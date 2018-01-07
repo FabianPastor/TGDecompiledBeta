@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
@@ -88,7 +89,9 @@ public class CallSwipeView extends View {
 
             public void onAnimationEnd(Animator animation) {
                 if (System.currentTimeMillis() - this.startTime < animation.getDuration() / 4) {
-                    FileLog.w("Not repeating animation because previous loop was too fast");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.w("Not repeating animation because previous loop was too fast");
+                    }
                 } else if (!CallSwipeView.this.canceled && CallSwipeView.this.animatingArrows) {
                     CallSwipeView.this.post(this.restarter);
                 }

@@ -85,8 +85,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private Matrix shaderMatrix;
     private boolean shouldGenerateQualityThumb;
     private Drawable staticThumb;
-    private Integer tag;
-    private Integer thumbTag;
+    private int tag;
+    private int thumbTag;
 
     public static class BitmapHolder {
         public Bitmap bitmap;
@@ -1175,14 +1175,14 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return this.currentImage instanceof AnimatedFileDrawable ? (AnimatedFileDrawable) this.currentImage : null;
     }
 
-    protected Integer getTag(boolean thumb) {
+    protected int getTag(boolean thumb) {
         if (thumb) {
             return this.thumbTag;
         }
         return this.tag;
     }
 
-    protected void setTag(Integer value, boolean thumb) {
+    protected void setTag(int value, boolean thumb) {
         if (thumb) {
             this.thumbTag = value;
         } else {

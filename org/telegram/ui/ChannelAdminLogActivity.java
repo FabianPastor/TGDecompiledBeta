@@ -30,6 +30,8 @@ import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
+import android.util.LongSparseArray;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
@@ -49,7 +51,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
@@ -177,7 +178,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private int loadsCount;
     protected ArrayList<MessageObject> messages = new ArrayList();
     private HashMap<String, ArrayList<MessageObject>> messagesByDays = new HashMap();
-    private HashMap<Long, MessageObject> messagesDict = new HashMap();
+    private LongSparseArray<MessageObject> messagesDict = new LongSparseArray();
     private int[] mid = new int[]{2};
     private int minDate;
     private long minEventId;
@@ -250,7 +251,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private String searchQuery = TtmlNode.ANONYMOUS_REGION_ID;
     private ImageView searchUpButton;
     private boolean searchWas;
-    private HashMap<Integer, User> selectedAdmins;
+    private SparseArray<User> selectedAdmins;
     private MessageObject selectedObject;
     private TextureView videoTextureView;
     private boolean wasPaused = false;
@@ -836,8 +837,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
             if (this.selectedAdmins != null) {
                 req.flags |= 2;
-                for (Entry<Integer, User> entry : this.selectedAdmins.entrySet()) {
-                    req.admins.add(MessagesController.getInstance(this.currentAccount).getInputUser((User) entry.getValue()));
+                for (int a = 0; a < this.selectedAdmins.size(); a++) {
+                    req.admins.add(MessagesController.getInstance(this.currentAccount).getInputUser((User) this.selectedAdmins.valueAt(a)));
                 }
             }
             updateEmptyPlaceholder();
@@ -853,12 +854,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                 int oldRowsCount = ChannelAdminLogActivity.this.messages.size();
                                 for (int a = 0; a < res.events.size(); a++) {
                                     TL_channelAdminLogEvent event = (TL_channelAdminLogEvent) res.events.get(a);
-                                    if (!ChannelAdminLogActivity.this.messagesDict.containsKey(Long.valueOf(event.id))) {
+                                    if (ChannelAdminLogActivity.this.messagesDict.indexOfKey(event.id) < 0) {
                                         ChannelAdminLogActivity.this.minEventId = Math.min(ChannelAdminLogActivity.this.minEventId, event.id);
                                         added = true;
                                         MessageObject messageObject = new MessageObject(ChannelAdminLogActivity.this.currentAccount, event, ChannelAdminLogActivity.this.messages, ChannelAdminLogActivity.this.messagesByDays, ChannelAdminLogActivity.this.currentChat, ChannelAdminLogActivity.this.mid);
                                         if (messageObject.contentType >= 0) {
-                                            ChannelAdminLogActivity.this.messagesDict.put(Long.valueOf(event.id), messageObject);
+                                            ChannelAdminLogActivity.this.messagesDict.put(event.id, messageObject);
                                         }
                                     }
                                 }
@@ -1304,7 +1305,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     AdminLogFilterAlert adminLogFilterAlert = new AdminLogFilterAlert(ChannelAdminLogActivity.this.getParentActivity(), ChannelAdminLogActivity.this.currentFilter, ChannelAdminLogActivity.this.selectedAdmins, ChannelAdminLogActivity.this.currentChat.megagroup);
                     adminLogFilterAlert.setCurrentAdmins(ChannelAdminLogActivity.this.admins);
                     adminLogFilterAlert.setAdminLogFilterAlertDelegate(new AdminLogFilterAlertDelegate() {
-                        public void didSelectRights(TL_channelAdminLogEventsFilter filter, HashMap<Integer, User> admins) {
+                        public void didSelectRights(TL_channelAdminLogEventsFilter filter, SparseArray<User> admins) {
                             ChannelAdminLogActivity.this.currentFilter = filter;
                             ChannelAdminLogActivity.this.selectedAdmins = admins;
                             if (ChannelAdminLogActivity.this.currentFilter == null && ChannelAdminLogActivity.this.selectedAdmins == null) {

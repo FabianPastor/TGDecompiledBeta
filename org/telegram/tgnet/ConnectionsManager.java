@@ -424,7 +424,9 @@ public class ConnectionsManager {
         final boolean z = immediate;
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
-                FileLog.d("send request " + tLObject + " with token = " + requestToken);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("send request " + tLObject + " with token = " + requestToken);
+                }
                 try {
                     NativeByteBuffer buffer = new NativeByteBuffer(tLObject.getObjectSize());
                     tLObject.serializeToStream(buffer);
@@ -449,7 +451,9 @@ public class ConnectionsManager {
                                 try {
                                     error2.code = errorCode;
                                     error2.text = errorText;
-                                    FileLog.e(tLObject + " got error " + error2.code + " " + error2.text);
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        FileLog.e(tLObject + " got error " + error2.code + " " + error2.text);
+                                    }
                                     error = error2;
                                 } catch (Exception e3) {
                                     e = e3;
@@ -461,7 +465,9 @@ public class ConnectionsManager {
                             if (resp != null) {
                                 resp.networkType = networkType;
                             }
-                            FileLog.d("java received " + resp + " error = " + error);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("java received " + resp + " error = " + error);
+                            }
                             final TLObject finalResponse = resp;
                             final TL_error finalError = error;
                             Utilities.stageQueue.postRunnable(new Runnable() {
@@ -566,13 +572,17 @@ public class ConnectionsManager {
     public void setAppPaused(boolean value, boolean byScreenState) {
         if (!byScreenState) {
             this.appPaused = value;
-            FileLog.d("app paused = " + value);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("app paused = " + value);
+            }
             if (value) {
                 this.appResumeCount--;
             } else {
                 this.appResumeCount++;
             }
-            FileLog.d("app resume count " + this.appResumeCount);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("app resume count " + this.appResumeCount);
+            }
             if (this.appResumeCount < 0) {
                 this.appResumeCount = 0;
             }
@@ -583,7 +593,9 @@ public class ConnectionsManager {
             }
             native_pauseNetwork(this.currentAccount);
         } else if (!this.appPaused) {
-            FileLog.e("reset app pause time");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("reset app pause time");
+            }
             if (this.lastPauseTime != 0 && System.currentTimeMillis() - this.lastPauseTime > DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) {
                 ContactsController.getInstance(this.currentAccount).checkContacts();
             }
@@ -598,11 +610,15 @@ public class ConnectionsManager {
             buff.reused = true;
             final TLObject message = TLClassStore.Instance().TLdeserialize(buff, buff.readInt32(true), true);
             if (message instanceof Updates) {
-                FileLog.d("java received " + message);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("java received " + message);
+                }
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         if (ConnectionsManager.getInstance(currentAccount).wakeLock.isHeld()) {
-                            FileLog.d("release wakelock");
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("release wakelock");
+                            }
                             ConnectionsManager.getInstance(currentAccount).wakeLock.release();
                         }
                     }
@@ -721,7 +737,9 @@ public class ConnectionsManager {
                 try {
                     if (!ConnectionsManager.getInstance(currentAccount).wakeLock.isHeld()) {
                         ConnectionsManager.getInstance(currentAccount).wakeLock.acquire(10000);
-                        FileLog.d("acquire wakelock");
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("acquire wakelock");
+                        }
                     }
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -796,21 +814,23 @@ public class ConnectionsManager {
         List<InterfaceAddress> interfaceAddresses;
         int a;
         InetAddress inetAddress;
-        if (BuildVars.DEBUG_VERSION) {
+        if (BuildVars.LOGS_ENABLED) {
             try {
                 networkInterfaces = NetworkInterface.getNetworkInterfaces();
                 while (networkInterfaces.hasMoreElements()) {
                     networkInterface = (NetworkInterface) networkInterfaces.nextElement();
                     if (!(!networkInterface.isUp() || networkInterface.isLoopback() || networkInterface.getInterfaceAddresses().isEmpty())) {
-                        FileLog.e("valid interface: " + networkInterface);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("valid interface: " + networkInterface);
+                        }
                         interfaceAddresses = networkInterface.getInterfaceAddresses();
                         for (a = 0; a < interfaceAddresses.size(); a++) {
                             inetAddress = ((InterfaceAddress) interfaceAddresses.get(a)).getAddress();
-                            if (BuildVars.DEBUG_VERSION) {
-                                FileLog.e("address: " + inetAddress.getHostAddress());
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("address: " + inetAddress.getHostAddress());
                             }
-                            if (!(inetAddress.isLinkLocalAddress() || inetAddress.isLoopbackAddress() || inetAddress.isMulticastAddress() || !BuildVars.DEBUG_VERSION)) {
-                                FileLog.e("address is good");
+                            if (!(inetAddress.isLinkLocalAddress() || inetAddress.isLoopbackAddress() || inetAddress.isMulticastAddress() || !BuildVars.LOGS_ENABLED)) {
+                                FileLog.d("address is good");
                             }
                         }
                     }

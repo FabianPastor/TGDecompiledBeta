@@ -191,9 +191,18 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 if (AudioPlayerAlert.this.searchWas) {
                     cell.setMessageObject((MessageObject) this.searchResult.get(position));
                 } else if (AudioPlayerAlert.this.searching) {
-                    cell.setMessageObject((MessageObject) AudioPlayerAlert.this.playlist.get((AudioPlayerAlert.this.playlist.size() - position) - 1));
-                } else if (position > 0) {
-                    cell.setMessageObject((MessageObject) AudioPlayerAlert.this.playlist.get(AudioPlayerAlert.this.playlist.size() - position));
+                    if (SharedConfig.playOrderReversed) {
+                        cell.setMessageObject((MessageObject) AudioPlayerAlert.this.playlist.get(position));
+                    } else {
+                        cell.setMessageObject((MessageObject) AudioPlayerAlert.this.playlist.get((AudioPlayerAlert.this.playlist.size() - position) - 1));
+                    }
+                } else if (position <= 0) {
+                } else {
+                    if (SharedConfig.playOrderReversed) {
+                        cell.setMessageObject((MessageObject) AudioPlayerAlert.this.playlist.get(position - 1));
+                    } else {
+                        cell.setMessageObject((MessageObject) AudioPlayerAlert.this.playlist.get(AudioPlayerAlert.this.playlist.size() - position));
+                    }
                 }
             }
         }
@@ -651,6 +660,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         frameLayout = this.playerLayout;
         frameLayout.addView(this.authorTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 72.0f, 40.0f, 60.0f, 0.0f));
         this.optionsButton = new ActionBarMenuItem(context, null, 0, Theme.getColor(Theme.key_player_actionBarItems));
+        this.optionsButton.setLongClickEnabled(false);
         this.optionsButton.setIcon((int) R.drawable.ic_ab_other);
         this.optionsButton.setAdditionalOffset(-AndroidUtilities.dp(120.0f));
         frameLayout = this.playerLayout;
@@ -658,6 +668,11 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         this.optionsButton.addSubItem(1, LocaleController.getString("Forward", R.string.Forward));
         this.optionsButton.addSubItem(2, LocaleController.getString("ShareFile", R.string.ShareFile));
         this.optionsButton.addSubItem(4, LocaleController.getString("ShowInChat", R.string.ShowInChat));
+        this.optionsButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                AudioPlayerAlert.this.optionsButton.toggleSubMenu();
+            }
+        });
         this.optionsButton.setDelegate(new ActionBarMenuItemDelegate() {
             public void onItemClick(int id) {
                 AudioPlayerAlert.this.onSubItemClick(id);
@@ -703,8 +718,14 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(context, null, 0, 0);
         this.shuffleButton = actionBarMenuItem;
         viewArr[0] = actionBarMenuItem;
+        this.shuffleButton.setLongClickEnabled(false);
         this.shuffleButton.setAdditionalOffset(-AndroidUtilities.dp(10.0f));
         bottomView.addView(this.shuffleButton, LayoutHelper.createFrame(48, 48, 51));
+        this.shuffleButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                AudioPlayerAlert.this.shuffleButton.toggleSubMenu();
+            }
+        });
         TextView textView = this.shuffleButton.addSubItem(1, LocaleController.getString("ReverseOrder", R.string.ReverseOrder));
         textView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(16.0f), 0);
         this.playOrderButtons[0] = context.getResources().getDrawable(R.drawable.music_reverse).mutate();
@@ -719,6 +740,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             public void onItemClick(int id) {
                 MediaController.getInstance().toggleShuffleMusic(id);
                 AudioPlayerAlert.this.updateShuffleButton();
+                AudioPlayerAlert.this.listAdapter.notifyDataSetChanged();
             }
         });
         viewArr = this.buttons;

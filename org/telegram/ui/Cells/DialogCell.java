@@ -221,7 +221,7 @@ public class DialogCell extends BaseCell {
         CharSequence messageString = TtmlNode.ANONYMOUS_REGION_ID;
         CharSequence printingString = null;
         if (this.isDialogCell) {
-            printingString = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(Long.valueOf(this.currentDialogId));
+            printingString = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(this.currentDialogId);
         }
         TextPaint currentNamePaint = Theme.dialogs_namePaint;
         TextPaint currentMessagePaint = Theme.dialogs_messagePaint;
@@ -808,7 +808,7 @@ public class DialogCell extends BaseCell {
         if (this.index < getDialogsArray().size()) {
             TL_dialog dialog = (TL_dialog) getDialogsArray().get(this.index);
             DraftMessage newDraftMessage = DataQuery.getInstance(this.currentAccount).getDraft(this.currentDialogId);
-            MessageObject newMessageObject = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(Long.valueOf(dialog.id));
+            MessageObject newMessageObject = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(dialog.id);
             if (this.currentDialogId != dialog.id || ((this.message != null && this.message.getId() != dialog.top_message) || ((newMessageObject != null && newMessageObject.messageOwner.edit_date != this.currentEditDate) || this.unreadCount != dialog.unread_count || this.mentionCount != dialog.unread_mentions_count || this.message != newMessageObject || ((this.message == null && newMessageObject != null) || newDraftMessage != this.draftMessage || this.drawPin != dialog.pinned)))) {
                 this.currentDialogId = dialog.id;
                 update(0);
@@ -835,10 +835,10 @@ public class DialogCell extends BaseCell {
             TL_dialog dialog;
             boolean z;
             if (this.isDialogCell) {
-                dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(Long.valueOf(this.currentDialogId));
+                dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.currentDialogId);
                 if (dialog != null && mask == 0) {
                     int i;
-                    this.message = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(Long.valueOf(dialog.id));
+                    this.message = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(dialog.id);
                     if (this.message == null || !this.message.isUnread()) {
                         z = false;
                     } else {
@@ -865,7 +865,7 @@ public class DialogCell extends BaseCell {
             if (mask != 0) {
                 boolean continueUpdate = false;
                 if (this.isDialogCell && (mask & 64) != 0) {
-                    CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(Long.valueOf(this.currentDialogId));
+                    CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(this.currentDialogId);
                     if ((this.lastPrintString != null && printString == null) || ((this.lastPrintString == null && printString != null) || !(this.lastPrintString == null || printString == null || this.lastPrintString.equals(printString)))) {
                         continueUpdate = true;
                     }
@@ -887,7 +887,7 @@ public class DialogCell extends BaseCell {
                         this.lastUnreadState = this.message.isUnread();
                         continueUpdate = true;
                     } else if (this.isDialogCell) {
-                        dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(Long.valueOf(this.currentDialogId));
+                        dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.currentDialogId);
                         if (!(dialog == null || (this.unreadCount == dialog.unread_count && this.mentionCount == dialog.unread_mentions_count))) {
                             this.unreadCount = dialog.unread_count;
                             this.mentionCount = dialog.unread_mentions_count;

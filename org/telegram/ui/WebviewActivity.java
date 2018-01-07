@@ -25,6 +25,7 @@ import android.widget.FrameLayout;
 import java.net.URLEncoder;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -74,7 +75,9 @@ public class WebviewActivity extends BaseFragment {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     if (WebviewActivity.this.getParentActivity() != null) {
-                        FileLog.e(eventName);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d(eventName);
+                        }
                         String str = eventName;
                         boolean z = true;
                         switch (str.hashCode()) {

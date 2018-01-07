@@ -26,19 +26,25 @@ public class WearDataLayerListenerService extends WearableListenerService {
 
     public void onCreate() {
         super.onCreate();
-        FileLog.d("WearableDataLayer service created");
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("WearableDataLayer service created");
+        }
     }
 
     public void onDestroy() {
         super.onDestroy();
-        FileLog.d("WearableDataLayer service destroyed");
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("WearableDataLayer service destroyed");
+        }
     }
 
     public void onChannelOpened(Channel ch) {
         GoogleApiClient apiClient = new Builder(this).addApi(Wearable.API).build();
         if (apiClient.blockingConnect().isSuccess()) {
             String path = ch.getPath();
-            FileLog.d("wear channel path: " + path);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("wear channel path: " + path);
+            }
             try {
                 DataOutputStream out;
                 final CyclicBarrier barrier;
@@ -58,9 +64,13 @@ public class WearDataLayerListenerService extends WearableListenerService {
                                 listener = new NotificationCenterDelegate() {
                                     public void didReceivedNotification(int id, int account, Object... args) {
                                         if (id == NotificationCenter.FileDidLoaded) {
-                                            FileLog.d("file loaded: " + args[0] + " " + args[0].getClass().getName());
+                                            if (BuildVars.LOGS_ENABLED) {
+                                                FileLog.d("file loaded: " + args[0] + " " + args[0].getClass().getName());
+                                            }
                                             if (args[0].equals(photo.getName())) {
-                                                FileLog.e("LOADED USER PHOTO");
+                                                if (BuildVars.LOGS_ENABLED) {
+                                                    FileLog.e("LOADED USER PHOTO");
+                                                }
                                                 try {
                                                     barrier.await(10, TimeUnit.MILLISECONDS);
                                                 } catch (Exception e) {
@@ -105,7 +115,9 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     out.close();
                     ch.close(apiClient).await();
                     apiClient.disconnect();
-                    FileLog.d("WearableDataLayer channel thread exiting");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("WearableDataLayer channel thread exiting");
+                    }
                 }
                 if ("/waitForAuthCode".equals(path)) {
                     ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
@@ -157,11 +169,15 @@ public class WearDataLayerListenerService extends WearableListenerService {
                 }
                 ch.close(apiClient).await();
                 apiClient.disconnect();
-                FileLog.d("WearableDataLayer channel thread exiting");
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("WearableDataLayer channel thread exiting");
+                }
             } catch (Exception x) {
-                FileLog.e("error processing wear request", x);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("error processing wear request", x);
+                }
             }
-        } else {
+        } else if (BuildVars.LOGS_ENABLED) {
             FileLog.e("failed to connect google api client");
         }
     }

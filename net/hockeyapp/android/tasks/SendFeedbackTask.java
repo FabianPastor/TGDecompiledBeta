@@ -1,13 +1,15 @@
 package net.hockeyapp.android.tasks;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import java.io.File;
-import java.io.IOException;
+import java.io.FilenameFilter;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,7 @@ import net.hockeyapp.android.utils.HttpURLConnectionBuilder;
 import net.hockeyapp.android.utils.Util;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
+@SuppressLint({"StaticFieldLeak"})
 public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String, String>> {
     private List<Uri> mAttachmentUris;
     private Context mContext;
@@ -50,18 +53,31 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
         }
     }
 
+    public void setHandler(Handler handler) {
+        this.mHandler = handler;
+    }
+
+    public void attach(Context context) {
+        this.mContext = context;
+        if (getStatus() != Status.RUNNING) {
+            return;
+        }
+        if ((this.mProgressDialog == null || !this.mProgressDialog.isShowing()) && this.mShowProgressDialog) {
+            this.mProgressDialog = ProgressDialog.show(this.mContext, TtmlNode.ANONYMOUS_REGION_ID, getLoadingMessage(), true, false);
+        }
+    }
+
     public void detach() {
         this.mContext = null;
-        this.mProgressDialog = null;
+        if (this.mProgressDialog != null) {
+            this.mProgressDialog.dismiss();
+            this.mProgressDialog = null;
+        }
     }
 
     protected void onPreExecute() {
-        String loadingMessage = this.mContext.getString(R.string.hockeyapp_feedback_sending_feedback_text);
-        if (this.mIsFetchMessages) {
-            loadingMessage = this.mContext.getString(R.string.hockeyapp_feedback_fetching_feedback_text);
-        }
         if ((this.mProgressDialog == null || !this.mProgressDialog.isShowing()) && this.mShowProgressDialog) {
-            this.mProgressDialog = ProgressDialog.show(this.mContext, TtmlNode.ANONYMOUS_REGION_ID, loadingMessage, true, false);
+            this.mProgressDialog = ProgressDialog.show(this.mContext, TtmlNode.ANONYMOUS_REGION_ID, getLoadingMessage(), true, false);
         }
     }
 
@@ -84,15 +100,33 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
     }
 
     private void clearTemporaryFolder(HashMap<String, String> result) {
+        int i = 0;
         String status = (String) result.get("status");
         if (status != null && status.startsWith("2") && this.mContext != null) {
             File folder = new File(this.mContext.getCacheDir(), "HockeyApp");
-            if (folder != null && folder.exists()) {
+            if (folder.exists()) {
                 for (File file : folder.listFiles()) {
                     if (!(file == null || Boolean.valueOf(file.delete()).booleanValue())) {
                         HockeyLog.debug("SendFeedbackTask", "Error deleting file from temporary folder");
                     }
                 }
+            }
+            File[] screenshots = Constants.getHockeyAppStorageDir(this.mContext).listFiles(new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    return name.endsWith(".jpg");
+                }
+            });
+            int length = screenshots.length;
+            while (i < length) {
+                File screenshot = screenshots[i];
+                if (this.mAttachmentUris.contains(Uri.fromFile(screenshot))) {
+                    if (screenshot.delete()) {
+                        HockeyLog.debug("SendFeedbackTask", "Screenshot '" + screenshot.getName() + "' has been deleted");
+                    } else {
+                        HockeyLog.error("SendFeedbackTask", "Error deleting screenshot");
+                    }
+                }
+                i++;
             }
         }
     }
@@ -102,7 +136,6 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             try {
                 this.mProgressDialog.dismiss();
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         if (this.mHandler != null) {
@@ -136,7 +169,7 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             parameters.put("os_version", Constants.ANDROID_VERSION);
             parameters.put("oem", Constants.PHONE_MANUFACTURER);
             parameters.put("model", Constants.PHONE_MODEL);
-            parameters.put("sdk_version", "4.1.3");
+            parameters.put("sdk_version", "5.0.4");
             if (this.mToken != null) {
                 this.mUrlString += this.mToken + "/";
             }
@@ -147,8 +180,8 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            HockeyLog.error("Failed to send feedback message", e);
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
@@ -176,7 +209,7 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             parameters.put("os_version", Constants.ANDROID_VERSION);
             parameters.put("oem", Constants.PHONE_MANUFACTURER);
             parameters.put("model", Constants.PHONE_MODEL);
-            parameters.put("sdk_version", "4.1.3");
+            parameters.put("sdk_version", "5.0.4");
             if (this.mToken != null) {
                 this.mUrlString += this.mToken + "/";
             }
@@ -187,8 +220,8 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            HockeyLog.error("Failed to send feedback message", e);
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
@@ -202,9 +235,9 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
 
     private HashMap<String, String> doGet() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.mUrlString + Util.encodeParam(this.mToken));
+        sb.append(this.mUrlString).append(Util.encodeParam(this.mToken));
         if (this.mLastMessageId != -1) {
-            sb.append("?last_message_id=" + this.mLastMessageId);
+            sb.append("?last_message_id=").append(this.mLastMessageId);
         }
         HashMap<String, String> result = new HashMap();
         HttpURLConnection urlConnection = null;
@@ -217,8 +250,8 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            HockeyLog.error("Failed to fetching feedback messages", e);
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
@@ -228,5 +261,13 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
             }
         }
         return result;
+    }
+
+    private String getLoadingMessage() {
+        String loadingMessage = this.mContext.getString(R.string.hockeyapp_feedback_sending_feedback_text);
+        if (this.mIsFetchMessages) {
+            return this.mContext.getString(R.string.hockeyapp_feedback_fetching_feedback_text);
+        }
+        return loadingMessage;
     }
 }

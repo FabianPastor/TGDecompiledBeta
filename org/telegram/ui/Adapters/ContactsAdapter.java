@@ -1,6 +1,7 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
@@ -24,16 +25,16 @@ import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SectionsAdapter;
 
 public class ContactsAdapter extends SectionsAdapter {
-    private HashMap<Integer, ?> checkedMap;
+    private SparseArray<?> checkedMap;
     private int currentAccount = UserConfig.selectedAccount;
-    private HashMap<Integer, User> ignoreUsers;
+    private SparseArray<User> ignoreUsers;
     private boolean isAdmin;
     private Context mContext;
     private boolean needPhonebook;
     private int onlyUsers;
     private boolean scrolling;
 
-    public ContactsAdapter(Context context, int onlyUsersType, boolean arg2, HashMap<Integer, User> arg3, boolean arg4) {
+    public ContactsAdapter(Context context, int onlyUsersType, boolean arg2, SparseArray<User> arg3, boolean arg4) {
         this.mContext = context;
         this.onlyUsers = onlyUsersType;
         this.needPhonebook = arg2;
@@ -41,7 +42,7 @@ public class ContactsAdapter extends SectionsAdapter {
         this.isAdmin = arg4;
     }
 
-    public void setCheckedMap(HashMap<Integer, ?> map) {
+    public void setCheckedMap(SparseArray<?> map) {
         this.checkedMap = map;
     }
 
@@ -229,12 +230,12 @@ public class ContactsAdapter extends SectionsAdapter {
                 User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) ((ArrayList) usersSectionsDict.get(sortedUsersSectionsArray.get(section - i))).get(position)).user_id));
                 userCell.setData(user, null, null, 0);
                 if (this.checkedMap != null) {
-                    userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(user.id)), !this.scrolling);
+                    userCell.setChecked(this.checkedMap.indexOfKey(user.id) >= 0, !this.scrolling);
                 }
                 if (this.ignoreUsers == null) {
                     return;
                 }
-                if (this.ignoreUsers.containsKey(Integer.valueOf(user.id))) {
+                if (this.ignoreUsers.indexOfKey(user.id) >= 0) {
                     userCell.setAlpha(0.5f);
                     return;
                 } else {

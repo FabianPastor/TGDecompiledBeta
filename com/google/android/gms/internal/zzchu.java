@@ -30,16 +30,16 @@ final class zzchu implements Runnable {
     }
 
     public final void run() {
-        OutputStream outputStream;
         Throwable e;
         Map map;
         int i;
         HttpURLConnection httpURLConnection;
-        OutputStream outputStream2;
+        OutputStream outputStream;
         Throwable th;
         int i2 = 0;
         this.zzjcm.zzawj();
         HttpURLConnection httpURLConnection2;
+        OutputStream outputStream2;
         Map map2;
         try {
             URLConnection openConnection = this.zzbxv.openConnection();
@@ -63,20 +63,20 @@ final class zzchu implements Runnable {
                         httpURLConnection2.addRequestProperty("Content-Encoding", "gzip");
                         httpURLConnection2.setFixedLengthStreamingMode(zzq.length);
                         httpURLConnection2.connect();
-                        outputStream = httpURLConnection2.getOutputStream();
+                        outputStream2 = httpURLConnection2.getOutputStream();
                         try {
-                            outputStream.write(zzq);
-                            outputStream.close();
+                            outputStream2.write(zzq);
+                            outputStream2.close();
                         } catch (IOException e2) {
                             e = e2;
                             map = null;
                             i = 0;
-                            OutputStream outputStream3 = outputStream;
+                            OutputStream outputStream3 = outputStream2;
                             httpURLConnection = httpURLConnection2;
-                            outputStream2 = outputStream3;
-                            if (outputStream2 != null) {
+                            outputStream = outputStream3;
+                            if (outputStream != null) {
                                 try {
-                                    outputStream2.close();
+                                    outputStream.close();
                                 } catch (IOException e3) {
                                     this.zzjcm.zzawy().zzazd().zze("Error closing HTTP compressed POST connection output stream. appId", zzchm.zzjk(this.mPackageName), e3);
                                 }
@@ -88,9 +88,9 @@ final class zzchu implements Runnable {
                         } catch (Throwable th2) {
                             th = th2;
                             map2 = null;
-                            if (outputStream != null) {
+                            if (outputStream2 != null) {
                                 try {
-                                    outputStream.close();
+                                    outputStream2.close();
                                 } catch (IOException e4) {
                                     this.zzjcm.zzawy().zzazd().zze("Error closing HTTP compressed POST connection output stream. appId", zzchm.zzjk(this.mPackageName), e4);
                                 }
@@ -116,9 +116,9 @@ final class zzchu implements Runnable {
                         map = map2;
                         i = i2;
                         httpURLConnection = httpURLConnection2;
-                        outputStream2 = null;
-                        if (outputStream2 != null) {
-                            outputStream2.close();
+                        outputStream = null;
+                        if (outputStream != null) {
+                            outputStream.close();
                         }
                         if (httpURLConnection != null) {
                             httpURLConnection.disconnect();
@@ -126,9 +126,9 @@ final class zzchu implements Runnable {
                         this.zzjcm.zzawx().zzg(new zzcht(this.mPackageName, this.zzjck, i, e, null, map));
                     } catch (Throwable th3) {
                         th = th3;
-                        outputStream = null;
-                        if (outputStream != null) {
-                            outputStream.close();
+                        outputStream2 = null;
+                        if (outputStream2 != null) {
+                            outputStream2.close();
                         }
                         if (httpURLConnection2 != null) {
                             httpURLConnection2.disconnect();
@@ -141,9 +141,9 @@ final class zzchu implements Runnable {
                     map = null;
                     i = i2;
                     httpURLConnection = httpURLConnection2;
-                    outputStream2 = null;
-                    if (outputStream2 != null) {
-                        outputStream2.close();
+                    outputStream = null;
+                    if (outputStream != null) {
+                        outputStream.close();
                     }
                     if (httpURLConnection != null) {
                         httpURLConnection.disconnect();
@@ -152,9 +152,9 @@ final class zzchu implements Runnable {
                 } catch (Throwable th32) {
                     th = th32;
                     map2 = null;
-                    outputStream = null;
-                    if (outputStream != null) {
-                        outputStream.close();
+                    outputStream2 = null;
+                    if (outputStream2 != null) {
+                        outputStream2.close();
                     }
                     if (httpURLConnection2 != null) {
                         httpURLConnection2.disconnect();
@@ -168,10 +168,10 @@ final class zzchu implements Runnable {
             e = e7;
             map = null;
             i = 0;
-            outputStream2 = null;
+            outputStream = null;
             httpURLConnection = null;
-            if (outputStream2 != null) {
-                outputStream2.close();
+            if (outputStream != null) {
+                outputStream.close();
             }
             if (httpURLConnection != null) {
                 httpURLConnection.disconnect();
@@ -180,10 +180,10 @@ final class zzchu implements Runnable {
         } catch (Throwable th4) {
             th = th4;
             map2 = null;
-            outputStream = null;
+            outputStream2 = null;
             httpURLConnection2 = null;
-            if (outputStream != null) {
-                outputStream.close();
+            if (outputStream2 != null) {
+                outputStream2.close();
             }
             if (httpURLConnection2 != null) {
                 httpURLConnection2.disconnect();

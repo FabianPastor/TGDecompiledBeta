@@ -27,8 +27,9 @@ import android.graphics.drawable.Icon;
 import android.os.Build.VERSION;
 import android.text.Spannable;
 import android.text.TextUtils;
+import android.util.LongSparseArray;
+import android.util.SparseArray;
 import android.widget.Toast;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,6 +42,7 @@ import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.ConnectionsManager;
@@ -166,16 +168,16 @@ public class DataQuery {
     private static Path roundPath;
     private HashMap<String, ArrayList<Document>> allStickers = new HashMap();
     private int[] archivedStickersCount = new int[2];
-    private HashMap<Integer, BotInfo> botInfos = new HashMap();
-    private HashMap<Long, Message> botKeyboards = new HashMap();
-    private HashMap<Integer, Long> botKeyboardsByMids = new HashMap();
+    private SparseArray<BotInfo> botInfos = new SparseArray();
+    private LongSparseArray<Message> botKeyboards = new LongSparseArray();
+    private SparseLongArray botKeyboardsByMids = new SparseLongArray();
     private int currentAccount;
-    private HashMap<Long, Message> draftMessages = new HashMap();
-    private HashMap<Long, DraftMessage> drafts = new HashMap();
+    private LongSparseArray<Message> draftMessages = new LongSparseArray();
+    private LongSparseArray<DraftMessage> drafts = new LongSparseArray();
     private ArrayList<StickerSetCovered> featuredStickerSets = new ArrayList();
-    private HashMap<Long, StickerSetCovered> featuredStickerSetsById = new HashMap();
+    private LongSparseArray<StickerSetCovered> featuredStickerSetsById = new LongSparseArray();
     private boolean featuredStickersLoaded;
-    private HashMap<Long, TL_messages_stickerSet> groupStickerSets = new HashMap();
+    private LongSparseArray<TL_messages_stickerSet> groupStickerSets = new LongSparseArray();
     public ArrayList<TL_topPeer> hints = new ArrayList();
     private boolean inTransaction;
     public ArrayList<TL_topPeer> inlineBots = new ArrayList();
@@ -205,11 +207,11 @@ public class DataQuery {
     private boolean[] recentStickersLoaded = new boolean[3];
     private int reqId;
     private ArrayList<MessageObject> searchResultMessages = new ArrayList();
-    private HashMap<Integer, MessageObject>[] searchResultMessagesMap = new HashMap[]{new HashMap(), new HashMap()};
+    private SparseArray<MessageObject>[] searchResultMessagesMap = new SparseArray[]{new SparseArray(), new SparseArray()};
     private ArrayList<TL_messages_stickerSet>[] stickerSets = new ArrayList[]{new ArrayList(), new ArrayList()};
-    private HashMap<Long, TL_messages_stickerSet> stickerSetsById = new HashMap();
+    private LongSparseArray<TL_messages_stickerSet> stickerSetsById = new LongSparseArray();
     private HashMap<String, TL_messages_stickerSet> stickerSetsByName = new HashMap();
-    private HashMap<Long, String> stickersByEmoji = new HashMap();
+    private LongSparseArray<String> stickersByEmoji = new LongSparseArray();
     private boolean[] stickersLoaded = new boolean[2];
     private ArrayList<Long> unreadStickerSets = new ArrayList();
 
@@ -255,12 +257,12 @@ public class DataQuery {
                 if (key.startsWith("r_")) {
                     Message message = Message.TLdeserialize(serializedData, serializedData.readInt32(true), true);
                     if (message != null) {
-                        this.draftMessages.put(Long.valueOf(did), message);
+                        this.draftMessages.put(did, message);
                     }
                 } else {
                     DraftMessage draftMessage = DraftMessage.TLdeserialize(serializedData, serializedData.readInt32(true), true);
                     if (draftMessage != null) {
-                        this.drafts.put(Long.valueOf(did), draftMessage);
+                        this.drafts.put(did, draftMessage);
                     }
                 }
             } catch (Exception e) {
@@ -474,13 +476,13 @@ public class DataQuery {
     }
 
     public TL_messages_stickerSet getStickerSetById(Long id) {
-        return (TL_messages_stickerSet) this.stickerSetsById.get(id);
+        return (TL_messages_stickerSet) this.stickerSetsById.get(id.longValue());
     }
 
     public TL_messages_stickerSet getGroupStickerSetById(StickerSet stickerSet) {
-        TL_messages_stickerSet set = (TL_messages_stickerSet) this.stickerSetsById.get(Long.valueOf(stickerSet.id));
+        TL_messages_stickerSet set = (TL_messages_stickerSet) this.stickerSetsById.get(stickerSet.id);
         if (set == null) {
-            set = (TL_messages_stickerSet) this.groupStickerSets.get(Long.valueOf(stickerSet.id));
+            set = (TL_messages_stickerSet) this.groupStickerSets.get(stickerSet.id);
             if (set == null || set.set == null) {
                 loadGroupStickerSet(stickerSet, true);
             } else if (set.set.hash != stickerSet.hash) {
@@ -491,7 +493,7 @@ public class DataQuery {
     }
 
     public void putGroupStickerSet(TL_messages_stickerSet stickerSet) {
-        this.groupStickerSets.put(Long.valueOf(stickerSet.set.id), stickerSet);
+        this.groupStickerSets.put(stickerSet.set.id, stickerSet);
     }
 
     private void loadGroupStickerSet(final StickerSet stickerSet, boolean cache) {
@@ -519,7 +521,7 @@ public class DataQuery {
                         if (set != null && set.set != null) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    DataQuery.this.groupStickerSets.put(Long.valueOf(set.set.id), set);
+                                    DataQuery.this.groupStickerSets.put(set.set.id, set);
                                     NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.groupStickersDidLoaded, Long.valueOf(set.set.id));
                                 }
                             });
@@ -566,7 +568,7 @@ public class DataQuery {
                     });
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            DataQuery.this.groupStickerSets.put(Long.valueOf(set.set.id), set);
+                            DataQuery.this.groupStickerSets.put(set.set.id, set);
                             NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.groupStickersDidLoaded, Long.valueOf(set.set.id));
                         }
                     });
@@ -596,7 +598,7 @@ public class DataQuery {
     }
 
     public boolean isStickerPackInstalled(long id) {
-        return this.stickerSetsById.containsKey(Long.valueOf(id));
+        return this.stickerSetsById.indexOfKey(id) >= 0;
     }
 
     public boolean isStickerPackUnread(long id) {
@@ -608,7 +610,7 @@ public class DataQuery {
     }
 
     public String getEmojiForSticker(long id) {
-        String value = (String) this.stickersByEmoji.get(Long.valueOf(id));
+        String value = (String) this.stickersByEmoji.get(id);
         return value != null ? value : TtmlNode.ANONYMOUS_REGION_ID;
     }
 
@@ -882,16 +884,16 @@ public class DataQuery {
     }
 
     public void addNewStickerSet(TL_messages_stickerSet set) {
-        if (!this.stickerSetsById.containsKey(Long.valueOf(set.set.id)) && !this.stickerSetsByName.containsKey(set.set.short_name)) {
+        if (this.stickerSetsById.indexOfKey(set.set.id) < 0 && !this.stickerSetsByName.containsKey(set.set.short_name)) {
             int a;
             int type = set.set.masks ? 1 : 0;
             this.stickerSets[type].add(0, set);
-            this.stickerSetsById.put(Long.valueOf(set.set.id), set);
+            this.stickerSetsById.put(set.set.id, set);
             this.stickerSetsByName.put(set.set.short_name, set);
-            HashMap<Long, Document> stickersById = new HashMap();
+            LongSparseArray<Document> stickersById = new LongSparseArray();
             for (a = 0; a < set.documents.size(); a++) {
                 Document document = (Document) set.documents.get(a);
-                stickersById.put(Long.valueOf(document.id), document);
+                stickersById.put(document.id, document);
             }
             for (a = 0; a < set.packs.size(); a++) {
                 TL_stickerPack stickerPack = (TL_stickerPack) set.packs.get(a);
@@ -903,10 +905,10 @@ public class DataQuery {
                 }
                 for (int c = 0; c < stickerPack.documents.size(); c++) {
                     Long id = (Long) stickerPack.documents.get(c);
-                    if (!this.stickersByEmoji.containsKey(id)) {
-                        this.stickersByEmoji.put(id, stickerPack.emoticon);
+                    if (this.stickersByEmoji.indexOfKey(id.longValue()) < 0) {
+                        this.stickersByEmoji.put(id.longValue(), stickerPack.emoticon);
                     }
-                    Document sticker = (Document) stickersById.get(id);
+                    Document sticker = (Document) stickersById.get(id.longValue());
                     if (sticker != null) {
                         arrayList.add(sticker);
                     }
@@ -1036,11 +1038,11 @@ public class DataQuery {
                 if (arrayList != null) {
                     try {
                         final ArrayList<StickerSetCovered> stickerSetsNew = new ArrayList();
-                        final HashMap<Long, StickerSetCovered> stickerSetsByIdNew = new HashMap();
+                        final LongSparseArray<StickerSetCovered> stickerSetsByIdNew = new LongSparseArray();
                         for (int a = 0; a < arrayList.size(); a++) {
                             StickerSetCovered stickerSet = (StickerSetCovered) arrayList.get(a);
                             stickerSetsNew.add(stickerSet);
-                            stickerSetsByIdNew.put(Long.valueOf(stickerSet.set.id), stickerSet);
+                            stickerSetsByIdNew.put(stickerSet.set.id, stickerSet);
                         }
                         if (!z) {
                             DataQuery.this.putFeaturedStickersToCache(stickerSetsNew, arrayList2, i, i2);
@@ -1301,10 +1303,10 @@ public class DataQuery {
                                     DataQuery.this.processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
                                     return;
                                 }
-                                HashMap<Long, TL_messages_stickerSet> newStickerSets = new HashMap();
+                                LongSparseArray<TL_messages_stickerSet> newStickerSets = new LongSparseArray();
                                 for (int a = 0; a < res.sets.size(); a++) {
                                     final StickerSet stickerSet = (StickerSet) res.sets.get(a);
-                                    TL_messages_stickerSet oldSet = (TL_messages_stickerSet) DataQuery.this.stickerSetsById.get(Long.valueOf(stickerSet.id));
+                                    TL_messages_stickerSet oldSet = (TL_messages_stickerSet) DataQuery.this.stickerSetsById.get(stickerSet.id);
                                     if (oldSet == null || oldSet.set.hash != stickerSet.hash) {
                                         newStickerArray.add(null);
                                         final int index = a;
@@ -1312,15 +1314,15 @@ public class DataQuery {
                                         req.stickerset = new TL_inputStickerSetID();
                                         req.stickerset.id = stickerSet.id;
                                         req.stickerset.access_hash = stickerSet.access_hash;
-                                        final HashMap<Long, TL_messages_stickerSet> hashMap = newStickerSets;
+                                        final LongSparseArray<TL_messages_stickerSet> longSparseArray = newStickerSets;
                                         ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new RequestDelegate() {
                                             public void run(final TLObject response, TL_error error) {
                                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                                     public void run() {
                                                         TL_messages_stickerSet res1 = response;
                                                         newStickerArray.set(index, res1);
-                                                        hashMap.put(Long.valueOf(stickerSet.id), res1);
-                                                        if (hashMap.size() == res.sets.size()) {
+                                                        longSparseArray.put(stickerSet.id, res1);
+                                                        if (longSparseArray.size() == res.sets.size()) {
                                                             for (int a = 0; a < newStickerArray.size(); a++) {
                                                                 if (newStickerArray.get(a) == null) {
                                                                     newStickerArray.remove(a);
@@ -1336,7 +1338,7 @@ public class DataQuery {
                                         oldSet.set.archived = stickerSet.archived;
                                         oldSet.set.installed = stickerSet.installed;
                                         oldSet.set.official = stickerSet.official;
-                                        newStickerSets.put(Long.valueOf(oldSet.set.id), oldSet);
+                                        newStickerSets.put(oldSet.set.id, oldSet);
                                         newStickerArray.add(oldSet);
                                         if (newStickerSets.size() == res.sets.size()) {
                                             DataQuery.this.processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
@@ -1403,11 +1405,11 @@ public class DataQuery {
     }
 
     public String getStickerSetName(long setId) {
-        TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) this.stickerSetsById.get(Long.valueOf(setId));
+        TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) this.stickerSetsById.get(setId);
         if (stickerSet != null) {
             return stickerSet.set.short_name;
         }
-        StickerSetCovered stickerSetCovered = (StickerSetCovered) this.featuredStickerSetsById.get(Long.valueOf(setId));
+        StickerSetCovered stickerSetCovered = (StickerSetCovered) this.featuredStickerSetsById.get(setId);
         if (stickerSetCovered != null) {
             return stickerSetCovered.set.short_name;
         }
@@ -1470,22 +1472,22 @@ public class DataQuery {
                 if (arrayList != null) {
                     try {
                         final ArrayList<TL_messages_stickerSet> stickerSetsNew = new ArrayList();
-                        final HashMap<Long, TL_messages_stickerSet> stickerSetsByIdNew = new HashMap();
+                        final LongSparseArray<TL_messages_stickerSet> stickerSetsByIdNew = new LongSparseArray();
                         final HashMap<String, TL_messages_stickerSet> stickerSetsByNameNew = new HashMap();
-                        final HashMap<Long, String> stickersByEmojiNew = new HashMap();
-                        HashMap<Long, Document> stickersByIdNew = new HashMap();
+                        final LongSparseArray<String> stickersByEmojiNew = new LongSparseArray();
+                        LongSparseArray<Document> stickersByIdNew = new LongSparseArray();
                         final HashMap<String, ArrayList<Document>> allStickersNew = new HashMap();
                         for (int a = 0; a < arrayList.size(); a++) {
                             TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) arrayList.get(a);
                             if (stickerSet != null) {
                                 int b;
                                 stickerSetsNew.add(stickerSet);
-                                stickerSetsByIdNew.put(Long.valueOf(stickerSet.set.id), stickerSet);
+                                stickerSetsByIdNew.put(stickerSet.set.id, stickerSet);
                                 stickerSetsByNameNew.put(stickerSet.set.short_name, stickerSet);
                                 for (b = 0; b < stickerSet.documents.size(); b++) {
                                     Document document = (Document) stickerSet.documents.get(b);
                                     if (!(document == null || (document instanceof TL_documentEmpty))) {
-                                        stickersByIdNew.put(Long.valueOf(document.id), document);
+                                        stickersByIdNew.put(document.id, document);
                                     }
                                 }
                                 if (!stickerSet.set.archived) {
@@ -1500,10 +1502,10 @@ public class DataQuery {
                                             }
                                             for (int c = 0; c < stickerPack.documents.size(); c++) {
                                                 Long id = (Long) stickerPack.documents.get(c);
-                                                if (!stickersByEmojiNew.containsKey(id)) {
-                                                    stickersByEmojiNew.put(id, stickerPack.emoticon);
+                                                if (stickersByEmojiNew.indexOfKey(id.longValue()) < 0) {
+                                                    stickersByEmojiNew.put(id.longValue(), stickerPack.emoticon);
                                                 }
-                                                Document sticker = (Document) stickersByIdNew.get(id);
+                                                Document sticker = (Document) stickersByIdNew.get(id.longValue());
                                                 if (sticker != null) {
                                                     arrayList.add(sticker);
                                                 }
@@ -1518,12 +1520,15 @@ public class DataQuery {
                         }
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                for (int a = 0; a < DataQuery.this.stickerSets[i3].size(); a++) {
+                                int a;
+                                for (a = 0; a < DataQuery.this.stickerSets[i3].size(); a++) {
                                     StickerSet set = ((TL_messages_stickerSet) DataQuery.this.stickerSets[i3].get(a)).set;
-                                    DataQuery.this.stickerSetsById.remove(Long.valueOf(set.id));
+                                    DataQuery.this.stickerSetsById.remove(set.id);
                                     DataQuery.this.stickerSetsByName.remove(set.short_name);
                                 }
-                                DataQuery.this.stickerSetsById.putAll(stickerSetsByIdNew);
+                                for (a = 0; a < stickerSetsByIdNew.size(); a++) {
+                                    DataQuery.this.stickerSetsById.put(stickerSetsByIdNew.keyAt(a), stickerSetsByIdNew.valueAt(a));
+                                }
                                 DataQuery.this.stickerSetsByName.putAll(stickerSetsByNameNew);
                                 DataQuery.this.stickerSets[i3] = stickerSetsNew;
                                 DataQuery.this.loadHash[i3] = i2;
@@ -1568,7 +1573,7 @@ public class DataQuery {
                     if (hide == 2) {
                         this.stickerSets[type].add(0, set);
                     } else {
-                        this.stickerSetsById.remove(Long.valueOf(set.set.id));
+                        this.stickerSetsById.remove(set.set.id);
                         this.stickerSetsByName.remove(set.set.short_name);
                     }
                     this.loadHash[type] = calcStickersHash(this.stickerSets[type]);
@@ -1654,7 +1659,7 @@ public class DataQuery {
     }
 
     public boolean isMessageFound(int messageId, boolean mergeDialog) {
-        return this.searchResultMessagesMap[mergeDialog ? 1 : 0].containsKey(Integer.valueOf(messageId));
+        return this.searchResultMessagesMap[mergeDialog ? 1 : 0].indexOfKey(messageId) >= 0;
     }
 
     public void searchMessagesInChat(String query, long dialog_id, long mergeDialogId, int guid, int direction, User user) {
@@ -1828,15 +1833,15 @@ public class DataQuery {
                                     boolean added = false;
                                     for (a = 0; a < Math.min(res.messages.size(), 20); a++) {
                                         added = true;
-                                        messageObject = new MessageObject(DataQuery.this.currentAccount, (Message) res.messages.get(a), null, false);
+                                        messageObject = new MessageObject(DataQuery.this.currentAccount, (Message) res.messages.get(a), false);
                                         DataQuery.this.searchResultMessages.add(messageObject);
-                                        HashMap[] access$4300 = DataQuery.this.searchResultMessagesMap;
+                                        SparseArray[] access$4300 = DataQuery.this.searchResultMessagesMap;
                                         if (j2 == j3) {
                                             i = 0;
                                         } else {
                                             i = 1;
                                         }
-                                        access$4300[i].put(Integer.valueOf(messageObject.getId()), messageObject);
+                                        access$4300[i].put(messageObject.getId(), messageObject);
                                     }
                                     DataQuery.this.messagesSearchEndReached[j2 == j3 ? 0 : 1] = res.messages.size() != 21;
                                     int[] access$3700 = DataQuery.this.messagesSearchCount;
@@ -2000,10 +2005,10 @@ public class DataQuery {
     }
 
     public static boolean canAddMessageToMedia(Message message) {
-        if ((message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) {
+        if ((message instanceof TL_message_secret) && (message.media instanceof TL_messageMediaPhoto) && message.ttl != 0 && message.ttl <= 60) {
             return false;
         }
-        if ((message instanceof TL_message_secret) && (message.media instanceof TL_messageMediaPhoto) && message.ttl != 0 && message.ttl <= 60) {
+        if (!(message instanceof TL_message_secret) && (message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) {
             return false;
         }
         if ((message.media instanceof TL_messageMediaPhoto) || ((message.media instanceof TL_messageMediaDocument) && !MessageObject.isGifDocument(message.media.document))) {
@@ -2033,14 +2038,14 @@ public class DataQuery {
             MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
             putMediaDatabase(uid, type, res.messages, max_id, topReached);
         }
-        AbstractMap usersDict = new HashMap();
+        SparseArray<User> usersDict = new SparseArray();
         for (a = 0; a < res.users.size(); a++) {
             User u = (User) res.users.get(a);
-            usersDict.put(Integer.valueOf(u.id), u);
+            usersDict.put(u.id, u);
         }
         final ArrayList<MessageObject> objects = new ArrayList();
         for (a = 0; a < res.messages.size(); a++) {
-            objects.add(new MessageObject(this.currentAccount, (Message) res.messages.get(a), usersDict, true));
+            objects.add(new MessageObject(this.currentAccount, (Message) res.messages.get(a), (SparseArray) usersDict, true));
         }
         final messages_Messages org_telegram_tgnet_TLRPC_messages_Messages = res;
         final boolean z = fromCache;
@@ -2358,7 +2363,7 @@ public class DataQuery {
                             if (MessageObject.isMusicMessage(message)) {
                                 message.id = cursor.intValue(1);
                                 message.dialog_id = j;
-                                arrayList.add(0, new MessageObject(DataQuery.this.currentAccount, message, null, false));
+                                arrayList.add(0, new MessageObject(DataQuery.this.currentAccount, message, false));
                             }
                         }
                     }
@@ -3181,15 +3186,15 @@ public class DataQuery {
 
     private MessageObject broadcastPinnedMessage(Message result, ArrayList<User> users, ArrayList<Chat> chats, boolean isCache, boolean returnValue) {
         int a;
-        HashMap<Integer, User> usersDict = new HashMap();
+        SparseArray usersDict = new SparseArray();
         for (a = 0; a < users.size(); a++) {
             User user = (User) users.get(a);
-            usersDict.put(Integer.valueOf(user.id), user);
+            usersDict.put(user.id, user);
         }
-        HashMap<Integer, Chat> chatsDict = new HashMap();
+        SparseArray chatsDict = new SparseArray();
         for (a = 0; a < chats.size(); a++) {
             Chat chat = (Chat) chats.get(a);
-            chatsDict.put(Integer.valueOf(chat.id), chat);
+            chatsDict.put(chat.id, chat);
         }
         if (returnValue) {
             return new MessageObject(this.currentAccount, result, usersDict, chatsDict, false);
@@ -3198,13 +3203,13 @@ public class DataQuery {
         final boolean z = isCache;
         final ArrayList<Chat> arrayList2 = chats;
         final Message message = result;
-        final HashMap<Integer, User> hashMap = usersDict;
-        final HashMap<Integer, Chat> hashMap2 = chatsDict;
+        final SparseArray sparseArray = usersDict;
+        final SparseArray sparseArray2 = chatsDict;
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 MessagesController.getInstance(DataQuery.this.currentAccount).putUsers(arrayList, z);
                 MessagesController.getInstance(DataQuery.this.currentAccount).putChats(arrayList2, z);
-                NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.didLoadedPinnedMessage, new MessageObject(DataQuery.this.currentAccount, message, hashMap, hashMap2, false));
+                NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.didLoadedPinnedMessage, new MessageObject(DataQuery.this.currentAccount, message, sparseArray, sparseArray2, false));
             }
         });
         return null;
@@ -3228,19 +3233,19 @@ public class DataQuery {
         ArrayList<MessageObject> messageObjects;
         if (((int) dialogId) == 0) {
             final ArrayList<Long> replyMessages = new ArrayList();
-            final HashMap<Long, ArrayList<MessageObject>> replyMessageRandomOwners = new HashMap();
+            final LongSparseArray<ArrayList<MessageObject>> replyMessageRandomOwners = new LongSparseArray();
             for (a = 0; a < messages.size(); a++) {
                 messageObject = (MessageObject) messages.get(a);
                 if (messageObject.isReply() && messageObject.replyMessageObject == null) {
-                    Long id = Long.valueOf(messageObject.messageOwner.reply_to_random_id);
+                    long id = messageObject.messageOwner.reply_to_random_id;
                     messageObjects = (ArrayList) replyMessageRandomOwners.get(id);
                     if (messageObjects == null) {
                         messageObjects = new ArrayList();
                         replyMessageRandomOwners.put(id, messageObjects);
                     }
                     messageObjects.add(messageObject);
-                    if (!replyMessages.contains(id)) {
-                        replyMessages.add(id);
+                    if (!replyMessages.contains(Long.valueOf(id))) {
+                        replyMessages.add(Long.valueOf(id));
                     }
                 }
             }
@@ -3250,6 +3255,7 @@ public class DataQuery {
                     public void run() {
                         try {
                             ArrayList<MessageObject> arrayList;
+                            int b;
                             SQLiteCursor cursor = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, m.date, r.random_id FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE r.random_id IN(%s)", new Object[]{TextUtils.join(",", replyMessages)}), new Object[0]);
                             while (cursor.next()) {
                                 NativeByteBuffer data = cursor.byteBufferValue(0);
@@ -3259,10 +3265,12 @@ public class DataQuery {
                                     message.id = cursor.intValue(1);
                                     message.date = cursor.intValue(2);
                                     message.dialog_id = j;
-                                    arrayList = (ArrayList) replyMessageRandomOwners.remove(Long.valueOf(cursor.longValue(3)));
+                                    long value = cursor.longValue(3);
+                                    arrayList = (ArrayList) replyMessageRandomOwners.get(value);
+                                    replyMessageRandomOwners.remove(value);
                                     if (arrayList != null) {
-                                        MessageObject messageObject = new MessageObject(DataQuery.this.currentAccount, message, null, null, false);
-                                        for (int b = 0; b < arrayList.size(); b++) {
+                                        MessageObject messageObject = new MessageObject(DataQuery.this.currentAccount, message, false);
+                                        for (b = 0; b < arrayList.size(); b++) {
                                             MessageObject object = (MessageObject) arrayList.get(b);
                                             object.replyMessageObject = messageObject;
                                             object.messageOwner.reply_to_msg_id = messageObject.getId();
@@ -3275,9 +3283,9 @@ public class DataQuery {
                                 }
                             }
                             cursor.dispose();
-                            if (!replyMessageRandomOwners.isEmpty()) {
-                                for (Entry<Long, ArrayList<MessageObject>> entry : replyMessageRandomOwners.entrySet()) {
-                                    arrayList = (ArrayList) entry.getValue();
+                            if (replyMessageRandomOwners.size() != 0) {
+                                for (b = 0; b < replyMessageRandomOwners.size(); b++) {
+                                    arrayList = (ArrayList) replyMessageRandomOwners.valueAt(b);
                                     for (int a = 0; a < arrayList.size(); a++) {
                                         ((MessageObject) arrayList.get(a)).messageOwner.reply_to_random_id = 0;
                                     }
@@ -3298,14 +3306,14 @@ public class DataQuery {
             return;
         }
         final ArrayList<Integer> replyMessages2 = new ArrayList();
-        final HashMap<Integer, ArrayList<MessageObject>> replyMessageOwners = new HashMap();
+        final SparseArray<ArrayList<MessageObject>> replyMessageOwners = new SparseArray();
         final StringBuilder stringBuilder = new StringBuilder();
         int channelId = 0;
         for (a = 0; a < messages.size(); a++) {
             messageObject = (MessageObject) messages.get(a);
             if (messageObject.getId() > 0 && messageObject.isReply() && messageObject.replyMessageObject == null) {
-                Integer id2 = Integer.valueOf(messageObject.messageOwner.reply_to_msg_id);
-                long messageId = (long) id2.intValue();
+                int id2 = messageObject.messageOwner.reply_to_msg_id;
+                long messageId = (long) id2;
                 if (messageObject.messageOwner.to_id.channel_id != 0) {
                     messageId |= ((long) messageObject.messageOwner.to_id.channel_id) << 32;
                     channelId = messageObject.messageOwner.to_id.channel_id;
@@ -3320,8 +3328,8 @@ public class DataQuery {
                     replyMessageOwners.put(id2, messageObjects);
                 }
                 messageObjects.add(messageObject);
-                if (!replyMessages2.contains(id2)) {
-                    replyMessages2.add(id2);
+                if (!replyMessages2.contains(Integer.valueOf(id2))) {
+                    replyMessages2.add(Integer.valueOf(id2));
                 }
             }
         }
@@ -3400,7 +3408,7 @@ public class DataQuery {
         }
     }
 
-    private void saveReplyMessages(final HashMap<Integer, ArrayList<MessageObject>> replyMessageOwners, final ArrayList<Message> result) {
+    private void saveReplyMessages(final SparseArray<ArrayList<MessageObject>> replyMessageOwners, final ArrayList<Message> result) {
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
             public void run() {
                 try {
@@ -3408,7 +3416,7 @@ public class DataQuery {
                     SQLitePreparedStatement state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("UPDATE messages SET replydata = ? WHERE mid = ?");
                     for (int a = 0; a < result.size(); a++) {
                         Message message = (Message) result.get(a);
-                        ArrayList<MessageObject> messageObjects = (ArrayList) replyMessageOwners.get(Integer.valueOf(message.id));
+                        ArrayList<MessageObject> messageObjects = (ArrayList) replyMessageOwners.get(message.id);
                         if (messageObjects != null) {
                             NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
                             message.serializeToStream(data);
@@ -3435,23 +3443,23 @@ public class DataQuery {
         });
     }
 
-    private void broadcastReplyMessages(ArrayList<Message> result, HashMap<Integer, ArrayList<MessageObject>> replyMessageOwners, ArrayList<User> users, ArrayList<Chat> chats, long dialog_id, boolean isCache) {
+    private void broadcastReplyMessages(ArrayList<Message> result, SparseArray<ArrayList<MessageObject>> replyMessageOwners, ArrayList<User> users, ArrayList<Chat> chats, long dialog_id, boolean isCache) {
         int a;
-        final HashMap<Integer, User> usersDict = new HashMap();
+        final SparseArray<User> usersDict = new SparseArray();
         for (a = 0; a < users.size(); a++) {
             User user = (User) users.get(a);
-            usersDict.put(Integer.valueOf(user.id), user);
+            usersDict.put(user.id, user);
         }
-        final HashMap<Integer, Chat> chatsDict = new HashMap();
+        final SparseArray<Chat> chatsDict = new SparseArray();
         for (a = 0; a < chats.size(); a++) {
             Chat chat = (Chat) chats.get(a);
-            chatsDict.put(Integer.valueOf(chat.id), chat);
+            chatsDict.put(chat.id, chat);
         }
         final ArrayList<User> arrayList = users;
         final boolean z = isCache;
         final ArrayList<Chat> arrayList2 = chats;
         final ArrayList<Message> arrayList3 = result;
-        final HashMap<Integer, ArrayList<MessageObject>> hashMap = replyMessageOwners;
+        final SparseArray<ArrayList<MessageObject>> sparseArray = replyMessageOwners;
         final long j = dialog_id;
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
@@ -3460,7 +3468,7 @@ public class DataQuery {
                 boolean changed = false;
                 for (int a = 0; a < arrayList3.size(); a++) {
                     Message message = (Message) arrayList3.get(a);
-                    ArrayList<MessageObject> arrayList = (ArrayList) hashMap.get(Integer.valueOf(message.id));
+                    ArrayList<MessageObject> arrayList = (ArrayList) sparseArray.get(message.id);
                     if (arrayList != null) {
                         MessageObject messageObject = new MessageObject(DataQuery.this.currentAccount, message, usersDict, chatsDict, false);
                         for (int b = 0; b < arrayList.size(); b++) {
@@ -3724,11 +3732,11 @@ public class DataQuery {
     }
 
     public DraftMessage getDraft(long did) {
-        return (DraftMessage) this.drafts.get(Long.valueOf(did));
+        return (DraftMessage) this.drafts.get(did);
     }
 
     public Message getDraftMessage(long did) {
-        return (Message) this.draftMessages.get(Long.valueOf(did));
+        return (Message) this.draftMessages.get(did);
     }
 
     public void saveDraft(long did, CharSequence message, ArrayList<MessageEntity> entities, Message replyToMessage, boolean noWebpage) {
@@ -3753,7 +3761,7 @@ public class DataQuery {
             draftMessage.entities = entities;
             draftMessage.flags |= 8;
         }
-        DraftMessage currentDraft = (DraftMessage) this.drafts.get(Long.valueOf(did));
+        DraftMessage currentDraft = (DraftMessage) this.drafts.get(did);
         if (!clean) {
             if (currentDraft == null || !currentDraft.message.equals(draftMessage.message) || currentDraft.reply_to_msg_id != draftMessage.reply_to_msg_id || currentDraft.no_webpage != draftMessage.no_webpage) {
                 if (currentDraft == null && TextUtils.isEmpty(draftMessage.message) && draftMessage.reply_to_msg_id == 0) {
@@ -3788,11 +3796,11 @@ public class DataQuery {
     public void saveDraft(long did, DraftMessage draft, Message replyToMessage, boolean fromServer) {
         Editor editor = this.preferences.edit();
         if (draft == null || (draft instanceof TL_draftMessageEmpty)) {
-            this.drafts.remove(Long.valueOf(did));
-            this.draftMessages.remove(Long.valueOf(did));
+            this.drafts.remove(did);
+            this.draftMessages.remove(did);
             this.preferences.edit().remove(TtmlNode.ANONYMOUS_REGION_ID + did).remove("r_" + did).commit();
         } else {
-            this.drafts.put(Long.valueOf(did), draft);
+            this.drafts.put(did, draft);
             try {
                 SerializedData serializedData = new SerializedData(draft.getObjectSize());
                 draft.serializeToStream(serializedData);
@@ -3802,10 +3810,10 @@ public class DataQuery {
             }
         }
         if (replyToMessage == null) {
-            this.draftMessages.remove(Long.valueOf(did));
+            this.draftMessages.remove(did);
             editor.remove("r_" + did);
         } else {
-            this.draftMessages.put(Long.valueOf(did), replyToMessage);
+            this.draftMessages.put(did, replyToMessage);
             serializedData = new SerializedData(replyToMessage.getObjectSize());
             replyToMessage.serializeToStream(serializedData);
             editor.putString("r_" + did, Utilities.bytesToHex(serializedData.toByteArray()));
@@ -3890,9 +3898,9 @@ public class DataQuery {
         if (message != null) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
-                    DraftMessage draftMessage = (DraftMessage) DataQuery.this.drafts.get(Long.valueOf(did));
+                    DraftMessage draftMessage = (DraftMessage) DataQuery.this.drafts.get(did);
                     if (draftMessage != null && draftMessage.reply_to_msg_id == message.id) {
-                        DataQuery.this.draftMessages.put(Long.valueOf(did), message);
+                        DataQuery.this.draftMessages.put(did, message);
                         SerializedData serializedData = new SerializedData(message.getObjectSize());
                         message.serializeToStream(serializedData);
                         DataQuery.this.preferences.edit().putString("r_" + did, Utilities.bytesToHex(serializedData.toByteArray())).commit();
@@ -3904,11 +3912,11 @@ public class DataQuery {
     }
 
     public void cleanDraft(long did, boolean replyOnly) {
-        DraftMessage draftMessage = (DraftMessage) this.drafts.get(Long.valueOf(did));
+        DraftMessage draftMessage = (DraftMessage) this.drafts.get(did);
         if (draftMessage != null) {
             if (!replyOnly) {
-                this.drafts.remove(Long.valueOf(did));
-                this.draftMessages.remove(Long.valueOf(did));
+                this.drafts.remove(did);
+                this.draftMessages.remove(did);
                 this.preferences.edit().remove(TtmlNode.ANONYMOUS_REGION_ID + did).remove("r_" + did).commit();
                 MessagesController.getInstance(this.currentAccount).sortDialogs(null);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
@@ -3933,23 +3941,23 @@ public class DataQuery {
             public void run() {
                 if (messages != null) {
                     for (int a = 0; a < messages.size(); a++) {
-                        Long did = (Long) DataQuery.this.botKeyboardsByMids.get(messages.get(a));
-                        if (did != null) {
+                        long did = DataQuery.this.botKeyboardsByMids.get(((Integer) messages.get(a)).intValue());
+                        if (did != 0) {
                             DataQuery.this.botKeyboards.remove(did);
-                            DataQuery.this.botKeyboardsByMids.remove(messages.get(a));
-                            NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoaded, null, did);
+                            DataQuery.this.botKeyboardsByMids.delete(((Integer) messages.get(a)).intValue());
+                            NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoaded, null, Long.valueOf(did));
                         }
                     }
                     return;
                 }
-                DataQuery.this.botKeyboards.remove(Long.valueOf(did));
+                DataQuery.this.botKeyboards.remove(did);
                 NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoaded, null, Long.valueOf(did));
             }
         });
     }
 
     public void loadBotKeyboard(final long did) {
-        if (((Message) this.botKeyboards.get(Long.valueOf(did))) != null) {
+        if (((Message) this.botKeyboards.get(did)) != null) {
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoaded, keyboard, Long.valueOf(did));
             return;
         }
@@ -3982,7 +3990,7 @@ public class DataQuery {
     }
 
     public void loadBotInfo(final int uid, boolean cache, final int classGuid) {
-        if (!cache || ((BotInfo) this.botInfos.get(Integer.valueOf(uid))) == null) {
+        if (!cache || ((BotInfo) this.botInfos.get(uid)) == null) {
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     BotInfo botInfo = null;
@@ -4036,11 +4044,12 @@ public class DataQuery {
                     state.dispose();
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            Message old = (Message) DataQuery.this.botKeyboards.put(Long.valueOf(did), message);
+                            Message old = (Message) DataQuery.this.botKeyboards.get(did);
+                            DataQuery.this.botKeyboards.put(did, message);
                             if (old != null) {
-                                DataQuery.this.botKeyboardsByMids.remove(Integer.valueOf(old.id));
+                                DataQuery.this.botKeyboardsByMids.delete(old.id);
                             }
-                            DataQuery.this.botKeyboardsByMids.put(Integer.valueOf(message.id), Long.valueOf(did));
+                            DataQuery.this.botKeyboardsByMids.put(message.id, did);
                             NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.botKeyboardDidLoaded, message, Long.valueOf(did));
                         }
                     });
@@ -4053,7 +4062,7 @@ public class DataQuery {
 
     public void putBotInfo(final BotInfo botInfo) {
         if (botInfo != null) {
-            this.botInfos.put(Integer.valueOf(botInfo.user_id), botInfo);
+            this.botInfos.put(botInfo.user_id, botInfo);
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     try {

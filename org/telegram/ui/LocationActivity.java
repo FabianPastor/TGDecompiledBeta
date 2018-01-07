@@ -28,6 +28,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build.VERSION;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,7 +52,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
@@ -145,7 +145,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private int markerTop;
     private ImageView markerXImageView;
     private ArrayList<LiveLocation> markers = new ArrayList();
-    private HashMap<Integer, LiveLocation> markersMap = new HashMap();
+    private SparseArray<LiveLocation> markersMap = new SparseArray();
     private MessageObject messageObject;
     private Location myLocation;
     private boolean onResumeCalled;
@@ -737,7 +737,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     private LiveLocation addUserMarker(Message message) {
         LatLng latLng = new LatLng(message.media.geo.lat, message.media.geo._long);
-        LiveLocation liveLocation = (LiveLocation) this.markersMap.get(Integer.valueOf(message.from_id));
+        LiveLocation liveLocation = (LiveLocation) this.markersMap.get(message.from_id);
         if (liveLocation == null) {
             liveLocation = new LiveLocation();
             liveLocation.object = message;
@@ -762,7 +762,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     options.anchor(0.5f, 0.907f);
                     liveLocation.marker = this.googleMap.addMarker(options);
                     this.markers.add(liveLocation);
-                    this.markersMap.put(Integer.valueOf(liveLocation.id), liveLocation);
+                    this.markersMap.put(liveLocation.id, liveLocation);
                     SharingLocationInfo myInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
                     if (liveLocation.id == UserConfig.getInstance(this.currentAccount).getClientUserId() && myInfo != null && liveLocation.object.id == myInfo.mid && this.myLocation != null) {
                         liveLocation.marker.setPosition(new LatLng(this.myLocation.getLatitude(), this.myLocation.getLongitude()));
@@ -1018,7 +1018,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private void positionMarker(Location location) {
         if (location != null) {
             this.myLocation = new Location(location);
-            LiveLocation liveLocation = (LiveLocation) this.markersMap.get(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+            LiveLocation liveLocation = (LiveLocation) this.markersMap.get(UserConfig.getInstance(this.currentAccount).getClientUserId());
             SharingLocationInfo myInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId);
             if (!(liveLocation == null || myInfo == null || liveLocation.object.id != myInfo.mid)) {
                 liveLocation.marker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
@@ -1090,7 +1090,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private boolean getRecentLocations() {
-        ArrayList<Message> messages = (ArrayList) LocationController.getInstance(this.currentAccount).locationsCache.get(Long.valueOf(this.messageObject.getDialogId()));
+        ArrayList<Message> messages = (ArrayList) LocationController.getInstance(this.currentAccount).locationsCache.get(this.messageObject.getDialogId());
         if (messages == null || !messages.isEmpty()) {
             messages = null;
         } else {
@@ -1118,7 +1118,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                                 MessagesStorage.getInstance(LocationActivity.this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
                                 MessagesController.getInstance(LocationActivity.this.currentAccount).putUsers(res.users, false);
                                 MessagesController.getInstance(LocationActivity.this.currentAccount).putChats(res.chats, false);
-                                LocationController.getInstance(LocationActivity.this.currentAccount).locationsCache.put(Long.valueOf(dialog_id), res.messages);
+                                LocationController.getInstance(LocationActivity.this.currentAccount).locationsCache.put(dialog_id, res.messages);
                                 NotificationCenter.getInstance(LocationActivity.this.currentAccount).postNotificationName(NotificationCenter.liveLocationsCacheChanged, Long.valueOf(dialog_id));
                                 LocationActivity.this.fetchRecentLocations(res.messages);
                             }
@@ -1167,7 +1167,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 for (a = 0; a < messageObjects.size(); a++) {
                     messageObject = (MessageObject) messageObjects.get(a);
                     if (messageObject.isLiveLocation()) {
-                        LiveLocation liveLocation = (LiveLocation) this.markersMap.get(Integer.valueOf(getMessageId(messageObject.messageOwner)));
+                        LiveLocation liveLocation = (LiveLocation) this.markersMap.get(getMessageId(messageObject.messageOwner));
                         if (liveLocation != null) {
                             SharingLocationInfo myInfo = LocationController.getInstance(this.currentAccount).getSharingLocationInfo(did);
                             if (myInfo == null || myInfo.mid != messageObject.getId()) {

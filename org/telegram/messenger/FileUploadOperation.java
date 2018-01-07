@@ -2,12 +2,13 @@ package org.telegram.messenger;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.tgnet.ConnectionsManager;
@@ -29,9 +30,9 @@ import org.telegram.tgnet.WriteToSocketDelegate;
 public class FileUploadOperation {
     private static final int initialRequestsCount = 8;
     private static final int maxUploadingKBytes = 2048;
-    private static final int minUploadChunkSize = 64;
+    private static final int minUploadChunkSize = 128;
     private long availableSize;
-    private HashMap<Integer, UploadCachedResult> cachedResults = new HashMap();
+    private SparseArray<UploadCachedResult> cachedResults = new SparseArray();
     private int currentAccount;
     private long currentFileId;
     private int currentPartNum;
@@ -56,7 +57,7 @@ public class FileUploadOperation {
     private byte[] readBuffer;
     private long readBytesCount;
     private int requestNum;
-    private HashMap<Integer, Integer> requestTokens = new HashMap();
+    private SparseIntArray requestTokens = new SparseIntArray();
     private int saveInfoTimes;
     private boolean started;
     private int state;
@@ -119,8 +120,8 @@ public class FileUploadOperation {
             this.state = 2;
             Utilities.stageQueue.postRunnable(new Runnable() {
                 public void run() {
-                    for (Integer num : FileUploadOperation.this.requestTokens.values()) {
-                        ConnectionsManager.getInstance(FileUploadOperation.this.currentAccount).cancelRequest(num.intValue(), true);
+                    for (int a = 0; a < FileUploadOperation.this.requestTokens.size(); a++) {
+                        ConnectionsManager.getInstance(FileUploadOperation.this.currentAccount).cancelRequest(FileUploadOperation.this.requestTokens.valueAt(a), true);
                     }
                 }
             });
@@ -203,7 +204,7 @@ public class FileUploadOperation {
                             FileLog.e(e);
                         }
                     }
-                    this.uploadChunkSize = (int) Math.max(64, ((this.totalFileSize + 3072000) - 1) / 3072000);
+                    this.uploadChunkSize = (int) Math.max(128, ((this.totalFileSize + 3072000) - 1) / 3072000);
                     if (1024 % this.uploadChunkSize != 0) {
                         int chunkSize = 64;
                         while (this.uploadChunkSize > chunkSize) {
@@ -393,7 +394,7 @@ public class FileUploadOperation {
                         this.currentPartNum = currentRequestPartNum + 1;
                         final int requestSize = finalRequest.getObjectSize() + 4;
                         final int i = currentRequestBytes;
-                        this.requestTokens.put(Integer.valueOf(requestNumFinal), Integer.valueOf(ConnectionsManager.getInstance(this.currentAccount).sendRequest(finalRequest, new RequestDelegate() {
+                        this.requestTokens.put(requestNumFinal, ConnectionsManager.getInstance(this.currentAccount).sendRequest(finalRequest, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
                                 int networkType = response != null ? response.networkType : ConnectionsManager.getCurrentNetworkType();
                                 if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
@@ -408,7 +409,7 @@ public class FileUploadOperation {
                                 if (currentRequestIv != null) {
                                     FileUploadOperation.this.freeRequestIvs.add(currentRequestIv);
                                 }
-                                FileUploadOperation.this.requestTokens.remove(Integer.valueOf(requestNumFinal));
+                                FileUploadOperation.this.requestTokens.delete(requestNumFinal);
                                 if (response instanceof TL_boolTrue) {
                                     FileUploadOperation.this.uploadedBytesCount = FileUploadOperation.this.uploadedBytesCount + ((long) i);
                                     FileUploadOperation.this.delegate.didChangedUploadProgress(FileUploadOperation.this, ((float) FileUploadOperation.this.uploadedBytesCount) / ((float) FileUploadOperation.this.totalFileSize));
@@ -468,13 +469,13 @@ public class FileUploadOperation {
                                                 long offsetToSave = currentRequestBytesOffset;
                                                 byte[] ivToSave = currentRequestIv;
                                                 while (true) {
-                                                    result3 = (UploadCachedResult) FileUploadOperation.this.cachedResults.get(Integer.valueOf(FileUploadOperation.this.lastSavedPartNum));
+                                                    result3 = (UploadCachedResult) FileUploadOperation.this.cachedResults.get(FileUploadOperation.this.lastSavedPartNum);
                                                     if (result3 == null) {
                                                         break;
                                                     }
                                                     offsetToSave = result3.bytesOffset;
                                                     ivToSave = result3.iv;
-                                                    FileUploadOperation.this.cachedResults.remove(Integer.valueOf(FileUploadOperation.this.lastSavedPartNum));
+                                                    FileUploadOperation.this.cachedResults.remove(FileUploadOperation.this.lastSavedPartNum);
                                                     FileUploadOperation.this.lastSavedPartNum = FileUploadOperation.this.lastSavedPartNum + 1;
                                                 }
                                                 if ((FileUploadOperation.this.isBigFile && offsetToSave % 1048576 == 0) || (!FileUploadOperation.this.isBigFile && FileUploadOperation.this.saveInfoTimes == 0)) {
@@ -492,7 +493,7 @@ public class FileUploadOperation {
                                                     result3.iv = new byte[32];
                                                     System.arraycopy(currentRequestIv, 0, result3.iv, 0, 32);
                                                 }
-                                                FileUploadOperation.this.cachedResults.put(Integer.valueOf(currentRequestPartNum), result3);
+                                                FileUploadOperation.this.cachedResults.put(currentRequestPartNum, result3);
                                             }
                                             FileUploadOperation.this.saveInfoTimes = FileUploadOperation.this.saveInfoTimes + 1;
                                         }
@@ -515,7 +516,7 @@ public class FileUploadOperation {
                                     }
                                 });
                             }
-                        }, 0, ConnectionsManager.DEFAULT_DATACENTER_ID, ((requestNumFinal % 4) << 16) | 4, true)));
+                        }, 0, ConnectionsManager.DEFAULT_DATACENTER_ID, ((requestNumFinal % 4) << 16) | 4, true));
                     }
                 }
             } catch (Throwable e22) {

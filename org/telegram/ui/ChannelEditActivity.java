@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -95,7 +96,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     private int membersSection2Row;
     private int membersSectionRow;
     private int membersStartRow;
-    private HashMap<Integer, ChatParticipant> participantsMap = new HashMap();
+    private SparseArray<ChatParticipant> participantsMap = new SparseArray();
     private int permissionsRow;
     private int rowCount = 0;
     private SearchAdapter searchListViewAdapter;
@@ -328,7 +329,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                     TLObject object = getItem(position);
                     if (object instanceof User) {
                         user = (User) object;
-                        ChatParticipant part = (ChatParticipant) ChannelEditActivity.this.participantsMap.get(Integer.valueOf(user.id));
+                        ChatParticipant part = (ChatParticipant) ChannelEditActivity.this.participantsMap.get(user.id);
                         if (part instanceof TL_chatChannelParticipant) {
                             ChannelParticipant channelParticipant = ((TL_chatChannelParticipant) part).channelParticipant;
                             isAdmin = (channelParticipant instanceof TL_channelParticipantCreator) || (channelParticipant instanceof TL_channelParticipantAdmin);
@@ -578,7 +579,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         if (!this.loadingUsers && this.participantsMap != null && this.info != null) {
             int delay;
             this.loadingUsers = true;
-            if (this.participantsMap.isEmpty() || !reload) {
+            if (this.participantsMap.size() == 0 || !reload) {
                 delay = 0;
             } else {
                 delay = 300;
@@ -613,9 +614,9 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                                     participant.inviter_id = participant.channelParticipant.inviter_id;
                                     participant.user_id = participant.channelParticipant.user_id;
                                     participant.date = participant.channelParticipant.date;
-                                    if (!ChannelEditActivity.this.participantsMap.containsKey(Integer.valueOf(participant.user_id))) {
+                                    if (ChannelEditActivity.this.participantsMap.indexOfKey(participant.user_id) < 0) {
                                         ChannelEditActivity.this.info.participants.participants.add(participant);
-                                        ChannelEditActivity.this.participantsMap.put(Integer.valueOf(participant.user_id), participant);
+                                        ChannelEditActivity.this.participantsMap.put(participant.user_id, participant);
                                     }
                                 }
                             }
@@ -637,7 +638,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         if ((this.info instanceof TL_channelFull) && this.info.participants != null) {
             for (int a = 0; a < this.info.participants.participants.size(); a++) {
                 ChatParticipant chatParticipant = (ChatParticipant) this.info.participants.participants.get(a);
-                this.participantsMap.put(Integer.valueOf(chatParticipant.user_id), chatParticipant);
+                this.participantsMap.put(chatParticipant.user_id, chatParticipant);
             }
         }
     }
@@ -704,7 +705,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                 return false;
             }
             uid = channelParticipant.user_id;
-            user = (TL_chatChannelParticipant) this.participantsMap.get(Integer.valueOf(channelParticipant.user_id));
+            user = (TL_chatChannelParticipant) this.participantsMap.get(channelParticipant.user_id);
             if (user != null) {
                 channelParticipant = user.channelParticipant;
             }

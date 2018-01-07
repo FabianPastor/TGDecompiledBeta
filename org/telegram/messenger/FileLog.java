@@ -9,8 +9,10 @@ import org.telegram.messenger.time.FastDateFormat;
 
 public class FileLog {
     private static volatile FileLog Instance = null;
+    private static final String tag = "tmessages";
     private File currentFile = null;
     private FastDateFormat dateFormat = null;
+    private boolean initied;
     private DispatchQueue logQueue = null;
     private File networkFile = null;
     private OutputStreamWriter streamWriter = null;
@@ -42,7 +44,13 @@ public class FileLog {
     }
 
     public FileLog() {
-        if (BuildVars.DEBUG_VERSION) {
+        if (BuildVars.LOGS_ENABLED) {
+            init();
+        }
+    }
+
+    public void init() {
+        if (!this.initied) {
             this.dateFormat = FastDateFormat.getInstance("dd_MM_yyyy_HH_mm_ss", Locale.US);
             try {
                 File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
@@ -59,6 +67,7 @@ public class FileLog {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    this.initied = true;
                 }
             } catch (Exception e2) {
                 e2.printStackTrace();
@@ -66,8 +75,12 @@ public class FileLog {
         }
     }
 
+    public static void ensureInitied() {
+        getInstance().init();
+    }
+
     public static String getNetworkLogPath() {
-        if (!BuildVars.DEBUG_VERSION) {
+        if (!BuildVars.LOGS_ENABLED) {
             return TtmlNode.ANONYMOUS_REGION_ID;
         }
         try {
@@ -86,8 +99,9 @@ public class FileLog {
     }
 
     public static void e(final String message, final Throwable exception) {
-        if (BuildVars.DEBUG_VERSION) {
-            Log.e("tmessages", message, exception);
+        if (BuildVars.LOGS_ENABLED) {
+            ensureInitied();
+            Log.e(tag, message, exception);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable() {
                     public void run() {
@@ -105,8 +119,9 @@ public class FileLog {
     }
 
     public static void e(final String message) {
-        if (BuildVars.DEBUG_VERSION) {
-            Log.e("tmessages", message);
+        if (BuildVars.LOGS_ENABLED) {
+            ensureInitied();
+            Log.e(tag, message);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable() {
                     public void run() {
@@ -123,7 +138,8 @@ public class FileLog {
     }
 
     public static void e(final Throwable e) {
-        if (BuildVars.DEBUG_VERSION) {
+        if (BuildVars.LOGS_ENABLED) {
+            ensureInitied();
             e.printStackTrace();
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable() {
@@ -147,8 +163,9 @@ public class FileLog {
     }
 
     public static void d(final String message) {
-        if (BuildVars.DEBUG_VERSION) {
-            Log.d("tmessages", message);
+        if (BuildVars.LOGS_ENABLED) {
+            ensureInitied();
+            Log.d(tag, message);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable() {
                     public void run() {
@@ -165,8 +182,9 @@ public class FileLog {
     }
 
     public static void w(final String message) {
-        if (BuildVars.DEBUG_VERSION) {
-            Log.w("tmessages", message);
+        if (BuildVars.LOGS_ENABLED) {
+            ensureInitied();
+            Log.w(tag, message);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable() {
                     public void run() {
@@ -183,6 +201,7 @@ public class FileLog {
     }
 
     public static void cleanupLogs() {
+        ensureInitied();
         File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
         if (sdCard != null) {
             File[] files = new File(sdCard.getAbsolutePath() + "/logs").listFiles();

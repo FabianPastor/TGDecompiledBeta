@@ -1,9 +1,9 @@
 package net.hockeyapp.android.tasks;
 
 import android.content.Context;
-import java.io.IOException;
 import java.net.URL;
 import net.hockeyapp.android.listeners.DownloadFileListener;
+import net.hockeyapp.android.utils.HockeyLog;
 
 public class GetFileSizeTask extends DownloadFileTask {
     private long mSize;
@@ -15,8 +15,8 @@ public class GetFileSizeTask extends DownloadFileTask {
     protected Long doInBackground(Void... args) {
         try {
             return Long.valueOf((long) createConnection(new URL(getURLString()), 6).getContentLength());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            HockeyLog.error("Failed to get size " + this.mUrlString, e);
             return Long.valueOf(0);
         }
     }

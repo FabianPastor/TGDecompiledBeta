@@ -1,6 +1,7 @@
 package org.telegram.SQLite;
 
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class SQLiteDatabase {
@@ -63,7 +64,9 @@ public class SQLiteDatabase {
                 commitTransaction();
                 closedb(this.sqliteHandle);
             } catch (SQLiteException e) {
-                FileLog.e(e.getMessage(), e);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e(e.getMessage(), e);
+                }
             }
             this.isOpen = false;
         }

@@ -336,7 +336,7 @@ public class AlertsCreator {
                 NotificationsController.getInstance(UserConfig.selectedAccount).removeNotificationsForDialog(dialog_id);
                 MessagesStorage.getInstance(UserConfig.selectedAccount).setDialogFlags(dialog_id, flags);
                 editor.commit();
-                TL_dialog dialog = (TL_dialog) MessagesController.getInstance(UserConfig.selectedAccount).dialogs_dict.get(Long.valueOf(dialog_id));
+                TL_dialog dialog = (TL_dialog) MessagesController.getInstance(UserConfig.selectedAccount).dialogs_dict.get(dialog_id);
                 if (dialog != null) {
                     dialog.notify_settings = new TL_peerNotifySettings();
                     dialog.notify_settings.mute_until = untilTime;

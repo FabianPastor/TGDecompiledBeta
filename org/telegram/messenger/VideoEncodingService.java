@@ -26,7 +26,9 @@ public class VideoEncodingService extends Service implements NotificationCenterD
         stopForeground(true);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.stopEncodingService);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
-        FileLog.e("destroy video service");
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("destroy video service");
+        }
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
@@ -72,7 +74,9 @@ public class VideoEncodingService extends Service implements NotificationCenterD
         if (this.path == null) {
             stopSelf();
         } else {
-            FileLog.e("start video service");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("start video service");
+            }
             if (this.builder == null) {
                 this.builder = new Builder(ApplicationLoader.applicationContext);
                 this.builder.setSmallIcon(17301640);

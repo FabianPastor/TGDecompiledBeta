@@ -826,7 +826,7 @@ public class LocaleController {
                 if (!AndroidUtilities.copyFile(file, finalFile)) {
                     return false;
                 }
-                LocaleInfo localeInfo = getLanguageFromDict(languageCode);
+                LocaleInfo localeInfo = getLanguageFromDict("local_" + languageCode.toLowerCase());
                 if (localeInfo == null) {
                     localeInfo = new LocaleInfo();
                     localeInfo.name = languageName;
@@ -935,12 +935,12 @@ public class LocaleController {
     }
 
     private HashMap<String, String> getLocaleFileStrings(File file, boolean preserveEscapes) {
+        HashMap<String, String> stringMap;
         Throwable e;
         Throwable th;
         FileInputStream fileInputStream = null;
         this.reloadLastFile = false;
         try {
-            HashMap<String, String> stringMap;
             if (file.exists()) {
                 stringMap = new HashMap();
                 XmlPullParser parser = Xml.newPullParser();
@@ -1063,7 +1063,9 @@ public class LocaleController {
                 ConnectionsManager.setLangCode(shortName.replace("_", "-"));
             }
             if (localeInfo.isRemote() && (force || !pathToFile.exists())) {
-                FileLog.d("reload locale because file doesn't exist " + pathToFile);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("reload locale because file doesn't exist " + pathToFile);
+                }
                 if (init) {
                     i = currentAccount;
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -1791,9 +1793,9 @@ public class LocaleController {
             int dateDay = rightNow.get(6);
             int dateYear = rightNow.get(1);
             if (dateDay == day && year == dateYear) {
-                return String.format("%s %s", new Object[]{getString("TodayAt", R.string.TodayAt), getInstance().formatterDay.format(new Date(date))});
+                return formatString("TodayAtFormatted", R.string.TodayAtFormatted, getInstance().formatterDay.format(new Date(date)));
             } else if (dateDay + 1 == day && year == dateYear) {
-                return String.format("%s %s", new Object[]{getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(date))});
+                return formatString("YesterdayAtFormatted", R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date)));
             } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
                 return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             } else {
@@ -1818,7 +1820,7 @@ public class LocaleController {
                 return getInstance().formatterDay.format(new Date(date));
             }
             if (dateDay + 1 == day && year == dateYear) {
-                return String.format("%s %s", new Object[]{getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(date))});
+                return formatString("YesterdayAtFormatted", R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date)));
             } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
                 return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().chatDate.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             } else {
@@ -1839,6 +1841,7 @@ public class LocaleController {
             rightNow.setTimeInMillis(date);
             int dateDay = rightNow.get(6);
             int dateYear = rightNow.get(1);
+            Object[] objArr;
             if (dateDay == day && year == dateYear) {
                 int diff = ((int) (((long) ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime()) - (date / 1000))) / 60;
                 if (diff < 1) {
@@ -1847,15 +1850,19 @@ public class LocaleController {
                 if (diff < 60) {
                     return formatPluralString("UpdatedMinutes", diff);
                 }
-                return String.format("%s %s %s", new Object[]{getString("LocationUpdated", R.string.LocationUpdated), getString("TodayAt", R.string.TodayAt), getInstance().formatterDay.format(new Date(date))});
+                objArr = new Object[1];
+                objArr[0] = formatString("TodayAtFormatted", R.string.TodayAtFormatted, getInstance().formatterDay.format(new Date(date)));
+                return formatString("LocationUpdatedFormatted", R.string.LocationUpdatedFormatted, objArr);
             } else if (dateDay + 1 == day && year == dateYear) {
-                return String.format("%s %s %s", new Object[]{getString("LocationUpdated", R.string.LocationUpdated), getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(date))});
+                objArr = new Object[1];
+                objArr[0] = formatString("YesterdayAtFormatted", R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date)));
+                return formatString("LocationUpdatedFormatted", R.string.LocationUpdatedFormatted, objArr);
             } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
                 format = formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
-                return String.format("%s %s", new Object[]{getString("LocationUpdated", R.string.LocationUpdated), format});
+                return formatString("LocationUpdatedFormatted", R.string.LocationUpdatedFormatted, format);
             } else {
                 format = formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
-                return String.format("%s %s", new Object[]{getString("LocationUpdated", R.string.LocationUpdated), format});
+                return formatString("LocationUpdatedFormatted", R.string.LocationUpdatedFormatted, format);
             }
         } catch (Throwable e) {
             FileLog.e(e);
@@ -1901,16 +1908,21 @@ public class LocaleController {
             rightNow.setTimeInMillis(date);
             int dateDay = rightNow.get(6);
             int dateYear = rightNow.get(1);
+            Object[] objArr;
             if (dateDay == day && year == dateYear) {
-                return String.format("%s %s %s", new Object[]{getString("LastSeen", R.string.LastSeen), getString("TodayAt", R.string.TodayAt), getInstance().formatterDay.format(new Date(date))});
+                objArr = new Object[1];
+                objArr[0] = formatString("TodayAtFormatted", R.string.TodayAtFormatted, getInstance().formatterDay.format(new Date(date)));
+                return formatString("LastSeenFormatted", R.string.LastSeenFormatted, objArr);
             } else if (dateDay + 1 == day && year == dateYear) {
-                return String.format("%s %s %s", new Object[]{getString("LastSeen", R.string.LastSeen), getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(date))});
+                objArr = new Object[1];
+                objArr[0] = formatString("YesterdayAtFormatted", R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date)));
+                return formatString("LastSeenFormatted", R.string.LastSeenFormatted, objArr);
             } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
                 format = formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
-                return String.format("%s %s", new Object[]{getString("LastSeenDate", R.string.LastSeenDate), format});
+                return formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);
             } else {
                 format = formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
-                return String.format("%s %s", new Object[]{getString("LastSeenDate", R.string.LastSeenDate), format});
+                return formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);
             }
         } catch (Throwable e) {
             FileLog.e(e);
@@ -2102,7 +2114,9 @@ public class LocaleController {
                         values.remove(string.key);
                     }
                 }
-                FileLog.d("save locale file to " + finalFile);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("save locale file to " + finalFile);
+                }
                 BufferedWriter writer = new BufferedWriter(new FileWriter(finalFile));
                 writer.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
                 writer.write("<resources>\n");
@@ -2178,7 +2192,9 @@ public class LocaleController {
                                 LocaleController.this.remoteLanguages.clear();
                                 for (a = 0; a < res.objects.size(); a++) {
                                     TL_langPackLanguage language = (TL_langPackLanguage) res.objects.get(a);
-                                    FileLog.d("loaded lang " + language.name);
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        FileLog.d("loaded lang " + language.name);
+                                    }
                                     LocaleInfo localeInfo = new LocaleInfo();
                                     localeInfo.nameEnglish = language.name;
                                     localeInfo.name = language.native_name;
@@ -2201,7 +2217,9 @@ public class LocaleController {
                                 while (a < LocaleController.this.languages.size()) {
                                     LocaleInfo info = (LocaleInfo) LocaleController.this.languages.get(a);
                                     if (!info.isBuiltIn() && info.isRemote() && ((LocaleInfo) remoteLoaded.get(info.getKey())) == null) {
-                                        FileLog.d("remove lang " + info.getKey());
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.d("remove lang " + info.getKey());
+                                        }
                                         LocaleController.this.languages.remove(a);
                                         LocaleController.this.languagesDict.remove(info.getKey());
                                         a--;

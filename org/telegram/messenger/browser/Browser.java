@@ -233,7 +233,9 @@ public class Browser {
                                 browserPackageNames = new String[list.size()];
                                 for (a = 0; a < list.size(); a++) {
                                     browserPackageNames[a] = ((ResolveInfo) list.get(a)).activityInfo.packageName;
-                                    FileLog.d("default browser name = " + browserPackageNames[a]);
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        FileLog.d("default browser name = " + browserPackageNames[a]);
+                                    }
                                 }
                             }
                         } catch (Exception e2) {
@@ -263,7 +265,7 @@ public class Browser {
                                     a++;
                                 }
                             }
-                            if (BuildVars.DEBUG_VERSION) {
+                            if (BuildVars.LOGS_ENABLED) {
                                 for (a = 0; a < allActivities.size(); a++) {
                                     FileLog.d("device has " + ((ResolveInfo) allActivities.get(a)).activityInfo.packageName + " to open " + uri.toString());
                                 }

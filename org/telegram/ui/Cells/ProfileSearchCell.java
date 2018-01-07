@@ -226,7 +226,7 @@ public class ProfileSearchCell extends BaseCell {
         int nameWidth2 = nameWidth - this.paddingRight;
         onlineWidth -= this.paddingRight;
         if (this.drawCount) {
-            TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(Long.valueOf(this.dialog_id));
+            TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
             if (dialog == null || dialog.unread_count == 0) {
                 this.lastUnreadCount = 0;
                 this.countLayout = null;
@@ -369,7 +369,7 @@ public class ProfileSearchCell extends BaseCell {
                 }
             }
             if (!(continueUpdate || !this.drawCount || (mask & 256) == 0)) {
-                TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(Long.valueOf(this.dialog_id));
+                TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
                 if (!(dialog == null || dialog.unread_count == this.lastUnreadCount)) {
                     continueUpdate = true;
                 }

@@ -8,6 +8,7 @@ import android.graphics.Matrix.ScaleToFit;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
+import android.support.annotation.Keep;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
@@ -48,10 +49,12 @@ public class ClippingImageView extends View {
         this.animationValues = values;
     }
 
+    @Keep
     public float getAnimationProgress() {
         return this.animationProgress;
     }
 
+    @Keep
     public void setAnimationProgress(float progress) {
         this.animationProgress = progress;
         setScaleX(this.animationValues[0][0] + ((this.animationValues[1][0] - this.animationValues[0][0]) * this.animationProgress));

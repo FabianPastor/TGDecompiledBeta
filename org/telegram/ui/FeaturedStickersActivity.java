@@ -1,12 +1,12 @@
 package org.telegram.ui;
 
 import android.content.Context;
+import android.util.LongSparseArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
@@ -34,7 +34,7 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.StickersAlert.StickersAlertInstallDelegate;
 
 public class FeaturedStickersActivity extends BaseFragment implements NotificationCenterDelegate {
-    private HashMap<Long, StickerSetCovered> installingStickerSets = new HashMap();
+    private LongSparseArray<StickerSetCovered> installingStickerSets = new LongSparseArray();
     private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
@@ -56,25 +56,27 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            boolean z = true;
             if (getItemViewType(position) == 0) {
-                boolean z2;
+                boolean z;
+                boolean installing;
                 ArrayList<StickerSetCovered> arrayList = DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).getFeaturedStickerSets();
                 FeaturedStickerSetCell cell = holder.itemView;
                 cell.setTag(Integer.valueOf(position));
                 StickerSetCovered stickerSet = (StickerSetCovered) arrayList.get(position);
                 if (position != arrayList.size() - 1) {
-                    z2 = true;
+                    z = true;
                 } else {
-                    z2 = false;
-                }
-                if (FeaturedStickersActivity.this.unreadStickers == null || !FeaturedStickersActivity.this.unreadStickers.contains(Long.valueOf(stickerSet.set.id))) {
                     z = false;
                 }
-                cell.setStickersSet(stickerSet, z2, z);
-                boolean installing = FeaturedStickersActivity.this.installingStickerSets.containsKey(Long.valueOf(stickerSet.set.id));
+                boolean z2 = FeaturedStickersActivity.this.unreadStickers != null && FeaturedStickersActivity.this.unreadStickers.contains(Long.valueOf(stickerSet.set.id));
+                cell.setStickersSet(stickerSet, z, z2);
+                if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(stickerSet.set.id) >= 0) {
+                    installing = true;
+                } else {
+                    installing = false;
+                }
                 if (installing && cell.isInstalled()) {
-                    FeaturedStickersActivity.this.installingStickerSets.remove(Long.valueOf(stickerSet.set.id));
+                    FeaturedStickersActivity.this.installingStickerSets.remove(stickerSet.set.id);
                     installing = false;
                     cell.setDrawProgress(false);
                 }
@@ -96,8 +98,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
                         public void onClick(View v) {
                             FeaturedStickerSetCell parent = (FeaturedStickerSetCell) v.getParent();
                             StickerSetCovered pack = parent.getStickerSet();
-                            if (!FeaturedStickersActivity.this.installingStickerSets.containsKey(Long.valueOf(pack.set.id))) {
-                                FeaturedStickersActivity.this.installingStickerSets.put(Long.valueOf(pack.set.id), pack);
+                            if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(pack.set.id) < 0) {
+                                FeaturedStickersActivity.this.installingStickerSets.put(pack.set.id, pack);
                                 DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).removeStickersSet(FeaturedStickersActivity.this.getParentActivity(), pack.set, 2, FeaturedStickersActivity.this, false);
                                 parent.setDrawProgress(true);
                             }
@@ -186,7 +188,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
                     stickersAlert.setInstallDelegate(new StickersAlertInstallDelegate() {
                         public void onStickerSetInstalled() {
                             view.setDrawProgress(true);
-                            FeaturedStickersActivity.this.installingStickerSets.put(Long.valueOf(stickerSet.set.id), stickerSet);
+                            FeaturedStickersActivity.this.installingStickerSets.put(stickerSet.set.id, stickerSet);
                         }
 
                         public void onStickerSetUninstalled() {

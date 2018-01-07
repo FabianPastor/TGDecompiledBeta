@@ -30,6 +30,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Bitmaps;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.NotificationCenter;
@@ -111,7 +112,9 @@ public class CameraController implements OnInfoListener {
                                     size = (Size) list.get(a);
                                     if ((size.width != 1280 || size.height == 720) && size.height < 2160 && size.width < 2160) {
                                         cameraInfo.previewSizes.add(new Size(size.width, size.height));
-                                        FileLog.e("preview size = " + size.width + " " + size.height);
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.d("preview size = " + size.width + " " + size.height);
+                                        }
                                     }
                                 }
                                 list = params.getSupportedPictureSizes();
@@ -119,7 +122,9 @@ public class CameraController implements OnInfoListener {
                                     size = (Size) list.get(a);
                                     if ((size.width != 1280 || size.height == 720) && !("samsung".equals(Build.MANUFACTURER) && "jflteuc".equals(Build.PRODUCT) && size.width >= 2048)) {
                                         cameraInfo.pictureSizes.add(new Size(size.width, size.height));
-                                        FileLog.e("picture size = " + size.width + " " + size.height);
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.d("picture size = " + size.width + " " + size.height);
+                                        }
                                     }
                                 }
                                 camera.release();
@@ -432,46 +437,50 @@ public class CameraController implements OnInfoListener {
     }
 
     public void openRound(CameraSession session, SurfaceTexture texture, Runnable callback, Runnable configureCallback) {
-        if (session == null || texture == null) {
-            FileLog.e("failed to open round " + session + " tex = " + texture);
-            return;
-        }
-        final CameraSession cameraSession = session;
-        final Runnable runnable = configureCallback;
-        final SurfaceTexture surfaceTexture = texture;
-        final Runnable runnable2 = callback;
-        this.threadPool.execute(new Runnable() {
-            @SuppressLint({"NewApi"})
-            public void run() {
-                Camera camera = cameraSession.cameraInfo.camera;
-                try {
-                    FileLog.e("start creating round camera session");
-                    if (camera == null) {
-                        CameraInfo cameraInfo = cameraSession.cameraInfo;
-                        Camera camera2 = Camera.open(cameraSession.cameraInfo.cameraId);
-                        cameraInfo.camera = camera2;
-                        camera = camera2;
+        if (session != null && texture != null) {
+            final CameraSession cameraSession = session;
+            final Runnable runnable = configureCallback;
+            final SurfaceTexture surfaceTexture = texture;
+            final Runnable runnable2 = callback;
+            this.threadPool.execute(new Runnable() {
+                @SuppressLint({"NewApi"})
+                public void run() {
+                    Camera camera = cameraSession.cameraInfo.camera;
+                    try {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("start creating round camera session");
+                        }
+                        if (camera == null) {
+                            CameraInfo cameraInfo = cameraSession.cameraInfo;
+                            Camera camera2 = Camera.open(cameraSession.cameraInfo.cameraId);
+                            cameraInfo.camera = camera2;
+                            camera = camera2;
+                        }
+                        Parameters params = camera.getParameters();
+                        cameraSession.configureRoundCamera();
+                        if (runnable != null) {
+                            runnable.run();
+                        }
+                        camera.setPreviewTexture(surfaceTexture);
+                        camera.startPreview();
+                        if (runnable2 != null) {
+                            AndroidUtilities.runOnUIThread(runnable2);
+                        }
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("round camera session created");
+                        }
+                    } catch (Throwable e) {
+                        cameraSession.cameraInfo.camera = null;
+                        if (camera != null) {
+                            camera.release();
+                        }
+                        FileLog.e(e);
                     }
-                    Parameters params = camera.getParameters();
-                    cameraSession.configureRoundCamera();
-                    if (runnable != null) {
-                        runnable.run();
-                    }
-                    camera.setPreviewTexture(surfaceTexture);
-                    camera.startPreview();
-                    if (runnable2 != null) {
-                        AndroidUtilities.runOnUIThread(runnable2);
-                    }
-                    FileLog.e("round camera session created");
-                } catch (Throwable e) {
-                    cameraSession.cameraInfo.camera = null;
-                    if (camera != null) {
-                        camera.release();
-                    }
-                    FileLog.e(e);
                 }
-            }
-        });
+            });
+        } else if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("failed to open round " + session + " tex = " + texture);
+        }
     }
 
     public void open(CameraSession session, SurfaceTexture texture, Runnable callback, Runnable prestartCallback) {

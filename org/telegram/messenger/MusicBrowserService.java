@@ -30,10 +30,10 @@ import android.service.media.MediaBrowserService;
 import android.service.media.MediaBrowserService.BrowserRoot;
 import android.service.media.MediaBrowserService.Result;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import org.telegram.SQLite.SQLiteCursor;
@@ -58,7 +58,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     private static final String SLOT_RESERVATION_SKIP_TO_PREV = "com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_SKIP_TO_PREVIOUS";
     private static final int STOP_DELAY = 30000;
     private RectF bitmapRect;
-    private HashMap<Integer, Chat> chats = new HashMap();
+    private SparseArray<Chat> chats = new SparseArray();
     private boolean chatsLoaded;
     private int currentAccount = UserConfig.selectedAccount;
     private DelayedStopHandler delayedStopHandler = new DelayedStopHandler();
@@ -66,11 +66,11 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     private int lastSelectedDialog;
     private boolean loadingChats;
     private MediaSession mediaSession;
-    private HashMap<Integer, ArrayList<MessageObject>> musicObjects = new HashMap();
-    private HashMap<Integer, ArrayList<QueueItem>> musicQueues = new HashMap();
+    private SparseArray<ArrayList<MessageObject>> musicObjects = new SparseArray();
+    private SparseArray<ArrayList<QueueItem>> musicQueues = new SparseArray();
     private Paint roundPaint;
     private boolean serviceStarted;
-    private HashMap<Integer, User> users = new HashMap();
+    private SparseArray<User> users = new SparseArray();
 
     private static class DelayedStopHandler extends Handler {
         private final WeakReference<MusicBrowserService> mWeakReference;
@@ -122,15 +122,15 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 try {
                     int did = Integer.parseInt(args[0]);
                     int id = Integer.parseInt(args[1]);
-                    ArrayList<MessageObject> arrayList = (ArrayList) MusicBrowserService.this.musicObjects.get(Integer.valueOf(did));
-                    ArrayList<QueueItem> arrayList1 = (ArrayList) MusicBrowserService.this.musicQueues.get(Integer.valueOf(did));
+                    ArrayList<MessageObject> arrayList = (ArrayList) MusicBrowserService.this.musicObjects.get(did);
+                    ArrayList<QueueItem> arrayList1 = (ArrayList) MusicBrowserService.this.musicQueues.get(did);
                     if (arrayList != null && id >= 0 && id < arrayList.size()) {
                         MusicBrowserService.this.lastSelectedDialog = did;
                         MessagesController.getNotificationsSettings(MusicBrowserService.this.currentAccount).edit().putInt("auto_lastSelectedDialog", did).commit();
                         MediaController.getInstance().setPlaylist(arrayList, (MessageObject) arrayList.get(id), false);
                         MusicBrowserService.this.mediaSession.setQueue(arrayList1);
                         if (did > 0) {
-                            User user = (User) MusicBrowserService.this.users.get(Integer.valueOf(did));
+                            User user = (User) MusicBrowserService.this.users.get(did);
                             if (user != null) {
                                 MusicBrowserService.this.mediaSession.setQueueTitle(ContactsController.formatName(user.first_name, user.last_name));
                             } else {
@@ -138,7 +138,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                             }
                             MusicBrowserService.this.handlePlayRequest();
                         }
-                        Chat chat = (Chat) MusicBrowserService.this.chats.get(Integer.valueOf(-did));
+                        Chat chat = (Chat) MusicBrowserService.this.chats.get(-did);
                         if (chat != null) {
                             MusicBrowserService.this.mediaSession.setQueueTitle(chat.title);
                         } else {
@@ -174,13 +174,13 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 for (int a = 0; a < MusicBrowserService.this.dialogs.size(); a++) {
                     int did = ((Integer) MusicBrowserService.this.dialogs.get(a)).intValue();
                     if (did > 0) {
-                        User user = (User) MusicBrowserService.this.users.get(Integer.valueOf(did));
+                        User user = (User) MusicBrowserService.this.users.get(did);
                         if (user != null && ((user.first_name != null && user.first_name.startsWith(query)) || (user.last_name != null && user.last_name.startsWith(query)))) {
                             onPlayFromMediaId(did + "_" + 0, null);
                             return;
                         }
                     }
-                    Chat chat = (Chat) MusicBrowserService.this.chats.get(Integer.valueOf(-did));
+                    Chat chat = (Chat) MusicBrowserService.this.chats.get(-did);
                     if (!(chat == null || chat.title == null || !chat.title.toLowerCase().contains(query))) {
                         onPlayFromMediaId(did + "_" + 0, null);
                         return;
@@ -268,15 +268,15 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                                         int did = cursor.intValue(0);
                                         message.id = cursor.intValue(2);
                                         message.dialog_id = (long) did;
-                                        ArrayList<MessageObject> arrayList = (ArrayList) MusicBrowserService.this.musicObjects.get(Integer.valueOf(did));
-                                        ArrayList<QueueItem> arrayList1 = (ArrayList) MusicBrowserService.this.musicQueues.get(Integer.valueOf(did));
+                                        ArrayList<MessageObject> arrayList = (ArrayList) MusicBrowserService.this.musicObjects.get(did);
+                                        ArrayList<QueueItem> arrayList1 = (ArrayList) MusicBrowserService.this.musicQueues.get(did);
                                         if (arrayList == null) {
                                             arrayList = new ArrayList();
-                                            MusicBrowserService.this.musicObjects.put(Integer.valueOf(did), arrayList);
+                                            MusicBrowserService.this.musicObjects.put(did, arrayList);
                                             arrayList1 = new ArrayList();
-                                            MusicBrowserService.this.musicQueues.put(Integer.valueOf(did), arrayList1);
+                                            MusicBrowserService.this.musicQueues.put(did, arrayList1);
                                         }
-                                        MessageObject messageObject = new MessageObject(MusicBrowserService.this.currentAccount, message, null, false);
+                                        MessageObject messageObject = new MessageObject(MusicBrowserService.this.currentAccount, message, false);
                                         arrayList.add(0, messageObject);
                                         Builder builder = new Builder().setMediaId(did + "_" + arrayList.size());
                                         builder.setTitle(messageObject.getMusicTitle());
@@ -291,7 +291,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                                 messagesStorage.getUsersInternal(TextUtils.join(",", usersToLoad), usersArrayList);
                                 for (a = 0; a < usersArrayList.size(); a++) {
                                     User user = (User) usersArrayList.get(a);
-                                    MusicBrowserService.this.users.put(Integer.valueOf(user.id), user);
+                                    MusicBrowserService.this.users.put(user.id, user);
                                 }
                             }
                             if (!chatsToLoad.isEmpty()) {
@@ -299,7 +299,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                                 messagesStorage.getChatsInternal(TextUtils.join(",", chatsToLoad), chatsArrayList);
                                 for (a = 0; a < chatsArrayList.size(); a++) {
                                     Chat chat = (Chat) chatsArrayList.get(a);
-                                    MusicBrowserService.this.chats.put(Integer.valueOf(chat.id), chat);
+                                    MusicBrowserService.this.chats.put(chat.id, chat);
                                 }
                             }
                         }
@@ -315,19 +315,19 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                                 MusicBrowserService.this.lastSelectedDialog = ((Integer) MusicBrowserService.this.dialogs.get(0)).intValue();
                             }
                             if (MusicBrowserService.this.lastSelectedDialog != 0) {
-                                ArrayList<MessageObject> arrayList = (ArrayList) MusicBrowserService.this.musicObjects.get(Integer.valueOf(MusicBrowserService.this.lastSelectedDialog));
-                                ArrayList<QueueItem> arrayList1 = (ArrayList) MusicBrowserService.this.musicQueues.get(Integer.valueOf(MusicBrowserService.this.lastSelectedDialog));
+                                ArrayList<MessageObject> arrayList = (ArrayList) MusicBrowserService.this.musicObjects.get(MusicBrowserService.this.lastSelectedDialog);
+                                ArrayList<QueueItem> arrayList1 = (ArrayList) MusicBrowserService.this.musicQueues.get(MusicBrowserService.this.lastSelectedDialog);
                                 if (!(arrayList == null || arrayList.isEmpty())) {
                                     MusicBrowserService.this.mediaSession.setQueue(arrayList1);
                                     if (MusicBrowserService.this.lastSelectedDialog > 0) {
-                                        User user = (User) MusicBrowserService.this.users.get(Integer.valueOf(MusicBrowserService.this.lastSelectedDialog));
+                                        User user = (User) MusicBrowserService.this.users.get(MusicBrowserService.this.lastSelectedDialog);
                                         if (user != null) {
                                             MusicBrowserService.this.mediaSession.setQueueTitle(ContactsController.formatName(user.first_name, user.last_name));
                                         } else {
                                             MusicBrowserService.this.mediaSession.setQueueTitle("DELETED USER");
                                         }
                                     } else {
-                                        Chat chat = (Chat) MusicBrowserService.this.chats.get(Integer.valueOf(-MusicBrowserService.this.lastSelectedDialog));
+                                        Chat chat = (Chat) MusicBrowserService.this.chats.get(-MusicBrowserService.this.lastSelectedDialog);
                                         if (chat != null) {
                                             MusicBrowserService.this.mediaSession.setQueueTitle(chat.title);
                                         } else {
@@ -361,7 +361,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 builder = new Builder().setMediaId("__CHAT_" + did);
                 FileLocation avatar = null;
                 if (did > 0) {
-                    User user = (User) this.users.get(Integer.valueOf(did));
+                    User user = (User) this.users.get(did);
                     if (user != null) {
                         builder.setTitle(ContactsController.formatName(user.first_name, user.last_name));
                         if (user.photo != null && (user.photo.photo_small instanceof TL_fileLocation)) {
@@ -371,7 +371,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                         builder.setTitle("DELETED USER");
                     }
                 } else {
-                    Chat chat = (Chat) this.chats.get(Integer.valueOf(-did));
+                    Chat chat = (Chat) this.chats.get(-did);
                     if (chat != null) {
                         builder.setTitle(chat.title);
                         if (chat.photo != null && (chat.photo.photo_small instanceof TL_fileLocation)) {
@@ -401,7 +401,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
-                ArrayList<MessageObject> arrayList = (ArrayList) this.musicObjects.get(Integer.valueOf(did));
+                ArrayList<MessageObject> arrayList = (ArrayList) this.musicObjects.get(did);
                 if (arrayList != null) {
                     for (a = 0; a < arrayList.size(); a++) {
                         MessageObject messageObject = (MessageObject) arrayList.get(a);

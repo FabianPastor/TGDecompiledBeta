@@ -85,12 +85,12 @@ public class ThemeActivity extends BaseFragment {
                                 Builder builder = new Builder(ThemeActivity.this.getParentActivity());
                                 builder.setItems(themeInfo.pathToFile == null ? new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile)} : new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Edit", R.string.Edit), LocaleController.getString("Delete", R.string.Delete)}, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
+                                        File currentFile;
                                         Throwable e;
                                         File finalFile;
                                         Intent intent;
                                         Throwable th;
                                         if (which == 0) {
-                                            File currentFile;
                                             if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
                                                 StringBuilder result = new StringBuilder();
                                                 for (Entry<String, Integer> entry : Theme.getDefaultColors().entrySet()) {
@@ -105,22 +105,22 @@ public class ThemeActivity extends BaseFragment {
                                                         if (stream2 != null) {
                                                             try {
                                                                 stream2.close();
-                                                            } catch (Exception e2) {
-                                                                FileLog.e("tmessage", e2);
+                                                            } catch (Throwable e2) {
+                                                                FileLog.e(e2);
                                                                 stream = stream2;
                                                             }
                                                         }
                                                         stream = stream2;
                                                     } catch (Exception e3) {
-                                                        e = e3;
+                                                        e2 = e3;
                                                         stream = stream2;
                                                         try {
-                                                            FileLog.e(e);
+                                                            FileLog.e(e2);
                                                             if (stream != null) {
                                                                 try {
                                                                     stream.close();
-                                                                } catch (Exception e22) {
-                                                                    FileLog.e("tmessage", e22);
+                                                                } catch (Throwable e22) {
+                                                                    FileLog.e(e22);
                                                                 }
                                                             }
                                                             finalFile = new File(FileLoader.getDirectory(4), currentFile.getName());
@@ -144,8 +144,8 @@ public class ThemeActivity extends BaseFragment {
                                                             if (stream != null) {
                                                                 try {
                                                                     stream.close();
-                                                                } catch (Exception e222) {
-                                                                    FileLog.e("tmessage", e222);
+                                                                } catch (Throwable e222) {
+                                                                    FileLog.e(e222);
                                                                 }
                                                             }
                                                             throw th;
@@ -159,8 +159,8 @@ public class ThemeActivity extends BaseFragment {
                                                         throw th;
                                                     }
                                                 } catch (Exception e5) {
-                                                    e = e5;
-                                                    FileLog.e(e);
+                                                    e222 = e5;
+                                                    FileLog.e(e222);
                                                     if (stream != null) {
                                                         stream.close();
                                                     }
@@ -192,8 +192,8 @@ public class ThemeActivity extends BaseFragment {
                                                     }
                                                     ThemeActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
                                                 }
-                                            } catch (Throwable e6) {
-                                                FileLog.e(e6);
+                                            } catch (Throwable e2222) {
+                                                FileLog.e(e2222);
                                             }
                                         } else if (which == 1) {
                                             if (ThemeActivity.this.parentLayout != null) {

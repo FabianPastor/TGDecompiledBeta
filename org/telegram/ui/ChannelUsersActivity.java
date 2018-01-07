@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
@@ -123,7 +124,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     private int participantsDividerRow;
     private int participantsEndRow;
     private int participantsInfoRow;
-    private HashMap<Integer, ChannelParticipant> participantsMap = new HashMap();
+    private SparseArray<ChannelParticipant> participantsMap = new SparseArray();
     private int participantsStartRow;
     private int restricted1SectionRow;
     private int restricted2SectionRow;
@@ -679,18 +680,9 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            User user;
-            Throwable e;
-            Object username;
-            ManageChatUserCell userCell;
             switch (holder.getItemViewType()) {
                 case 0:
-                    CharSequence username2;
-                    CharSequence username3;
-                    String foundUserName;
-                    CharSequence spannableStringBuilder;
-                    String u;
-                    int idx;
+                    User user;
                     TLObject object = getItem(position);
                     if (object instanceof User) {
                         user = (User) object;
@@ -698,7 +690,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         user = MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).getUser(Integer.valueOf(((ChannelParticipant) object).user_id));
                     }
                     String un = user.username;
-                    CharSequence name = null;
+                    CharSequence username = null;
+                    CharSequence charSequence = null;
                     int count = this.searchAdapterHelper.getGroupSearch().size();
                     boolean ok = false;
                     String nameSearch = null;
@@ -725,125 +718,55 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         if (count != 0) {
                             if (count + 1 > position) {
                                 ok = true;
-                                name = (CharSequence) this.searchResultNames.get(position - 1);
-                                if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
-                                    username2 = name;
-                                    name = null;
-                                    username3 = username2;
+                                charSequence = (CharSequence) this.searchResultNames.get(position - 1);
+                                if (charSequence != null && un != null && un.length() > 0 && charSequence.toString().startsWith("@" + un)) {
+                                    username = charSequence;
+                                    charSequence = null;
                                 }
                             } else {
                                 position -= count + 1;
-                                username3 = null;
                             }
-                            if (!ok) {
-                                count = this.searchAdapterHelper.getGlobalSearch().size();
-                                if (count != 0 && count + 1 > position) {
-                                    foundUserName = this.searchAdapterHelper.getLastFoundUsername();
-                                    if (foundUserName.startsWith("@")) {
-                                        foundUserName = foundUserName.substring(1);
-                                    }
-                                    try {
-                                        spannableStringBuilder = new SpannableStringBuilder(un);
-                                        try {
-                                            ((SpannableStringBuilder) spannableStringBuilder).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
-                                        } catch (Exception e2) {
-                                            e = e2;
-                                            username = un;
-                                            FileLog.e(e);
-                                            if (nameSearch != null) {
-                                                u = UserObject.getUserName(user);
-                                                name = new SpannableStringBuilder(u);
-                                                idx = u.toLowerCase().indexOf(nameSearch);
-                                                if (idx != -1) {
-                                                    ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
-                                                }
-                                            }
-                                            userCell = (ManageChatUserCell) holder.itemView;
-                                            userCell.setTag(Integer.valueOf(position));
-                                            userCell.setData(user, name, username2);
-                                            return;
-                                        }
-                                    } catch (Exception e3) {
-                                        e = e3;
-                                        username2 = username3;
-                                        username = un;
-                                        FileLog.e(e);
-                                        if (nameSearch != null) {
-                                            u = UserObject.getUserName(user);
-                                            name = new SpannableStringBuilder(u);
-                                            idx = u.toLowerCase().indexOf(nameSearch);
-                                            if (idx != -1) {
-                                                ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
-                                            }
-                                        }
-                                        userCell = (ManageChatUserCell) holder.itemView;
-                                        userCell.setTag(Integer.valueOf(position));
-                                        userCell.setData(user, name, username2);
-                                        return;
-                                    }
-                                    if (nameSearch != null) {
-                                        u = UserObject.getUserName(user);
-                                        name = new SpannableStringBuilder(u);
-                                        idx = u.toLowerCase().indexOf(nameSearch);
-                                        if (idx != -1) {
-                                            ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
-                                        }
-                                    }
-                                    userCell = (ManageChatUserCell) holder.itemView;
-                                    userCell.setTag(Integer.valueOf(position));
-                                    userCell.setData(user, name, username2);
-                                    return;
-                                }
-                            }
-                            username2 = username3;
-                            if (nameSearch != null) {
-                                u = UserObject.getUserName(user);
-                                name = new SpannableStringBuilder(u);
-                                idx = u.toLowerCase().indexOf(nameSearch);
-                                if (idx != -1) {
-                                    ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
-                                }
-                            }
-                            userCell = (ManageChatUserCell) holder.itemView;
-                            userCell.setTag(Integer.valueOf(position));
-                            userCell.setData(user, name, username2);
-                            return;
                         }
                     }
-                    username3 = null;
-                    if (ok) {
+                    if (!ok) {
                         count = this.searchAdapterHelper.getGlobalSearch().size();
-                        foundUserName = this.searchAdapterHelper.getLastFoundUsername();
-                        if (foundUserName.startsWith("@")) {
-                            foundUserName = foundUserName.substring(1);
-                        }
-                        spannableStringBuilder = new SpannableStringBuilder(un);
-                        ((SpannableStringBuilder) spannableStringBuilder).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
-                        if (nameSearch != null) {
-                            u = UserObject.getUserName(user);
-                            name = new SpannableStringBuilder(u);
-                            idx = u.toLowerCase().indexOf(nameSearch);
-                            if (idx != -1) {
-                                ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
+                        if (count != 0 && count + 1 > position) {
+                            String foundUserName = this.searchAdapterHelper.getLastFoundUsername();
+                            if (foundUserName.startsWith("@")) {
+                                foundUserName = foundUserName.substring(1);
+                            }
+                            try {
+                                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+                                spannableStringBuilder.append("@");
+                                spannableStringBuilder.append(un);
+                                int index = un.toLowerCase().indexOf(foundUserName);
+                                if (index != -1) {
+                                    int len = foundUserName.length();
+                                    if (index == 0) {
+                                        len++;
+                                    } else {
+                                        index++;
+                                    }
+                                    spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, index + len, 33);
+                                }
+                                username = spannableStringBuilder;
+                            } catch (Throwable e) {
+                                Object username2 = un;
+                                FileLog.e(e);
                             }
                         }
-                        userCell = (ManageChatUserCell) holder.itemView;
-                        userCell.setTag(Integer.valueOf(position));
-                        userCell.setData(user, name, username2);
-                        return;
                     }
-                    username2 = username3;
                     if (nameSearch != null) {
-                        u = UserObject.getUserName(user);
-                        name = new SpannableStringBuilder(u);
-                        idx = u.toLowerCase().indexOf(nameSearch);
+                        String u = UserObject.getUserName(user);
+                        charSequence = new SpannableStringBuilder(u);
+                        int idx = u.toLowerCase().indexOf(nameSearch);
                         if (idx != -1) {
-                            ((SpannableStringBuilder) name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
+                            ((SpannableStringBuilder) charSequence).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), idx, nameSearch.length() + idx, 33);
                         }
                     }
-                    userCell = (ManageChatUserCell) holder.itemView;
+                    ManageChatUserCell userCell = (ManageChatUserCell) holder.itemView;
                     userCell.setTag(Integer.valueOf(position));
-                    userCell.setData(user, name, username2);
+                    userCell.setData(user, charSequence, username);
                     return;
                 case 1:
                     GraySectionCell sectionCell = holder.itemView;
@@ -1223,9 +1146,9 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         if (object instanceof User) {
                             User user = (User) object;
                             MessagesController.getInstance(ChannelUsersActivity.this.currentAccount).putUser(user, false);
-                            HashMap access$1600 = ChannelUsersActivity.this.participantsMap;
+                            SparseArray access$1600 = ChannelUsersActivity.this.participantsMap;
                             user_id = user.id;
-                            participant = (ChannelParticipant) access$1600.get(Integer.valueOf(user_id));
+                            participant = (ChannelParticipant) access$1600.get(user_id);
                         } else if (object instanceof ChannelParticipant) {
                             participant = (ChannelParticipant) object;
                         } else {
@@ -1270,7 +1193,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                     if (channelParticipant != null) {
                                         channelParticipant.admin_rights = rightsAdmin;
                                         channelParticipant.banned_rights = rightsBanned;
-                                        ChannelParticipant p = (ChannelParticipant) ChannelUsersActivity.this.participantsMap.get(Integer.valueOf(channelParticipant.user_id));
+                                        ChannelParticipant p = (ChannelParticipant) ChannelUsersActivity.this.participantsMap.get(channelParticipant.user_id);
                                         if (p != null) {
                                             p.admin_rights = rightsAdmin;
                                             p.banned_rights = rightsBanned;
@@ -1292,7 +1215,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 if (channelParticipant != null) {
                                     channelParticipant.admin_rights = rightsAdmin;
                                     channelParticipant.banned_rights = rightsBanned;
-                                    ChannelParticipant p = (ChannelParticipant) ChannelUsersActivity.this.participantsMap.get(Integer.valueOf(channelParticipant.user_id));
+                                    ChannelParticipant p = (ChannelParticipant) ChannelUsersActivity.this.participantsMap.get(channelParticipant.user_id);
                                     if (p != null) {
                                         p.admin_rights = rightsAdmin;
                                         p.banned_rights = rightsBanned;
@@ -1596,7 +1519,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                 }
                                 for (a = 0; a < res.participants.size(); a++) {
                                     ChannelParticipant participant = (ChannelParticipant) res.participants.get(a);
-                                    ChannelUsersActivity.this.participantsMap.put(Integer.valueOf(participant.user_id), participant);
+                                    ChannelUsersActivity.this.participantsMap.put(participant.user_id, participant);
                                 }
                                 try {
                                     if (ChannelUsersActivity.this.type == 0 || ChannelUsersActivity.this.type == 2) {

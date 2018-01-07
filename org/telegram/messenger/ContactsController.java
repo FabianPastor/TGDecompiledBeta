@@ -16,6 +16,7 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
+import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -315,7 +317,9 @@ public class ContactsController {
         Utilities.globalQueue.postRunnable(new Runnable() {
             public void run() {
                 if (ContactsController.this.checkContactsInternal()) {
-                    FileLog.e("detected contacts change");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("detected contacts change");
+                    }
                     ContactsController.this.performSyncPhoneBook(ContactsController.this.getContactsCopy(ContactsController.this.contactsBook), true, false, true, false, true, false);
                 }
             }
@@ -582,7 +586,7 @@ public class ContactsController {
         return ret;
     }
 
-    protected void migratePhoneBookToV7(final HashMap<Integer, Contact> contactHashMap) {
+    protected void migratePhoneBookToV7(final SparseArray<Contact> contactHashMap) {
         Utilities.globalQueue.postRunnable(new Runnable() {
             public void run() {
                 if (!ContactsController.this.migratingContacts) {
@@ -598,8 +602,8 @@ public class ContactsController {
                             contactsBookShort.put(value.shortPhones.get(a), value.key);
                         }
                     }
-                    for (Entry<Integer, Contact> entry2 : contactHashMap.entrySet()) {
-                        value = (Contact) entry2.getValue();
+                    for (int b = 0; b < contactHashMap.size(); b++) {
+                        value = (Contact) contactHashMap.valueAt(b);
                         for (a = 0; a < value.shortPhones.size(); a++) {
                             String key = (String) contactsBookShort.get((String) value.shortPhones.get(a));
                             if (key != null) {
@@ -609,7 +613,9 @@ public class ContactsController {
                             }
                         }
                     }
-                    FileLog.d("migrated contacts " + migratedMap.size() + " of " + contactHashMap.size());
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("migrated contacts " + migratedMap.size() + " of " + contactHashMap.size());
+                    }
                     MessagesStorage.getInstance(ContactsController.this.currentAccount).putCachedPhoneBook(migratedMap, true);
                 }
             }
@@ -638,7 +644,9 @@ public class ContactsController {
                             contactShortHashMap.put(c.shortPhones.get(a), c);
                         }
                     }
-                    FileLog.e("start read contacts from phone");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("start read contacts from phone");
+                    }
                     if (!z) {
                         ContactsController.this.checkContactsInternal();
                     }
@@ -772,7 +780,10 @@ public class ContactsController {
                             }
                         }
                         if (!z3 && hashMap.isEmpty() && toImport.isEmpty() && oldCount == contactsMap.size()) {
-                            FileLog.e("contacts not changed!");
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("contacts not changed!");
+                                return;
+                            }
                             return;
                         } else if (!(!z2 || hashMap.isEmpty() || contactsMap.isEmpty())) {
                             if (toImport.isEmpty()) {
@@ -859,7 +870,9 @@ public class ContactsController {
                             }
                         }
                     }
-                    FileLog.e("done processing contacts");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("done processing contacts");
+                    }
                     if (!z2) {
                         Utilities.stageQueue.postRunnable(new Runnable() {
                             public void run() {
@@ -913,7 +926,9 @@ public class ContactsController {
                         } else {
                             checkType = 0;
                         }
-                        FileLog.d("new phone book contacts " + newPhonebookContacts + " serverContactsInPhonebook " + serverContactsInPhonebook + " totalContacts " + ContactsController.this.contactsByPhone.size());
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("new phone book contacts " + newPhonebookContacts + " serverContactsInPhonebook " + serverContactsInPhonebook + " totalContacts " + ContactsController.this.contactsByPhone.size());
+                        }
                         if (checkType != 0) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
@@ -947,10 +962,10 @@ public class ContactsController {
                         } else {
                             final boolean[] hasErrors = new boolean[]{false};
                             final HashMap<String, Contact> contactsMapToSave = new HashMap(contactsMap);
-                            final HashMap<Integer, String> contactIdToKey = new HashMap();
+                            final SparseArray<String> contactIdToKey = new SparseArray();
                             for (Entry<String, Contact> entry2 : contactsMapToSave.entrySet()) {
                                 value = (Contact) entry2.getValue();
-                                contactIdToKey.put(Integer.valueOf(value.contact_id), value.key);
+                                contactIdToKey.put(value.contact_id, value.key);
                             }
                             ContactsController.this.completedRequestsCount = 0;
                             final int count = (int) Math.ceil(((double) toImport.size()) / 500.0d);
@@ -963,17 +978,19 @@ public class ContactsController {
                                         ContactsController.this.completedRequestsCount = ContactsController.this.completedRequestsCount + 1;
                                         int a;
                                         if (error == null) {
-                                            FileLog.e("contacts imported");
+                                            if (BuildVars.LOGS_ENABLED) {
+                                                FileLog.d("contacts imported");
+                                            }
                                             TL_contacts_importedContacts res = (TL_contacts_importedContacts) response;
                                             if (!res.retry_contacts.isEmpty()) {
                                                 for (a = 0; a < res.retry_contacts.size(); a++) {
-                                                    contactsMapToSave.remove(contactIdToKey.get(Integer.valueOf((int) ((Long) res.retry_contacts.get(a)).longValue())));
+                                                    contactsMapToSave.remove(contactIdToKey.get((int) ((Long) res.retry_contacts.get(a)).longValue()));
                                                 }
                                                 hasErrors[0] = true;
                                             }
                                             for (a = 0; a < res.popular_invites.size(); a++) {
                                                 TL_popularContact popularContact = (TL_popularContact) res.popular_invites.get(a);
-                                                Contact contact = (Contact) contactsMap.get(contactIdToKey.get(Integer.valueOf((int) popularContact.client_id)));
+                                                Contact contact = (Contact) contactsMap.get(contactIdToKey.get((int) popularContact.client_id));
                                                 if (contact != null) {
                                                     contact.imported = popularContact.importers;
                                                 }
@@ -988,10 +1005,12 @@ public class ContactsController {
                                             ContactsController.this.processLoadedContacts(cArr, res.users, 2);
                                         } else {
                                             for (a = 0; a < req.contacts.size(); a++) {
-                                                contactsMapToSave.remove(contactIdToKey.get(Integer.valueOf((int) ((TL_inputPhoneContact) req.contacts.get(a)).client_id)));
+                                                contactsMapToSave.remove(contactIdToKey.get((int) ((TL_inputPhoneContact) req.contacts.get(a)).client_id));
                                             }
                                             hasErrors[0] = true;
-                                            FileLog.e("import contacts error " + error.text);
+                                            if (BuildVars.LOGS_ENABLED) {
+                                                FileLog.d("import contacts error " + error.text);
+                                            }
                                         }
                                         if (ContactsController.this.completedRequestsCount == count) {
                                             if (!contactsMapToSave.isEmpty()) {
@@ -1073,11 +1092,15 @@ public class ContactsController {
             this.loadingContacts = true;
         }
         if (fromCache) {
-            FileLog.e("load contacts from cache");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("load contacts from cache");
+            }
             MessagesStorage.getInstance(this.currentAccount).getContacts();
             return;
         }
-        FileLog.e("load contacts from server");
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("load contacts from server");
+        }
         TL_contacts_getContacts req = new TL_contacts_getContacts();
         req.hash = hash;
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
@@ -1105,7 +1128,9 @@ public class ContactsController {
                             NotificationCenter.getInstance(ContactsController.this.currentAccount).postNotificationName(NotificationCenter.contactsDidLoaded, new Object[0]);
                         }
                     });
-                    FileLog.e("load contacts don't change");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("load contacts don't change");
+                    }
                 }
             }
         });
@@ -1122,7 +1147,7 @@ public class ContactsController {
                     z = false;
                 }
                 instance.putUsers(arrayList, z);
-                final HashMap<Integer, User> usersDict = new HashMap();
+                final SparseArray<User> usersDict = new SparseArray();
                 final boolean isEmpty = contactsArr.isEmpty();
                 if (!ContactsController.this.contacts.isEmpty()) {
                     a = 0;
@@ -1138,12 +1163,14 @@ public class ContactsController {
                 for (a = 0; a < contactsArr.size(); a++) {
                     User user = MessagesController.getInstance(ContactsController.this.currentAccount).getUser(Integer.valueOf(((TL_contact) contactsArr.get(a)).user_id));
                     if (user != null) {
-                        usersDict.put(Integer.valueOf(user.id), user);
+                        usersDict.put(user.id, user);
                     }
                 }
                 Utilities.stageQueue.postRunnable(new Runnable() {
                     public void run() {
-                        FileLog.e("done loading contacts");
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("done loading contacts");
+                        }
                         if (from == 1 && (contactsArr.isEmpty() || Math.abs((System.currentTimeMillis() / 1000) - ((long) UserConfig.getInstance(ContactsController.this.currentAccount).lastContactsSyncTime)) >= 86400)) {
                             ContactsController.this.loadContacts(false, ContactsController.this.getContactsHash(contactsArr));
                             if (contactsArr.isEmpty()) {
@@ -1157,11 +1184,14 @@ public class ContactsController {
                         int a = 0;
                         while (a < contactsArr.size()) {
                             TL_contact contact = (TL_contact) contactsArr.get(a);
-                            if (usersDict.get(Integer.valueOf(contact.user_id)) != null || contact.user_id == UserConfig.getInstance(ContactsController.this.currentAccount).getClientUserId()) {
+                            if (usersDict.get(contact.user_id) != null || contact.user_id == UserConfig.getInstance(ContactsController.this.currentAccount).getClientUserId()) {
                                 a++;
                             } else {
                                 ContactsController.this.loadContacts(false, 0);
-                                FileLog.e("contacts are broken, load from server");
+                                if (BuildVars.LOGS_ENABLED) {
+                                    FileLog.d("contacts are broken, load from server");
+                                    return;
+                                }
                                 return;
                             }
                         }
@@ -1171,7 +1201,7 @@ public class ContactsController {
                         }
                         Collections.sort(contactsArr, new Comparator<TL_contact>() {
                             public int compare(TL_contact tl_contact, TL_contact tl_contact2) {
-                                return UserObject.getFirstName((User) usersDict.get(Integer.valueOf(tl_contact.user_id))).compareTo(UserObject.getFirstName((User) usersDict.get(Integer.valueOf(tl_contact2.user_id))));
+                                return UserObject.getFirstName((User) usersDict.get(tl_contact.user_id)).compareTo(UserObject.getFirstName((User) usersDict.get(tl_contact2.user_id)));
                             }
                         });
                         final ConcurrentHashMap<Integer, TL_contact> contactsDictionary = new ConcurrentHashMap(20, 1.0f, 2);
@@ -1189,7 +1219,7 @@ public class ContactsController {
                         HashMap<String, TL_contact> contactsByPhonesShortDictFinal = contactsByPhonesShortDict;
                         for (a = 0; a < contactsArr.size(); a++) {
                             TL_contact value = (TL_contact) contactsArr.get(a);
-                            User user = (User) usersDict.get(Integer.valueOf(value.user_id));
+                            User user = (User) usersDict.get(value.user_id);
                             if (user != null) {
                                 contactsDictionary.put(Integer.valueOf(value.user_id), value);
                                 if (!(contactsByPhonesDict == null || TextUtils.isEmpty(user.phone))) {
@@ -1462,15 +1492,15 @@ public class ContactsController {
             if (hasContactsPermission()) {
                 Uri rawContactUri = RawContacts.CONTENT_URI.buildUpon().appendQueryParameter("account_name", this.systemAccount.name).appendQueryParameter("account_type", this.systemAccount.type).build();
                 Cursor c1 = ApplicationLoader.applicationContext.getContentResolver().query(rawContactUri, new String[]{"_id", "sync2"}, null, null, null);
-                HashMap<Integer, Long> bookContacts = new HashMap();
+                SparseLongArray bookContacts = new SparseLongArray();
                 if (c1 != null) {
                     while (c1.moveToNext()) {
-                        bookContacts.put(Integer.valueOf(c1.getInt(1)), Long.valueOf(c1.getLong(0)));
+                        bookContacts.put(c1.getInt(1), c1.getLong(0));
                     }
                     c1.close();
                     for (int a = 0; a < contactsArray.size(); a++) {
                         TL_contact u = (TL_contact) contactsArray.get(a);
-                        if (!bookContacts.containsKey(Integer.valueOf(u.user_id))) {
+                        if (bookContacts.indexOfKey(u.user_id) < 0) {
                             addContactToPhoneBook(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(u.user_id)), false);
                         }
                     }
@@ -1510,7 +1540,9 @@ public class ContactsController {
                 }
             }
         }
-        FileLog.e("process update - contacts add = " + newC.size() + " delete = " + contactsTD.size());
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("process update - contacts add = " + newC.size() + " delete = " + contactsTD.size());
+        }
         StringBuilder toAdd = new StringBuilder();
         StringBuilder toDelete = new StringBuilder();
         boolean reloadContacts = false;
@@ -1658,7 +1690,9 @@ public class ContactsController {
             return;
         }
         this.delayedContactsUpdate.addAll(ids);
-        FileLog.e("delay update - contacts add = " + newContacts.size() + " delete = " + contactsToDelete.size());
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("delay update - contacts add = " + newContacts.size() + " delete = " + contactsToDelete.size());
+        }
     }
 
     public long addContactToPhoneBook(User user, boolean check) {

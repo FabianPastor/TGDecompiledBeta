@@ -1,5 +1,6 @@
 package org.telegram.SQLite;
 
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.tgnet.NativeByteBuffer;
 
@@ -89,7 +90,9 @@ public class SQLiteCursor {
                     break;
                 }
                 try {
-                    FileLog.e("sqlite busy, waiting...");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("sqlite busy, waiting...");
+                    }
                     Thread.sleep(500);
                     res = this.preparedStatement.step();
                     if (res == 0) {

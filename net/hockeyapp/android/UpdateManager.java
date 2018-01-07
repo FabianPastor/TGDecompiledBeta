@@ -1,6 +1,5 @@
 package net.hockeyapp.android;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import net.hockeyapp.android.utils.AsyncTaskUtils;
 import net.hockeyapp.android.utils.Util;
 
 public class UpdateManager {
-    private static UpdateManagerListener lastListener = null;
     private static CheckUpdateTask updateTask = null;
 
     public static void register(Activity activity, String appIdentifier) {
@@ -32,9 +30,9 @@ public class UpdateManager {
 
     public static void register(Activity activity, String urlString, String appIdentifier, UpdateManagerListener listener, boolean isDialogRequired) {
         appIdentifier = Util.sanitizeAppIdentifier(appIdentifier);
-        lastListener = listener;
+        Constants.loadFromContext(activity);
         WeakReference<Activity> weakActivity = new WeakReference(activity);
-        if ((!Util.fragmentsSupported().booleanValue() || !dialogShown(weakActivity)) && !checkExpiryDate(weakActivity, listener)) {
+        if (!dialogShown(weakActivity) && !checkExpiryDate(weakActivity, listener)) {
             if ((listener != null && listener.canUpdateInMarket()) || !installedFromMarket(weakActivity)) {
                 startUpdateTask(weakActivity, urlString, appIdentifier, listener, isDialogRequired);
             }
@@ -47,7 +45,6 @@ public class UpdateManager {
             updateTask.detach();
             updateTask = null;
         }
-        lastListener = null;
     }
 
     private static boolean checkExpiryDate(WeakReference<Activity> weakActivity, UpdateManagerListener listener) {
@@ -114,19 +111,14 @@ public class UpdateManager {
         updateTask.attach(weakActivity);
     }
 
-    @TargetApi(11)
     private static boolean dialogShown(WeakReference<Activity> weakActivity) {
         if (weakActivity == null) {
             return false;
         }
         Activity activity = (Activity) weakActivity.get();
-        if (activity == null || activity.getFragmentManager().findFragmentByTag("hockey_update_dialog") == null) {
+        if (activity == null || activity.getFragmentManager().findFragmentByTag(UpdateFragment.FRAGMENT_TAG) == null) {
             return false;
         }
         return true;
-    }
-
-    public static UpdateManagerListener getLastListener() {
-        return lastListener;
     }
 }

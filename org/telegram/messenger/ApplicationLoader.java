@@ -61,7 +61,9 @@ public class ApplicationLoader extends Application {
             }
             try {
                 isScreenOn = ((PowerManager) applicationContext.getSystemService("power")).isScreenOn();
-                FileLog.e("screen state = " + isScreenOn);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("screen state = " + isScreenOn);
+                }
             } catch (Throwable e3) {
                 FileLog.e(e3);
             }
@@ -78,7 +80,9 @@ public class ApplicationLoader extends Application {
                 }
             }
             ((ApplicationLoader) applicationContext).initPlayServices();
-            FileLog.e("app initied");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("app initied");
+            }
             MediaController.getInstance();
             for (a = 0; a < 3; a++) {
                 ContactsController.getInstance(a).checkAppAccount();
@@ -130,19 +134,20 @@ public class ApplicationLoader extends Application {
             public void run() {
                 if (ApplicationLoader.this.checkPlayServices()) {
                     if (SharedConfig.pushString == null || SharedConfig.pushString.length() == 0) {
-                        FileLog.d("GCM Registration not found.");
-                    } else {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("GCM Registration not found.");
+                        }
+                    } else if (BuildVars.LOGS_ENABLED) {
                         FileLog.d("GCM regId = " + SharedConfig.pushString);
                     }
                     try {
                         ApplicationLoader.this.startService(new Intent(ApplicationLoader.applicationContext, GcmRegistrationIntentService.class));
-                        return;
                     } catch (Throwable e) {
                         FileLog.e(e);
-                        return;
                     }
+                } else if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("No valid Google Play Services APK found.");
                 }
-                FileLog.d("No valid Google Play Services APK found.");
             }
         }, 1000);
     }

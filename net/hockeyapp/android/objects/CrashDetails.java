@@ -1,19 +1,19 @@
 package net.hockeyapp.android.objects;
 
+import android.content.Context;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-import net.hockeyapp.android.Constants;
 import net.hockeyapp.android.utils.HockeyLog;
+import net.hockeyapp.android.utils.JSONDateUtils;
+import org.json.JSONException;
 
 public class CrashDetails {
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
     private Date appCrashDate;
     private String appPackage;
     private Date appStartDate;
@@ -43,17 +43,21 @@ public class CrashDetails {
         this.throwableStackTrace = stackTraceResult.toString();
     }
 
-    public void writeCrashReport() {
-        writeCrashReport(Constants.FILES_PATH + "/" + this.crashIdentifier + ".stacktrace");
+    public void writeCrashReport(Context context) {
+        try {
+            writeCrashReport(new File(context.getFilesDir(), this.crashIdentifier + ".stacktrace"));
+        } catch (JSONException e) {
+            HockeyLog.error("Could not write crash report with error " + e.toString());
+        }
     }
 
-    public void writeCrashReport(String path) {
+    public void writeCrashReport(File file) throws JSONException {
         Throwable e;
         Throwable th;
-        HockeyLog.debug("Writing unhandled exception to: " + path);
+        HockeyLog.debug("Writing unhandled exception to: " + file.getAbsolutePath());
         BufferedWriter writer = null;
         try {
-            BufferedWriter writer2 = new BufferedWriter(new FileWriter(path));
+            BufferedWriter writer2 = new BufferedWriter(new FileWriter(file));
             try {
                 writeHeader(writer2, "Package", this.appPackage);
                 writeHeader(writer2, "Version Code", this.appVersionCode);
@@ -64,8 +68,8 @@ public class CrashDetails {
                 writeHeader(writer2, "Model", this.deviceModel);
                 writeHeader(writer2, "Thread", this.threadName);
                 writeHeader(writer2, "CrashReporter Key", this.reporterKey);
-                writeHeader(writer2, "Start Date", DATE_FORMAT.format(this.appStartDate));
-                writeHeader(writer2, "Date", DATE_FORMAT.format(this.appCrashDate));
+                writeHeader(writer2, "Start Date", JSONDateUtils.toString(this.appStartDate));
+                writeHeader(writer2, "Date", JSONDateUtils.toString(this.appCrashDate));
                 if (this.isXamarinException.booleanValue()) {
                     writeHeader(writer2, "Format", "Xamarin");
                 }

@@ -1,9 +1,6 @@
 package net.hockeyapp.android.objects;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.Serializable;
-import net.hockeyapp.android.Constants;
 
 public class FeedbackAttachment implements Serializable {
     private String mCreatedAt;
@@ -49,23 +46,7 @@ public class FeedbackAttachment implements Serializable {
         return TtmlNode.ANONYMOUS_REGION_ID + this.mMessageId + this.mId;
     }
 
-    public boolean isAvailableInCache() {
-        File folder = Constants.getHockeyAppStorageDir();
-        if (!folder.exists() || !folder.isDirectory()) {
-            return false;
-        }
-        File[] match = folder.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String filename) {
-                return filename.equals(FeedbackAttachment.this.getCacheId());
-            }
-        });
-        if (match == null || match.length != 1) {
-            return false;
-        }
-        return true;
-    }
-
     public String toString() {
-        return "\n" + FeedbackAttachment.class.getSimpleName() + "\n" + "id         " + this.mId + "\n" + "message id " + this.mMessageId + "\n" + "filename   " + this.mFilename + "\n" + "url        " + this.mUrl + "\n" + "createdAt  " + this.mCreatedAt + "\n" + "updatedAt  " + this.mUpdatedAt;
+        return "\n" + FeedbackAttachment.class.getSimpleName() + "\nid         " + this.mId + "\nmessage id " + this.mMessageId + "\nfilename   " + this.mFilename + "\nurl        " + this.mUrl + "\ncreatedAt  " + this.mCreatedAt + "\nupdatedAt  " + this.mUpdatedAt;
     }
 }

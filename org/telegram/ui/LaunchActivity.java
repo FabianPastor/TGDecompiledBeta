@@ -63,7 +63,6 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
-import org.telegram.messenger.NativeCrashManager;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SendMessagesHelper;
@@ -182,7 +181,6 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     protected void onCreate(Bundle savedInstanceState) {
         int dp;
         ApplicationLoader.postInitApplication();
-        NativeCrashManager.handleDumpFiles(this);
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
         this.currentAccount = UserConfig.selectedAccount;
         if (!UserConfig.getInstance(this.currentAccount).isClientActivated()) {
@@ -851,7 +849,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         }
                         if (height > AndroidUtilities.dp(100.0f) && height < AndroidUtilities.displaySize.y && AndroidUtilities.dp(100.0f) + height > AndroidUtilities.displaySize.y) {
                             AndroidUtilities.displaySize.y = height;
-                            FileLog.e("fix display size y to " + AndroidUtilities.displaySize.y);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("fix display size y to " + AndroidUtilities.displaySize.y);
+                            }
                         }
                     }
                 };
@@ -1115,7 +1115,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                 while (true) {
                                     String line = bufferedReader.readLine();
                                     if (line != null) {
-                                        FileLog.e(line);
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.d(line);
+                                        }
                                         args = line.split(":");
                                         if (args.length == 2) {
                                             if (args[0].equals("BEGIN") && args[1].equals("VCARD")) {
@@ -2121,8 +2123,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     if (LaunchActivity.this.visibleDialog != null && LaunchActivity.this.visibleDialog == LaunchActivity.this.localeDialog) {
                         try {
                             Toast.makeText(LaunchActivity.this, LaunchActivity.this.getStringForLanguageAlert(LocaleController.getInstance().getCurrentLocaleInfo().shortName.equals("en") ? LaunchActivity.this.englishLocaleStrings : LaunchActivity.this.systemLocaleStrings, "ChangeLanguageLater", R.string.ChangeLanguageLater), 1).show();
-                        } catch (Exception e) {
-                            FileLog.e("tmessages", e);
+                        } catch (Throwable e) {
+                            FileLog.e(e);
                         }
                         LaunchActivity.this.localeDialog = null;
                     }
@@ -2494,7 +2496,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         } else if (id == NotificationCenter.didUpdatedConnectionState) {
             int state = ConnectionsManager.getInstance(account).getConnectionState();
             if (this.currentConnectionState != state) {
-                FileLog.d("switch to state " + state);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("switch to state " + state);
+                }
                 this.currentConnectionState = state;
                 updateCurrentConnectionState(account);
             }
@@ -2806,7 +2810,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         }
                     }
                     if (infos[0] != null && infos[1] != null && infos[0] != infos[1]) {
-                        FileLog.d("show lang alert for " + infos[0].getKey() + " and " + infos[1].getKey());
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("show lang alert for " + infos[0].getKey() + " and " + infos[1].getKey());
+                        }
                         this.systemLocaleStrings = null;
                         this.englishLocaleStrings = null;
                         this.loadingLocaleDialog = true;
@@ -2862,11 +2868,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                 });
                             }
                         }, 8);
-                        return;
                     }
-                    return;
+                } else if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("alert already showed for " + showedLang);
                 }
-                FileLog.d("alert already showed for " + showedLang);
             }
         } catch (Throwable e) {
             FileLog.e(e);
@@ -2884,10 +2889,12 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 public void run() {
                     if (LaunchActivity.this.lockRunnable == this) {
                         if (AndroidUtilities.needShowPasscode(true)) {
-                            FileLog.e("lock app");
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("lock app");
+                            }
                             LaunchActivity.this.showPasscodeActivity();
-                        } else {
-                            FileLog.e("didn't pass lock check");
+                        } else if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("didn't pass lock check");
                         }
                         LaunchActivity.this.lockRunnable = null;
                     }

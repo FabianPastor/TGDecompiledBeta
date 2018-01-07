@@ -15,6 +15,7 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils.TruncateAt;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
@@ -192,7 +192,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     private ActionBarMenuItem searchItem;
     private boolean searchWas;
     private boolean searching;
-    private HashMap<Integer, MessageObject>[] selectedFiles = new HashMap[]{new HashMap(), new HashMap()};
+    private SparseArray<MessageObject>[] selectedFiles = new SparseArray[]{new SparseArray(), new SparseArray()};
     private NumberTextView selectedMessagesCountTextView;
     private int selectedMode;
     private SharedMediaData[] sharedMediaData = new SharedMediaData[5];
@@ -202,14 +202,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         private boolean loading;
         private int[] max_id;
         private ArrayList<MessageObject> messages;
-        private HashMap<Integer, MessageObject>[] messagesDict;
+        private SparseArray<MessageObject>[] messagesDict;
         private HashMap<String, ArrayList<MessageObject>> sectionArrays;
         private ArrayList<String> sections;
         private int totalCount;
 
         private SharedMediaData() {
             this.messages = new ArrayList();
-            this.messagesDict = new HashMap[]{new HashMap(), new HashMap()};
+            this.messagesDict = new SparseArray[]{new SparseArray(), new SparseArray()};
             this.sections = new ArrayList();
             this.sectionArrays = new HashMap();
             this.endReached = new boolean[]{false, true};
@@ -223,7 +223,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             } else {
                 loadIndex = 1;
             }
-            if (this.messagesDict[loadIndex].containsKey(Integer.valueOf(messageObject.getId()))) {
+            if (this.messagesDict[loadIndex].indexOfKey(messageObject.getId()) >= 0) {
                 return false;
             }
             ArrayList<MessageObject> messageObjects = (ArrayList) this.sectionArrays.get(messageObject.monthKey);
@@ -243,7 +243,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 messageObjects.add(messageObject);
                 this.messages.add(messageObject);
             }
-            this.messagesDict[loadIndex].put(Integer.valueOf(messageObject.getId()), messageObject);
+            this.messagesDict[loadIndex].put(messageObject.getId(), messageObject);
             if (enc) {
                 this.max_id[loadIndex] = Math.max(messageObject.getId(), this.max_id[loadIndex]);
             } else if (messageObject.getId() > 0) {
@@ -253,7 +253,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
 
         public boolean deleteMessage(int mid, int loadIndex) {
-            MessageObject messageObject = (MessageObject) this.messagesDict[loadIndex].get(Integer.valueOf(mid));
+            MessageObject messageObject = (MessageObject) this.messagesDict[loadIndex].get(mid);
             if (messageObject == null) {
                 return false;
             }
@@ -263,7 +263,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
             messageObjects.remove(messageObject);
             this.messages.remove(messageObject);
-            this.messagesDict[loadIndex].remove(Integer.valueOf(messageObject.getId()));
+            this.messagesDict[loadIndex].remove(messageObject.getId());
             if (messageObjects.isEmpty()) {
                 this.sectionArrays.remove(messageObject.monthKey);
                 this.sections.remove(messageObject.monthKey);
@@ -273,10 +273,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
 
         public void replaceMid(int oldMid, int newMid) {
-            MessageObject obj = (MessageObject) this.messagesDict[0].get(Integer.valueOf(oldMid));
+            MessageObject obj = (MessageObject) this.messagesDict[0].get(oldMid);
             if (obj != null) {
-                this.messagesDict[0].remove(Integer.valueOf(oldMid));
-                this.messagesDict[0].put(Integer.valueOf(newMid), obj);
+                this.messagesDict[0].remove(oldMid);
+                this.messagesDict[0].put(newMid, obj);
                 obj.messageOwner.id = newMid;
             }
         }
@@ -332,7 +332,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                 for (int a = 0; a < res.messages.size(); a++) {
                                     Message message = (Message) res.messages.get(a);
                                     if (max_id == 0 || message.id <= max_id) {
-                                        messageObjects.add(new MessageObject(MediaActivity.this.currentAccount, message, null, false));
+                                        messageObjects.add(new MessageObject(MediaActivity.this.currentAccount, message, false));
                                     }
                                 }
                             }
@@ -525,7 +525,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             boolean z = true;
             MessageObject messageObject;
             boolean z2;
-            HashMap[] access$800;
+            SparseArray[] access$800;
             int i;
             if (this.currentType == 1 || this.currentType == 4) {
                 SharedDocumentCell sharedDocumentCell = holder.itemView;
@@ -543,7 +543,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     } else {
                         i = 1;
                     }
-                    z2 = access$800[i].containsKey(Integer.valueOf(messageObject.getId()));
+                    if (access$800[i].indexOfKey(messageObject.getId()) >= 0) {
+                        z2 = true;
+                    } else {
+                        z2 = false;
+                    }
                     if (MediaActivity.this.scrolling) {
                         z = false;
                     }
@@ -570,7 +574,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     } else {
                         i = 1;
                     }
-                    z2 = access$800[i].containsKey(Integer.valueOf(messageObject.getId()));
+                    z2 = access$800[i].indexOfKey(messageObject.getId()) >= 0;
                     if (MediaActivity.this.scrolling) {
                         z = false;
                     }
@@ -668,13 +672,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         sharedDocumentCell.setDocument(messageObject, z2);
                         if (MediaActivity.this.actionBar.isActionModeShowed()) {
                             int i;
-                            HashMap[] access$800 = MediaActivity.this.selectedFiles;
+                            SparseArray[] access$800 = MediaActivity.this.selectedFiles;
                             if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                                 i = 0;
                             } else {
                                 i = 1;
                             }
-                            z2 = access$800[i].containsKey(Integer.valueOf(messageObject.getId()));
+                            z2 = access$800[i].indexOfKey(messageObject.getId()) >= 0;
                             if (MediaActivity.this.scrolling) {
                                 z = false;
                             }
@@ -797,13 +801,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         sharedLinkCell.setLink(messageObject, z2);
                         if (MediaActivity.this.actionBar.isActionModeShowed()) {
                             int i;
-                            HashMap[] access$800 = MediaActivity.this.selectedFiles;
+                            SparseArray[] access$800 = MediaActivity.this.selectedFiles;
                             if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                                 i = 0;
                             } else {
                                 i = 1;
                             }
-                            z2 = access$800[i].containsKey(Integer.valueOf(messageObject.getId()));
+                            z2 = access$800[i].indexOfKey(messageObject.getId()) >= 0;
                             if (MediaActivity.this.scrolling) {
                                 z = false;
                             }
@@ -931,19 +935,24 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                 if (MediaActivity.this.actionBar.isActionModeShowed()) {
                                     int i;
                                     boolean z;
-                                    HashMap[] access$800 = MediaActivity.this.selectedFiles;
+                                    boolean z2;
+                                    SparseArray[] access$800 = MediaActivity.this.selectedFiles;
                                     if (messageObject.getDialogId() == MediaActivity.this.dialog_id) {
                                         i = 0;
                                     } else {
                                         i = 1;
                                     }
-                                    boolean containsKey = access$800[i].containsKey(Integer.valueOf(messageObject.getId()));
-                                    if (MediaActivity.this.scrolling) {
-                                        z = false;
-                                    } else {
+                                    if (access$800[i].indexOfKey(messageObject.getId()) >= 0) {
                                         z = true;
+                                    } else {
+                                        z = false;
                                     }
-                                    cell.setChecked(a, containsKey, z);
+                                    if (MediaActivity.this.scrolling) {
+                                        z2 = false;
+                                    } else {
+                                        z2 = true;
+                                    }
+                                    cell.setChecked(a, z, z2);
                                 } else {
                                     cell.setChecked(a, false, !MediaActivity.this.scrolling);
                                 }
@@ -1020,6 +1029,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 int a;
+                int b;
                 if (id == -1) {
                     if (MediaActivity.this.actionBar.isActionModeShowed()) {
                         for (a = 1; a >= 0; a--) {
@@ -1033,7 +1043,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             if (child instanceof SharedDocumentCell) {
                                 ((SharedDocumentCell) child).setChecked(false, true);
                             } else if (child instanceof SharedPhotoVideoCell) {
-                                for (int b = 0; b < 6; b++) {
+                                for (b = 0; b < 6; b++) {
                                     ((SharedPhotoVideoCell) child).setChecked(b, false, true);
                                 }
                             } else if (child instanceof SharedLinkCell) {
@@ -1086,8 +1096,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                 if (!((currentUser == null || currentUser.id == UserConfig.getInstance(MediaActivity.this.currentAccount).getClientUserId()) && currentChat == null)) {
                                     boolean hasOutgoing = false;
                                     for (a = 1; a >= 0; a--) {
-                                        for (Entry<Integer, MessageObject> entry : MediaActivity.this.selectedFiles[a].entrySet()) {
-                                            MessageObject msg = (MessageObject) entry.getValue();
+                                        for (b = 0; b < MediaActivity.this.selectedFiles[a].size(); b++) {
+                                            MessageObject msg = (MessageObject) MediaActivity.this.selectedFiles[a].valueAt(b);
                                             if (msg.messageOwner.action == null) {
                                                 if (!msg.isOut()) {
                                                     hasOutgoing = false;
@@ -1148,13 +1158,17 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 for (int a = 1; a >= 0; a--) {
+                                    int b;
                                     MessageObject msg;
-                                    ArrayList<Integer> ids = new ArrayList(MediaActivity.this.selectedFiles[a].keySet());
+                                    ArrayList<Integer> ids = new ArrayList();
+                                    for (b = 0; b < MediaActivity.this.selectedFiles[a].size(); b++) {
+                                        ids.add(Integer.valueOf(MediaActivity.this.selectedFiles[a].keyAt(b)));
+                                    }
                                     ArrayList<Long> random_ids = null;
                                     EncryptedChat currentEncryptedChat = null;
                                     int channelId = 0;
                                     if (!ids.isEmpty()) {
-                                        msg = (MessageObject) MediaActivity.this.selectedFiles[a].get(ids.get(0));
+                                        msg = (MessageObject) MediaActivity.this.selectedFiles[a].get(((Integer) ids.get(0)).intValue());
                                         if (null == null && msg.messageOwner.to_id.channel_id != 0) {
                                             channelId = msg.messageOwner.to_id.channel_id;
                                         }
@@ -1164,8 +1178,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                     }
                                     if (currentEncryptedChat != null) {
                                         random_ids = new ArrayList();
-                                        for (Entry<Integer, MessageObject> entry : MediaActivity.this.selectedFiles[a].entrySet()) {
-                                            msg = (MessageObject) entry.getValue();
+                                        for (b = 0; b < MediaActivity.this.selectedFiles[a].size(); b++) {
+                                            msg = (MessageObject) MediaActivity.this.selectedFiles[a].valueAt(b);
                                             if (!(msg.messageOwner.random_id == 0 || msg.type == 10)) {
                                                 random_ids.add(Long.valueOf(msg.messageOwner.random_id));
                                             }
@@ -1192,13 +1206,16 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             int a;
                             ArrayList<MessageObject> fmessages = new ArrayList();
                             for (a = 1; a >= 0; a--) {
-                                ArrayList<Integer> arrayList = new ArrayList(MediaActivity.this.selectedFiles[a].keySet());
-                                Collections.sort(arrayList);
-                                Iterator it = arrayList.iterator();
+                                ArrayList<Integer> ids = new ArrayList();
+                                for (int b = 0; b < MediaActivity.this.selectedFiles[a].size(); b++) {
+                                    ids.add(Integer.valueOf(MediaActivity.this.selectedFiles[a].keyAt(b)));
+                                }
+                                Collections.sort(ids);
+                                Iterator it = ids.iterator();
                                 while (it.hasNext()) {
                                     Integer id = (Integer) it.next();
                                     if (id.intValue() > 0) {
-                                        fmessages.add(MediaActivity.this.selectedFiles[a].get(id));
+                                        fmessages.add(MediaActivity.this.selectedFiles[a].get(id.intValue()));
                                     }
                                 }
                                 MediaActivity.this.selectedFiles[a].clear();
@@ -1807,13 +1824,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
         int i;
         AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
-        HashMap[] hashMapArr = this.selectedFiles;
+        SparseArray[] sparseArrayArr = this.selectedFiles;
         if (item.getDialogId() == this.dialog_id) {
             i = 0;
         } else {
             i = 1;
         }
-        hashMapArr[i].put(Integer.valueOf(item.getId()), item);
+        sparseArrayArr[i].put(item.getId(), item);
         if (!item.canDeleteMessage(null)) {
             this.cantDeleteMessagesCount++;
         }
@@ -1845,20 +1862,20 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (message != null) {
             if (this.actionBar.isActionModeShowed()) {
                 int loadIndex = message.getDialogId() == this.dialog_id ? 0 : 1;
-                if (this.selectedFiles[loadIndex].containsKey(Integer.valueOf(message.getId()))) {
-                    this.selectedFiles[loadIndex].remove(Integer.valueOf(message.getId()));
+                if (this.selectedFiles[loadIndex].indexOfKey(message.getId()) >= 0) {
+                    this.selectedFiles[loadIndex].remove(message.getId());
                     if (!message.canDeleteMessage(null)) {
                         this.cantDeleteMessagesCount--;
                     }
                 } else if (this.selectedFiles[0].size() + this.selectedFiles[1].size() < 100) {
-                    this.selectedFiles[loadIndex].put(Integer.valueOf(message.getId()), message);
+                    this.selectedFiles[loadIndex].put(message.getId(), message);
                     if (!message.canDeleteMessage(null)) {
                         this.cantDeleteMessagesCount++;
                     }
                 } else {
                     return;
                 }
-                if (this.selectedFiles[0].isEmpty() && this.selectedFiles[1].isEmpty()) {
+                if (this.selectedFiles[0].size() == 0 && this.selectedFiles[1].size() == 0) {
                     this.actionBar.hideActionMode();
                 } else {
                     this.selectedMessagesCountTextView.setNumber(this.selectedFiles[0].size() + this.selectedFiles[1].size(), true);
@@ -1866,11 +1883,18 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 this.actionBar.createActionMode().getItem(4).setVisibility(this.cantDeleteMessagesCount == 0 ? 0 : 8);
                 this.scrolling = false;
                 if (view instanceof SharedDocumentCell) {
-                    ((SharedDocumentCell) view).setChecked(this.selectedFiles[loadIndex].containsKey(Integer.valueOf(message.getId())), true);
+                    boolean z;
+                    SharedDocumentCell sharedDocumentCell = (SharedDocumentCell) view;
+                    if (this.selectedFiles[loadIndex].indexOfKey(message.getId()) >= 0) {
+                        z = true;
+                    } else {
+                        z = false;
+                    }
+                    sharedDocumentCell.setChecked(z, true);
                 } else if (view instanceof SharedPhotoVideoCell) {
-                    ((SharedPhotoVideoCell) view).setChecked(a, this.selectedFiles[loadIndex].containsKey(Integer.valueOf(message.getId())), true);
+                    ((SharedPhotoVideoCell) view).setChecked(a, this.selectedFiles[loadIndex].indexOfKey(message.getId()) >= 0, true);
                 } else if (view instanceof SharedLinkCell) {
-                    ((SharedLinkCell) view).setChecked(this.selectedFiles[loadIndex].containsKey(Integer.valueOf(message.getId())), true);
+                    ((SharedLinkCell) view).setChecked(this.selectedFiles[loadIndex].indexOfKey(message.getId()) >= 0, true);
                 }
             } else if (this.selectedMode == 0) {
                 PhotoViewer.getInstance().setParentActivity(getParentActivity());

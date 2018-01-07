@@ -13,6 +13,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
+import android.util.SparseArray;
 import java.io.File;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -588,26 +589,44 @@ public class MessageObject {
     }
 
     public MessageObject(int accountNum, Message message, AbstractMap<Integer, User> users, boolean generateLayout) {
-        this(accountNum, message, users, null, generateLayout);
+        this(accountNum, message, (AbstractMap) users, null, generateLayout);
+    }
+
+    public MessageObject(int accountNum, Message message, SparseArray<User> users, boolean generateLayout) {
+        this(accountNum, message, (SparseArray) users, null, generateLayout);
+    }
+
+    public MessageObject(int accountNum, Message message, boolean generateLayout) {
+        this(accountNum, message, null, null, null, null, generateLayout, 0);
     }
 
     public MessageObject(int accountNum, Message message, AbstractMap<Integer, User> users, AbstractMap<Integer, Chat> chats, boolean generateLayout) {
         this(accountNum, message, (AbstractMap) users, (AbstractMap) chats, generateLayout, 0);
     }
 
+    public MessageObject(int accountNum, Message message, SparseArray<User> users, SparseArray<Chat> chats, boolean generateLayout) {
+        this(accountNum, message, null, null, users, chats, generateLayout, 0);
+    }
+
     public MessageObject(int accountNum, Message message, AbstractMap<Integer, User> users, AbstractMap<Integer, Chat> chats, boolean generateLayout, long eid) {
+        this(accountNum, message, users, chats, null, null, generateLayout, eid);
+    }
+
+    public MessageObject(int accountNum, Message message, AbstractMap<Integer, User> users, AbstractMap<Integer, Chat> chats, SparseArray<User> sUsers, SparseArray<Chat> sChats, boolean generateLayout, long eid) {
         this.type = 1000;
         Theme.createChatResources(null, true);
         this.currentAccount = accountNum;
         this.messageOwner = message;
         this.eventId = eid;
         if (message.replyMessage != null) {
-            this.replyMessageObject = new MessageObject(accountNum, message.replyMessage, users, chats, false);
+            this.replyMessageObject = new MessageObject(accountNum, message.replyMessage, users, chats, sUsers, sChats, false, eid);
         }
         User fromUser = null;
         if (message.from_id > 0) {
             if (users != null) {
                 fromUser = (User) users.get(Integer.valueOf(message.from_id));
+            } else if (sUsers != null) {
+                fromUser = (User) sUsers.get(message.from_id);
             }
             if (fromUser == null) {
                 fromUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(message.from_id));
@@ -629,6 +648,8 @@ public class MessageObject {
                         whoUser = null;
                         if (users != null) {
                             whoUser = (User) users.get(Integer.valueOf(message.action.user_id));
+                        } else if (sUsers != null) {
+                            whoUser = (User) sUsers.get(message.action.user_id);
                         }
                         if (whoUser == null) {
                             whoUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(message.action.user_id));
@@ -655,6 +676,8 @@ public class MessageObject {
                         whoUser = null;
                         if (users != null) {
                             whoUser = (User) users.get(Integer.valueOf(singleUserId));
+                        } else if (sUsers != null) {
+                            whoUser = (User) sUsers.get(singleUserId);
                         }
                         if (whoUser == null) {
                             whoUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(singleUserId));
@@ -686,9 +709,9 @@ public class MessageObject {
                             this.messageText = replaceWithLink(LocaleController.getString("ChannelAddedBy", R.string.ChannelAddedBy), "un1", fromUser);
                         }
                     } else if (isOut()) {
-                        this.messageText = replaceWithLink(LocaleController.getString("ActionYouAddUser", R.string.ActionYouAddUser), "un2", message.action.users, users);
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionYouAddUser", R.string.ActionYouAddUser), "un2", message.action.users, users, sUsers);
                     } else {
-                        this.messageText = replaceWithLink(LocaleController.getString("ActionAddUser", R.string.ActionAddUser), "un2", message.action.users, users);
+                        this.messageText = replaceWithLink(LocaleController.getString("ActionAddUser", R.string.ActionAddUser), "un2", message.action.users, users, sUsers);
                         this.messageText = replaceWithLink(this.messageText, "un1", fromUser);
                     }
                 } else if (message.action instanceof TL_messageActionChatJoinedByLink) {
@@ -745,6 +768,8 @@ public class MessageObject {
                     if (to_user == null) {
                         if (users != null) {
                             to_user = (User) users.get(Integer.valueOf(this.messageOwner.to_id.user_id));
+                        } else if (sUsers != null) {
+                            to_user = (User) sUsers.get(this.messageOwner.to_id.user_id);
                         }
                         if (to_user == null) {
                             to_user = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(this.messageOwner.to_id.user_id));
@@ -764,7 +789,7 @@ public class MessageObject {
                             this.messageText = replaceWithLink(LocaleController.getString("ActionTakeScreenshoot", R.string.ActionTakeScreenshoot), "un1", fromUser);
                         }
                     } else if (message.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL) {
-                        if (message.action.encryptedAction.ttl_seconds != 0) {
+                        if (((TL_decryptedMessageActionSetMessageTTL) message.action.encryptedAction).ttl_seconds != 0) {
                             if (isOut()) {
                                 this.messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", R.string.MessageLifetimeChangedOutgoing, LocaleController.formatTTLString(action.ttl_seconds));
                             } else {
@@ -795,14 +820,23 @@ public class MessageObject {
                 } else if (message.action instanceof TL_messageActionChannelMigrateFrom) {
                     this.messageText = LocaleController.getString("ActionMigrateFromGroup", R.string.ActionMigrateFromGroup);
                 } else if (message.action instanceof TL_messageActionPinMessage) {
-                    Chat chat = (fromUser != null || chats == null) ? null : (Chat) chats.get(Integer.valueOf(message.to_id.channel_id));
+                    Chat chat;
+                    if (fromUser != null) {
+                        chat = null;
+                    } else if (chats != null) {
+                        chat = (Chat) chats.get(Integer.valueOf(message.to_id.channel_id));
+                    } else if (sChats != null) {
+                        chat = (Chat) sChats.get(message.to_id.channel_id);
+                    } else {
+                        chat = null;
+                    }
                     generatePinMessageText(fromUser, chat);
                 } else if (message.action instanceof TL_messageActionHistoryClear) {
                     this.messageText = LocaleController.getString("HistoryCleared", R.string.HistoryCleared);
                 } else if (message.action instanceof TL_messageActionGameScore) {
                     generateGameMessageText(fromUser);
                 } else if (message.action instanceof TL_messageActionPhoneCall) {
-                    TL_messageActionPhoneCall call = this.messageOwner.action;
+                    TL_messageActionPhoneCall call = (TL_messageActionPhoneCall) this.messageOwner.action;
                     boolean isMissed = call.reason instanceof TL_phoneCallDiscardReasonMissed;
                     if (this.messageOwner.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                         if (isMissed) {
@@ -839,6 +873,8 @@ public class MessageObject {
                     int uid = (int) getDialogId();
                     if (users != null) {
                         fromUser = (User) users.get(Integer.valueOf(uid));
+                    } else if (sUsers != null) {
+                        fromUser = (User) sUsers.get(uid);
                     }
                     if (fromUser == null) {
                         fromUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(uid));
@@ -957,7 +993,7 @@ public class MessageObject {
             dateMsg.message = LocaleController.formatDateChat((long) event.date);
             dateMsg.id = 0;
             dateMsg.date = event.date;
-            MessageObject dateObj = new MessageObject(accountNum, dateMsg, null, false);
+            MessageObject dateObj = new MessageObject(accountNum, dateMsg, false);
             dateObj.type = 10;
             dateObj.contentType = 1;
             dateObj.isDateObject = true;
@@ -1697,7 +1733,7 @@ public class MessageObject {
         message.to_id = this.messageOwner.to_id;
         message.out = this.messageOwner.out;
         message.from_id = this.messageOwner.from_id;
-        return new MessageObject(this.currentAccount, message, null, false);
+        return new MessageObject(this.currentAccount, message, false);
     }
 
     public ArrayList<MessageObject> getWebPagePhotos(ArrayList<MessageObject> array, ArrayList<PageBlock> blocksToSearch) {
@@ -2055,7 +2091,7 @@ public class MessageObject {
         }
     }
 
-    public CharSequence replaceWithLink(CharSequence source, String param, ArrayList<Integer> uids, AbstractMap<Integer, User> usersDict) {
+    public CharSequence replaceWithLink(CharSequence source, String param, ArrayList<Integer> uids, AbstractMap<Integer, User> usersDict, SparseArray<User> sUsersDict) {
         if (TextUtils.indexOf(source, param) < 0) {
             return source;
         }
@@ -2064,6 +2100,8 @@ public class MessageObject {
             User user = null;
             if (usersDict != null) {
                 user = (User) usersDict.get(uids.get(a));
+            } else if (sUsersDict != null) {
+                user = (User) sUsersDict.get(((Integer) uids.get(a)).intValue());
             }
             if (user == null) {
                 user = MessagesController.getInstance(this.currentAccount).getUser((Integer) uids.get(a));
@@ -2787,7 +2825,16 @@ public class MessageObject {
     }
 
     public static boolean shouldEncryptPhotoOrVideo(Message message) {
-        return ((message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) || ((message instanceof TL_message_secret) && (((message.media instanceof TL_messageMediaPhoto) || isVideoMessage(message)) && message.ttl > 0 && message.ttl <= 60));
+        if (message instanceof TL_message_secret) {
+            if (((message.media instanceof TL_messageMediaPhoto) || isVideoMessage(message)) && message.ttl > 0 && message.ttl <= 60) {
+                return true;
+            }
+            return false;
+        } else if (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean shouldEncryptPhotoOrVideo() {
@@ -2795,15 +2842,53 @@ public class MessageObject {
     }
 
     public static boolean isSecretPhotoOrVideo(Message message) {
-        return ((message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) || ((message instanceof TL_message_secret) && (((message.media instanceof TL_messageMediaPhoto) || isRoundVideoMessage(message) || isVideoMessage(message)) && message.ttl > 0 && message.ttl <= 60));
+        if (message instanceof TL_message_secret) {
+            if (((message.media instanceof TL_messageMediaPhoto) || isRoundVideoMessage(message) || isVideoMessage(message)) && message.ttl > 0 && message.ttl <= 60) {
+                return true;
+            }
+            return false;
+        } else if (!(message instanceof TL_message)) {
+            return false;
+        } else {
+            if (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0) {
+                return true;
+            }
+            return false;
+        }
     }
 
     public boolean isSecretPhoto() {
-        return ((this.messageOwner instanceof TL_message) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) || (this.messageOwner.media instanceof TL_messageMediaDocument)) && this.messageOwner.media.ttl_seconds != 0)) || ((this.messageOwner instanceof TL_message_secret) && ((((this.messageOwner.media instanceof TL_messageMediaPhoto) || isVideo()) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isRoundVideo()));
+        boolean z = true;
+        if (this.messageOwner instanceof TL_message_secret) {
+            if ((((this.messageOwner.media instanceof TL_messageMediaPhoto) || isVideo()) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isRoundVideo()) {
+                return true;
+            }
+            return false;
+        } else if (!(this.messageOwner instanceof TL_message)) {
+            return false;
+        } else {
+            if (!((this.messageOwner.media instanceof TL_messageMediaPhoto) || (this.messageOwner.media instanceof TL_messageMediaDocument)) || this.messageOwner.media.ttl_seconds == 0) {
+                z = false;
+            }
+            return z;
+        }
     }
 
     public boolean isSecretMedia() {
-        return ((this.messageOwner instanceof TL_message) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) || (this.messageOwner.media instanceof TL_messageMediaDocument)) && this.messageOwner.media.ttl_seconds != 0)) || ((this.messageOwner instanceof TL_message_secret) && (((this.messageOwner.media instanceof TL_messageMediaPhoto) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice() || isRoundVideo() || isVideo()));
+        boolean z = true;
+        if (this.messageOwner instanceof TL_message_secret) {
+            if (((this.messageOwner.media instanceof TL_messageMediaPhoto) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice() || isRoundVideo() || isVideo()) {
+                return true;
+            }
+            return false;
+        } else if (!(this.messageOwner instanceof TL_message)) {
+            return false;
+        } else {
+            if (!((this.messageOwner.media instanceof TL_messageMediaPhoto) || (this.messageOwner.media instanceof TL_messageMediaDocument)) || this.messageOwner.media.ttl_seconds == 0) {
+                z = false;
+            }
+            return z;
+        }
     }
 
     public static void setUnreadFlags(Message message, int flag) {

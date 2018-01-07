@@ -18,6 +18,7 @@ import android.os.Build.VERSION;
 import android.os.Environment;
 import android.support.media.ExifInterface;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -81,7 +82,7 @@ public class ImageLoader {
     private String ignoreRemoval = null;
     private DispatchQueue imageLoadQueue = new DispatchQueue("imageLoadQueue");
     private HashMap<String, CacheImage> imageLoadingByKeys = new HashMap();
-    private HashMap<Integer, CacheImage> imageLoadingByTag = new HashMap();
+    private SparseArray<CacheImage> imageLoadingByTag = new SparseArray();
     private HashMap<String, CacheImage> imageLoadingByUrl = new HashMap();
     private volatile long lastCacheOutTime = 0;
     private int lastImageNum = 0;
@@ -92,7 +93,7 @@ public class ImageLoader {
     private HashMap<String, ThumbGenerateTask> thumbGenerateTasks = new HashMap();
     private DispatchQueue thumbGeneratingQueue = new DispatchQueue("thumbGeneratingQueue");
     private HashMap<String, ThumbGenerateInfo> waitingForQualityThumb = new HashMap();
-    private HashMap<Integer, String> waitingForQualityThumbByTag = new HashMap();
+    private SparseArray<String> waitingForQualityThumbByTag = new SparseArray();
 
     private class CacheImage {
         protected boolean animatedFile;
@@ -791,7 +792,7 @@ public class ImageLoader {
                 }
             }
         };
-        HashMap<Integer, File> mediaDirs = new HashMap();
+        SparseArray<File> mediaDirs = new SparseArray();
         File cachePath = AndroidUtilities.getCacheDir();
         if (!cachePath.isDirectory()) {
             try {
@@ -805,7 +806,7 @@ public class ImageLoader {
         } catch (Throwable e2) {
             FileLog.e(e2);
         }
-        mediaDirs.put(Integer.valueOf(4), cachePath);
+        mediaDirs.put(4, cachePath);
         for (int a = 0; a < 3; a++) {
             final int currentAccount = a;
             FileLoader.getInstance(a).setDelegate(new FileLoaderDelegate() {
@@ -894,7 +895,9 @@ public class ImageLoader {
         FileLoader.setMediaDirs(mediaDirs);
         BroadcastReceiver receiver = new BroadcastReceiver() {
             public void onReceive(Context arg0, Intent intent) {
-                FileLog.e("file system changed");
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("file system changed");
+                }
                 Runnable r = new Runnable() {
                     public void run() {
                         ImageLoader.this.checkMediaPaths();
@@ -925,7 +928,7 @@ public class ImageLoader {
     public void checkMediaPaths() {
         this.cacheOutQueue.postRunnable(new Runnable() {
             public void run() {
-                final HashMap<Integer, File> paths = ImageLoader.this.createMediaPaths();
+                final SparseArray<File> paths = ImageLoader.this.createMediaPaths();
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         FileLoader.setMediaDirs(paths);
@@ -935,10 +938,8 @@ public class ImageLoader {
         });
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public HashMap<Integer, File> createMediaPaths() {
-        HashMap<Integer, File> mediaDirs = new HashMap();
+    public SparseArray<File> createMediaPaths() {
+        SparseArray<File> mediaDirs = new SparseArray();
         File cachePath = AndroidUtilities.getCacheDir();
         if (!cachePath.isDirectory()) {
             try {
@@ -952,78 +953,92 @@ public class ImageLoader {
         } catch (Throwable e2) {
             FileLog.e(e2);
         }
-        mediaDirs.put(Integer.valueOf(4), cachePath);
-        FileLog.e("cache path = " + cachePath);
-        if ("mounted".equals(Environment.getExternalStorageState())) {
-            this.telegramPath = new File(Environment.getExternalStorageDirectory(), "Telegram");
-            this.telegramPath.mkdirs();
-            if (this.telegramPath.isDirectory()) {
-                try {
-                    File imagePath = new File(this.telegramPath, "Telegram Images");
-                    imagePath.mkdir();
-                    if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath, 0)) {
-                        mediaDirs.put(Integer.valueOf(0), imagePath);
-                        FileLog.e("image path = " + imagePath);
+        mediaDirs.put(4, cachePath);
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("cache path = " + cachePath);
+        }
+        try {
+            if ("mounted".equals(Environment.getExternalStorageState())) {
+                this.telegramPath = new File(Environment.getExternalStorageDirectory(), "Telegram");
+                this.telegramPath.mkdirs();
+                if (this.telegramPath.isDirectory()) {
+                    try {
+                        File imagePath = new File(this.telegramPath, "Telegram Images");
+                        imagePath.mkdir();
+                        if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath, 0)) {
+                            mediaDirs.put(0, imagePath);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("image path = " + imagePath);
+                            }
+                        }
+                    } catch (Throwable e22) {
+                        FileLog.e(e22);
                     }
-                } catch (Throwable e22) {
-                    FileLog.e(e22);
-                }
-                try {
-                    File videoPath = new File(this.telegramPath, "Telegram Video");
-                    videoPath.mkdir();
-                    if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath, 2)) {
-                        mediaDirs.put(Integer.valueOf(2), videoPath);
-                        FileLog.e("video path = " + videoPath);
+                    try {
+                        File videoPath = new File(this.telegramPath, "Telegram Video");
+                        videoPath.mkdir();
+                        if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath, 2)) {
+                            mediaDirs.put(2, videoPath);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("video path = " + videoPath);
+                            }
+                        }
+                    } catch (Throwable e222) {
+                        FileLog.e(e222);
                     }
-                } catch (Throwable e222) {
-                    FileLog.e(e222);
-                }
-                try {
-                    File audioPath = new File(this.telegramPath, "Telegram Audio");
-                    audioPath.mkdir();
-                    if (audioPath.isDirectory() && canMoveFiles(cachePath, audioPath, 1)) {
-                        new File(audioPath, ".nomedia").createNewFile();
-                        mediaDirs.put(Integer.valueOf(1), audioPath);
-                        FileLog.e("audio path = " + audioPath);
+                    try {
+                        File audioPath = new File(this.telegramPath, "Telegram Audio");
+                        audioPath.mkdir();
+                        if (audioPath.isDirectory() && canMoveFiles(cachePath, audioPath, 1)) {
+                            new File(audioPath, ".nomedia").createNewFile();
+                            mediaDirs.put(1, audioPath);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("audio path = " + audioPath);
+                            }
+                        }
+                    } catch (Throwable e2222) {
+                        FileLog.e(e2222);
                     }
                     try {
                         File documentPath = new File(this.telegramPath, "Telegram Documents");
                         documentPath.mkdir();
                         if (documentPath.isDirectory() && canMoveFiles(cachePath, documentPath, 3)) {
                             new File(documentPath, ".nomedia").createNewFile();
-                            mediaDirs.put(Integer.valueOf(3), documentPath);
-                            FileLog.e("documents path = " + documentPath);
+                            mediaDirs.put(3, documentPath);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("documents path = " + documentPath);
+                            }
                         }
-                    } catch (Throwable e2222) {
-                        FileLog.e(e2222);
+                    } catch (Throwable e22222) {
+                        FileLog.e(e22222);
                     }
-                } catch (Throwable e22222) {
-                    FileLog.e(e22222);
                 }
+            } else if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("this Android can't rename files");
             }
-        } else {
-            FileLog.e("this Android can't rename files");
+            SharedConfig.checkSaveToGalleryFiles();
+        } catch (Throwable e222222) {
+            FileLog.e(e222222);
         }
-        SharedConfig.checkSaveToGalleryFiles();
         return mediaDirs;
     }
 
     private boolean canMoveFiles(File from, File to, int type) {
-        File srcFile;
         Throwable e;
         Throwable th;
         RandomAccessFile file = null;
-        File srcFile2 = null;
+        File srcFile = null;
         File dstFile = null;
+        File srcFile2;
         if (type == 0) {
             try {
-                srcFile = new File(from, "000000000_999999_temp.jpg");
+                srcFile2 = new File(from, "000000000_999999_temp.jpg");
                 try {
                     dstFile = new File(to, "000000000_999999.jpg");
-                    srcFile2 = srcFile;
+                    srcFile = srcFile2;
                 } catch (Exception e2) {
                     e = e2;
-                    srcFile2 = srcFile;
+                    srcFile = srcFile2;
                     try {
                         FileLog.e(e);
                         if (file != null) {
@@ -1055,27 +1070,27 @@ public class ImageLoader {
                 return false;
             }
         } else if (type == 3) {
-            srcFile = new File(from, "000000000_999999_temp.doc");
+            srcFile2 = new File(from, "000000000_999999_temp.doc");
             dstFile = new File(to, "000000000_999999.doc");
-            srcFile2 = srcFile;
+            srcFile = srcFile2;
         } else if (type == 1) {
-            srcFile = new File(from, "000000000_999999_temp.ogg");
+            srcFile2 = new File(from, "000000000_999999_temp.ogg");
             dstFile = new File(to, "000000000_999999.ogg");
-            srcFile2 = srcFile;
+            srcFile = srcFile2;
         } else if (type == 2) {
-            srcFile = new File(from, "000000000_999999_temp.mp4");
+            srcFile2 = new File(from, "000000000_999999_temp.mp4");
             dstFile = new File(to, "000000000_999999.mp4");
-            srcFile2 = srcFile;
+            srcFile = srcFile2;
         }
         byte[] buffer = new byte[1024];
-        srcFile2.createNewFile();
-        RandomAccessFile file2 = new RandomAccessFile(srcFile2, "rws");
+        srcFile.createNewFile();
+        RandomAccessFile file2 = new RandomAccessFile(srcFile, "rws");
         try {
             file2.write(buffer);
             file2.close();
             file = null;
-            boolean canRename = srcFile2.renameTo(dstFile);
-            srcFile2.delete();
+            boolean canRename = srcFile.renameTo(dstFile);
+            srcFile.delete();
             dstFile.delete();
             if (!canRename) {
                 if (file != null) {
@@ -1185,7 +1200,7 @@ public class ImageLoader {
         this.memCache.evictAll();
     }
 
-    private void removeFromWaitingForThumb(Integer TAG) {
+    private void removeFromWaitingForThumb(int TAG) {
         String location = (String) this.waitingForQualityThumbByTag.get(TAG);
         if (location != null) {
             ThumbGenerateInfo info = (ThumbGenerateInfo) this.waitingForQualityThumb.get(location);
@@ -1212,11 +1227,11 @@ public class ImageLoader {
                     }
                     int a = start;
                     while (a < count) {
-                        Integer TAG = imageReceiver.getTag(a == 0);
+                        int TAG = imageReceiver.getTag(a == 0);
                         if (a == 0) {
                             ImageLoader.this.removeFromWaitingForThumb(TAG);
                         }
-                        if (TAG != null) {
+                        if (TAG != 0) {
                             CacheImage ei = (CacheImage) ImageLoader.this.imageLoadingByTag.get(TAG);
                             if (ei != null) {
                                 ei.removeImageReceiver(imageReceiver);
@@ -1312,16 +1327,16 @@ public class ImageLoader {
 
     private void createLoadOperationForImageReceiver(ImageReceiver imageReceiver, String key, String url, String ext, TLObject imageLocation, String httpLocation, String filter, int size, int cacheType, int thumb) {
         if (imageReceiver != null && url != null && key != null) {
-            Integer TAG = imageReceiver.getTag(thumb != 0);
-            if (TAG == null) {
-                TAG = Integer.valueOf(this.lastImageNum);
+            int TAG = imageReceiver.getTag(thumb != 0);
+            if (TAG == 0) {
+                TAG = this.lastImageNum;
                 imageReceiver.setTag(TAG, thumb != 0);
                 this.lastImageNum++;
                 if (this.lastImageNum == ConnectionsManager.DEFAULT_DATACENTER_ID) {
                     this.lastImageNum = 0;
                 }
             }
-            final Integer finalTag = TAG;
+            final int finalTag = TAG;
             final boolean finalIsNeedsQualityThumb = imageReceiver.isNeedsQualityThumb();
             final MessageObject parentMessageObject = imageReceiver.getParentMessageObject();
             final boolean shouldGenerateQualityThumb = imageReceiver.isShouldGenerateQualityThumb();

@@ -7,6 +7,7 @@ import android.content.DialogInterface.OnDismissListener;
 import android.location.Location;
 import android.os.Build.VERSION;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
@@ -72,7 +72,7 @@ import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class MentionsAdapter extends SelectionAdapter {
     private boolean allowNewMentions = true;
-    private HashMap<Integer, BotInfo> botInfo;
+    private SparseArray<BotInfo> botInfo;
     private int botsCount;
     private int channelLastReqId;
     private int channelReqId;
@@ -129,7 +129,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private ArrayList<String> searchResultHashtags;
     private ArrayList<EmojiSuggestion> searchResultSuggestions;
     private ArrayList<User> searchResultUsernames;
-    private HashMap<Integer, User> searchResultUsernamesMap;
+    private SparseArray<User> searchResultUsernamesMap;
     private String searchingContextQuery;
     private String searchingContextUsername;
 
@@ -224,7 +224,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.needBotContext = value;
     }
 
-    public void setBotInfo(HashMap<Integer, BotInfo> info) {
+    public void setBotInfo(SparseArray<BotInfo> info) {
         this.botInfo = info;
     }
 
@@ -728,8 +728,8 @@ public class MentionsAdapter extends SelectionAdapter {
                 String usernameString = result.toString().toLowerCase();
                 boolean hasSpace = usernameString.indexOf(32) >= 0;
                 ArrayList<User> newResult = new ArrayList();
-                HashMap<Integer, User> newResultsHashMap = new HashMap();
-                HashMap<Integer, User> newMap = new HashMap();
+                SparseArray<User> newResultsHashMap = new SparseArray();
+                SparseArray<User> newMap = new SparseArray();
                 ArrayList<TL_topPeer> inlineBots = DataQuery.getInstance(this.currentAccount).inlineBots;
                 if (!usernameOnly && this.needBotContext && dogPostion == 0 && !inlineBots.isEmpty()) {
                     int count = 0;
@@ -738,7 +738,7 @@ public class MentionsAdapter extends SelectionAdapter {
                         if (user != null) {
                             if (user.username != null && user.username.length() > 0 && ((usernameString.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) || usernameString.length() == 0)) {
                                 newResult.add(user);
-                                newResultsHashMap.put(Integer.valueOf(user.id), user);
+                                newResultsHashMap.put(user.id, user);
                                 count++;
                             }
                             if (count == 5) {
@@ -757,24 +757,26 @@ public class MentionsAdapter extends SelectionAdapter {
                 if (!(chat == null || this.info == null || this.info.participants == null || (ChatObject.isChannel(chat) && !chat.megagroup))) {
                     for (a = 0; a < this.info.participants.participants.size(); a++) {
                         user = messagesController.getUser(Integer.valueOf(((ChatParticipant) this.info.participants.participants.get(a)).user_id));
-                        if (user != null && ((usernameOnly || !UserObject.isUserSelf(user)) && !newResultsHashMap.containsKey(Integer.valueOf(user.id)))) {
-                            if (usernameString.length() == 0) {
-                                if (!user.deleted && (this.allowNewMentions || !(this.allowNewMentions || user.username == null || user.username.length() == 0))) {
+                        if (user != null && (usernameOnly || !UserObject.isUserSelf(user))) {
+                            if (newResultsHashMap.indexOfKey(user.id) < 0) {
+                                if (usernameString.length() == 0) {
+                                    if (!user.deleted && (this.allowNewMentions || !(this.allowNewMentions || user.username == null || user.username.length() == 0))) {
+                                        newResult.add(user);
+                                    }
+                                } else if (user.username != null && user.username.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) {
                                     newResult.add(user);
-                                }
-                            } else if (user.username != null && user.username.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) {
-                                newResult.add(user);
-                                newMap.put(Integer.valueOf(user.id), user);
-                            } else if (this.allowNewMentions || !(user.username == null || user.username.length() == 0)) {
-                                if (user.first_name != null && user.first_name.length() > 0 && user.first_name.toLowerCase().startsWith(usernameString)) {
-                                    newResult.add(user);
-                                    newMap.put(Integer.valueOf(user.id), user);
-                                } else if (user.last_name != null && user.last_name.length() > 0 && user.last_name.toLowerCase().startsWith(usernameString)) {
-                                    newResult.add(user);
-                                    newMap.put(Integer.valueOf(user.id), user);
-                                } else if (hasSpace && ContactsController.formatName(user.first_name, user.last_name).toLowerCase().startsWith(usernameString)) {
-                                    newResult.add(user);
-                                    newMap.put(Integer.valueOf(user.id), user);
+                                    newMap.put(user.id, user);
+                                } else if (this.allowNewMentions || !(user.username == null || user.username.length() == 0)) {
+                                    if (user.first_name != null && user.first_name.length() > 0 && user.first_name.toLowerCase().startsWith(usernameString)) {
+                                        newResult.add(user);
+                                        newMap.put(user.id, user);
+                                    } else if (user.last_name != null && user.last_name.length() > 0 && user.last_name.toLowerCase().startsWith(usernameString)) {
+                                        newResult.add(user);
+                                        newMap.put(user.id, user);
+                                    } else if (hasSpace && ContactsController.formatName(user.first_name, user.last_name).toLowerCase().startsWith(usernameString)) {
+                                        newResult.add(user);
+                                        newMap.put(user.id, user);
+                                    }
                                 }
                             }
                         }
@@ -811,7 +813,7 @@ public class MentionsAdapter extends SelectionAdapter {
                                                         int currentUserId = UserConfig.getInstance(MentionsAdapter.this.currentAccount).getClientUserId();
                                                         for (int a = 0; a < res.participants.size(); a++) {
                                                             ChannelParticipant participant = (ChannelParticipant) res.participants.get(a);
-                                                            if (!MentionsAdapter.this.searchResultUsernamesMap.containsKey(Integer.valueOf(participant.user_id)) && (MentionsAdapter.this.isSearchingMentions || participant.user_id != currentUserId)) {
+                                                            if (MentionsAdapter.this.searchResultUsernamesMap.indexOfKey(participant.user_id) < 0 && (MentionsAdapter.this.isSearchingMentions || participant.user_id != currentUserId)) {
                                                                 User user = messagesController2.getUser(Integer.valueOf(participant.user_id));
                                                                 if (user != null) {
                                                                     MentionsAdapter.this.searchResultUsernames.add(user);
@@ -834,17 +836,17 @@ public class MentionsAdapter extends SelectionAdapter {
                     this.searchGlobalRunnable = anonymousClass9;
                     AndroidUtilities.runOnUIThread(anonymousClass9, 200);
                 }
-                final HashMap<Integer, User> hashMap = newResultsHashMap;
+                final SparseArray<User> sparseArray = newResultsHashMap;
                 final ArrayList<Integer> arrayList = users;
                 Collections.sort(this.searchResultUsernames, new Comparator<User>() {
                     public int compare(User lhs, User rhs) {
-                        if (hashMap.containsKey(Integer.valueOf(lhs.id)) && hashMap.containsKey(Integer.valueOf(rhs.id))) {
+                        if (sparseArray.indexOfKey(lhs.id) >= 0 && sparseArray.indexOfKey(rhs.id) >= 0) {
                             return 0;
                         }
-                        if (hashMap.containsKey(Integer.valueOf(lhs.id))) {
+                        if (sparseArray.indexOfKey(lhs.id) >= 0) {
                             return -1;
                         }
-                        if (hashMap.containsKey(Integer.valueOf(rhs.id))) {
+                        if (sparseArray.indexOfKey(rhs.id) >= 0) {
                             return 1;
                         }
                         int lhsNum = arrayList.indexOf(Integer.valueOf(lhs.id));
@@ -890,14 +892,14 @@ public class MentionsAdapter extends SelectionAdapter {
                 ArrayList<String> newResultHelp = new ArrayList();
                 ArrayList<User> newResultUsers = new ArrayList();
                 String command = result.toString().toLowerCase();
-                for (Entry<Integer, BotInfo> entry : this.botInfo.entrySet()) {
-                    BotInfo botInfo = (BotInfo) entry.getValue();
-                    for (a = 0; a < botInfo.commands.size(); a++) {
-                        TL_botCommand botCommand = (TL_botCommand) botInfo.commands.get(a);
+                for (int b = 0; b < this.botInfo.size(); b++) {
+                    BotInfo info = (BotInfo) this.botInfo.valueAt(b);
+                    for (a = 0; a < info.commands.size(); a++) {
+                        TL_botCommand botCommand = (TL_botCommand) info.commands.get(a);
                         if (!(botCommand == null || botCommand.command == null || !botCommand.command.startsWith(command))) {
                             newResult.add("/" + botCommand.command);
                             newResultHelp.add(botCommand.description);
-                            newResultUsers.add(messagesController.getUser(Integer.valueOf(botInfo.user_id)));
+                            newResultUsers.add(messagesController.getUser(Integer.valueOf(info.user_id)));
                         }
                     }
                 }

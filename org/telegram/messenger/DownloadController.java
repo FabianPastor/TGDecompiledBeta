@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.util.LongSparseArray;
+import android.util.SparseArray;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,11 +44,11 @@ public class DownloadController implements NotificationCenterDelegate {
     public int[] mobileDataDownloadMask = new int[4];
     public int[] mobileMaxFileSize = new int[7];
     private ArrayList<DownloadObject> musicDownloadQueue = new ArrayList();
-    private HashMap<Integer, String> observersByTag = new HashMap();
+    private SparseArray<String> observersByTag = new SparseArray();
     private ArrayList<DownloadObject> photoDownloadQueue = new ArrayList();
     public int[] roamingDownloadMask = new int[4];
     public int[] roamingMaxFileSize = new int[7];
-    private HashMap<Long, Long> typingTimes = new HashMap();
+    private LongSparseArray<Long> typingTimes = new LongSparseArray();
     private ArrayList<DownloadObject> videoDownloadQueue = new ArrayList();
     private ArrayList<DownloadObject> videoMessageDownloadQueue = new ArrayList();
     public int[] wifiDownloadMask = new int[4];
@@ -582,7 +584,7 @@ public class DownloadController implements NotificationCenterDelegate {
             }
             messageObjects.add(messageObject);
         }
-        this.observersByTag.put(Integer.valueOf(observer.getObserverTag()), fileName);
+        this.observersByTag.put(observer.getObserverTag(), fileName);
     }
 
     public void removeLoadingFileObserver(FileDownloadProgressListener observer) {
@@ -590,7 +592,7 @@ public class DownloadController implements NotificationCenterDelegate {
             this.deleteLaterArray.add(observer);
             return;
         }
-        String fileName = (String) this.observersByTag.get(Integer.valueOf(observer.getObserverTag()));
+        String fileName = (String) this.observersByTag.get(observer.getObserverTag());
         if (fileName != null) {
             ArrayList<WeakReference<FileDownloadProgressListener>> arrayList = (ArrayList) this.loadingFileObservers.get(fileName);
             if (arrayList != null) {
@@ -607,7 +609,7 @@ public class DownloadController implements NotificationCenterDelegate {
                     this.loadingFileObservers.remove(fileName);
                 }
             }
-            this.observersByTag.remove(Integer.valueOf(observer.getObserverTag()));
+            this.observersByTag.remove(observer.getObserverTag());
         }
     }
 
@@ -637,7 +639,7 @@ public class DownloadController implements NotificationCenterDelegate {
                     reference = (WeakReference) arrayList.get(a);
                     if (reference.get() != null) {
                         ((FileDownloadProgressListener) reference.get()).onFailedDownload(fileName);
-                        this.observersByTag.remove(Integer.valueOf(((FileDownloadProgressListener) reference.get()).getObserverTag()));
+                        this.observersByTag.remove(((FileDownloadProgressListener) reference.get()).getObserverTag());
                     }
                 }
                 this.loadingFileObservers.remove(fileName);
@@ -661,7 +663,7 @@ public class DownloadController implements NotificationCenterDelegate {
                     reference = (WeakReference) arrayList.get(a);
                     if (reference.get() != null) {
                         ((FileDownloadProgressListener) reference.get()).onSuccessDownload(fileName);
-                        this.observersByTag.remove(Integer.valueOf(((FileDownloadProgressListener) reference.get()).getObserverTag()));
+                        this.observersByTag.remove(((FileDownloadProgressListener) reference.get()).getObserverTag());
                     }
                 }
                 this.loadingFileObservers.remove(fileName);
@@ -711,7 +713,7 @@ public class DownloadController implements NotificationCenterDelegate {
                             long dialog_id = delayedMessage.peer;
                             Long lastTime;
                             if (delayedMessage.type == 4) {
-                                lastTime = (Long) this.typingTimes.get(Long.valueOf(dialog_id));
+                                lastTime = (Long) this.typingTimes.get(dialog_id);
                                 if (lastTime == null || lastTime.longValue() + 4000 < System.currentTimeMillis()) {
                                     MessageObject messageObject = (MessageObject) delayedMessage.extraHashMap.get(fileName + "_i");
                                     if (messageObject == null || !messageObject.isVideo()) {
@@ -719,10 +721,10 @@ public class DownloadController implements NotificationCenterDelegate {
                                     } else {
                                         MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 5, 0);
                                     }
-                                    this.typingTimes.put(Long.valueOf(dialog_id), Long.valueOf(System.currentTimeMillis()));
+                                    this.typingTimes.put(dialog_id, Long.valueOf(System.currentTimeMillis()));
                                 }
                             } else {
-                                lastTime = (Long) this.typingTimes.get(Long.valueOf(dialog_id));
+                                lastTime = (Long) this.typingTimes.get(dialog_id);
                                 Document document = delayedMessage.obj.getDocument();
                                 if (lastTime == null || lastTime.longValue() + 4000 < System.currentTimeMillis()) {
                                     if (delayedMessage.obj.isRoundVideo()) {
@@ -734,7 +736,7 @@ public class DownloadController implements NotificationCenterDelegate {
                                     } else if (delayedMessage.location != null) {
                                         MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 4, 0);
                                     }
-                                    this.typingTimes.put(Long.valueOf(dialog_id), Long.valueOf(System.currentTimeMillis()));
+                                    this.typingTimes.put(dialog_id, Long.valueOf(System.currentTimeMillis()));
                                 }
                             }
                         }

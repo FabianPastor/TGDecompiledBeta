@@ -21,6 +21,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.SpannableStringBuilder;
+import android.util.LongSparseArray;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -128,7 +131,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private boolean groupStickersHidden;
     private Drawable[] icons;
     private ChatFull info;
-    private HashMap<Long, StickerSetCovered> installingStickerSets = new HashMap();
+    private LongSparseArray<StickerSetCovered> installingStickerSets = new LongSparseArray();
     private boolean isLayout;
     private int lastNotifyWidth;
     private Listener listener;
@@ -146,7 +149,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private ArrayList<Document> recentGifs = new ArrayList();
     private ArrayList<Document> recentStickers = new ArrayList();
     private int recentTabBum = -2;
-    private HashMap<Long, StickerSetCovered> removingStickerSets = new HashMap();
+    private LongSparseArray<StickerSetCovered> removingStickerSets = new LongSparseArray();
     private boolean showGifs;
     private StickerPreviewViewerDelegate stickerPreviewViewerDelegate = new StickerPreviewViewerDelegate() {
         public void sentSticker(Document sticker) {
@@ -761,11 +764,11 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     }
 
     private class StickersGridAdapter extends SelectionAdapter {
-        private HashMap<Integer, Object> cache = new HashMap();
+        private SparseArray<Object> cache = new SparseArray();
         private Context context;
         private HashMap<Object, Integer> packStartPosition = new HashMap();
-        private HashMap<Integer, Integer> positionToRow = new HashMap();
-        private HashMap<Integer, Object> rowStartPack = new HashMap();
+        private SparseIntArray positionToRow = new SparseIntArray();
+        private SparseArray<Object> rowStartPack = new SparseArray();
         private int stickersPerRow;
         private int totalItems;
 
@@ -782,7 +785,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
 
         public Object getItem(int i) {
-            return this.cache.get(Integer.valueOf(i));
+            return this.cache.get(i);
         }
 
         public int getPositionForPack(Object pack) {
@@ -794,7 +797,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
 
         public int getItemViewType(int position) {
-            Object object = this.cache.get(Integer.valueOf(position));
+            Object object = this.cache.get(position);
             if (object == null) {
                 return 1;
             }
@@ -815,8 +818,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 }
                 this.stickersPerRow = width / AndroidUtilities.dp(72.0f);
             }
-            Integer row = (Integer) this.positionToRow.get(Integer.valueOf(position));
-            if (row == null) {
+            int row = this.positionToRow.get(position, Integer.MIN_VALUE);
+            if (row == Integer.MIN_VALUE) {
                 return (EmojiView.this.stickerSets.size() - 1) + EmojiView.this.stickersTabOffset;
             }
             TL_messages_stickerSet pack = this.rowStartPack.get(row);
@@ -876,7 +879,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         public void onBindViewHolder(ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 0:
-                    Document sticker = (Document) this.cache.get(Integer.valueOf(position));
+                    Document sticker = (Document) this.cache.get(position);
                     StickerEmojiCell cell = holder.itemView;
                     cell.setSticker(sticker, false);
                     boolean z = EmojiView.this.recentStickers.contains(sticker) || EmojiView.this.favouriteStickers.contains(sticker);
@@ -885,8 +888,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 case 1:
                     EmptyCell cell2 = holder.itemView;
                     if (position == this.totalItems) {
-                        Integer row = (Integer) this.positionToRow.get(Integer.valueOf(position - 1));
-                        if (row == null) {
+                        int row = this.positionToRow.get(position - 1, Integer.MIN_VALUE);
+                        if (row == Integer.MIN_VALUE) {
                             cell2.setHeight(1);
                             return;
                         }
@@ -934,7 +937,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         cell3.setText(LocaleController.formatString(str, R.string.CurrentGroupStickers, objArr), icon);
                         return;
                     }
-                    TL_messages_stickerSet object = this.cache.get(Integer.valueOf(position));
+                    TL_messages_stickerSet object = this.cache.get(position);
                     if (object instanceof TL_messages_stickerSet) {
                         TL_messages_stickerSet set = object;
                         if (set.set != null) {
@@ -991,20 +994,20 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 if (a == EmojiView.this.groupStickerPackNum) {
                     EmojiView.this.groupStickerPackPosition = this.totalItems;
                     if (documents.isEmpty()) {
-                        this.rowStartPack.put(Integer.valueOf(startRow), pack);
+                        this.rowStartPack.put(startRow, pack);
                         int startRow2 = startRow + 1;
-                        this.positionToRow.put(Integer.valueOf(this.totalItems), Integer.valueOf(startRow));
-                        this.rowStartPack.put(Integer.valueOf(startRow2), pack);
+                        this.positionToRow.put(this.totalItems, startRow);
+                        this.rowStartPack.put(startRow2, pack);
                         startRow = startRow2 + 1;
-                        this.positionToRow.put(Integer.valueOf(this.totalItems + 1), Integer.valueOf(startRow2));
-                        HashMap hashMap = this.cache;
+                        this.positionToRow.put(this.totalItems + 1, startRow2);
+                        SparseArray sparseArray = this.cache;
                         int i = this.totalItems;
                         this.totalItems = i + 1;
-                        hashMap.put(Integer.valueOf(i), pack);
-                        hashMap = this.cache;
+                        sparseArray.put(i, pack);
+                        sparseArray = this.cache;
                         i = this.totalItems;
                         this.totalItems = i + 1;
-                        hashMap.put(Integer.valueOf(i), "group");
+                        sparseArray.put(i, "group");
                         a++;
                     }
                 }
@@ -1012,20 +1015,20 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     int b;
                     int count = (int) Math.ceil((double) (((float) documents.size()) / ((float) this.stickersPerRow)));
                     if (pack != null) {
-                        this.cache.put(Integer.valueOf(this.totalItems), pack);
+                        this.cache.put(this.totalItems, pack);
                     } else {
-                        this.cache.put(Integer.valueOf(this.totalItems), documents);
+                        this.cache.put(this.totalItems, documents);
                     }
-                    this.positionToRow.put(Integer.valueOf(this.totalItems), Integer.valueOf(startRow));
+                    this.positionToRow.put(this.totalItems, startRow);
                     for (b = 0; b < documents.size(); b++) {
-                        this.cache.put(Integer.valueOf((b + 1) + this.totalItems), documents.get(b));
-                        this.positionToRow.put(Integer.valueOf((b + 1) + this.totalItems), Integer.valueOf((startRow + 1) + (b / this.stickersPerRow)));
+                        this.cache.put((b + 1) + this.totalItems, documents.get(b));
+                        this.positionToRow.put((b + 1) + this.totalItems, (startRow + 1) + (b / this.stickersPerRow));
                     }
                     for (b = 0; b < count + 1; b++) {
                         if (pack != null) {
-                            this.rowStartPack.put(Integer.valueOf(startRow + b), pack);
+                            this.rowStartPack.put(startRow + b, pack);
                         } else {
-                            this.rowStartPack.put(Integer.valueOf(startRow + b), a == -1 ? "recent" : "fav");
+                            this.rowStartPack.put(startRow + b, a == -1 ? "recent" : "fav");
                         }
                     }
                     this.totalItems += (this.stickersPerRow * count) + 1;
@@ -1038,9 +1041,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     }
 
     private class TrendingGridAdapter extends SelectionAdapter {
-        private HashMap<Integer, Object> cache = new HashMap();
+        private SparseArray<Object> cache = new SparseArray();
         private Context context;
-        private HashMap<Integer, StickerSetCovered> positionsToSets = new HashMap();
+        private SparseArray<StickerSetCovered> positionsToSets = new SparseArray();
         private ArrayList<StickerSetCovered> sets = new ArrayList();
         private int stickersPerRow;
         private int totalItems;
@@ -1054,7 +1057,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
 
         public Object getItem(int i) {
-            return this.cache.get(Integer.valueOf(i));
+            return this.cache.get(i);
         }
 
         public boolean isEnabled(ViewHolder holder) {
@@ -1062,7 +1065,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
 
         public int getItemViewType(int position) {
-            Object object = this.cache.get(Integer.valueOf(position));
+            Object object = this.cache.get(position);
             if (object == null) {
                 return 1;
             }
@@ -1091,12 +1094,12 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         public void onClick(View v) {
                             FeaturedStickerSetInfoCell parent = (FeaturedStickerSetInfoCell) v.getParent();
                             StickerSetCovered pack = parent.getStickerSet();
-                            if (!EmojiView.this.installingStickerSets.containsKey(Long.valueOf(pack.set.id)) && !EmojiView.this.removingStickerSets.containsKey(Long.valueOf(pack.set.id))) {
+                            if (EmojiView.this.installingStickerSets.indexOfKey(pack.set.id) < 0 && EmojiView.this.removingStickerSets.indexOfKey(pack.set.id) < 0) {
                                 if (parent.isInstalled()) {
-                                    EmojiView.this.removingStickerSets.put(Long.valueOf(pack.set.id), pack);
+                                    EmojiView.this.removingStickerSets.put(pack.set.id, pack);
                                     EmojiView.this.listener.onStickerSetRemove(parent.getStickerSet());
                                 } else {
-                                    EmojiView.this.installingStickerSets.put(Long.valueOf(pack.set.id), pack);
+                                    EmojiView.this.installingStickerSets.put(pack.set.id, pack);
                                     EmojiView.this.listener.onStickerSetAdd(parent.getStickerSet());
                                 }
                                 parent.setDrawProgress(true);
@@ -1112,15 +1115,17 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             boolean z = false;
             switch (holder.getItemViewType()) {
                 case 0:
-                    ((StickerEmojiCell) holder.itemView).setSticker((Document) this.cache.get(Integer.valueOf(position)), false);
+                    ((StickerEmojiCell) holder.itemView).setSticker((Document) this.cache.get(position), false);
                     return;
                 case 1:
                     ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.dp(82.0f));
                     return;
                 case 2:
                     boolean unread;
+                    boolean installing;
+                    boolean removing;
                     ArrayList<Long> unreadStickers = DataQuery.getInstance(EmojiView.this.currentAccount).getUnreadStickerSets();
-                    StickerSetCovered stickerSetCovered = (StickerSetCovered) this.sets.get(((Integer) this.cache.get(Integer.valueOf(position))).intValue());
+                    StickerSetCovered stickerSetCovered = (StickerSetCovered) this.sets.get(((Integer) this.cache.get(position)).intValue());
                     if (unreadStickers == null || !unreadStickers.contains(Long.valueOf(stickerSetCovered.set.id))) {
                         unread = false;
                     } else {
@@ -1131,14 +1136,22 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     if (unread) {
                         DataQuery.getInstance(EmojiView.this.currentAccount).markFaturedStickersByIdAsRead(stickerSetCovered.set.id);
                     }
-                    boolean installing = EmojiView.this.installingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
-                    boolean removing = EmojiView.this.removingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
+                    if (EmojiView.this.installingStickerSets.indexOfKey(stickerSetCovered.set.id) >= 0) {
+                        installing = true;
+                    } else {
+                        installing = false;
+                    }
+                    if (EmojiView.this.removingStickerSets.indexOfKey(stickerSetCovered.set.id) >= 0) {
+                        removing = true;
+                    } else {
+                        removing = false;
+                    }
                     if (installing || removing) {
                         if (installing && cell.isInstalled()) {
-                            EmojiView.this.installingStickerSets.remove(Long.valueOf(stickerSetCovered.set.id));
+                            EmojiView.this.installingStickerSets.remove(stickerSetCovered.set.id);
                             installing = false;
                         } else if (removing && !cell.isInstalled()) {
-                            EmojiView.this.removingStickerSets.remove(Long.valueOf(stickerSetCovered.set.id));
+                            EmojiView.this.removingStickerSets.remove(stickerSetCovered.set.id);
                             removing = false;
                         }
                     }
@@ -1184,24 +1197,24 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         int count;
                         int b;
                         this.sets.add(pack);
-                        this.positionsToSets.put(Integer.valueOf(this.totalItems), pack);
-                        HashMap hashMap = this.cache;
+                        this.positionsToSets.put(this.totalItems, pack);
+                        SparseArray sparseArray = this.cache;
                         int i = this.totalItems;
                         this.totalItems = i + 1;
                         int num2 = num + 1;
-                        hashMap.put(Integer.valueOf(i), Integer.valueOf(num));
+                        sparseArray.put(i, Integer.valueOf(num));
                         int startRow = this.totalItems / this.stickersPerRow;
                         if (pack.covers.isEmpty()) {
                             count = 1;
-                            this.cache.put(Integer.valueOf(this.totalItems), pack.cover);
+                            this.cache.put(this.totalItems, pack.cover);
                         } else {
                             count = (int) Math.ceil((double) (((float) pack.covers.size()) / ((float) this.stickersPerRow)));
                             for (b = 0; b < pack.covers.size(); b++) {
-                                this.cache.put(Integer.valueOf(this.totalItems + b), pack.covers.get(b));
+                                this.cache.put(this.totalItems + b, pack.covers.get(b));
                             }
                         }
                         for (b = 0; b < this.stickersPerRow * count; b++) {
-                            this.positionsToSets.put(Integer.valueOf(this.totalItems + b), pack);
+                            this.positionsToSets.put(this.totalItems + b, pack);
                         }
                         this.totalItems += this.stickersPerRow * count;
                         num = num2;
@@ -1317,7 +1330,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             recyclerListView.setLayoutManager(gridLayoutManager);
             this.stickersLayoutManager.setSpanSizeLookup(new SpanSizeLookup() {
                 public int getSpanSize(int position) {
-                    if (position == EmojiView.this.stickersGridAdapter.totalItems || (EmojiView.this.stickersGridAdapter.cache.get(Integer.valueOf(position)) != null && !(EmojiView.this.stickersGridAdapter.cache.get(Integer.valueOf(position)) instanceof Document))) {
+                    if (position == EmojiView.this.stickersGridAdapter.totalItems || (EmojiView.this.stickersGridAdapter.cache.get(position) != null && !(EmojiView.this.stickersGridAdapter.cache.get(position) instanceof Document))) {
                         return EmojiView.this.stickersGridAdapter.stickersPerRow;
                     }
                     return 1;
@@ -1363,7 +1376,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             recyclerListView.setLayoutManager(gridLayoutManager);
             this.trendingLayoutManager.setSpanSizeLookup(new SpanSizeLookup() {
                 public int getSpanSize(int position) {
-                    if ((EmojiView.this.trendingGridAdapter.cache.get(Integer.valueOf(position)) instanceof Integer) || position == EmojiView.this.trendingGridAdapter.totalItems) {
+                    if ((EmojiView.this.trendingGridAdapter.cache.get(position) instanceof Integer) || position == EmojiView.this.trendingGridAdapter.totalItems) {
                         return EmojiView.this.trendingGridAdapter.stickersPerRow;
                     }
                     return 1;
@@ -1382,7 +1395,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             recyclerListView.setAdapter(stickersGridAdapter);
             this.trendingGridView.setOnItemClickListener(new OnItemClickListener() {
                 public void onItemClick(View view, int position) {
-                    StickerSetCovered pack = (StickerSetCovered) EmojiView.this.trendingGridAdapter.positionsToSets.get(Integer.valueOf(position));
+                    StickerSetCovered pack = (StickerSetCovered) EmojiView.this.trendingGridAdapter.positionsToSets.get(position);
                     if (pack != null) {
                         EmojiView.this.listener.onShowStickerSet(pack.set, null);
                     }
@@ -2467,15 +2480,15 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         if (unread) {
                             DataQuery.getInstance(this.currentAccount).markFaturedStickersByIdAsRead(stickerSetCovered.set.id);
                         }
-                        boolean installing = this.installingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
-                        boolean removing = this.removingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
+                        boolean installing = this.installingStickerSets.indexOfKey(stickerSetCovered.set.id) >= 0;
+                        boolean removing = this.removingStickerSets.indexOfKey(stickerSetCovered.set.id) >= 0;
                         if (installing || removing) {
                             if (installing && cell.isInstalled()) {
-                                this.installingStickerSets.remove(Long.valueOf(stickerSetCovered.set.id));
+                                this.installingStickerSets.remove(stickerSetCovered.set.id);
                                 installing = false;
                             } else if (removing) {
                                 if (!cell.isInstalled()) {
-                                    this.removingStickerSets.remove(Long.valueOf(stickerSetCovered.set.id));
+                                    this.removingStickerSets.remove(stickerSetCovered.set.id);
                                     removing = false;
                                 }
                             }

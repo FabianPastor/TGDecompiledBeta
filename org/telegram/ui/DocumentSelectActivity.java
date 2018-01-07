@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.StringTokenizer;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
@@ -595,6 +596,8 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     @SuppressLint({"NewApi"})
     private void listRoots() {
         Throwable e;
@@ -631,7 +634,9 @@ public class DocumentSelectActivity extends BaseFragment {
                     if (line == null) {
                         break;
                     } else if (line.contains("vfat") || line.contains("/mnt")) {
-                        FileLog.e(line);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d(line);
+                        }
                         StringTokenizer stringTokenizer = new StringTokenizer(line, " ");
                         String unused = stringTokenizer.nextToken();
                         String path = stringTokenizer.nextToken();
@@ -646,30 +651,23 @@ public class DocumentSelectActivity extends BaseFragment {
                                 }
                             }
                             paths.add(path);
-                            try {
-                                ListItem item = new ListItem();
-                                if (path.toLowerCase().contains("sd")) {
-                                    item.title = LocaleController.getString("SdCard", R.string.SdCard);
-                                } else {
-                                    item.title = LocaleController.getString("ExternalStorage", R.string.ExternalStorage);
-                                }
-                                item.icon = R.drawable.ic_external_storage;
-                                item.subtitle = getRootSubtitle(path);
-                                item.file = new File(path);
-                                this.items.add(item);
-                            } catch (Throwable e2) {
-                                FileLog.e(e2);
-                            } catch (Throwable th2) {
-                                th = th2;
-                                bufferedReader = bufferedReader2;
+                            ListItem item = new ListItem();
+                            if (path.toLowerCase().contains("sd")) {
+                                item.title = LocaleController.getString("SdCard", R.string.SdCard);
+                            } else {
+                                item.title = LocaleController.getString("ExternalStorage", R.string.ExternalStorage);
                             }
+                            item.icon = R.drawable.ic_external_storage;
+                            item.subtitle = getRootSubtitle(path);
+                            item.file = new File(path);
+                            this.items.add(item);
                         }
                     }
-                } catch (Exception e3) {
-                    e2 = e3;
+                } catch (Exception e2) {
+                    e = e2;
                     bufferedReader = bufferedReader2;
-                } catch (Throwable th22) {
-                    th = th22;
+                } catch (Throwable th2) {
+                    th = th2;
                     bufferedReader = bufferedReader2;
                 }
             }
@@ -677,20 +675,20 @@ public class DocumentSelectActivity extends BaseFragment {
                 try {
                     bufferedReader2.close();
                     bufferedReader = bufferedReader2;
-                } catch (Throwable e22) {
-                    FileLog.e(e22);
+                } catch (Throwable e3) {
+                    FileLog.e(e3);
                     bufferedReader = bufferedReader2;
                 }
             }
         } catch (Exception e4) {
-            e22 = e4;
+            e3 = e4;
             try {
-                FileLog.e(e22);
+                FileLog.e(e3);
                 if (bufferedReader != null) {
                     try {
                         bufferedReader.close();
-                    } catch (Throwable e222) {
-                        FileLog.e(e222);
+                    } catch (Throwable e32) {
+                        FileLog.e(e32);
                     }
                 }
                 fs = new ListItem();
@@ -710,9 +708,9 @@ public class DocumentSelectActivity extends BaseFragment {
                         this.items.add(fs2);
                         fs = fs2;
                     } catch (Exception e5) {
-                        e222 = e5;
+                        e32 = e5;
                         fs = fs2;
-                        FileLog.e(e222);
+                        FileLog.e(e32);
                         fs = new ListItem();
                         fs.title = LocaleController.getString("Gallery", R.string.Gallery);
                         fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
@@ -738,8 +736,8 @@ public class DocumentSelectActivity extends BaseFragment {
                 if (bufferedReader != null) {
                     try {
                         bufferedReader.close();
-                    } catch (Throwable e2222) {
-                        FileLog.e(e2222);
+                    } catch (Throwable e322) {
+                        FileLog.e(e322);
                     }
                 }
                 throw th;
@@ -763,8 +761,8 @@ public class DocumentSelectActivity extends BaseFragment {
                 fs = fs2;
             }
         } catch (Exception e6) {
-            e2222 = e6;
-            FileLog.e(e2222);
+            e322 = e6;
+            FileLog.e(e322);
             fs = new ListItem();
             fs.title = LocaleController.getString("Gallery", R.string.Gallery);
             fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);

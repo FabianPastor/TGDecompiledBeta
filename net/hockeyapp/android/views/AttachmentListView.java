@@ -69,7 +69,7 @@ public class AttachmentListView extends ViewGroup {
     }
 
     protected boolean checkLayoutParams(LayoutParams p) {
-        return p instanceof LayoutParams;
+        return p != null;
     }
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {

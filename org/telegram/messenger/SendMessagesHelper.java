@@ -15,6 +15,8 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v13.view.inputmethod.InputContentInfoCompat;
 import android.text.TextUtils;
+import android.util.LongSparseArray;
+import android.util.SparseArray;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 import com.coremedia.iso.IsoFile;
@@ -45,6 +47,7 @@ import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
+import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
@@ -226,8 +229,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             SendMessagesHelper.this.waitingForLocation.clear();
         }
     });
-    private HashMap<Integer, Message> sendingMessages = new HashMap();
-    private HashMap<Integer, MessageObject> unsentMessages = new HashMap();
+    private SparseArray<Message> sendingMessages = new SparseArray();
+    private SparseArray<MessageObject> unsentMessages = new SparseArray();
     private HashMap<String, MessageObject> waitingForCallback = new HashMap();
     private HashMap<String, MessageObject> waitingForLocation = new HashMap();
 
@@ -342,7 +345,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
             public void onLocationChanged(Location location) {
                 if (location != null && LocationProvider.this.locationQueryCancelRunnable != null) {
-                    FileLog.e("found location " + location);
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("found location " + location);
+                    }
                     LocationProvider.this.lastKnownLocation = location;
                     if (location.getAccuracy() < 100.0f) {
                         if (LocationProvider.this.delegate != null) {
@@ -806,7 +811,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                 return;
                                             }
                                         }
-                                        FileLog.e("can't load image " + path + " to file " + cacheFile.toString());
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.e("can't load image " + path + " to file " + cacheFile.toString());
+                                        }
                                         message.markAsError();
                                     }
                                 });
@@ -1001,7 +1008,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             sendScreenshotMessage(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf((int) messageObject.getDialogId())), messageObject.messageOwner.reply_to_msg_id, messageObject.messageOwner);
         }
         if (unsent) {
-            this.unsentMessages.put(Integer.valueOf(messageObject.getId()), messageObject);
+            this.unsentMessages.put(messageObject.getId(), messageObject);
         }
         sendMessage(messageObject);
         return true;
@@ -1009,7 +1016,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     protected void processSentMessage(int id) {
         int prevSize = this.unsentMessages.size();
-        this.unsentMessages.remove(Integer.valueOf(id));
+        this.unsentMessages.remove(id);
         if (prevSize != 0 && this.unsentMessages.size() == 0) {
             checkUnsentMessages();
         }
@@ -1094,7 +1101,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 UserConfig.getInstance(this.currentAccount).saveConfig(false);
             }
             req.random_id = message.random_id;
-            MessageObject newMsgObj = new MessageObject(this.currentAccount, message, null, false);
+            MessageObject newMsgObj = new MessageObject(this.currentAccount, message, false);
             newMsgObj.messageOwner.send_state = 1;
             ArrayList<MessageObject> objArr = new ArrayList();
             objArr.add(newMsgObj);
@@ -1183,12 +1190,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             } else if (MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id)) == null) {
                 return 0;
             }
-            HashMap<Long, Long> groupsMap = new HashMap();
+            LongSparseArray<Long> groupsMap = new LongSparseArray();
             ArrayList<MessageObject> objArr = new ArrayList();
             ArrayList<Message> arr = new ArrayList();
             ArrayList<Long> randomIds = new ArrayList();
             ArrayList<Integer> ids = new ArrayList();
-            HashMap<Long, Message> messagesByRandomIds = new HashMap();
+            LongSparseArray<Message> messagesByRandomIds = new LongSparseArray();
             InputPeer inputPeer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_id);
             int myId = UserConfig.getInstance(this.currentAccount).getClientUserId();
             boolean toMyself = peer == ((long) myId);
@@ -1281,10 +1288,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             newMsg.out = true;
                             long lastGroupedId = msgObj.messageOwner.grouped_id;
                             if (lastGroupedId != 0) {
-                                Long gId = (Long) groupsMap.get(Long.valueOf(msgObj.messageOwner.grouped_id));
+                                Long gId = (Long) groupsMap.get(msgObj.messageOwner.grouped_id);
                                 if (gId == null) {
                                     gId = Long.valueOf(Utilities.random.nextLong());
-                                    groupsMap.put(Long.valueOf(msgObj.messageOwner.grouped_id), gId);
+                                    groupsMap.put(msgObj.messageOwner.grouped_id, gId);
                                 }
                                 newMsg.grouped_id = gId.longValue();
                                 newMsg.flags |= 131072;
@@ -1305,7 +1312,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 newMsg.random_id = getNextRandomId();
                             }
                             randomIds.add(Long.valueOf(newMsg.random_id));
-                            messagesByRandomIds.put(Long.valueOf(newMsg.random_id), newMsg);
+                            messagesByRandomIds.put(newMsg.random_id, newMsg);
                             ids.add(Integer.valueOf(newMsg.fwd_msg_id));
                             newMsg.date = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
                             if (!(inputPeer instanceof TL_inputPeerChannel)) {
@@ -1328,13 +1335,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             if (msgObj.messageOwner.to_id instanceof TL_peerChannel) {
                                 newMsg.ttl = -msgObj.messageOwner.to_id.channel_id;
                             }
-                            MessageObject messageObject = new MessageObject(this.currentAccount, newMsg, null, true);
+                            MessageObject messageObject = new MessageObject(this.currentAccount, newMsg, true);
                             messageObject.messageOwner.send_state = 1;
                             objArr.add(messageObject);
                             arr.add(newMsg);
                             putToSendingMessages(newMsg);
-                            if (BuildVars.DEBUG_VERSION) {
-                                FileLog.e("forward message user_id = " + inputPeer.user_id + " chat_id = " + inputPeer.chat_id + " channel_id = " + inputPeer.channel_id + " access_hash = " + inputPeer.access_hash);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("forward message user_id = " + inputPeer.user_id + " chat_id = " + inputPeer.chat_id + " channel_id = " + inputPeer.channel_id + " access_hash = " + inputPeer.access_hash);
                             }
                             if (!((groupedIdChanged && arr.size() > 0) || arr.size() == 100 || a == messages.size() - 1)) {
                                 if (a != messages.size() - 1) {
@@ -1368,7 +1375,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             req.with_my_score = z;
                             final ArrayList<Message> newMsgObjArr = arr;
                             final ArrayList<MessageObject> newMsgArr = objArr;
-                            final HashMap<Long, Message> messagesByRandomIdsFinal = messagesByRandomIds;
+                            final LongSparseArray<Message> messagesByRandomIdsFinal = messagesByRandomIds;
                             final boolean isMegagroupFinal = isMegagroup;
                             final long j = peer;
                             final boolean z2 = toMyself;
@@ -1378,14 +1385,14 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     final Message newMsgObj;
                                     if (error == null) {
                                         Update update;
-                                        HashMap<Integer, Long> newMessagesByIds = new HashMap();
+                                        SparseLongArray newMessagesByIds = new SparseLongArray();
                                         Updates updates = (Updates) response;
                                         a = 0;
                                         while (a < updates.updates.size()) {
                                             update = (Update) updates.updates.get(a);
                                             if (update instanceof TL_updateMessageID) {
                                                 TL_updateMessageID updateMessageID = (TL_updateMessageID) update;
-                                                newMessagesByIds.put(Integer.valueOf(updateMessageID.id), Long.valueOf(updateMessageID.random_id));
+                                                newMessagesByIds.put(updateMessageID.id, updateMessageID.random_id);
                                                 updates.updates.remove(a);
                                                 a--;
                                             }
@@ -1420,8 +1427,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                     message.unread = false;
                                                     message.media_unread = false;
                                                 }
-                                                Long random_id = (Long) newMessagesByIds.get(Integer.valueOf(message.id));
-                                                if (random_id != null) {
+                                                long random_id = newMessagesByIds.get(message.id);
+                                                if (random_id != 0) {
                                                     newMsgObj = (Message) messagesByRandomIdsFinal.get(random_id);
                                                     if (newMsgObj != null) {
                                                         int index = newMsgObjArr.indexOf(newMsgObj);
@@ -1487,7 +1494,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 arr = new ArrayList();
                                 randomIds = new ArrayList();
                                 ids = new ArrayList();
-                                messagesByRandomIds = new HashMap();
+                                messagesByRandomIds = new LongSparseArray();
                             }
                         } else if (sendResult == 0) {
                             sendResult = 2;
@@ -2331,7 +2338,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
             }
             newMsg.send_state = 1;
-            newMsgObj = new MessageObject(this.currentAccount, newMsg, null, true);
+            newMsgObj = new MessageObject(this.currentAccount, newMsg, true);
             try {
                 newMsgObj.replyMessageObject = reply_to_msg;
                 if (!newMsgObj.isForwarded() && ((newMsgObj.type == 3 || videoEditedInfo != null || newMsgObj.type == 2) && !TextUtils.isEmpty(newMsg.attachPath))) {
@@ -2392,8 +2399,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 processSentMessage(newMsg.id);
             }
             try {
-                if (BuildVars.DEBUG_VERSION && sendToPeer != null) {
-                    FileLog.e("send message user_id = " + sendToPeer.user_id + " chat_id = " + sendToPeer.chat_id + " channel_id = " + sendToPeer.channel_id + " access_hash = " + sendToPeer.access_hash);
+                if (BuildVars.LOGS_ENABLED && sendToPeer != null) {
+                    FileLog.d("send message user_id = " + sendToPeer.user_id + " chat_id = " + sendToPeer.chat_id + " channel_id = " + sendToPeer.channel_id + " access_hash = " + sendToPeer.access_hash);
                 }
                 TL_decryptedMessage reqSend;
                 ArrayList<Long> random_ids;
@@ -3441,15 +3448,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     protected void putToSendingMessages(Message message) {
-        this.sendingMessages.put(Integer.valueOf(message.id), message);
+        this.sendingMessages.put(message.id, message);
     }
 
     protected void removeFromSendingMessages(int mid) {
-        this.sendingMessages.remove(Integer.valueOf(mid));
+        this.sendingMessages.remove(mid);
     }
 
     public boolean isSendingMessage(int mid) {
-        return this.sendingMessages.containsKey(Integer.valueOf(mid));
+        return this.sendingMessages.indexOfKey(mid) >= 0;
     }
 
     private void performSendMessageRequestMulti(final TL_messages_sendMultiMedia req, final ArrayList<MessageObject> msgObjs, final ArrayList<String> originalPaths) {
@@ -3464,20 +3471,20 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         final Message newMsgObj;
                         boolean isSentError = false;
                         if (error == null) {
-                            HashMap<Integer, Message> newMessages = new HashMap();
-                            HashMap<Long, Integer> newIds = new HashMap();
+                            SparseArray<Message> newMessages = new SparseArray();
+                            LongSparseArray<Integer> newIds = new LongSparseArray();
                             Updates updates = (Updates) response;
                             ArrayList<Update> updatesArr = ((Updates) response).updates;
                             int a = 0;
                             while (a < updatesArr.size()) {
                                 Update update = (Update) updatesArr.get(a);
                                 if (update instanceof TL_updateMessageID) {
-                                    newIds.put(Long.valueOf(update.random_id), Integer.valueOf(((TL_updateMessageID) update).id));
+                                    newIds.put(update.random_id, Integer.valueOf(((TL_updateMessageID) update).id));
                                     updatesArr.remove(a);
                                     a--;
                                 } else if (update instanceof TL_updateNewMessage) {
                                     final TL_updateNewMessage newMessage = (TL_updateNewMessage) update;
-                                    newMessages.put(Integer.valueOf(newMessage.message.id), newMessage.message);
+                                    newMessages.put(newMessage.message.id, newMessage.message);
                                     Utilities.stageQueue.postRunnable(new Runnable() {
                                         public void run() {
                                             MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewDifferenceParams(-1, newMessage.pts, -1, newMessage.pts_count);
@@ -3487,7 +3494,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     a--;
                                 } else if (update instanceof TL_updateNewChannelMessage) {
                                     final TL_updateNewChannelMessage newMessage2 = (TL_updateNewChannelMessage) update;
-                                    newMessages.put(Integer.valueOf(newMessage2.message.id), newMessage2.message);
+                                    newMessages.put(newMessage2.message.id, newMessage2.message);
                                     Utilities.stageQueue.postRunnable(new Runnable() {
                                         public void run() {
                                             MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewChannelDifferenceParams(newMessage2.pts, newMessage2.pts_count, newMessage2.message.to_id.channel_id);
@@ -3505,12 +3512,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 final int oldId = newMsgObj.id;
                                 ArrayList<Message> sentMessages = new ArrayList();
                                 String attachPath = newMsgObj.attachPath;
-                                Integer id = (Integer) newIds.get(Long.valueOf(newMsgObj.random_id));
+                                Integer id = (Integer) newIds.get(newMsgObj.random_id);
                                 if (id == null) {
                                     isSentError = true;
                                     break;
                                 }
-                                Message message = (Message) newMessages.get(id);
+                                Message message = (Message) newMessages.get(id.intValue());
                                 if (message == null) {
                                     isSentError = true;
                                     break;
@@ -3757,7 +3764,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                     for (int a = 0; a < arrayList.size(); a++) {
                                                         Message message = (Message) arrayList.get(a);
                                                         ArrayList<MessageObject> arr = new ArrayList();
-                                                        MessageObject messageObject = new MessageObject(SendMessagesHelper.this.currentAccount, message, null, false);
+                                                        MessageObject messageObject = new MessageObject(SendMessagesHelper.this.currentAccount, message, false);
                                                         arr.add(messageObject);
                                                         MessagesController.getInstance(SendMessagesHelper.this.currentAccount).updateInterfaceWithMessages(messageObject.getDialogId(), arr, true);
                                                     }
@@ -3999,7 +4006,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 MessagesController.getInstance(SendMessagesHelper.this.currentAccount).putChats(arrayList2, true);
                 MessagesController.getInstance(SendMessagesHelper.this.currentAccount).putEncryptedChats(arrayList3, true);
                 for (int a = 0; a < arrayList4.size(); a++) {
-                    SendMessagesHelper.this.retrySendMessage(new MessageObject(SendMessagesHelper.this.currentAccount, (Message) arrayList4.get(a), null, false), true);
+                    SendMessagesHelper.this.retrySendMessage(new MessageObject(SendMessagesHelper.this.currentAccount, (Message) arrayList4.get(a), false), true);
                 }
             }
         });
@@ -5144,7 +5151,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         try {
                                             worker.sync.await();
                                         } catch (Throwable e2) {
-                                            FileLog.e("tmessages", e2);
+                                            FileLog.e(e2);
                                         }
                                         photo = worker.photo;
                                     }
@@ -5230,7 +5237,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             SendMessagesHelper.prepareSendingDocumentInternal(currentAccount, (String) sendAsDocuments.get(a), (String) sendAsDocumentsOriginal.get(a), null, extension, j, messageObject, (CharSequence) sendAsDocumentsCaptions.get(a));
                         }
                     }
-                    FileLog.d("total send time = " + (System.currentTimeMillis() - beginTime));
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("total send time = " + (System.currentTimeMillis() - beginTime));
+                    }
                 }
             });
         }
@@ -5396,11 +5405,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         long audioFramesSize = 0;
         IsoFile isoFile = new IsoFile(videoPath);
         List<Box> boxes = Path.getPaths(isoFile, "/moov/trak/");
-        if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/mp4a/") == null) {
+        if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/mp4a/") == null && BuildVars.LOGS_ENABLED) {
             FileLog.d("video hasn't mp4a atom");
         }
         if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/avc1/") == null) {
-            FileLog.d("video hasn't avc1 atom");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("video hasn't avc1 atom");
+            }
             return null;
         }
         for (int b = 0; b < boxes.size(); b++) {
@@ -5432,7 +5443,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             }
         }
         if (trackHeaderBox == null) {
-            FileLog.d("video hasn't trackHeaderBox atom");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("video hasn't trackHeaderBox atom");
+            }
             return null;
         }
         int compressionsCount;
@@ -5440,15 +5453,21 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             try {
                 MediaCodecInfo codecInfo = MediaController.selectCodec("video/avc");
                 if (codecInfo == null) {
-                    FileLog.d("no codec info for video/avc");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("no codec info for video/avc");
+                    }
                     return null;
                 }
                 String name = codecInfo.getName();
                 if (name.equals("OMX.google.h264.encoder") || name.equals("OMX.ST.VFM.H264Enc") || name.equals("OMX.Exynos.avc.enc") || name.equals("OMX.MARVELL.VIDEO.HW.CODA7542ENCODER") || name.equals("OMX.MARVELL.VIDEO.H264ENCODER") || name.equals("OMX.k3.video.encoder.avc") || name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
-                    FileLog.d("unsupported encoder = " + name);
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("unsupported encoder = " + name);
+                    }
                     return null;
                 } else if (MediaController.selectColorFormat(codecInfo, "video/avc") == 0) {
-                    FileLog.d("no color format for video/avc");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("no color format for video/avc");
+                    }
                     return null;
                 }
             } catch (Exception e2) {

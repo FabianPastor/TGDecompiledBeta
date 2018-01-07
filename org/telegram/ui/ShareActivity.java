@@ -55,7 +55,7 @@ public class ShareActivity extends Activity {
                 return;
             }
             String link = sharedPreferences.getString(hash + "_link", null);
-            MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, mess, null, false);
+            MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, mess, false);
             messageObject.messageOwner.with_my_score = true;
             try {
                 this.visibleDialog = ShareAlert.createShareAlert(this, messageObject, null, false, link, false);

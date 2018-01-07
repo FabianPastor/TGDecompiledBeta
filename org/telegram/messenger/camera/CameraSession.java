@@ -13,6 +13,7 @@ import android.view.OrientationEventListener;
 import android.view.WindowManager;
 import java.util.ArrayList;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class CameraSession {
@@ -186,9 +187,13 @@ public class CameraSession {
             camera.setDisplayOrientation(cameraDisplayOrientation);
             this.diffOrientation = this.currentOrientation - displayOrientation;
             if (params != null) {
-                FileLog.e("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
+                }
                 params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
-                FileLog.e("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
+                }
                 params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
                 params.setPictureFormat(this.pictureFormat);
                 params.setRecordingHint(true);

@@ -1,7 +1,6 @@
 package net.hockeyapp.android;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,17 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.lang.ref.WeakReference;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import net.hockeyapp.android.tasks.LoginTask;
 import net.hockeyapp.android.utils.AsyncTaskUtils;
+import net.hockeyapp.android.utils.HockeyLog;
 import net.hockeyapp.android.utils.Util;
-import org.telegram.tgnet.ConnectionsManager;
 
 public class LoginActivity extends Activity {
-    private Button mButtonLogin;
     private Handler mLoginHandler;
     private LoginTask mLoginTask;
     private int mMode;
@@ -34,7 +30,7 @@ public class LoginActivity extends Activity {
     private static class LoginHandler extends Handler {
         private final WeakReference<Activity> mWeakActivity;
 
-        public LoginHandler(Activity activity) {
+        LoginHandler(Activity activity) {
             this.mWeakActivity = new WeakReference(activity);
         }
 
@@ -80,20 +76,13 @@ public class LoginActivity extends Activity {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == 4) {
-            if (LoginManager.listener != null) {
-                LoginManager.listener.onBack();
-            } else if (LoginManager.mainActivity == null) {
-                return true;
-            } else {
-                Intent intent = new Intent(this, LoginManager.mainActivity);
-                intent.setFlags(ConnectionsManager.FileTypeFile);
-                intent.putExtra("net.hockeyapp.android.EXIT", true);
-                startActivity(intent);
-                return true;
-            }
+        if (keyCode != 4) {
+            return super.onKeyDown(keyCode, event);
         }
-        return super.onKeyDown(keyCode, event);
+        if (LoginManager.listener != null) {
+            LoginManager.listener.onBack();
+        }
+        return true;
     }
 
     private void configureView() {
@@ -101,8 +90,7 @@ public class LoginActivity extends Activity {
             ((EditText) findViewById(R.id.input_password)).setVisibility(4);
         }
         ((TextView) findViewById(R.id.text_headline)).setText(this.mMode == 1 ? R.string.hockeyapp_login_headline_text_email_only : R.string.hockeyapp_login_headline_text);
-        this.mButtonLogin = (Button) findViewById(R.id.button_login);
-        this.mButtonLogin.setOnClickListener(new OnClickListener() {
+        ((Button) findViewById(R.id.button_login)).setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 LoginActivity.this.performAuthentication();
             }
@@ -145,20 +133,9 @@ public class LoginActivity extends Activity {
 
     public String md5(String s) {
         try {
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes());
-            byte[] messageDigest = digest.digest();
-            StringBuilder hexString = new StringBuilder();
-            for (byte aMessageDigest : messageDigest) {
-                String h = Integer.toHexString(aMessageDigest & 255);
-                while (h.length() < 2) {
-                    h = "0" + h;
-                }
-                hexString.append(h);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            return Util.bytesToHex(Util.hash(s.getBytes(), "MD5"));
+        } catch (Throwable e) {
+            HockeyLog.error("Failed to create MD5 hash", e);
             return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }

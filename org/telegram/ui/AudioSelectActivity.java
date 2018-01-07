@@ -3,14 +3,13 @@ package org.telegram.ui;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore.Audio.Media;
+import android.util.LongSparseArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
@@ -61,7 +60,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     private boolean loadingAudio;
     private MessageObject playingAudio;
     private EmptyTextProgressView progressView;
-    private HashMap<Long, AudioEntry> selectedAudios = new HashMap();
+    private LongSparseArray<AudioEntry> selectedAudios = new LongSparseArray();
     private View shadow;
 
     public interface AudioSelectActivityDelegate {
@@ -102,7 +101,20 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            ((AudioCell) holder.itemView).setAudio((AudioEntry) AudioSelectActivity.this.audioEntries.get(position), position != AudioSelectActivity.this.audioEntries.size() + -1, AudioSelectActivity.this.selectedAudios.containsKey(Long.valueOf(((AudioEntry) AudioSelectActivity.this.audioEntries.get(position)).id)));
+            boolean z;
+            boolean z2 = true;
+            AudioEntry audioEntry = (AudioEntry) AudioSelectActivity.this.audioEntries.get(position);
+            AudioCell audioCell = (AudioCell) holder.itemView;
+            AudioEntry audioEntry2 = (AudioEntry) AudioSelectActivity.this.audioEntries.get(position);
+            if (position != AudioSelectActivity.this.audioEntries.size() - 1) {
+                z = true;
+            } else {
+                z = false;
+            }
+            if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.id) < 0) {
+                z2 = false;
+            }
+            audioCell.setAudio(audioEntry2, z, z2);
         }
 
         public int getItemViewType(int i) {
@@ -162,11 +174,11 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             public void onItemClick(View view, int position) {
                 AudioCell audioCell = (AudioCell) view;
                 AudioEntry audioEntry = audioCell.getAudioEntry();
-                if (AudioSelectActivity.this.selectedAudios.containsKey(Long.valueOf(audioEntry.id))) {
-                    AudioSelectActivity.this.selectedAudios.remove(Long.valueOf(audioEntry.id));
+                if (AudioSelectActivity.this.selectedAudios.indexOfKey(audioEntry.id) >= 0) {
+                    AudioSelectActivity.this.selectedAudios.remove(audioEntry.id);
                     audioCell.setChecked(false);
                 } else {
-                    AudioSelectActivity.this.selectedAudios.put(Long.valueOf(audioEntry.id), audioEntry);
+                    AudioSelectActivity.this.selectedAudios.put(audioEntry.id, audioEntry);
                     audioCell.setChecked(true);
                 }
                 AudioSelectActivity.this.updateBottomLayoutCount();
@@ -183,8 +195,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             public void onClick(View view) {
                 if (AudioSelectActivity.this.delegate != null) {
                     ArrayList<MessageObject> audios = new ArrayList();
-                    for (Entry<Long, AudioEntry> entry : AudioSelectActivity.this.selectedAudios.entrySet()) {
-                        audios.add(((AudioEntry) entry.getValue()).messageObject);
+                    for (int a = 0; a < AudioSelectActivity.this.selectedAudios.size(); a++) {
+                        audios.add(((AudioEntry) AudioSelectActivity.this.selectedAudios.valueAt(a)).messageObject);
                     }
                     AudioSelectActivity.this.delegate.didSelectAudio(audios);
                 }
@@ -280,7 +292,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                         TL_documentAttributeFilename fileName = new TL_documentAttributeFilename();
                         fileName.file_name = file.getName();
                         message.media.document.attributes.add(fileName);
-                        audioEntry.messageObject = new MessageObject(AudioSelectActivity.this.currentAccount, message, null, false);
+                        audioEntry.messageObject = new MessageObject(AudioSelectActivity.this.currentAccount, message, false);
                         newAudioEntries.add(audioEntry);
                         id--;
                     }

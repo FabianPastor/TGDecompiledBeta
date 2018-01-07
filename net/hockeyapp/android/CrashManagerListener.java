@@ -29,10 +29,6 @@ public abstract class CrashManagerListener {
         return null;
     }
 
-    public boolean onCrashesFound() {
-        return false;
-    }
-
     public boolean shouldAutoUploadCrashes() {
         return false;
     }
@@ -41,6 +37,9 @@ public abstract class CrashManagerListener {
     }
 
     public void onConfirmedCrashesFound() {
+    }
+
+    public void onNoCrashesFound() {
     }
 
     public void onCrashesSent() {

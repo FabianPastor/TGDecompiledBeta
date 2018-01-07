@@ -258,7 +258,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.out = true;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = 0;
-            MessageObject replyMessageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true);
+            MessageObject replyMessageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
             message = new TL_message();
             message.message = "I can't even take you seriously right now.";
             message.date = date + 960;
@@ -270,7 +270,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.out = true;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = 0;
-            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true));
+            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, true));
             message = new TL_message();
             message.date = date + TsExtractor.TS_STREAM_TYPE_HDMV_DTS;
             message.dialog_id = 1;
@@ -292,7 +292,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.out = false;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true));
+            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, true));
             message = new TL_message();
             message.message = "Ah, you kids today with techno music! You should enjoy the classics, like Hasselhoff!";
             message.date = date + 60;
@@ -305,7 +305,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.out = false;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            MessageObject messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true);
+            MessageObject messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
             messageObject.customReplyName = "Lucio";
             messageObject.replyMessageObject = replyMessageObject;
             this.messages.add(messageObject);
@@ -331,7 +331,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.out = true;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = 0;
-            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true);
+            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
             messageObject.audioProgressSec = 1;
             messageObject.audioProgress = 0.3f;
             messageObject.useCustomPhoto = true;
@@ -362,14 +362,14 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.out = false;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, true);
+            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
             messageObject.useCustomPhoto = true;
             this.messages.add(messageObject);
             message = new TL_message();
             message.message = LocaleController.formatDateChat((long) date);
             message.id = 0;
             message.date = date;
-            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, null, false);
+            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, false);
             messageObject.type = 10;
             messageObject.contentType = 1;
             messageObject.isDateObject = true;

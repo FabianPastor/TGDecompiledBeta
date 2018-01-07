@@ -226,7 +226,10 @@ public class Emoji {
         } catch (Throwable e) {
             FileLog.e(e);
         } catch (Throwable x) {
-            FileLog.e("Error loading emoji", x);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Error loading emoji", x);
+                return;
+            }
             return;
         }
         Bitmap bitmap = null;
@@ -301,7 +304,9 @@ public class Emoji {
             }
         }
         if (info == null) {
-            FileLog.e("No drawable for emoji " + code);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("No drawable for emoji " + code);
+            }
             return null;
         }
         EmojiDrawable ed = new EmojiDrawable(info);

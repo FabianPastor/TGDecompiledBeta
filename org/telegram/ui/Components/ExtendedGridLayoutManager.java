@@ -1,7 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
-import android.util.SparseArray;
+import android.util.SparseIntArray;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.support.widget.GridLayoutManager;
@@ -9,8 +9,8 @@ import org.telegram.tgnet.ConnectionsManager;
 
 public class ExtendedGridLayoutManager extends GridLayoutManager {
     private int calculatedWidth;
-    private SparseArray<Integer> itemSpans = new SparseArray();
-    private SparseArray<Integer> itemsToRow = new SparseArray();
+    private SparseIntArray itemSpans = new SparseIntArray();
+    private SparseIntArray itemsToRow = new SparseIntArray();
     private ArrayList<ArrayList<Integer>> rows;
 
     public ExtendedGridLayoutManager(Context context, int spanCount) {
@@ -65,10 +65,10 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
                     itemSpan = (int) ((((float) width) / viewPortAvailableSize) * ((float) getSpanCount()));
                     spanLeft -= itemSpan;
                 } else {
-                    this.itemsToRow.put(j, Integer.valueOf(a));
+                    this.itemsToRow.put(j, a);
                     itemSpan = spanLeft;
                 }
-                this.itemSpans.put(j, Integer.valueOf(itemSpan));
+                this.itemSpans.put(j, itemSpan);
                 j++;
             }
             i += row.size();
@@ -188,7 +188,7 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
 
     public int getSpanSizeForItem(int i) {
         checkLayout();
-        return ((Integer) this.itemSpans.get(i)).intValue();
+        return this.itemSpans.get(i);
     }
 
     public int getRowsCount(int width) {
@@ -200,7 +200,7 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
 
     public boolean isLastInRow(int i) {
         checkLayout();
-        return this.itemsToRow.get(i) != null;
+        return this.itemsToRow.get(i, ConnectionsManager.DEFAULT_DATACENTER_ID) != ConnectionsManager.DEFAULT_DATACENTER_ID;
     }
 
     public boolean isFirstRow(int i) {

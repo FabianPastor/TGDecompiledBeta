@@ -1234,7 +1234,6 @@ public class ViewPager extends ViewGroup {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int i;
-        LayoutParams lp;
         setMeasuredDimension(getDefaultSize(0, widthMeasureSpec), getDefaultSize(0, heightMeasureSpec));
         int measuredWidth = getMeasuredWidth();
         this.mGutterSize = Math.min(measuredWidth / 10, this.mDefaultGutterSize);
@@ -1242,6 +1241,7 @@ public class ViewPager extends ViewGroup {
         int childHeightSize = (getMeasuredHeight() - getPaddingTop()) - getPaddingBottom();
         int size = getChildCount();
         for (i = 0; i < size; i++) {
+            LayoutParams lp;
             View child = getChildAt(i);
             if (child.getVisibility() != 8) {
                 lp = (LayoutParams) child.getLayoutParams();
@@ -1322,8 +1322,6 @@ public class ViewPager extends ViewGroup {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int i;
         LayoutParams lp;
-        int childLeft;
-        int childTop;
         int count = getChildCount();
         int width = r - l;
         int height = b - t;
@@ -1334,6 +1332,8 @@ public class ViewPager extends ViewGroup {
         int scrollX = getScrollX();
         int decorCount = 0;
         for (i = 0; i < count; i++) {
+            int childLeft;
+            int childTop;
             View child = getChildAt(i);
             if (child.getVisibility() != 8) {
                 lp = (LayoutParams) child.getLayoutParams();

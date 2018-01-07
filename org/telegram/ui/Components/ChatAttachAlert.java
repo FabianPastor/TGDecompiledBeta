@@ -17,10 +17,10 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
-import android.media.ExifInterface;
 import android.os.Build.VERSION;
 import android.provider.Settings.System;
 import android.support.annotation.Keep;
+import android.support.media.ExifInterface;
 import android.text.TextUtils.TruncateAt;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -99,6 +99,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     private RecyclerListView attachPhotoRecyclerView;
     private ViewGroup attachView;
     private ChatActivity baseFragment;
+    private boolean buttonPressed;
     private boolean cameraAnimationInProgress;
     private File cameraFile;
     private FrameLayout cameraIcon;
@@ -989,7 +990,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             }
             attachButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    ChatAttachAlert.this.delegate.didPressedButton(((Integer) v.getTag()).intValue());
+                    if (!ChatAttachAlert.this.buttonPressed) {
+                        ChatAttachAlert.this.buttonPressed = true;
+                        ChatAttachAlert.this.delegate.didPressedButton(((Integer) v.getTag()).intValue());
+                    }
                 }
             });
         }
@@ -1241,9 +1245,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     ObjectAnimator animator = ObjectAnimator.ofFloat(ChatAttachAlert.this.switchCameraButton, "scaleX", new float[]{0.0f}).setDuration(100);
                     animator.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
-                            ImageView access$5400 = ChatAttachAlert.this.switchCameraButton;
+                            ImageView access$5500 = ChatAttachAlert.this.switchCameraButton;
                             int i = (ChatAttachAlert.this.cameraView == null || !ChatAttachAlert.this.cameraView.isFrontface()) ? R.drawable.camera_revert2 : R.drawable.camera_revert1;
-                            access$5400.setImageResource(i);
+                            access$5500.setImageResource(i);
                             ObjectAnimator.ofFloat(ChatAttachAlert.this.switchCameraButton, "scaleX", new float[]{1.0f}).setDuration(100).start();
                         }
                     });
@@ -1287,6 +1291,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 }
             });
         }
+    }
+
+    public void show() {
+        super.show();
+        this.buttonPressed = false;
     }
 
     private boolean processTouchEvent(MotionEvent event) {
@@ -1836,11 +1845,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                             }
                         }
                         ChatAttachAlert.this.switchCameraButton.setImageResource(ChatAttachAlert.this.cameraView.isFrontface() ? R.drawable.camera_revert1 : R.drawable.camera_revert2);
-                        ImageView access$5400 = ChatAttachAlert.this.switchCameraButton;
+                        ImageView access$5500 = ChatAttachAlert.this.switchCameraButton;
                         if (!ChatAttachAlert.this.cameraView.hasFrontFaceCamera()) {
                             i = 4;
                         }
-                        access$5400.setVisibility(i);
+                        access$5500.setVisibility(i);
                     }
                 });
                 this.cameraIcon = new FrameLayout(this.baseFragment.getParentActivity());
@@ -1979,10 +1988,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             this.sendPhotosButton.imageView.setPadding(AndroidUtilities.dp(2.0f), 0, 0, 0);
             this.sendPhotosButton.imageView.setBackgroundResource(R.drawable.attach_send_states);
             this.sendPhotosButton.imageView.setImageResource(R.drawable.attach_send2);
-            TextView access$7300 = this.sendPhotosButton.textView;
+            TextView access$7400 = this.sendPhotosButton.textView;
             Object[] objArr = new Object[1];
             objArr[0] = String.format("(%d)", new Object[]{Integer.valueOf(count)});
-            access$7300.setText(LocaleController.formatString("SendItems", R.string.SendItems, objArr));
+            access$7400.setText(LocaleController.formatString("SendItems", R.string.SendItems, objArr));
             this.sendDocumentsButton.textView.setText(count == 1 ? LocaleController.getString("SendAsFile", R.string.SendAsFile) : LocaleController.getString("SendAsFiles", R.string.SendAsFiles));
         }
         if (VERSION.SDK_INT < 23 || getContext().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {

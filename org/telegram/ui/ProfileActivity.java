@@ -29,6 +29,7 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.Keep;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -45,7 +46,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
@@ -215,7 +215,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private int onlineCount = -1;
     private SimpleTextView[] onlineTextView = new SimpleTextView[2];
     private boolean openAnimationInProgress;
-    private HashMap<Integer, ChatParticipant> participantsMap = new HashMap();
+    private SparseArray<ChatParticipant> participantsMap = new SparseArray();
     private int phoneRow;
     private boolean playProfileAnimation;
     private PhotoViewerProvider provider = new EmptyPhotoViewerProvider() {
@@ -1125,7 +1125,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                         editor.putInt("notify2_" + did, 0);
                                         MessagesStorage.getInstance(ProfileActivity.this.currentAccount).setDialogFlags(did, 0);
                                         editor.commit();
-                                        dialog = (TL_dialog) MessagesController.getInstance(ProfileActivity.this.currentAccount).dialogs_dict.get(Long.valueOf(did));
+                                        dialog = (TL_dialog) MessagesController.getInstance(ProfileActivity.this.currentAccount).dialogs_dict.get(did);
                                         if (dialog != null) {
                                             dialog.notify_settings = new TL_peerNotifySettings();
                                         }
@@ -1156,7 +1156,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                         NotificationsController.getInstance(ProfileActivity.this.currentAccount).removeNotificationsForDialog(did);
                                         MessagesStorage.getInstance(ProfileActivity.this.currentAccount).setDialogFlags(did, flags);
                                         editor.commit();
-                                        dialog = (TL_dialog) MessagesController.getInstance(ProfileActivity.this.currentAccount).dialogs_dict.get(Long.valueOf(did));
+                                        dialog = (TL_dialog) MessagesController.getInstance(ProfileActivity.this.currentAccount).dialogs_dict.get(did);
                                         if (dialog != null) {
                                             dialog.notify_settings = new TL_peerNotifySettings();
                                             dialog.notify_settings.mute_until = untilTime;
@@ -1741,7 +1741,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         if (!this.loadingUsers && this.participantsMap != null && this.info != null) {
             int delay;
             this.loadingUsers = true;
-            if (this.participantsMap.isEmpty() || !reload) {
+            if (this.participantsMap.size() == 0 || !reload) {
                 delay = 0;
             } else {
                 delay = 300;
@@ -1776,9 +1776,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                     participant.inviter_id = participant.channelParticipant.inviter_id;
                                     participant.user_id = participant.channelParticipant.user_id;
                                     participant.date = participant.channelParticipant.date;
-                                    if (!ProfileActivity.this.participantsMap.containsKey(Integer.valueOf(participant.user_id))) {
+                                    if (ProfileActivity.this.participantsMap.indexOfKey(participant.user_id) < 0) {
                                         ProfileActivity.this.info.participants.participants.add(participant);
-                                        ProfileActivity.this.participantsMap.put(Integer.valueOf(participant.user_id), participant);
+                                        ProfileActivity.this.participantsMap.put(participant.user_id, participant);
                                     }
                                 }
                             }
@@ -1819,9 +1819,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         });
         if (!(this.info == null || this.info.participants == null)) {
-            HashMap<Integer, User> users = new HashMap();
+            SparseArray<User> users = new SparseArray();
             for (int a = 0; a < this.info.participants.participants.size(); a++) {
-                users.put(Integer.valueOf(((ChatParticipant) this.info.participants.participants.get(a)).user_id), null);
+                users.put(((ChatParticipant) this.info.participants.participants.get(a)).user_id, null);
             }
             fragment.setIgnoreUsers(users);
         }
@@ -2456,7 +2456,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         if (this.currentChat != null && this.currentChat.megagroup && (this.info instanceof TL_channelFull) && this.info.participants != null) {
             for (int a = 0; a < this.info.participants.participants.size(); a++) {
                 ChatParticipant chatParticipant = (ChatParticipant) this.info.participants.participants.get(a);
-                this.participantsMap.put(Integer.valueOf(chatParticipant.user_id), chatParticipant);
+                this.participantsMap.put(chatParticipant.user_id, chatParticipant);
             }
         }
     }

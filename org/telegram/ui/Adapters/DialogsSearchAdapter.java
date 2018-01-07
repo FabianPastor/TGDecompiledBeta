@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.LongSparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     private boolean messagesSearchEndReached;
     private int needMessagesSearch;
     private ArrayList<RecentSearchObject> recentSearchObjects = new ArrayList();
-    private HashMap<Long, RecentSearchObject> recentSearchObjectsById = new HashMap();
+    private LongSparseArray<RecentSearchObject> recentSearchObjectsById = new LongSparseArray();
     private int reqId = 0;
     private SearchAdapterHelper searchAdapterHelper = new SearchAdapterHelper(false);
     private ArrayList<TLObject> searchResult = new ArrayList();
@@ -266,7 +267,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                 for (int a = 0; a < res.messages.size(); a++) {
                                     boolean z2;
                                     Message message = (Message) res.messages.get(a);
-                                    DialogsSearchAdapter.this.searchResultMessages.add(new MessageObject(DialogsSearchAdapter.this.currentAccount, message, null, false));
+                                    DialogsSearchAdapter.this.searchResultMessages.add(new MessageObject(DialogsSearchAdapter.this.currentAccount, message, false));
                                     long dialog_id = MessageObject.getDialogId(message);
                                     ConcurrentHashMap<Long, Integer> read_max = message.out ? MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).dialogs_read_outbox_max : MessagesController.getInstance(DialogsSearchAdapter.this.currentAccount).dialogs_read_inbox_max;
                                     Integer value = (Integer) read_max.get(Long.valueOf(dialog_id));
@@ -320,7 +321,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     ArrayList<Integer> encryptedToLoad = new ArrayList();
                     ArrayList<User> encUsers = new ArrayList();
                     final ArrayList<RecentSearchObject> arrayList = new ArrayList();
-                    HashMap<Long, RecentSearchObject> hashMap = new HashMap();
+                    LongSparseArray<RecentSearchObject> hashMap = new LongSparseArray();
                     while (cursor.next()) {
                         did = cursor.longValue(0);
                         boolean add = false;
@@ -350,7 +351,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             recentSearchObject.did = did;
                             recentSearchObject.date = cursor.intValue(1);
                             arrayList.add(recentSearchObject);
-                            hashMap.put(Long.valueOf(recentSearchObject.did), recentSearchObject);
+                            hashMap.put(recentSearchObject.did, recentSearchObject);
                         }
                     }
                     cursor.dispose();
@@ -359,7 +360,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                         MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getEncryptedChatsInternal(TextUtils.join(",", encryptedToLoad), encryptedChats, usersToLoad);
                         for (a = 0; a < encryptedChats.size(); a++) {
-                            ((RecentSearchObject) hashMap.get(Long.valueOf(((long) ((EncryptedChat) encryptedChats.get(a)).id) << 32))).object = (TLObject) encryptedChats.get(a);
+                            ((RecentSearchObject) hashMap.get(((long) ((EncryptedChat) encryptedChats.get(a)).id) << 32)).object = (TLObject) encryptedChats.get(a);
                         }
                     }
                     if (!chatsToLoad.isEmpty()) {
@@ -373,12 +374,13 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                 did = AndroidUtilities.makeBroadcastId(chat.id);
                             }
                             if (chat.migrated_to != null) {
-                                recentSearchObject = (RecentSearchObject) hashMap.remove(Long.valueOf(did));
+                                recentSearchObject = (RecentSearchObject) hashMap.get(did);
+                                hashMap.remove(did);
                                 if (recentSearchObject != null) {
                                     arrayList.remove(recentSearchObject);
                                 }
                             } else {
-                                ((RecentSearchObject) hashMap.get(Long.valueOf(did))).object = chat;
+                                ((RecentSearchObject) hashMap.get(did)).object = chat;
                             }
                         }
                     }
@@ -386,7 +388,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
                         for (a = 0; a < users.size(); a++) {
                             TLObject user = (User) users.get(a);
-                            recentSearchObject = (RecentSearchObject) hashMap.get(Long.valueOf((long) user.id));
+                            recentSearchObject = (RecentSearchObject) hashMap.get((long) user.id);
                             if (recentSearchObject != null) {
                                 recentSearchObject.object = user;
                             }
@@ -403,10 +405,10 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             return 0;
                         }
                     });
-                    final HashMap<Long, RecentSearchObject> hashMap2 = hashMap;
+                    final LongSparseArray<RecentSearchObject> longSparseArray = hashMap;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            DialogsSearchAdapter.this.setRecentSearch(arrayList, hashMap2);
+                            DialogsSearchAdapter.this.setRecentSearch(arrayList, longSparseArray);
                         }
                     });
                 } catch (Throwable e) {
@@ -417,10 +419,10 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public void putRecentSearch(final long did, TLObject object) {
-        RecentSearchObject recentSearchObject = (RecentSearchObject) this.recentSearchObjectsById.get(Long.valueOf(did));
+        RecentSearchObject recentSearchObject = (RecentSearchObject) this.recentSearchObjectsById.get(did);
         if (recentSearchObject == null) {
             recentSearchObject = new RecentSearchObject();
-            this.recentSearchObjectsById.put(Long.valueOf(did), recentSearchObject);
+            this.recentSearchObjectsById.put(did, recentSearchObject);
         } else {
             this.recentSearchObjects.remove(recentSearchObject);
         }
@@ -446,7 +448,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public void clearRecentSearch() {
-        this.recentSearchObjectsById = new HashMap();
+        this.recentSearchObjectsById = new LongSparseArray();
         this.recentSearchObjects = new ArrayList();
         notifyDataSetChanged();
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
@@ -464,7 +466,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         this.searchAdapterHelper.addHashtagsFromMessage(message);
     }
 
-    private void setRecentSearch(ArrayList<RecentSearchObject> arrayList, HashMap<Long, RecentSearchObject> hashMap) {
+    private void setRecentSearch(ArrayList<RecentSearchObject> arrayList, LongSparseArray<RecentSearchObject> hashMap) {
         this.recentSearchObjects = arrayList;
         this.recentSearchObjectsById = hashMap;
         for (int a = 0; a < this.recentSearchObjects.size(); a++) {
@@ -519,13 +521,13 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         ArrayList<Integer> encryptedToLoad = new ArrayList();
                         ArrayList<User> encUsers = new ArrayList();
                         int resultCount = 0;
-                        HashMap<Long, DialogSearchResult> dialogsResult = new HashMap();
+                        LongSparseArray<DialogSearchResult> dialogsResult = new LongSparseArray();
                         SQLiteCursor cursor = MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getDatabase().queryFinalized("SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 600", new Object[0]);
                         while (cursor.next()) {
                             long id = cursor.longValue(0);
                             dialogSearchResult = new DialogSearchResult();
                             dialogSearchResult.date = cursor.intValue(1);
-                            dialogsResult.put(Long.valueOf(id), dialogSearchResult);
+                            dialogsResult.put(id, dialogSearchResult);
                             int lower_id = (int) id;
                             int high_id = (int) (id >> 32);
                             if (lower_id != 0) {
@@ -551,7 +553,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             dialogSearchResult.date = ConnectionsManager.DEFAULT_DATACENTER_ID;
                             dialogSearchResult.name = savedMessages;
                             dialogSearchResult.object = user;
-                            dialogsResult.put(Long.valueOf((long) user.id), dialogSearchResult);
+                            dialogsResult.put((long) user.id, dialogSearchResult);
                             resultCount = 0 + 1;
                         }
                         if (!usersToLoad.isEmpty()) {
@@ -582,7 +584,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                         if (data != null) {
                                             user = User.TLdeserialize(data, data.readInt32(false), false);
                                             data.reuse();
-                                            dialogSearchResult = (DialogSearchResult) dialogsResult.get(Long.valueOf((long) user.id));
+                                            dialogSearchResult = (DialogSearchResult) dialogsResult.get((long) user.id);
                                             if (user.status != null) {
                                                 user.status.expires = cursor.intValue(1);
                                             }
@@ -626,7 +628,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                                     } else {
                                                         dialog_id = AndroidUtilities.makeBroadcastId(chat.id);
                                                     }
-                                                    dialogSearchResult = (DialogSearchResult) dialogsResult.get(Long.valueOf(dialog_id));
+                                                    dialogSearchResult = (DialogSearchResult) dialogsResult.get(dialog_id);
                                                     dialogSearchResult.name = AndroidUtilities.generateSearchName(chat.title, null, q);
                                                     dialogSearchResult.object = chat;
                                                     resultCount++;
@@ -676,7 +678,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                             data.reuse();
                                         }
                                         if (!(chat2 == null || user2 == null)) {
-                                            dialogSearchResult = (DialogSearchResult) dialogsResult.get(Long.valueOf(((long) chat2.id) << 32));
+                                            dialogSearchResult = (DialogSearchResult) dialogsResult.get(((long) chat2.id) << 32);
                                             chat2.user_id = cursor.intValue(2);
                                             chat2.a_or_b = cursor.byteArrayValue(3);
                                             chat2.auth_key = cursor.byteArrayValue(4);
@@ -719,9 +721,10 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             cursor.dispose();
                         }
                         ArrayList<DialogSearchResult> arrayList = new ArrayList(resultCount);
-                        for (DialogSearchResult dialogSearchResult2 : dialogsResult.values()) {
-                            if (!(dialogSearchResult2.object == null || dialogSearchResult2.name == null)) {
-                                arrayList.add(dialogSearchResult2);
+                        for (a = 0; a < dialogsResult.size(); a++) {
+                            dialogSearchResult = (DialogSearchResult) dialogsResult.valueAt(a);
+                            if (!(dialogSearchResult.object == null || dialogSearchResult.name == null)) {
+                                arrayList.add(dialogSearchResult);
                             }
                         }
                         Collections.sort(arrayList, new Comparator<DialogSearchResult>() {
@@ -738,14 +741,14 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         ArrayList<TLObject> resultArray = new ArrayList();
                         ArrayList<CharSequence> resultArrayNames = new ArrayList();
                         for (a = 0; a < arrayList.size(); a++) {
-                            dialogSearchResult2 = (DialogSearchResult) arrayList.get(a);
-                            resultArray.add(dialogSearchResult2.object);
-                            resultArrayNames.add(dialogSearchResult2.name);
+                            dialogSearchResult = (DialogSearchResult) arrayList.get(a);
+                            resultArray.add(dialogSearchResult.object);
+                            resultArrayNames.add(dialogSearchResult.name);
                         }
                         if (DialogsSearchAdapter.this.dialogsType != 2) {
                             cursor = MessagesStorage.getInstance(DialogsSearchAdapter.this.currentAccount).getDatabase().queryFinalized("SELECT u.data, u.status, u.name, u.uid FROM users as u INNER JOIN contacts as c ON u.uid = c.uid", new Object[0]);
                             while (cursor.next()) {
-                                if (!dialogsResult.containsKey(Long.valueOf((long) cursor.intValue(3)))) {
+                                if (dialogsResult.indexOfKey((long) cursor.intValue(3)) < 0) {
                                     name = cursor.stringValue(2);
                                     tName = LocaleController.getInstance().getTranslitString(name);
                                     if (name.equals(tName)) {
@@ -1114,6 +1117,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     } else {
                         String foundUserName = this.searchAdapterHelper.getLastFoundUsername();
                         if (!TextUtils.isEmpty(foundUserName)) {
+                            int index;
                             String nameSearch = null;
                             String nameSearchLower = null;
                             if (user != null) {
@@ -1124,7 +1128,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                 nameSearchLower = nameSearch.toLowerCase();
                             }
                             if (nameSearch != null) {
-                                int index = nameSearchLower.indexOf(foundUserName);
+                                index = nameSearchLower.indexOf(foundUserName);
                                 if (index != -1) {
                                     SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(nameSearch);
                                     spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, foundUserName.length() + index, 33);
@@ -1139,8 +1143,15 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                     SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder();
                                     spannableStringBuilder2.append("@");
                                     spannableStringBuilder2.append(un);
-                                    if (un.startsWith(foundUserName)) {
-                                        spannableStringBuilder2.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, Math.min(spannableStringBuilder2.length(), foundUserName.length() + 1), 33);
+                                    index = un.toLowerCase().indexOf(foundUserName);
+                                    if (index != -1) {
+                                        int len = foundUserName.length();
+                                        if (index == 0) {
+                                            len++;
+                                        } else {
+                                            index++;
+                                        }
+                                        spannableStringBuilder2.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, index + len, 33);
                                     }
                                     username = spannableStringBuilder2;
                                 } catch (Throwable e) {

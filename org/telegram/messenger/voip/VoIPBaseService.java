@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
@@ -190,7 +191,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 this.mHasEarpiece = Boolean.FALSE;
             }
         } catch (Throwable error) {
-            FileLog.e("Error while checking earpiece! ", error);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Error while checking earpiece! ", error);
+            }
             this.mHasEarpiece = Boolean.TRUE;
         }
         return this.mHasEarpiece.booleanValue();
@@ -298,7 +301,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     public void onDestroy() {
-        FileLog.d("=============== VoIPService STOPPING ===============");
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("=============== VoIPService STOPPING ===============");
+        }
         stopForeground(true);
         stopRinging();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.appDidLogout);
@@ -338,7 +343,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         try {
             am.setMode(0);
         } catch (SecurityException x) {
-            FileLog.e("Error setting audio more to normal", x);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Error setting audio more to normal", x);
+            }
         }
         am.unregisterMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
         if (this.haveAudioFocus) {
@@ -366,7 +373,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 
     public void onCreate() {
         super.onCreate();
-        FileLog.d("=============== VoIPService STARTING ===============");
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("=============== VoIPService STARTING ===============");
+        }
         AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
         if (VERSION.SDK_INT < 17 || am.getProperty("android.media.property.OUTPUT_FRAMES_PER_BUFFER") == null) {
             VoIPController.setNativeBufferSize(AudioTrack.getMinBufferSize(48000, 4, 2) / 2);
@@ -413,13 +422,17 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 }
             }
         } catch (Exception x) {
-            FileLog.e("error initializing voip controller", x);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("error initializing voip controller", x);
+            }
             callFailed();
         }
     }
 
     protected void dispatchStateChanged(int state) {
-        FileLog.d("== Call " + getCallID() + " state changed to " + state + " ==");
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("== Call " + getCallID() + " state changed to " + state + " ==");
+        }
         this.currentState = state;
         for (int a = 0; a < this.stateListeners.size(); a++) {
             ((StateListener) this.stateListeners.get(a)).onStateChanged(state);
@@ -467,7 +480,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 this.proximityWakelock = ((PowerManager) getSystemService("power")).newWakeLock(32, "telegram-voip-prx");
                 sm.registerListener(this, proximity, 3);
             } catch (Exception x) {
-                FileLog.e("Error initializing proximity sensor", x);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("Error initializing proximity sensor", x);
+                }
             }
         }
     }
@@ -483,7 +498,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                         newIsNear = false;
                     }
                     if (newIsNear != this.isProximityNear) {
-                        FileLog.d("proximity " + newIsNear);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("proximity " + newIsNear);
+                        }
                         this.isProximityNear = newIsNear;
                         try {
                             if (this.isProximityNear) {
@@ -659,7 +676,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     protected void callEnded() {
-        FileLog.d("Call " + getCallID() + " ended");
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("Call " + getCallID() + " ended");
+        }
         dispatchStateChanged(11);
         if (this.needPlayEndSound) {
             this.playingSound = true;
@@ -692,14 +711,19 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                     PendingIntent.getActivity(this, 0, new Intent(this, VoIPActivity.class).addFlags(805306368), 0).send();
                     return;
                 } catch (Exception x) {
-                    FileLog.e("Error starting incall activity", x);
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.e("Error starting incall activity", x);
+                        return;
+                    }
                     return;
                 }
             }
             try {
                 PendingIntent.getActivity(this, 0, new Intent(this, VoIPPermissionActivity.class).addFlags(268435456), 0).send();
             } catch (Exception x2) {
-                FileLog.e("Error starting permission activity", x2);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("Error starting permission activity", x2);
+                }
             }
         }
     }

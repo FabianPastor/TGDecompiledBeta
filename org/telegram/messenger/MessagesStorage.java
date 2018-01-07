@@ -1,6 +1,7 @@
 package org.telegram.messenger;
 
 import android.text.TextUtils;
+import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import java.io.File;
@@ -21,6 +22,7 @@ import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.ConnectionsManager;
@@ -112,7 +114,9 @@ public class MessagesStorage {
     private CountDownLatch openSync = new CountDownLatch(1);
     private int secretG = 0;
     private byte[] secretPBytes = null;
+    private File shmCacheFile;
     private DispatchQueue storageQueue = new DispatchQueue("storageQueue");
+    private File walCacheFile;
 
     private class Hole {
         public int end;
@@ -262,13 +266,15 @@ public class MessagesStorage {
     }
 
     public void openDatabase(boolean first) {
-        if (this.currentAccount == 0) {
-            this.cacheFile = new File(ApplicationLoader.getFilesDirFixed(), "cache4.db");
-        } else {
-            this.cacheFile = new File(ApplicationLoader.getFilesDirFixed(), "account" + this.currentAccount + "/");
-            this.cacheFile.mkdirs();
-            this.cacheFile = new File(this.cacheFile, "cache4.db");
+        File filesDir = ApplicationLoader.getFilesDirFixed();
+        if (this.currentAccount != 0) {
+            File filesDir2 = new File(filesDir, "account" + this.currentAccount + "/");
+            filesDir2.mkdirs();
+            filesDir = filesDir2;
         }
+        this.cacheFile = new File(filesDir, "cache4.db");
+        this.walCacheFile = new File(filesDir, "cache4.db-wal");
+        this.shmCacheFile = new File(filesDir, "cache4.db-shm");
         boolean createTable = false;
         if (!this.cacheFile.exists()) {
             createTable = true;
@@ -277,8 +283,11 @@ public class MessagesStorage {
             this.database = new SQLiteDatabase(this.cacheFile.getPath());
             this.database.executeFast("PRAGMA secure_delete = ON").stepThis().dispose();
             this.database.executeFast("PRAGMA temp_store = 1").stepThis().dispose();
+            this.database.executeFast("PRAGMA journal_mode = WAL").stepThis().dispose();
             if (createTable) {
-                FileLog.e("create new database");
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("create new database");
+                }
                 this.database.executeFast("CREATE TABLE messages_holes(uid INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, start));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes(uid, end);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE media_holes_v2(uid INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, type, start));").stepThis().dispose();
@@ -348,7 +357,9 @@ public class MessagesStorage {
                 this.database.executeFast("PRAGMA user_version = 46").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
-                FileLog.e("current db version = " + version);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("current db version = " + version);
+                }
                 if (version == 0) {
                     throw new Exception("malformed");
                 }
@@ -735,6 +746,14 @@ public class MessagesStorage {
             this.cacheFile.delete();
             this.cacheFile = null;
         }
+        if (this.walCacheFile != null) {
+            this.walCacheFile.delete();
+            this.walCacheFile = null;
+        }
+        if (this.shmCacheFile != null) {
+            this.shmCacheFile.delete();
+            this.shmCacheFile = null;
+        }
     }
 
     public void cleanup(final boolean isLogin) {
@@ -784,7 +803,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 try {
-                    HashMap<Long, Long> ids = new HashMap();
+                    LongSparseArray<Long> ids = new LongSparseArray();
                     Map<String, ?> values = MessagesController.getNotificationsSettings(MessagesStorage.this.currentAccount).getAll();
                     for (Entry<String, ?> entry : values.entrySet()) {
                         String key = (String) entry.getKey();
@@ -803,7 +822,7 @@ public class MessagesStorage {
                                         flags = 1;
                                     }
                                 }
-                                ids.put(Long.valueOf(Long.parseLong(key)), Long.valueOf(flags));
+                                ids.put(Long.parseLong(key), Long.valueOf(flags));
                             } else if (value.intValue() == 3) {
                             }
                         }
@@ -811,10 +830,10 @@ public class MessagesStorage {
                     try {
                         MessagesStorage.this.database.beginTransaction();
                         SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO dialog_settings VALUES(?, ?)");
-                        for (Entry<Long, Long> entry2 : ids.entrySet()) {
+                        for (int a = 0; a < ids.size(); a++) {
                             state.requery();
-                            state.bindLong(1, ((Long) entry2.getKey()).longValue());
-                            state.bindLong(2, ((Long) entry2.getValue()).longValue());
+                            state.bindLong(1, ids.keyAt(a));
+                            state.bindLong(2, ((Long) ids.valueAt(a)).longValue());
                             state.step();
                         }
                         state.dispose();
@@ -1055,7 +1074,7 @@ public class MessagesStorage {
                     ArrayList<Integer> usersToLoad = new ArrayList();
                     ArrayList<Integer> chatsToLoad = new ArrayList();
                     ArrayList<Integer> encryptedChatIds = new ArrayList();
-                    final HashMap<Long, Integer> pushDialogs = new HashMap();
+                    final LongSparseArray<Integer> pushDialogs = new LongSparseArray();
                     SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT d.did, d.unread_count, s.flags FROM dialogs as d LEFT JOIN dialog_settings as s ON d.did = s.did WHERE d.unread_count != 0", new Object[0]);
                     StringBuilder ids = new StringBuilder();
                     int currentTime = ConnectionsManager.getInstance(MessagesStorage.this.currentAccount).getCurrentTime();
@@ -1065,7 +1084,7 @@ public class MessagesStorage {
                         int mutedUntil = (int) (flags >> 32);
                         if (cursor.isNull(2) || !muted || (mutedUntil != 0 && mutedUntil < currentTime)) {
                             did = cursor.longValue(0);
-                            pushDialogs.put(Long.valueOf(did), Integer.valueOf(cursor.intValue(1)));
+                            pushDialogs.put(did, Integer.valueOf(cursor.intValue(1)));
                             if (ids.length() != 0) {
                                 ids.append(",");
                             }
@@ -1087,7 +1106,7 @@ public class MessagesStorage {
                     }
                     cursor.dispose();
                     ArrayList<Long> replyMessages = new ArrayList();
-                    HashMap<Integer, ArrayList<Message>> replyMessageOwners = new HashMap();
+                    SparseArray<ArrayList<Message>> replyMessageOwners = new SparseArray();
                     final ArrayList<Message> messages = new ArrayList();
                     final ArrayList<User> users = new ArrayList();
                     final ArrayList<Chat> chats = new ArrayList();
@@ -1142,10 +1161,10 @@ public class MessagesStorage {
                                             if (!replyMessages.contains(Long.valueOf(messageId))) {
                                                 replyMessages.add(Long.valueOf(messageId));
                                             }
-                                            arrayList = (ArrayList) replyMessageOwners.get(Integer.valueOf(message.reply_to_msg_id));
+                                            arrayList = (ArrayList) replyMessageOwners.get(message.reply_to_msg_id);
                                             if (arrayList == null) {
                                                 arrayList = new ArrayList();
-                                                replyMessageOwners.put(Integer.valueOf(message.reply_to_msg_id), arrayList);
+                                                replyMessageOwners.put(message.reply_to_msg_id, arrayList);
                                             }
                                             arrayList.add(message);
                                         }
@@ -1167,7 +1186,7 @@ public class MessagesStorage {
                                     message.date = cursor.intValue(2);
                                     message.dialog_id = cursor.longValue(3);
                                     MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
-                                    arrayList = (ArrayList) replyMessageOwners.get(Integer.valueOf(message.id));
+                                    arrayList = (ArrayList) replyMessageOwners.get(message.id);
                                     if (arrayList != null) {
                                         for (a = 0; a < arrayList.size(); a++) {
                                             Message m = (Message) arrayList.get(a);
@@ -1198,7 +1217,7 @@ public class MessagesStorage {
                                     MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = 3 WHERE uid = %d AND mid > 0 AND read_state IN(0,2) AND out = 0", new Object[]{Long.valueOf(did)})).stepThis().dispose();
                                     chats.remove(a);
                                     a--;
-                                    pushDialogs.remove(Long.valueOf((long) (-chat.id)));
+                                    pushDialogs.remove((long) (-chat.id));
                                     int b = 0;
                                     while (b < messages.size()) {
                                         if (((Message) messages.get(b)).dialog_id == ((long) (-chat.id))) {
@@ -1740,7 +1759,7 @@ public class MessagesStorage {
         });
     }
 
-    public void resetDialogs(messages_Dialogs dialogsRes, int messagesCount, int seq, int newPts, int date, int qts, HashMap<Long, TL_dialog> new_dialogs_dict, HashMap<Long, MessageObject> new_dialogMessage, Message lastMessage, int dialogsCount) {
+    public void resetDialogs(messages_Dialogs dialogsRes, int messagesCount, int seq, int newPts, int date, int qts, LongSparseArray<TL_dialog> new_dialogs_dict, LongSparseArray<MessageObject> new_dialogMessage, Message lastMessage, int dialogsCount) {
         final messages_Dialogs org_telegram_tgnet_TLRPC_messages_Dialogs = dialogsRes;
         final int i = dialogsCount;
         final int i2 = seq;
@@ -1749,8 +1768,8 @@ public class MessagesStorage {
         final int i5 = qts;
         final Message message = lastMessage;
         final int i6 = messagesCount;
-        final HashMap<Long, TL_dialog> hashMap = new_dialogs_dict;
-        final HashMap<Long, MessageObject> hashMap2 = new_dialogMessage;
+        final LongSparseArray<TL_dialog> longSparseArray = new_dialogs_dict;
+        final LongSparseArray<MessageObject> longSparseArray2 = new_dialogMessage;
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 int maxPinnedNum = 0;
@@ -1758,7 +1777,7 @@ public class MessagesStorage {
                     int a;
                     ArrayList<Integer> dids = new ArrayList();
                     int totalPinnedCount = org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size() - i;
-                    HashMap<Long, Integer> oldPinnedDialogNums = new HashMap();
+                    LongSparseArray<Integer> oldPinnedDialogNums = new LongSparseArray();
                     ArrayList<Long> oldPinnedOrder = new ArrayList();
                     ArrayList<Long> orderArrayList = new ArrayList();
                     for (a = i; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
@@ -1773,16 +1792,16 @@ public class MessagesStorage {
                             dids.add(Integer.valueOf(lower_id));
                             if (pinnedNum > 0) {
                                 maxPinnedNum = Math.max(pinnedNum, maxPinnedNum);
-                                oldPinnedDialogNums.put(Long.valueOf(did), Integer.valueOf(pinnedNum));
+                                oldPinnedDialogNums.put(did, Integer.valueOf(pinnedNum));
                                 oldPinnedOrder.add(Long.valueOf(did));
                             }
                         }
                     }
-                    final HashMap<Long, Integer> hashMap = oldPinnedDialogNums;
+                    final LongSparseArray<Integer> longSparseArray = oldPinnedDialogNums;
                     Collections.sort(oldPinnedOrder, new Comparator<Long>() {
                         public int compare(Long o1, Long o2) {
-                            Integer val1 = (Integer) hashMap.get(o1);
-                            Integer val2 = (Integer) hashMap.get(o2);
+                            Integer val1 = (Integer) longSparseArray.get(o1.longValue());
+                            Integer val2 = (Integer) longSparseArray.get(o2.longValue());
                             if (val1.intValue() < val2.intValue()) {
                                 return 1;
                             }
@@ -1813,12 +1832,12 @@ public class MessagesStorage {
                         if (!(oldIdx == -1 || newIdx == -1)) {
                             Integer oldNum;
                             if (oldIdx == newIdx) {
-                                oldNum = (Integer) oldPinnedDialogNums.get(Long.valueOf(dialog.id));
+                                oldNum = (Integer) oldPinnedDialogNums.get(dialog.id);
                                 if (oldNum != null) {
                                     dialog.pinnedNum = oldNum.intValue();
                                 }
                             } else {
-                                oldNum = (Integer) oldPinnedDialogNums.get(Long.valueOf(((Long) oldPinnedOrder.get(newIdx)).longValue()));
+                                oldNum = (Integer) oldPinnedDialogNums.get(((Long) oldPinnedOrder.get(newIdx)).longValue());
                                 if (oldNum != null) {
                                     dialog.pinnedNum = oldNum.intValue();
                                 }
@@ -1873,9 +1892,9 @@ public class MessagesStorage {
                         }
                     }
                     UserConfig.getInstance(MessagesStorage.this.currentAccount).saveConfig(false);
-                    MessagesController.getInstance(MessagesStorage.this.currentAccount).completeDialogsReset(org_telegram_tgnet_TLRPC_messages_Dialogs, i6, i2, i3, i4, i5, hashMap, hashMap2, message);
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).completeDialogsReset(org_telegram_tgnet_TLRPC_messages_Dialogs, i6, i2, i3, i4, i5, longSparseArray, longSparseArray2, message);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -2053,9 +2072,9 @@ public class MessagesStorage {
                     }
                     cursor.dispose();
                     MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE dialogs SET unread_count_i = %d WHERE did = %d", new Object[]{Integer.valueOf(old_mentions_count), Long.valueOf(j)})).stepThis().dispose();
-                    HashMap<Long, Integer> hashMap = new HashMap();
-                    hashMap.put(Long.valueOf(j), Integer.valueOf(old_mentions_count));
-                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processDialogsUpdateRead(null, hashMap);
+                    LongSparseArray<Integer> sparseArray = new LongSparseArray(1);
+                    sparseArray.put(j, Integer.valueOf(old_mentions_count));
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processDialogsUpdateRead(null, sparseArray);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -2083,9 +2102,9 @@ public class MessagesStorage {
                         MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", new Object[]{Long.valueOf(did)})).stepThis().dispose();
                     }
                     MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE dialogs SET unread_count_i = %d WHERE did = %d", new Object[]{Integer.valueOf(count), Long.valueOf(did)})).stepThis().dispose();
-                    HashMap<Long, Integer> hashMap = new HashMap();
-                    hashMap.put(Long.valueOf(did), Integer.valueOf(count));
-                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processDialogsUpdateRead(null, hashMap);
+                    LongSparseArray<Integer> sparseArray = new LongSparseArray(1);
+                    sparseArray.put(did, Integer.valueOf(count));
+                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processDialogsUpdateRead(null, sparseArray);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -2230,25 +2249,26 @@ public class MessagesStorage {
         });
     }
 
-    private void updateDialogsWithReadMessagesInternal(ArrayList<Integer> messages, SparseArray<Long> inbox, SparseArray<Long> outbox, ArrayList<Long> mentions) {
+    private void updateDialogsWithReadMessagesInternal(ArrayList<Integer> messages, SparseLongArray inbox, SparseLongArray outbox, ArrayList<Long> mentions) {
         try {
             SQLitePreparedStatement state;
-            HashMap<Long, Integer> dialogsToUpdate = new HashMap();
-            HashMap<Long, Integer> dialogsToUpdateMentions = new HashMap();
+            int a;
+            LongSparseArray<Integer> dialogsToUpdate = new LongSparseArray();
+            LongSparseArray<Integer> dialogsToUpdateMentions = new LongSparseArray();
             ArrayList<Integer> channelMentionsToReload = new ArrayList();
             SQLiteCursor cursor;
             String ids;
-            if (messages == null || messages.isEmpty()) {
+            if (messages == null || messages.size() == 0) {
                 int b;
                 int key;
                 long messageId;
                 if (!(inbox == null || inbox.size() == 0)) {
                     for (b = 0; b < inbox.size(); b++) {
                         key = inbox.keyAt(b);
-                        messageId = ((Long) inbox.get(key)).longValue();
+                        messageId = inbox.get(key);
                         cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT COUNT(mid) FROM messages WHERE uid = %d AND mid > %d AND read_state IN(0,2) AND out = 0", new Object[]{Integer.valueOf(key), Long.valueOf(messageId)}), new Object[0]);
                         if (cursor.next()) {
-                            dialogsToUpdate.put(Long.valueOf((long) key), Integer.valueOf(cursor.intValue(0)));
+                            dialogsToUpdate.put((long) key, Integer.valueOf(cursor.intValue(0)));
                         }
                         cursor.dispose();
                         state = this.database.executeFast("UPDATE dialogs SET inbox_max = max((SELECT inbox_max FROM dialogs WHERE did = ?), ?) WHERE did = ?");
@@ -2268,7 +2288,7 @@ public class MessagesStorage {
                         long did = cursor.longValue(0);
                         arrayList.remove(Long.valueOf(cursor.longValue(4)));
                         if (cursor.intValue(1) < 2 && cursor.intValue(2) == 0 && cursor.intValue(3) == 1) {
-                            Integer unread_count = (Integer) dialogsToUpdateMentions.get(Long.valueOf(did));
+                            Integer unread_count = (Integer) dialogsToUpdateMentions.get(did);
                             if (unread_count == null) {
                                 SQLiteCursor cursor2 = this.database.queryFinalized("SELECT unread_count_i FROM dialogs WHERE did = " + did, new Object[0]);
                                 int old_mentions_count = 0;
@@ -2276,14 +2296,14 @@ public class MessagesStorage {
                                     old_mentions_count = cursor2.intValue(0);
                                 }
                                 cursor2.dispose();
-                                dialogsToUpdateMentions.put(Long.valueOf(did), Integer.valueOf(Math.max(0, old_mentions_count - 1)));
+                                dialogsToUpdateMentions.put(did, Integer.valueOf(Math.max(0, old_mentions_count - 1)));
                             } else {
-                                dialogsToUpdateMentions.put(Long.valueOf(did), Integer.valueOf(Math.max(0, unread_count.intValue() - 1)));
+                                dialogsToUpdateMentions.put(did, Integer.valueOf(Math.max(0, unread_count.intValue() - 1)));
                             }
                         }
                     }
                     cursor.dispose();
-                    for (int a = 0; a < arrayList.size(); a++) {
+                    for (a = 0; a < arrayList.size(); a++) {
                         int channelId = (int) (((Long) arrayList.get(a)).longValue() >> 32);
                         if (channelId > 0 && !channelMentionsToReload.contains(Integer.valueOf(channelId))) {
                             channelMentionsToReload.add(Integer.valueOf(channelId));
@@ -2293,7 +2313,7 @@ public class MessagesStorage {
                 if (!(outbox == null || outbox.size() == 0)) {
                     for (b = 0; b < outbox.size(); b++) {
                         key = outbox.keyAt(b);
-                        messageId = ((Long) outbox.get(key)).longValue();
+                        messageId = outbox.get(key);
                         state = this.database.executeFast("UPDATE dialogs SET outbox_max = max((SELECT outbox_max FROM dialogs WHERE did = ?), ?) WHERE did = ?");
                         state.requery();
                         state.bindLong(1, (long) key);
@@ -2309,34 +2329,34 @@ public class MessagesStorage {
                 while (cursor.next()) {
                     if (cursor.intValue(2) == 0 && cursor.intValue(1) == 0) {
                         long uid = cursor.longValue(0);
-                        Integer currentCount = (Integer) dialogsToUpdate.get(Long.valueOf(uid));
+                        Integer currentCount = (Integer) dialogsToUpdate.get(uid);
                         if (currentCount == null) {
-                            dialogsToUpdate.put(Long.valueOf(uid), Integer.valueOf(1));
+                            dialogsToUpdate.put(uid, Integer.valueOf(1));
                         } else {
-                            dialogsToUpdate.put(Long.valueOf(uid), Integer.valueOf(currentCount.intValue() + 1));
+                            dialogsToUpdate.put(uid, Integer.valueOf(currentCount.intValue() + 1));
                         }
                     }
                 }
                 cursor.dispose();
             }
-            if (!(dialogsToUpdate.isEmpty() && dialogsToUpdateMentions.isEmpty())) {
+            if (dialogsToUpdate.size() > 0 || dialogsToUpdateMentions.size() > 0) {
                 this.database.beginTransaction();
-                if (!dialogsToUpdate.isEmpty()) {
+                if (dialogsToUpdate.size() > 0) {
                     state = this.database.executeFast("UPDATE dialogs SET unread_count = ? WHERE did = ?");
-                    for (Entry<Long, Integer> entry : dialogsToUpdate.entrySet()) {
+                    for (a = 0; a < dialogsToUpdate.size(); a++) {
                         state.requery();
-                        state.bindInteger(1, ((Integer) entry.getValue()).intValue());
-                        state.bindLong(2, ((Long) entry.getKey()).longValue());
+                        state.bindInteger(1, ((Integer) dialogsToUpdate.valueAt(a)).intValue());
+                        state.bindLong(2, dialogsToUpdate.keyAt(a));
                         state.step();
                     }
                     state.dispose();
                 }
-                if (!dialogsToUpdateMentions.isEmpty()) {
+                if (dialogsToUpdateMentions.size() > 0) {
                     state = this.database.executeFast("UPDATE dialogs SET unread_count_i = ? WHERE did = ?");
-                    for (Entry<Long, Integer> entry2 : dialogsToUpdateMentions.entrySet()) {
+                    for (a = 0; a < dialogsToUpdateMentions.size(); a++) {
                         state.requery();
-                        state.bindInteger(1, ((Integer) entry2.getValue()).intValue());
-                        state.bindLong(2, ((Long) entry2.getKey()).longValue());
+                        state.bindInteger(1, ((Integer) dialogsToUpdateMentions.valueAt(a)).intValue());
+                        state.bindLong(2, dialogsToUpdateMentions.keyAt(a));
                         state.step();
                     }
                     state.dispose();
@@ -2352,7 +2372,7 @@ public class MessagesStorage {
         }
     }
 
-    public void updateDialogsWithReadMessages(final SparseArray<Long> inbox, final SparseArray<Long> outbox, final ArrayList<Long> mentions, boolean useQueue) {
+    public void updateDialogsWithReadMessages(final SparseLongArray inbox, final SparseLongArray outbox, final ArrayList<Long> mentions, boolean useQueue) {
         if (inbox.size() != 0 || !mentions.isEmpty()) {
             if (useQueue) {
                 this.storageQueue.postRunnable(new Runnable() {
@@ -3122,11 +3142,11 @@ Error: java.util.NoSuchElementException
                     boolean migrate = cursor.next();
                     cursor.dispose();
                     if (migrate) {
-                        HashMap<Integer, Contact> contactHashMap = new HashMap();
+                        SparseArray<Contact> contactHashMap = new SparseArray();
                         cursor = MessagesStorage.this.database.queryFinalized("SELECT us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v6 as us LEFT JOIN user_phones_v6 as up ON us.uid = up.uid WHERE 1", new Object[0]);
                         while (cursor.next()) {
                             int uid = cursor.intValue(0);
-                            contact = (Contact) contactHashMap.get(Integer.valueOf(uid));
+                            contact = (Contact) contactHashMap.get(uid);
                             if (contact == null) {
                                 contact = new Contact();
                                 contact.first_name = cursor.stringValue(1);
@@ -3139,7 +3159,7 @@ Error: java.util.NoSuchElementException
                                     contact.last_name = TtmlNode.ANONYMOUS_REGION_ID;
                                 }
                                 contact.contact_id = uid;
-                                contactHashMap.put(Integer.valueOf(uid), contact);
+                                contactHashMap.put(uid, contact);
                             }
                             phone = cursor.stringValue(3);
                             if (phone != null) {
@@ -3249,7 +3269,7 @@ Error: java.util.NoSuchElementException
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 try {
-                    HashMap<Integer, Message> messageHashMap = new HashMap();
+                    SparseArray<Message> messageHashMap = new SparseArray();
                     ArrayList<Message> messages = new ArrayList();
                     ArrayList<User> users = new ArrayList();
                     ArrayList<Chat> chats = new ArrayList();
@@ -3264,9 +3284,7 @@ Error: java.util.NoSuchElementException
                         if (data != null) {
                             Message message = Message.TLdeserialize(data, data.readInt32(false), false);
                             data.reuse();
-                            if (messageHashMap.containsKey(Integer.valueOf(message.id))) {
-                                continue;
-                            } else {
+                            if (messageHashMap.indexOfKey(message.id) < 0) {
                                 MessageObject.setUnreadFlags(message, cursor.intValue(0));
                                 message.id = cursor.intValue(3);
                                 message.date = cursor.intValue(4);
@@ -3278,7 +3296,7 @@ Error: java.util.NoSuchElementException
                                 message.seq_out = cursor.intValue(8);
                                 message.ttl = cursor.intValue(9);
                                 messages.add(message);
-                                messageHashMap.put(Integer.valueOf(message.id), message);
+                                messageHashMap.put(message.id, message);
                                 int lower_id = (int) message.dialog_id;
                                 int high_id = (int) (message.dialog_id >> 32);
                                 if (lower_id != 0) {
@@ -3304,6 +3322,8 @@ Error: java.util.NoSuchElementException
                                 if (lower_id == 0 && !cursor.isNull(5)) {
                                     message.random_id = cursor.longValue(5);
                                 }
+                            } else {
+                                continue;
                             }
                         }
                     }
@@ -3396,8 +3416,8 @@ Error: java.util.NoSuchElementException
                             callback.run(result);
                         }
                     });
-                } catch (Exception e) {
-                    FileLog.e("tmessages", e);
+                } catch (Throwable e) {
+                    FileLog.e(e);
                 }
             }
         });
@@ -3445,8 +3465,8 @@ Error: java.util.NoSuchElementException
                     ArrayList<Integer> usersToLoad = new ArrayList();
                     ArrayList<Integer> chatsToLoad = new ArrayList();
                     ArrayList<Long> replyMessages = new ArrayList();
-                    HashMap<Integer, ArrayList<Message>> replyMessageOwners = new HashMap();
-                    HashMap<Long, ArrayList<Message>> replyMessageRandomOwners = new HashMap();
+                    SparseArray<ArrayList<Message>> replyMessageOwners = new SparseArray();
+                    LongSparseArray<ArrayList<Message>> replyMessageRandomOwners = new LongSparseArray();
                     int lower_id = (int) j;
                     if (lower_id != 0) {
                         int existingUnreadCount;
@@ -3836,20 +3856,20 @@ Error: java.util.NoSuchElementException
                                             if (!replyMessages.contains(Long.valueOf(messageId))) {
                                                 replyMessages.add(Long.valueOf(messageId));
                                             }
-                                            messages = (ArrayList) replyMessageOwners.get(Integer.valueOf(message.reply_to_msg_id));
+                                            messages = (ArrayList) replyMessageOwners.get(message.reply_to_msg_id);
                                             if (messages == null) {
                                                 messages = new ArrayList();
-                                                replyMessageOwners.put(Integer.valueOf(message.reply_to_msg_id), messages);
+                                                replyMessageOwners.put(message.reply_to_msg_id, messages);
                                             }
                                             messages.add(message);
                                         } else {
                                             if (!replyMessages.contains(Long.valueOf(message.reply_to_random_id))) {
                                                 replyMessages.add(Long.valueOf(message.reply_to_random_id));
                                             }
-                                            messages = (ArrayList) replyMessageRandomOwners.get(Long.valueOf(message.reply_to_random_id));
+                                            messages = (ArrayList) replyMessageRandomOwners.get(message.reply_to_random_id);
                                             if (messages == null) {
                                                 messages = new ArrayList();
-                                                replyMessageRandomOwners.put(Long.valueOf(message.reply_to_random_id), messages);
+                                                replyMessageRandomOwners.put(message.reply_to_random_id, messages);
                                             }
                                             messages.add(message);
                                         }
@@ -3924,10 +3944,10 @@ Error: java.util.NoSuchElementException
                     if (!replyMessages.isEmpty()) {
                         ArrayList<Message> arrayList;
                         int a;
-                        if (replyMessageOwners.isEmpty()) {
-                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, m.date, r.random_id FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE r.random_id IN(%s)", new Object[]{TextUtils.join(",", replyMessages)}), new Object[0]);
-                        } else {
+                        if (replyMessageOwners.size() > 0) {
                             cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT data, mid, date FROM messages WHERE mid IN(%s)", new Object[]{TextUtils.join(",", replyMessages)}), new Object[0]);
+                        } else {
+                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, m.date, r.random_id FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE r.random_id IN(%s)", new Object[]{TextUtils.join(",", replyMessages)}), new Object[0]);
                         }
                         while (cursor.next()) {
                             data = cursor.byteBufferValue(0);
@@ -3939,8 +3959,22 @@ Error: java.util.NoSuchElementException
                                 message.dialog_id = j;
                                 MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
                                 Message object;
-                                if (replyMessageOwners.isEmpty()) {
-                                    arrayList = (ArrayList) replyMessageRandomOwners.remove(Long.valueOf(cursor.longValue(3)));
+                                if (replyMessageOwners.size() > 0) {
+                                    arrayList = (ArrayList) replyMessageOwners.get(message.id);
+                                    if (arrayList != null) {
+                                        for (a = 0; a < arrayList.size(); a++) {
+                                            object = (Message) arrayList.get(a);
+                                            object.replyMessage = message;
+                                            if (MessageObject.isMegagroup(object)) {
+                                                message2 = object.replyMessage;
+                                                message2.flags |= Integer.MIN_VALUE;
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    long value = cursor.longValue(3);
+                                    arrayList = (ArrayList) replyMessageRandomOwners.get(value);
+                                    replyMessageRandomOwners.remove(value);
                                     if (arrayList != null) {
                                         for (a = 0; a < arrayList.size(); a++) {
                                             object = (Message) arrayList.get(a);
@@ -3952,25 +3986,13 @@ Error: java.util.NoSuchElementException
                                             }
                                         }
                                     }
-                                } else {
-                                    arrayList = (ArrayList) replyMessageOwners.get(Integer.valueOf(message.id));
-                                    if (arrayList != null) {
-                                        for (a = 0; a < arrayList.size(); a++) {
-                                            object = (Message) arrayList.get(a);
-                                            object.replyMessage = message;
-                                            if (MessageObject.isMegagroup(object)) {
-                                                message2 = object.replyMessage;
-                                                message2.flags |= Integer.MIN_VALUE;
-                                            }
-                                        }
-                                    }
                                 }
                             }
                         }
                         cursor.dispose();
-                        if (!replyMessageRandomOwners.isEmpty()) {
-                            for (Entry<Long, ArrayList<Message>> entry : replyMessageRandomOwners.entrySet()) {
-                                arrayList = (ArrayList) entry.getValue();
+                        if (replyMessageRandomOwners.size() > 0) {
+                            for (int b = 0; b < replyMessageRandomOwners.size(); b++) {
+                                arrayList = (ArrayList) replyMessageRandomOwners.valueAt(b);
                                 for (a = 0; a < arrayList.size(); a++) {
                                     ((Message) arrayList.get(a)).reply_to_random_id = 0;
                                 }
@@ -5177,16 +5199,17 @@ Error: java.util.NoSuchElementException
         return -1;
     }
 
-    public void putWebPages(final HashMap<Long, WebPage> webPages) {
-        if (webPages != null && !webPages.isEmpty()) {
+    public void putWebPages(final LongSparseArray<WebPage> webPages) {
+        if (webPages != null && webPages.size() != 0) {
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
                     try {
+                        int a;
                         NativeByteBuffer data;
                         Message message;
                         final ArrayList<Message> messages = new ArrayList();
-                        for (Entry<Long, WebPage> entry : webPages.entrySet()) {
-                            SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT mid FROM webpage_pending WHERE id = " + entry.getKey(), new Object[0]);
+                        for (a = 0; a < webPages.size(); a++) {
+                            SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT mid FROM webpage_pending WHERE id = " + webPages.keyAt(a), new Object[0]);
                             ArrayList<Long> mids = new ArrayList();
                             while (cursor.next()) {
                                 mids.add(Long.valueOf(cursor.longValue(0)));
@@ -5202,7 +5225,7 @@ Error: java.util.NoSuchElementException
                                         data.reuse();
                                         if (message.media instanceof TL_messageMediaWebPage) {
                                             message.id = mid;
-                                            message.media.webpage = (WebPage) entry.getValue();
+                                            message.media.webpage = (WebPage) webPages.valueAt(a);
                                             messages.add(message);
                                         }
                                     }
@@ -5214,7 +5237,7 @@ Error: java.util.NoSuchElementException
                             MessagesStorage.this.database.beginTransaction();
                             SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE messages SET data = ? WHERE mid = ?");
                             SQLitePreparedStatement state2 = MessagesStorage.this.database.executeFast("UPDATE media_v2 SET data = ? WHERE mid = ?");
-                            for (int a = 0; a < messages.size(); a++) {
+                            for (a = 0; a < messages.size(); a++) {
                                 message = (Message) messages.get(a);
                                 data = new NativeByteBuffer(message.getObjectSize());
                                 message.serializeToStream(data);
@@ -5354,8 +5377,8 @@ Error: java.util.NoSuchElementException
         Message lastMessage;
         SQLiteCursor cursor;
         int a;
-        Integer type;
         Integer count;
+        int type;
         if (ifNoLastMessage) {
             try {
                 lastMessage = (Message) messages.get(0);
@@ -5385,18 +5408,18 @@ Error: java.util.NoSuchElementException
         if (withTransaction) {
             this.database.beginTransaction();
         }
-        HashMap<Long, Message> messagesMap = new HashMap();
-        HashMap<Long, Integer> messagesCounts = new HashMap();
-        HashMap<Long, Integer> mentionCounts = new HashMap();
-        HashMap<Integer, HashMap<Long, Integer>> mediaCounts = null;
-        HashMap<Long, Message> botKeyboards = new HashMap();
-        HashMap<Long, Long> messagesMediaIdsMap = null;
+        LongSparseArray<Message> messagesMap = new LongSparseArray();
+        LongSparseArray<Integer> messagesCounts = new LongSparseArray();
+        LongSparseArray<Integer> mentionCounts = new LongSparseArray();
+        SparseArray<LongSparseArray<Integer>> mediaCounts = null;
+        LongSparseArray<Message> botKeyboards = new LongSparseArray();
+        LongSparseArray<Long> messagesMediaIdsMap = null;
         StringBuilder messageMediaIds = null;
-        HashMap<Long, Integer> mediaTypes = null;
+        LongSparseArray<Integer> mediaTypes = null;
         StringBuilder messageIds = new StringBuilder();
-        HashMap<Long, Integer> dialogsReadMax = new HashMap();
-        HashMap<Long, Long> messagesIdsMap = new HashMap();
-        HashMap<Long, Long> mentionsIdsMap = new HashMap();
+        LongSparseArray<Integer> dialogsReadMax = new LongSparseArray();
+        LongSparseArray<Long> messagesIdsMap = new LongSparseArray();
+        LongSparseArray<Long> mentionsIdsMap = new LongSparseArray();
         SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
         SQLitePreparedStatement state2 = null;
         SQLitePreparedStatement state3 = this.database.executeFast("REPLACE INTO randoms VALUES(?, ?)");
@@ -5418,10 +5441,10 @@ Error: java.util.NoSuchElementException
                 messageId |= ((long) message.to_id.channel_id) << 32;
             }
             if (message.mentioned && message.media_unread) {
-                mentionsIdsMap.put(Long.valueOf(messageId), Long.valueOf(message.dialog_id));
+                mentionsIdsMap.put(messageId, Long.valueOf(message.dialog_id));
             }
             if (!((message.action instanceof TL_messageActionHistoryClear) || MessageObject.isOut(message) || (message.id <= 0 && !MessageObject.isUnread(message)))) {
-                Integer currentMaxId = (Integer) dialogsReadMax.get(Long.valueOf(message.dialog_id));
+                Integer currentMaxId = (Integer) dialogsReadMax.get(message.dialog_id);
                 if (currentMaxId == null) {
                     cursor = this.database.queryFinalized("SELECT inbox_max FROM dialogs WHERE did = " + message.dialog_id, new Object[0]);
                     if (cursor.next()) {
@@ -5430,83 +5453,88 @@ Error: java.util.NoSuchElementException
                         currentMaxId = Integer.valueOf(0);
                     }
                     cursor.dispose();
-                    dialogsReadMax.put(Long.valueOf(message.dialog_id), currentMaxId);
+                    dialogsReadMax.put(message.dialog_id, currentMaxId);
                 }
                 if (message.id < 0 || currentMaxId.intValue() < message.id) {
                     if (messageIds.length() > 0) {
                         messageIds.append(",");
                     }
                     messageIds.append(messageId);
-                    messagesIdsMap.put(Long.valueOf(messageId), Long.valueOf(message.dialog_id));
+                    messagesIdsMap.put(messageId, Long.valueOf(message.dialog_id));
                 }
             }
             if (DataQuery.canAddMessageToMedia(message)) {
                 if (messageMediaIds == null) {
                     messageMediaIds = new StringBuilder();
-                    messagesMediaIdsMap = new HashMap();
-                    mediaTypes = new HashMap();
+                    messagesMediaIdsMap = new LongSparseArray();
+                    mediaTypes = new LongSparseArray();
                 }
                 if (messageMediaIds.length() > 0) {
                     messageMediaIds.append(",");
                 }
                 messageMediaIds.append(messageId);
-                messagesMediaIdsMap.put(Long.valueOf(messageId), Long.valueOf(message.dialog_id));
-                mediaTypes.put(Long.valueOf(messageId), Integer.valueOf(DataQuery.getMediaType(message)));
+                messagesMediaIdsMap.put(messageId, Long.valueOf(message.dialog_id));
+                mediaTypes.put(messageId, Integer.valueOf(DataQuery.getMediaType(message)));
             }
             if (isValidKeyboardToSave(message)) {
-                Message oldMessage = (Message) botKeyboards.get(Long.valueOf(message.dialog_id));
+                Message oldMessage = (Message) botKeyboards.get(message.dialog_id);
                 if (oldMessage == null || oldMessage.id < message.id) {
-                    botKeyboards.put(Long.valueOf(message.dialog_id), message);
+                    botKeyboards.put(message.dialog_id, message);
                 }
             }
         }
-        for (Entry<Long, Message> entry : botKeyboards.entrySet()) {
-            DataQuery.getInstance(this.currentAccount).putBotKeyboard(((Long) entry.getKey()).longValue(), (Message) entry.getValue());
+        for (a = 0; a < botKeyboards.size(); a++) {
+            DataQuery.getInstance(this.currentAccount).putBotKeyboard(botKeyboards.keyAt(a), (Message) botKeyboards.valueAt(a));
         }
         if (messageMediaIds != null) {
             cursor = this.database.queryFinalized("SELECT mid FROM media_v2 WHERE mid IN(" + messageMediaIds.toString() + ")", new Object[0]);
             while (cursor.next()) {
-                messagesMediaIdsMap.remove(Long.valueOf(cursor.longValue(0)));
+                messagesMediaIdsMap.remove(cursor.longValue(0));
             }
             cursor.dispose();
-            mediaCounts = new HashMap();
-            for (Entry<Long, Long> entry2 : messagesMediaIdsMap.entrySet()) {
-                type = (Integer) mediaTypes.get(entry2.getKey());
-                HashMap<Long, Integer> counts = (HashMap) mediaCounts.get(type);
+            mediaCounts = new SparseArray();
+            for (a = 0; a < messagesMediaIdsMap.size(); a++) {
+                long key = messagesMediaIdsMap.keyAt(a);
+                long value = ((Long) messagesMediaIdsMap.valueAt(a)).longValue();
+                Integer type2 = (Integer) mediaTypes.get(key);
+                LongSparseArray<Integer> counts = (LongSparseArray) mediaCounts.get(type2.intValue());
                 if (counts == null) {
-                    counts = new HashMap();
+                    counts = new LongSparseArray();
                     count = Integer.valueOf(0);
-                    mediaCounts.put(type, counts);
+                    mediaCounts.put(type2.intValue(), counts);
                 } else {
-                    count = (Integer) counts.get(entry2.getValue());
+                    count = (Integer) counts.get(value);
                 }
                 if (count == null) {
                     count = Integer.valueOf(0);
                 }
-                counts.put(entry2.getValue(), Integer.valueOf(count.intValue() + 1));
+                counts.put(value, Integer.valueOf(count.intValue() + 1));
             }
         }
         if (messageIds.length() > 0) {
+            long dialog_id;
             cursor = this.database.queryFinalized("SELECT mid FROM messages WHERE mid IN(" + messageIds.toString() + ")", new Object[0]);
             while (cursor.next()) {
                 long mid = cursor.longValue(0);
-                messagesIdsMap.remove(Long.valueOf(mid));
-                mentionsIdsMap.remove(Long.valueOf(mid));
+                messagesIdsMap.remove(mid);
+                mentionsIdsMap.remove(mid);
             }
             cursor.dispose();
-            for (Long dialog_id : messagesIdsMap.values()) {
+            for (a = 0; a < messagesIdsMap.size(); a++) {
+                dialog_id = ((Long) messagesIdsMap.valueAt(a)).longValue();
                 count = (Integer) messagesCounts.get(dialog_id);
                 if (count == null) {
                     count = Integer.valueOf(0);
                 }
                 messagesCounts.put(dialog_id, Integer.valueOf(count.intValue() + 1));
             }
-            for (Long dialog_id2 : mentionsIdsMap.values()) {
-                count = (Integer) mentionCounts.get(dialog_id2);
+            for (a = 0; a < mentionsIdsMap.size(); a++) {
+                dialog_id = ((Long) mentionsIdsMap.valueAt(a)).longValue();
+                count = (Integer) mentionCounts.get(dialog_id);
                 if (count == null) {
                     count = Integer.valueOf(0);
                 }
-                mentionCounts.put(dialog_id2, Integer.valueOf(count.intValue() + 1));
+                mentionCounts.put(dialog_id, Integer.valueOf(count.intValue() + 1));
             }
         }
         int downloadMediaMask = 0;
@@ -5528,9 +5556,9 @@ Error: java.util.NoSuchElementException
                 updateDialog = false;
             }
             if (updateDialog) {
-                lastMessage = (Message) messagesMap.get(Long.valueOf(message.dialog_id));
+                lastMessage = (Message) messagesMap.get(message.dialog_id);
                 if (lastMessage == null || message.date > lastMessage.date || ((message.id > 0 && lastMessage.id > 0 && message.id > lastMessage.id) || (message.id < 0 && lastMessage.id < 0 && message.id < lastMessage.id))) {
-                    messagesMap.put(Long.valueOf(message.dialog_id), message);
+                    messagesMap.put(message.dialog_id, message);
                 }
             }
             state.bindLong(1, messageId);
@@ -5575,38 +5603,38 @@ Error: java.util.NoSuchElementException
             }
             data.reuse();
             if (downloadMask != 0 && ((message.to_id.channel_id == 0 || message.post) && message.date >= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - 3600 && DownloadController.getInstance(this.currentAccount).canDownloadMedia(message) && ((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)))) {
-                int type2 = 0;
+                type = 0;
                 long id = 0;
                 MessageMedia object = null;
                 if (MessageObject.isVoiceMessage(message)) {
                     id = message.media.document.id;
-                    type2 = 2;
+                    type = 2;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (MessageObject.isRoundVideoMessage(message)) {
                     id = message.media.document.id;
-                    type2 = 64;
+                    type = 64;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (message.media instanceof TL_messageMediaPhoto) {
                     if (FileLoader.getClosestPhotoSizeWithSize(message.media.photo.sizes, AndroidUtilities.getPhotoSize()) != null) {
                         id = message.media.photo.id;
-                        type2 = 1;
+                        type = 1;
                         object = new TL_messageMediaPhoto();
                         object.photo = message.media.photo;
                         object.flags |= 1;
                     }
                 } else if (MessageObject.isVideoMessage(message)) {
                     id = message.media.document.id;
-                    type2 = 4;
+                    type = 4;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (!(!(message.media instanceof TL_messageMediaDocument) || MessageObject.isMusicMessage(message) || MessageObject.isGifDocument(message.media.document))) {
                     id = message.media.document.id;
-                    type2 = 8;
+                    type = 8;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
@@ -5616,12 +5644,12 @@ Error: java.util.NoSuchElementException
                         object.ttl_seconds = message.media.ttl_seconds;
                         object.flags |= 4;
                     }
-                    downloadMediaMask |= type2;
+                    downloadMediaMask |= type;
                     state4.requery();
                     data = new NativeByteBuffer(object.getObjectSize());
                     object.serializeToStream(data);
                     state4.bindLong(1, id);
-                    state4.bindInteger(2, type2);
+                    state4.bindInteger(2, type);
                     state4.bindInteger(3, message.date);
                     state4.bindByteBuffer(4, data);
                     state4.step();
@@ -5637,12 +5665,10 @@ Error: java.util.NoSuchElementException
         state4.dispose();
         state5.dispose();
         state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        HashMap<Long, Message> dids = new HashMap();
-        dids.putAll(messagesMap);
-        for (Entry<Long, Message> pair : dids.entrySet()) {
-            Long key = (Long) pair.getKey();
-            if (key.longValue() != 0) {
-                message = (Message) messagesMap.get(key);
+        for (a = 0; a < messagesMap.size(); a++) {
+            key = messagesMap.keyAt(a);
+            if (key != 0) {
+                message = (Message) messagesMap.valueAt(a);
                 int channelId = 0;
                 if (message != null) {
                     channelId = message.to_id.channel_id;
@@ -5693,7 +5719,7 @@ Error: java.util.NoSuchElementException
                     messageId |= ((long) channelId) << 32;
                 }
                 state.requery();
-                state.bindLong(1, key.longValue());
+                state.bindLong(1, key);
                 if (message == null || (doNotUpdateDialogDate && dialog_date != 0)) {
                     state.bindInteger(2, dialog_date);
                 } else {
@@ -5714,22 +5740,23 @@ Error: java.util.NoSuchElementException
         state.dispose();
         if (mediaCounts != null) {
             state3 = this.database.executeFast("REPLACE INTO media_counts_v2 VALUES(?, ?, ?)");
-            for (Entry<Integer, HashMap<Long, Integer>> counts2 : mediaCounts.entrySet()) {
-                type = (Integer) counts2.getKey();
-                for (Entry<Long, Integer> pair2 : ((HashMap) counts2.getValue()).entrySet()) {
-                    long uid = ((Long) pair2.getKey()).longValue();
+            for (a = 0; a < mediaCounts.size(); a++) {
+                type = mediaCounts.keyAt(a);
+                LongSparseArray<Integer> value2 = (LongSparseArray) mediaCounts.valueAt(a);
+                for (int b = 0; b < value2.size(); b++) {
+                    long uid = value2.keyAt(b);
                     int lower_part = (int) uid;
                     int count2 = -1;
-                    cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT count FROM media_counts_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(uid), type}), new Object[0]);
+                    cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT count FROM media_counts_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(uid), Integer.valueOf(type)}), new Object[0]);
                     if (cursor.next()) {
                         count2 = cursor.intValue(0);
                     }
                     cursor.dispose();
                     if (count2 != -1) {
                         state3.requery();
-                        count2 += ((Integer) pair2.getValue()).intValue();
+                        count2 += ((Integer) value2.valueAt(b)).intValue();
                         state3.bindLong(1, uid);
-                        state3.bindInteger(2, type.intValue());
+                        state3.bindInteger(2, type);
                         state3.bindInteger(3, count2);
                         state3.step();
                     }
@@ -5809,7 +5836,6 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
-        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5862,6 +5888,7 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
+        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {
@@ -6003,7 +6030,7 @@ Error: java.util.NoSuchElementException
             }
         } else {
             StringBuilder ids = new StringBuilder();
-            HashMap<Integer, User> usersDict = new HashMap();
+            SparseArray<User> usersDict = new SparseArray();
             r7 = users.iterator();
             while (r7.hasNext()) {
                 user = (User) r7.next();
@@ -6011,14 +6038,14 @@ Error: java.util.NoSuchElementException
                     ids.append(",");
                 }
                 ids.append(user.id);
-                usersDict.put(Integer.valueOf(user.id), user);
+                usersDict.put(user.id, user);
             }
             ArrayList<User> loadedUsers = new ArrayList();
             getUsersInternal(ids.toString(), loadedUsers);
             r7 = loadedUsers.iterator();
             while (r7.hasNext()) {
                 user = (User) r7.next();
-                User updateUser = (User) usersDict.get(Integer.valueOf(user.id));
+                User updateUser = (User) usersDict.get(user.id);
                 if (updateUser != null) {
                     if (updateUser.first_name != null && updateUser.last_name != null) {
                         if (!UserObject.isContact(user)) {
@@ -6059,13 +6086,13 @@ Error: java.util.NoSuchElementException
         }
     }
 
-    private void markMessagesAsReadInternal(SparseArray<Long> inbox, SparseArray<Long> outbox, HashMap<Integer, Integer> encryptedMessages) {
+    private void markMessagesAsReadInternal(SparseLongArray inbox, SparseLongArray outbox, SparseIntArray encryptedMessages) {
         int b;
         if (inbox != null) {
             b = 0;
             while (b < inbox.size()) {
                 try {
-                    long messageId = ((Long) inbox.get(inbox.keyAt(b))).longValue();
+                    long messageId = inbox.get(inbox.keyAt(b));
                     this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 1 WHERE uid = %d AND mid > 0 AND mid <= %d AND read_state IN(0,2) AND out = 0", new Object[]{Integer.valueOf(key), Long.valueOf(messageId)})).stepThis().dispose();
                     b++;
                 } catch (Throwable e) {
@@ -6076,14 +6103,14 @@ Error: java.util.NoSuchElementException
         }
         if (outbox != null) {
             for (b = 0; b < outbox.size(); b++) {
-                messageId = ((Long) outbox.get(outbox.keyAt(b))).longValue();
+                messageId = outbox.get(outbox.keyAt(b));
                 this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 1 WHERE uid = %d AND mid > 0 AND mid <= %d AND read_state IN(0,2) AND out = 1", new Object[]{Integer.valueOf(key), Long.valueOf(messageId)})).stepThis().dispose();
             }
         }
-        if (encryptedMessages != null && !encryptedMessages.isEmpty()) {
-            for (Entry<Integer, Integer> entry : encryptedMessages.entrySet()) {
-                long dialog_id = ((long) ((Integer) entry.getKey()).intValue()) << 32;
-                int max_date = ((Integer) entry.getValue()).intValue();
+        if (encryptedMessages != null && encryptedMessages.size() > 0) {
+            for (int a = 0; a < encryptedMessages.size(); a++) {
+                long dialog_id = ((long) encryptedMessages.keyAt(a)) << 32;
+                int max_date = encryptedMessages.valueAt(a);
                 SQLitePreparedStatement state = this.database.executeFast("UPDATE messages SET read_state = read_state | 1 WHERE uid = ? AND date <= ? AND read_state IN(0,2) AND out = 1");
                 state.requery();
                 state.bindLong(1, dialog_id);
@@ -6123,7 +6150,7 @@ Error: java.util.NoSuchElementException
         }
     }
 
-    public void markMessagesAsRead(final SparseArray<Long> inbox, final SparseArray<Long> outbox, final HashMap<Integer, Integer> encryptedMessages, boolean useQueue) {
+    public void markMessagesAsRead(final SparseLongArray inbox, final SparseLongArray outbox, final SparseIntArray encryptedMessages, boolean useQueue) {
         if (useQueue) {
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
@@ -6167,13 +6194,14 @@ Error: java.util.NoSuchElementException
 
     private ArrayList<Long> markMessagesAsDeletedInternal(ArrayList<Integer> messages, int channelId) {
         try {
+            int a;
             String ids;
-            Iterator it;
-            ArrayList<Long> arrayList = new ArrayList();
-            HashMap<Long, Integer[]> dialogsToUpdate = new HashMap();
+            long did;
+            ArrayList<Long> dialogsIds = new ArrayList();
+            LongSparseArray<Integer[]> dialogsToUpdate = new LongSparseArray();
             if (channelId != 0) {
                 StringBuilder builder = new StringBuilder(messages.size());
-                for (int a = 0; a < messages.size(); a++) {
+                for (a = 0; a < messages.size(); a++) {
                     long messageId = ((long) ((Integer) messages.get(a)).intValue()) | (((long) channelId) << 32);
                     if (builder.length() > 0) {
                         builder.append(',');
@@ -6188,15 +6216,15 @@ Error: java.util.NoSuchElementException
             int currentUser = UserConfig.getInstance(this.currentAccount).getClientUserId();
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out, mention FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
             while (cursor.next()) {
-                long did = cursor.longValue(0);
+                did = cursor.longValue(0);
                 if (did != ((long) currentUser)) {
                     int read_state = cursor.intValue(2);
                     if (cursor.intValue(3) == 0) {
                         Integer num;
-                        Integer[] unread_count = (Integer[]) dialogsToUpdate.get(Long.valueOf(did));
+                        Integer[] unread_count = (Integer[]) dialogsToUpdate.get(did);
                         if (unread_count == null) {
                             unread_count = new Integer[]{Integer.valueOf(0), Integer.valueOf(0)};
-                            dialogsToUpdate.put(Long.valueOf(did), unread_count);
+                            dialogsToUpdate.put(did, unread_count);
                         }
                         if (read_state < 2) {
                             num = unread_count[1];
@@ -6215,7 +6243,7 @@ Error: java.util.NoSuchElementException
                             if (message == null) {
                                 continue;
                             } else if (message.media instanceof TL_messageMediaPhoto) {
-                                it = message.media.photo.sizes.iterator();
+                                Iterator it = message.media.photo.sizes.iterator();
                                 while (it.hasNext()) {
                                     file = FileLoader.getPathToAttach((PhotoSize) it.next());
                                     if (file != null && file.toString().length() > 0) {
@@ -6248,10 +6276,10 @@ Error: java.util.NoSuchElementException
             }
             cursor.dispose();
             FileLoader.getInstance(this.currentAccount).deleteFiles(filesToDelete, 0);
-            for (Entry<Long, Integer[]> entry : dialogsToUpdate.entrySet()) {
-                Long did2 = (Long) entry.getKey();
-                Integer[] counts = (Integer[]) entry.getValue();
-                cursor = this.database.queryFinalized("SELECT unread_count, unread_count_i FROM dialogs WHERE did = " + did2, new Object[0]);
+            for (a = 0; a < dialogsToUpdate.size(); a++) {
+                did = dialogsToUpdate.keyAt(a);
+                Integer[] counts = (Integer[]) dialogsToUpdate.valueAt(a);
+                cursor = this.database.queryFinalized("SELECT unread_count, unread_count_i FROM dialogs WHERE did = " + did, new Object[0]);
                 int old_unread_count = 0;
                 int old_mentions_count = 0;
                 if (cursor.next()) {
@@ -6259,12 +6287,12 @@ Error: java.util.NoSuchElementException
                     old_mentions_count = cursor.intValue(1);
                 }
                 cursor.dispose();
-                arrayList.add(did2);
+                dialogsIds.add(Long.valueOf(did));
                 SQLitePreparedStatement state = this.database.executeFast("UPDATE dialogs SET unread_count = ?, unread_count_i = ? WHERE did = ?");
                 state.requery();
                 state.bindInteger(1, Math.max(0, old_unread_count - counts[0].intValue()));
                 state.bindInteger(2, Math.max(0, old_mentions_count - counts[1].intValue()));
-                state.bindLong(3, did2.longValue());
+                state.bindLong(3, did);
                 state.step();
                 state.dispose();
             }
@@ -6274,7 +6302,7 @@ Error: java.util.NoSuchElementException
             this.database.executeFast(String.format(Locale.US, "DELETE FROM media_v2 WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
             this.database.executeFast("DELETE FROM media_counts_v2 WHERE 1").stepThis().dispose();
             DataQuery.getInstance(this.currentAccount).clearBotKeyboard(0, messages);
-            return arrayList;
+            return dialogsIds;
         } catch (Throwable e2) {
             FileLog.e(e2);
             return null;
@@ -6429,76 +6457,78 @@ Error: java.util.NoSuchElementException
 
     private ArrayList<Long> markMessagesAsDeletedInternal(int channelId, int mid) {
         try {
-            Iterator it;
-            ArrayList<Long> arrayList = new ArrayList();
-            HashMap<Long, Integer[]> dialogsToUpdate = new HashMap();
+            long did;
+            ArrayList<Long> dialogsIds = new ArrayList();
+            LongSparseArray<Integer[]> dialogsToUpdate = new LongSparseArray();
             long maxMessageId = ((long) mid) | (((long) channelId) << 32);
             ArrayList<File> filesToDelete = new ArrayList();
             int currentUser = UserConfig.getInstance(this.currentAccount).getClientUserId();
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out, mention FROM messages WHERE uid = %d AND mid <= %d", new Object[]{Integer.valueOf(-channelId), Long.valueOf(maxMessageId)}), new Object[0]);
             while (cursor.next()) {
-                try {
-                    long did = cursor.longValue(0);
-                    if (did != ((long) currentUser)) {
-                        int read_state = cursor.intValue(2);
-                        if (cursor.intValue(3) == 0) {
-                            Integer num;
-                            Integer[] unread_count = (Integer[]) dialogsToUpdate.get(Long.valueOf(did));
-                            if (unread_count == null) {
-                                unread_count = new Integer[]{Integer.valueOf(0), Integer.valueOf(0)};
-                                dialogsToUpdate.put(Long.valueOf(did), unread_count);
-                            }
-                            if (read_state < 2) {
-                                num = unread_count[1];
-                                unread_count[1] = Integer.valueOf(unread_count[1].intValue() + 1);
-                            }
-                            if (read_state == 0 || read_state == 2) {
-                                num = unread_count[0];
-                                unread_count[0] = Integer.valueOf(unread_count[0].intValue() + 1);
-                            }
+                did = cursor.longValue(0);
+                if (did != ((long) currentUser)) {
+                    int read_state = cursor.intValue(2);
+                    if (cursor.intValue(3) == 0) {
+                        Integer num;
+                        Integer[] unread_count = (Integer[]) dialogsToUpdate.get(did);
+                        if (unread_count == null) {
+                            unread_count = new Integer[]{Integer.valueOf(0), Integer.valueOf(0)};
+                            dialogsToUpdate.put(did, unread_count);
                         }
-                        if (((int) did) == 0) {
-                            NativeByteBuffer data = cursor.byteBufferValue(1);
-                            if (data != null) {
-                                Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                data.reuse();
-                                if (message == null) {
-                                    continue;
-                                } else if (message.media instanceof TL_messageMediaPhoto) {
-                                    it = message.media.photo.sizes.iterator();
-                                    while (it.hasNext()) {
-                                        file = FileLoader.getPathToAttach((PhotoSize) it.next());
-                                        if (file != null && file.toString().length() > 0) {
-                                            filesToDelete.add(file);
-                                        }
-                                    }
-                                } else if (message.media instanceof TL_messageMediaDocument) {
-                                    file = FileLoader.getPathToAttach(message.media.document);
-                                    if (file != null && file.toString().length() > 0) {
-                                        filesToDelete.add(file);
-                                    }
-                                    file = FileLoader.getPathToAttach(message.media.document.thumb);
+                        if (read_state < 2) {
+                            num = unread_count[1];
+                            unread_count[1] = Integer.valueOf(unread_count[1].intValue() + 1);
+                        }
+                        if (read_state == 0 || read_state == 2) {
+                            num = unread_count[0];
+                            unread_count[0] = Integer.valueOf(unread_count[0].intValue() + 1);
+                        }
+                    }
+                    if (((int) did) == 0) {
+                        NativeByteBuffer data = cursor.byteBufferValue(1);
+                        if (data != null) {
+                            Message message = Message.TLdeserialize(data, data.readInt32(false), false);
+                            data.reuse();
+                            if (message == null) {
+                                continue;
+                            } else if (message.media instanceof TL_messageMediaPhoto) {
+                                Iterator it = message.media.photo.sizes.iterator();
+                                while (it.hasNext()) {
+                                    file = FileLoader.getPathToAttach((PhotoSize) it.next());
                                     if (file != null && file.toString().length() > 0) {
                                         filesToDelete.add(file);
                                     }
                                 }
                             } else {
-                                continue;
+                                try {
+                                    if (message.media instanceof TL_messageMediaDocument) {
+                                        file = FileLoader.getPathToAttach(message.media.document);
+                                        if (file != null && file.toString().length() > 0) {
+                                            filesToDelete.add(file);
+                                        }
+                                        file = FileLoader.getPathToAttach(message.media.document.thumb);
+                                        if (file != null && file.toString().length() > 0) {
+                                            filesToDelete.add(file);
+                                        }
+                                    }
+                                } catch (Throwable e) {
+                                    FileLog.e(e);
+                                }
                             }
                         } else {
                             continue;
                         }
+                    } else {
+                        continue;
                     }
-                } catch (Throwable e) {
-                    FileLog.e(e);
                 }
             }
             cursor.dispose();
             FileLoader.getInstance(this.currentAccount).deleteFiles(filesToDelete, 0);
-            for (Entry<Long, Integer[]> entry : dialogsToUpdate.entrySet()) {
-                Long did2 = (Long) entry.getKey();
-                Integer[] counts = (Integer[]) entry.getValue();
-                cursor = this.database.queryFinalized("SELECT unread_count, unread_count_i FROM dialogs WHERE did = " + did2, new Object[0]);
+            for (int a = 0; a < dialogsToUpdate.size(); a++) {
+                did = dialogsToUpdate.keyAt(a);
+                Integer[] counts = (Integer[]) dialogsToUpdate.valueAt(a);
+                cursor = this.database.queryFinalized("SELECT unread_count, unread_count_i FROM dialogs WHERE did = " + did, new Object[0]);
                 int old_unread_count = 0;
                 int old_mentions_count = 0;
                 if (cursor.next()) {
@@ -6506,19 +6536,19 @@ Error: java.util.NoSuchElementException
                     old_mentions_count = cursor.intValue(1);
                 }
                 cursor.dispose();
-                arrayList.add(did2);
+                dialogsIds.add(Long.valueOf(did));
                 SQLitePreparedStatement state = this.database.executeFast("UPDATE dialogs SET unread_count = ?, unread_count_i = ? WHERE did = ?");
                 state.requery();
                 state.bindInteger(1, Math.max(0, old_unread_count - counts[0].intValue()));
                 state.bindInteger(2, Math.max(0, old_mentions_count - counts[1].intValue()));
-                state.bindLong(3, did2.longValue());
+                state.bindLong(3, did);
                 state.step();
                 state.dispose();
             }
             this.database.executeFast(String.format(Locale.US, "DELETE FROM messages WHERE uid = %d AND mid <= %d", new Object[]{Integer.valueOf(-channelId), Long.valueOf(maxMessageId)})).stepThis().dispose();
             this.database.executeFast(String.format(Locale.US, "DELETE FROM media_v2 WHERE uid = %d AND mid <= %d", new Object[]{Integer.valueOf(-channelId), Long.valueOf(maxMessageId)})).stepThis().dispose();
             this.database.executeFast("DELETE FROM media_counts_v2 WHERE 1").stepThis().dispose();
-            return arrayList;
+            return dialogsIds;
         } catch (Throwable e2) {
             FileLog.e(e2);
             return null;
@@ -6893,9 +6923,9 @@ Error: java.util.NoSuchElementException
                         MessagesStorage.this.putChatsInternal(org_telegram_tgnet_TLRPC_messages_Messages.chats);
                         if (mentionCountUpdate != Integer.MAX_VALUE) {
                             MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE dialogs SET unread_count_i = %d WHERE did = %d", new Object[]{Integer.valueOf(mentionCountUpdate), Long.valueOf(j)})).stepThis().dispose();
-                            HashMap<Long, Integer> hashMap = new HashMap();
-                            hashMap.put(Long.valueOf(j), Integer.valueOf(mentionCountUpdate));
-                            MessagesController.getInstance(MessagesStorage.this.currentAccount).processDialogsUpdateRead(null, hashMap);
+                            LongSparseArray<Integer> longSparseArray = new LongSparseArray(1);
+                            longSparseArray.put(j, Integer.valueOf(mentionCountUpdate));
+                            MessagesController.getInstance(MessagesStorage.this.currentAccount).processDialogsUpdateRead(null, longSparseArray);
                         }
                         MessagesStorage.this.database.commitTransaction();
                         if (z) {
@@ -6994,7 +7024,7 @@ Error: java.util.NoSuchElementException
                 ArrayList<Integer> chatsToLoad = new ArrayList();
                 ArrayList<Integer> encryptedToLoad = new ArrayList();
                 ArrayList<Long> replyMessages = new ArrayList();
-                HashMap<Long, Message> replyMessageOwners = new HashMap();
+                LongSparseArray<Message> replyMessageOwners = new LongSparseArray();
                 SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
                     Message message;
@@ -7060,40 +7090,40 @@ Error: java.util.NoSuchElementException
                                         if (!replyMessages.contains(Long.valueOf(messageId))) {
                                             replyMessages.add(Long.valueOf(messageId));
                                         }
-                                        replyMessageOwners.put(Long.valueOf(dialog.id), message);
+                                        replyMessageOwners.put(dialog.id, message);
                                     }
                                 }
                             } catch (Throwable e) {
-                                FileLog.e(e);
+                                try {
+                                    FileLog.e(e);
+                                } catch (Throwable e2) {
+                                    dialogs.dialogs.clear();
+                                    dialogs.users.clear();
+                                    dialogs.chats.clear();
+                                    encryptedChats.clear();
+                                    FileLog.e(e2);
+                                    MessagesController.getInstance(MessagesStorage.this.currentAccount).processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false, true);
+                                    return;
+                                }
                             }
                         }
                     }
-                    try {
-                        int lower_id = (int) dialog.id;
-                        int high_id = (int) (dialog.id >> 32);
-                        if (lower_id == 0) {
-                            if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
-                                encryptedToLoad.add(Integer.valueOf(high_id));
-                            }
-                        } else if (high_id == 1) {
-                            if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
-                                chatsToLoad.add(Integer.valueOf(lower_id));
-                            }
-                        } else if (lower_id > 0) {
-                            if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
-                                usersToLoad.add(Integer.valueOf(lower_id));
-                            }
-                        } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
-                            chatsToLoad.add(Integer.valueOf(-lower_id));
+                    int lower_id = (int) dialog.id;
+                    int high_id = (int) (dialog.id >> 32);
+                    if (lower_id == 0) {
+                        if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
+                            encryptedToLoad.add(Integer.valueOf(high_id));
                         }
-                    } catch (Throwable e2) {
-                        dialogs.dialogs.clear();
-                        dialogs.users.clear();
-                        dialogs.chats.clear();
-                        encryptedChats.clear();
-                        FileLog.e(e2);
-                        MessagesController.getInstance(MessagesStorage.this.currentAccount).processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false, true);
-                        return;
+                    } else if (high_id == 1) {
+                        if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
+                            chatsToLoad.add(Integer.valueOf(lower_id));
+                        }
+                    } else if (lower_id > 0) {
+                        if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
+                            usersToLoad.add(Integer.valueOf(lower_id));
+                        }
+                    } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
+                        chatsToLoad.add(Integer.valueOf(-lower_id));
                     }
                 }
                 cursor.dispose();
@@ -7108,7 +7138,7 @@ Error: java.util.NoSuchElementException
                             message.date = cursor.intValue(2);
                             message.dialog_id = cursor.longValue(3);
                             MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
-                            Message owner = (Message) replyMessageOwners.get(Long.valueOf(message.dialog_id));
+                            Message owner = (Message) replyMessageOwners.get(message.dialog_id);
                             if (owner != null) {
                                 owner.replyMessage = message;
                                 message.dialog_id = owner.dialog_id;
@@ -7167,10 +7197,10 @@ Error: java.util.NoSuchElementException
             int a;
             Message message;
             this.database.beginTransaction();
-            HashMap<Long, Message> new_dialogMessage = new HashMap();
+            LongSparseArray<Message> longSparseArray = new LongSparseArray(dialogs.messages.size());
             for (a = 0; a < dialogs.messages.size(); a++) {
                 message = (Message) dialogs.messages.get(a);
-                new_dialogMessage.put(Long.valueOf(message.dialog_id), message);
+                longSparseArray.put(message.dialog_id, message);
             }
             if (!dialogs.dialogs.isEmpty()) {
                 SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
@@ -7198,7 +7228,7 @@ Error: java.util.NoSuchElementException
                         }
                     }
                     int messageDate = 0;
-                    message = (Message) new_dialogMessage.get(Long.valueOf(dialog.id));
+                    message = (Message) longSparseArray.get(dialog.id);
                     if (message != null) {
                         messageDate = Math.max(message.date, 0);
                         if (isValidKeyboardToSave(message)) {

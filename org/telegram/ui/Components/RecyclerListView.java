@@ -15,7 +15,7 @@ import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.util.StateSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -38,6 +38,7 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnItemTouchListener;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RecyclerListView extends RecyclerView {
@@ -78,6 +79,7 @@ public class RecyclerListView extends RecyclerView {
     private OnItemClickListener onItemClickListener;
     private OnItemClickListenerExtended onItemClickListenerExtended;
     private OnItemLongClickListener onItemLongClickListener;
+    private OnItemLongClickListenerExtended onItemLongClickListenerExtended;
     private OnScrollListener onScrollListener;
     private View pinnedHeader;
     private boolean scrollEnabled = true;
@@ -336,6 +338,10 @@ public class RecyclerListView extends RecyclerView {
         boolean onItemClick(View view, int i);
     }
 
+    public interface OnItemLongClickListenerExtended {
+        boolean onItemClick(View view, int i, float f, float f2);
+    }
+
     public static class Holder extends ViewHolder {
         public Holder(View itemView) {
             super(itemView);
@@ -394,10 +400,16 @@ public class RecyclerListView extends RecyclerView {
                 }
 
                 public void onLongPress(MotionEvent event) {
-                    if (RecyclerListView.this.currentChildView != null) {
-                        View child = RecyclerListView.this.currentChildView;
-                        if (RecyclerListView.this.onItemLongClickListener != null && RecyclerListView.this.currentChildPosition != -1 && RecyclerListView.this.onItemLongClickListener.onItemClick(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition)) {
-                            child.performHapticFeedback(0);
+                    if (RecyclerListView.this.currentChildView != null && RecyclerListView.this.currentChildPosition != -1) {
+                        if (RecyclerListView.this.onItemLongClickListener != null || RecyclerListView.this.onItemLongClickListenerExtended != null) {
+                            View child = RecyclerListView.this.currentChildView;
+                            if (RecyclerListView.this.onItemLongClickListener != null) {
+                                if (RecyclerListView.this.onItemLongClickListener.onItemClick(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition)) {
+                                    child.performHapticFeedback(0);
+                                }
+                            } else if (RecyclerListView.this.onItemLongClickListenerExtended != null && RecyclerListView.this.onItemLongClickListenerExtended.onItemClick(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition, event.getX(), event.getY())) {
+                                child.performHapticFeedback(0);
+                            }
                         }
                     }
                 }
@@ -458,10 +470,10 @@ public class RecyclerListView extends RecyclerView {
                         if (RecyclerListView.this.selectorDrawable != null) {
                             Drawable d = RecyclerListView.this.selectorDrawable.getCurrent();
                             if (d != null && (d instanceof TransitionDrawable)) {
-                                if (RecyclerListView.this.onItemLongClickListener != null) {
-                                    ((TransitionDrawable) d).startTransition(ViewConfiguration.getLongPressTimeout());
-                                } else {
+                                if (RecyclerListView.this.onItemLongClickListener == null && RecyclerListView.this.onItemClickListenerExtended == null) {
                                     ((TransitionDrawable) d).resetTransition();
+                                } else {
+                                    ((TransitionDrawable) d).startTransition(ViewConfiguration.getLongPressTimeout());
                                 }
                             }
                             if (VERSION.SDK_INT >= 21) {
@@ -507,10 +519,10 @@ public class RecyclerListView extends RecyclerView {
 
     public static abstract class SectionsAdapter extends FastScrollAdapter {
         private int count;
-        private SparseArray<Integer> sectionCache;
+        private SparseIntArray sectionCache;
         private int sectionCount;
-        private SparseArray<Integer> sectionCountCache;
-        private SparseArray<Integer> sectionPositionCache;
+        private SparseIntArray sectionCountCache;
+        private SparseIntArray sectionPositionCache;
 
         public abstract int getCountForSection(int i);
 
@@ -527,9 +539,9 @@ public class RecyclerListView extends RecyclerView {
         public abstract void onBindViewHolder(int i, int i2, ViewHolder viewHolder);
 
         private void cleanupCache() {
-            this.sectionCache = new SparseArray();
-            this.sectionPositionCache = new SparseArray();
-            this.sectionCountCache = new SparseArray();
+            this.sectionCache = new SparseIntArray();
+            this.sectionPositionCache = new SparseIntArray();
+            this.sectionCountCache = new SparseIntArray();
             this.count = -1;
             this.sectionCount = -1;
         }
@@ -572,12 +584,12 @@ public class RecyclerListView extends RecyclerView {
         }
 
         private int internalGetCountForSection(int section) {
-            Integer cachedSectionCount = (Integer) this.sectionCountCache.get(section);
-            if (cachedSectionCount != null) {
-                return cachedSectionCount.intValue();
+            int cachedSectionCount = this.sectionCountCache.get(section, ConnectionsManager.DEFAULT_DATACENTER_ID);
+            if (cachedSectionCount != ConnectionsManager.DEFAULT_DATACENTER_ID) {
+                return cachedSectionCount;
             }
             int sectionCount = getCountForSection(section);
-            this.sectionCountCache.put(section, Integer.valueOf(sectionCount));
+            this.sectionCountCache.put(section, sectionCount);
             return sectionCount;
         }
 
@@ -590,9 +602,9 @@ public class RecyclerListView extends RecyclerView {
         }
 
         public final int getSectionForPosition(int position) {
-            Integer cachedSection = (Integer) this.sectionCache.get(position);
-            if (cachedSection != null) {
-                return cachedSection.intValue();
+            int cachedSection = this.sectionCache.get(position, ConnectionsManager.DEFAULT_DATACENTER_ID);
+            if (cachedSection != ConnectionsManager.DEFAULT_DATACENTER_ID) {
+                return cachedSection;
             }
             int sectionStart = 0;
             int i = 0;
@@ -602,7 +614,7 @@ public class RecyclerListView extends RecyclerView {
                     sectionStart = sectionEnd;
                     i++;
                 } else {
-                    this.sectionCache.put(position, Integer.valueOf(i));
+                    this.sectionCache.put(position, i);
                     return i;
                 }
             }
@@ -610,9 +622,9 @@ public class RecyclerListView extends RecyclerView {
         }
 
         public int getPositionInSectionForPosition(int position) {
-            Integer cachedPosition = (Integer) this.sectionPositionCache.get(position);
-            if (cachedPosition != null) {
-                return cachedPosition.intValue();
+            int cachedPosition = this.sectionPositionCache.get(position, ConnectionsManager.DEFAULT_DATACENTER_ID);
+            if (cachedPosition != ConnectionsManager.DEFAULT_DATACENTER_ID) {
+                return cachedPosition;
             }
             int sectionStart = 0;
             int i = 0;
@@ -623,7 +635,7 @@ public class RecyclerListView extends RecyclerView {
                     i++;
                 } else {
                     int positionInSection = position - sectionStart;
-                    this.sectionPositionCache.put(position, Integer.valueOf(positionInSection));
+                    this.sectionPositionCache.put(position, positionInSection);
                     return positionInSection;
                 }
             }
@@ -908,6 +920,10 @@ public class RecyclerListView extends RecyclerView {
 
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         this.onItemLongClickListener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListenerExtended listener) {
+        this.onItemLongClickListenerExtended = listener;
     }
 
     public void setEmptyView(View view) {

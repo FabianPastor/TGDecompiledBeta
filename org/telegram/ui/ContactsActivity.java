@@ -14,6 +14,7 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.EditText;
@@ -21,7 +22,6 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
@@ -78,7 +78,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     private ContactsActivityDelegate delegate;
     private boolean destroyAfterSelect;
     private EmptyTextProgressView emptyView;
-    private HashMap<Integer, User> ignoreUsers;
+    private SparseArray<User> ignoreUsers;
     private RecyclerListView listView;
     private ContactsAdapter listViewAdapter;
     private boolean needFinishFragment = true;
@@ -232,7 +232,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                             MessagesStorage.getInstance(ContactsActivity.this.currentAccount).putUsersAndChats(users, null, false, true);
                         }
                         if (ContactsActivity.this.returnAsResult) {
-                            if (ContactsActivity.this.ignoreUsers == null || !ContactsActivity.this.ignoreUsers.containsKey(Integer.valueOf(user.id))) {
+                            if (ContactsActivity.this.ignoreUsers == null || ContactsActivity.this.ignoreUsers.indexOfKey(user.id) < 0) {
                                 ContactsActivity.this.didSelectResult(user, true, null);
                                 return;
                             }
@@ -263,7 +263,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         if (item instanceof User) {
                             user = (User) item;
                             if (ContactsActivity.this.returnAsResult) {
-                                if (ContactsActivity.this.ignoreUsers == null || !ContactsActivity.this.ignoreUsers.containsKey(Integer.valueOf(user.id))) {
+                                if (ContactsActivity.this.ignoreUsers == null || ContactsActivity.this.ignoreUsers.indexOfKey(user.id) < 0) {
                                     ContactsActivity.this.didSelectResult(user, true, null);
                                 }
                             } else if (ContactsActivity.this.createSecretChat) {
@@ -559,7 +559,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         this.delegate = delegate;
     }
 
-    public void setIgnoreUsers(HashMap<Integer, User> users) {
+    public void setIgnoreUsers(SparseArray<User> users) {
         this.ignoreUsers = users;
     }
 

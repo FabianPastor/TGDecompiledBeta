@@ -3631,7 +3631,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     messageMedia.flags |= 3;
                     message.media.document = this.audioToSend;
                     message.flags |= 768;
-                    this.audioToSendMessageObject = new MessageObject(UserConfig.selectedAccount, message, null, false);
+                    this.audioToSendMessageObject = new MessageObject(UserConfig.selectedAccount, message, false);
                     this.recordedAudioPanel.setAlpha(1.0f);
                     this.recordedAudioPanel.setVisibility(0);
                     int duration = 0;

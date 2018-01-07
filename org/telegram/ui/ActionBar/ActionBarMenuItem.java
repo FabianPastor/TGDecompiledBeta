@@ -53,6 +53,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private boolean layoutInScreen;
     private ActionBarMenuItemSearchListener listener;
     private int[] location;
+    private boolean longClickEnabled = true;
     protected boolean overrideMenuClick;
     private ActionBarMenu parentMenu;
     private ActionBarPopupWindowLayout popupLayout;
@@ -106,9 +107,13 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    public void setLongClickEnabled(boolean value) {
+        this.longClickEnabled = value;
+    }
+
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getActionMasked() == 0) {
-            if (hasSubMenu() && (this.popupWindow == null || !(this.popupWindow == null || this.popupWindow.isShowing()))) {
+            if (this.longClickEnabled && hasSubMenu() && (this.popupWindow == null || !(this.popupWindow == null || this.popupWindow.isShowing()))) {
                 this.showMenuRunnable = new Runnable() {
                     public void run() {
                         if (ActionBarMenuItem.this.getParent() != null) {

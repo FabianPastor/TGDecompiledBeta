@@ -1,6 +1,7 @@
 package org.telegram.SQLite;
 
 import java.nio.ByteBuffer;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.tgnet.NativeByteBuffer;
 
@@ -94,7 +95,9 @@ public class SQLitePreparedStatement {
                 this.isFinalized = true;
                 finalize(this.sqliteStatementHandle);
             } catch (SQLiteException e) {
-                FileLog.e(e.getMessage(), e);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e(e.getMessage(), e);
+                }
             }
         }
     }

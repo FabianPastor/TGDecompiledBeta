@@ -1,7 +1,9 @@
 package org.telegram.messenger;
 
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Array;
 
 public class StatsController {
@@ -23,13 +25,101 @@ public class StatsController {
         }
     };
     private static DispatchQueue statsSaveQueue = new DispatchQueue("statsSaveQueue");
+    private byte[] buffer = new byte[8];
     private int[] callsTotalTime = new int[3];
-    private Editor editor;
+    private long lastInternalStatsSaveTime;
     private long[][] receivedBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] receivedItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
     private long[] resetStatsDate = new long[3];
+    private Runnable saveRunnable = new Runnable() {
+        public void run() {
+            Throwable th;
+            long newTime = System.currentTimeMillis();
+            if (Math.abs(newTime - StatsController.this.lastInternalStatsSaveTime) >= 2000) {
+                StatsController.this.lastInternalStatsSaveTime = newTime;
+                FileOutputStream outputStream = null;
+                try {
+                    FileOutputStream outputStream2 = new FileOutputStream(StatsController.this.statsFile);
+                    for (int a = 0; a < 3; a++) {
+                        int b = 0;
+                        while (b < 7) {
+                            try {
+                                outputStream2.write(StatsController.this.longToBytes(StatsController.this.sentBytes[a][b]), 0, 8);
+                                outputStream2.write(StatsController.this.longToBytes(StatsController.this.receivedBytes[a][b]), 0, 8);
+                                outputStream2.write(StatsController.this.intToBytes(StatsController.this.sentItems[a][b]), 0, 4);
+                                outputStream2.write(StatsController.this.intToBytes(StatsController.this.receivedItems[a][b]), 0, 4);
+                                b++;
+                            } catch (Exception e) {
+                                outputStream = outputStream2;
+                            } catch (Throwable th2) {
+                                th = th2;
+                                outputStream = outputStream2;
+                            }
+                        }
+                        outputStream2.write(StatsController.this.intToBytes(StatsController.this.callsTotalTime[a]), 0, 4);
+                        outputStream2.write(StatsController.this.longToBytes(StatsController.this.resetStatsDate[a]), 0, 8);
+                    }
+                    if (outputStream2 != null) {
+                        try {
+                            outputStream2.close();
+                            outputStream = outputStream2;
+                            return;
+                        } catch (Exception e2) {
+                            outputStream = outputStream2;
+                            return;
+                        }
+                    }
+                } catch (Exception e3) {
+                    if (outputStream != null) {
+                        try {
+                            outputStream.close();
+                        } catch (Exception e4) {
+                        }
+                    }
+                } catch (Throwable th3) {
+                    th = th3;
+                    if (outputStream != null) {
+                        try {
+                            outputStream.close();
+                        } catch (Exception e5) {
+                        }
+                    }
+                    throw th;
+                }
+            }
+        }
+    };
     private long[][] sentBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] sentItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
+    private File statsFile;
+
+    private byte[] intToBytes(int value) {
+        this.buffer[0] = (byte) (value >>> 24);
+        this.buffer[1] = (byte) (value >>> 16);
+        this.buffer[2] = (byte) (value >>> 8);
+        this.buffer[3] = (byte) value;
+        return this.buffer;
+    }
+
+    private int bytesToInt(byte[] bytes) {
+        return (((bytes[0] << 24) | ((bytes[1] & 255) << 16)) | ((bytes[2] & 255) << 8)) | (bytes[3] & 255);
+    }
+
+    private byte[] longToBytes(long value) {
+        this.buffer[0] = (byte) ((int) (value >>> 56));
+        this.buffer[1] = (byte) ((int) (value >>> 48));
+        this.buffer[2] = (byte) ((int) (value >>> 40));
+        this.buffer[3] = (byte) ((int) (value >>> 32));
+        this.buffer[4] = (byte) ((int) (value >>> 24));
+        this.buffer[5] = (byte) ((int) (value >>> 16));
+        this.buffer[6] = (byte) ((int) (value >>> 8));
+        this.buffer[7] = (byte) ((int) value);
+        return this.buffer;
+    }
+
+    private long bytesToLong(byte[] bytes) {
+        return ((((((((((long) bytes[0]) & 255) << 56) | ((((long) bytes[1]) & 255) << 48)) | ((((long) bytes[2]) & 255) << 40)) | ((((long) bytes[3]) & 255) << 32)) | ((((long) bytes[4]) & 255) << 24)) | ((((long) bytes[5]) & 255) << 16)) | ((((long) bytes[6]) & 255) << 8)) | (((long) bytes[7]) & 255);
+    }
 
     public static StatsController getInstance(int num) {
         StatsController localInstance = Instance[num];
@@ -59,18 +149,96 @@ public class StatsController {
     }
 
     private StatsController(int account) {
+        Throwable th;
+        File filesDir = ApplicationLoader.getFilesDirFixed();
+        if (account != 0) {
+            filesDir = new File(ApplicationLoader.getFilesDirFixed(), "account" + account + "/");
+            filesDir.mkdirs();
+        }
+        this.statsFile = new File(filesDir, "stats.dat");
+        boolean save;
+        int a;
+        int b;
+        if (this.statsFile.length() > 0) {
+            FileInputStream inputStream = null;
+            try {
+                FileInputStream inputStream2 = new FileInputStream(this.statsFile);
+                save = false;
+                for (a = 0; a < 3; a++) {
+                    b = 0;
+                    while (b < 7) {
+                        try {
+                            inputStream2.read(this.buffer, 0, 8);
+                            this.sentBytes[a][b] = bytesToLong(this.buffer);
+                            inputStream2.read(this.buffer, 0, 8);
+                            this.receivedBytes[a][b] = bytesToLong(this.buffer);
+                            inputStream2.read(this.buffer, 0, 4);
+                            this.sentItems[a][b] = bytesToInt(this.buffer);
+                            inputStream2.read(this.buffer, 0, 4);
+                            this.receivedItems[a][b] = bytesToInt(this.buffer);
+                            b++;
+                        } catch (Exception e) {
+                            inputStream = inputStream2;
+                        } catch (Throwable th2) {
+                            th = th2;
+                            inputStream = inputStream2;
+                        }
+                    }
+                    inputStream2.read(this.buffer, 0, 4);
+                    this.callsTotalTime[a] = bytesToInt(this.buffer);
+                    inputStream2.read(this.buffer, 0, 8);
+                    this.resetStatsDate[a] = bytesToLong(this.buffer);
+                    if (this.resetStatsDate[a] == 0) {
+                        save = true;
+                        this.resetStatsDate[a] = System.currentTimeMillis();
+                    }
+                }
+                if (save) {
+                    saveStats();
+                }
+                if (inputStream2 != null) {
+                    try {
+                        inputStream2.close();
+                        inputStream = inputStream2;
+                        return;
+                    } catch (Exception e2) {
+                        inputStream = inputStream2;
+                        return;
+                    }
+                }
+                return;
+            } catch (Exception e3) {
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                        return;
+                    } catch (Exception e4) {
+                        return;
+                    }
+                }
+                return;
+            } catch (Throwable th3) {
+                th = th3;
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (Exception e5) {
+                    }
+                }
+                throw th;
+            }
+        }
         SharedPreferences sharedPreferences;
         if (account == 0) {
             sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("stats", 0);
         } else {
             sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("stats" + account, 0);
         }
-        boolean save = false;
-        this.editor = sharedPreferences.edit();
-        for (int a = 0; a < 3; a++) {
+        save = false;
+        for (a = 0; a < 3; a++) {
             this.callsTotalTime[a] = sharedPreferences.getInt("callsTotalTime" + a, 0);
             this.resetStatsDate[a] = sharedPreferences.getLong("resetStatsDate" + a, 0);
-            for (int b = 0; b < 7; b++) {
+            for (b = 0; b < 7; b++) {
                 this.sentBytes[a][b] = sharedPreferences.getLong("sentBytes" + a + "_" + b, 0);
                 this.receivedBytes[a][b] = sharedPreferences.getLong("receivedBytes" + a + "_" + b, 0);
                 this.sentItems[a][b] = sharedPreferences.getInt("sentItems" + a + "_" + b, 0);
@@ -162,25 +330,7 @@ public class StatsController {
         long newTime = System.currentTimeMillis();
         if (Math.abs(newTime - ((Long) lastStatsSaveTime.get()).longValue()) >= 2000) {
             lastStatsSaveTime.set(Long.valueOf(newTime));
-            statsSaveQueue.postRunnable(new Runnable() {
-                public void run() {
-                    for (int networkType = 0; networkType < 3; networkType++) {
-                        for (int a = 0; a < 7; a++) {
-                            StatsController.this.editor.putInt("receivedItems" + networkType + "_" + a, StatsController.this.receivedItems[networkType][a]);
-                            StatsController.this.editor.putInt("sentItems" + networkType + "_" + a, StatsController.this.sentItems[networkType][a]);
-                            StatsController.this.editor.putLong("receivedBytes" + networkType + "_" + a, StatsController.this.receivedBytes[networkType][a]);
-                            StatsController.this.editor.putLong("sentBytes" + networkType + "_" + a, StatsController.this.sentBytes[networkType][a]);
-                        }
-                        StatsController.this.editor.putInt("callsTotalTime" + networkType, StatsController.this.callsTotalTime[networkType]);
-                        StatsController.this.editor.putLong("resetStatsDate" + networkType, StatsController.this.resetStatsDate[networkType]);
-                    }
-                    try {
-                        StatsController.this.editor.commit();
-                    } catch (Throwable e) {
-                        FileLog.e(e);
-                    }
-                }
-            });
+            statsSaveQueue.postRunnable(this.saveRunnable);
         }
     }
 }

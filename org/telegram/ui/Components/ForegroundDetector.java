@@ -8,6 +8,7 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 @SuppressLint({"NewApi"})
@@ -56,7 +57,9 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
             if (System.currentTimeMillis() - this.enterBackgroundTime < 200) {
                 this.wasInBackground = false;
             }
-            FileLog.e("switch to foreground");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("switch to foreground");
+            }
             Iterator it = this.listeners.iterator();
             while (it.hasNext()) {
                 try {
@@ -85,7 +88,9 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
         if (i == 0) {
             this.enterBackgroundTime = System.currentTimeMillis();
             this.wasInBackground = true;
-            FileLog.e("switch to background");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("switch to background");
+            }
             Iterator it = this.listeners.iterator();
             while (it.hasNext()) {
                 try {

@@ -1,11 +1,8 @@
 package net.hockeyapp.android.views;
 
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
@@ -16,10 +13,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.MotionEvent;
 import android.widget.ImageView;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Stack;
 import net.hockeyapp.android.utils.HockeyLog;
+import net.hockeyapp.android.utils.ImageUtils;
 
 @SuppressLint({"ViewConstructor"})
 public class PaintView extends ImageView {
@@ -29,44 +26,7 @@ public class PaintView extends ImageView {
     private Path path = new Path();
     private Stack<Path> paths = new Stack();
 
-    public static int determineOrientation(ContentResolver resolver, Uri imageUri) {
-        Options options = new Options();
-        options.inJustDecodeBounds = true;
-        try {
-            BitmapFactory.decodeStream(resolver.openInputStream(imageUri), null, options);
-            if (((float) options.outWidth) / ((float) options.outHeight) > 1.0f) {
-                return 0;
-            }
-            return 1;
-        } catch (Throwable e) {
-            HockeyLog.error("Unable to determine necessary screen orientation.", e);
-            return 1;
-        }
-    }
-
-    private static int calculateInSampleSize(Options options, int reqWidth, int reqHeight) {
-        int height = options.outHeight;
-        int width = options.outWidth;
-        int inSampleSize = 1;
-        if (height > reqHeight || width > reqWidth) {
-            int halfHeight = height / 2;
-            int halfWidth = width / 2;
-            while (halfHeight / inSampleSize > reqHeight && halfWidth / inSampleSize > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-        return inSampleSize;
-    }
-
-    private static Bitmap decodeSampledBitmapFromResource(ContentResolver resolver, Uri imageUri, int reqWidth, int reqHeight) throws IOException {
-        Options options = new Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(resolver.openInputStream(imageUri), null, options);
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeStream(resolver.openInputStream(imageUri), null, options);
-    }
-
+    @SuppressLint({"StaticFieldLeak"})
     public PaintView(Context context, Uri imageUri, int displayWidth, int displayHeight) {
         super(context);
         this.paint.setAntiAlias(true);
@@ -83,7 +43,7 @@ public class PaintView extends ImageView {
 
             protected Bitmap doInBackground(Object... args) {
                 try {
-                    return PaintView.decodeSampledBitmapFromResource(args[0].getContentResolver(), args[1], args[2].intValue(), args[3].intValue());
+                    return ImageUtils.decodeSampledBitmap(args[0], args[1], args[2].intValue(), args[3].intValue());
                 } catch (Throwable e) {
                     HockeyLog.error("Could not load image into ImageView.", e);
                     return null;
@@ -146,6 +106,7 @@ public class PaintView extends ImageView {
         this.path = new Path();
     }
 
+    @SuppressLint({"ClickableViewAccessibility"})
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();

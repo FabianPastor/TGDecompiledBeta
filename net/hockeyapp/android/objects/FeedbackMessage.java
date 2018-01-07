@@ -19,9 +19,8 @@ public class FeedbackMessage implements Serializable {
     private String mUserString;
     private int mVia;
 
-    @Deprecated
-    public void setSubjec(String subjec) {
-        this.mSubject = subjec;
+    public void setSubject(String subject) {
+        this.mSubject = subject;
     }
 
     public String getText() {

@@ -43,6 +43,7 @@ import android.provider.MediaStore.Video;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -319,7 +320,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private VideoPlayer videoPlayer;
     private final Object videoQueueSync = new Object();
     private ArrayList<MessageObject> voiceMessagesPlaylist;
-    private HashMap<Integer, MessageObject> voiceMessagesPlaylistMap;
+    private SparseArray<MessageObject> voiceMessagesPlaylistMap;
     private boolean voiceMessagesPlaylistUnread;
 
     public static class AlbumEntry {
@@ -327,7 +328,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         public String bucketName;
         public PhotoEntry coverPhoto;
         public ArrayList<PhotoEntry> photos = new ArrayList();
-        public HashMap<Integer, PhotoEntry> photosByIds = new HashMap();
+        public SparseArray<PhotoEntry> photosByIds = new SparseArray();
 
         public AlbumEntry(int bucketId, String bucketName, PhotoEntry coverPhoto) {
             this.bucketId = bucketId;
@@ -337,7 +338,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
         public void addPhoto(PhotoEntry photoEntry) {
             this.photos.add(photoEntry);
-            this.photosByIds.put(Integer.valueOf(photoEntry.imageId), photoEntry);
+            this.photosByIds.put(photoEntry.imageId, photoEntry);
         }
     }
 
@@ -728,7 +729,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             this.linearSensor = this.sensorManager.getDefaultSensor(10);
             this.gravitySensor = this.sensorManager.getDefaultSensor(9);
             if (this.linearSensor == null || this.gravitySensor == null) {
-                FileLog.e("gravity or linear sensor not found");
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("gravity or linear sensor not found");
+                }
                 this.accelerometerSensor = this.sensorManager.getDefaultSensor(1);
                 this.linearSensor = null;
                 this.gravitySensor = null;
@@ -785,8 +788,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                         public void run() {
                             EmbedBottomSheet embedBottomSheet;
                             if (state == 1) {
-                                if (MediaController.this.isPlayingMessage(MediaController.this.getPlayingMessageObject()) && !MediaController.this.isMessagePaused()) {
-                                    MediaController.this.pauseMessage(MediaController.this.getPlayingMessageObject());
+                                if (MediaController.this.isPlayingMessage(MediaController.this.playingMessageObject) && !MediaController.this.isMessagePaused()) {
+                                    MediaController.this.pauseMessage(MediaController.this.playingMessageObject);
                                 } else if (!(MediaController.this.recordStartRunnable == null && MediaController.this.recordingAudio == null)) {
                                     MediaController.this.stopRecording(2);
                                 }
@@ -820,7 +823,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     public void onAudioFocusChange(int focusChange) {
         if (focusChange == -1) {
             if (isPlayingMessage(getPlayingMessageObject()) && !isMessagePaused()) {
-                pauseMessage(getPlayingMessageObject());
+                pauseMessage(this.playingMessageObject);
             }
             this.hasAudioFocus = 0;
             this.audioFocus = 0;
@@ -837,7 +840,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         } else if (focusChange == -2) {
             this.audioFocus = 0;
             if (isPlayingMessage(getPlayingMessageObject()) && !isMessagePaused()) {
-                pauseMessage(getPlayingMessageObject());
+                pauseMessage(this.playingMessageObject);
                 this.resumeAudioOnFocusGain = true;
             }
         }
@@ -1112,7 +1115,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             }
             if (this.voiceMessagesPlaylist != null && !this.voiceMessagesPlaylist.isEmpty() && channelId == ((MessageObject) this.voiceMessagesPlaylist.get(0)).messageOwner.to_id.channel_id) {
                 for (a = 0; a < markAsDeletedMessages.size(); a++) {
-                    messageObject = (MessageObject) this.voiceMessagesPlaylistMap.remove(markAsDeletedMessages.get(a));
+                    Integer key = (Integer) markAsDeletedMessages.get(a);
+                    messageObject = (MessageObject) this.voiceMessagesPlaylistMap.get(key.intValue());
+                    this.voiceMessagesPlaylistMap.remove(key.intValue());
                     if (messageObject != null) {
                         this.voiceMessagesPlaylist.remove(messageObject);
                     }
@@ -1142,7 +1147,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     messageObject = (MessageObject) arr.get(a);
                     if ((messageObject.isVoice() || messageObject.isRoundVideo()) && (!this.voiceMessagesPlaylistUnread || (messageObject.isContentUnread() && !messageObject.isOut()))) {
                         this.voiceMessagesPlaylist.add(messageObject);
-                        this.voiceMessagesPlaylistMap.put(Integer.valueOf(messageObject.getId()), messageObject);
+                        this.voiceMessagesPlaylistMap.put(messageObject.getId(), messageObject);
                     }
                 }
             }
@@ -1252,7 +1257,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     public void onSensorChanged(SensorEvent event) {
         if (this.sensorsStarted && VoIPService.getSharedInstance() == null) {
             if (event.sensor == this.proximitySensor) {
-                FileLog.e("proximity changed to " + event.values[0]);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("proximity changed to " + event.values[0]);
+                }
                 if (this.lastProximityValue == -100.0f) {
                     this.lastProximityValue = event.values[0];
                 } else if (this.lastProximityValue != event.values[0]) {
@@ -1343,10 +1350,14 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 this.accelerometerVertical = z;
             }
             if (this.raisedToBack == 6 && this.accelerometerVertical && this.proximityTouched && !NotificationsController.audioManager.isWiredHeadsetOn()) {
-                FileLog.e("sensor values reached");
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("sensor values reached");
+                }
                 if (this.playingMessageObject == null && this.recordStartRunnable == null && this.recordingAudio == null && !PhotoViewer.getInstance().isVisible() && ApplicationLoader.isScreenOn && !this.inputFieldHasText && this.allowStartRecord && this.raiseChat != null && !this.callInProgress) {
                     if (!this.raiseToEarRecord) {
-                        FileLog.e("start record");
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("start record");
+                        }
                         this.useFrontSpeaker = true;
                         if (!this.raiseChat.playFirstUnreadVoiceMessage()) {
                             this.raiseToEarRecord = true;
@@ -1362,7 +1373,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                         }
                     }
                 } else if (this.playingMessageObject != null && ((this.playingMessageObject.isVoice() || this.playingMessageObject.isRoundVideo()) && !this.useFrontSpeaker)) {
-                    FileLog.e("start listen");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("start listen");
+                    }
                     if (!(!this.proximityHasDifferentValues || this.proximityWakeLock == null || this.proximityWakeLock.isHeld())) {
                         this.proximityWakeLock.acquire();
                     }
@@ -1375,7 +1388,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 this.countLess = 0;
             } else if (this.proximityTouched) {
                 if (this.playingMessageObject != null && ((this.playingMessageObject.isVoice() || this.playingMessageObject.isRoundVideo()) && !this.useFrontSpeaker)) {
-                    FileLog.e("start listen by proximity only");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("start listen by proximity only");
+                    }
                     if (!(!this.proximityHasDifferentValues || this.proximityWakeLock == null || this.proximityWakeLock.isHeld())) {
                         this.proximityWakeLock.acquire();
                     }
@@ -1385,7 +1400,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 }
             } else if (!this.proximityTouched) {
                 if (this.raiseToEarRecord) {
-                    FileLog.e("stop record");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("stop record");
+                    }
                     stopRecording(2);
                     this.raiseToEarRecord = false;
                     this.ignoreOnPause = false;
@@ -1393,7 +1410,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                         this.proximityWakeLock.release();
                     }
                 } else if (this.useFrontSpeaker) {
-                    FileLog.e("stop listen");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("stop listen");
+                    }
                     this.useFrontSpeaker = false;
                     startAudioAgain(true);
                     this.ignoreOnPause = false;
@@ -1626,14 +1645,21 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         this.lastProgress = 0;
         this.buffersWrited = 0;
         this.isPaused = false;
+        if (!(this.useFrontSpeaker || SharedConfig.raiseToSpeak)) {
+            ChatActivity chat = this.raiseChat;
+            stopRaiseToEarSensors(this.raiseChat);
+            this.raiseChat = chat;
+        }
         if (this.playingMessageObject != null) {
             if (this.downloadingCurrentMessage) {
                 FileLoader.getInstance(this.playingMessageObject.currentAccount).cancelLoadFile(this.playingMessageObject.getDocument());
             }
             MessageObject lastFile = this.playingMessageObject;
-            this.playingMessageObject.audioProgress = 0.0f;
-            this.playingMessageObject.audioProgressSec = 0;
-            NotificationCenter.getInstance(lastFile.currentAccount).postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, Integer.valueOf(this.playingMessageObject.getId()), Integer.valueOf(0));
+            if (notify) {
+                this.playingMessageObject.audioProgress = 0.0f;
+                this.playingMessageObject.audioProgressSec = 0;
+                NotificationCenter.getInstance(lastFile.currentAccount).postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, Integer.valueOf(this.playingMessageObject.getId()), Integer.valueOf(0));
+            }
             this.playingMessageObject = null;
             this.downloadingCurrentMessage = false;
             if (notify) {
@@ -1642,7 +1668,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 if (this.voiceMessagesPlaylist != null) {
                     if (byVoiceEnd && this.voiceMessagesPlaylist.get(0) == lastFile) {
                         this.voiceMessagesPlaylist.remove(0);
-                        this.voiceMessagesPlaylistMap.remove(Integer.valueOf(lastFile.getId()));
+                        this.voiceMessagesPlaylistMap.remove(lastFile.getId());
                         if (this.voiceMessagesPlaylist.isEmpty()) {
                             this.voiceMessagesPlaylist = null;
                             this.voiceMessagesPlaylistMap = null;
@@ -1674,11 +1700,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             if (stopService) {
                 ApplicationLoader.applicationContext.stopService(new Intent(ApplicationLoader.applicationContext, MusicPlayerService.class));
             }
-        }
-        if (!this.useFrontSpeaker && !SharedConfig.raiseToSpeak) {
-            ChatActivity chat = this.raiseChat;
-            stopRaiseToEarSensors(this.raiseChat);
-            this.raiseChat = chat;
         }
     }
 
@@ -1998,10 +2019,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         this.voiceMessagesPlaylist = playlist;
         if (this.voiceMessagesPlaylist != null) {
             this.voiceMessagesPlaylistUnread = unread;
-            this.voiceMessagesPlaylistMap = new HashMap();
+            this.voiceMessagesPlaylistMap = new SparseArray();
             for (int a = 0; a < this.voiceMessagesPlaylist.size(); a++) {
                 MessageObject messageObject = (MessageObject) this.voiceMessagesPlaylist.get(a);
-                this.voiceMessagesPlaylistMap.put(Integer.valueOf(messageObject.getId()), messageObject);
+                this.voiceMessagesPlaylistMap.put(messageObject.getId(), messageObject);
             }
         }
     }
@@ -2140,6 +2161,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             boolean notify = !this.playMusicAgain;
             if (this.playingMessageObject != null) {
                 notify = false;
+                if (!this.playMusicAgain) {
+                    this.playingMessageObject.audioProgress = 0.0f;
+                    this.playingMessageObject.audioProgressSec = 0;
+                }
             }
             cleanupPlayer(notify, false);
             this.playMusicAgain = false;
@@ -2298,6 +2323,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     this.videoPlayer.setStreamType(this.useFrontSpeaker ? 0 : 3);
                     this.videoPlayer.play();
                 } else if (isOpusFile(cacheFile.getAbsolutePath()) == 1) {
+                    if (this.pipRoundVideoView != null) {
+                        this.pipRoundVideoView.close(true);
+                        this.pipRoundVideoView = null;
+                    }
                     this.playlist.clear();
                     this.shuffledPlaylist.clear();
                     synchronized (this.playerObjectSync) {
@@ -2349,6 +2378,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                         }
                     }
                 } else {
+                    if (this.pipRoundVideoView != null) {
+                        this.pipRoundVideoView.close(true);
+                        this.pipRoundVideoView = null;
+                    }
                     try {
                         this.audioPlayer = new MediaPlayer();
                         this.audioPlayer.setAudioStreamType(this.useFrontSpeaker ? 0 : 3);
@@ -2586,6 +2619,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 cleanupPlayer(true, true);
             }
         }
+    }
+
+    public boolean isCurrentPlayer(VideoPlayer player) {
+        return this.videoPlayer == player;
     }
 
     public boolean pauseMessage(MessageObject messageObject) {
@@ -3351,7 +3388,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 long dateTaken;
                 AlbumEntry albumEntry;
                 Throwable th;
-                AlbumEntry albumEntry2;
                 Integer mediaCameraAlbumId;
                 int durationColumn;
                 long duration;
@@ -3359,10 +3395,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 int a;
                 ArrayList<AlbumEntry> mediaAlbumsSorted = new ArrayList();
                 ArrayList<AlbumEntry> photoAlbumsSorted = new ArrayList();
-                HashMap<Integer, AlbumEntry> mediaAlbums = new HashMap();
-                HashMap<Integer, AlbumEntry> photoAlbums = new HashMap();
+                SparseArray<AlbumEntry> mediaAlbums = new SparseArray();
+                SparseArray<AlbumEntry> photoAlbums = new SparseArray();
+                AlbumEntry albumEntry2 = null;
                 AlbumEntry albumEntry3 = null;
-                AlbumEntry albumEntry4 = null;
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
@@ -3392,6 +3428,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 dateTaken = cursor.getLong(dateColumn);
                                 int orientation = cursor.getInt(orientationColumn);
                                 if (!(path == null || path.length() == 0)) {
+                                    AlbumEntry albumEntry4;
                                     PhotoEntry photoEntry2 = new PhotoEntry(bucketId, imageId, dateTaken, path, orientation, false);
                                     if (allPhotosAlbum == null) {
                                         albumEntry = new AlbumEntry(0, LocaleController.getString("AllPhotos", R.string.AllPhotos), photoEntry2);
@@ -3399,27 +3436,27 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                             photoAlbumsSorted.add(0, albumEntry);
                                         } catch (Throwable th2) {
                                             th = th2;
-                                            albumEntry4 = allMediaAlbum;
+                                            albumEntry3 = allMediaAlbum;
                                         }
                                     } else {
-                                        albumEntry3 = allPhotosAlbum;
+                                        albumEntry2 = allPhotosAlbum;
                                     }
                                     if (allMediaAlbum == null) {
-                                        albumEntry4 = new AlbumEntry(0, LocaleController.getString("AllMedia", R.string.AllMedia), photoEntry2);
+                                        albumEntry3 = new AlbumEntry(0, LocaleController.getString("AllMedia", R.string.AllMedia), photoEntry2);
                                         try {
-                                            mediaAlbumsSorted.add(0, albumEntry4);
+                                            mediaAlbumsSorted.add(0, albumEntry3);
                                         } catch (Throwable th3) {
                                             e2 = th3;
                                         }
                                     } else {
-                                        albumEntry4 = allMediaAlbum;
+                                        albumEntry3 = allMediaAlbum;
                                     }
+                                    albumEntry2.addPhoto(photoEntry2);
                                     albumEntry3.addPhoto(photoEntry2);
-                                    albumEntry4.addPhoto(photoEntry2);
-                                    albumEntry2 = (AlbumEntry) mediaAlbums.get(Integer.valueOf(bucketId));
-                                    if (albumEntry2 == null) {
+                                    albumEntry4 = (AlbumEntry) mediaAlbums.get(bucketId);
+                                    if (albumEntry4 == null) {
                                         albumEntry = new AlbumEntry(bucketId, bucketName, photoEntry2);
-                                        mediaAlbums.put(Integer.valueOf(bucketId), albumEntry);
+                                        mediaAlbums.put(bucketId, albumEntry);
                                         if (num != null || cameraFolder == null || path == null || !path.startsWith(cameraFolder)) {
                                             mediaAlbumsSorted.add(albumEntry);
                                         } else {
@@ -3427,11 +3464,11 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                             num = Integer.valueOf(bucketId);
                                         }
                                     }
-                                    albumEntry2.addPhoto(photoEntry2);
-                                    albumEntry2 = (AlbumEntry) photoAlbums.get(Integer.valueOf(bucketId));
-                                    if (albumEntry2 == null) {
+                                    albumEntry4.addPhoto(photoEntry2);
+                                    albumEntry4 = (AlbumEntry) photoAlbums.get(bucketId);
+                                    if (albumEntry4 == null) {
                                         albumEntry = new AlbumEntry(bucketId, bucketName, photoEntry2);
-                                        photoAlbums.put(Integer.valueOf(bucketId), albumEntry);
+                                        photoAlbums.put(bucketId, albumEntry);
                                         if (photoCameraAlbumId != null || cameraFolder == null || path == null || !path.startsWith(cameraFolder)) {
                                             photoAlbumsSorted.add(albumEntry);
                                         } else {
@@ -3439,29 +3476,29 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                             photoCameraAlbumId = Integer.valueOf(bucketId);
                                         }
                                     }
-                                    albumEntry2.addPhoto(photoEntry2);
-                                    allMediaAlbum = albumEntry4;
-                                    allPhotosAlbum = albumEntry3;
+                                    albumEntry4.addPhoto(photoEntry2);
+                                    allMediaAlbum = albumEntry3;
+                                    allPhotosAlbum = albumEntry2;
                                 }
                             } catch (Throwable th4) {
                                 th = th4;
-                                albumEntry4 = allMediaAlbum;
-                                albumEntry3 = allPhotosAlbum;
+                                albumEntry3 = allMediaAlbum;
+                                albumEntry2 = allPhotosAlbum;
                             }
                         }
-                        albumEntry4 = allMediaAlbum;
-                        albumEntry3 = allPhotosAlbum;
+                        albumEntry3 = allMediaAlbum;
+                        albumEntry2 = allPhotosAlbum;
                     }
                 }
                 if (cursor != null) {
                     try {
                         cursor.close();
                         mediaCameraAlbumId = num;
-                        allMediaAlbum = albumEntry4;
+                        allMediaAlbum = albumEntry3;
                     } catch (Throwable e22) {
                         FileLog.e(e22);
                         mediaCameraAlbumId = num;
-                        allMediaAlbum = albumEntry4;
+                        allMediaAlbum = albumEntry3;
                     }
                     if (VERSION.SDK_INT < 23 || (VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0)) {
                         cursor = Media.query(ApplicationLoader.applicationContext.getContentResolver(), Video.Media.EXTERNAL_CONTENT_URI, MediaController.projectionVideo, null, null, "datetaken DESC");
@@ -3482,36 +3519,36 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 if (!(path == null || path.length() == 0)) {
                                     photoEntry = new PhotoEntry(bucketId, imageId, dateTaken, path, (int) (duration / 1000), true);
                                     if (allMediaAlbum != null) {
-                                        albumEntry4 = new AlbumEntry(0, LocaleController.getString("AllMedia", R.string.AllMedia), photoEntry);
+                                        albumEntry3 = new AlbumEntry(0, LocaleController.getString("AllMedia", R.string.AllMedia), photoEntry);
                                         try {
-                                            mediaAlbumsSorted.add(0, albumEntry4);
+                                            mediaAlbumsSorted.add(0, albumEntry3);
                                         } catch (Throwable th5) {
                                             th = th5;
                                             num = mediaCameraAlbumId;
                                         }
                                     } else {
-                                        albumEntry4 = allMediaAlbum;
+                                        albumEntry3 = allMediaAlbum;
                                     }
-                                    albumEntry4.addPhoto(photoEntry);
-                                    albumEntry2 = (AlbumEntry) mediaAlbums.get(Integer.valueOf(bucketId));
-                                    if (albumEntry2 == null) {
+                                    albumEntry3.addPhoto(photoEntry);
+                                    albumEntry4 = (AlbumEntry) mediaAlbums.get(bucketId);
+                                    if (albumEntry4 == null) {
                                         albumEntry = new AlbumEntry(bucketId, bucketName, photoEntry);
-                                        mediaAlbums.put(Integer.valueOf(bucketId), albumEntry);
+                                        mediaAlbums.put(bucketId, albumEntry);
                                         if (mediaCameraAlbumId == null || cameraFolder == null || path == null || !path.startsWith(cameraFolder)) {
                                             mediaAlbumsSorted.add(albumEntry);
                                         } else {
                                             mediaAlbumsSorted.add(0, albumEntry);
                                             num = Integer.valueOf(bucketId);
-                                            albumEntry2.addPhoto(photoEntry);
+                                            albumEntry4.addPhoto(photoEntry);
                                             mediaCameraAlbumId = num;
-                                            allMediaAlbum = albumEntry4;
+                                            allMediaAlbum = albumEntry3;
                                         }
                                     }
                                     num = mediaCameraAlbumId;
                                     try {
-                                        albumEntry2.addPhoto(photoEntry);
+                                        albumEntry4.addPhoto(photoEntry);
                                         mediaCameraAlbumId = num;
-                                        allMediaAlbum = albumEntry4;
+                                        allMediaAlbum = albumEntry3;
                                     } catch (Throwable th6) {
                                         e22 = th6;
                                     }
@@ -3520,7 +3557,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                         }
                     }
                     num = mediaCameraAlbumId;
-                    albumEntry4 = allMediaAlbum;
+                    albumEntry3 = allMediaAlbum;
                     if (cursor != null) {
                         try {
                             cursor.close();
@@ -3541,10 +3578,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                             }
                         });
                     }
-                    MediaController.broadcastNewPhotos(guid, mediaAlbumsSorted, photoAlbumsSorted, num, albumEntry4, albumEntry3, 0);
+                    MediaController.broadcastNewPhotos(guid, mediaAlbumsSorted, photoAlbumsSorted, num, albumEntry3, albumEntry2, 0);
                 }
                 mediaCameraAlbumId = num;
-                allMediaAlbum = albumEntry4;
+                allMediaAlbum = albumEntry3;
                 try {
                     cursor = Media.query(ApplicationLoader.applicationContext.getContentResolver(), Video.Media.EXTERNAL_CONTENT_URI, MediaController.projectionVideo, null, null, "datetaken DESC");
                     if (cursor != null) {
@@ -3563,35 +3600,35 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                             duration = cursor.getLong(durationColumn);
                             photoEntry = new PhotoEntry(bucketId, imageId, dateTaken, path, (int) (duration / 1000), true);
                             if (allMediaAlbum != null) {
-                                albumEntry4 = allMediaAlbum;
+                                albumEntry3 = allMediaAlbum;
                             } else {
-                                albumEntry4 = new AlbumEntry(0, LocaleController.getString("AllMedia", R.string.AllMedia), photoEntry);
-                                mediaAlbumsSorted.add(0, albumEntry4);
+                                albumEntry3 = new AlbumEntry(0, LocaleController.getString("AllMedia", R.string.AllMedia), photoEntry);
+                                mediaAlbumsSorted.add(0, albumEntry3);
                             }
-                            albumEntry4.addPhoto(photoEntry);
-                            albumEntry2 = (AlbumEntry) mediaAlbums.get(Integer.valueOf(bucketId));
-                            if (albumEntry2 == null) {
+                            albumEntry3.addPhoto(photoEntry);
+                            albumEntry4 = (AlbumEntry) mediaAlbums.get(bucketId);
+                            if (albumEntry4 == null) {
                                 albumEntry = new AlbumEntry(bucketId, bucketName, photoEntry);
-                                mediaAlbums.put(Integer.valueOf(bucketId), albumEntry);
+                                mediaAlbums.put(bucketId, albumEntry);
                                 if (mediaCameraAlbumId == null) {
                                 }
                                 mediaAlbumsSorted.add(albumEntry);
                             }
                             num = mediaCameraAlbumId;
-                            albumEntry2.addPhoto(photoEntry);
+                            albumEntry4.addPhoto(photoEntry);
                             mediaCameraAlbumId = num;
-                            allMediaAlbum = albumEntry4;
+                            allMediaAlbum = albumEntry3;
                         }
                     }
                     num = mediaCameraAlbumId;
-                    albumEntry4 = allMediaAlbum;
+                    albumEntry3 = allMediaAlbum;
                     if (cursor != null) {
                         cursor.close();
                     }
                 } catch (Throwable th7) {
                     th = th7;
                     num = mediaCameraAlbumId;
-                    albumEntry4 = allMediaAlbum;
+                    albumEntry3 = allMediaAlbum;
                     if (cursor != null) {
                         cursor.close();
                     }
@@ -3600,18 +3637,18 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 for (a = 0; a < mediaAlbumsSorted.size(); a++) {
                     Collections.sort(((AlbumEntry) mediaAlbumsSorted.get(a)).photos, /* anonymous class already generated */);
                 }
-                MediaController.broadcastNewPhotos(guid, mediaAlbumsSorted, photoAlbumsSorted, num, albumEntry4, albumEntry3, 0);
+                MediaController.broadcastNewPhotos(guid, mediaAlbumsSorted, photoAlbumsSorted, num, albumEntry3, albumEntry2, 0);
                 try {
                     FileLog.e(e222);
                     if (cursor != null) {
                         try {
                             cursor.close();
                             mediaCameraAlbumId = num;
-                            allMediaAlbum = albumEntry4;
+                            allMediaAlbum = albumEntry3;
                         } catch (Throwable e2222) {
                             FileLog.e(e2222);
                             mediaCameraAlbumId = num;
-                            allMediaAlbum = albumEntry4;
+                            allMediaAlbum = albumEntry3;
                         }
                         cursor = Media.query(ApplicationLoader.applicationContext.getContentResolver(), Video.Media.EXTERNAL_CONTENT_URI, MediaController.projectionVideo, null, null, "datetaken DESC");
                         if (cursor != null) {
@@ -3630,38 +3667,38 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 duration = cursor.getLong(durationColumn);
                                 photoEntry = new PhotoEntry(bucketId, imageId, dateTaken, path, (int) (duration / 1000), true);
                                 if (allMediaAlbum != null) {
-                                    albumEntry4 = new AlbumEntry(0, LocaleController.getString("AllMedia", R.string.AllMedia), photoEntry);
-                                    mediaAlbumsSorted.add(0, albumEntry4);
+                                    albumEntry3 = new AlbumEntry(0, LocaleController.getString("AllMedia", R.string.AllMedia), photoEntry);
+                                    mediaAlbumsSorted.add(0, albumEntry3);
                                 } else {
-                                    albumEntry4 = allMediaAlbum;
+                                    albumEntry3 = allMediaAlbum;
                                 }
-                                albumEntry4.addPhoto(photoEntry);
-                                albumEntry2 = (AlbumEntry) mediaAlbums.get(Integer.valueOf(bucketId));
-                                if (albumEntry2 == null) {
+                                albumEntry3.addPhoto(photoEntry);
+                                albumEntry4 = (AlbumEntry) mediaAlbums.get(bucketId);
+                                if (albumEntry4 == null) {
                                     albumEntry = new AlbumEntry(bucketId, bucketName, photoEntry);
-                                    mediaAlbums.put(Integer.valueOf(bucketId), albumEntry);
+                                    mediaAlbums.put(bucketId, albumEntry);
                                     if (mediaCameraAlbumId == null) {
                                     }
                                     mediaAlbumsSorted.add(albumEntry);
                                 }
                                 num = mediaCameraAlbumId;
-                                albumEntry2.addPhoto(photoEntry);
+                                albumEntry4.addPhoto(photoEntry);
                                 mediaCameraAlbumId = num;
-                                allMediaAlbum = albumEntry4;
+                                allMediaAlbum = albumEntry3;
                             }
                         }
                         num = mediaCameraAlbumId;
-                        albumEntry4 = allMediaAlbum;
+                        albumEntry3 = allMediaAlbum;
                         if (cursor != null) {
                             cursor.close();
                         }
                         for (a = 0; a < mediaAlbumsSorted.size(); a++) {
                             Collections.sort(((AlbumEntry) mediaAlbumsSorted.get(a)).photos, /* anonymous class already generated */);
                         }
-                        MediaController.broadcastNewPhotos(guid, mediaAlbumsSorted, photoAlbumsSorted, num, albumEntry4, albumEntry3, 0);
+                        MediaController.broadcastNewPhotos(guid, mediaAlbumsSorted, photoAlbumsSorted, num, albumEntry3, albumEntry2, 0);
                     }
                     mediaCameraAlbumId = num;
-                    allMediaAlbum = albumEntry4;
+                    allMediaAlbum = albumEntry3;
                     cursor = Media.query(ApplicationLoader.applicationContext.getContentResolver(), Video.Media.EXTERNAL_CONTENT_URI, MediaController.projectionVideo, null, null, "datetaken DESC");
                     if (cursor != null) {
                         imageIdColumn = cursor.getColumnIndex("_id");
@@ -3679,35 +3716,35 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                             duration = cursor.getLong(durationColumn);
                             photoEntry = new PhotoEntry(bucketId, imageId, dateTaken, path, (int) (duration / 1000), true);
                             if (allMediaAlbum != null) {
-                                albumEntry4 = allMediaAlbum;
+                                albumEntry3 = allMediaAlbum;
                             } else {
-                                albumEntry4 = new AlbumEntry(0, LocaleController.getString("AllMedia", R.string.AllMedia), photoEntry);
-                                mediaAlbumsSorted.add(0, albumEntry4);
+                                albumEntry3 = new AlbumEntry(0, LocaleController.getString("AllMedia", R.string.AllMedia), photoEntry);
+                                mediaAlbumsSorted.add(0, albumEntry3);
                             }
-                            albumEntry4.addPhoto(photoEntry);
-                            albumEntry2 = (AlbumEntry) mediaAlbums.get(Integer.valueOf(bucketId));
-                            if (albumEntry2 == null) {
+                            albumEntry3.addPhoto(photoEntry);
+                            albumEntry4 = (AlbumEntry) mediaAlbums.get(bucketId);
+                            if (albumEntry4 == null) {
                                 albumEntry = new AlbumEntry(bucketId, bucketName, photoEntry);
-                                mediaAlbums.put(Integer.valueOf(bucketId), albumEntry);
+                                mediaAlbums.put(bucketId, albumEntry);
                                 if (mediaCameraAlbumId == null) {
                                 }
                                 mediaAlbumsSorted.add(albumEntry);
                             }
                             num = mediaCameraAlbumId;
-                            albumEntry2.addPhoto(photoEntry);
+                            albumEntry4.addPhoto(photoEntry);
                             mediaCameraAlbumId = num;
-                            allMediaAlbum = albumEntry4;
+                            allMediaAlbum = albumEntry3;
                         }
                     }
                     num = mediaCameraAlbumId;
-                    albumEntry4 = allMediaAlbum;
+                    albumEntry3 = allMediaAlbum;
                     if (cursor != null) {
                         cursor.close();
                     }
                     for (a = 0; a < mediaAlbumsSorted.size(); a++) {
                         Collections.sort(((AlbumEntry) mediaAlbumsSorted.get(a)).photos, /* anonymous class already generated */);
                     }
-                    MediaController.broadcastNewPhotos(guid, mediaAlbumsSorted, photoAlbumsSorted, num, albumEntry4, albumEntry3, 0);
+                    MediaController.broadcastNewPhotos(guid, mediaAlbumsSorted, photoAlbumsSorted, num, albumEntry3, albumEntry2, 0);
                 } catch (Throwable th8) {
                     th = th8;
                     if (cursor != null) {
@@ -4030,6 +4067,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean convertVideo(MessageObject messageObject) {
+        long videoStartTime;
         Throwable e;
         Throwable th;
         String videoPath = messageObject.videoEditedInfo.originalPath;
@@ -4081,7 +4119,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
         this.videoConvertFirstWrite = true;
         boolean error = false;
-        long videoStartTime = startTime;
+        long videoStartTime2 = startTime;
         long time = System.currentTimeMillis();
         if (resultWidth == 0 || resultHeight == 0) {
             preferences.edit().putBoolean("isPreviousOk", true).commit();
@@ -4090,7 +4128,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
         MP4Builder mP4Builder = null;
         MediaExtractor extractor = null;
-        long videoStartTime2;
         try {
             BufferInfo info = new BufferInfo();
             Mp4Movie movie = new Mp4Movie();
@@ -4106,9 +4143,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 if (resultWidth == originalWidth && resultHeight == originalHeight && rotateRender == 0 && !messageObject.videoEditedInfo.roundVideo) {
                     videoTime = readAndWriteTrack(messageObject, extractor2, mP4Builder, info, startTime, endTime, file, false);
                     if (videoTime != -1) {
-                        videoStartTime2 = videoTime;
+                        videoStartTime = videoTime;
                     }
-                    videoStartTime2 = videoStartTime;
+                    videoStartTime = videoStartTime2;
                 } else {
                     int videoIndex = selectTrack(extractor2, false);
                     if (videoIndex >= 0) {
@@ -4157,11 +4194,15 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                     }
                                 }
                             }
-                            FileLog.e("codec = " + codecInfo.getName() + " manufacturer = " + manufacturer + "device = " + Build.MODEL);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("codec = " + codecInfo.getName() + " manufacturer = " + manufacturer + "device = " + Build.MODEL);
+                            }
                         } else {
                             colorFormat = NUM;
                         }
-                        FileLog.e("colorFormat = " + colorFormat);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("colorFormat = " + colorFormat);
+                        }
                         int resultHeightAligned = resultHeight;
                         int padding = 0;
                         int bufferSize = ((resultWidth * resultHeight) * 3) / 2;
@@ -4209,7 +4250,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 inputSurface = inputSurface2;
                                 FileLog.e(e);
                                 error = true;
-                                videoStartTime2 = videoStartTime;
+                                videoStartTime = videoStartTime2;
                                 extractor2.unselectTrack(videoIndex);
                                 if (outputSurface != null) {
                                     outputSurface.release();
@@ -4226,7 +4267,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                     encoder.release();
                                 }
                                 checkConversionCanceled();
-                                readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime2, endTime, file, true);
+                                readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
                                 if (extractor2 != null) {
                                     extractor2.release();
                                 }
@@ -4237,15 +4278,19 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                         FileLog.e(e3);
                                     }
                                 }
-                                FileLog.e("time = " + (System.currentTimeMillis() - time));
-                                extractor = extractor2;
+                                if (BuildVars.LOGS_ENABLED) {
+                                    FileLog.d("time = " + (System.currentTimeMillis() - time));
+                                    extractor = extractor2;
+                                } else {
+                                    extractor = extractor2;
+                                }
                                 preferences.edit().putBoolean("isPreviousOk", true).commit();
                                 didWriteData(messageObject, file, true, error);
                                 return true;
                             } catch (Throwable th2) {
                                 th = th2;
                                 extractor = extractor2;
-                                videoStartTime2 = videoStartTime;
+                                videoStartTime = videoStartTime2;
                             }
                         }
                         try {
@@ -4308,6 +4353,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 boolean encoderOutputAvailable = true;
                                 while (true) {
                                     if (decoderOutputAvailable || encoderOutputAvailable) {
+                                        MediaFormat newFormat;
                                         checkConversionCanceled();
                                         int encoderStatus = encoder.dequeueOutputBuffer(info, 2500);
                                         if (encoderStatus == -1) {
@@ -4374,7 +4420,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                             } else if (decoderStatus == -3) {
                                                 continue;
                                             } else if (decoderStatus == -2) {
-                                                FileLog.e("newFormat = " + decoder.getOutputFormat());
+                                                newFormat = decoder.getOutputFormat();
+                                                if (BuildVars.LOGS_ENABLED) {
+                                                    FileLog.d("newFormat = " + newFormat);
+                                                }
                                             } else if (decoderStatus < 0) {
                                                 throw new RuntimeException("unexpected result from decoder.dequeueOutputBuffer: " + decoderStatus);
                                             } else {
@@ -4388,7 +4437,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                                 if (startTime > 0 && videoTime == -1) {
                                                     if (info.presentationTimeUs < startTime) {
                                                         doRender = false;
-                                                        FileLog.e("drop frame startTime = " + startTime + " present time = " + info.presentationTimeUs);
+                                                        if (BuildVars.LOGS_ENABLED) {
+                                                            FileLog.d("drop frame startTime = " + startTime + " present time = " + info.presentationTimeUs);
+                                                        }
                                                     } else {
                                                         videoTime = info.presentationTimeUs;
                                                     }
@@ -4411,15 +4462,17 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                                                 yuvBuf.clear();
                                                                 Utilities.convertVideoFrame(rgbBuf, yuvBuf, colorFormat, resultWidth, resultHeight, padding, swapUV);
                                                                 encoder.queueInputBuffer(inputBufIndex, 0, bufferSize, info.presentationTimeUs, 0);
-                                                            } else {
-                                                                FileLog.e("input buffer not available");
+                                                            } else if (BuildVars.LOGS_ENABLED) {
+                                                                FileLog.d("input buffer not available");
                                                             }
                                                         }
                                                     }
                                                 }
                                                 if ((info.flags & 4) != 0) {
                                                     decoderOutputAvailable = false;
-                                                    FileLog.e("decoder stream end");
+                                                    if (BuildVars.LOGS_ENABLED) {
+                                                        FileLog.d("decoder stream end");
+                                                    }
                                                     if (VERSION.SDK_INT >= 18) {
                                                         encoder.signalEndOfInputStream();
                                                     } else {
@@ -4435,16 +4488,16 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 }
                             }
                             if (videoTime != -1) {
-                                videoStartTime2 = videoTime;
+                                videoStartTime = videoTime;
                             } else {
-                                videoStartTime2 = videoStartTime;
+                                videoStartTime = videoStartTime2;
                             }
                         } catch (Exception e4) {
                             e3 = e4;
                         } catch (Throwable th22) {
                             th = th22;
                             extractor = extractor2;
-                            videoStartTime2 = videoStartTime;
+                            videoStartTime = videoStartTime2;
                         }
                         try {
                             extractor2.unselectTrack(videoIndex);
@@ -4479,7 +4532,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                         FileLog.e(e32);
                                     }
                                 }
-                                FileLog.e("time = " + (System.currentTimeMillis() - time));
+                                if (BuildVars.LOGS_ENABLED) {
+                                    FileLog.d("time = " + (System.currentTimeMillis() - time));
+                                }
                                 preferences.edit().putBoolean("isPreviousOk", true).commit();
                                 didWriteData(messageObject, file, true, error);
                                 return true;
@@ -4495,7 +4550,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                         FileLog.e(e322);
                                     }
                                 }
-                                FileLog.e("time = " + (System.currentTimeMillis() - time));
+                                if (BuildVars.LOGS_ENABLED) {
+                                    FileLog.d("time = " + (System.currentTimeMillis() - time));
+                                }
                                 throw th;
                             }
                         } catch (Throwable th4) {
@@ -4507,14 +4564,16 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                             if (mP4Builder != null) {
                                 mP4Builder.finishMovie();
                             }
-                            FileLog.e("time = " + (System.currentTimeMillis() - time));
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("time = " + (System.currentTimeMillis() - time));
+                            }
                             throw th;
                         }
                     }
-                    videoStartTime2 = videoStartTime;
+                    videoStartTime = videoStartTime2;
                 }
                 if (!(error || bitrate == -1)) {
-                    readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime2, endTime, file, true);
+                    readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
                 }
                 if (extractor2 != null) {
                     extractor2.release();
@@ -4522,12 +4581,16 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 if (mP4Builder != null) {
                     mP4Builder.finishMovie();
                 }
-                FileLog.e("time = " + (System.currentTimeMillis() - time));
-                extractor = extractor2;
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("time = " + (System.currentTimeMillis() - time));
+                    extractor = extractor2;
+                } else {
+                    extractor = extractor2;
+                }
             } catch (Exception e6) {
                 e322 = e6;
                 extractor = extractor2;
-                videoStartTime2 = videoStartTime;
+                videoStartTime = videoStartTime2;
                 error = true;
                 FileLog.e(e322);
                 if (extractor != null) {
@@ -4536,18 +4599,20 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 if (mP4Builder != null) {
                     mP4Builder.finishMovie();
                 }
-                FileLog.e("time = " + (System.currentTimeMillis() - time));
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("time = " + (System.currentTimeMillis() - time));
+                }
                 preferences.edit().putBoolean("isPreviousOk", true).commit();
                 didWriteData(messageObject, file, true, error);
                 return true;
             } catch (Throwable th222) {
                 th = th222;
                 extractor = extractor2;
-                videoStartTime2 = videoStartTime;
+                videoStartTime = videoStartTime2;
             }
         } catch (Exception e7) {
             e322 = e7;
-            videoStartTime2 = videoStartTime;
+            videoStartTime = videoStartTime2;
             error = true;
             FileLog.e(e322);
             if (extractor != null) {
@@ -4556,20 +4621,24 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             if (mP4Builder != null) {
                 mP4Builder.finishMovie();
             }
-            FileLog.e("time = " + (System.currentTimeMillis() - time));
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("time = " + (System.currentTimeMillis() - time));
+            }
             preferences.edit().putBoolean("isPreviousOk", true).commit();
             didWriteData(messageObject, file, true, error);
             return true;
         } catch (Throwable th5) {
             th = th5;
-            videoStartTime2 = videoStartTime;
+            videoStartTime = videoStartTime2;
             if (extractor != null) {
                 extractor.release();
             }
             if (mP4Builder != null) {
                 mP4Builder.finishMovie();
             }
-            FileLog.e("time = " + (System.currentTimeMillis() - time));
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("time = " + (System.currentTimeMillis() - time));
+            }
             throw th;
         }
         preferences.edit().putBoolean("isPreviousOk", true).commit();

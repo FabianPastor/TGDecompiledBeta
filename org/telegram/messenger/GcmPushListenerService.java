@@ -15,7 +15,9 @@ public class GcmPushListenerService extends GcmListenerService {
     public static final int NOTIFICATION_ID = 1;
 
     public void onMessageReceived(String from, final Bundle bundle) {
-        FileLog.d("GCM received bundle: " + bundle + " from: " + from);
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("GCM received bundle: " + bundle + " from: " + from);
+        }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 int userId;
@@ -93,7 +95,7 @@ public class GcmPushListenerService extends GcmListenerService {
                         if (time == -1 || SharedConfig.lastAppPauseTime < time) {
                             ConnectivityManager connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
                             NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-                            if (BuildVars.DEBUG_VERSION) {
+                            if (BuildVars.LOGS_ENABLED) {
                                 FileLog.d("try show notification in background with time " + time + " with nework info " + netInfo + " and status " + connectivityManager.getRestrictBackgroundStatus());
                             }
                             if (connectivityManager.getRestrictBackgroundStatus() == 3 && netInfo.getType() == 0) {

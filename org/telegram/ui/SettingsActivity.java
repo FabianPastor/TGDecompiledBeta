@@ -282,10 +282,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell.setText(LocaleController.getString("ChatBackground", R.string.ChatBackground), true);
                         return;
                     } else if (position == SettingsActivity.this.sendLogsRow) {
-                        textCell.setText("Send Logs", true);
+                        textCell.setText(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs), true);
                         return;
                     } else if (position == SettingsActivity.this.clearLogsRow) {
-                        textCell.setText("Clear Logs", true);
+                        textCell.setText(LocaleController.getString("DebugClearLogs", R.string.DebugClearLogs), true);
                         return;
                     } else if (position == SettingsActivity.this.askQuestionRow) {
                         textCell.setText(LocaleController.getString("AskAQuestion", R.string.AskAQuestion), true);
@@ -647,7 +647,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         i = this.rowCount;
         this.rowCount = i + 1;
         this.privacyPolicyRow = i;
-        if (BuildVars.DEBUG_VERSION) {
+        if (BuildVars.LOGS_ENABLED) {
             i = this.rowCount;
             this.rowCount = i + 1;
             this.sendLogsRow = i;
@@ -657,9 +657,17 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             i = this.rowCount;
             this.rowCount = i + 1;
             this.dumpCallStatsRow = i;
+        } else {
+            this.sendLogsRow = -1;
+            this.clearLogsRow = -1;
+            this.dumpCallStatsRow = -1;
+        }
+        if (BuildVars.DEBUG_VERSION) {
             i = this.rowCount;
             this.rowCount = i + 1;
             this.switchBackendButtonRow = i;
+        } else {
+            this.switchBackendButtonRow = -1;
         }
         i = this.rowCount;
         this.rowCount = i + 1;
@@ -1017,33 +1025,36 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
                     String str;
                     if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                        items = new CharSequence[6];
+                        items = new CharSequence[7];
                         items[0] = LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts);
                         items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
                         items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
                         items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
-                        items[4] = SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
+                        items[4] = BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs);
+                        items[5] = SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
                         if (SharedConfig.roundCamera16to9) {
                             str = "switch camera to 4:3";
                         } else {
                             str = "switch camera to 16:9";
                         }
-                        items[5] = str;
+                        items[6] = str;
                     } else {
-                        items = new CharSequence[5];
+                        items = new CharSequence[6];
                         items[0] = LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts);
                         items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
                         items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
                         items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
+                        items[4] = BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs);
                         if (SharedConfig.inappCamera) {
                             str = LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera);
                         } else {
                             str = LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
                         }
-                        items[4] = str;
+                        items[5] = str;
                     }
                     builder.setItems(items, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            boolean z = true;
                             if (which == 0) {
                                 UserConfig.getInstance(SettingsActivity.this.currentAccount).syncContacts = true;
                                 UserConfig.getInstance(SettingsActivity.this.currentAccount).saveConfig(false);
@@ -1055,8 +1066,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             } else if (which == 3) {
                                 MessagesController.getInstance(SettingsActivity.this.currentAccount).forceResetDialogs();
                             } else if (which == 4) {
-                                SharedConfig.toggleInappCamera();
+                                if (BuildVars.LOGS_ENABLED) {
+                                    z = false;
+                                }
+                                BuildVars.LOGS_ENABLED = z;
+                                ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", 0).edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).commit();
                             } else if (which == 5) {
+                                SharedConfig.toggleInappCamera();
+                            } else if (which == 6) {
                                 SharedConfig.toggleRoundCamera16to9();
                             }
                         }

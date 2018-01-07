@@ -15,6 +15,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.SparseArray;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.KeyEvent;
@@ -97,7 +98,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
     private ScrollView scrollView;
     private boolean searchWas;
     private boolean searching;
-    private HashMap<Integer, GroupCreateSpan> selectedContacts = new HashMap();
+    private SparseArray<GroupCreateSpan> selectedContacts = new SparseArray();
     private SpansContainer spansContainer;
 
     public interface GroupCreateActivityDelegate {
@@ -211,7 +212,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
 
         public void addSpan(GroupCreateSpan span) {
             GroupCreateActivity.this.allSpans.add(span);
-            GroupCreateActivity.this.selectedContacts.put(Integer.valueOf(span.getUid()), span);
+            GroupCreateActivity.this.selectedContacts.put(span.getUid(), span);
             GroupCreateActivity.this.editText.setHintVisible(false);
             if (this.currentAnimation != null) {
                 this.currentAnimation.setupEndValues();
@@ -238,7 +239,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
 
         public void removeSpan(final GroupCreateSpan span) {
             GroupCreateActivity.this.ignoreScrollEvent = true;
-            GroupCreateActivity.this.selectedContacts.remove(Integer.valueOf(span.getUid()));
+            GroupCreateActivity.this.selectedContacts.remove(span.getUid());
             GroupCreateActivity.this.allSpans.remove(span);
             span.setOnClickListener(null);
             if (this.currentAnimation != null) {
@@ -356,7 +357,6 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            User user;
             switch (holder.getItemViewType()) {
                 case 0:
                     GroupCreateSectionCell cell = (GroupCreateSectionCell) holder.itemView;
@@ -366,6 +366,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                     }
                     return;
                 default:
+                    User user;
                     GroupCreateUserCell cell2 = holder.itemView;
                     CharSequence username = null;
                     CharSequence name = null;
@@ -392,29 +393,30 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                                     foundUserName = foundUserName.substring(1);
                                 }
                                 try {
-                                    CharSequence username2 = new SpannableStringBuilder(null);
-                                    try {
-                                        ((SpannableStringBuilder) username2).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
-                                        username = username2;
-                                    } catch (Exception e) {
-                                        username = username2;
-                                        username = user.username;
-                                        cell2.setUser(user, name, username);
-                                        cell2.setChecked(GroupCreateActivity.this.selectedContacts.containsKey(Integer.valueOf(user.id)), false);
-                                        return;
+                                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+                                    spannableStringBuilder.append("@");
+                                    spannableStringBuilder.append(user.username);
+                                    int index = user.username.toLowerCase().indexOf(foundUserName);
+                                    if (index != -1) {
+                                        int len = foundUserName.length();
+                                        if (index == 0) {
+                                            len++;
+                                        } else {
+                                            index++;
+                                        }
+                                        spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, index + len, 33);
                                     }
-                                } catch (Exception e2) {
+                                    Object username2 = spannableStringBuilder;
+                                } catch (Exception e) {
                                     username = user.username;
-                                    cell2.setUser(user, name, username);
-                                    cell2.setChecked(GroupCreateActivity.this.selectedContacts.containsKey(Integer.valueOf(user.id)), false);
-                                    return;
                                 }
                             }
                         }
+                    } else {
+                        user = (User) this.contacts.get(position);
                     }
-                    user = (User) this.contacts.get(position);
                     cell2.setUser(user, name, username);
-                    cell2.setChecked(GroupCreateActivity.this.selectedContacts.containsKey(Integer.valueOf(user.id)), false);
+                    cell2.setChecked(GroupCreateActivity.this.selectedContacts.indexOfKey(user.id) >= 0, false);
                     return;
             }
         }
@@ -803,9 +805,14 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                     GroupCreateUserCell cell = (GroupCreateUserCell) view;
                     User user = cell.getUser();
                     if (user != null) {
-                        boolean exists = GroupCreateActivity.this.selectedContacts.containsKey(Integer.valueOf(user.id));
+                        boolean exists;
+                        if (GroupCreateActivity.this.selectedContacts.indexOfKey(user.id) >= 0) {
+                            exists = true;
+                        } else {
+                            exists = false;
+                        }
                         if (exists) {
-                            GroupCreateActivity.this.spansContainer.removeSpan((GroupCreateSpan) GroupCreateActivity.this.selectedContacts.get(Integer.valueOf(user.id)));
+                            GroupCreateActivity.this.spansContainer.removeSpan((GroupCreateSpan) GroupCreateActivity.this.selectedContacts.get(user.id));
                         } else if (GroupCreateActivity.this.maxCount != 0 && GroupCreateActivity.this.selectedContacts.size() == GroupCreateActivity.this.maxCount) {
                             return;
                         } else {
@@ -909,17 +916,24 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
                 GroupCreateUserCell cell = (GroupCreateUserCell) child;
                 User user = cell.getUser();
                 if (user != null) {
-                    cell.setChecked(this.selectedContacts.containsKey(Integer.valueOf(user.id)), true);
+                    boolean z;
+                    if (this.selectedContacts.indexOfKey(user.id) >= 0) {
+                        z = true;
+                    } else {
+                        z = false;
+                    }
+                    cell.setChecked(z, true);
                 }
             }
         }
     }
 
     private boolean onDonePressed() {
+        int a;
         if (this.chatType == 2) {
             ArrayList<InputUser> result = new ArrayList();
-            for (Integer uid : this.selectedContacts.keySet()) {
-                InputUser user = MessagesController.getInstance(this.currentAccount).getInputUser(MessagesController.getInstance(this.currentAccount).getUser(uid));
+            for (a = 0; a < this.selectedContacts.size(); a++) {
+                InputUser user = MessagesController.getInstance(this.currentAccount).getInputUser(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.selectedContacts.keyAt(a))));
                 if (user != null) {
                     result.add(user);
                 }
@@ -929,11 +943,13 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
             Bundle args2 = new Bundle();
             args2.putInt("chat_id", this.chatId);
             presentFragment(new ChatActivity(args2), true);
-        } else if (!this.doneButtonVisible || this.selectedContacts.isEmpty()) {
+        } else if (!this.doneButtonVisible || this.selectedContacts.size() == 0) {
             return false;
         } else {
             ArrayList<Integer> result2 = new ArrayList();
-            result2.addAll(this.selectedContacts.keySet());
+            for (a = 0; a < this.selectedContacts.size(); a++) {
+                result2.add(Integer.valueOf(this.selectedContacts.keyAt(a)));
+            }
             if (this.isAlwaysShare || this.isNeverShare) {
                 if (this.delegate != null) {
                     this.delegate.didSelectUsers(result2);
@@ -964,7 +980,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
         if (!(this.isAlwaysShare || this.isNeverShare)) {
             if (this.chatType == 2) {
                 this.actionBar.setSubtitle(LocaleController.formatPluralString("Members", this.selectedContacts.size()));
-            } else if (this.selectedContacts.isEmpty()) {
+            } else if (this.selectedContacts.size() == 0) {
                 this.actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", R.string.MembersCountZero, LocaleController.formatPluralString("Members", this.maxCount)));
             } else {
                 this.actionBar.setSubtitle(LocaleController.formatString("MembersCount", R.string.MembersCount, Integer.valueOf(this.selectedContacts.size()), Integer.valueOf(this.maxCount)));

@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.opengl.GLES20;
 import java.util.HashMap;
 import java.util.Map;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class Shader {
@@ -26,13 +27,17 @@ public class Shader {
         int i = 0;
         CompilationResult vResult = compileShader(35633, vertexShader);
         if (vResult.status == 0) {
-            FileLog.e("Vertex shader compilation failed");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Vertex shader compilation failed");
+            }
             destroyShader(vResult.shader, 0, this.program);
             return;
         }
         CompilationResult fResult = compileShader(35632, fragmentShader);
         if (fResult.status == 0) {
-            FileLog.e("Fragment shader compilation failed");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Fragment shader compilation failed");
+            }
             destroyShader(vResult.shader, fResult.shader, this.program);
             return;
         }
@@ -76,7 +81,7 @@ public class Shader {
         GLES20.glCompileShader(shader);
         int[] compileStatus = new int[1];
         GLES20.glGetShaderiv(shader, 35713, compileStatus, 0);
-        if (compileStatus[0] == 0) {
+        if (compileStatus[0] == 0 && BuildVars.LOGS_ENABLED) {
             FileLog.e(GLES20.glGetShaderInfoLog(shader));
         }
         return new CompilationResult(shader, compileStatus[0]);
@@ -86,7 +91,7 @@ public class Shader {
         GLES20.glLinkProgram(program);
         int[] linkStatus = new int[1];
         GLES20.glGetProgramiv(program, 35714, linkStatus, 0);
-        if (linkStatus[0] == 0) {
+        if (linkStatus[0] == 0 && BuildVars.LOGS_ENABLED) {
             FileLog.e(GLES20.glGetProgramInfoLog(program));
         }
         return linkStatus[0];

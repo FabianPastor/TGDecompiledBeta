@@ -3,6 +3,7 @@ package org.telegram.messenger.voip;
 import android.media.AudioTrack;
 import android.util.Log;
 import java.nio.ByteBuffer;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class AudioTrackJNI {
@@ -38,7 +39,9 @@ public class AudioTrackJNI {
             } catch (Throwable th) {
             }
             size = getBufferSize(bufferSize * 6, 44100);
-            FileLog.d("buffer size: " + size);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("buffer size: " + size);
+            }
             if (channels == 1) {
                 i = 4;
             } else {
@@ -124,7 +127,9 @@ public class AudioTrackJNI {
                     }
                     Log.i("tg-voip", "audiotrack thread exits");
                 } catch (Exception x) {
-                    FileLog.e("error starting AudioTrack", x);
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.e("error starting AudioTrack", x);
+                    }
                 }
             }
         });

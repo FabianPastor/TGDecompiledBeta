@@ -7,6 +7,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -14,7 +15,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -60,12 +60,12 @@ public class AdminLogFilterAlert extends BottomSheet {
     private int restrictionsRow;
     private BottomSheetCell saveButton;
     private int scrollOffsetY;
-    private HashMap<Integer, User> selectedAdmins;
+    private SparseArray<User> selectedAdmins;
     private Drawable shadowDrawable;
     private Pattern urlPattern;
 
     public interface AdminLogFilterAlertDelegate {
-        void didSelectRights(TL_channelAdminLogEventsFilter tL_channelAdminLogEventsFilter, HashMap<Integer, User> hashMap);
+        void didSelectRights(TL_channelAdminLogEventsFilter tL_channelAdminLogEventsFilter, SparseArray<User> sparseArray);
     }
 
     private class ListAdapter extends SelectionAdapter {
@@ -183,7 +183,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                 case 2:
                     CheckBoxUserCell userCell = holder.itemView;
                     int userId = ((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((position - AdminLogFilterAlert.this.allAdminsRow) - 1)).user_id;
-                    if (!(AdminLogFilterAlert.this.selectedAdmins == null || AdminLogFilterAlert.this.selectedAdmins.containsKey(Integer.valueOf(userId)))) {
+                    if (AdminLogFilterAlert.this.selectedAdmins != null && AdminLogFilterAlert.this.selectedAdmins.indexOfKey(userId) < 0) {
                         z = false;
                     }
                     userCell.setChecked(z, false);
@@ -290,7 +290,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                     CheckBoxUserCell userCell = holder.itemView;
                     int userId = ((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((position - AdminLogFilterAlert.this.allAdminsRow) - 1)).user_id;
                     User user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(userId));
-                    boolean z3 = AdminLogFilterAlert.this.selectedAdmins == null || AdminLogFilterAlert.this.selectedAdmins.containsKey(Integer.valueOf(userId));
+                    boolean z3 = AdminLogFilterAlert.this.selectedAdmins == null || AdminLogFilterAlert.this.selectedAdmins.indexOfKey(userId) >= 0;
                     if (position == getItemCount() - 1) {
                         z2 = false;
                     }
@@ -302,7 +302,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         }
     }
 
-    public AdminLogFilterAlert(Context context, TL_channelAdminLogEventsFilter filter, HashMap<Integer, User> admins, boolean megagroup) {
+    public AdminLogFilterAlert(Context context, TL_channelAdminLogEventsFilter filter, SparseArray<User> admins, boolean megagroup) {
         int rowCount;
         super(context, false);
         if (filter != null) {
@@ -323,7 +323,7 @@ public class AdminLogFilterAlert extends BottomSheet {
             this.currentFilter.delete = filter.delete;
         }
         if (admins != null) {
-            this.selectedAdmins = new HashMap(admins);
+            this.selectedAdmins = admins.clone();
         }
         this.isMegagroup = megagroup;
         int rowCount2 = 1;
@@ -516,7 +516,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                         }
                     } else if (position == AdminLogFilterAlert.this.allAdminsRow) {
                         if (isChecked) {
-                            AdminLogFilterAlert.this.selectedAdmins = new HashMap();
+                            AdminLogFilterAlert.this.selectedAdmins = new SparseArray();
                         } else {
                             AdminLogFilterAlert.this.selectedAdmins = null;
                         }
@@ -623,22 +623,22 @@ public class AdminLogFilterAlert extends BottomSheet {
                     User user;
                     CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) view;
                     if (AdminLogFilterAlert.this.selectedAdmins == null) {
-                        AdminLogFilterAlert.this.selectedAdmins = new HashMap();
+                        AdminLogFilterAlert.this.selectedAdmins = new SparseArray();
                         holder = AdminLogFilterAlert.this.listView.findViewHolderForAdapterPosition(AdminLogFilterAlert.this.allAdminsRow);
                         if (holder != null) {
                             ((CheckBoxCell) holder.itemView).setChecked(false, true);
                         }
                         for (a = 0; a < AdminLogFilterAlert.this.currentAdmins.size(); a++) {
                             user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(((ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get(a)).user_id));
-                            AdminLogFilterAlert.this.selectedAdmins.put(Integer.valueOf(user.id), user);
+                            AdminLogFilterAlert.this.selectedAdmins.put(user.id, user);
                         }
                     }
                     isChecked = checkBoxUserCell.isChecked();
                     user = checkBoxUserCell.getCurrentUser();
                     if (isChecked) {
-                        AdminLogFilterAlert.this.selectedAdmins.remove(Integer.valueOf(user.id));
+                        AdminLogFilterAlert.this.selectedAdmins.remove(user.id);
                     } else {
-                        AdminLogFilterAlert.this.selectedAdmins.put(Integer.valueOf(user.id), user);
+                        AdminLogFilterAlert.this.selectedAdmins.put(user.id, user);
                     }
                     checkBoxUserCell.setChecked(!isChecked, true);
                 }

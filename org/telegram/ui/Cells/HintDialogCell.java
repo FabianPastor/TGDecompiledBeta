@@ -55,7 +55,7 @@ public class HintDialogCell extends FrameLayout {
 
     public void checkUnreadCounter(int mask) {
         if (mask == 0 || (mask & 256) != 0 || (mask & 2048) != 0) {
-            TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(Long.valueOf(this.dialog_id));
+            TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
             if (dialog == null || dialog.unread_count == 0) {
                 if (this.countLayout != null) {
                     if (mask != 0) {

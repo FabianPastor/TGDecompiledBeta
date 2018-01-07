@@ -499,7 +499,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             ChatActivity chatActivity = this.fragment;
             long dialogId = chatActivity.getDialogId();
             int currentAccount = chatActivity.getCurrentAccount();
-            ArrayList<Message> messages = (ArrayList) LocationController.getInstance(currentAccount).locationsCache.get(Long.valueOf(dialogId));
+            ArrayList<Message> messages = (ArrayList) LocationController.getInstance(currentAccount).locationsCache.get(dialogId);
             if (!this.firstLocationsLoaded) {
                 LocationController.getInstance(currentAccount).loadLiveLocations(dialogId);
                 this.firstLocationsLoaded = true;
@@ -566,7 +566,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
         if (messageObject == null || messageObject.getId() == 0) {
             this.lastMessageObject = null;
-            if (this.visible) {
+            boolean callAvailable = (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 15) ? false : true;
+            if (callAvailable) {
+                checkCall(false);
+                return;
+            } else if (this.visible) {
                 this.visible = false;
                 if (create) {
                     if (getVisibility() != 8) {
@@ -581,10 +585,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }
                 this.animatorSet = new AnimatorSet();
                 AnimatorSet animatorSet = this.animatorSet;
-                r6 = new Animator[2];
-                r6[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp2(36.0f))});
-                r6[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
-                animatorSet.playTogether(r6);
+                r7 = new Animator[2];
+                r7[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp2(36.0f))});
+                r7[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
+                animatorSet.playTogether(r7);
                 this.animatorSet.setDuration(200);
                 this.animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
@@ -596,8 +600,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 });
                 this.animatorSet.start();
                 return;
+            } else {
+                return;
             }
-            return;
         }
         int prevStyle = this.currentStyle;
         updateStyle(0);
@@ -624,10 +629,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     ((LayoutParams) getLayoutParams()).topMargin = -AndroidUtilities.dp(72.0f);
                 }
                 animatorSet = this.animatorSet;
-                r6 = new Animator[2];
-                r6[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp2(36.0f)), 0.0f});
-                r6[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp2(36.0f)});
-                animatorSet.playTogether(r6);
+                r7 = new Animator[2];
+                r7[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp2(36.0f)), 0.0f});
+                r7[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp2(36.0f)});
+                animatorSet.playTogether(r7);
                 this.animatorSet.setDuration(200);
                 this.animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {

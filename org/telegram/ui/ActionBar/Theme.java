@@ -1955,23 +1955,23 @@ public class Theme {
                 if (stream2 != null) {
                     try {
                         stream2.close();
-                    } catch (Exception e2) {
-                        FileLog.e("tmessage", e2);
+                    } catch (Throwable e2) {
+                        FileLog.e(e2);
                         stream = stream2;
                         return;
                     }
                 }
                 stream = stream2;
             } catch (Exception e3) {
-                e = e3;
+                e2 = e3;
                 stream = stream2;
                 try {
-                    FileLog.e(e);
+                    FileLog.e(e2);
                     if (stream != null) {
                         try {
                             stream.close();
-                        } catch (Exception e22) {
-                            FileLog.e("tmessage", e22);
+                        } catch (Throwable e22) {
+                            FileLog.e(e22);
                         }
                     }
                 } catch (Throwable th2) {
@@ -1979,8 +1979,8 @@ public class Theme {
                     if (stream != null) {
                         try {
                             stream.close();
-                        } catch (Exception e222) {
-                            FileLog.e("tmessage", e222);
+                        } catch (Throwable e222) {
+                            FileLog.e(e222);
                         }
                     }
                     throw th;
@@ -1994,8 +1994,8 @@ public class Theme {
                 throw th;
             }
         } catch (Exception e4) {
-            e = e4;
-            FileLog.e(e);
+            e222 = e4;
+            FileLog.e(e222);
             if (stream != null) {
                 stream.close();
             }
@@ -2003,8 +2003,8 @@ public class Theme {
     }
 
     public static File getAssetFile(String assetName) {
-        long size;
         File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
+        long size;
         try {
             InputStream stream = ApplicationLoader.applicationContext.getAssets().open(assetName);
             size = (long) stream.available();
@@ -2887,12 +2887,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
-                    SharedPreferences preferences;
+                    int i;
                     int selectedBackground;
                     File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int i;
+                        SharedPreferences preferences;
                         if (!MessagesController.getGlobalMainSettings().getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

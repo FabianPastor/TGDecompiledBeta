@@ -7,6 +7,7 @@ import android.media.audiofx.NoiseSuppressor;
 import android.os.Build.VERSION;
 import android.util.Log;
 import java.nio.ByteBuffer;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class AudioRecordJNI {
@@ -57,7 +58,9 @@ public class AudioRecordJNI {
             } catch (Exception e) {
             }
         }
-        FileLog.d("Trying to initialize AudioRecord with source=" + source + " and sample rate=" + sampleRate);
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("Trying to initialize AudioRecord with source=" + source + " and sample rate=" + sampleRate);
+        }
         try {
             this.audioRecord = new AudioRecord(source, sampleRate, 16, 2, getBufferSize(this.bufferSize, 48000));
         } catch (Exception x) {
@@ -124,11 +127,13 @@ public class AudioRecordJNI {
                             if (this.agc != null) {
                                 this.agc.setEnabled(false);
                             }
-                        } else {
+                        } else if (BuildVars.LOGS_ENABLED) {
                             FileLog.w("AutomaticGainControl is not available on this device :(");
                         }
                     } catch (Throwable x) {
-                        FileLog.e("error creating AutomaticGainControl", x);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("error creating AutomaticGainControl", x);
+                        }
                     }
                     try {
                         if (NoiseSuppressor.isAvailable()) {
@@ -136,11 +141,13 @@ public class AudioRecordJNI {
                             if (this.ns != null) {
                                 this.ns.setEnabled(VoIPServerConfig.getBoolean("user_system_ns", true));
                             }
-                        } else {
+                        } else if (BuildVars.LOGS_ENABLED) {
                             FileLog.w("NoiseSuppressor is not available on this device :(");
                         }
                     } catch (Throwable x2) {
-                        FileLog.e("error creating NoiseSuppressor", x2);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("error creating NoiseSuppressor", x2);
+                        }
                     }
                     try {
                         if (AcousticEchoCanceler.isAvailable()) {
@@ -148,17 +155,22 @@ public class AudioRecordJNI {
                             if (this.aec != null) {
                                 this.aec.setEnabled(VoIPServerConfig.getBoolean("use_system_aec", true));
                             }
-                        } else {
+                        } else if (BuildVars.LOGS_ENABLED) {
                             FileLog.w("AcousticEchoCanceler is not available on this device");
                         }
                     } catch (Throwable x22) {
-                        FileLog.e("error creating AcousticEchoCanceler", x22);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("error creating AcousticEchoCanceler", x22);
+                        }
                     }
                 }
                 startThread();
             }
             return true;
         } catch (Exception x3) {
+            if (!BuildVars.LOGS_ENABLED) {
+                return false;
+            }
             FileLog.e("Error initializing AudioRecord", x3);
             return false;
         }

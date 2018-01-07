@@ -17,6 +17,7 @@ public class URLSpanMono extends MetricAffectingSpan {
         this.currentMessage = message;
         this.currentStart = start;
         this.currentEnd = end;
+        this.isOut = out;
     }
 
     public void copyToClipboard() {

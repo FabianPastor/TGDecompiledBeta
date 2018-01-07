@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.view.TextureView;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.ExoPlayer.EventListener;
@@ -386,6 +387,9 @@ public class VideoPlayer implements EventListener, VideoListener {
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         maybeReportPlayerState();
         if (!this.videoPlayerReady && playbackState == 3) {
+            if (!MediaController.getInstance().isCurrentPlayer(this)) {
+                MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
+            }
             this.videoPlayerReady = true;
             checkPlayersReady();
         }

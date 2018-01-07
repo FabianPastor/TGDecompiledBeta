@@ -229,7 +229,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         int a;
         if (start) {
             try {
-                Integer type = (Integer) MessagesController.getInstance(this.currentAccount).printingStringsTypes.get(Long.valueOf(this.parentFragment.getDialogId()));
+                Integer type = (Integer) MessagesController.getInstance(this.currentAccount).printingStringsTypes.get(this.parentFragment.getDialogId());
                 this.subtitleTextView.setLeftDrawable(this.statusDrawables[type.intValue()]);
                 for (a = 0; a < this.statusDrawables.length; a++) {
                     if (a == type.intValue()) {
@@ -256,7 +256,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             if (!UserObject.isUserSelf(user)) {
                 CharSequence newSubtitle;
                 Chat chat = this.parentFragment.getCurrentChat();
-                CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(Long.valueOf(this.parentFragment.getDialogId()));
+                CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentAccount).printingStrings.get(this.parentFragment.getDialogId());
                 if (printString != null) {
                     printString = TextUtils.replace(printString, new String[]{"..."}, new String[]{TtmlNode.ANONYMOUS_REGION_ID});
                 }

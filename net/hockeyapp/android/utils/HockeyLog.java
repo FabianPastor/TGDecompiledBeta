@@ -23,6 +23,17 @@ public class HockeyLog {
         }
     }
 
+    public static void debug(String message, Throwable throwable) {
+        debug(null, message, throwable);
+    }
+
+    public static void debug(String tag, String message, Throwable throwable) {
+        tag = sanitizeTag(tag);
+        if (sLogLevel <= 3) {
+            Log.d(tag, message, throwable);
+        }
+    }
+
     public static void warn(String message) {
         warn(null, message);
     }

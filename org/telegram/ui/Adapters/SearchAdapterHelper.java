@@ -1,5 +1,6 @@
 package org.telegram.ui.Adapters;
 
+import android.util.SparseArray;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,7 +39,7 @@ public class SearchAdapterHelper {
     private int currentAccount = UserConfig.selectedAccount;
     private SearchAdapterHelperDelegate delegate;
     private ArrayList<TLObject> globalSearch = new ArrayList();
-    private HashMap<Integer, TLObject> globalSearchMap = new HashMap();
+    private SparseArray<TLObject> globalSearchMap = new SparseArray();
     private ArrayList<ChannelParticipant> groupSearch = new ArrayList();
     private ArrayList<ChannelParticipant> groupSearch2 = new ArrayList();
     private ArrayList<HashtagObject> hashtags;
@@ -192,15 +193,15 @@ public class SearchAdapterHelper {
                                 MessagesController.getInstance(SearchAdapterHelper.this.currentAccount).putChats(res.chats, false);
                                 MessagesController.getInstance(SearchAdapterHelper.this.currentAccount).putUsers(res.users, false);
                                 MessagesStorage.getInstance(SearchAdapterHelper.this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
-                                HashMap<Integer, Chat> chatsMap = new HashMap();
-                                HashMap<Integer, User> usersMap = new HashMap();
+                                SparseArray<Chat> chatsMap = new SparseArray();
+                                SparseArray<User> usersMap = new SparseArray();
                                 for (a = 0; a < res.chats.size(); a++) {
                                     chat = (Chat) res.chats.get(a);
-                                    chatsMap.put(Integer.valueOf(chat.id), chat);
+                                    chatsMap.put(chat.id, chat);
                                 }
                                 for (a = 0; a < res.users.size(); a++) {
                                     user = (User) res.users.get(a);
-                                    usersMap.put(Integer.valueOf(user.id), user);
+                                    usersMap.put(user.id, user);
                                 }
                                 for (int b = 0; b < 2; b++) {
                                     ArrayList<Peer> arrayList;
@@ -211,18 +212,18 @@ public class SearchAdapterHelper {
                                             user = null;
                                             chat = null;
                                             if (peer.user_id != 0) {
-                                                user = (User) usersMap.get(Integer.valueOf(peer.user_id));
+                                                user = (User) usersMap.get(peer.user_id);
                                             } else if (peer.chat_id != 0) {
-                                                chat = (Chat) chatsMap.get(Integer.valueOf(peer.chat_id));
+                                                chat = (Chat) chatsMap.get(peer.chat_id);
                                             } else if (peer.channel_id != 0) {
-                                                chat = (Chat) chatsMap.get(Integer.valueOf(peer.channel_id));
+                                                chat = (Chat) chatsMap.get(peer.channel_id);
                                             }
                                             if (chat == null) {
                                                 SearchAdapterHelper.this.globalSearch.add(user);
-                                                SearchAdapterHelper.this.globalSearchMap.put(Integer.valueOf(user.id), user);
+                                                SearchAdapterHelper.this.globalSearchMap.put(user.id, user);
                                             } else if (!z) {
                                                 SearchAdapterHelper.this.globalSearch.add(chat);
-                                                SearchAdapterHelper.this.globalSearchMap.put(Integer.valueOf(-chat.id), chat);
+                                                SearchAdapterHelper.this.globalSearchMap.put(-chat.id, chat);
                                             }
                                         }
                                     } else if (SearchAdapterHelper.this.allResultsAreGlobal) {
@@ -232,20 +233,20 @@ public class SearchAdapterHelper {
                                             user = null;
                                             chat = null;
                                             if (peer.user_id != 0) {
-                                                user = (User) usersMap.get(Integer.valueOf(peer.user_id));
+                                                user = (User) usersMap.get(peer.user_id);
                                             } else if (peer.chat_id != 0) {
-                                                chat = (Chat) chatsMap.get(Integer.valueOf(peer.chat_id));
+                                                chat = (Chat) chatsMap.get(peer.chat_id);
                                             } else if (peer.channel_id != 0) {
-                                                chat = (Chat) chatsMap.get(Integer.valueOf(peer.channel_id));
+                                                chat = (Chat) chatsMap.get(peer.channel_id);
                                             }
                                             if (chat == null) {
                                                 if (!z) {
                                                     SearchAdapterHelper.this.globalSearch.add(chat);
-                                                    SearchAdapterHelper.this.globalSearchMap.put(Integer.valueOf(-chat.id), chat);
+                                                    SearchAdapterHelper.this.globalSearchMap.put(-chat.id, chat);
                                                 }
                                             } else if (user != null && ((z2 || !user.bot) && (z3 || !user.self))) {
                                                 SearchAdapterHelper.this.globalSearch.add(user);
-                                                SearchAdapterHelper.this.globalSearchMap.put(Integer.valueOf(user.id), user);
+                                                SearchAdapterHelper.this.globalSearchMap.put(user.id, user);
                                             }
                                         }
                                     }
@@ -256,18 +257,18 @@ public class SearchAdapterHelper {
                                         user = null;
                                         chat = null;
                                         if (peer.user_id != 0) {
-                                            user = (User) usersMap.get(Integer.valueOf(peer.user_id));
+                                            user = (User) usersMap.get(peer.user_id);
                                         } else if (peer.chat_id != 0) {
-                                            chat = (Chat) chatsMap.get(Integer.valueOf(peer.chat_id));
+                                            chat = (Chat) chatsMap.get(peer.chat_id);
                                         } else if (peer.channel_id != 0) {
-                                            chat = (Chat) chatsMap.get(Integer.valueOf(peer.channel_id));
+                                            chat = (Chat) chatsMap.get(peer.channel_id);
                                         }
                                         if (chat != null) {
                                             SearchAdapterHelper.this.localServerSearch.add(chat);
-                                            SearchAdapterHelper.this.globalSearchMap.put(Integer.valueOf(-chat.id), chat);
+                                            SearchAdapterHelper.this.globalSearchMap.put(-chat.id, chat);
                                         } else if (user != null) {
                                             SearchAdapterHelper.this.localServerSearch.add(user);
-                                            SearchAdapterHelper.this.globalSearchMap.put(Integer.valueOf(user.id), user);
+                                            SearchAdapterHelper.this.globalSearchMap.put(user.id, user);
                                         }
                                     }
                                 }
@@ -339,23 +340,23 @@ public class SearchAdapterHelper {
 
     public void mergeResults(ArrayList<TLObject> localResults) {
         this.localSearchResults = localResults;
-        if (!this.globalSearchMap.isEmpty() && localResults != null) {
+        if (this.globalSearchMap.size() != 0 && localResults != null) {
             int count = localResults.size();
             for (int a = 0; a < count; a++) {
                 TLObject obj = (TLObject) localResults.get(a);
                 if (obj instanceof User) {
-                    User u = (User) this.globalSearchMap.get(Integer.valueOf(((User) obj).id));
+                    User u = (User) this.globalSearchMap.get(((User) obj).id);
                     if (u != null) {
                         this.globalSearch.remove(u);
                         this.localServerSearch.remove(u);
-                        this.globalSearchMap.remove(Integer.valueOf(u.id));
+                        this.globalSearchMap.remove(u.id);
                     }
                 } else if (obj instanceof Chat) {
-                    Chat c = (Chat) this.globalSearchMap.get(Integer.valueOf(-((Chat) obj).id));
+                    Chat c = (Chat) this.globalSearchMap.get(-((Chat) obj).id);
                     if (c != null) {
                         this.globalSearch.remove(c);
                         this.localServerSearch.remove(c);
-                        this.globalSearchMap.remove(Integer.valueOf(-c.id));
+                        this.globalSearchMap.remove(-c.id);
                     }
                 }
             }

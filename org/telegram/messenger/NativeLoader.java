@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
@@ -36,6 +37,7 @@ public class NativeLoader {
         return file.isDirectory() ? file : null;
     }
 
+    @SuppressLint({"UnsafeDynamicallyLoadedCode", "SetWorldReadable"})
     private static boolean loadFromZip(Context context, File destDir, File destLocalFile, String folder) {
         Throwable e;
         Throwable th;
@@ -72,7 +74,6 @@ public class NativeLoader {
                 destLocalFile.setWritable(true);
                 try {
                     System.load(destLocalFile.getAbsolutePath());
-                    init(Constants.FILES_PATH, BuildVars.DEBUG_VERSION);
                     nativeLoaded = true;
                 } catch (Throwable e22) {
                     FileLog.e(e22);
@@ -157,6 +158,7 @@ public class NativeLoader {
 
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
+    @SuppressLint({"UnsafeDynamicallyLoadedCode"})
     public static synchronized void initNativeLibs(Context context) {
         synchronized (NativeLoader.class) {
             if (!nativeLoaded) {
@@ -173,7 +175,9 @@ public class NativeLoader {
                         folder = "mips";
                     } else {
                         folder = "armeabi";
-                        FileLog.e("Unsupported arch: " + Build.CPU_ABI);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("Unsupported arch: " + Build.CPU_ABI);
+                        }
                     }
                     try {
                         String javaArch = System.getProperty("os.arch");
@@ -184,9 +188,10 @@ public class NativeLoader {
                         if (destFile != null) {
                             File destFile2 = new File(destFile, LIB_SO_NAME);
                             if (destFile2.exists()) {
-                                FileLog.d("load normal lib");
+                                if (BuildVars.LOGS_ENABLED) {
+                                    FileLog.d("load normal lib");
+                                }
                                 System.loadLibrary(LIB_NAME);
-                                init(Constants.FILES_PATH, BuildVars.DEBUG_VERSION);
                                 nativeLoaded = true;
                             }
                             destFile = destFile2;
@@ -205,21 +210,23 @@ public class NativeLoader {
                 File destLocalFile = new File(destDir, LOCALE_LIB_SO_NAME);
                 if (destLocalFile.exists()) {
                     try {
-                        FileLog.d("Load local lib");
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("Load local lib");
+                        }
                         System.load(destLocalFile.getAbsolutePath());
-                        init(Constants.FILES_PATH, BuildVars.DEBUG_VERSION);
                         nativeLoaded = true;
                     } catch (Throwable e222) {
                         FileLog.e(e222);
                         destLocalFile.delete();
                     }
                 }
-                FileLog.e("Library not found, arch = " + folder);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("Library not found, arch = " + folder);
+                }
             }
         }
         try {
             System.loadLibrary(LIB_NAME);
-            init(Constants.FILES_PATH, BuildVars.DEBUG_VERSION);
             nativeLoaded = true;
         } catch (Throwable e2222) {
             FileLog.e(e2222);

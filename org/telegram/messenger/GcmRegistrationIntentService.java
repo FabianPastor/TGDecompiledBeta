@@ -13,7 +13,9 @@ public class GcmRegistrationIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         try {
             final String token = InstanceID.getInstance(this).getToken(getString(R.string.gcm_defaultSenderId), "GCM", null);
-            FileLog.d("GCM Registration Token: " + token);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("GCM Registration Token: " + token);
+            }
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     ApplicationLoader.postInitApplication();

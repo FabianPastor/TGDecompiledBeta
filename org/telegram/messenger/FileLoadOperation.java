@@ -1,10 +1,10 @@
 package org.telegram.messenger;
 
+import android.util.SparseArray;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Scanner;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
@@ -43,7 +43,7 @@ public class FileLoadOperation {
     private static final int downloadChunkSize = 32768;
     private static final int downloadChunkSizeBig = 131072;
     private static final int maxDownloadRequests = 4;
-    private static final int maxDownloadRequestsBig = 2;
+    private static final int maxDownloadRequestsBig = 4;
     private static final int stateDownloading = 1;
     private static final int stateFailed = 2;
     private static final int stateFinished = 3;
@@ -54,7 +54,7 @@ public class FileLoadOperation {
     private File cacheIvTemp;
     private byte[] cdnCheckBytes;
     private int cdnDatacenterId;
-    private HashMap<Integer, TL_cdnFileHash> cdnHashes;
+    private SparseArray<TL_cdnFileHash> cdnHashes;
     private byte[] cdnIv;
     private byte[] cdnKey;
     private byte[] cdnToken;
@@ -368,7 +368,7 @@ public class FileLoadOperation {
             }
         }
         this.currentDownloadChunkSize = this.totalBytesCount >= 1048576 ? 131072 : 32768;
-        this.currentMaxDownloadRequests = this.totalBytesCount >= 1048576 ? 2 : 4;
+        this.currentMaxDownloadRequests = this.totalBytesCount >= 1048576 ? 4 : 4;
         this.requestInfos = new ArrayList(this.currentMaxDownloadRequests);
         this.delayedRequestInfos = new ArrayList(this.currentMaxDownloadRequests - 1);
         this.state = 1;
@@ -424,7 +424,7 @@ public class FileLoadOperation {
                     this.nextDownloadOffset = i;
                 }
             }
-            if (BuildVars.DEBUG_VERSION) {
+            if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("start loading file to temp = " + this.cacheFileTemp + " final = " + this.cacheFileFinal);
             }
             if (fileNameIv != null) {
@@ -554,7 +554,7 @@ public class FileLoadOperation {
                 this.cacheIvTemp = null;
             }
             if (!(this.cacheFileTemp == null || this.cacheFileTemp.renameTo(this.cacheFileFinal))) {
-                if (BuildVars.DEBUG_VERSION) {
+                if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("unable to rename temp = " + this.cacheFileTemp + " to final = " + this.cacheFileFinal + " retry = " + this.renameRetryCount);
                 }
                 this.renameRetryCount++;
@@ -573,8 +573,8 @@ public class FileLoadOperation {
                 }
                 this.cacheFileFinal = this.cacheFileTemp;
             }
-            if (BuildVars.DEBUG_VERSION) {
-                FileLog.e("finished downloading file to " + this.cacheFileFinal);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("finished downloading file to " + this.cacheFileFinal);
             }
             this.delegate.didFinishLoadingFile(this, this.cacheFileFinal);
             if (!increment) {
@@ -620,11 +620,11 @@ public class FileLoadOperation {
                     Vector vector = (Vector) response;
                     if (!vector.objects.isEmpty()) {
                         if (FileLoadOperation.this.cdnHashes == null) {
-                            FileLoadOperation.this.cdnHashes = new HashMap();
+                            FileLoadOperation.this.cdnHashes = new SparseArray();
                         }
                         for (a = 0; a < vector.objects.size(); a++) {
                             TL_cdnFileHash hash = (TL_cdnFileHash) vector.objects.get(a);
-                            FileLoadOperation.this.cdnHashes.put(Integer.valueOf(hash.offset), hash);
+                            FileLoadOperation.this.cdnHashes.put(hash.offset, hash);
                         }
                     }
                     for (a = 0; a < FileLoadOperation.this.delayedRequestInfos.size(); a++) {
@@ -688,7 +688,7 @@ public class FileLoadOperation {
                 if (this.isCdn) {
                     cdnCheckPart = (this.downloadedBytes + currentBytesSize) / 131072;
                     fileOffset = (cdnCheckPart - (this.lastCheckedCdnPart != cdnCheckPart ? 1 : 0)) * 131072;
-                    if ((this.cdnHashes != null ? (TL_cdnFileHash) this.cdnHashes.get(Integer.valueOf(fileOffset)) : null) == null) {
+                    if ((this.cdnHashes != null ? (TL_cdnFileHash) this.cdnHashes.get(fileOffset) : null) == null) {
                         delayRequestInfo(requestInfo);
                         requestFileOffsets(fileOffset);
                         return true;
@@ -725,7 +725,7 @@ public class FileLoadOperation {
                         int count;
                         this.fileOutputStream.getFD().sync();
                         fileOffset = (cdnCheckPart - (this.lastCheckedCdnPart != cdnCheckPart ? 1 : 0)) * 131072;
-                        TL_cdnFileHash hash = (TL_cdnFileHash) this.cdnHashes.get(Integer.valueOf(fileOffset));
+                        TL_cdnFileHash hash = (TL_cdnFileHash) this.cdnHashes.get(fileOffset);
                         if (this.fileReadStream == null) {
                             this.cdnCheckBytes = new byte[131072];
                             this.fileReadStream = new RandomAccessFile(this.cacheFileTemp, "r");
@@ -742,10 +742,12 @@ public class FileLoadOperation {
                         if (Arrays.equals(Utilities.computeSHA256(this.cdnCheckBytes, 0, count), hash.hash)) {
                             this.lastCheckedCdnPart = cdnCheckPart;
                         } else {
-                            if (this.location != null) {
-                                FileLog.e("invalid cdn hash " + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
-                            } else if (this.webLocation != null) {
-                                FileLog.e("invalid cdn hash  " + this.webLocation + " id = " + this.webLocation.url + " access_hash = " + this.webLocation.access_hash);
+                            if (BuildVars.LOGS_ENABLED) {
+                                if (this.location != null) {
+                                    FileLog.e("invalid cdn hash " + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
+                                } else if (this.webLocation != null) {
+                                    FileLog.e("invalid cdn hash  " + this.webLocation + " id = " + this.webLocation.url + " access_hash = " + this.webLocation.access_hash);
+                                }
                             }
                             onFail(false, 0);
                             this.cacheFileTemp.delete();
@@ -825,10 +827,12 @@ public class FileLoadOperation {
         } else if (error.text.contains("RETRY_LIMIT")) {
             onFail(false, 2);
         } else {
-            if (this.location != null) {
-                FileLog.e(TtmlNode.ANONYMOUS_REGION_ID + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
-            } else if (this.webLocation != null) {
-                FileLog.e(TtmlNode.ANONYMOUS_REGION_ID + this.webLocation + " id = " + this.webLocation.url + " access_hash = " + this.webLocation.access_hash);
+            if (BuildVars.LOGS_ENABLED) {
+                if (this.location != null) {
+                    FileLog.e(TtmlNode.ANONYMOUS_REGION_ID + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
+                } else if (this.webLocation != null) {
+                    FileLog.e(TtmlNode.ANONYMOUS_REGION_ID + this.webLocation + " id = " + this.webLocation.url + " access_hash = " + this.webLocation.access_hash);
+                }
             }
             onFail(false, 0);
         }
@@ -939,11 +943,11 @@ public class FileLoadOperation {
                                 TL_upload_fileCdnRedirect res = (TL_upload_fileCdnRedirect) response;
                                 if (!res.cdn_file_hashes.isEmpty()) {
                                     if (FileLoadOperation.this.cdnHashes == null) {
-                                        FileLoadOperation.this.cdnHashes = new HashMap();
+                                        FileLoadOperation.this.cdnHashes = new SparseArray();
                                     }
                                     for (int a = 0; a < res.cdn_file_hashes.size(); a++) {
                                         TL_cdnFileHash hash = (TL_cdnFileHash) res.cdn_file_hashes.get(a);
-                                        FileLoadOperation.this.cdnHashes.put(Integer.valueOf(hash.offset), hash);
+                                        FileLoadOperation.this.cdnHashes.put(hash.offset, hash);
                                     }
                                 }
                                 if (res.encryption_iv == null || res.encryption_key == null || res.encryption_iv.length != 16 || res.encryption_key.length != 32) {
@@ -994,11 +998,11 @@ public class FileLoadOperation {
                                             Vector vector = (Vector) response;
                                             if (!vector.objects.isEmpty()) {
                                                 if (FileLoadOperation.this.cdnHashes == null) {
-                                                    FileLoadOperation.this.cdnHashes = new HashMap();
+                                                    FileLoadOperation.this.cdnHashes = new SparseArray();
                                                 }
                                                 for (int a = 0; a < vector.objects.size(); a++) {
                                                     TL_cdnFileHash hash = (TL_cdnFileHash) vector.objects.get(a);
-                                                    FileLoadOperation.this.cdnHashes.put(Integer.valueOf(hash.offset), hash);
+                                                    FileLoadOperation.this.cdnHashes.put(hash.offset, hash);
                                                 }
                                             }
                                             FileLoadOperation.this.startDownloadRequest();

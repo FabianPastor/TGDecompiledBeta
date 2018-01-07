@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import android.util.SparseArray;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class FileLoader {
     public static final int MEDIA_DIR_IMAGE = 0;
     public static final int MEDIA_DIR_VIDEO = 2;
     private static volatile DispatchQueue fileLoaderQueue = new DispatchQueue("fileUploadQueue");
-    private static HashMap<Integer, File> mediaDirs = null;
+    private static SparseArray<File> mediaDirs = null;
     private LinkedList<FileLoadOperation> audioLoadOperationQueue = new LinkedList();
     private int currentAccount;
     private int currentAudioLoadOperationsCount = 0;
@@ -98,18 +99,18 @@ public class FileLoader {
         this.currentAccount = instance;
     }
 
-    public static void setMediaDirs(HashMap<Integer, File> dirs) {
+    public static void setMediaDirs(SparseArray<File> dirs) {
         mediaDirs = dirs;
     }
 
     public static File checkDirectory(int type) {
-        return (File) mediaDirs.get(Integer.valueOf(type));
+        return (File) mediaDirs.get(type);
     }
 
     public static File getDirectory(int type) {
-        File dir = (File) mediaDirs.get(Integer.valueOf(type));
+        File dir = (File) mediaDirs.get(type);
         if (dir == null && type != 4) {
-            dir = (File) mediaDirs.get(Integer.valueOf(4));
+            dir = (File) mediaDirs.get(4);
         }
         try {
             if (!dir.isDirectory()) {

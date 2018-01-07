@@ -10,6 +10,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -19,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -76,7 +76,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     private WallpaperUpdater updater;
     private ArrayList<WallPaper> wallPapers = new ArrayList();
     private File wallpaperFile;
-    private HashMap<Integer, WallPaper> wallpappersByIds = new HashMap();
+    private SparseArray<WallPaper> wallpappersByIds = new SparseArray();
 
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
@@ -182,7 +182,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                     WallpapersActivity.this.finishFragment();
                 } else if (id == 1) {
                     boolean done;
-                    WallPaper wallPaper = (WallPaper) WallpapersActivity.this.wallpappersByIds.get(Integer.valueOf(WallpapersActivity.this.selectedBackground));
+                    WallPaper wallPaper = (WallPaper) WallpapersActivity.this.wallpappersByIds.get(WallpapersActivity.this.selectedBackground);
                     if (wallPaper != null && wallPaper.id != 1000001 && (wallPaper instanceof TL_wallPaper)) {
                         int width = AndroidUtilities.displaySize.x;
                         int height = AndroidUtilities.displaySize.y;
@@ -301,7 +301,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
 
     private void processSelectedBackground() {
         if (!Theme.hasWallpaperFromTheme() || this.overrideThemeWallpaper) {
-            WallPaper wallPaper = (WallPaper) this.wallpappersByIds.get(Integer.valueOf(this.selectedBackground));
+            WallPaper wallPaper = (WallPaper) this.wallpappersByIds.get(this.selectedBackground);
             if (this.selectedBackground == -1 || this.selectedBackground == 1000001 || wallPaper == null || !(wallPaper instanceof TL_wallPaper)) {
                 if (this.loadingFile != null) {
                     FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.loadingSize);
@@ -414,7 +414,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
             Iterator it = this.wallPapers.iterator();
             while (it.hasNext()) {
                 WallPaper wallPaper = (WallPaper) it.next();
-                this.wallpappersByIds.put(Integer.valueOf(wallPaper.id), wallPaper);
+                this.wallpappersByIds.put(wallPaper.id, wallPaper);
             }
             if (this.listAdapter != null) {
                 this.listAdapter.notifyDataSetChanged();
@@ -439,7 +439,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                             while (it.hasNext()) {
                                 Object obj = it.next();
                                 WallpapersActivity.this.wallPapers.add((WallPaper) obj);
-                                WallpapersActivity.this.wallpappersByIds.put(Integer.valueOf(((WallPaper) obj).id), (WallPaper) obj);
+                                WallpapersActivity.this.wallpappersByIds.put(((WallPaper) obj).id, (WallPaper) obj);
                             }
                             if (WallpapersActivity.this.listAdapter != null) {
                                 WallpapersActivity.this.listAdapter.notifyDataSetChanged();

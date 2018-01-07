@@ -44,6 +44,8 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.text.style.MetricAffectingSpan;
+import android.util.LongSparseArray;
+import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -80,7 +82,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DownloadController;
@@ -232,41 +233,41 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private static final int TEXT_FLAG_UNDERLINE = 16;
     private static final int TEXT_FLAG_URL = 8;
     private static TextPaint audioTimePaint = new TextPaint(1);
-    private static HashMap<Integer, TextPaint> authorTextPaints = new HashMap();
-    private static HashMap<Integer, TextPaint> captionTextPaints = new HashMap();
+    private static SparseArray<TextPaint> authorTextPaints = new SparseArray();
+    private static SparseArray<TextPaint> captionTextPaints = new SparseArray();
     private static TextPaint channelNamePaint = null;
     private static Paint colorPaint = null;
     private static DecelerateInterpolator decelerateInterpolator = null;
     private static Paint dividerPaint = null;
     private static Paint dotsPaint = null;
     private static TextPaint embedPostAuthorPaint = null;
-    private static HashMap<Integer, TextPaint> embedPostCaptionTextPaints = new HashMap();
+    private static SparseArray<TextPaint> embedPostCaptionTextPaints = new SparseArray();
     private static TextPaint embedPostDatePaint = null;
-    private static HashMap<Integer, TextPaint> embedPostTextPaints = new HashMap();
-    private static HashMap<Integer, TextPaint> embedTextPaints = new HashMap();
+    private static SparseArray<TextPaint> embedPostTextPaints = new SparseArray();
+    private static SparseArray<TextPaint> embedTextPaints = new SparseArray();
     private static TextPaint errorTextPaint = null;
-    private static HashMap<Integer, TextPaint> footerTextPaints = new HashMap();
+    private static SparseArray<TextPaint> footerTextPaints = new SparseArray();
     private static final int gallery_menu_openin = 3;
     private static final int gallery_menu_save = 1;
     private static final int gallery_menu_share = 2;
-    private static HashMap<Integer, TextPaint> headerTextPaints = new HashMap();
-    private static HashMap<Integer, TextPaint> listTextPaints = new HashMap();
+    private static SparseArray<TextPaint> headerTextPaints = new SparseArray();
+    private static SparseArray<TextPaint> listTextPaints = new SparseArray();
     private static TextPaint listTextPointerPaint;
-    private static HashMap<Integer, TextPaint> paragraphTextPaints = new HashMap();
+    private static SparseArray<TextPaint> paragraphTextPaints = new SparseArray();
     private static Paint preformattedBackgroundPaint;
-    private static HashMap<Integer, TextPaint> preformattedTextPaints = new HashMap();
+    private static SparseArray<TextPaint> preformattedTextPaints = new SparseArray();
     private static Drawable[] progressDrawables;
     private static Paint progressPaint;
     private static Paint quoteLinePaint;
-    private static HashMap<Integer, TextPaint> quoteTextPaints = new HashMap();
+    private static SparseArray<TextPaint> quoteTextPaints = new SparseArray();
     private static Paint selectorPaint;
-    private static HashMap<Integer, TextPaint> slideshowTextPaints = new HashMap();
-    private static HashMap<Integer, TextPaint> subheaderTextPaints = new HashMap();
-    private static HashMap<Integer, TextPaint> subquoteTextPaints = new HashMap();
-    private static HashMap<Integer, TextPaint> subtitleTextPaints = new HashMap();
-    private static HashMap<Integer, TextPaint> titleTextPaints = new HashMap();
+    private static SparseArray<TextPaint> slideshowTextPaints = new SparseArray();
+    private static SparseArray<TextPaint> subheaderTextPaints = new SparseArray();
+    private static SparseArray<TextPaint> subquoteTextPaints = new SparseArray();
+    private static SparseArray<TextPaint> subtitleTextPaints = new SparseArray();
+    private static SparseArray<TextPaint> titleTextPaints = new SparseArray();
     private static Paint urlPaint;
-    private static HashMap<Integer, TextPaint> videoTextPaints = new HashMap();
+    private static SparseArray<TextPaint> videoTextPaints = new SparseArray();
     private ActionBar actionBar;
     private WebpageAdapter adapter;
     private HashMap<String, Integer> anchors = new HashMap();
@@ -4221,7 +4222,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             messageMedia.flags |= 3;
                             message.media.document = getDocumentWithId(block.audio_id);
                             message.flags |= 768;
-                            MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, message, null, false);
+                            MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, message, false);
                             this.audioMessages.add(messageObject);
                             this.audioBlocks.put((TL_pageBlockAudio) block, messageObject);
                         }
@@ -4492,7 +4493,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private TextPaint getTextPaint(RichText parentRichText, RichText richText, PageBlock parentBlock) {
         int additionalSize;
         int flags = getTextFlags(richText);
-        HashMap<Integer, TextPaint> currentMap = null;
+        SparseArray<TextPaint> currentMap = null;
         int textSize = AndroidUtilities.dp(14.0f);
         int textColor = -65536;
         if (this.selectedFontSize == 0) {
@@ -4589,7 +4590,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             errorTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
             return errorTextPaint;
         }
-        TextPaint paint = (TextPaint) currentMap.get(Integer.valueOf(flags));
+        TextPaint paint = (TextPaint) currentMap.get(flags);
         if (paint == null) {
             paint = new TextPaint(1);
             if ((flags & 4) != 0) {
@@ -4622,7 +4623,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 textColor = getTextColor();
             }
             paint.setColor(textColor);
-            currentMap.put(Integer.valueOf(flags), paint);
+            currentMap.put(flags, paint);
         }
         paint.setTextSize((float) (textSize + additionalSize));
         return paint;
@@ -4995,60 +4996,59 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     private void updatePaintFonts() {
+        int a;
         ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putInt("font_type", this.selectedFont).commit();
         Typeface typefaceNormal = this.selectedFont == 0 ? Typeface.DEFAULT : Typeface.SERIF;
         Typeface typefaceItalic = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/ritalic.ttf") : Typeface.create(C.SERIF_NAME, 2);
         Typeface typefaceBold = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/rmedium.ttf") : Typeface.create(C.SERIF_NAME, 1);
         Typeface typefaceBoldItalic = this.selectedFont == 0 ? AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf") : Typeface.create(C.SERIF_NAME, 3);
-        for (Entry<Integer, TextPaint> entry : quoteTextPaints.entrySet()) {
-            updateFontEntry(entry, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < quoteTextPaints.size(); a++) {
+            updateFontEntry(quoteTextPaints.keyAt(a), (TextPaint) quoteTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entry2 : preformattedTextPaints.entrySet()) {
-            updateFontEntry(entry2, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < preformattedTextPaints.size(); a++) {
+            updateFontEntry(preformattedTextPaints.keyAt(a), (TextPaint) preformattedTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entry22 : paragraphTextPaints.entrySet()) {
-            updateFontEntry(entry22, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < paragraphTextPaints.size(); a++) {
+            updateFontEntry(paragraphTextPaints.keyAt(a), (TextPaint) paragraphTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entry222 : listTextPaints.entrySet()) {
-            updateFontEntry(entry222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < listTextPaints.size(); a++) {
+            updateFontEntry(listTextPaints.keyAt(a), (TextPaint) listTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entry2222 : embedPostTextPaints.entrySet()) {
-            updateFontEntry(entry2222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < embedPostTextPaints.size(); a++) {
+            updateFontEntry(embedPostTextPaints.keyAt(a), (TextPaint) embedPostTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entry22222 : videoTextPaints.entrySet()) {
-            updateFontEntry(entry22222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < videoTextPaints.size(); a++) {
+            updateFontEntry(videoTextPaints.keyAt(a), (TextPaint) videoTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entry222222 : captionTextPaints.entrySet()) {
-            updateFontEntry(entry222222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < captionTextPaints.size(); a++) {
+            updateFontEntry(captionTextPaints.keyAt(a), (TextPaint) captionTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entry2222222 : authorTextPaints.entrySet()) {
-            updateFontEntry(entry2222222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < authorTextPaints.size(); a++) {
+            updateFontEntry(authorTextPaints.keyAt(a), (TextPaint) captionTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entry22222222 : footerTextPaints.entrySet()) {
-            updateFontEntry(entry22222222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < footerTextPaints.size(); a++) {
+            updateFontEntry(footerTextPaints.keyAt(a), (TextPaint) footerTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entry222222222 : subquoteTextPaints.entrySet()) {
-            updateFontEntry(entry222222222, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < subquoteTextPaints.size(); a++) {
+            updateFontEntry(subquoteTextPaints.keyAt(a), (TextPaint) subquoteTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entryNUM : embedPostCaptionTextPaints.entrySet()) {
-            updateFontEntry(entryNUM, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < embedPostCaptionTextPaints.size(); a++) {
+            updateFontEntry(embedPostCaptionTextPaints.keyAt(a), (TextPaint) embedPostCaptionTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entry2NUM : embedTextPaints.entrySet()) {
-            updateFontEntry(entry2NUM, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < embedTextPaints.size(); a++) {
+            updateFontEntry(embedTextPaints.keyAt(a), (TextPaint) embedTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
-        for (Entry<Integer, TextPaint> entry22NUM : slideshowTextPaints.entrySet()) {
-            updateFontEntry(entry22NUM, typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
+        for (a = 0; a < slideshowTextPaints.size(); a++) {
+            updateFontEntry(slideshowTextPaints.keyAt(a), (TextPaint) slideshowTextPaints.valueAt(a), typefaceNormal, typefaceBoldItalic, typefaceBold, typefaceItalic);
         }
     }
 
-    private void updateFontEntry(Entry<Integer, TextPaint> entry, Typeface typefaceNormal, Typeface typefaceBoldItalic, Typeface typefaceBold, Typeface typefaceItalic) {
-        Integer flags = (Integer) entry.getKey();
-        TextPaint paint = (TextPaint) entry.getValue();
-        if ((flags.intValue() & 1) != 0 && (flags.intValue() & 2) != 0) {
+    private void updateFontEntry(int flags, TextPaint paint, Typeface typefaceNormal, Typeface typefaceBoldItalic, Typeface typefaceBold, Typeface typefaceItalic) {
+        if ((flags & 1) != 0 && (flags & 2) != 0) {
             paint.setTypeface(typefaceBoldItalic);
-        } else if ((flags.intValue() & 1) != 0) {
+        } else if ((flags & 1) != 0) {
             paint.setTypeface(typefaceBold);
-        } else if ((flags.intValue() & 2) != 0) {
+        } else if ((flags & 2) != 0) {
             paint.setTypeface(typefaceItalic);
         } else {
             paint.setTypeface(typefaceNormal);
@@ -5068,6 +5068,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     }
 
     private void updatePaintColors() {
+        int a;
         ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putInt("font_color", this.selectedColor).commit();
         int currentColor = getSelectedColor();
         if (currentColor == 0) {
@@ -5080,7 +5081,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.backgroundPaint.setColor(-15461356);
             this.listView.setGlowColor(-15461356);
         }
-        for (int a = 0; a < Theme.chat_ivStatesDrawable.length; a++) {
+        for (a = 0; a < Theme.chat_ivStatesDrawable.length; a++) {
             Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][0], getTextColor(), false);
             Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][0], getTextColor(), true);
             Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[a][1], getTextColor(), false);
@@ -5138,56 +5139,56 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 dividerPaint.setColor(-12303292);
             }
         }
-        for (Entry<Integer, TextPaint> entry : titleTextPaints.entrySet()) {
-            ((TextPaint) entry.getValue()).setColor(getTextColor());
+        for (a = 0; a < titleTextPaints.size(); a++) {
+            ((TextPaint) titleTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry2 : subtitleTextPaints.entrySet()) {
-            ((TextPaint) entry2.getValue()).setColor(getTextColor());
+        for (a = 0; a < subtitleTextPaints.size(); a++) {
+            ((TextPaint) subtitleTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry22 : headerTextPaints.entrySet()) {
-            ((TextPaint) entry22.getValue()).setColor(getTextColor());
+        for (a = 0; a < headerTextPaints.size(); a++) {
+            ((TextPaint) headerTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry222 : subheaderTextPaints.entrySet()) {
-            ((TextPaint) entry222.getValue()).setColor(getTextColor());
+        for (a = 0; a < subheaderTextPaints.size(); a++) {
+            ((TextPaint) subheaderTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry2222 : quoteTextPaints.entrySet()) {
-            ((TextPaint) entry2222.getValue()).setColor(getTextColor());
+        for (a = 0; a < quoteTextPaints.size(); a++) {
+            ((TextPaint) quoteTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry22222 : preformattedTextPaints.entrySet()) {
-            ((TextPaint) entry22222.getValue()).setColor(getTextColor());
+        for (a = 0; a < preformattedTextPaints.size(); a++) {
+            ((TextPaint) preformattedTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry222222 : paragraphTextPaints.entrySet()) {
-            ((TextPaint) entry222222.getValue()).setColor(getTextColor());
+        for (a = 0; a < paragraphTextPaints.size(); a++) {
+            ((TextPaint) paragraphTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry2222222 : listTextPaints.entrySet()) {
-            ((TextPaint) entry2222222.getValue()).setColor(getTextColor());
+        for (a = 0; a < listTextPaints.size(); a++) {
+            ((TextPaint) listTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry22222222 : embedPostTextPaints.entrySet()) {
-            ((TextPaint) entry22222222.getValue()).setColor(getTextColor());
+        for (a = 0; a < embedPostTextPaints.size(); a++) {
+            ((TextPaint) embedPostTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry222222222 : videoTextPaints.entrySet()) {
-            ((TextPaint) entry222222222.getValue()).setColor(getTextColor());
+        for (a = 0; a < videoTextPaints.size(); a++) {
+            ((TextPaint) videoTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entryNUM : captionTextPaints.entrySet()) {
-            ((TextPaint) entry2222222222.getValue()).setColor(getGrayTextColor());
+        for (a = 0; a < captionTextPaints.size(); a++) {
+            ((TextPaint) captionTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry2NUM : authorTextPaints.entrySet()) {
-            ((TextPaint) entry22222222222.getValue()).setColor(getGrayTextColor());
+        for (a = 0; a < authorTextPaints.size(); a++) {
+            ((TextPaint) authorTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry22NUM : footerTextPaints.entrySet()) {
-            ((TextPaint) entry222222222222.getValue()).setColor(getGrayTextColor());
+        for (a = 0; a < footerTextPaints.size(); a++) {
+            ((TextPaint) footerTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry222NUM : subquoteTextPaints.entrySet()) {
-            ((TextPaint) entry2222222222222.getValue()).setColor(getGrayTextColor());
+        for (a = 0; a < subquoteTextPaints.size(); a++) {
+            ((TextPaint) subquoteTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry2222NUM : embedPostCaptionTextPaints.entrySet()) {
-            ((TextPaint) entry22222222222222.getValue()).setColor(getGrayTextColor());
+        for (a = 0; a < embedPostCaptionTextPaints.size(); a++) {
+            ((TextPaint) embedPostCaptionTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry22222NUM : embedTextPaints.entrySet()) {
-            ((TextPaint) entry222222222222222.getValue()).setColor(getGrayTextColor());
+        for (a = 0; a < embedTextPaints.size(); a++) {
+            ((TextPaint) embedTextPaints.valueAt(a)).setColor(getTextColor());
         }
-        for (Entry<Integer, TextPaint> entry222222NUM : slideshowTextPaints.entrySet()) {
-            ((TextPaint) entry2222222222222222.getValue()).setColor(getGrayTextColor());
+        for (a = 0; a < slideshowTextPaints.size(); a++) {
+            ((TextPaint) slideshowTextPaints.valueAt(a)).setColor(getTextColor());
         }
     }
 
@@ -5920,8 +5921,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                                     }
                                 }
                             });
-                            HashMap<Long, WebPage> webpages = new HashMap();
-                            webpages.put(Long.valueOf(webPage.id), webPage);
+                            LongSparseArray<WebPage> webpages = new LongSparseArray(1);
+                            webpages.put(webPage.id, webPage);
                             MessagesStorage.getInstance(currentAccount).putWebPages(webpages);
                         }
                     }

@@ -18,6 +18,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils.TruncateAt;
 import android.text.method.LinkMovementMethod;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -31,7 +32,6 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
@@ -144,9 +144,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     private class GridAdapter extends SelectionAdapter {
-        private HashMap<Integer, Object> cache = new HashMap();
+        private SparseArray<Object> cache = new SparseArray();
         private Context context;
-        private HashMap<Integer, StickerSetCovered> positionsToSets = new HashMap();
+        private SparseArray<StickerSetCovered> positionsToSets = new SparseArray();
         private int stickersPerRow;
         private int stickersRowCount;
         private int totalItems;
@@ -163,7 +163,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             if (StickersAlert.this.stickerSetCovereds == null) {
                 return 0;
             }
-            Object object = this.cache.get(Integer.valueOf(position));
+            Object object = this.cache.get(position);
             if (object == null) {
                 return 1;
             }
@@ -201,13 +201,13 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             if (StickersAlert.this.stickerSetCovereds != null) {
                 switch (holder.getItemViewType()) {
                     case 0:
-                        ((StickerEmojiCell) holder.itemView).setSticker((Document) this.cache.get(Integer.valueOf(position)), false);
+                        ((StickerEmojiCell) holder.itemView).setSticker((Document) this.cache.get(position), false);
                         return;
                     case 1:
                         ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.dp(82.0f));
                         return;
                     case 2:
-                        holder.itemView.setStickerSet((StickerSetCovered) StickersAlert.this.stickerSetCovereds.get(((Integer) this.cache.get(Integer.valueOf(position))).intValue()), false);
+                        holder.itemView.setStickerSet((StickerSetCovered) StickersAlert.this.stickerSetCovereds.get(((Integer) this.cache.get(position)).intValue()), false);
                         return;
                     default:
                         return;
@@ -235,23 +235,23 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                         int count;
                         int b;
                         this.stickersRowCount = (int) (((double) this.stickersRowCount) + Math.ceil((double) (((float) StickersAlert.this.stickerSetCovereds.size()) / ((float) this.stickersPerRow))));
-                        this.positionsToSets.put(Integer.valueOf(this.totalItems), pack);
-                        HashMap hashMap = this.cache;
+                        this.positionsToSets.put(this.totalItems, pack);
+                        SparseArray sparseArray = this.cache;
                         int i2 = this.totalItems;
                         this.totalItems = i2 + 1;
-                        hashMap.put(Integer.valueOf(i2), Integer.valueOf(a));
+                        sparseArray.put(i2, Integer.valueOf(a));
                         int startRow = this.totalItems / this.stickersPerRow;
                         if (pack.covers.isEmpty()) {
                             count = 1;
-                            this.cache.put(Integer.valueOf(this.totalItems), pack.cover);
+                            this.cache.put(this.totalItems, pack.cover);
                         } else {
                             count = (int) Math.ceil((double) (((float) pack.covers.size()) / ((float) this.stickersPerRow)));
                             for (b = 0; b < pack.covers.size(); b++) {
-                                this.cache.put(Integer.valueOf(this.totalItems + b), pack.covers.get(b));
+                                this.cache.put(this.totalItems + b, pack.covers.get(b));
                             }
                         }
                         for (b = 0; b < this.stickersPerRow * count; b++) {
-                            this.positionsToSets.put(Integer.valueOf(this.totalItems + b), pack);
+                            this.positionsToSets.put(this.totalItems + b, pack);
                         }
                         this.totalItems += this.stickersPerRow * count;
                     }
@@ -470,7 +470,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         recyclerListView.setLayoutManager(gridLayoutManager);
         this.layoutManager.setSpanSizeLookup(new SpanSizeLookup() {
             public int getSpanSize(int position) {
-                if ((StickersAlert.this.stickerSetCovereds == null || !(StickersAlert.this.adapter.cache.get(Integer.valueOf(position)) instanceof Integer)) && position != StickersAlert.this.adapter.totalItems) {
+                if ((StickersAlert.this.stickerSetCovereds == null || !(StickersAlert.this.adapter.cache.get(position) instanceof Integer)) && position != StickersAlert.this.adapter.totalItems) {
                     return 1;
                 }
                 return StickersAlert.this.adapter.stickersPerRow;
@@ -506,7 +506,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.stickersOnItemClickListener = new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 if (StickersAlert.this.stickerSetCovereds != null) {
-                    StickerSetCovered pack = (StickerSetCovered) StickersAlert.this.adapter.positionsToSets.get(Integer.valueOf(position));
+                    StickerSetCovered pack = (StickerSetCovered) StickersAlert.this.adapter.positionsToSets.get(position);
                     if (pack != null) {
                         StickersAlert.this.dismiss();
                         TL_inputStickerSetID inputStickerSetID = new TL_inputStickerSetID();

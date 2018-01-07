@@ -27,7 +27,6 @@
         <item>@color/hockeyapp_text_white</item>
         <item>11</item>
         <item>@drawable/hockeyapp_btn_background</item>
-        <item>true</item>
     </style>
     <style name="HockeyApp.EditTextStyle">
         <item>15sp</item>

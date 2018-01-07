@@ -3,6 +3,7 @@ package org.telegram.ui.Adapters;
 import android.content.Context;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ public class SearchAdapter extends SelectionAdapter {
     private boolean allowChats;
     private boolean allowUsernameSearch;
     private int channelId;
-    private HashMap<Integer, ?> checkedMap;
-    private HashMap<Integer, User> ignoreUsers;
+    private SparseArray<?> checkedMap;
+    private SparseArray<User> ignoreUsers;
     private Context mContext;
     private boolean onlyMutual;
     private SearchAdapterHelper searchAdapterHelper;
@@ -46,7 +47,7 @@ public class SearchAdapter extends SelectionAdapter {
     private Timer searchTimer;
     private boolean useUserCell;
 
-    public SearchAdapter(Context context, HashMap<Integer, User> arg1, boolean usernameSearch, boolean mutual, boolean chats, boolean bots, int searchChannelId) {
+    public SearchAdapter(Context context, SparseArray<User> arg1, boolean usernameSearch, boolean mutual, boolean chats, boolean bots, int searchChannelId) {
         this.mContext = context;
         this.ignoreUsers = arg1;
         this.onlyMutual = mutual;
@@ -65,7 +66,7 @@ public class SearchAdapter extends SelectionAdapter {
         });
     }
 
-    public void setCheckedMap(HashMap<Integer, ?> map) {
+    public void setCheckedMap(SparseArray<?> map) {
         this.checkedMap = map;
     }
 
@@ -236,14 +237,10 @@ public class SearchAdapter extends SelectionAdapter {
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Throwable e;
         Object username;
-        UserCell userCell;
         if (holder.getItemViewType() == 0) {
             TLObject object = getItem(position);
             if (object != null) {
-                ProfileSearchCell profileSearchCell;
-                boolean z;
                 int id = 0;
                 String un = null;
                 if (object instanceof User) {
@@ -267,62 +264,43 @@ public class SearchAdapter extends SelectionAdapter {
                         foundUserName = foundUserName.substring(1);
                     }
                     try {
-                        CharSequence username3 = new SpannableStringBuilder(un);
-                        try {
-                            ((SpannableStringBuilder) username3).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
-                            username2 = username3;
-                        } catch (Exception e2) {
-                            e = e2;
-                            username2 = username3;
-                            username = un;
-                            FileLog.e(e);
-                            if (this.useUserCell) {
-                                profileSearchCell = holder.itemView;
-                                profileSearchCell.setData(object, null, name, username2, false, false);
-                                if (position == getItemCount() + -1) {
-                                }
-                                profileSearchCell.useSeparator = z;
+                        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+                        spannableStringBuilder.append("@");
+                        spannableStringBuilder.append(un);
+                        int index = un.toLowerCase().indexOf(foundUserName);
+                        if (index != -1) {
+                            int len = foundUserName.length();
+                            if (index == 0) {
+                                len++;
+                            } else {
+                                index++;
                             }
-                            userCell = holder.itemView;
-                            userCell.setData(object, name, username2, 0);
-                            if (this.checkedMap == null) {
-                                userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(id)), false);
-                                return;
-                            }
-                            return;
+                            spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, index + len, 33);
                         }
-                    } catch (Exception e3) {
-                        e = e3;
+                        username = spannableStringBuilder;
+                    } catch (Throwable e) {
                         username = un;
                         FileLog.e(e);
-                        if (this.useUserCell) {
-                            userCell = holder.itemView;
-                            userCell.setData(object, name, username2, 0);
-                            if (this.checkedMap == null) {
-                                userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(id)), false);
-                                return;
-                            }
-                            return;
-                        }
-                        profileSearchCell = holder.itemView;
-                        profileSearchCell.setData(object, null, name, username2, false, false);
-                        if (position == getItemCount() + -1) {
-                        }
-                        profileSearchCell.useSeparator = z;
                     }
                 }
+                boolean z;
                 if (this.useUserCell) {
-                    userCell = holder.itemView;
+                    UserCell userCell = (UserCell) holder.itemView;
                     userCell.setData(object, name, username2, 0);
-                    if (this.checkedMap == null) {
-                        userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(id)), false);
+                    if (this.checkedMap != null) {
+                        if (this.checkedMap.indexOfKey(id) >= 0) {
+                            z = true;
+                        } else {
+                            z = false;
+                        }
+                        userCell.setChecked(z, false);
                         return;
                     }
                     return;
                 }
-                profileSearchCell = holder.itemView;
+                ProfileSearchCell profileSearchCell = holder.itemView;
                 profileSearchCell.setData(object, null, name, username2, false, false);
-                z = position == getItemCount() + -1 && position != this.searchResult.size() - 1;
+                z = (position == getItemCount() + -1 || position == this.searchResult.size() - 1) ? false : true;
                 profileSearchCell.useSeparator = z;
             }
         }

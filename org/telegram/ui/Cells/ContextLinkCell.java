@@ -365,7 +365,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 }
                 message.attachPath = new File(directory, append.append(ImageLoader.getHttpUrlExtension(str2, str)).toString()).getAbsolutePath();
             }
-            this.currentMessageObject = new MessageObject(this.currentAccount, message, null, false);
+            this.currentMessageObject = new MessageObject(this.currentAccount, message, false);
         }
     }
 

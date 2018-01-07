@@ -1,5 +1,6 @@
 package net.hockeyapp.android.tasks;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,15 +9,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.Map;
 import net.hockeyapp.android.Constants;
+import net.hockeyapp.android.utils.HockeyLog;
 import net.hockeyapp.android.utils.HttpURLConnectionBuilder;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
+@SuppressLint({"StaticFieldLeak"})
 public class LoginTask extends ConnectionTask<Void, Void, Boolean> {
     private Context mContext;
     private Handler mHandler;
@@ -73,13 +74,8 @@ public class LoginTask extends ConnectionTask<Void, Void, Boolean> {
             if (connection != null) {
                 connection.disconnect();
             }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            if (connection != null) {
-                connection.disconnect();
-            }
-        } catch (IOException e2) {
-            e2.printStackTrace();
+        } catch (Throwable e) {
+            HockeyLog.error("Failed to login", e);
             if (connection != null) {
                 connection.disconnect();
             }
@@ -96,7 +92,6 @@ public class LoginTask extends ConnectionTask<Void, Void, Boolean> {
             try {
                 this.mProgressDialog.dismiss();
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         if (this.mHandler != null) {
@@ -153,8 +148,8 @@ public class LoginTask extends ConnectionTask<Void, Void, Boolean> {
                 prefs.edit().remove("iuid").remove("auid").remove("email").apply();
             }
             return false;
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            HockeyLog.error("Failed to parse login response", e);
             return false;
         }
     }

@@ -2,7 +2,6 @@ package net.hockeyapp.android.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.text.TextUtils;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -13,30 +12,33 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import net.hockeyapp.android.R;
 import net.hockeyapp.android.UpdateInfoListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class VersionHelper {
+    private Context mContext;
     private int mCurrentVersionCode;
     private UpdateInfoListener mListener;
     private JSONObject mNewest;
     private ArrayList<JSONObject> mSortedVersions;
 
     public VersionHelper(Context context, String infoJSON, UpdateInfoListener listener) {
+        this.mContext = context;
         this.mListener = listener;
-        loadVersions(context, infoJSON);
+        loadVersions(infoJSON);
         sortVersions();
     }
 
-    private void loadVersions(Context context, String infoJSON) {
+    private void loadVersions(String infoJSON) {
         this.mNewest = new JSONObject();
         this.mSortedVersions = new ArrayList();
         this.mCurrentVersionCode = this.mListener.getCurrentVersionCode();
         try {
             JSONArray versions = new JSONArray(infoJSON);
-            int versionCode = this.mListener.getCurrentVersionCode();
+            int versionCode = this.mCurrentVersionCode;
             for (int index = 0; index < versions.length(); index++) {
                 boolean largerVersionCode;
                 JSONObject entry = versions.getJSONObject(index);
@@ -46,7 +48,7 @@ public class VersionHelper {
                     largerVersionCode = false;
                 }
                 boolean newerApkFile;
-                if (entry.getInt("version") == versionCode && isNewerThanLastUpdateTime(context, entry.getLong("timestamp"))) {
+                if (entry.getInt("version") == versionCode && isNewerThanLastUpdateTime(this.mContext, entry.getLong("timestamp"))) {
                     newerApkFile = true;
                 } else {
                     newerApkFile = false;
@@ -116,11 +118,11 @@ public class VersionHelper {
             if (count > 0) {
                 result.append(getSeparator());
                 if (showRestore) {
-                    result.append(getRestoreButton(count, version));
+                    result.append(getRestoreButton(version));
                 }
             }
             result.append(getVersionLine(count, version));
-            result.append(getVersionNotes(count, version));
+            result.append(getVersionNotes(version));
             count++;
         }
         result.append("</body>");
@@ -132,11 +134,10 @@ public class VersionHelper {
         return "<hr style='border-top: 1px solid #c8c8c8; border-bottom: 0px; margin: 40px 10px 0px 10px;' />";
     }
 
-    private String getRestoreButton(int count, JSONObject version) {
+    private String getRestoreButton(JSONObject version) {
         StringBuilder result = new StringBuilder();
-        String versionID = getVersionID(version);
-        if (!TextUtils.isEmpty(versionID)) {
-            result.append("<a href='restore:" + versionID + "'  style='background: #c8c8c8; color: #000; display: block; float: right; padding: 7px; margin: 0px 10px 10px; text-decoration: none;'>Restore</a>");
+        if (!TextUtils.isEmpty(getVersionID(version))) {
+            result.append(String.format("<a href='restore:%s' style='%s'>%s</a>", new Object[]{getVersionID(version), "background: #c8c8c8; color: #000; display: block; float: right; padding: 7px; margin: 0px 10px 10px; text-decoration: none;", this.mContext.getString(R.string.hockeyapp_update_restore)}));
         }
         return result.toString();
     }
@@ -157,12 +158,13 @@ public class VersionHelper {
         String versionName = getVersionName(version);
         result.append("<div style='padding: 20px 10px 10px;'><strong>");
         if (count == 0) {
-            result.append("Newest version:");
+            result.append(this.mContext.getString(R.string.hockeyapp_update_newest_version)).append(':');
         } else {
-            result.append("Version " + versionName + " (" + versionCode + "): ");
+            String versionString = String.format(this.mContext.getString(R.string.hockeyapp_update_version), new Object[]{versionName});
+            result.append(String.format("%s (%s): ", new Object[]{versionString, Integer.valueOf(versionCode)}));
             if (versionCode != newestCode && versionCode == this.mCurrentVersionCode) {
                 this.mCurrentVersionCode = -1;
-                result.append("[INSTALLED]");
+                result.append(String.format("[%s]", new Object[]{this.mContext.getString(R.string.hockeyapp_update_already_installed)}));
             }
         }
         result.append("</strong></div>");
@@ -187,12 +189,12 @@ public class VersionHelper {
         return versionName;
     }
 
-    private String getVersionNotes(int count, JSONObject version) {
+    private String getVersionNotes(JSONObject version) {
         StringBuilder result = new StringBuilder();
         String notes = failSafeGetStringFromJSON(version, "notes", TtmlNode.ANONYMOUS_REGION_ID);
         result.append("<div style='padding: 0px 10px;'>");
         if (notes.trim().length() == 0) {
-            result.append("<em>No information.</em>");
+            result.append(String.format("<em>%s</em>", new Object[]{this.mContext.getString(R.string.hockeyapp_update_no_info)}));
         } else {
             result.append(notes);
         }
@@ -240,8 +242,8 @@ public class VersionHelper {
                 return true;
             }
             return false;
-        } catch (NameNotFoundException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            HockeyLog.error("Failed to get application info", e);
             return false;
         }
     }
@@ -255,6 +257,9 @@ public class VersionHelper {
         }
         if (version.equalsIgnoreCase("N")) {
             return "7.0";
+        }
+        if (version.equalsIgnoreCase("O")) {
+            return "8.0";
         }
         if (Pattern.matches("^[a-zA-Z]+", version)) {
             return "99.0";

@@ -619,7 +619,7 @@ public class NotificationCenter {
             }
         } else {
             this.delayedPosts.add(new DelayedPost(id, args));
-            if (BuildVars.DEBUG_VERSION) {
+            if (BuildVars.LOGS_ENABLED) {
                 FileLog.e("delay post notification " + id + " with args count = " + args.length);
             }
         }

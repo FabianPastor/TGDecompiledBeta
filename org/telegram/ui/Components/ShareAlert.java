@@ -17,6 +17,7 @@ import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.LongSparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -33,9 +34,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.SQLite.SQLiteCursor;
@@ -102,7 +101,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private int scrollOffsetY;
     private ShareSearchAdapter searchAdapter;
     private EmptyTextProgressView searchEmptyView;
-    private HashMap<Long, TL_dialog> selectedDialogs = new HashMap();
+    private LongSparseArray<TL_dialog> selectedDialogs = new LongSparseArray();
     private ArrayList<MessageObject> sendingMessageObjects;
     private String sendingText;
     private View shadow;
@@ -164,7 +163,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         public void onBindViewHolder(ViewHolder holder, int position) {
             ShareDialogCell cell = holder.itemView;
             TL_dialog dialog = getItem(position);
-            cell.setDialog((int) dialog.id, ShareAlert.this.selectedDialogs.containsKey(Long.valueOf(dialog.id)), null);
+            cell.setDialog((int) dialog.id, ShareAlert.this.selectedDialogs.indexOfKey(dialog.id) >= 0, null);
         }
 
         public int getItemViewType(int i) {
@@ -217,6 +216,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         String q;
                         NativeByteBuffer data;
                         TLObject user;
+                        int a;
                         String search2 = LocaleController.getInstance().getTranslitString(search1);
                         if (search1.equals(search2) || search2.length() == 0) {
                             search2 = null;
@@ -229,13 +229,13 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         ArrayList<Integer> usersToLoad = new ArrayList();
                         ArrayList<Integer> chatsToLoad = new ArrayList();
                         int resultCount = 0;
-                        HashMap<Long, DialogSearchResult> dialogsResult = new HashMap();
+                        LongSparseArray<DialogSearchResult> dialogsResult = new LongSparseArray();
                         SQLiteCursor cursor = MessagesStorage.getInstance(ShareAlert.this.currentAccount).getDatabase().queryFinalized("SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 400", new Object[0]);
                         while (cursor.next()) {
                             long id = cursor.longValue(0);
                             dialogSearchResult = new DialogSearchResult();
                             dialogSearchResult.date = cursor.intValue(1);
-                            dialogsResult.put(Long.valueOf(id), dialogSearchResult);
+                            dialogsResult.put(id, dialogSearchResult);
                             int lower_id = (int) id;
                             int high_id = (int) (id >> 32);
                             if (!(lower_id == 0 || high_id == 1)) {
@@ -277,7 +277,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                                         if (data != null) {
                                             user = User.TLdeserialize(data, data.readInt32(false), false);
                                             data.reuse();
-                                            dialogSearchResult = (DialogSearchResult) dialogsResult.get(Long.valueOf((long) user.id));
+                                            dialogSearchResult = (DialogSearchResult) dialogsResult.get((long) user.id);
                                             if (user.status != null) {
                                                 user.status.expires = cursor.intValue(1);
                                             }
@@ -305,7 +305,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                                 if (name.equals(tName)) {
                                     tName = null;
                                 }
-                                int a = 0;
+                                a = 0;
                                 while (a < search.length) {
                                     q = search[a];
                                     if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
@@ -315,7 +315,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                                             data.reuse();
                                             if (!(chat == null || ChatObject.isNotInChat(chat))) {
                                                 if (!ChatObject.isChannel(chat) || chat.creator || ((chat.admin_rights != null && chat.admin_rights.post_messages) || chat.megagroup)) {
-                                                    dialogSearchResult = (DialogSearchResult) dialogsResult.get(Long.valueOf(-((long) chat.id)));
+                                                    dialogSearchResult = (DialogSearchResult) dialogsResult.get(-((long) chat.id));
                                                     dialogSearchResult.name = AndroidUtilities.generateSearchName(chat.title, null, q);
                                                     dialogSearchResult.object = chat;
                                                     dialogSearchResult.dialog.id = (long) (-chat.id);
@@ -331,14 +331,15 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                             cursor.dispose();
                         }
                         ArrayList<DialogSearchResult> arrayList = new ArrayList(resultCount);
-                        for (DialogSearchResult dialogSearchResult2 : dialogsResult.values()) {
-                            if (!(dialogSearchResult2.object == null || dialogSearchResult2.name == null)) {
-                                arrayList.add(dialogSearchResult2);
+                        for (a = 0; a < dialogsResult.size(); a++) {
+                            dialogSearchResult = (DialogSearchResult) dialogsResult.valueAt(a);
+                            if (!(dialogSearchResult.object == null || dialogSearchResult.name == null)) {
+                                arrayList.add(dialogSearchResult);
                             }
                         }
                         cursor = MessagesStorage.getInstance(ShareAlert.this.currentAccount).getDatabase().queryFinalized("SELECT u.data, u.status, u.name, u.uid FROM users as u INNER JOIN contacts as c ON u.uid = c.uid", new Object[0]);
                         while (cursor.next()) {
-                            if (!dialogsResult.containsKey(Long.valueOf((long) cursor.intValue(3)))) {
+                            if (dialogsResult.indexOfKey((long) cursor.intValue(3)) < 0) {
                                 name = cursor.stringValue(2);
                                 tName = LocaleController.getInstance().getTranslitString(name);
                                 if (name.equals(tName)) {
@@ -364,18 +365,18 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                                         if (data != null) {
                                             user = User.TLdeserialize(data, data.readInt32(false), false);
                                             data.reuse();
-                                            dialogSearchResult2 = new DialogSearchResult();
+                                            dialogSearchResult = new DialogSearchResult();
                                             if (user.status != null) {
                                                 user.status.expires = cursor.intValue(1);
                                             }
-                                            dialogSearchResult2.dialog.id = (long) user.id;
-                                            dialogSearchResult2.object = user;
+                                            dialogSearchResult.dialog.id = (long) user.id;
+                                            dialogSearchResult.object = user;
                                             if (found == 1) {
-                                                dialogSearchResult2.name = AndroidUtilities.generateSearchName(user.first_name, user.last_name, q);
+                                                dialogSearchResult.name = AndroidUtilities.generateSearchName(user.first_name, user.last_name, q);
                                             } else {
-                                                dialogSearchResult2.name = AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q);
+                                                dialogSearchResult.name = AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q);
                                             }
-                                            arrayList.add(dialogSearchResult2);
+                                            arrayList.add(dialogSearchResult);
                                         }
                                     } else {
                                         i++;
@@ -503,7 +504,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             DialogSearchResult result = (DialogSearchResult) this.searchResult.get(position);
-            holder.itemView.setDialog((int) result.dialog.id, ShareAlert.this.selectedDialogs.containsKey(Long.valueOf(result.dialog.id)), result.name);
+            holder.itemView.setDialog((int) result.dialog.id, ShareAlert.this.selectedDialogs.indexOfKey(result.dialog.id) >= 0, result.name);
         }
 
         public int getItemViewType(int i) {
@@ -619,20 +620,24 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.frameLayout.addView(this.doneButton, LayoutHelper.createFrame(-2, -1, 53));
         this.doneButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (!ShareAlert.this.selectedDialogs.isEmpty() || (!ShareAlert.this.isPublicChannel && ShareAlert.this.linkToCopy == null)) {
+                if (ShareAlert.this.selectedDialogs.size() != 0 || (!ShareAlert.this.isPublicChannel && ShareAlert.this.linkToCopy == null)) {
+                    int a;
+                    long key;
                     if (ShareAlert.this.sendingMessageObjects != null) {
-                        for (Entry<Long, TL_dialog> entry : ShareAlert.this.selectedDialogs.entrySet()) {
+                        for (a = 0; a < ShareAlert.this.selectedDialogs.size(); a++) {
+                            key = ShareAlert.this.selectedDialogs.keyAt(a);
                             if (ShareAlert.this.frameLayout2.getTag() != null && ShareAlert.this.commentTextView.length() > 0) {
-                                SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.commentTextView.getText().toString(), ((Long) entry.getKey()).longValue(), null, null, true, null, null, null);
+                                SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.commentTextView.getText().toString(), key, null, null, true, null, null, null);
                             }
-                            SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.sendingMessageObjects, ((Long) entry.getKey()).longValue());
+                            SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.sendingMessageObjects, key);
                         }
                     } else if (ShareAlert.this.sendingText != null) {
-                        for (Entry<Long, TL_dialog> entry2 : ShareAlert.this.selectedDialogs.entrySet()) {
+                        for (a = 0; a < ShareAlert.this.selectedDialogs.size(); a++) {
+                            key = ShareAlert.this.selectedDialogs.keyAt(a);
                             if (ShareAlert.this.frameLayout2.getTag() != null && ShareAlert.this.commentTextView.length() > 0) {
-                                SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.commentTextView.getText().toString(), ((Long) entry2.getKey()).longValue(), null, null, true, null, null, null);
+                                SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.commentTextView.getText().toString(), key, null, null, true, null, null, null);
                             }
-                            SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.sendingText, ((Long) entry2.getKey()).longValue(), null, null, true, null, null, null);
+                            SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.sendingText, key, null, null, true, null, null, null);
                         }
                     }
                     ShareAlert.this.dismiss();
@@ -759,11 +764,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                     }
                     if (dialog != null) {
                         ShareDialogCell cell = (ShareDialogCell) view;
-                        if (ShareAlert.this.selectedDialogs.containsKey(Long.valueOf(dialog.id))) {
-                            ShareAlert.this.selectedDialogs.remove(Long.valueOf(dialog.id));
+                        if (ShareAlert.this.selectedDialogs.indexOfKey(dialog.id) >= 0) {
+                            ShareAlert.this.selectedDialogs.remove(dialog.id);
                             cell.setChecked(false, true);
                         } else {
-                            ShareAlert.this.selectedDialogs.put(Long.valueOf(dialog.id), dialog);
+                            ShareAlert.this.selectedDialogs.put(dialog.id, dialog);
                             cell.setChecked(true, true);
                         }
                         ShareAlert.this.updateSelectedCount();
@@ -945,7 +950,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     }
 
     public void updateSelectedCount() {
-        if (this.selectedDialogs.isEmpty()) {
+        if (this.selectedDialogs.size() == 0) {
             showCommentTextView(false);
             this.doneButtonBadgeTextView.setVisibility(8);
             if (this.isPublicChannel || this.linkToCopy != null) {

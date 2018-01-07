@@ -91,8 +91,8 @@ public class BotHelpCell extends View {
                 if (this.width > maxWidth) {
                     this.width = maxWidth;
                 }
-            } catch (Exception e) {
-                FileLog.e("tmessage", e);
+            } catch (Throwable e) {
+                FileLog.e(e);
             }
             this.width += AndroidUtilities.dp(22.0f);
         }

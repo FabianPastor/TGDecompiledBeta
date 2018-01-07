@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -60,10 +61,10 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     private class StickersGridAdapter extends SelectionAdapter {
-        private HashMap<Integer, Document> cache = new HashMap();
+        private SparseArray<Document> cache = new SparseArray();
         private Context context;
         private HashMap<TL_messages_stickerSet, Integer> packStartRow = new HashMap();
-        private HashMap<Integer, TL_messages_stickerSet> rowStartPack = new HashMap();
+        private SparseArray<TL_messages_stickerSet> rowStartPack = new SparseArray();
         private int stickersPerRow;
         private int totalItems;
 
@@ -76,7 +77,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         }
 
         public Object getItem(int i) {
-            return this.cache.get(Integer.valueOf(i));
+            return this.cache.get(i);
         }
 
         public int getPositionForPack(TL_messages_stickerSet stickerSet) {
@@ -84,7 +85,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         }
 
         public int getItemViewType(int position) {
-            if (this.cache.get(Integer.valueOf(position)) != null) {
+            if (this.cache.get(position) != null) {
                 return 0;
             }
             return 1;
@@ -98,7 +99,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                 }
                 this.stickersPerRow = width / AndroidUtilities.dp(72.0f);
             }
-            TL_messages_stickerSet pack = (TL_messages_stickerSet) this.rowStartPack.get(Integer.valueOf(position / this.stickersPerRow));
+            TL_messages_stickerSet pack = (TL_messages_stickerSet) this.rowStartPack.get(position / this.stickersPerRow);
             if (pack == null) {
                 return StickerMasksView.this.recentTabBum;
             }
@@ -129,11 +130,11 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         public void onBindViewHolder(ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 0:
-                    ((StickerEmojiCell) holder.itemView).setSticker((Document) this.cache.get(Integer.valueOf(position)), false);
+                    ((StickerEmojiCell) holder.itemView).setSticker((Document) this.cache.get(position), false);
                     return;
                 case 1:
                     if (position == this.totalItems) {
-                        TL_messages_stickerSet pack = (TL_messages_stickerSet) this.rowStartPack.get(Integer.valueOf((position - 1) / this.stickersPerRow));
+                        TL_messages_stickerSet pack = (TL_messages_stickerSet) this.rowStartPack.get((position - 1) / this.stickersPerRow);
                         if (pack == null) {
                             ((EmptyCell) holder.itemView).setHeight(1);
                             return;
@@ -180,11 +181,11 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                     int b;
                     int count = (int) Math.ceil((double) (((float) documents.size()) / ((float) this.stickersPerRow)));
                     for (b = 0; b < documents.size(); b++) {
-                        this.cache.put(Integer.valueOf(this.totalItems + b), documents.get(b));
+                        this.cache.put(this.totalItems + b, documents.get(b));
                     }
                     this.totalItems += this.stickersPerRow * count;
                     for (b = 0; b < count; b++) {
-                        this.rowStartPack.put(Integer.valueOf(startRow + b), pack);
+                        this.rowStartPack.put(startRow + b, pack);
                     }
                 }
             }

@@ -113,9 +113,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (sharedInstance != null) {
-            FileLog.e("Tried to start the VoIP service when it's already started");
-        } else {
+        if (sharedInstance == null) {
             this.currentAccount = intent.getIntExtra("account", -1);
             if (this.currentAccount == -1) {
                 throw new IllegalStateException("No account specified when starting VoIP service");
@@ -124,7 +122,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             this.isOutgoing = intent.getBooleanExtra("is_outgoing", false);
             this.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(userID));
             if (this.user == null) {
-                FileLog.w("VoIPService: user==null");
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.w("VoIPService: user==null");
+                }
                 stopSelf();
             } else {
                 if (this.isOutgoing) {
@@ -151,6 +151,8 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                 sharedInstance = this;
                 initializeAccountRelatedThings();
             }
+        } else if (BuildVars.LOGS_ENABLED) {
+            FileLog.e("Tried to start the VoIP service when it's already started");
         }
         return 2;
     }
@@ -182,7 +184,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             req.peer.id = this.call.id;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
-                    FileLog.d("Sent debug logs, response=" + response);
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("Sent debug logs, response=" + response);
+                    }
                 }
             });
         }
@@ -286,10 +290,12 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                                                 req.reason = new TL_phoneCallDiscardReasonMissed();
                                                 ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new RequestDelegate() {
                                                     public void run(TLObject response, TL_error error) {
-                                                        if (error != null) {
-                                                            FileLog.e("error on phone.discardCall: " + error);
-                                                        } else {
-                                                            FileLog.d("phone.discardCall " + response);
+                                                        if (BuildVars.LOGS_ENABLED) {
+                                                            if (error != null) {
+                                                                FileLog.e("error on phone.discardCall: " + error);
+                                                            } else {
+                                                                FileLog.d("phone.discardCall " + response);
+                                                            }
                                                         }
                                                         AndroidUtilities.runOnUIThread(new Runnable() {
                                                             public void run() {
@@ -308,7 +314,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                                     } else if (error.code == 406) {
                                         VoIPService.this.callFailed(-3);
                                     } else {
-                                        FileLog.e("Error on phone.requestCall: " + error);
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.e("Error on phone.requestCall: " + error);
+                                        }
                                         VoIPService.this.callFailed();
                                     }
                                 }
@@ -317,7 +325,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     }, 2);
                     return;
                 }
-                FileLog.e("Error on getDhConfig " + error);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("Error on getDhConfig " + error);
+                }
                 VoIPService.this.callFailed();
             }
         }, 2);
@@ -325,7 +335,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
 
     private void acknowledgeCallAndStartRinging() {
         if (this.call instanceof TL_phoneCallDiscarded) {
-            FileLog.w("Call " + this.call.id + " was discarded before the service started, stopping");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.w("Call " + this.call.id + " was discarded before the service started, stopping");
+            }
             stopSelf();
             return;
         }
@@ -338,9 +350,13 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         if (VoIPBaseService.sharedInstance != null) {
-                            FileLog.w("receivedCall response = " + response);
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.w("receivedCall response = " + response);
+                            }
                             if (error != null) {
-                                FileLog.e("error on receivedCall: " + error);
+                                if (BuildVars.LOGS_ENABLED) {
+                                    FileLog.e("error on receivedCall: " + error);
+                                }
                                 VoIPService.this.stopSelf();
                                 return;
                             }
@@ -354,7 +370,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
 
     private void startRinging() {
         int vibrate;
-        FileLog.d("starting ringing for call " + this.call.id);
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("starting ringing for call " + this.call.id);
+        }
         dispatchStateChanged(15);
         SharedPreferences prefs = MessagesController.getNotificationsSettings(this.currentAccount);
         this.ringtonePlayer = new MediaPlayer();
@@ -398,11 +416,15 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             this.vibrator.vibrate(new long[]{0, duration, 500}, 0);
         }
         if (VERSION.SDK_INT < 21 || ((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode() || !NotificationManagerCompat.from(this).areNotificationsEnabled()) {
-            FileLog.d("Starting incall activity for incoming call");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("Starting incall activity for incoming call");
+            }
             try {
                 PendingIntent.getActivity(this, 12345, new Intent(this, VoIPActivity.class).addFlags(268435456), 0).send();
             } catch (Exception x) {
-                FileLog.e("Error starting incall activity", x);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("Error starting incall activity", x);
+                }
             }
             if (VERSION.SDK_INT >= 26) {
                 showNotification();
@@ -411,7 +433,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             return;
         }
         showIncomingNotification();
-        FileLog.d("Showing incoming call notification");
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("Showing incoming call notification");
+        }
     }
 
     public void acceptIncomingCall() {
@@ -440,7 +464,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                             messagesStorage.setLastSecretVersion(res.version);
                             MessagesStorage.getInstance(VoIPService.this.currentAccount).saveSecretParams(messagesStorage.getLastSecretVersion(), messagesStorage.getSecretG(), messagesStorage.getSecretPBytes());
                         } else {
-                            FileLog.e("stopping VoIP service, bad prime");
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.e("stopping VoIP service, bad prime");
+                            }
                             VoIPService.this.callFailed();
                             return;
                         }
@@ -450,7 +476,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                         salt[a] = (byte) (((byte) ((int) (Utilities.random.nextDouble() * 256.0d))) ^ res.random[a]);
                     }
                     if (VoIPService.this.call == null) {
-                        FileLog.e("call is null");
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("call is null");
+                        }
                         VoIPService.this.callFailed();
                         return;
                     }
@@ -479,7 +507,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
                                     if (error == null) {
-                                        FileLog.w("accept call ok! " + response);
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.w("accept call ok! " + response);
+                                        }
                                         VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
                                         if (VoIPService.this.call instanceof TL_phoneCallDiscarded) {
                                             VoIPService.this.onCallUpdated(VoIPService.this.call);
@@ -487,7 +517,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                                         }
                                         return;
                                     }
-                                    FileLog.e("Error on phone.acceptCall: " + error);
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        FileLog.e("Error on phone.acceptCall: " + error);
+                                    }
                                     VoIPService.this.callFailed();
                                 }
                             });
@@ -583,13 +615,15 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
-                    if (error != null) {
-                        FileLog.e("error on phone.discardCall: " + error);
-                    } else {
+                    if (error == null) {
                         if (response instanceof TL_updates) {
                             MessagesController.getInstance(VoIPService.this.currentAccount).processUpdates((TL_updates) response, false);
                         }
-                        FileLog.d("phone.discardCall " + response);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("phone.discardCall " + response);
+                        }
+                    } else if (BuildVars.LOGS_ENABLED) {
+                        FileLog.e("error on phone.discardCall: " + error);
                     }
                     if (!wasNotConnected) {
                         AndroidUtilities.cancelRunOnUIThread(stopper);
@@ -604,11 +638,15 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
 
     private void dumpCallObject() {
         try {
-            for (Field f : PhoneCall.class.getFields()) {
-                FileLog.d(f.getName() + " = " + f.get(this.call));
+            if (BuildVars.LOGS_ENABLED) {
+                for (Field f : PhoneCall.class.getFields()) {
+                    FileLog.d(f.getName() + " = " + f.get(this.call));
+                }
             }
         } catch (Throwable x) {
-            FileLog.e(x);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e(x);
+            }
         }
     }
 
@@ -621,14 +659,16 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                 if (call.access_hash == 0) {
                     call.access_hash = this.call.access_hash;
                 }
-                if (BuildVars.DEBUG_VERSION) {
+                if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("Call updated: " + call);
                     dumpCallObject();
                 }
                 this.call = call;
                 if (call instanceof TL_phoneCallDiscarded) {
                     this.needSendDebugLog = call.need_debug;
-                    FileLog.d("call discarded, stopping service");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("call discarded, stopping service");
+                    }
                     if (call.reason instanceof TL_phoneCallDiscardReasonBusy) {
                         dispatchStateChanged(17);
                         this.playingSound = true;
@@ -643,7 +683,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     }
                 } else if ((call instanceof TL_phoneCall) && this.authKey == null) {
                     if (call.g_a_or_b == null) {
-                        FileLog.w("stopping VoIP service, Ga == null");
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.w("stopping VoIP service, Ga == null");
+                        }
                         callFailed();
                     } else if (Arrays.equals(this.g_a_hash, Utilities.computeSHA256(call.g_a_or_b, 0, call.g_a_or_b.length))) {
                         this.g_a = call.g_a_or_b;
@@ -670,24 +712,32 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                             this.authKey = authKey;
                             this.keyFingerprint = Utilities.bytesToLong(authKeyId);
                             if (this.keyFingerprint != call.key_fingerprint) {
-                                FileLog.w("key fingerprints don't match");
+                                if (BuildVars.LOGS_ENABLED) {
+                                    FileLog.w("key fingerprints don't match");
+                                }
                                 callFailed();
                                 return;
                             }
                             initiateActualEncryptedCall();
                             return;
                         }
-                        FileLog.w("stopping VoIP service, bad Ga and Gb (accepting)");
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.w("stopping VoIP service, bad Ga and Gb (accepting)");
+                        }
                         callFailed();
                     } else {
-                        FileLog.w("stopping VoIP service, Ga hash doesn't match");
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.w("stopping VoIP service, Ga hash doesn't match");
+                        }
                         callFailed();
                     }
                 } else if ((call instanceof TL_phoneCallAccepted) && this.authKey == null) {
                     processAcceptedCall();
                 } else if (this.currentState == 13 && call.receive_date != 0) {
                     dispatchStateChanged(16);
-                    FileLog.d("!!!!!! CALL RECEIVED");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("!!!!!! CALL RECEIVED");
+                    }
                     if (this.spPlayID != 0) {
                         this.soundPool.stop(this.spPlayID);
                     }
@@ -704,7 +754,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     };
                     AndroidUtilities.runOnUIThread(this.timeoutRunnable, (long) MessagesController.getInstance(this.currentAccount).callRingTimeout);
                 }
-            } else if (BuildVars.DEBUG_VERSION) {
+            } else if (BuildVars.LOGS_ENABLED) {
                 FileLog.w("onCallUpdated called with wrong call id (got " + call.id + ", expected " + this.call.id + ")");
             }
         }
@@ -714,7 +764,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         try {
             PendingIntent.getActivity(this, 0, new Intent(this, VoIPFeedbackActivity.class).putExtra("call_id", this.call.id).putExtra("call_access_hash", this.call.access_hash).putExtra("account", this.currentAccount).addFlags(805306368), 0).send();
         } catch (Exception x) {
-            FileLog.e("Error starting incall activity", x);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Error starting incall activity", x);
+            }
         }
     }
 
@@ -775,7 +827,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             });
             return;
         }
-        FileLog.w("stopping VoIP service, bad Ga and Gb");
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.w("stopping VoIP service, bad Ga and Gb");
+        }
         callFailed();
     }
 
@@ -786,7 +840,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
         }
         try {
             int i;
-            FileLog.d("InitCall: keyID=" + this.keyFingerprint);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("InitCall: keyID=" + this.keyFingerprint);
+            }
             SharedPreferences nprefs = MessagesController.getNotificationsSettings(this.currentAccount);
             HashSet<String> hashes = new HashSet(nprefs.getStringSet("calls_access_hashes", Collections.EMPTY_SET));
             hashes.add(this.call.id + " " + this.call.access_hash + " " + System.currentTimeMillis());
@@ -868,7 +924,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                 }
             }, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
         } catch (Throwable x) {
-            FileLog.e("error starting call", x);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("error starting call", x);
+            }
             callFailed();
         }
     }
@@ -891,7 +949,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                 if (existingChannel.getImportance() >= 4 && existingChannel.getSound() == null && existingChannel.getVibrationPattern() == null) {
                     needCreate = false;
                 } else {
-                    FileLog.d("User messed up the notification channel; deleting it and creating a proper one");
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("User messed up the notification channel; deleting it and creating a proper one");
+                    }
                     nm.deleteNotificationChannel("incoming_calls" + chanIndex);
                     chanIndex++;
                     nprefs.edit().putInt("calls_notification_channel", chanIndex).commit();
@@ -989,7 +1049,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
 
     protected void callFailed(int errorCode) {
         if (this.call != null) {
-            FileLog.d("Discarding failed call");
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("Discarding failed call");
+            }
             TL_phone_discardCall req = new TL_phone_discardCall();
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
@@ -1002,8 +1064,10 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error != null) {
-                        FileLog.e("error on phone.discardCall: " + error);
-                    } else {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("error on phone.discardCall: " + error);
+                        }
+                    } else if (BuildVars.LOGS_ENABLED) {
                         FileLog.d("phone.discardCall " + response);
                     }
                 }
@@ -1030,7 +1094,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                     try {
                         PendingIntent.getActivity(VoIPService.this, 0, intent, 0).send();
                     } catch (CanceledException e) {
-                        FileLog.e("error restarting activity", e);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("error restarting activity", e);
+                        }
                     }
                     if (VERSION.SDK_INT >= 26) {
                         VoIPService.this.showNotification();

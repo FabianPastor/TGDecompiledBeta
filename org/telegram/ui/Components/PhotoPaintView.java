@@ -1129,90 +1129,94 @@ Error: java.util.NoSuchElementException
                 /*
                 r12 = this;
                 r3 = 0;
-                r10 = new com.google.android.gms.vision.face.FaceDetector$Builder;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r11 = r11.getContext();	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10.<init>(r11);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r11 = 1;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10 = r10.setMode(r11);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r11 = 1;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10 = r10.setLandmarkType(r11);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r11 = 0;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10 = r10.setTrackingEnabled(r11);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r3 = r10.build();	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10 = r3.isOperational();	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                if (r10 != 0) goto L_0x0031;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
+                r10 = new com.google.android.gms.vision.face.FaceDetector$Builder;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = r11.getContext();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10.<init>(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = 1;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.setMode(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = 1;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.setLandmarkType(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = 0;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.setTrackingEnabled(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r3 = r10.build();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r3.isOperational();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r10 != 0) goto L_0x0035;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
             L_0x0025:
-                r10 = "face detection is not operational";	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                org.telegram.messenger.FileLog.e(r10);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                if (r3 == 0) goto L_0x0030;
-            L_0x002d:
-                r3.release();
-            L_0x0030:
-                return;
+                r10 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r10 == 0) goto L_0x002f;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x0029:
+                r10 = "face detection is not operational";	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                org.telegram.messenger.FileLog.e(r10);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x002f:
+                if (r3 == 0) goto L_0x0034;
             L_0x0031:
-                r10 = new com.google.android.gms.vision.Frame$Builder;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10.<init>();	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r11 = r11.bitmapToEdit;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10 = r10.setBitmap(r11);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r11 = r11.getFrameRotation();	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10 = r10.setRotation(r11);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r5 = r10.build();	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r4 = r3.detect(r5);	 Catch:{ Throwable -> 0x008b }
-                r8 = new java.util.ArrayList;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r8.<init>();	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r9 = r10.getPaintingSize();	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r6 = 0;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-            L_0x005e:
-                r10 = r4.size();	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                if (r6 >= r10) goto L_0x0095;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-            L_0x0064:
-                r7 = r4.keyAt(r6);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r1 = r4.get(r7);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r1 = (com.google.android.gms.vision.face.Face) r1;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r2 = new org.telegram.ui.Components.Paint.PhotoFace;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10 = r10.bitmapToEdit;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r11 = r11.isSidewardOrientation();	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r2.<init>(r1, r10, r9, r11);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10 = r2.isSufficient();	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                if (r10 == 0) goto L_0x0088;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-            L_0x0085:
-                r8.add(r2);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-            L_0x0088:
-                r6 = r6 + 1;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                goto L_0x005e;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-            L_0x008b:
-                r0 = move-exception;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                if (r3 == 0) goto L_0x0030;
-            L_0x0091:
                 r3.release();
-                goto L_0x0030;
+            L_0x0034:
+                return;
+            L_0x0035:
+                r10 = new com.google.android.gms.vision.Frame$Builder;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10.<init>();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = r11.bitmapToEdit;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.setBitmap(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = r11.getFrameRotation();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.setRotation(r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r5 = r10.build();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r4 = r3.detect(r5);	 Catch:{ Throwable -> 0x008f }
+                r8 = new java.util.ArrayList;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r8.<init>();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r9 = r10.getPaintingSize();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r6 = 0;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x0062:
+                r10 = r4.size();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r6 >= r10) goto L_0x0099;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x0068:
+                r7 = r4.keyAt(r6);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r1 = r4.get(r7);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r1 = (com.google.android.gms.vision.face.Face) r1;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r2 = new org.telegram.ui.Components.Paint.PhotoFace;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r10.bitmapToEdit;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r11 = r11.isSidewardOrientation();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r2.<init>(r1, r10, r9, r11);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10 = r2.isSufficient();	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r10 == 0) goto L_0x008c;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x0089:
+                r8.add(r2);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x008c:
+                r6 = r6 + 1;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                goto L_0x0062;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+            L_0x008f:
+                r0 = move-exception;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r3 == 0) goto L_0x0034;
             L_0x0095:
-                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                r10.faces = r8;	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                if (r3 == 0) goto L_0x0030;
-            L_0x009c:
                 r3.release();
-                goto L_0x0030;
+                goto L_0x0034;
+            L_0x0099:
+                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                r10.faces = r8;	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r3 == 0) goto L_0x0034;
             L_0x00a0:
+                r3.release();
+                goto L_0x0034;
+            L_0x00a4:
                 r0 = move-exception;
-                org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x00a0, all -> 0x00aa }
-                if (r3 == 0) goto L_0x0030;
-            L_0x00a6:
-                r3.release();
-                goto L_0x0030;
+                org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x00a4, all -> 0x00ae }
+                if (r3 == 0) goto L_0x0034;
             L_0x00aa:
-                r10 = move-exception;
-                if (r3 == 0) goto L_0x00b0;
-            L_0x00ad:
                 r3.release();
-            L_0x00b0:
+                goto L_0x0034;
+            L_0x00ae:
+                r10 = move-exception;
+                if (r3 == 0) goto L_0x00b4;
+            L_0x00b1:
+                r3.release();
+            L_0x00b4:
                 throw r10;
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.26.run():void");
