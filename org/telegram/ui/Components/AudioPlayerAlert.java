@@ -824,7 +824,11 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                                     idx = AudioPlayerAlert.this.playlist.indexOf(playingMessageObject);
                                     if (idx >= 0) {
                                         this.ignoreLayout = true;
-                                        AudioPlayerAlert.this.layoutManager.scrollToPosition(AudioPlayerAlert.this.playlist.size() - idx);
+                                        if (SharedConfig.playOrderReversed) {
+                                            AudioPlayerAlert.this.layoutManager.scrollToPosition(AudioPlayerAlert.this.playlist.size() - idx);
+                                        } else {
+                                            AudioPlayerAlert.this.layoutManager.scrollToPosition(idx);
+                                        }
                                         super.onLayout(false, l, t, r, b);
                                         this.ignoreLayout = false;
                                     }
@@ -835,7 +839,11 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                             idx = AudioPlayerAlert.this.playlist.indexOf(playingMessageObject);
                             if (idx >= 0) {
                                 this.ignoreLayout = true;
-                                AudioPlayerAlert.this.layoutManager.scrollToPosition(AudioPlayerAlert.this.playlist.size() - idx);
+                                if (SharedConfig.playOrderReversed) {
+                                    AudioPlayerAlert.this.layoutManager.scrollToPosition(AudioPlayerAlert.this.playlist.size() - idx);
+                                } else {
+                                    AudioPlayerAlert.this.layoutManager.scrollToPosition(idx);
+                                }
                                 super.onLayout(false, l, t, r, b);
                                 this.ignoreLayout = false;
                             }

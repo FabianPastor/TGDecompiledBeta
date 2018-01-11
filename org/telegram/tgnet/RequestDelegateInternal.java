@@ -1,5 +1,5 @@
 package org.telegram.tgnet;
 
 public interface RequestDelegateInternal {
-    void run(int i, int i2, String str, int i3);
+    void run(long j, int i, String str, int i2);
 }

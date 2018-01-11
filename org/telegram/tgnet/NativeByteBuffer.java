@@ -12,23 +12,23 @@ public class NativeByteBuffer extends AbstractSerializedData {
             return new NativeByteBuffer(0, true);
         }
     };
-    protected int address;
+    protected long address;
     public ByteBuffer buffer;
     private boolean justCalc;
     private int len;
     public boolean reused;
 
-    public static native int native_getFreeBuffer(int i);
+    public static native long native_getFreeBuffer(int i);
 
-    public static native ByteBuffer native_getJavaByteBuffer(int i);
+    public static native ByteBuffer native_getJavaByteBuffer(long j);
 
-    public static native int native_limit(int i);
+    public static native int native_limit(long j);
 
-    public static native int native_position(int i);
+    public static native int native_position(long j);
 
-    public static native void native_reuse(int i);
+    public static native void native_reuse(long j);
 
-    public static NativeByteBuffer wrap(int address) {
+    public static NativeByteBuffer wrap(long address) {
         NativeByteBuffer result = (NativeByteBuffer) addressWrapper.get();
         if (address != 0) {
             if (!result.reused && BuildVars.LOGS_ENABLED) {

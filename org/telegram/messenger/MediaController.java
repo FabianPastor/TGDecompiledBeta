@@ -1744,7 +1744,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     public boolean seekToProgress(MessageObject messageObject, float progress) {
-        if ((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null || isSamePlayingMessage(messageObject)) {
+        if ((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null || !isSamePlayingMessage(messageObject)) {
             return false;
         }
         try {
@@ -1851,6 +1851,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         if (this.currentPlaylistNum >= 0 && this.currentPlaylistNum < this.playlist.size()) {
             this.currentPlaylistNum = index;
             this.playMusicAgain = true;
+            if (this.playingMessageObject != null) {
+                this.playingMessageObject.audioProgress = 0.0f;
+                this.playingMessageObject.audioProgressSec = 0;
+            }
             playMessage((MessageObject) this.playlist.get(this.currentPlaylistNum));
         }
     }
@@ -1933,6 +1937,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 NotificationCenter.getInstance(this.playingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, Integer.valueOf(this.playingMessageObject.getId()));
             }
         } else if (this.currentPlaylistNum >= 0 && this.currentPlaylistNum < currentPlayList.size()) {
+            if (this.playingMessageObject != null) {
+                this.playingMessageObject.audioProgress = 0.0f;
+                this.playingMessageObject.audioProgressSec = 0;
+            }
             this.playMusicAgain = true;
             playMessage((MessageObject) currentPlayList.get(this.currentPlaylistNum));
         }
@@ -1961,6 +1969,12 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 this.playMusicAgain = true;
                 playMessage((MessageObject) currentPlayList.get(this.currentPlaylistNum));
             }
+        }
+    }
+
+    protected void checkIsNextMediaFileDownloaded() {
+        if (this.playingMessageObject != null && this.playingMessageObject.isMusic()) {
+            checkIsNextMusicFileDownloaded(this.playingMessageObject.currentAccount);
         }
     }
 

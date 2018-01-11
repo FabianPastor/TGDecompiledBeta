@@ -20,6 +20,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.content.FileProvider;
@@ -453,7 +454,15 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 abi = "x86";
                                 break;
                             case 5:
-                                abi = "universal";
+                            case 7:
+                                abi = "arm64-v8a";
+                                break;
+                            case 6:
+                            case 8:
+                                abi = "x86_64";
+                                break;
+                            case 9:
+                                abi = "universal " + Build.CPU_ABI + " " + Build.CPU_ABI2;
                                 break;
                         }
                         TextInfoCell textInfoCell = (TextInfoCell) view;
@@ -1020,38 +1029,22 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
                 this.pressCount++;
                 if (this.pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
-                    CharSequence[] items;
+                    String string;
                     Builder builder = new Builder(SettingsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
-                    String str;
-                    if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                        items = new CharSequence[7];
-                        items[0] = LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts);
-                        items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
-                        items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
-                        items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
-                        items[4] = BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs);
-                        items[5] = SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
-                        if (SharedConfig.roundCamera16to9) {
-                            str = "switch camera to 4:3";
-                        } else {
-                            str = "switch camera to 16:9";
-                        }
-                        items[6] = str;
+                    CharSequence[] items = new CharSequence[7];
+                    items[0] = LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts);
+                    items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
+                    items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
+                    items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
+                    items[4] = BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs);
+                    if (SharedConfig.inappCamera) {
+                        string = LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera);
                     } else {
-                        items = new CharSequence[6];
-                        items[0] = LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts);
-                        items[1] = LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts);
-                        items[2] = LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts);
-                        items[3] = LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs);
-                        items[4] = BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs);
-                        if (SharedConfig.inappCamera) {
-                            str = LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera);
-                        } else {
-                            str = LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
-                        }
-                        items[5] = str;
+                        string = LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera);
                     }
+                    items[5] = string;
+                    items[6] = LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache);
                     builder.setItems(items, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             boolean z = true;
@@ -1074,7 +1067,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             } else if (which == 5) {
                                 SharedConfig.toggleInappCamera();
                             } else if (which == 6) {
-                                SharedConfig.toggleRoundCamera16to9();
+                                MessagesStorage.getInstance(SettingsActivity.this.currentAccount).clearSentMedia();
                             }
                         }
                     });

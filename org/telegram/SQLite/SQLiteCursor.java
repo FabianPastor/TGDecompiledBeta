@@ -10,24 +10,24 @@ public class SQLiteCursor {
     public static final int FIELD_TYPE_INT = 1;
     public static final int FIELD_TYPE_NULL = 5;
     public static final int FIELD_TYPE_STRING = 3;
-    boolean inRow = false;
-    SQLitePreparedStatement preparedStatement;
+    private boolean inRow = false;
+    private SQLitePreparedStatement preparedStatement;
 
-    native byte[] columnByteArrayValue(int i, int i2);
+    native byte[] columnByteArrayValue(long j, int i);
 
-    native int columnByteBufferValue(int i, int i2);
+    native long columnByteBufferValue(long j, int i);
 
-    native double columnDoubleValue(int i, int i2);
+    native double columnDoubleValue(long j, int i);
 
-    native int columnIntValue(int i, int i2);
+    native int columnIntValue(long j, int i);
 
-    native int columnIsNull(int i, int i2);
+    native int columnIsNull(long j, int i);
 
-    native long columnLongValue(int i, int i2);
+    native long columnLongValue(long j, int i);
 
-    native String columnStringValue(int i, int i2);
+    native String columnStringValue(long j, int i);
 
-    native int columnType(int i, int i2);
+    native int columnType(long j, int i);
 
     public SQLiteCursor(SQLitePreparedStatement stmt) {
         this.preparedStatement = stmt;
@@ -68,7 +68,7 @@ public class SQLiteCursor {
 
     public NativeByteBuffer byteBufferValue(int columnIndex) throws SQLiteException {
         checkRow();
-        int ptr = columnByteBufferValue(this.preparedStatement.getStatementHandle(), columnIndex);
+        long ptr = columnByteBufferValue(this.preparedStatement.getStatementHandle(), columnIndex);
         if (ptr != 0) {
             return NativeByteBuffer.wrap(ptr);
         }
@@ -112,7 +112,7 @@ public class SQLiteCursor {
         return this.inRow;
     }
 
-    public int getStatementHandle() {
+    public long getStatementHandle() {
         return this.preparedStatement.getStatementHandle();
     }
 

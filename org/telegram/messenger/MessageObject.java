@@ -1386,6 +1386,7 @@ public class MessageObject {
             message2 = this.messageOwner;
             message2.flags |= Integer.MIN_VALUE;
         }
+        MediaController mediaController = MediaController.getInstance();
         if (!(event.action.message == null || (event.action.message instanceof TL_messageEmpty))) {
             message = event.action.message;
         }
@@ -1401,6 +1402,11 @@ public class MessageObject {
             }
             MessageObject messageObject = new MessageObject(accountNum, message, null, null, true, this.eventId);
             if (messageObject.contentType >= 0) {
+                if (mediaController.isPlayingMessage(messageObject)) {
+                    MessageObject player = mediaController.getPlayingMessageObject();
+                    messageObject.audioProgress = player.audioProgress;
+                    messageObject.audioProgressSec = player.audioProgressSec;
+                }
                 createDateArray(accountNum, event, messageObjects, messagesByDays);
                 messageObjects.add(messageObjects.size() - 1, messageObject);
             } else {
@@ -1455,6 +1461,11 @@ public class MessageObject {
                         replaceFontMetrics.replaceFontMetrics(emojiPaint.getFontMetricsInt(), size);
                     }
                 }
+            }
+            if (mediaController.isPlayingMessage(this)) {
+                player = mediaController.getPlayingMessageObject();
+                this.audioProgress = player.audioProgress;
+                this.audioProgressSec = player.audioProgressSec;
             }
             generateLayout(fromUser);
             this.layoutCreated = true;

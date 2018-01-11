@@ -259,7 +259,7 @@ public class ConnectionsManager {
 
     public static native void native_applyDatacenterAddress(int i, int i2, String str, int i3);
 
-    public static native void native_applyDnsConfig(int i, int i2);
+    public static native void native_applyDnsConfig(int i, long j);
 
     public static native void native_bindRequestToGuid(int i, int i2, int i3);
 
@@ -285,7 +285,7 @@ public class ConnectionsManager {
 
     public static native void native_resumeNetwork(int i, boolean z);
 
-    public static native void native_sendRequest(int i, int i2, RequestDelegateInternal requestDelegateInternal, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i3, int i4, int i5, boolean z, int i6);
+    public static native void native_sendRequest(int i, long j, RequestDelegateInternal requestDelegateInternal, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i2, int i3, int i4, boolean z, int i5);
 
     public static native void native_setJava(boolean z);
 
@@ -432,7 +432,7 @@ public class ConnectionsManager {
                     tLObject.serializeToStream(buffer);
                     tLObject.freeResources();
                     ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new RequestDelegateInternal() {
-                        public void run(int response, int errorCode, String errorText, int networkType) {
+                        public void run(long response, int errorCode, String errorText, int networkType) {
                             Throwable e;
                             TLObject resp = null;
                             TL_error error = null;
@@ -604,7 +604,7 @@ public class ConnectionsManager {
         }
     }
 
-    public static void onUnparsedMessageReceived(int address, final int currentAccount) {
+    public static void onUnparsedMessageReceived(long address, final int currentAccount) {
         try {
             NativeByteBuffer buff = NativeByteBuffer.wrap(address);
             buff.reused = true;
@@ -714,7 +714,7 @@ public class ConnectionsManager {
         }
     }
 
-    public static void onUpdateConfig(int address, final int currentAccount) {
+    public static void onUpdateConfig(long address, final int currentAccount) {
         try {
             NativeByteBuffer buff = NativeByteBuffer.wrap(address);
             buff.reused = true;

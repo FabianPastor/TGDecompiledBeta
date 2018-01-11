@@ -3,16 +3,16 @@ package org.telegram.tgnet;
 import java.io.File;
 
 public class FileLoadOperation {
-    private int address;
+    private long address;
     private FileLoadOperationDelegate delegate;
     private boolean isForceRequest;
     private boolean started;
 
-    public static native void native_cancelLoadOperation(int i);
+    public static native void native_cancelLoadOperation(long j);
 
-    public static native int native_createLoadOpetation(int i, long j, long j2, long j3, int i2, byte[] bArr, byte[] bArr2, String str, int i3, int i4, String str2, String str3, Object obj);
+    public static native long native_createLoadOpetation(int i, long j, long j2, long j3, int i2, byte[] bArr, byte[] bArr2, String str, int i3, int i4, String str2, String str3, Object obj);
 
-    public static native void native_startLoadOperation(int i);
+    public static native void native_startLoadOperation(long j);
 
     public FileLoadOperation(int dc_id, long id, long volume_id, long access_hash, int local_id, byte[] encKey, byte[] encIv, String extension, int version, int size, File dest, File temp, FileLoadOperationDelegate fileLoadOperationDelegate) {
         this.address = native_createLoadOpetation(dc_id, id, volume_id, access_hash, local_id, encKey, encIv, extension, version, size, dest.getAbsolutePath(), temp.getAbsolutePath(), fileLoadOperationDelegate);

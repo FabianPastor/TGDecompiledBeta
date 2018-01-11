@@ -84,7 +84,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
     };
     private final int[] metaData = new int[4];
-    private volatile int nativePtr;
+    private volatile long nativePtr;
     private Bitmap nextRenderingBitmap;
     private BitmapShader nextRenderingShader;
     private View parentView = null;
@@ -137,11 +137,11 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
     };
 
-    private static native int createDecoder(String str, int[] iArr);
+    private static native long createDecoder(String str, int[] iArr);
 
-    private static native void destroyDecoder(int i);
+    private static native void destroyDecoder(long j);
 
-    private static native int getVideoFrame(int i, Bitmap bitmap, int[] iArr);
+    private static native int getVideoFrame(long j, Bitmap bitmap, int[] iArr);
 
     public AnimatedFileDrawable(File file, boolean createDecoder) {
         this.path = file;

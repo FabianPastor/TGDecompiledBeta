@@ -433,7 +433,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                         break;
                                     }
                                     if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.d("first audio frame not found, removing buffers " + input.results);
+                                        FileLog.d("first audio frame not found, removing buffers " + input.results + " with last time " + input.offset[input.results - 1]);
                                     }
                                     this.buffersToWrite.remove(input);
                                     if (!this.buffersToWrite.isEmpty()) {
@@ -447,7 +447,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                 break;
                             }
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("first audio frame not found, removing buffers " + input.results);
+                                FileLog.d("first audio frame not found, removing buffers " + input.results + " with last time " + input.offset[input.results - 1]);
                             }
                             this.buffersToWrite.remove(input);
                             if (!this.buffersToWrite.isEmpty()) {
@@ -476,55 +476,55 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
                 boolean isLast = false;
                 while (input != null) {
-                    int inputBufferIndex = this.audioEncoder.dequeueInputBuffer(0);
-                    if (inputBufferIndex >= 0) {
-                        ByteBuffer inputBuffer;
-                        if (VERSION.SDK_INT >= 21) {
-                            inputBuffer = this.audioEncoder.getInputBuffer(inputBufferIndex);
-                        } else {
-                            try {
+                    try {
+                        int inputBufferIndex = this.audioEncoder.dequeueInputBuffer(0);
+                        if (inputBufferIndex >= 0) {
+                            ByteBuffer inputBuffer;
+                            if (VERSION.SDK_INT >= 21) {
+                                inputBuffer = this.audioEncoder.getInputBuffer(inputBufferIndex);
+                            } else {
                                 inputBuffer = this.audioEncoder.getInputBuffers()[inputBufferIndex];
                                 inputBuffer.clear();
-                            } catch (Throwable e2) {
-                                FileLog.e(e2);
-                                return;
                             }
-                        }
-                        long startWriteTime = input.offset[input.lastWroteBuffer];
-                        a = input.lastWroteBuffer;
-                        while (a <= input.results) {
-                            if (a < input.results) {
-                                if (!this.running && input.offset[a] >= this.videoLast) {
-                                    if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.d("stop audio encoding because of stoped video recording at " + input.offset[a] + " last video " + this.videoLast);
+                            long startWriteTime = input.offset[input.lastWroteBuffer];
+                            a = input.lastWroteBuffer;
+                            while (a <= input.results) {
+                                if (a < input.results) {
+                                    if (!this.running && input.offset[a] >= this.videoLast) {
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.d("stop audio encoding because of stoped video recording at " + input.offset[a] + " last video " + this.videoLast);
+                                        }
+                                        this.audioStopedByTime = true;
+                                        isLast = true;
+                                        input = null;
+                                        this.buffersToWrite.clear();
+                                    } else if (inputBuffer.remaining() < input.read[a]) {
+                                        input.lastWroteBuffer = a;
+                                        input = null;
+                                        break;
+                                    } else {
+                                        inputBuffer.put(input.buffer, a * 2048, input.read[a]);
                                     }
-                                    this.audioStopedByTime = true;
-                                    isLast = true;
-                                    input = null;
-                                    this.buffersToWrite.clear();
-                                } else if (inputBuffer.remaining() < input.read[a]) {
-                                    input.lastWroteBuffer = a;
-                                    input = null;
-                                    break;
-                                } else {
-                                    inputBuffer.put(input.buffer, a * 2048, input.read[a]);
                                 }
+                                if (a >= input.results - 1) {
+                                    this.buffersToWrite.remove(input);
+                                    if (this.running) {
+                                        this.buffers.put(input);
+                                    }
+                                    if (this.buffersToWrite.isEmpty()) {
+                                        isLast = input.last;
+                                        input = null;
+                                        break;
+                                    }
+                                    input = (AudioBufferInfo) this.buffersToWrite.get(0);
+                                }
+                                a++;
                             }
-                            if (a >= input.results - 1) {
-                                this.buffersToWrite.remove(input);
-                                if (this.running) {
-                                    this.buffers.put(input);
-                                }
-                                if (this.buffersToWrite.isEmpty()) {
-                                    isLast = input.last;
-                                    input = null;
-                                    break;
-                                }
-                                input = (AudioBufferInfo) this.buffersToWrite.get(0);
-                            }
-                            a++;
+                            this.audioEncoder.queueInputBuffer(inputBufferIndex, 0, inputBuffer.position(), startWriteTime == 0 ? 0 : startWriteTime - this.audioStartTime, isLast ? 4 : 0);
                         }
-                        this.audioEncoder.queueInputBuffer(inputBufferIndex, 0, inputBuffer.position(), startWriteTime == 0 ? 0 : startWriteTime - this.audioStartTime, isLast ? 4 : 0);
+                    } catch (Throwable e2) {
+                        FileLog.e(e2);
+                        return;
                     }
                 }
             }
@@ -899,6 +899,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
+            MediaFormat newFormat;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
@@ -907,7 +908,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             }
             while (true) {
-                MediaFormat newFormat;
                 ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {

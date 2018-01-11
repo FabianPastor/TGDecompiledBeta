@@ -86,7 +86,7 @@ public class Bitmaps {
     }
 
     public static Bitmap createBitmap(Bitmap source, int x, int y, int width, int height, Matrix m, boolean filter) {
-        if (VERSION.SDK_INT >= 26) {
+        if (VERSION.SDK_INT >= 21) {
             return Bitmap.createBitmap(source, x, y, width, height, m, filter);
         }
         checkXYSign(x, y);
@@ -161,7 +161,7 @@ public class Bitmaps {
     }
 
     public static Bitmap createScaledBitmap(Bitmap src, int dstWidth, int dstHeight, boolean filter) {
-        if (VERSION.SDK_INT >= 26) {
+        if (VERSION.SDK_INT >= 21) {
             return Bitmap.createScaledBitmap(src, dstWidth, dstHeight, filter);
         }
         Matrix m;

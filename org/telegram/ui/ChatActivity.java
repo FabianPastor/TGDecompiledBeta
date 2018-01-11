@@ -7029,11 +7029,35 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void addToSelectedMessages(MessageObject messageObject, boolean outside, boolean last) {
-        int index = messageObject.getDialogId() == this.dialog_id ? 0 : 1;
-        GroupedMessages groupedMessages;
         int a;
-        if (!outside || messageObject.getGroupId() == 0) {
-            if (this.selectedMessagesIds[index].indexOfKey(messageObject.getId()) >= 0) {
+        if (messageObject != null) {
+            int index = messageObject.getDialogId() == this.dialog_id ? 0 : 1;
+            GroupedMessages groupedMessages;
+            if (outside && messageObject.getGroupId() != 0) {
+                boolean hasUnselected = false;
+                groupedMessages = (GroupedMessages) this.groupedMessagesMap.get(messageObject.getGroupId());
+                if (groupedMessages != null) {
+                    int lastNum = 0;
+                    for (a = 0; a < groupedMessages.messages.size(); a++) {
+                        if (this.selectedMessagesIds[index].indexOfKey(((MessageObject) groupedMessages.messages.get(a)).getId()) < 0) {
+                            hasUnselected = true;
+                            lastNum = a;
+                        }
+                    }
+                    a = 0;
+                    while (a < groupedMessages.messages.size()) {
+                        MessageObject message = (MessageObject) groupedMessages.messages.get(a);
+                        if (!hasUnselected) {
+                            addToSelectedMessages(message, false, a == groupedMessages.messages.size() + -1);
+                        } else if (this.selectedMessagesIds[index].indexOfKey(message.getId()) < 0) {
+                            addToSelectedMessages(message, false, a == lastNum);
+                        }
+                        a++;
+                    }
+                    return;
+                }
+                return;
+            } else if (this.selectedMessagesIds[index].indexOfKey(messageObject.getId()) >= 0) {
                 this.selectedMessagesIds[index].remove(messageObject.getId());
                 if (messageObject.type == 0 || messageObject.caption != null) {
                     this.selectedMessagesCanCopyIds[index].remove(messageObject.getId());
@@ -7070,133 +7094,108 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             } else {
                 return;
             }
-            if (last && this.actionBar.isActionModeShowed()) {
-                int selectedCount = this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size();
-                if (selectedCount == 0) {
-                    this.actionBar.hideActionMode();
-                    updatePinnedMessageView(true);
-                    this.startReplyOnTextChange = false;
-                    return;
-                }
-                ActionBarMenuItem copyItem = this.actionBar.createActionMode().getItem(10);
-                ActionBarMenuItem starItem = this.actionBar.createActionMode().getItem(22);
-                ActionBarMenuItem editItem = this.actionBar.createActionMode().getItem(edit);
-                ActionBarMenuItem replyItem = this.actionBar.createActionMode().getItem(19);
-                int copyVisible = copyItem.getVisibility();
-                int starVisible = starItem.getVisibility();
-                copyItem.setVisibility(this.selectedMessagesCanCopyIds[0].size() + this.selectedMessagesCanCopyIds[1].size() != 0 ? 0 : 8);
-                int i = (DataQuery.getInstance(this.currentAccount).canAddStickerToFavorites() && this.selectedMessagesCanStarIds[0].size() + this.selectedMessagesCanStarIds[1].size() == selectedCount) ? 0 : 8;
-                starItem.setVisibility(i);
-                int newCopyVisible = copyItem.getVisibility();
-                int newStarVisible = starItem.getVisibility();
-                this.actionBar.createActionMode().getItem(12).setVisibility(this.cantDeleteMessagesCount == 0 ? 0 : 8);
-                if (editItem != null) {
-                    i = (this.canEditMessagesCount == 1 && this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size() == 1) ? 0 : 8;
-                    editItem.setVisibility(i);
-                }
-                this.hasUnfavedSelected = false;
-                for (a = 0; a < 2; a++) {
-                    for (int b = 0; b < this.selectedMessagesCanStarIds[a].size(); b++) {
-                        if (!DataQuery.getInstance(this.currentAccount).isStickerInFavorites(((MessageObject) this.selectedMessagesCanStarIds[a].valueAt(b)).getDocument())) {
-                            this.hasUnfavedSelected = true;
-                            break;
-                        }
-                    }
-                    if (this.hasUnfavedSelected) {
+        }
+        if (last && this.actionBar.isActionModeShowed()) {
+            int selectedCount = this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size();
+            if (selectedCount == 0) {
+                this.actionBar.hideActionMode();
+                updatePinnedMessageView(true);
+                this.startReplyOnTextChange = false;
+                return;
+            }
+            ActionBarMenuItem copyItem = this.actionBar.createActionMode().getItem(10);
+            ActionBarMenuItem starItem = this.actionBar.createActionMode().getItem(22);
+            ActionBarMenuItem editItem = this.actionBar.createActionMode().getItem(edit);
+            ActionBarMenuItem replyItem = this.actionBar.createActionMode().getItem(19);
+            int copyVisible = copyItem.getVisibility();
+            int starVisible = starItem.getVisibility();
+            copyItem.setVisibility(this.selectedMessagesCanCopyIds[0].size() + this.selectedMessagesCanCopyIds[1].size() != 0 ? 0 : 8);
+            int i = (DataQuery.getInstance(this.currentAccount).canAddStickerToFavorites() && this.selectedMessagesCanStarIds[0].size() + this.selectedMessagesCanStarIds[1].size() == selectedCount) ? 0 : 8;
+            starItem.setVisibility(i);
+            int newCopyVisible = copyItem.getVisibility();
+            int newStarVisible = starItem.getVisibility();
+            this.actionBar.createActionMode().getItem(12).setVisibility(this.cantDeleteMessagesCount == 0 ? 0 : 8);
+            if (editItem != null) {
+                i = (this.canEditMessagesCount == 1 && this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size() == 1) ? 0 : 8;
+                editItem.setVisibility(i);
+            }
+            this.hasUnfavedSelected = false;
+            for (a = 0; a < 2; a++) {
+                for (int b = 0; b < this.selectedMessagesCanStarIds[a].size(); b++) {
+                    if (!DataQuery.getInstance(this.currentAccount).isStickerInFavorites(((MessageObject) this.selectedMessagesCanStarIds[a].valueAt(b)).getDocument())) {
+                        this.hasUnfavedSelected = true;
                         break;
                     }
                 }
-                starItem.setIcon(this.hasUnfavedSelected ? R.drawable.ic_ab_fave : R.drawable.ic_ab_unfave);
-                if (replyItem != null) {
-                    boolean allowChatActions = true;
-                    if ((this.currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) < 46) || this.isBroadcast || ((this.bottomOverlayChat != null && this.bottomOverlayChat.getVisibility() == 0) || (this.currentChat != null && (ChatObject.isNotInChat(this.currentChat) || !((!ChatObject.isChannel(this.currentChat) || ChatObject.canPost(this.currentChat) || this.currentChat.megagroup) && ChatObject.canSendMessages(this.currentChat)))))) {
-                        allowChatActions = false;
+                if (this.hasUnfavedSelected) {
+                    break;
+                }
+            }
+            starItem.setIcon(this.hasUnfavedSelected ? R.drawable.ic_ab_fave : R.drawable.ic_ab_unfave);
+            if (replyItem != null) {
+                boolean allowChatActions = true;
+                if ((this.currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(this.currentEncryptedChat.layer) < 46) || this.isBroadcast || ((this.bottomOverlayChat != null && this.bottomOverlayChat.getVisibility() == 0) || (this.currentChat != null && (ChatObject.isNotInChat(this.currentChat) || !((!ChatObject.isChannel(this.currentChat) || ChatObject.canPost(this.currentChat) || this.currentChat.megagroup) && ChatObject.canSendMessages(this.currentChat)))))) {
+                    allowChatActions = false;
+                }
+                int newVisibility = (allowChatActions && this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size() == 1) ? 0 : 8;
+                boolean z = newVisibility == 0 && !this.chatActivityEnterView.hasText();
+                this.startReplyOnTextChange = z;
+                if (replyItem.getVisibility() != newVisibility) {
+                    if (this.replyButtonAnimation != null) {
+                        this.replyButtonAnimation.cancel();
                     }
-                    int newVisibility = (allowChatActions && this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size() == 1) ? 0 : 8;
-                    boolean z = newVisibility == 0 && !this.chatActivityEnterView.hasText();
-                    this.startReplyOnTextChange = z;
-                    if (replyItem.getVisibility() != newVisibility) {
-                        if (this.replyButtonAnimation != null) {
-                            this.replyButtonAnimation.cancel();
-                        }
-                        if (copyVisible == newCopyVisible && starVisible == newStarVisible) {
-                            this.replyButtonAnimation = new AnimatorSet();
-                            replyItem.setPivotX((float) AndroidUtilities.dp(54.0f));
-                            editItem.setPivotX((float) AndroidUtilities.dp(54.0f));
-                            AnimatorSet animatorSet;
-                            Animator[] animatorArr;
-                            if (newVisibility == 0) {
-                                replyItem.setVisibility(newVisibility);
-                                animatorSet = this.replyButtonAnimation;
-                                animatorArr = new Animator[4];
-                                animatorArr[0] = ObjectAnimator.ofFloat(replyItem, "alpha", new float[]{1.0f});
-                                animatorArr[1] = ObjectAnimator.ofFloat(replyItem, "scaleX", new float[]{1.0f});
-                                animatorArr[2] = ObjectAnimator.ofFloat(editItem, "alpha", new float[]{1.0f});
-                                animatorArr[3] = ObjectAnimator.ofFloat(editItem, "scaleX", new float[]{1.0f});
-                                animatorSet.playTogether(animatorArr);
-                            } else {
-                                animatorSet = this.replyButtonAnimation;
-                                animatorArr = new Animator[4];
-                                animatorArr[0] = ObjectAnimator.ofFloat(replyItem, "alpha", new float[]{0.0f});
-                                animatorArr[1] = ObjectAnimator.ofFloat(replyItem, "scaleX", new float[]{0.0f});
-                                animatorArr[2] = ObjectAnimator.ofFloat(editItem, "alpha", new float[]{0.0f});
-                                animatorArr[3] = ObjectAnimator.ofFloat(editItem, "scaleX", new float[]{0.0f});
-                                animatorSet.playTogether(animatorArr);
-                            }
-                            this.replyButtonAnimation.setDuration(100);
-                            final int i2 = newVisibility;
-                            final ActionBarMenuItem actionBarMenuItem = replyItem;
-                            this.replyButtonAnimation.addListener(new AnimatorListenerAdapter() {
-                                public void onAnimationEnd(Animator animation) {
-                                    if (ChatActivity.this.replyButtonAnimation != null && ChatActivity.this.replyButtonAnimation.equals(animation) && i2 == 8) {
-                                        actionBarMenuItem.setVisibility(8);
-                                    }
-                                }
-
-                                public void onAnimationCancel(Animator animation) {
-                                    if (ChatActivity.this.replyButtonAnimation != null && ChatActivity.this.replyButtonAnimation.equals(animation)) {
-                                        ChatActivity.this.replyButtonAnimation = null;
-                                    }
-                                }
-                            });
-                            this.replyButtonAnimation.start();
-                            return;
-                        }
+                    if (copyVisible == newCopyVisible && starVisible == newStarVisible) {
+                        this.replyButtonAnimation = new AnimatorSet();
+                        replyItem.setPivotX((float) AndroidUtilities.dp(54.0f));
+                        editItem.setPivotX((float) AndroidUtilities.dp(54.0f));
+                        AnimatorSet animatorSet;
+                        Animator[] animatorArr;
                         if (newVisibility == 0) {
-                            replyItem.setAlpha(1.0f);
-                            replyItem.setScaleX(1.0f);
+                            replyItem.setVisibility(newVisibility);
+                            animatorSet = this.replyButtonAnimation;
+                            animatorArr = new Animator[4];
+                            animatorArr[0] = ObjectAnimator.ofFloat(replyItem, "alpha", new float[]{1.0f});
+                            animatorArr[1] = ObjectAnimator.ofFloat(replyItem, "scaleX", new float[]{1.0f});
+                            animatorArr[2] = ObjectAnimator.ofFloat(editItem, "alpha", new float[]{1.0f});
+                            animatorArr[3] = ObjectAnimator.ofFloat(editItem, "scaleX", new float[]{1.0f});
+                            animatorSet.playTogether(animatorArr);
                         } else {
-                            replyItem.setAlpha(0.0f);
-                            replyItem.setScaleX(0.0f);
+                            animatorSet = this.replyButtonAnimation;
+                            animatorArr = new Animator[4];
+                            animatorArr[0] = ObjectAnimator.ofFloat(replyItem, "alpha", new float[]{0.0f});
+                            animatorArr[1] = ObjectAnimator.ofFloat(replyItem, "scaleX", new float[]{0.0f});
+                            animatorArr[2] = ObjectAnimator.ofFloat(editItem, "alpha", new float[]{0.0f});
+                            animatorArr[3] = ObjectAnimator.ofFloat(editItem, "scaleX", new float[]{0.0f});
+                            animatorSet.playTogether(animatorArr);
                         }
-                        replyItem.setVisibility(newVisibility);
+                        this.replyButtonAnimation.setDuration(100);
+                        final int i2 = newVisibility;
+                        final ActionBarMenuItem actionBarMenuItem = replyItem;
+                        this.replyButtonAnimation.addListener(new AnimatorListenerAdapter() {
+                            public void onAnimationEnd(Animator animation) {
+                                if (ChatActivity.this.replyButtonAnimation != null && ChatActivity.this.replyButtonAnimation.equals(animation) && i2 == 8) {
+                                    actionBarMenuItem.setVisibility(8);
+                                }
+                            }
+
+                            public void onAnimationCancel(Animator animation) {
+                                if (ChatActivity.this.replyButtonAnimation != null && ChatActivity.this.replyButtonAnimation.equals(animation)) {
+                                    ChatActivity.this.replyButtonAnimation = null;
+                                }
+                            }
+                        });
+                        this.replyButtonAnimation.start();
                         return;
                     }
-                    return;
+                    if (newVisibility == 0) {
+                        replyItem.setAlpha(1.0f);
+                        replyItem.setScaleX(1.0f);
+                    } else {
+                        replyItem.setAlpha(0.0f);
+                        replyItem.setScaleX(0.0f);
+                    }
+                    replyItem.setVisibility(newVisibility);
                 }
-                return;
-            }
-            return;
-        }
-        boolean hasUnselected = false;
-        groupedMessages = (GroupedMessages) this.groupedMessagesMap.get(messageObject.getGroupId());
-        if (groupedMessages != null) {
-            int lastNum = 0;
-            for (a = 0; a < groupedMessages.messages.size(); a++) {
-                if (this.selectedMessagesIds[index].indexOfKey(((MessageObject) groupedMessages.messages.get(a)).getId()) < 0) {
-                    hasUnselected = true;
-                    lastNum = a;
-                }
-            }
-            a = 0;
-            while (a < groupedMessages.messages.size()) {
-                MessageObject message = (MessageObject) groupedMessages.messages.get(a);
-                if (!hasUnselected) {
-                    addToSelectedMessages(message, false, a == groupedMessages.messages.size() + -1);
-                } else if (this.selectedMessagesIds[index].indexOfKey(message.getId()) < 0) {
-                    addToSelectedMessages(message, false, a == lastNum);
-                }
-                a++;
             }
         }
     }
@@ -7751,7 +7750,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             }
                         }
                         if (this.messagesDict[loadIndex].indexOfKey(obj.getId()) < 0) {
-                            if (MediaController.getInstance().isPlayingMessage(obj)) {
+                            if (mediaController.isPlayingMessage(obj)) {
                                 player = mediaController.getPlayingMessageObject();
                                 obj.audioProgress = player.audioProgress;
                                 obj.audioProgressSec = player.audioProgressSec;
@@ -8292,7 +8291,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 if (obj.messageOwner.id < 0 || this.messages.isEmpty()) {
                                     placeToPaste = 0;
                                 } else {
-                                    int size = this.messages.size();
+                                    size = this.messages.size();
                                     b = 0;
                                     while (b < size) {
                                         MessageObject lastMessage = (MessageObject) this.messages.get(b);
@@ -8811,7 +8810,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
             updated = false;
             newGroups = null;
-            for (a = 0; a < markAsDeletedMessages.size(); a++) {
+            size = markAsDeletedMessages.size();
+            boolean updatedSelected = false;
+            boolean updatedSelectedLast = false;
+            a = 0;
+            while (a < size) {
                 Integer ids = (Integer) markAsDeletedMessages.get(a);
                 obj = (MessageObject) this.messagesDict[loadIndex].get(ids.intValue());
                 if (loadIndex == 0 && this.info != null && this.info.pinned_msg_id == ids.intValue()) {
@@ -8823,6 +8826,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 if (obj != null) {
                     index = this.messages.indexOf(obj);
                     if (index != -1) {
+                        if (this.selectedMessagesIds[loadIndex].indexOfKey(ids.intValue()) >= 0) {
+                            updatedSelected = true;
+                            updatedSelectedLast = a == size + -1;
+                            addToSelectedMessages(obj, false, updatedSelectedLast);
+                        }
                         removed = (MessageObject) this.messages.remove(index);
                         if (removed.getGroupId() != 0) {
                             groupedMessages = (GroupedMessages) this.groupedMessagesMap.get(removed.getGroupId());
@@ -8848,6 +8856,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         updated = true;
                     }
                 }
+                a++;
+            }
+            if (updatedSelected && !updatedSelectedLast) {
+                addToSelectedMessages(null, false, true);
             }
             if (newGroups != null) {
                 for (a = 0; a < newGroups.size(); a++) {
@@ -9337,6 +9349,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     cell.updateButtonState(false);
                                 } else if (messageObject1.isRoundVideo()) {
                                     cell.checkRoundVideoPlayback(false);
+                                    if (!(MediaController.getInstance().isPlayingMessage(messageObject1) || messageObject1.audioProgress == 0.0f)) {
+                                        messageObject1.audioProgress = 0.0f;
+                                        messageObject1.audioProgressSec = 0;
+                                        cell.invalidate();
+                                    }
                                 }
                             }
                         }

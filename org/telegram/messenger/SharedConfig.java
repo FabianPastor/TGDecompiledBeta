@@ -177,6 +177,7 @@ public class SharedConfig {
             }
             playOrderReversed = z;
         }
+        MediaController.getInstance().checkIsNextMediaFileDownloaded();
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("shuffleMusic", shuffleMusic);
         editor.putBoolean("playOrderReversed", playOrderReversed);
