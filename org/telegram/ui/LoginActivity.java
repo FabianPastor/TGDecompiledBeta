@@ -2282,6 +2282,8 @@ public class LoginActivity extends BaseFragment {
                                     } else if (error.text != null) {
                                         if (error.text.contains("PHONE_NUMBER_INVALID")) {
                                             LoginActivity.this.needShowInvalidAlert(tLObject.phone_number, false);
+                                        } else if (error.text.contains("PHONE_PASSWORD_FLOOD")) {
+                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
                                         } else if (error.text.contains("PHONE_NUMBER_FLOOD")) {
                                             LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("PhoneNumberFlood", R.string.PhoneNumberFlood));
                                         } else if (error.text.contains("PHONE_NUMBER_BANNED")) {
