@@ -1857,15 +1857,19 @@ public class NotificationsController {
                     } else {
                         name = chatName;
                     }
-                    if (UserConfig.getActivatedAccountsCount() <= 1) {
-                        detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser()) + "・";
-                    } else {
+                    if (UserConfig.getActivatedAccountsCount() > 1) {
                         detailText = TtmlNode.ANONYMOUS_REGION_ID;
-                    }
-                    if (this.pushDialogs.size() != 1) {
-                        detailText = detailText + LocaleController.formatPluralString("NewMessages", this.total_unread_count);
+                    } else if (this.pushMessages.size() != 1) {
+                        detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser());
                     } else {
-                        detailText = detailText + LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", this.total_unread_count), LocaleController.formatPluralString("FromChats", this.pushDialogs.size()));
+                        detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser()) + "・";
+                    }
+                    if (this.pushMessages.size() != 1) {
+                        if (this.pushDialogs.size() != 1) {
+                            detailText = detailText + LocaleController.formatPluralString("NewMessages", this.total_unread_count);
+                        } else {
+                            detailText = detailText + LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", this.total_unread_count), LocaleController.formatPluralString("FromChats", this.pushDialogs.size()));
+                        }
                     }
                     mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup(this.notificationGroup).setGroupSummary(true).setColor(-13851168);
                     vibrationPattern = null;
@@ -2023,7 +2027,7 @@ public class NotificationsController {
                     }
                     notificationManager.notify(this.notificationId, mBuilder.build());
                     this.lastNotificationIsNoData = false;
-                    showExtraNotifications(mBuilder, notifyAboutLast);
+                    showExtraNotifications(mBuilder, notifyAboutLast, detailText);
                     scheduleNotificationRepeat();
                 }
             }
@@ -2144,15 +2148,19 @@ public class NotificationsController {
             }
             name = LocaleController.getString("AppName", R.string.AppName);
             replace = false;
-            if (UserConfig.getActivatedAccountsCount() <= 1) {
+            if (UserConfig.getActivatedAccountsCount() > 1) {
                 detailText = TtmlNode.ANONYMOUS_REGION_ID;
-            } else {
+            } else if (this.pushMessages.size() != 1) {
                 detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser()) + "・";
-            }
-            if (this.pushDialogs.size() != 1) {
-                detailText = detailText + LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", this.total_unread_count), LocaleController.formatPluralString("FromChats", this.pushDialogs.size()));
             } else {
-                detailText = detailText + LocaleController.formatPluralString("NewMessages", this.total_unread_count);
+                detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser());
+            }
+            if (this.pushMessages.size() != 1) {
+                if (this.pushDialogs.size() != 1) {
+                    detailText = detailText + LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", this.total_unread_count), LocaleController.formatPluralString("FromChats", this.pushDialogs.size()));
+                } else {
+                    detailText = detailText + LocaleController.formatPluralString("NewMessages", this.total_unread_count);
+                }
             }
             mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup(this.notificationGroup).setGroupSummary(true).setColor(-13851168);
             vibrationPattern = null;
@@ -2257,7 +2265,7 @@ public class NotificationsController {
             }
             notificationManager.notify(this.notificationId, mBuilder.build());
             this.lastNotificationIsNoData = false;
-            showExtraNotifications(mBuilder, notifyAboutLast);
+            showExtraNotifications(mBuilder, notifyAboutLast, detailText);
             scheduleNotificationRepeat();
         } catch (Throwable e2) {
             FileLog.e(e2);
@@ -2265,7 +2273,7 @@ public class NotificationsController {
     }
 
     @SuppressLint({"InlinedApi"})
-    private void showExtraNotifications(Builder notificationBuilder, boolean notifyAboutLast) {
+    private void showExtraNotifications(Builder notificationBuilder, boolean notifyAboutLast, String summary) {
         if (VERSION.SDK_INT >= 18) {
             int a;
             MessageObject messageObject;
@@ -2383,7 +2391,7 @@ public class NotificationsController {
                     if (count == null) {
                         count = Integer.valueOf(0);
                     }
-                    messagingStyle = new MessagingStyle(null).setConversationTitle(String.format("%1$s (%2$s)", new Object[]{name, LocaleController.formatPluralString("NewMessages", Math.max(count.intValue(), messageObjects.size()))}));
+                    messagingStyle = new MessagingStyle(TtmlNode.ANONYMOUS_REGION_ID).setConversationTitle(String.format("%1$s (%2$s)", new Object[]{name, LocaleController.formatPluralString("NewMessages", Math.max(count.intValue(), messageObjects.size()))}));
                     text = new StringBuilder();
                     isText = new boolean[1];
                     for (a = messageObjects.size() - 1; a >= 0; a--) {
@@ -2431,6 +2439,9 @@ public class NotificationsController {
                     notificationBuilder.extend(summaryExtender);
                     date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
                     builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
+                    if (this.pushMessages.size() == 1) {
+                        builder.setSubText(summary);
+                    }
                     if (photoPath != null) {
                         img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
                         if (img == null) {
@@ -2515,7 +2526,7 @@ public class NotificationsController {
                     if (count == null) {
                         count = Integer.valueOf(0);
                     }
-                    messagingStyle = new MessagingStyle(null).setConversationTitle(String.format("%1$s (%2$s)", new Object[]{name, LocaleController.formatPluralString("NewMessages", Math.max(count.intValue(), messageObjects.size()))}));
+                    messagingStyle = new MessagingStyle(TtmlNode.ANONYMOUS_REGION_ID).setConversationTitle(String.format("%1$s (%2$s)", new Object[]{name, LocaleController.formatPluralString("NewMessages", Math.max(count.intValue(), messageObjects.size()))}));
                     text = new StringBuilder();
                     isText = new boolean[1];
                     for (a = messageObjects.size() - 1; a >= 0; a--) {
@@ -2563,6 +2574,9 @@ public class NotificationsController {
                     notificationBuilder.extend(summaryExtender);
                     date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
                     builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
+                    if (this.pushMessages.size() == 1) {
+                        builder.setSubText(summary);
+                    }
                     if (photoPath != null) {
                         img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
                         if (img == null) {

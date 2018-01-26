@@ -2,8 +2,7 @@ package org.telegram.messenger;
 
 import android.content.SharedPreferences;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.RandomAccessFile;
 import java.lang.reflect.Array;
 
 public class StatsController {
@@ -33,65 +32,30 @@ public class StatsController {
     private long[] resetStatsDate = new long[3];
     private Runnable saveRunnable = new Runnable() {
         public void run() {
-            Throwable th;
             long newTime = System.currentTimeMillis();
             if (Math.abs(newTime - StatsController.this.lastInternalStatsSaveTime) >= 2000) {
                 StatsController.this.lastInternalStatsSaveTime = newTime;
-                FileOutputStream outputStream = null;
                 try {
-                    FileOutputStream outputStream2 = new FileOutputStream(StatsController.this.statsFile);
+                    StatsController.this.statsFile.seek(0);
                     for (int a = 0; a < 3; a++) {
-                        int b = 0;
-                        while (b < 7) {
-                            try {
-                                outputStream2.write(StatsController.this.longToBytes(StatsController.this.sentBytes[a][b]), 0, 8);
-                                outputStream2.write(StatsController.this.longToBytes(StatsController.this.receivedBytes[a][b]), 0, 8);
-                                outputStream2.write(StatsController.this.intToBytes(StatsController.this.sentItems[a][b]), 0, 4);
-                                outputStream2.write(StatsController.this.intToBytes(StatsController.this.receivedItems[a][b]), 0, 4);
-                                b++;
-                            } catch (Exception e) {
-                                outputStream = outputStream2;
-                            } catch (Throwable th2) {
-                                th = th2;
-                                outputStream = outputStream2;
-                            }
+                        for (int b = 0; b < 7; b++) {
+                            StatsController.this.statsFile.write(StatsController.this.longToBytes(StatsController.this.sentBytes[a][b]), 0, 8);
+                            StatsController.this.statsFile.write(StatsController.this.longToBytes(StatsController.this.receivedBytes[a][b]), 0, 8);
+                            StatsController.this.statsFile.write(StatsController.this.intToBytes(StatsController.this.sentItems[a][b]), 0, 4);
+                            StatsController.this.statsFile.write(StatsController.this.intToBytes(StatsController.this.receivedItems[a][b]), 0, 4);
                         }
-                        outputStream2.write(StatsController.this.intToBytes(StatsController.this.callsTotalTime[a]), 0, 4);
-                        outputStream2.write(StatsController.this.longToBytes(StatsController.this.resetStatsDate[a]), 0, 8);
+                        StatsController.this.statsFile.write(StatsController.this.intToBytes(StatsController.this.callsTotalTime[a]), 0, 4);
+                        StatsController.this.statsFile.write(StatsController.this.longToBytes(StatsController.this.resetStatsDate[a]), 0, 8);
                     }
-                    if (outputStream2 != null) {
-                        try {
-                            outputStream2.close();
-                            outputStream = outputStream2;
-                            return;
-                        } catch (Exception e2) {
-                            outputStream = outputStream2;
-                            return;
-                        }
-                    }
-                } catch (Exception e3) {
-                    if (outputStream != null) {
-                        try {
-                            outputStream.close();
-                        } catch (Exception e4) {
-                        }
-                    }
-                } catch (Throwable th3) {
-                    th = th3;
-                    if (outputStream != null) {
-                        try {
-                            outputStream.close();
-                        } catch (Exception e5) {
-                        }
-                    }
-                    throw th;
+                    StatsController.this.statsFile.getFD().sync();
+                } catch (Exception e) {
                 }
             }
         }
     };
     private long[][] sentBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] sentItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
-    private File statsFile;
+    private RandomAccessFile statsFile;
 
     private byte[] intToBytes(int value) {
         this.buffer[0] = (byte) (value >>> 24);
@@ -149,44 +113,33 @@ public class StatsController {
     }
 
     private StatsController(int account) {
-        Throwable th;
+        boolean save;
+        int a;
+        int b;
         File filesDir = ApplicationLoader.getFilesDirFixed();
         if (account != 0) {
             filesDir = new File(ApplicationLoader.getFilesDirFixed(), "account" + account + "/");
             filesDir.mkdirs();
         }
-        this.statsFile = new File(filesDir, "stats.dat");
-        boolean save;
-        int a;
-        int b;
-        if (this.statsFile.length() > 0) {
-            FileInputStream inputStream = null;
-            try {
-                FileInputStream inputStream2 = new FileInputStream(this.statsFile);
+        boolean needConvert = true;
+        try {
+            this.statsFile = new RandomAccessFile(new File(filesDir, "stats2.dat"), "rw");
+            if (this.statsFile.length() > 0) {
                 save = false;
                 for (a = 0; a < 3; a++) {
-                    b = 0;
-                    while (b < 7) {
-                        try {
-                            inputStream2.read(this.buffer, 0, 8);
-                            this.sentBytes[a][b] = bytesToLong(this.buffer);
-                            inputStream2.read(this.buffer, 0, 8);
-                            this.receivedBytes[a][b] = bytesToLong(this.buffer);
-                            inputStream2.read(this.buffer, 0, 4);
-                            this.sentItems[a][b] = bytesToInt(this.buffer);
-                            inputStream2.read(this.buffer, 0, 4);
-                            this.receivedItems[a][b] = bytesToInt(this.buffer);
-                            b++;
-                        } catch (Exception e) {
-                            inputStream = inputStream2;
-                        } catch (Throwable th2) {
-                            th = th2;
-                            inputStream = inputStream2;
-                        }
+                    for (b = 0; b < 7; b++) {
+                        this.statsFile.readFully(this.buffer, 0, 8);
+                        this.sentBytes[a][b] = bytesToLong(this.buffer);
+                        this.statsFile.readFully(this.buffer, 0, 8);
+                        this.receivedBytes[a][b] = bytesToLong(this.buffer);
+                        this.statsFile.readFully(this.buffer, 0, 4);
+                        this.sentItems[a][b] = bytesToInt(this.buffer);
+                        this.statsFile.readFully(this.buffer, 0, 4);
+                        this.receivedItems[a][b] = bytesToInt(this.buffer);
                     }
-                    inputStream2.read(this.buffer, 0, 4);
+                    this.statsFile.readFully(this.buffer, 0, 4);
                     this.callsTotalTime[a] = bytesToInt(this.buffer);
-                    inputStream2.read(this.buffer, 0, 8);
+                    this.statsFile.readFully(this.buffer, 0, 8);
                     this.resetStatsDate[a] = bytesToLong(this.buffer);
                     if (this.resetStatsDate[a] == 0) {
                         save = true;
@@ -196,61 +149,35 @@ public class StatsController {
                 if (save) {
                     saveStats();
                 }
-                if (inputStream2 != null) {
-                    try {
-                        inputStream2.close();
-                        inputStream = inputStream2;
-                        return;
-                    } catch (Exception e2) {
-                        inputStream = inputStream2;
-                        return;
-                    }
-                }
-                return;
-            } catch (Exception e3) {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                        return;
-                    } catch (Exception e4) {
-                        return;
-                    }
-                }
-                return;
-            } catch (Throwable th3) {
-                th = th3;
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (Exception e5) {
-                    }
-                }
-                throw th;
+                needConvert = false;
             }
+        } catch (Exception e) {
         }
-        SharedPreferences sharedPreferences;
-        if (account == 0) {
-            sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("stats", 0);
-        } else {
-            sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("stats" + account, 0);
-        }
-        save = false;
-        for (a = 0; a < 3; a++) {
-            this.callsTotalTime[a] = sharedPreferences.getInt("callsTotalTime" + a, 0);
-            this.resetStatsDate[a] = sharedPreferences.getLong("resetStatsDate" + a, 0);
-            for (b = 0; b < 7; b++) {
-                this.sentBytes[a][b] = sharedPreferences.getLong("sentBytes" + a + "_" + b, 0);
-                this.receivedBytes[a][b] = sharedPreferences.getLong("receivedBytes" + a + "_" + b, 0);
-                this.sentItems[a][b] = sharedPreferences.getInt("sentItems" + a + "_" + b, 0);
-                this.receivedItems[a][b] = sharedPreferences.getInt("receivedItems" + a + "_" + b, 0);
+        if (needConvert) {
+            SharedPreferences sharedPreferences;
+            if (account == 0) {
+                sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("stats", 0);
+            } else {
+                sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("stats" + account, 0);
             }
-            if (this.resetStatsDate[a] == 0) {
-                save = true;
-                this.resetStatsDate[a] = System.currentTimeMillis();
+            save = false;
+            for (a = 0; a < 3; a++) {
+                this.callsTotalTime[a] = sharedPreferences.getInt("callsTotalTime" + a, 0);
+                this.resetStatsDate[a] = sharedPreferences.getLong("resetStatsDate" + a, 0);
+                for (b = 0; b < 7; b++) {
+                    this.sentBytes[a][b] = sharedPreferences.getLong("sentBytes" + a + "_" + b, 0);
+                    this.receivedBytes[a][b] = sharedPreferences.getLong("receivedBytes" + a + "_" + b, 0);
+                    this.sentItems[a][b] = sharedPreferences.getInt("sentItems" + a + "_" + b, 0);
+                    this.receivedItems[a][b] = sharedPreferences.getInt("receivedItems" + a + "_" + b, 0);
+                }
+                if (this.resetStatsDate[a] == 0) {
+                    save = true;
+                    this.resetStatsDate[a] = System.currentTimeMillis();
+                }
             }
-        }
-        if (save) {
-            saveStats();
+            if (save) {
+                saveStats();
+            }
         }
     }
 

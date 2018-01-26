@@ -2777,12 +2777,11 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 }
                 MediaController.this.recordingAudio = new TL_document();
                 MediaController.this.recordingAudio.dc_id = Integer.MIN_VALUE;
-                MediaController.this.recordingAudio.id = (long) SharedConfig.lastLocalId;
+                MediaController.this.recordingAudio.id = (long) SharedConfig.getLastLocalId();
                 MediaController.this.recordingAudio.user_id = UserConfig.getInstance(i).getClientUserId();
                 MediaController.this.recordingAudio.mime_type = "audio/ogg";
                 MediaController.this.recordingAudio.thumb = new TL_photoSizeEmpty();
                 MediaController.this.recordingAudio.thumb.type = "s";
-                SharedConfig.lastLocalId--;
                 SharedConfig.saveConfig();
                 MediaController.this.recordingAudioFile = new File(FileLoader.getDirectory(4), FileLoader.getAttachFileName(MediaController.this.recordingAudio));
                 try {
@@ -3298,8 +3297,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         try {
             String name = getFileName(uri);
             if (name == null) {
-                int id = SharedConfig.lastLocalId;
-                SharedConfig.lastLocalId--;
+                int id = SharedConfig.getLastLocalId();
                 SharedConfig.saveConfig();
                 name = String.format(Locale.US, "%d.%s", new Object[]{Integer.valueOf(id), ext});
             }
@@ -3399,6 +3397,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
+                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3427,8 +3426,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                } catch (Throwable e) {
-                    Throwable e2;
+                } catch (Throwable e2) {
                     FileLog.e(e2);
                 }
                 Integer num = null;

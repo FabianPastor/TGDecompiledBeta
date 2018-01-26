@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -2263,11 +2264,11 @@ public class MessagesStorage {
             ArrayList<Integer> channelMentionsToReload = new ArrayList();
             SQLiteCursor cursor;
             String ids;
-            if (messages == null || messages.size() == 0) {
+            if (isEmpty((List) messages)) {
                 int b;
                 int key;
                 long messageId;
-                if (!(inbox == null || inbox.size() == 0)) {
+                if (!isEmpty(inbox)) {
                     for (b = 0; b < inbox.size(); b++) {
                         key = inbox.keyAt(b);
                         messageId = inbox.get(key);
@@ -2285,7 +2286,7 @@ public class MessagesStorage {
                         state.dispose();
                     }
                 }
-                if (!(mentions == null || mentions.size() == 0)) {
+                if (!isEmpty((List) mentions)) {
                     ArrayList<Long> arrayList = new ArrayList(mentions);
                     ids = TextUtils.join(",", mentions);
                     cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, read_state, out, mention, mid FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
@@ -2315,7 +2316,7 @@ public class MessagesStorage {
                         }
                     }
                 }
-                if (!(outbox == null || outbox.size() == 0)) {
+                if (!isEmpty(outbox)) {
                     for (b = 0; b < outbox.size(); b++) {
                         key = outbox.keyAt(b);
                         messageId = outbox.get(key);
@@ -2377,8 +2378,28 @@ public class MessagesStorage {
         }
     }
 
+    private static boolean isEmpty(SparseArray<?> array) {
+        return array == null || array.size() == 0;
+    }
+
+    private static boolean isEmpty(SparseLongArray array) {
+        return array == null || array.size() == 0;
+    }
+
+    private static boolean isEmpty(List<?> array) {
+        return array == null || array.isEmpty();
+    }
+
+    private static boolean isEmpty(SparseIntArray array) {
+        return array == null || array.size() == 0;
+    }
+
+    private static boolean isEmpty(LongSparseArray<?> array) {
+        return array == null || array.size() == 0;
+    }
+
     public void updateDialogsWithReadMessages(final SparseLongArray inbox, final SparseLongArray outbox, final ArrayList<Long> mentions, boolean useQueue) {
-        if (inbox.size() != 0 || !mentions.isEmpty()) {
+        if (!isEmpty(inbox) || !isEmpty((List) mentions)) {
             if (useQueue) {
                 this.storageQueue.postRunnable(new Runnable() {
                     public void run() {
@@ -5221,7 +5242,7 @@ Error: java.util.NoSuchElementException
     }
 
     public void putWebPages(final LongSparseArray<WebPage> webPages) {
-        if (webPages != null && webPages.size() != 0) {
+        if (!isEmpty((LongSparseArray) webPages)) {
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
                     try {
@@ -5361,34 +5382,36 @@ Error: java.util.NoSuchElementException
     }
 
     public void putChannelViews(final SparseArray<SparseIntArray> channelViews, final boolean isChannel) {
-        this.storageQueue.postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    MessagesStorage.this.database.beginTransaction();
-                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE messages SET media = max((SELECT media FROM messages WHERE mid = ?), ?) WHERE mid = ?");
-                    for (int a = 0; a < channelViews.size(); a++) {
-                        int peer = channelViews.keyAt(a);
-                        SparseIntArray messages = (SparseIntArray) channelViews.get(peer);
-                        for (int b = 0; b < messages.size(); b++) {
-                            int views = messages.get(messages.keyAt(b));
-                            long messageId = (long) messages.keyAt(b);
-                            if (isChannel) {
-                                messageId |= ((long) (-peer)) << 32;
+        if (!isEmpty((SparseArray) channelViews)) {
+            this.storageQueue.postRunnable(new Runnable() {
+                public void run() {
+                    try {
+                        MessagesStorage.this.database.beginTransaction();
+                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE messages SET media = max((SELECT media FROM messages WHERE mid = ?), ?) WHERE mid = ?");
+                        for (int a = 0; a < channelViews.size(); a++) {
+                            int peer = channelViews.keyAt(a);
+                            SparseIntArray messages = (SparseIntArray) channelViews.get(peer);
+                            for (int b = 0; b < messages.size(); b++) {
+                                int views = messages.get(messages.keyAt(b));
+                                long messageId = (long) messages.keyAt(b);
+                                if (isChannel) {
+                                    messageId |= ((long) (-peer)) << 32;
+                                }
+                                state.requery();
+                                state.bindLong(1, messageId);
+                                state.bindInteger(2, views);
+                                state.bindLong(3, messageId);
+                                state.step();
                             }
-                            state.requery();
-                            state.bindLong(1, messageId);
-                            state.bindInteger(2, views);
-                            state.bindLong(3, messageId);
-                            state.step();
                         }
+                        state.dispose();
+                        MessagesStorage.this.database.commitTransaction();
+                    } catch (Throwable e) {
+                        FileLog.e(e);
                     }
-                    state.dispose();
-                    MessagesStorage.this.database.commitTransaction();
-                } catch (Throwable e) {
-                    FileLog.e(e);
                 }
-            }
-        });
+            });
+        }
     }
 
     private boolean isValidKeyboardToSave(Message message) {
@@ -6109,42 +6132,40 @@ Error: java.util.NoSuchElementException
     }
 
     private void markMessagesAsReadInternal(SparseLongArray inbox, SparseLongArray outbox, SparseIntArray encryptedMessages) {
-        int b;
-        if (inbox != null) {
-            b = 0;
-            while (b < inbox.size()) {
-                try {
-                    long messageId = inbox.get(inbox.keyAt(b));
+        try {
+            int b;
+            long messageId;
+            if (!isEmpty(inbox)) {
+                for (b = 0; b < inbox.size(); b++) {
+                    messageId = inbox.get(inbox.keyAt(b));
                     this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 1 WHERE uid = %d AND mid > 0 AND mid <= %d AND read_state IN(0,2) AND out = 0", new Object[]{Integer.valueOf(key), Long.valueOf(messageId)})).stepThis().dispose();
-                    b++;
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                    return;
                 }
             }
-        }
-        if (outbox != null) {
-            for (b = 0; b < outbox.size(); b++) {
-                messageId = outbox.get(outbox.keyAt(b));
-                this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 1 WHERE uid = %d AND mid > 0 AND mid <= %d AND read_state IN(0,2) AND out = 1", new Object[]{Integer.valueOf(key), Long.valueOf(messageId)})).stepThis().dispose();
+            if (!isEmpty(outbox)) {
+                for (b = 0; b < outbox.size(); b++) {
+                    messageId = outbox.get(outbox.keyAt(b));
+                    this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 1 WHERE uid = %d AND mid > 0 AND mid <= %d AND read_state IN(0,2) AND out = 1", new Object[]{Integer.valueOf(key), Long.valueOf(messageId)})).stepThis().dispose();
+                }
             }
-        }
-        if (encryptedMessages != null && encryptedMessages.size() > 0) {
-            for (int a = 0; a < encryptedMessages.size(); a++) {
-                long dialog_id = ((long) encryptedMessages.keyAt(a)) << 32;
-                int max_date = encryptedMessages.valueAt(a);
-                SQLitePreparedStatement state = this.database.executeFast("UPDATE messages SET read_state = read_state | 1 WHERE uid = ? AND date <= ? AND read_state IN(0,2) AND out = 1");
-                state.requery();
-                state.bindLong(1, dialog_id);
-                state.bindInteger(2, max_date);
-                state.step();
-                state.dispose();
+            if (encryptedMessages != null && !isEmpty(encryptedMessages)) {
+                for (int a = 0; a < encryptedMessages.size(); a++) {
+                    long dialog_id = ((long) encryptedMessages.keyAt(a)) << 32;
+                    int max_date = encryptedMessages.valueAt(a);
+                    SQLitePreparedStatement state = this.database.executeFast("UPDATE messages SET read_state = read_state | 1 WHERE uid = ? AND date <= ? AND read_state IN(0,2) AND out = 1");
+                    state.requery();
+                    state.bindLong(1, dialog_id);
+                    state.bindInteger(2, max_date);
+                    state.step();
+                    state.dispose();
+                }
             }
+        } catch (Throwable e) {
+            FileLog.e(e);
         }
     }
 
     public void markMessagesContentAsRead(final ArrayList<Long> mids, final int date) {
-        if (mids != null && !mids.isEmpty()) {
+        if (!isEmpty((List) mids)) {
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
                     try {

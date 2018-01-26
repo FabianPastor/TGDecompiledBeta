@@ -1003,20 +1003,30 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     private void updateCheckedPhotoIndices() {
-        if (this.selectedAlbum != null) {
+        if (this.allowIndices) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {
                 View view = this.listView.getChildAt(a);
                 if (view instanceof PhotoPickerPhotoCell) {
-                    int indexOf;
                     PhotoPickerPhotoCell cell = (PhotoPickerPhotoCell) view;
-                    PhotoEntry photoEntry = (PhotoEntry) this.selectedAlbum.photos.get(((Integer) cell.getTag()).intValue());
-                    if (this.allowIndices) {
-                        indexOf = this.selectedPhotosOrder.indexOf(Integer.valueOf(photoEntry.imageId));
+                    Integer index = (Integer) cell.getTag();
+                    if (this.selectedAlbum != null) {
+                        cell.setNum(this.allowIndices ? this.selectedPhotosOrder.indexOf(Integer.valueOf(((PhotoEntry) this.selectedAlbum.photos.get(index.intValue())).imageId)) : -1);
                     } else {
-                        indexOf = -1;
+                        SearchImage photoEntry;
+                        int indexOf;
+                        if (this.searchResult.isEmpty() && this.lastSearchString == null) {
+                            photoEntry = (SearchImage) this.recentImages.get(index.intValue());
+                        } else {
+                            photoEntry = (SearchImage) this.searchResult.get(index.intValue());
+                        }
+                        if (this.allowIndices) {
+                            indexOf = this.selectedPhotosOrder.indexOf(photoEntry.id);
+                        } else {
+                            indexOf = -1;
+                        }
+                        cell.setNum(indexOf);
                     }
-                    cell.setNum(indexOf);
                 }
             }
         }

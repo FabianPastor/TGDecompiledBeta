@@ -225,41 +225,13 @@ public class CacheControlActivity extends BaseFragment {
         if (dir == null || this.canceled) {
             return 0;
         }
-        long size = 0;
         if (dir.isDirectory()) {
-            try {
-                File[] array = dir.listFiles();
-                if (array == null) {
-                    return 0;
-                }
-                for (File file : array) {
-                    if (this.canceled) {
-                        return 0;
-                    }
-                    if (documentsMusicType == 1 || documentsMusicType == 2) {
-                        String name = file.getName().toLowerCase();
-                        if (name.endsWith(".mp3") || name.endsWith(".m4a")) {
-                            if (documentsMusicType == 1) {
-                            }
-                        } else if (documentsMusicType == 2) {
-                        }
-                    }
-                    if (file.isDirectory()) {
-                        size += getDirectorySize(file, documentsMusicType);
-                    } else {
-                        size += file.length();
-                    }
-                }
-                return size;
-            } catch (Throwable e) {
-                FileLog.e(e);
-                return 0;
-            }
-        } else if (dir.isFile()) {
-            return 0 + dir.length();
-        } else {
-            return 0;
+            return Utilities.getDirSize(dir.getAbsolutePath(), documentsMusicType);
         }
+        if (dir.isFile()) {
+            return 0 + dir.length();
+        }
+        return 0;
     }
 
     private void cleanupFolders() {
@@ -293,30 +265,7 @@ public class CacheControlActivity extends BaseFragment {
                         if (type != -1) {
                             File file = FileLoader.checkDirectory(type);
                             if (file != null) {
-                                try {
-                                    File[] array = file.listFiles();
-                                    if (array != null) {
-                                        int b = 0;
-                                        while (b < array.length) {
-                                            String name = array[b].getName().toLowerCase();
-                                            if (documentsMusicType == 1 || documentsMusicType == 2) {
-                                                if (name.endsWith(".mp3") || name.endsWith(".m4a")) {
-                                                    if (documentsMusicType == 1) {
-                                                        b++;
-                                                    }
-                                                } else if (documentsMusicType == 2) {
-                                                    b++;
-                                                }
-                                            }
-                                            if (!name.equals(".nomedia") && array[b].isFile()) {
-                                                array[b].delete();
-                                            }
-                                            b++;
-                                        }
-                                    }
-                                } catch (Throwable e) {
-                                    FileLog.e(e);
-                                }
+                                Utilities.clearDir(file.getAbsolutePath(), documentsMusicType, Long.MAX_VALUE);
                             }
                             if (type == 4) {
                                 CacheControlActivity.this.cacheSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(4), documentsMusicType);

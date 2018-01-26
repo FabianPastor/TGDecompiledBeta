@@ -346,9 +346,11 @@ public class RadialProgress {
 
     public void draw(Canvas canvas) {
         if (this.drawMiniProgress) {
-            this.currentDrawable.setAlpha((int) (this.overrideAlpha * 255.0f));
-            this.currentDrawable.setBounds((int) this.progressRect.left, (int) this.progressRect.top, (int) this.progressRect.right, (int) this.progressRect.bottom);
-            this.currentDrawable.draw(canvas);
+            if (this.currentDrawable != null) {
+                this.currentDrawable.setAlpha((int) (this.overrideAlpha * 255.0f));
+                this.currentDrawable.setBounds((int) this.progressRect.left, (int) this.progressRect.top, (int) this.progressRect.right, (int) this.progressRect.bottom);
+                this.currentDrawable.draw(canvas);
+            }
             float cx = this.progressRect.centerX() + ((float) AndroidUtilities.dp(15.0f));
             float cy = this.progressRect.centerY() + ((float) AndroidUtilities.dp(15.0f));
             this.miniProgressBackgroundPaint.setColor(this.progressColor);

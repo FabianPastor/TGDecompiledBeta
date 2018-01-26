@@ -235,6 +235,11 @@ public class NotificationCompat {
             return this;
         }
 
+        public Builder setSubText(CharSequence text) {
+            this.mSubText = limitCharSequenceLength(text);
+            return this;
+        }
+
         public Builder setNumber(int number) {
             this.mNumber = number;
             return this;

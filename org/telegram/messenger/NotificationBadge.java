@@ -13,12 +13,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import java.io.BufferedReader;
 import java.io.Closeable;
-import java.io.InputStreamReader;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -135,7 +131,7 @@ public class NotificationBadge {
         }
 
         public List<String> getSupportLaunchers() {
-            return new ArrayList(0);
+            return Arrays.asList(new String[]{"fr.neamar.kiss", "com.quaap.launchtime", "com.quaap.launchtime_official"});
         }
     }
 
@@ -215,38 +211,12 @@ public class NotificationBadge {
         private static final String INTENT_EXTRA_BADGE_UPGRADENUMBER = "upgradeNumber";
         private static final String INTENT_EXTRA_PACKAGENAME = "pakeageName";
         private static final String PROVIDER_CONTENT_URI = "content://com.android.badge/badge";
-        private static int ROMVERSION = -1;
+        private int mCurrentTotalCount = -1;
 
-        @TargetApi(11)
         public void executeBadge(int badgeCount) {
-            if (badgeCount == 0) {
-                badgeCount = -1;
-            }
-            final Intent intent = new Intent(INTENT_ACTION);
-            intent.putExtra(INTENT_EXTRA_PACKAGENAME, NotificationBadge.componentName.getPackageName());
-            intent.putExtra(INTENT_EXTRA_BADGE_COUNT, badgeCount);
-            intent.putExtra(INTENT_EXTRA_BADGE_UPGRADENUMBER, badgeCount);
-            if (NotificationBadge.canResolveBroadcast(intent)) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        ApplicationLoader.applicationContext.sendBroadcast(intent);
-                    }
-                });
-            } else if (getSupportVersion() == 6) {
-                try {
-                    final Bundle extras = new Bundle();
-                    extras.putInt(INTENT_EXTRA_BADGEUPGRADE_COUNT, badgeCount);
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            try {
-                                ApplicationLoader.applicationContext.getContentResolver().call(Uri.parse(OPPOHomeBader.PROVIDER_CONTENT_URI), "setAppBadgeCount", null, extras);
-                            } catch (Throwable e) {
-                                FileLog.e(e);
-                            }
-                        }
-                    });
-                } catch (Throwable th) {
-                }
+            if (this.mCurrentTotalCount != badgeCount) {
+                this.mCurrentTotalCount = badgeCount;
+                executeBadgeByContentProvider(badgeCount);
             }
         }
 
@@ -254,102 +224,13 @@ public class NotificationBadge {
             return Collections.singletonList("com.oppo.launcher");
         }
 
-        private int getSupportVersion() {
-            int i = ROMVERSION;
-            if (i >= 0) {
-                return ROMVERSION;
-            }
+        @TargetApi(11)
+        private void executeBadgeByContentProvider(int badgeCount) {
             try {
-                i = ((Integer) executeClassLoad(getClass("com.color.os.ColorBuild"), "getColorOSVERSION", null, null)).intValue();
-            } catch (Exception e) {
-                i = 0;
-            }
-            if (i == 0) {
-                try {
-                    String str = getSystemProperty("ro.build.version.opporom");
-                    if (str.startsWith("V1.4")) {
-                        return 3;
-                    }
-                    if (str.startsWith("V2.0")) {
-                        return 4;
-                    }
-                    if (str.startsWith("V2.1")) {
-                        return 5;
-                    }
-                } catch (Exception e2) {
-                }
-            }
-            ROMVERSION = i;
-            return ROMVERSION;
-        }
-
-        private Object executeClassLoad(Class cls, String str, Class[] clsArr, Object[] objArr) {
-            Object obj = null;
-            if (!(cls == null || checkObjExists(str))) {
-                Method method = getMethod(cls, str, clsArr);
-                if (method != null) {
-                    method.setAccessible(true);
-                    try {
-                        obj = method.invoke(null, objArr);
-                    } catch (Throwable th) {
-                    }
-                }
-            }
-            return obj;
-        }
-
-        private Method getMethod(Class cls, String str, Class[] clsArr) {
-            Method method = null;
-            if (cls == null || checkObjExists(str)) {
-                return method;
-            }
-            try {
-                cls.getMethods();
-                cls.getDeclaredMethods();
-                return cls.getDeclaredMethod(str, clsArr);
-            } catch (Exception e) {
-                try {
-                    return cls.getMethod(str, clsArr);
-                } catch (Exception e2) {
-                    return cls.getSuperclass() != null ? getMethod(cls.getSuperclass(), str, clsArr) : method;
-                }
-            }
-        }
-
-        private Class getClass(String str) {
-            Class cls = null;
-            try {
-                cls = Class.forName(str);
-            } catch (ClassNotFoundException e) {
-            }
-            return cls;
-        }
-
-        private boolean checkObjExists(Object obj) {
-            return obj == null || obj.toString().equals(TtmlNode.ANONYMOUS_REGION_ID) || obj.toString().trim().equals("null");
-        }
-
-        private String getSystemProperty(String propName) {
-            Throwable th;
-            BufferedReader input = null;
-            try {
-                BufferedReader input2 = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("getprop " + propName).getInputStream()), 1024);
-                try {
-                    String line = input2.readLine();
-                    input2.close();
-                    NotificationBadge.closeQuietly(input2);
-                    input = input2;
-                    return line;
-                } catch (Throwable th2) {
-                    th = th2;
-                    input = input2;
-                    NotificationBadge.closeQuietly(input);
-                    throw th;
-                }
-            } catch (Throwable th3) {
-                th = th3;
-                NotificationBadge.closeQuietly(input);
-                throw th;
+                Bundle extras = new Bundle();
+                extras.putInt(INTENT_EXTRA_BADGEUPGRADE_COUNT, badgeCount);
+                ApplicationLoader.applicationContext.getContentResolver().call(Uri.parse(PROVIDER_CONTENT_URI), "setAppBadgeCount", null, extras);
+            } catch (Throwable th) {
             }
         }
     }
@@ -602,6 +483,9 @@ public class NotificationBadge {
                     badger = shortcutBadger;
                     break;
                 }
+            }
+            if (badger != null) {
+                break;
             }
         }
         if (badger == null) {

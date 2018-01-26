@@ -2720,7 +2720,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             }
                         }
                     }
-                    setFieldText(Emoji.replaceEmoji(new SpannableStringBuilder(editingText), this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
+                    setFieldText(Emoji.replaceEmoji(new SpannableStringBuilder(stringBuilder), this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
                 } else {
                     setFieldText(TtmlNode.ANONYMOUS_REGION_ID);
                 }

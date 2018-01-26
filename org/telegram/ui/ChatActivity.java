@@ -8625,81 +8625,59 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 finishFragment();
             }
         } else if (id == NotificationCenter.messagesRead) {
+            int size2;
             SparseLongArray inbox = args[0];
             SparseLongArray outbox = args[1];
             updated = false;
-            b = 0;
-            while (b < inbox.size()) {
-                key = inbox.keyAt(b);
-                long messageId = inbox.get(key);
-                if (((long) key) != this.dialog_id) {
-                    b++;
-                } else {
-                    for (a = 0; a < this.messages.size(); a++) {
-                        obj = (MessageObject) this.messages.get(a);
-                        if (!obj.isOut() && obj.getId() > 0 && obj.getId() <= ((int) messageId)) {
-                            if (!obj.isUnread()) {
-                                break;
-                            }
-                            obj.setIsRead();
-                            updated = true;
-                        }
-                    }
-                    while (b < outbox.size()) {
-                        key = outbox.keyAt(b);
-                        messageId = (int) outbox.get(key);
-                        if (((long) key) == this.dialog_id) {
-                        } else {
-                            for (a = 0; a < this.messages.size(); a++) {
-                                obj = (MessageObject) this.messages.get(a);
-                                if (obj.isOut() && obj.getId() > 0 && obj.getId() <= messageId) {
-                                    if (!obj.isUnread()) {
-                                        break;
-                                    }
-                                    obj.setIsRead();
-                                    updated = true;
+            if (inbox != null) {
+                b = 0;
+                size = inbox.size();
+                while (b < size) {
+                    key = inbox.keyAt(b);
+                    long messageId = inbox.get(key);
+                    if (((long) key) != this.dialog_id) {
+                        b++;
+                    } else {
+                        size2 = this.messages.size();
+                        for (a = 0; a < size2; a++) {
+                            obj = (MessageObject) this.messages.get(a);
+                            if (!obj.isOut() && obj.getId() > 0 && obj.getId() <= ((int) messageId)) {
+                                if (!obj.isUnread()) {
+                                    break;
                                 }
-                            }
-                            if (inbox.size() != 0) {
-                                removeUnreadPlane();
-                            }
-                            if (!updated) {
-                                updateVisibleRows();
+                                obj.setIsRead();
+                                updated = true;
                             }
                         }
-                    }
-                    if (inbox.size() != 0) {
                         removeUnreadPlane();
                     }
-                    if (!updated) {
-                        updateVisibleRows();
-                    }
                 }
-            }
-            for (b = 0; b < outbox.size(); b++) {
-                key = outbox.keyAt(b);
-                messageId = (int) outbox.get(key);
-                if (((long) key) == this.dialog_id) {
-                    for (a = 0; a < this.messages.size(); a++) {
-                        obj = (MessageObject) this.messages.get(a);
-                        if (!obj.isUnread()) {
-                            break;
-                        }
-                        obj.setIsRead();
-                        updated = true;
-                    }
-                    if (inbox.size() != 0) {
-                        removeUnreadPlane();
-                    }
-                    if (!updated) {
-                        updateVisibleRows();
-                    }
-                }
-            }
-            if (inbox.size() != 0) {
                 removeUnreadPlane();
             }
-            if (!updated) {
+            if (outbox != null) {
+                b = 0;
+                size = outbox.size();
+                while (b < size) {
+                    key = outbox.keyAt(b);
+                    messageId = (int) outbox.get(key);
+                    if (((long) key) != this.dialog_id) {
+                        b++;
+                    } else {
+                        size2 = this.messages.size();
+                        for (a = 0; a < size2; a++) {
+                            obj = (MessageObject) this.messages.get(a);
+                            if (obj.isOut() && obj.getId() > 0 && obj.getId() <= messageId) {
+                                if (!obj.isUnread()) {
+                                    break;
+                                }
+                                obj.setIsRead();
+                                updated = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (updated) {
                 updateVisibleRows();
             }
         } else if (id == NotificationCenter.historyCleared) {

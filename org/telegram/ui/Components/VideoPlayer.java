@@ -368,10 +368,10 @@ public class VideoPlayer implements EventListener, VideoListener {
     }
 
     public long getBufferedPosition() {
-        if (this.isStreaming) {
-            return this.player != null ? this.player.getBufferedPosition() : 0;
+        if (this.player != null) {
+            return this.isStreaming ? this.player.getBufferedPosition() : this.player.getDuration();
         } else {
-            return this.player.getDuration();
+            return 0;
         }
     }
 

@@ -1969,8 +1969,7 @@ public class ImageLoader {
         TL_fileLocation location = new TL_fileLocation();
         location.volume_id = -2147483648L;
         location.dc_id = Integer.MIN_VALUE;
-        location.local_id = SharedConfig.lastLocalId;
-        SharedConfig.lastLocalId--;
+        location.local_id = SharedConfig.getLastLocalId();
         PhotoSize size = new TL_photoSize();
         size.location = location;
         size.w = scaledBitmap.getWidth();
@@ -2090,8 +2089,7 @@ public class ImageLoader {
                 photoSize.location = new TL_fileLocation();
                 photoSize.location.volume_id = -2147483648L;
                 photoSize.location.dc_id = Integer.MIN_VALUE;
-                photoSize.location.local_id = SharedConfig.lastLocalId;
-                SharedConfig.lastLocalId--;
+                photoSize.location.local_id = SharedConfig.getLastLocalId();
             }
             File file = FileLoader.getPathToAttach(photoSize, true);
             boolean isEncrypted = false;

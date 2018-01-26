@@ -21,9 +21,10 @@ public class SharedConfig {
     public static boolean inappCamera = true;
     public static boolean isWaitingForPasscodeEnter;
     public static long lastAppPauseTime;
-    public static int lastLocalId = -210000;
+    private static int lastLocalId = -210000;
     public static int lastPauseTime;
     public static String lastUpdateVersion;
+    private static final Object localIdSync = new Object();
     public static String passcodeHash = TtmlNode.ANONYMOUS_REGION_ID;
     public static byte[] passcodeSalt = new byte[0];
     public static int passcodeType;
@@ -67,6 +68,15 @@ public class SharedConfig {
                 FileLog.e(e);
             }
         }
+    }
+
+    public static int getLastLocalId() {
+        int value;
+        synchronized (localIdSync) {
+            value = lastLocalId;
+            lastLocalId = value - 1;
+        }
+        return value;
     }
 
     public static void loadConfig() {

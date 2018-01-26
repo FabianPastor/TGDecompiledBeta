@@ -5052,9 +5052,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             }
                                         }
                                         tL_document.size = (int) videoEditedInfo.estimatedSize;
-                                        String fileName2 = "-2147483648_" + SharedConfig.lastLocalId + ".mp4";
-                                        SharedConfig.lastLocalId--;
-                                        file = new File(FileLoader.getDirectory(4), fileName2);
+                                        file = new File(FileLoader.getDirectory(4), "-2147483648_" + SharedConfig.getLastLocalId() + ".mp4");
                                         SharedConfig.saveConfig();
                                         path = file.getAbsolutePath();
                                     }
@@ -5669,9 +5667,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     }
                                 }
                                 tL_document.size = (int) j3;
-                                String fileName = "-2147483648_" + SharedConfig.lastLocalId + ".mp4";
-                                SharedConfig.lastLocalId--;
-                                file = new File(FileLoader.getDirectory(4), fileName);
+                                file = new File(FileLoader.getDirectory(4), "-2147483648_" + SharedConfig.getLastLocalId() + ".mp4");
                                 SharedConfig.saveConfig();
                                 path = file.getAbsolutePath();
                             }

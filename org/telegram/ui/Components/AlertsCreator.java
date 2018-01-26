@@ -262,6 +262,8 @@ public class AlertsCreator {
                     }
                 } else if (error.text.startsWith("FLOOD_WAIT")) {
                     showFloodWaitAlert(error.text, fragment);
+                } else {
+                    showAddUserAlert(error.text, fragment, false);
                 }
             } else if (error.text.startsWith("FLOOD_WAIT")) {
                 showFloodWaitAlert(error.text, fragment);

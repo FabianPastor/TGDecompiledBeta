@@ -1362,7 +1362,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
 
         public void setBackgroundState(int state, boolean animated) {
-            if (this.backgroundState != state) {
+            if (this.backgroundState != state || !animated) {
                 this.lastUpdateTime = System.currentTimeMillis();
                 if (!animated || this.backgroundState == state) {
                     this.previousBackgroundState = -2;
@@ -7877,7 +7877,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 }
                 canvas.restore();
             }
-            boolean drawProgress = this.isCurrentVideo ? this.progressView.getVisibility() != 0 && (this.videoPlayer == null || !this.videoPlayer.isPlaying()) : (drawTextureView || this.videoPlayControlFrameLayout.getVisibility() == 0) ? false : true;
+            boolean drawProgress = this.isCurrentVideo ? this.progressView.getVisibility() != 0 && (this.videoPlayer == null || !this.videoPlayer.isPlaying()) : !drawTextureView && this.videoPlayControlFrameLayout.getTag() == null;
             if (drawProgress) {
                 canvas.save();
                 canvas.translate(translateX, currentTranslationY / currentScale);
@@ -7888,7 +7888,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             }
             if (this.photoProgressViews[0].backgroundState == 3) {
                 canvas.save();
-                canvas.translate((((float) (getContainerViewWidth() / 2)) + translateX) - ((float) AndroidUtilities.dp(25.0f)), (((currentTranslationY / currentScale) - ((float) (getContainerViewHeight() / 2))) + ((float) this.actionBar.getMeasuredHeight())) + ((float) AndroidUtilities.dp(25.0f)));
+                canvas.translate((((float) (getContainerViewWidth() / 2)) + translateX) - ((float) AndroidUtilities.dp(25.0f)), (float) ((((-getContainerViewHeight()) / 2) + this.actionBar.getMeasuredHeight()) + AndroidUtilities.dp(25.0f)));
                 this.miniPhotoProgressViews[0].setScale(1.0f - scaleDiff);
                 this.miniPhotoProgressViews[0].setAlpha(this.actionBar.getAlpha() * alpha);
                 this.miniPhotoProgressViews[0].onDraw(canvas);
@@ -7983,6 +7983,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                 FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
                                 Document document = this.currentMessageObject.getDocument();
                                 uri = Uri.parse("tg://" + this.currentMessageObject.getFileName() + ("?id=" + document.id + "&hash=" + document.access_hash + "&dc=" + document.dc_id + "&size=" + document.size + "&mime=" + URLEncoder.encode(document.mime_type, C.UTF8_NAME) + "&name=" + URLEncoder.encode(FileLoader.getDocumentFileName(document), C.UTF8_NAME)));
+                                checkProgress(0, false);
                             } catch (Exception e) {
                             }
                         }

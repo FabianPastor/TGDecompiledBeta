@@ -376,8 +376,8 @@ public final class DynamiteModule {
     }
 
     private static int zze(Context context, String str, boolean z) throws zzc {
-        Cursor query;
         Throwable e;
+        Cursor query;
         try {
             ContentResolver contentResolver = context.getContentResolver();
             String str2 = z ? "api_force_staging" : "api";
