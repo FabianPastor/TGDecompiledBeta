@@ -540,4 +540,8 @@ public class NativeByteBuffer extends AbstractSerializedData {
             native_reuse(this.address);
         }
     }
+
+    public int remaining() {
+        return this.buffer.remaining();
+    }
 }

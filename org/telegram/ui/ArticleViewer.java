@@ -1174,7 +1174,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     }
                 }
 
-                public boolean checkInlinePermissons() {
+                public boolean checkInlinePermissions() {
                     return false;
                 }
 
@@ -3211,7 +3211,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.isFirst = first;
             this.isLast = last;
             this.radialProgress.setProgressColor(ArticleViewer.this.getTextColor());
-            this.seekBar.setColors(ArticleViewer.this.getTextColor() & NUM, ArticleViewer.this.getTextColor(), ArticleViewer.this.getTextColor());
+            this.seekBar.setColors(ArticleViewer.this.getTextColor() & NUM, ArticleViewer.this.getTextColor() & NUM, ArticleViewer.this.getTextColor(), ArticleViewer.this.getTextColor(), ArticleViewer.this.getTextColor());
             updateButtonState(false);
             requestLayout();
         }
@@ -4090,6 +4090,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         return localInstance;
     }
 
+    public static boolean hasInstance() {
+        return Instance != null;
+    }
+
     private void showPopup(View parent, int gravity, int x, int y) {
         if (this.popupWindow == null || !this.popupWindow.isShowing()) {
             if (this.popupLayout == null) {
@@ -4216,7 +4220,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             message.from_id = clientUserId;
                             peer.user_id = clientUserId;
                             message.date = (int) (System.currentTimeMillis() / 1000);
-                            message.message = "-1";
+                            message.message = TtmlNode.ANONYMOUS_REGION_ID;
                             message.media = new TL_messageMediaDocument();
                             MessageMedia messageMedia = message.media;
                             messageMedia.flags |= 3;
@@ -5652,7 +5656,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.radialProgressViews[2] = new RadialProgressView(activity, this.photoContainerView);
         this.radialProgressViews[2].setBackgroundState(0, false);
         this.videoPlayerSeekbar = new SeekBar(activity);
-        this.videoPlayerSeekbar.setColors(NUM, -1, -1);
+        this.videoPlayerSeekbar.setColors(NUM, NUM, -2764585, -1, -1);
         this.videoPlayerSeekbar.setDelegate(new SeekBarDelegate() {
             public void onSeekBarDrag(float progress) {
                 if (ArticleViewer.this.videoPlayer != null) {
@@ -6639,7 +6643,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             TextureView textureView = this.videoTextureView;
             this.videoCrossfadeAlpha = 0.0f;
             textureView.setAlpha(0.0f);
-            this.videoPlayButton.setImageResource(R.drawable.inline_video_play);
+            this.videoPlayButton.setImageResource(R.drawable.playvideo);
             if (this.videoPlayer == null) {
                 long duration;
                 this.videoPlayer = new VideoPlayer();
@@ -6666,7 +6670,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             if (!ArticleViewer.this.videoPlayer.isPlaying() || playbackState == 4) {
                                 if (ArticleViewer.this.isPlaying) {
                                     ArticleViewer.this.isPlaying = false;
-                                    ArticleViewer.this.videoPlayButton.setImageResource(R.drawable.inline_video_play);
+                                    ArticleViewer.this.videoPlayButton.setImageResource(R.drawable.playvideo);
                                     AndroidUtilities.cancelRunOnUIThread(ArticleViewer.this.updateProgressRunnable);
                                     if (playbackState == 4 && !ArticleViewer.this.videoPlayerSeekbar.isDragging()) {
                                         ArticleViewer.this.videoPlayerSeekbar.setProgress(0.0f);
@@ -6677,7 +6681,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                                 }
                             } else if (!ArticleViewer.this.isPlaying) {
                                 ArticleViewer.this.isPlaying = true;
-                                ArticleViewer.this.videoPlayButton.setImageResource(R.drawable.inline_video_pause);
+                                ArticleViewer.this.videoPlayButton.setImageResource(R.drawable.pausevideo);
                                 AndroidUtilities.runOnUIThread(ArticleViewer.this.updateProgressRunnable);
                             }
                             ArticleViewer.this.updateVideoPlayerTime();
@@ -6749,7 +6753,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
         if (this.isPlaying) {
             this.isPlaying = false;
-            this.videoPlayButton.setImageResource(R.drawable.inline_video_play);
+            this.videoPlayButton.setImageResource(R.drawable.playvideo);
             AndroidUtilities.cancelRunOnUIThread(this.updateProgressRunnable);
         }
         this.bottomLayout.setVisibility(8);

@@ -22,7 +22,9 @@ public class CombinedDrawable extends Drawable implements Callback {
         this.icon = iconDrawable;
         this.left = leftOffset;
         this.top = topOffset;
-        iconDrawable.setCallback(this);
+        if (iconDrawable != null) {
+            iconDrawable.setCallback(this);
+        }
     }
 
     public void setIconSize(int width, int height) {
@@ -33,7 +35,9 @@ public class CombinedDrawable extends Drawable implements Callback {
     public CombinedDrawable(Drawable backgroundDrawable, Drawable iconDrawable) {
         this.background = backgroundDrawable;
         this.icon = iconDrawable;
-        iconDrawable.setCallback(this);
+        if (iconDrawable != null) {
+            iconDrawable.setCallback(this);
+        }
     }
 
     public void setCustomSize(int width, int height) {
@@ -85,18 +89,20 @@ public class CombinedDrawable extends Drawable implements Callback {
     public void draw(Canvas canvas) {
         this.background.setBounds(getBounds());
         this.background.draw(canvas);
-        if (this.fullSize) {
-            this.icon.setBounds(getBounds());
-        } else if (this.iconWidth != 0) {
-            x = (getBounds().centerX() - (this.iconWidth / 2)) + this.left;
-            y = (getBounds().centerY() - (this.iconHeight / 2)) + this.top;
-            this.icon.setBounds(x, y, this.iconWidth + x, this.iconHeight + y);
-        } else {
-            x = (getBounds().centerX() - (this.icon.getIntrinsicWidth() / 2)) + this.left;
-            y = (getBounds().centerY() - (this.icon.getIntrinsicHeight() / 2)) + this.top;
-            this.icon.setBounds(x, y, this.icon.getIntrinsicWidth() + x, this.icon.getIntrinsicHeight() + y);
+        if (this.icon != null) {
+            if (this.fullSize) {
+                this.icon.setBounds(getBounds());
+            } else if (this.iconWidth != 0) {
+                x = (getBounds().centerX() - (this.iconWidth / 2)) + this.left;
+                y = (getBounds().centerY() - (this.iconHeight / 2)) + this.top;
+                this.icon.setBounds(x, y, this.iconWidth + x, this.iconHeight + y);
+            } else {
+                x = (getBounds().centerX() - (this.icon.getIntrinsicWidth() / 2)) + this.left;
+                y = (getBounds().centerY() - (this.icon.getIntrinsicHeight() / 2)) + this.top;
+                this.icon.setBounds(x, y, this.icon.getIntrinsicWidth() + x, this.icon.getIntrinsicHeight() + y);
+            }
+            this.icon.draw(canvas);
         }
-        this.icon.draw(canvas);
     }
 
     public void setAlpha(int alpha) {

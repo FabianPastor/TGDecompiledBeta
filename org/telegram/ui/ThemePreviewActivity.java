@@ -358,7 +358,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             photoSize.type = "s";
             photoSize.location = new TL_fileLocationUnavailable();
             message.media.photo.sizes.add(photoSize);
-            message.media.caption = "Bring it on! I LIVE for this!";
+            message.message = "Bring it on! I LIVE for this!";
             message.out = false;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();

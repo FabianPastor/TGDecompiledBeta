@@ -243,7 +243,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
             this.photoVideoViews[a].setVisibility(0);
             PhotoVideoView photoVideoView = this.photoVideoViews[a];
             photoVideoView.imageView.getImageReceiver().setParentMessageObject(messageObject);
-            photoVideoView.imageView.getImageReceiver().setVisible(!PhotoViewer.getInstance().isShowingImage(messageObject), false);
+            photoVideoView.imageView.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(messageObject), false);
             if (messageObject.isVideo()) {
                 photoVideoView.videoInfoContainer.setVisibility(0);
                 int duration = 0;

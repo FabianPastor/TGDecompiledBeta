@@ -927,27 +927,24 @@ public class zzcim {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private final boolean zzg(String str, long j) {
-        String str2;
+        Cursor cursor;
         Object obj;
+        zzcmc[] com_google_android_gms_internal_zzcmcArr;
+        zzcmc[] com_google_android_gms_internal_zzcmcArr2;
         boolean z;
-        SecureRandom zzbaz;
-        int length;
+        zzcmb[] com_google_android_gms_internal_zzcmbArr;
         int i;
-        zzcgw zzae;
-        String str3;
-        zzcgh zzjb;
-        long zzaxf;
         Throwable th;
         zzaws().beginTransaction();
         zzcim com_google_android_gms_internal_zzcim = this;
         zza com_google_android_gms_internal_zzcim_zza = new zza();
         zzcjk zzaws = zzaws();
-        String str4 = null;
+        String str2 = null;
         long j2 = this.zzjgb;
         zzbq.checkNotNull(com_google_android_gms_internal_zzcim_zza);
         zzaws.zzve();
         zzaws.zzxf();
-        Cursor cursor = null;
+        Cursor cursor2 = null;
         boolean z2;
         zzcme com_google_android_gms_internal_zzcme;
         int i2;
@@ -955,56 +952,59 @@ public class zzcim {
         boolean zzao;
         Object obj2;
         Object obj3;
-        zzcmc[] com_google_android_gms_internal_zzcmcArr;
-        int length2;
+        int length;
         int i4;
         zzcmc com_google_android_gms_internal_zzcmc;
-        zzcmc[] com_google_android_gms_internal_zzcmcArr2;
         zzcmc com_google_android_gms_internal_zzcmc2;
         zzcmb com_google_android_gms_internal_zzcmb;
         int i5;
         Object obj4;
         zzcmc com_google_android_gms_internal_zzcmc3;
         zzcmc[] com_google_android_gms_internal_zzcmcArr3;
-        int length3;
+        int length2;
         int i6;
         zzcmc com_google_android_gms_internal_zzcmc4;
         int i7;
         int i8;
         boolean z3;
         Map hashMap;
-        zzcmb[] com_google_android_gms_internal_zzcmbArr;
         int i9;
+        SecureRandom zzbaz;
         zzcmb[] com_google_android_gms_internal_zzcmbArr2;
+        int length3;
         zzcmb com_google_android_gms_internal_zzcmb2;
         int zzap;
         zzcgw com_google_android_gms_internal_zzcgw;
+        zzcgw zzae;
         Long l;
         Boolean valueOf;
-        String str5;
+        String str3;
+        String str4;
+        zzcgh zzjb;
+        long zzaxf;
         long zzaxe;
         zzcly zzjs;
         zzcjk zzaws2;
         try {
             String[] strArr;
+            String str5;
             String str6;
             String str7;
-            Cursor cursor2;
             SQLiteDatabase writableDatabase = zzaws.getWritableDatabase();
             if (TextUtils.isEmpty(null)) {
                 strArr = j2 != -1 ? new String[]{String.valueOf(j2), String.valueOf(j)} : new String[]{String.valueOf(j)};
-                str6 = j2 != -1 ? "rowid <= ? and " : TtmlNode.ANONYMOUS_REGION_ID;
-                cursor = writableDatabase.rawQuery(new StringBuilder(String.valueOf(str6).length() + 148).append("select app_id, metadata_fingerprint from raw_events where ").append(str6).append("app_id in (select app_id from apps where config_fetched_time >= ?) order by rowid limit 1;").toString(), strArr);
-                if (cursor.moveToFirst()) {
-                    str4 = cursor.getString(0);
-                    str6 = cursor.getString(1);
-                    cursor.close();
-                    str7 = str6;
-                    cursor2 = cursor;
-                    str2 = str4;
+                str5 = j2 != -1 ? "rowid <= ? and " : TtmlNode.ANONYMOUS_REGION_ID;
+                cursor2 = writableDatabase.rawQuery(new StringBuilder(String.valueOf(str5).length() + 148).append("select app_id, metadata_fingerprint from raw_events where ").append(str5).append("app_id in (select app_id from apps where config_fetched_time >= ?) order by rowid limit 1;").toString(), strArr);
+                if (cursor2.moveToFirst()) {
+                    str2 = cursor2.getString(0);
+                    str5 = cursor2.getString(1);
+                    cursor2.close();
+                    str6 = str5;
+                    cursor = cursor2;
+                    str7 = str2;
                 } else {
-                    if (cursor != null) {
-                        cursor.close();
+                    if (cursor2 != null) {
+                        cursor2.close();
                     }
                     obj = (com_google_android_gms_internal_zzcim_zza.zzapa != null || com_google_android_gms_internal_zzcim_zza.zzapa.isEmpty()) ? 1 : null;
                     if (obj != null) {
@@ -1025,9 +1025,9 @@ public class zzcim {
                                     ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh = new zzcmc[0];
                                 }
                                 com_google_android_gms_internal_zzcmcArr = ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh;
-                                length2 = com_google_android_gms_internal_zzcmcArr.length;
+                                length = com_google_android_gms_internal_zzcmcArr.length;
                                 i4 = 0;
-                                while (i4 < length2) {
+                                while (i4 < length) {
                                     com_google_android_gms_internal_zzcmc = com_google_android_gms_internal_zzcmcArr[i4];
                                     if (!"_c".equals(com_google_android_gms_internal_zzcmc.name)) {
                                         com_google_android_gms_internal_zzcmc.zzjll = Long.valueOf(1);
@@ -1086,9 +1086,9 @@ public class zzcim {
                                     obj4 = null;
                                     com_google_android_gms_internal_zzcmc3 = null;
                                     com_google_android_gms_internal_zzcmcArr3 = com_google_android_gms_internal_zzcmb.zzjlh;
-                                    length3 = com_google_android_gms_internal_zzcmcArr3.length;
+                                    length2 = com_google_android_gms_internal_zzcmcArr3.length;
                                     i6 = 0;
-                                    while (i6 < length3) {
+                                    while (i6 < length2) {
                                         com_google_android_gms_internal_zzcmc2 = com_google_android_gms_internal_zzcmcArr3[i6];
                                         if (!"_c".equals(com_google_android_gms_internal_zzcmc2.name)) {
                                             obj3 = obj4;
@@ -1155,9 +1155,9 @@ public class zzcim {
                                 i9 = 0;
                                 zzbaz = zzawu().zzbaz();
                                 com_google_android_gms_internal_zzcmbArr2 = com_google_android_gms_internal_zzcme.zzjlp;
-                                length = com_google_android_gms_internal_zzcmbArr2.length;
+                                length3 = com_google_android_gms_internal_zzcmbArr2.length;
                                 i = 0;
-                                while (i < length) {
+                                while (i < length3) {
                                     com_google_android_gms_internal_zzcmb2 = com_google_android_gms_internal_zzcmbArr2[i];
                                     if (com_google_android_gms_internal_zzcmb2.name.equals("_ep")) {
                                         zzap = zza(com_google_android_gms_internal_zzcmb2, "_dbg", Long.valueOf(1)) ? zzawv().zzap(com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn, com_google_android_gms_internal_zzcmb2.name) : 1;
@@ -1257,8 +1257,8 @@ public class zzcim {
                                 com_google_android_gms_internal_zzcme.zzjlt = com_google_android_gms_internal_zzcmb3.zzjli;
                             }
                         }
-                        str5 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
-                        zzjb = zzaws().zzjb(str5);
+                        str4 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
+                        zzjb = zzaws().zzjb(str4);
                         if (zzjb != null) {
                             zzawy().zzazd().zzj("Bundling raw events w/o app info. appId", zzchm.zzjk(com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn));
                         } else if (com_google_android_gms_internal_zzcme.zzjlp.length > 0) {
@@ -1290,9 +1290,9 @@ public class zzcim {
                         zzaws().zzah(com_google_android_gms_internal_zzcim_zza.zzjgj);
                         zzaws2 = zzaws();
                         try {
-                            zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str5, str5});
+                            zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str4, str4});
                         } catch (SQLiteException e) {
-                            zzaws2.zzawy().zzazd().zze("Failed to remove unused event metadata. appId", zzchm.zzjk(str5), e);
+                            zzaws2.zzawy().zzazd().zze("Failed to remove unused event metadata. appId", zzchm.zzjk(str4), e);
                         }
                         zzaws().setTransactionSuccessful();
                         zzaws().endTransaction();
@@ -1304,17 +1304,17 @@ public class zzcim {
                 }
             }
             strArr = j2 != -1 ? new String[]{null, String.valueOf(j2)} : new String[]{null};
-            str6 = j2 != -1 ? " and rowid <= ?" : TtmlNode.ANONYMOUS_REGION_ID;
-            cursor = writableDatabase.rawQuery(new StringBuilder(String.valueOf(str6).length() + 84).append("select metadata_fingerprint from raw_events where app_id = ?").append(str6).append(" order by rowid limit 1;").toString(), strArr);
-            if (cursor.moveToFirst()) {
-                str6 = cursor.getString(0);
-                cursor.close();
-                str7 = str6;
-                cursor2 = cursor;
-                str2 = null;
+            str5 = j2 != -1 ? " and rowid <= ?" : TtmlNode.ANONYMOUS_REGION_ID;
+            cursor2 = writableDatabase.rawQuery(new StringBuilder(String.valueOf(str5).length() + 84).append("select metadata_fingerprint from raw_events where app_id = ?").append(str5).append(" order by rowid limit 1;").toString(), strArr);
+            if (cursor2.moveToFirst()) {
+                str5 = cursor2.getString(0);
+                cursor2.close();
+                str6 = str5;
+                cursor = cursor2;
+                str7 = null;
             } else {
-                if (cursor != null) {
-                    cursor.close();
+                if (cursor2 != null) {
+                    cursor2.close();
                 }
                 if (com_google_android_gms_internal_zzcim_zza.zzapa != null) {
                 }
@@ -1340,9 +1340,9 @@ public class zzcim {
                             ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh = new zzcmc[0];
                         }
                         com_google_android_gms_internal_zzcmcArr = ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh;
-                        length2 = com_google_android_gms_internal_zzcmcArr.length;
+                        length = com_google_android_gms_internal_zzcmcArr.length;
                         i4 = 0;
-                        while (i4 < length2) {
+                        while (i4 < length) {
                             com_google_android_gms_internal_zzcmc = com_google_android_gms_internal_zzcmcArr[i4];
                             if (!"_c".equals(com_google_android_gms_internal_zzcmc.name)) {
                                 com_google_android_gms_internal_zzcmc.zzjll = Long.valueOf(1);
@@ -1398,9 +1398,9 @@ public class zzcim {
                         obj4 = null;
                         com_google_android_gms_internal_zzcmc3 = null;
                         com_google_android_gms_internal_zzcmcArr3 = com_google_android_gms_internal_zzcmb.zzjlh;
-                        length3 = com_google_android_gms_internal_zzcmcArr3.length;
+                        length2 = com_google_android_gms_internal_zzcmcArr3.length;
                         i6 = 0;
-                        while (i6 < length3) {
+                        while (i6 < length2) {
                             com_google_android_gms_internal_zzcmc2 = com_google_android_gms_internal_zzcmcArr3[i6];
                             if (!"_c".equals(com_google_android_gms_internal_zzcmc2.name)) {
                                 obj3 = obj4;
@@ -1458,9 +1458,9 @@ public class zzcim {
                         i9 = 0;
                         zzbaz = zzawu().zzbaz();
                         com_google_android_gms_internal_zzcmbArr2 = com_google_android_gms_internal_zzcme.zzjlp;
-                        length = com_google_android_gms_internal_zzcmbArr2.length;
+                        length3 = com_google_android_gms_internal_zzcmbArr2.length;
                         i = 0;
-                        while (i < length) {
+                        while (i < length3) {
                             com_google_android_gms_internal_zzcmb2 = com_google_android_gms_internal_zzcmbArr2[i];
                             if (com_google_android_gms_internal_zzcmb2.name.equals("_ep")) {
                                 if (zza(com_google_android_gms_internal_zzcmb2, "_dbg", Long.valueOf(1))) {
@@ -1559,8 +1559,8 @@ public class zzcim {
                         com_google_android_gms_internal_zzcme.zzjlt = com_google_android_gms_internal_zzcmb32.zzjli;
                     }
                 }
-                str5 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
-                zzjb = zzaws().zzjb(str5);
+                str4 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
+                zzjb = zzaws().zzjb(str4);
                 if (zzjb != null) {
                     zzawy().zzazd().zzj("Bundling raw events w/o app info. appId", zzchm.zzjk(com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn));
                 } else if (com_google_android_gms_internal_zzcme.zzjlp.length > 0) {
@@ -1595,49 +1595,49 @@ public class zzcim {
                 }
                 zzaws().zzah(com_google_android_gms_internal_zzcim_zza.zzjgj);
                 zzaws2 = zzaws();
-                zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str5, str5});
+                zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str4, str4});
                 zzaws().setTransactionSuccessful();
                 zzaws().endTransaction();
                 return true;
             }
             try {
-                cursor2 = writableDatabase.query("raw_events_metadata", new String[]{TtmlNode.TAG_METADATA}, "app_id = ? and metadata_fingerprint = ?", new String[]{str2, str7}, null, null, "rowid", "2");
-                if (cursor2.moveToFirst()) {
-                    byte[] blob = cursor2.getBlob(0);
+                cursor = writableDatabase.query("raw_events_metadata", new String[]{TtmlNode.TAG_METADATA}, "app_id = ? and metadata_fingerprint = ?", new String[]{str7, str6}, null, null, "rowid", "2");
+                if (cursor.moveToFirst()) {
+                    byte[] blob = cursor.getBlob(0);
                     zzfjj zzn = zzfjj.zzn(blob, 0, blob.length);
                     zzfjs com_google_android_gms_internal_zzcme2 = new zzcme();
                     try {
                         com_google_android_gms_internal_zzcme2.zza(zzn);
-                        if (cursor2.moveToNext()) {
-                            zzaws.zzawy().zzazf().zzj("Get multiple raw event metadata records, expected one. appId", zzchm.zzjk(str2));
+                        if (cursor.moveToNext()) {
+                            zzaws.zzawy().zzazf().zzj("Get multiple raw event metadata records, expected one. appId", zzchm.zzjk(str7));
                         }
-                        cursor2.close();
+                        cursor.close();
                         com_google_android_gms_internal_zzcim_zza.zzb(com_google_android_gms_internal_zzcme2);
                         if (j2 != -1) {
-                            str6 = "app_id = ? and metadata_fingerprint = ? and rowid <= ?";
-                            strArr = new String[]{str2, str7, String.valueOf(j2)};
+                            str5 = "app_id = ? and metadata_fingerprint = ? and rowid <= ?";
+                            strArr = new String[]{str7, str6, String.valueOf(j2)};
                         } else {
-                            str6 = "app_id = ? and metadata_fingerprint = ?";
-                            strArr = new String[]{str2, str7};
+                            str5 = "app_id = ? and metadata_fingerprint = ?";
+                            strArr = new String[]{str7, str6};
                         }
-                        cursor = writableDatabase.query("raw_events", new String[]{"rowid", "name", "timestamp", "data"}, str6, strArr, null, null, "rowid", null);
-                        if (cursor.moveToFirst()) {
+                        cursor2 = writableDatabase.query("raw_events", new String[]{"rowid", "name", "timestamp", "data"}, str5, strArr, null, null, "rowid", null);
+                        if (cursor2.moveToFirst()) {
                             do {
-                                zzaxe = cursor.getLong(0);
-                                byte[] blob2 = cursor.getBlob(3);
+                                zzaxe = cursor2.getLong(0);
+                                byte[] blob2 = cursor2.getBlob(3);
                                 zzfjj zzn2 = zzfjj.zzn(blob2, 0, blob2.length);
                                 zzfjs com_google_android_gms_internal_zzcmb4 = new zzcmb();
                                 try {
                                     com_google_android_gms_internal_zzcmb4.zza(zzn2);
                                 } catch (IOException e2) {
-                                    zzaws.zzawy().zzazd().zze("Data loss. Failed to merge raw event. appId", zzchm.zzjk(str2), e2);
+                                    zzaws.zzawy().zzazd().zze("Data loss. Failed to merge raw event. appId", zzchm.zzjk(str7), e2);
                                 }
                                 try {
-                                    com_google_android_gms_internal_zzcmb4.name = cursor.getString(1);
-                                    com_google_android_gms_internal_zzcmb4.zzjli = Long.valueOf(cursor.getLong(2));
+                                    com_google_android_gms_internal_zzcmb4.name = cursor2.getString(1);
+                                    com_google_android_gms_internal_zzcmb4.zzjli = Long.valueOf(cursor2.getLong(2));
                                     if (!com_google_android_gms_internal_zzcim_zza.zza(zzaxe, com_google_android_gms_internal_zzcmb4)) {
-                                        if (cursor != null) {
-                                            cursor.close();
+                                        if (cursor2 != null) {
+                                            cursor2.close();
                                         }
                                         if (com_google_android_gms_internal_zzcim_zza.zzapa != null) {
                                         }
@@ -1667,9 +1667,9 @@ public class zzcim {
                                                         ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh = new zzcmc[0];
                                                     }
                                                     com_google_android_gms_internal_zzcmcArr = ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh;
-                                                    length2 = com_google_android_gms_internal_zzcmcArr.length;
+                                                    length = com_google_android_gms_internal_zzcmcArr.length;
                                                     i4 = 0;
-                                                    while (i4 < length2) {
+                                                    while (i4 < length) {
                                                         com_google_android_gms_internal_zzcmc = com_google_android_gms_internal_zzcmcArr[i4];
                                                         if (!"_c".equals(com_google_android_gms_internal_zzcmc.name)) {
                                                             com_google_android_gms_internal_zzcmc.zzjll = Long.valueOf(1);
@@ -1725,9 +1725,9 @@ public class zzcim {
                                                     obj4 = null;
                                                     com_google_android_gms_internal_zzcmc3 = null;
                                                     com_google_android_gms_internal_zzcmcArr3 = com_google_android_gms_internal_zzcmb.zzjlh;
-                                                    length3 = com_google_android_gms_internal_zzcmcArr3.length;
+                                                    length2 = com_google_android_gms_internal_zzcmcArr3.length;
                                                     i6 = 0;
-                                                    while (i6 < length3) {
+                                                    while (i6 < length2) {
                                                         com_google_android_gms_internal_zzcmc2 = com_google_android_gms_internal_zzcmcArr3[i6];
                                                         if (!"_c".equals(com_google_android_gms_internal_zzcmc2.name)) {
                                                             obj3 = obj4;
@@ -1777,9 +1777,9 @@ public class zzcim {
                                                     i9 = 0;
                                                     zzbaz = zzawu().zzbaz();
                                                     com_google_android_gms_internal_zzcmbArr2 = com_google_android_gms_internal_zzcme.zzjlp;
-                                                    length = com_google_android_gms_internal_zzcmbArr2.length;
+                                                    length3 = com_google_android_gms_internal_zzcmbArr2.length;
                                                     i = 0;
-                                                    while (i < length) {
+                                                    while (i < length3) {
                                                         com_google_android_gms_internal_zzcmb2 = com_google_android_gms_internal_zzcmbArr2[i];
                                                         if (com_google_android_gms_internal_zzcmb2.name.equals("_ep")) {
                                                             zzawu();
@@ -1878,8 +1878,8 @@ public class zzcim {
                                                     com_google_android_gms_internal_zzcme.zzjlt = com_google_android_gms_internal_zzcmb322.zzjli;
                                                 }
                                             }
-                                            str5 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
-                                            zzjb = zzaws().zzjb(str5);
+                                            str4 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
+                                            zzjb = zzaws().zzjb(str4);
                                             if (zzjb != null) {
                                                 zzawy().zzazd().zzj("Bundling raw events w/o app info. appId", zzchm.zzjk(com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn));
                                             } else if (com_google_android_gms_internal_zzcme.zzjlp.length > 0) {
@@ -1914,7 +1914,7 @@ public class zzcim {
                                             }
                                             zzaws().zzah(com_google_android_gms_internal_zzcim_zza.zzjgj);
                                             zzaws2 = zzaws();
-                                            zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str5, str5});
+                                            zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str4, str4});
                                             zzaws().setTransactionSuccessful();
                                             zzaws().endTransaction();
                                             return true;
@@ -1925,11 +1925,11 @@ public class zzcim {
                                     }
                                 } catch (SQLiteException e3) {
                                     obj = e3;
-                                    str4 = str2;
+                                    str2 = str7;
                                 }
-                            } while (cursor.moveToNext());
-                            if (cursor != null) {
-                                cursor.close();
+                            } while (cursor2.moveToNext());
+                            if (cursor2 != null) {
+                                cursor2.close();
                             }
                             if (com_google_android_gms_internal_zzcim_zza.zzapa != null) {
                             }
@@ -1955,9 +1955,9 @@ public class zzcim {
                                         ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh = new zzcmc[0];
                                     }
                                     com_google_android_gms_internal_zzcmcArr = ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh;
-                                    length2 = com_google_android_gms_internal_zzcmcArr.length;
+                                    length = com_google_android_gms_internal_zzcmcArr.length;
                                     i4 = 0;
-                                    while (i4 < length2) {
+                                    while (i4 < length) {
                                         com_google_android_gms_internal_zzcmc = com_google_android_gms_internal_zzcmcArr[i4];
                                         if (!"_c".equals(com_google_android_gms_internal_zzcmc.name)) {
                                             com_google_android_gms_internal_zzcmc.zzjll = Long.valueOf(1);
@@ -2013,9 +2013,9 @@ public class zzcim {
                                     obj4 = null;
                                     com_google_android_gms_internal_zzcmc3 = null;
                                     com_google_android_gms_internal_zzcmcArr3 = com_google_android_gms_internal_zzcmb.zzjlh;
-                                    length3 = com_google_android_gms_internal_zzcmcArr3.length;
+                                    length2 = com_google_android_gms_internal_zzcmcArr3.length;
                                     i6 = 0;
-                                    while (i6 < length3) {
+                                    while (i6 < length2) {
                                         com_google_android_gms_internal_zzcmc2 = com_google_android_gms_internal_zzcmcArr3[i6];
                                         if (!"_c".equals(com_google_android_gms_internal_zzcmc2.name)) {
                                             obj3 = obj4;
@@ -2073,9 +2073,9 @@ public class zzcim {
                                     i9 = 0;
                                     zzbaz = zzawu().zzbaz();
                                     com_google_android_gms_internal_zzcmbArr2 = com_google_android_gms_internal_zzcme.zzjlp;
-                                    length = com_google_android_gms_internal_zzcmbArr2.length;
+                                    length3 = com_google_android_gms_internal_zzcmbArr2.length;
                                     i = 0;
-                                    while (i < length) {
+                                    while (i < length3) {
                                         com_google_android_gms_internal_zzcmb2 = com_google_android_gms_internal_zzcmbArr2[i];
                                         if (com_google_android_gms_internal_zzcmb2.name.equals("_ep")) {
                                             if (zza(com_google_android_gms_internal_zzcmb2, "_dbg", Long.valueOf(1))) {
@@ -2174,8 +2174,8 @@ public class zzcim {
                                     com_google_android_gms_internal_zzcme.zzjlt = com_google_android_gms_internal_zzcmb3222.zzjli;
                                 }
                             }
-                            str5 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
-                            zzjb = zzaws().zzjb(str5);
+                            str4 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
+                            zzjb = zzaws().zzjb(str4);
                             if (zzjb != null) {
                                 zzawy().zzazd().zzj("Bundling raw events w/o app info. appId", zzchm.zzjk(com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn));
                             } else if (com_google_android_gms_internal_zzcme.zzjlp.length > 0) {
@@ -2210,14 +2210,14 @@ public class zzcim {
                             }
                             zzaws().zzah(com_google_android_gms_internal_zzcim_zza.zzjgj);
                             zzaws2 = zzaws();
-                            zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str5, str5});
+                            zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str4, str4});
                             zzaws().setTransactionSuccessful();
                             zzaws().endTransaction();
                             return true;
                         }
-                        zzaws.zzawy().zzazf().zzj("Raw event data disappeared while in transaction. appId", zzchm.zzjk(str2));
-                        if (cursor != null) {
-                            cursor.close();
+                        zzaws.zzawy().zzazf().zzj("Raw event data disappeared while in transaction. appId", zzchm.zzjk(str7));
+                        if (cursor2 != null) {
+                            cursor2.close();
                         }
                         if (com_google_android_gms_internal_zzcim_zza.zzapa != null) {
                         }
@@ -2243,9 +2243,9 @@ public class zzcim {
                                     ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh = new zzcmc[0];
                                 }
                                 com_google_android_gms_internal_zzcmcArr = ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh;
-                                length2 = com_google_android_gms_internal_zzcmcArr.length;
+                                length = com_google_android_gms_internal_zzcmcArr.length;
                                 i4 = 0;
-                                while (i4 < length2) {
+                                while (i4 < length) {
                                     com_google_android_gms_internal_zzcmc = com_google_android_gms_internal_zzcmcArr[i4];
                                     if (!"_c".equals(com_google_android_gms_internal_zzcmc.name)) {
                                         com_google_android_gms_internal_zzcmc.zzjll = Long.valueOf(1);
@@ -2301,9 +2301,9 @@ public class zzcim {
                                 obj4 = null;
                                 com_google_android_gms_internal_zzcmc3 = null;
                                 com_google_android_gms_internal_zzcmcArr3 = com_google_android_gms_internal_zzcmb.zzjlh;
-                                length3 = com_google_android_gms_internal_zzcmcArr3.length;
+                                length2 = com_google_android_gms_internal_zzcmcArr3.length;
                                 i6 = 0;
-                                while (i6 < length3) {
+                                while (i6 < length2) {
                                     com_google_android_gms_internal_zzcmc2 = com_google_android_gms_internal_zzcmcArr3[i6];
                                     if (!"_c".equals(com_google_android_gms_internal_zzcmc2.name)) {
                                         obj3 = obj4;
@@ -2361,9 +2361,9 @@ public class zzcim {
                                 i9 = 0;
                                 zzbaz = zzawu().zzbaz();
                                 com_google_android_gms_internal_zzcmbArr2 = com_google_android_gms_internal_zzcme.zzjlp;
-                                length = com_google_android_gms_internal_zzcmbArr2.length;
+                                length3 = com_google_android_gms_internal_zzcmbArr2.length;
                                 i = 0;
-                                while (i < length) {
+                                while (i < length3) {
                                     com_google_android_gms_internal_zzcmb2 = com_google_android_gms_internal_zzcmbArr2[i];
                                     if (com_google_android_gms_internal_zzcmb2.name.equals("_ep")) {
                                         if (zza(com_google_android_gms_internal_zzcmb2, "_dbg", Long.valueOf(1))) {
@@ -2462,8 +2462,8 @@ public class zzcim {
                                 com_google_android_gms_internal_zzcme.zzjlt = com_google_android_gms_internal_zzcmb32222.zzjli;
                             }
                         }
-                        str5 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
-                        zzjb = zzaws().zzjb(str5);
+                        str4 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
+                        zzjb = zzaws().zzjb(str4);
                         if (zzjb != null) {
                             zzawy().zzazd().zzj("Bundling raw events w/o app info. appId", zzchm.zzjk(com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn));
                         } else if (com_google_android_gms_internal_zzcme.zzjlp.length > 0) {
@@ -2498,22 +2498,22 @@ public class zzcim {
                         }
                         zzaws().zzah(com_google_android_gms_internal_zzcim_zza.zzjgj);
                         zzaws2 = zzaws();
-                        zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str5, str5});
+                        zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str4, str4});
                         zzaws().setTransactionSuccessful();
                         zzaws().endTransaction();
                         return true;
                     } catch (IOException e22) {
-                        zzaws.zzawy().zzazd().zze("Data loss. Failed to merge raw event metadata. appId", zzchm.zzjk(str2), e22);
-                        if (cursor2 != null) {
-                            cursor2.close();
+                        zzaws.zzawy().zzazd().zze("Data loss. Failed to merge raw event metadata. appId", zzchm.zzjk(str7), e22);
+                        if (cursor != null) {
+                            cursor.close();
                         }
                     } catch (Throwable th2) {
                         zzaws().endTransaction();
                     }
                 } else {
-                    zzaws.zzawy().zzazd().zzj("Raw event metadata record is missing. appId", zzchm.zzjk(str2));
-                    if (cursor2 != null) {
-                        cursor2.close();
+                    zzaws.zzawy().zzazd().zzj("Raw event metadata record is missing. appId", zzchm.zzjk(str7));
+                    if (cursor != null) {
+                        cursor.close();
                     }
                     if (com_google_android_gms_internal_zzcim_zza.zzapa != null) {
                     }
@@ -2543,9 +2543,9 @@ public class zzcim {
                                     ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh = new zzcmc[0];
                                 }
                                 com_google_android_gms_internal_zzcmcArr = ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh;
-                                length2 = com_google_android_gms_internal_zzcmcArr.length;
+                                length = com_google_android_gms_internal_zzcmcArr.length;
                                 i4 = 0;
-                                while (i4 < length2) {
+                                while (i4 < length) {
                                     com_google_android_gms_internal_zzcmc = com_google_android_gms_internal_zzcmcArr[i4];
                                     if (!"_c".equals(com_google_android_gms_internal_zzcmc.name)) {
                                         com_google_android_gms_internal_zzcmc.zzjll = Long.valueOf(1);
@@ -2601,9 +2601,9 @@ public class zzcim {
                                 obj4 = null;
                                 com_google_android_gms_internal_zzcmc3 = null;
                                 com_google_android_gms_internal_zzcmcArr3 = com_google_android_gms_internal_zzcmb.zzjlh;
-                                length3 = com_google_android_gms_internal_zzcmcArr3.length;
+                                length2 = com_google_android_gms_internal_zzcmcArr3.length;
                                 i6 = 0;
-                                while (i6 < length3) {
+                                while (i6 < length2) {
                                     com_google_android_gms_internal_zzcmc2 = com_google_android_gms_internal_zzcmcArr3[i6];
                                     if (!"_c".equals(com_google_android_gms_internal_zzcmc2.name)) {
                                         obj3 = obj4;
@@ -2653,9 +2653,9 @@ public class zzcim {
                                 i9 = 0;
                                 zzbaz = zzawu().zzbaz();
                                 com_google_android_gms_internal_zzcmbArr2 = com_google_android_gms_internal_zzcme.zzjlp;
-                                length = com_google_android_gms_internal_zzcmbArr2.length;
+                                length3 = com_google_android_gms_internal_zzcmbArr2.length;
                                 i = 0;
-                                while (i < length) {
+                                while (i < length3) {
                                     com_google_android_gms_internal_zzcmb2 = com_google_android_gms_internal_zzcmbArr2[i];
                                     if (com_google_android_gms_internal_zzcmb2.name.equals("_ep")) {
                                         zzawu();
@@ -2754,8 +2754,8 @@ public class zzcim {
                                 com_google_android_gms_internal_zzcme.zzjlt = com_google_android_gms_internal_zzcmb322222.zzjli;
                             }
                         }
-                        str5 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
-                        zzjb = zzaws().zzjb(str5);
+                        str4 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
+                        zzjb = zzaws().zzjb(str4);
                         if (zzjb != null) {
                             zzawy().zzazd().zzj("Bundling raw events w/o app info. appId", zzchm.zzjk(com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn));
                         } else if (com_google_android_gms_internal_zzcme.zzjlp.length > 0) {
@@ -2790,7 +2790,7 @@ public class zzcim {
                         }
                         zzaws().zzah(com_google_android_gms_internal_zzcim_zza.zzjgj);
                         zzaws2 = zzaws();
-                        zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str5, str5});
+                        zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str4, str4});
                         zzaws().setTransactionSuccessful();
                         zzaws().endTransaction();
                         return true;
@@ -2801,12 +2801,12 @@ public class zzcim {
                 }
             } catch (SQLiteException e4) {
                 obj = e4;
-                cursor = cursor2;
-                str4 = str2;
+                cursor2 = cursor;
+                str2 = str7;
                 try {
-                    zzaws.zzawy().zzazd().zze("Data loss. Error selecting raw event. appId", zzchm.zzjk(str4), obj);
-                    if (cursor != null) {
-                        cursor.close();
+                    zzaws.zzawy().zzazd().zze("Data loss. Error selecting raw event. appId", zzchm.zzjk(str2), obj);
+                    if (cursor2 != null) {
+                        cursor2.close();
                     }
                     if (com_google_android_gms_internal_zzcim_zza.zzapa != null) {
                     }
@@ -2832,9 +2832,9 @@ public class zzcim {
                                 ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh = new zzcmc[0];
                             }
                             com_google_android_gms_internal_zzcmcArr = ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh;
-                            length2 = com_google_android_gms_internal_zzcmcArr.length;
+                            length = com_google_android_gms_internal_zzcmcArr.length;
                             i4 = 0;
-                            while (i4 < length2) {
+                            while (i4 < length) {
                                 com_google_android_gms_internal_zzcmc = com_google_android_gms_internal_zzcmcArr[i4];
                                 if (!"_c".equals(com_google_android_gms_internal_zzcmc.name)) {
                                     com_google_android_gms_internal_zzcmc.zzjll = Long.valueOf(1);
@@ -2890,9 +2890,9 @@ public class zzcim {
                             obj4 = null;
                             com_google_android_gms_internal_zzcmc3 = null;
                             com_google_android_gms_internal_zzcmcArr3 = com_google_android_gms_internal_zzcmb.zzjlh;
-                            length3 = com_google_android_gms_internal_zzcmcArr3.length;
+                            length2 = com_google_android_gms_internal_zzcmcArr3.length;
                             i6 = 0;
-                            while (i6 < length3) {
+                            while (i6 < length2) {
                                 com_google_android_gms_internal_zzcmc2 = com_google_android_gms_internal_zzcmcArr3[i6];
                                 if (!"_c".equals(com_google_android_gms_internal_zzcmc2.name)) {
                                     obj3 = obj4;
@@ -2950,9 +2950,9 @@ public class zzcim {
                             i9 = 0;
                             zzbaz = zzawu().zzbaz();
                             com_google_android_gms_internal_zzcmbArr2 = com_google_android_gms_internal_zzcme.zzjlp;
-                            length = com_google_android_gms_internal_zzcmbArr2.length;
+                            length3 = com_google_android_gms_internal_zzcmbArr2.length;
                             i = 0;
-                            while (i < length) {
+                            while (i < length3) {
                                 com_google_android_gms_internal_zzcmb2 = com_google_android_gms_internal_zzcmbArr2[i];
                                 if (com_google_android_gms_internal_zzcmb2.name.equals("_ep")) {
                                     if (zza(com_google_android_gms_internal_zzcmb2, "_dbg", Long.valueOf(1))) {
@@ -3051,8 +3051,8 @@ public class zzcim {
                             com_google_android_gms_internal_zzcme.zzjlt = com_google_android_gms_internal_zzcmb3222222.zzjli;
                         }
                     }
-                    str5 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
-                    zzjb = zzaws().zzjb(str5);
+                    str4 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
+                    zzjb = zzaws().zzjb(str4);
                     if (zzjb != null) {
                         zzawy().zzazd().zzj("Bundling raw events w/o app info. appId", zzchm.zzjk(com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn));
                     } else if (com_google_android_gms_internal_zzcme.zzjlp.length > 0) {
@@ -3087,30 +3087,30 @@ public class zzcim {
                     }
                     zzaws().zzah(com_google_android_gms_internal_zzcim_zza.zzjgj);
                     zzaws2 = zzaws();
-                    zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str5, str5});
+                    zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str4, str4});
                     zzaws().setTransactionSuccessful();
                     zzaws().endTransaction();
                     return true;
                 } catch (Throwable th3) {
                     th = th3;
-                    if (cursor != null) {
-                        cursor.close();
+                    if (cursor2 != null) {
+                        cursor2.close();
                     }
                     throw th;
                 }
             } catch (Throwable th4) {
                 th = th4;
-                cursor = cursor2;
-                if (cursor != null) {
-                    cursor.close();
+                cursor2 = cursor;
+                if (cursor2 != null) {
+                    cursor2.close();
                 }
                 throw th;
             }
         } catch (SQLiteException e5) {
             obj = e5;
-            zzaws.zzawy().zzazd().zze("Data loss. Error selecting raw event. appId", zzchm.zzjk(str4), obj);
-            if (cursor != null) {
-                cursor.close();
+            zzaws.zzawy().zzazd().zze("Data loss. Error selecting raw event. appId", zzchm.zzjk(str2), obj);
+            if (cursor2 != null) {
+                cursor2.close();
             }
             if (com_google_android_gms_internal_zzcim_zza.zzapa != null) {
             }
@@ -3140,9 +3140,9 @@ public class zzcim {
                             ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh = new zzcmc[0];
                         }
                         com_google_android_gms_internal_zzcmcArr = ((zzcmb) com_google_android_gms_internal_zzcim_zza.zzapa.get(i3)).zzjlh;
-                        length2 = com_google_android_gms_internal_zzcmcArr.length;
+                        length = com_google_android_gms_internal_zzcmcArr.length;
                         i4 = 0;
-                        while (i4 < length2) {
+                        while (i4 < length) {
                             com_google_android_gms_internal_zzcmc = com_google_android_gms_internal_zzcmcArr[i4];
                             if (!"_c".equals(com_google_android_gms_internal_zzcmc.name)) {
                                 com_google_android_gms_internal_zzcmc.zzjll = Long.valueOf(1);
@@ -3198,9 +3198,9 @@ public class zzcim {
                         obj4 = null;
                         com_google_android_gms_internal_zzcmc3 = null;
                         com_google_android_gms_internal_zzcmcArr3 = com_google_android_gms_internal_zzcmb.zzjlh;
-                        length3 = com_google_android_gms_internal_zzcmcArr3.length;
+                        length2 = com_google_android_gms_internal_zzcmcArr3.length;
                         i6 = 0;
-                        while (i6 < length3) {
+                        while (i6 < length2) {
                             com_google_android_gms_internal_zzcmc2 = com_google_android_gms_internal_zzcmcArr3[i6];
                             if (!"_c".equals(com_google_android_gms_internal_zzcmc2.name)) {
                                 obj3 = obj4;
@@ -3250,9 +3250,9 @@ public class zzcim {
                         i9 = 0;
                         zzbaz = zzawu().zzbaz();
                         com_google_android_gms_internal_zzcmbArr2 = com_google_android_gms_internal_zzcme.zzjlp;
-                        length = com_google_android_gms_internal_zzcmbArr2.length;
+                        length3 = com_google_android_gms_internal_zzcmbArr2.length;
                         i = 0;
-                        while (i < length) {
+                        while (i < length3) {
                             com_google_android_gms_internal_zzcmb2 = com_google_android_gms_internal_zzcmbArr2[i];
                             if (com_google_android_gms_internal_zzcmb2.name.equals("_ep")) {
                                 zzawu();
@@ -3351,8 +3351,8 @@ public class zzcim {
                         com_google_android_gms_internal_zzcme.zzjlt = com_google_android_gms_internal_zzcmb32222222.zzjli;
                     }
                 }
-                str5 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
-                zzjb = zzaws().zzjb(str5);
+                str4 = com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn;
+                zzjb = zzaws().zzjb(str4);
                 if (zzjb != null) {
                     zzawy().zzazd().zzj("Bundling raw events w/o app info. appId", zzchm.zzjk(com_google_android_gms_internal_zzcim_zza.zzjgi.zzcn));
                 } else if (com_google_android_gms_internal_zzcme.zzjlp.length > 0) {
@@ -3387,7 +3387,7 @@ public class zzcim {
                 }
                 zzaws().zzah(com_google_android_gms_internal_zzcim_zza.zzjgj);
                 zzaws2 = zzaws();
-                zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str5, str5});
+                zzaws2.getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str4, str4});
                 zzaws().setTransactionSuccessful();
                 zzaws().endTransaction();
                 return true;
@@ -4148,10 +4148,10 @@ public class zzcim {
     }
 
     public final void zzbah() {
-        String zzayf;
         zzawx().zzve();
         zzxf();
         this.zzjgf = true;
+        String zzayf;
         String str;
         try {
             Boolean zzbas = zzawp().zzbas();

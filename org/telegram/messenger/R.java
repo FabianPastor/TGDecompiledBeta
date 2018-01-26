@@ -180,6 +180,7 @@ public final class R {
         public static final int attach_video = NUM;
         public static final int attach_video_pressed = NUM;
         public static final int attach_video_states = NUM;
+        public static final int audio_mini_arrow = NUM;
         public static final int audiosend_pause = NUM;
         public static final int audiosend_play = NUM;
         public static final int background_hd = NUM;
@@ -274,6 +275,7 @@ public final class R {
         public static final int floating_pencil = NUM;
         public static final int floating_shadow = NUM;
         public static final int floating_shadow_profile = NUM;
+        public static final int forwardvideo = NUM;
         public static final int foursquare = NUM;
         public static final int googleg_disabled_color_18 = NUM;
         public static final int googleg_standard_color_18 = NUM;
@@ -373,8 +375,6 @@ public final class R {
         public static final int ic_storage_gallery = NUM;
         public static final int ic_video = NUM;
         public static final int ic_volume_up_white_24dp = NUM;
-        public static final int inline_video_pause = NUM;
-        public static final int inline_video_play = NUM;
         public static final int instant_camera = NUM;
         public static final int intro_fast_arrow = NUM;
         public static final int intro_fast_arrow_shadow = NUM;
@@ -518,6 +518,7 @@ public final class R {
         public static final int passcode_check = NUM;
         public static final int passcode_delete = NUM;
         public static final int passcode_logo = NUM;
+        public static final int pausevideo = NUM;
         public static final int permissions_contacts = NUM;
         public static final int phone_activate = NUM;
         public static final int phone_change = NUM;
@@ -549,6 +550,7 @@ public final class R {
         public static final int place_x = NUM;
         public static final int play_big = NUM;
         public static final int player = NUM;
+        public static final int playvideo = NUM;
         public static final int plus = NUM;
         public static final int popup_fixed = NUM;
         public static final int popup_fixed_alert = NUM;
@@ -560,6 +562,7 @@ public final class R {
         public static final int regbtn2 = NUM;
         public static final int regbtn2_pressed = NUM;
         public static final int regbtn_states = NUM;
+        public static final int replyvideo = NUM;
         public static final int round_check2 = NUM;
         public static final int round_grey = NUM;
         public static final int s_pause = NUM;
@@ -1008,6 +1011,7 @@ public final class R {
         public static final int BytesSent = NUM;
         public static final int CacheClear = NUM;
         public static final int CacheEmpty = NUM;
+        public static final int CacheStreamFile = NUM;
         public static final int CalculatingSize = NUM;
         public static final int Call = NUM;
         public static final int CallAgain = NUM;
@@ -1037,6 +1041,7 @@ public final class R {
         public static final int CancelLinkExpired = NUM;
         public static final int CancelLinkSuccess = NUM;
         public static final int CancelRegistration = NUM;
+        public static final int CantPlayVideo = NUM;
         public static final int Caption = NUM;
         public static final int ChangeLanguageLater = NUM;
         public static final int ChangePasscode = NUM;
@@ -1326,6 +1331,7 @@ public final class R {
         public static final int EnableAnimations = NUM;
         public static final int EnableProxyAlert = NUM;
         public static final int EnableProxyAlert2 = NUM;
+        public static final int EnableStreaming = NUM;
         public static final int EnabledPasswordText = NUM;
         public static final int EncryptedChatStartedIncoming = NUM;
         public static final int EncryptedChatStartedOutgoing = NUM;
@@ -2305,6 +2311,7 @@ public final class R {
         public static final int StopLiveLocationAlertToGroup = NUM;
         public static final int StopLiveLocationAlertToUser = NUM;
         public static final int StorageUsage = NUM;
+        public static final int Streaming = NUM;
         public static final int Subscribers_few = NUM;
         public static final int Subscribers_many = NUM;
         public static final int Subscribers_one = NUM;

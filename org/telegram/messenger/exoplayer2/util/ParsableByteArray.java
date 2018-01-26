@@ -458,10 +458,10 @@ public final class ParsableByteArray {
 
     public long readUtf8EncodedLong() {
         int i;
-        int x;
         int length = 0;
         long value = (long) this.data[this.position];
         for (int j = 7; j >= 0; j--) {
+            int x;
             if ((((long) (1 << j)) & value) == 0) {
                 if (j < 6) {
                     value &= (long) ((1 << j) - 1);

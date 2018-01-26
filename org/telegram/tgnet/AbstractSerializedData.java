@@ -23,6 +23,8 @@ public abstract class AbstractSerializedData {
 
     public abstract String readString(boolean z);
 
+    public abstract int remaining();
+
     public abstract void skip(int i);
 
     public abstract void writeBool(boolean z);

@@ -109,7 +109,6 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
 
     public boolean selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs, boolean forceReset) {
         boolean seekRequired;
-        SampleQueue sampleQueue;
         Assertions.checkState(this.prepared);
         int oldEnabledTrackCount = this.enabledTrackCount;
         int i = 0;
@@ -140,6 +139,7 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
                 streams[i] = new HlsSampleStream(this, trackGroupIndex);
                 streamResetFlags[i] = true;
                 if (!seekRequired) {
+                    SampleQueue sampleQueue;
                     sampleQueue = this.sampleQueues[trackGroupIndex];
                     sampleQueue.rewind();
                     if (sampleQueue.advanceTo(positionUs, true, true) || sampleQueue.getReadIndex() == 0) {

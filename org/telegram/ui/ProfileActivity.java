@@ -2752,7 +2752,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         this.nameTextView[a].setRightDrawable(rightIcon);
                     }
                 }
-                this.avatarImage.getImageReceiver().setVisible(!PhotoViewer.getInstance().isShowingImage(photoBig), false);
+                this.avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig), false);
             } else if (this.chat_id != 0) {
                 int[] result;
                 String shortNumber;
@@ -2835,7 +2835,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 }
                 this.avatarDrawable.setInfo(chat);
                 this.avatarImage.setImage(photo, "50_50", this.avatarDrawable);
-                this.avatarImage.getImageReceiver().setVisible(!PhotoViewer.getInstance().isShowingImage(photoBig), false);
+                this.avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig), false);
             }
         }
     }

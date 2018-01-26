@@ -1068,7 +1068,7 @@ public class LoginActivity extends BaseFragment {
                 this.phoneCode = params.getString("code");
                 this.startTime = params.getInt("startTime");
                 this.waitTime = params.getInt("waitTime");
-                this.confirmTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ResetAccountInfo", R.string.ResetAccountInfo, PhoneFormat.getInstance().format("+" + this.requestPhone))));
+                this.confirmTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ResetAccountInfo", R.string.ResetAccountInfo, LocaleController.addNbsp(PhoneFormat.getInstance().format("+" + this.requestPhone)))));
                 updateTimeText();
                 this.timeRunnable = new Runnable() {
                     public void run() {
@@ -1355,11 +1355,11 @@ public class LoginActivity extends BaseFragment {
                     if (this.currentType == 1) {
                         str = AndroidUtilities.replaceTags(LocaleController.getString("SentAppCode", R.string.SentAppCode));
                     } else if (this.currentType == 2) {
-                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentSmsCode", R.string.SentSmsCode, number));
+                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentSmsCode", R.string.SentSmsCode, LocaleController.addNbsp(number)));
                     } else if (this.currentType == 3) {
-                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallCode", R.string.SentCallCode, number));
+                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallCode", R.string.SentCallCode, LocaleController.addNbsp(number)));
                     } else if (this.currentType == 4) {
-                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallOnly", R.string.SentCallOnly, number));
+                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallOnly", R.string.SentCallOnly, LocaleController.addNbsp(number)));
                     }
                     this.confirmTextView.setText(str);
                     if (this.currentType != 3) {

@@ -538,7 +538,6 @@ public class SecretChatHelper {
             newMsg.media.document.iv = decryptedMessage.media.iv;
             newMsg.media.document.thumb = document.thumb;
             newMsg.media.document.dc_id = file.dc_id;
-            newMsg.media.document.caption = document.caption != null ? document.caption : TtmlNode.ANONYMOUS_REGION_ID;
             if (newMsg.attachPath != null && newMsg.attachPath.startsWith(FileLoader.getDirectory(4).getAbsolutePath()) && new File(newMsg.attachPath).renameTo(FileLoader.getPathToAttach(newMsg.media.document))) {
                 newMsgObj.mediaExists = newMsgObj.attachPathExists;
                 newMsgObj.attachPathExists = false;
@@ -886,7 +885,7 @@ public class SecretChatHelper {
                     newMessage.media = new TL_messageMediaPhoto();
                     r4 = newMessage.media;
                     r4.flags |= 3;
-                    newMessage.media.caption = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : TtmlNode.ANONYMOUS_REGION_ID;
+                    newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : TtmlNode.ANONYMOUS_REGION_ID;
                     newMessage.media.photo = new TL_photo();
                     newMessage.media.photo.date = newMessage.date;
                     thumb = ((TL_decryptedMessageMediaPhoto) decryptedMessage.media).thumb;
@@ -927,7 +926,7 @@ public class SecretChatHelper {
                     newMessage.media.document.key = decryptedMessage.media.key;
                     newMessage.media.document.iv = decryptedMessage.media.iv;
                     newMessage.media.document.dc_id = file.dc_id;
-                    newMessage.media.caption = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : TtmlNode.ANONYMOUS_REGION_ID;
+                    newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : TtmlNode.ANONYMOUS_REGION_ID;
                     newMessage.media.document.date = date;
                     newMessage.media.document.size = file.size;
                     newMessage.media.document.id = file.id;
@@ -966,7 +965,7 @@ public class SecretChatHelper {
                     newMessage.media = new TL_messageMediaDocument();
                     r4 = newMessage.media;
                     r4.flags |= 3;
-                    newMessage.media.caption = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : TtmlNode.ANONYMOUS_REGION_ID;
+                    newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : TtmlNode.ANONYMOUS_REGION_ID;
                     newMessage.media.document = new TL_documentEncrypted();
                     newMessage.media.document.id = file.id;
                     newMessage.media.document.access_hash = file.access_hash;
@@ -1013,7 +1012,7 @@ public class SecretChatHelper {
                     newMessage.media = new TL_messageMediaDocument();
                     r4 = newMessage.media;
                     r4.flags |= 3;
-                    newMessage.media.caption = TtmlNode.ANONYMOUS_REGION_ID;
+                    newMessage.message = TtmlNode.ANONYMOUS_REGION_ID;
                     newMessage.media.document = new TL_document();
                     newMessage.media.document.id = decryptedMessage.media.id;
                     newMessage.media.document.access_hash = decryptedMessage.media.access_hash;
@@ -1046,7 +1045,7 @@ public class SecretChatHelper {
                     newMessage.media.document.mime_type = decryptedMessage.media.mime_type;
                     newMessage.media.document.thumb = new TL_photoSizeEmpty();
                     newMessage.media.document.thumb.type = "s";
-                    newMessage.media.caption = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : TtmlNode.ANONYMOUS_REGION_ID;
+                    newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : TtmlNode.ANONYMOUS_REGION_ID;
                     if (newMessage.media.document.mime_type == null) {
                         newMessage.media.document.mime_type = "audio/ogg";
                     }
@@ -1344,6 +1343,7 @@ public class SecretChatHelper {
                                 AbstractSerializedData data = cursor.byteBufferValue(0);
                                 if (data != null) {
                                     message = Message.TLdeserialize(data, data.readInt32(false), false);
+                                    message.readAttachPath(data);
                                     data.reuse();
                                     message.random_id = random_id;
                                     message.dialog_id = dialog_id;

@@ -8,11 +8,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Build.VERSION;
+import android.support.annotation.Keep;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
@@ -29,12 +33,14 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.PhotoViewer;
 
 public class PipVideoView {
     private View controlsView;
     private DecelerateInterpolator decelerateInterpolator;
     private Activity parentActivity;
     private EmbedBottomSheet parentSheet;
+    private PhotoViewer photoViewer;
     private SharedPreferences preferences;
     private int videoHeight;
     private int videoWidth;
@@ -43,6 +49,7 @@ public class PipVideoView {
     private FrameLayout windowView;
 
     private class MiniControlsView extends FrameLayout {
+        private float bufferedPosition;
         private AnimatorSet currentAnimation;
         private Runnable hideRunnable = new Runnable() {
             public void run() {
@@ -50,11 +57,27 @@ public class PipVideoView {
             }
         };
         private ImageView inlineButton;
+        private boolean isCompleted;
         private boolean isVisible = true;
+        private ImageView playButton;
+        private float progress;
+        private Paint progressInnerPaint;
+        private Paint progressPaint;
+        private Runnable progressRunnable = new Runnable() {
+            public void run() {
+                if (PipVideoView.this.photoViewer != null) {
+                    VideoPlayer videoPlayer = PipVideoView.this.photoViewer.getVideoPlayer();
+                    if (videoPlayer != null) {
+                        MiniControlsView.this.setProgress(((float) videoPlayer.getCurrentPosition()) / ((float) videoPlayer.getDuration()));
+                        MiniControlsView.this.setBufferedProgress(((float) videoPlayer.getBufferedPosition()) / ((float) videoPlayer.getDuration()));
+                        AndroidUtilities.runOnUIThread(MiniControlsView.this.progressRunnable, 1000);
+                    }
+                }
+            }
+        };
 
-        public MiniControlsView(Context context) {
+        public MiniControlsView(Context context, boolean fullControls) {
             super(context);
-            setWillNotDraw(false);
             this.inlineButton = new ImageView(context);
             this.inlineButton.setScaleType(ScaleType.CENTER);
             this.inlineButton.setImageResource(R.drawable.ic_outinline);
@@ -63,9 +86,69 @@ public class PipVideoView {
                 public void onClick(View v) {
                     if (PipVideoView.this.parentSheet != null) {
                         PipVideoView.this.parentSheet.exitFromPip();
+                    } else if (PipVideoView.this.photoViewer != null) {
+                        PipVideoView.this.photoViewer.exitFromPip();
                     }
                 }
             });
+            if (fullControls) {
+                this.progressPaint = new Paint();
+                this.progressPaint.setColor(-15095832);
+                this.progressInnerPaint = new Paint();
+                this.progressInnerPaint.setColor(-6975081);
+                setWillNotDraw(false);
+                this.playButton = new ImageView(context);
+                this.playButton.setScaleType(ScaleType.CENTER);
+                addView(this.playButton, LayoutHelper.createFrame(48, 48, 17));
+                this.playButton.setOnClickListener(new OnClickListener(PipVideoView.this) {
+                    public void onClick(View v) {
+                        if (PipVideoView.this.photoViewer != null) {
+                            VideoPlayer videoPlayer = PipVideoView.this.photoViewer.getVideoPlayer();
+                            if (videoPlayer != null) {
+                                if (videoPlayer.isPlaying()) {
+                                    videoPlayer.pause();
+                                } else {
+                                    videoPlayer.play();
+                                }
+                                MiniControlsView.this.updatePlayButton();
+                            }
+                        }
+                    }
+                });
+            }
+            setOnTouchListener(new OnTouchListener(PipVideoView.this) {
+                public boolean onTouch(View v, MotionEvent event) {
+                    return true;
+                }
+            });
+            updatePlayButton();
+            show(false, false);
+        }
+
+        private void updatePlayButton() {
+            if (PipVideoView.this.photoViewer != null) {
+                VideoPlayer videoPlayer = PipVideoView.this.photoViewer.getVideoPlayer();
+                if (videoPlayer != null) {
+                    AndroidUtilities.cancelRunOnUIThread(this.progressRunnable);
+                    if (videoPlayer.isPlaying()) {
+                        this.playButton.setImageResource(R.drawable.ic_pauseinline);
+                        AndroidUtilities.runOnUIThread(this.progressRunnable, 500);
+                    } else if (this.isCompleted) {
+                        this.playButton.setImageResource(R.drawable.ic_againinline);
+                    } else {
+                        this.playButton.setImageResource(R.drawable.ic_playinline);
+                    }
+                }
+            }
+        }
+
+        public void setBufferedProgress(float position) {
+            this.bufferedPosition = position;
+        }
+
+        public void setProgress(float value) {
+            this.progress = value;
+            invalidate();
         }
 
         public void show(boolean value, boolean animated) {
@@ -141,10 +224,34 @@ public class PipVideoView {
             super.onAttachedToWindow();
             checkNeedHide();
         }
+
+        protected void onDraw(Canvas canvas) {
+            int width = getMeasuredWidth();
+            int height = getMeasuredHeight();
+            int progressLineY = height - AndroidUtilities.dp(3.0f);
+            int cy = height - AndroidUtilities.dp(7.0f);
+            int progressX = 0 + ((int) (((float) (width - 0)) * this.progress));
+            if (this.bufferedPosition != 0.0f) {
+                Canvas canvas2 = canvas;
+                canvas2.drawRect((float) null, (float) progressLineY, (((float) (width - 0)) * this.bufferedPosition) + ((float) null), (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressInnerPaint);
+            }
+            canvas.drawRect((float) null, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressPaint);
+        }
     }
 
     public TextureView show(Activity activity, EmbedBottomSheet sheet, View controls, float aspectRatio, int rotation, WebView webview) {
+        return show(activity, null, sheet, controls, aspectRatio, rotation, webview);
+    }
+
+    public TextureView show(Activity activity, PhotoViewer viewer, float aspectRatio, int rotation) {
+        return show(activity, viewer, null, null, aspectRatio, rotation, null);
+    }
+
+    public TextureView show(Activity activity, PhotoViewer viewer, EmbedBottomSheet sheet, View controls, float aspectRatio, int rotation, WebView webview) {
         TextureView textureView;
+        this.parentSheet = sheet;
+        this.parentActivity = activity;
+        this.photoViewer = viewer;
         this.windowView = new FrameLayout(activity) {
             private boolean dragging;
             private float startX;
@@ -181,10 +288,10 @@ public class PipVideoView {
                 if (event.getAction() == 2) {
                     float dx = x - this.startX;
                     float dy = y - this.startY;
-                    LayoutParams access$300 = PipVideoView.this.windowLayoutParams;
-                    access$300.x = (int) (((float) access$300.x) + dx);
-                    access$300 = PipVideoView.this.windowLayoutParams;
-                    access$300.y = (int) (((float) access$300.y) + dy);
+                    LayoutParams access$600 = PipVideoView.this.windowLayoutParams;
+                    access$600.x = (int) (((float) access$600.x) + dx);
+                    access$600 = PipVideoView.this.windowLayoutParams;
+                    access$600.y = (int) (((float) access$600.y) + dy);
                     int maxDiff = PipVideoView.this.videoWidth / 2;
                     if (PipVideoView.this.windowLayoutParams.x < (-maxDiff)) {
                         PipVideoView.this.windowLayoutParams.x = -maxDiff;
@@ -237,7 +344,7 @@ public class PipVideoView {
             aspectRatioFrameLayout.addView(textureView, LayoutHelper.createFrame(-1, -1.0f));
         }
         if (controls == null) {
-            this.controlsView = new MiniControlsView(activity);
+            this.controlsView = new MiniControlsView(activity, viewer != null);
         } else {
             this.controlsView = controls;
         }
@@ -263,12 +370,22 @@ public class PipVideoView {
             }
             this.windowLayoutParams.flags = 16777736;
             this.windowManager.addView(this.windowView, this.windowLayoutParams);
-            this.parentSheet = sheet;
-            this.parentActivity = activity;
             return textureView;
         } catch (Throwable e) {
             FileLog.e(e);
             return null;
+        }
+    }
+
+    public void onVideoCompleted() {
+        if (this.controlsView instanceof MiniControlsView) {
+            MiniControlsView miniControlsView = this.controlsView;
+            miniControlsView.isCompleted = true;
+            miniControlsView.progress = 0.0f;
+            miniControlsView.bufferedPosition = 0.0f;
+            miniControlsView.updatePlayButton();
+            miniControlsView.invalidate();
+            miniControlsView.show(true, true);
         }
     }
 
@@ -299,6 +416,7 @@ public class PipVideoView {
         } catch (Exception e) {
         }
         this.parentSheet = null;
+        this.photoViewer = null;
         this.parentActivity = null;
     }
 
@@ -385,6 +503,8 @@ public class PipVideoView {
                     public void onAnimationEnd(Animator animation) {
                         if (PipVideoView.this.parentSheet != null) {
                             PipVideoView.this.parentSheet.destroy();
+                        } else if (PipVideoView.this.photoViewer != null) {
+                            PipVideoView.this.photoViewer.destroyPhotoViewer();
                         }
                     }
                 });
@@ -412,19 +532,23 @@ public class PipVideoView {
         return new Rect((float) getSideCoord(true, sidex, px, videoWidth), (float) getSideCoord(false, sidey, py, videoHeight), (float) videoWidth, (float) videoHeight);
     }
 
+    @Keep
     public int getX() {
         return this.windowLayoutParams.x;
     }
 
+    @Keep
     public int getY() {
         return this.windowLayoutParams.y;
     }
 
+    @Keep
     public void setX(int value) {
         this.windowLayoutParams.x = value;
         this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
     }
 
+    @Keep
     public void setY(int value) {
         this.windowLayoutParams.y = value;
         this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);

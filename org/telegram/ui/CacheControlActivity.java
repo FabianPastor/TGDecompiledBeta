@@ -460,6 +460,7 @@ public class CacheControlActivity extends BaseFragment {
                                                                 NativeByteBuffer data = cursor2.byteBufferValue(0);
                                                                 if (data != null) {
                                                                     Message message = Message.TLdeserialize(data, data.readInt32(false), false);
+                                                                    message.readAttachPath(data);
                                                                     data.reuse();
                                                                     if (message != null) {
                                                                         messageId = message.id;

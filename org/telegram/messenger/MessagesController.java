@@ -266,7 +266,6 @@ import org.telegram.tgnet.TLRPC.TL_updateLangPackTooLong;
 import org.telegram.tgnet.TLRPC.TL_updateMessageID;
 import org.telegram.tgnet.TLRPC.TL_updateNewChannelMessage;
 import org.telegram.tgnet.TLRPC.TL_updateNewEncryptedMessage;
-import org.telegram.tgnet.TLRPC.TL_updateNewGeoChatMessage;
 import org.telegram.tgnet.TLRPC.TL_updateNewMessage;
 import org.telegram.tgnet.TLRPC.TL_updateNewStickerSet;
 import org.telegram.tgnet.TLRPC.TL_updateNotifySettings;
@@ -1541,9 +1540,6 @@ public class MessagesController implements NotificationCenterDelegate {
                                     MessagesController.this.exportedChats.put(i, res.full_chat.exported_invite);
                                     MessagesController.this.loadingFullChats.remove(Integer.valueOf(i));
                                     MessagesController.this.loadedFullChats.add(Integer.valueOf(i));
-                                    if (!res.chats.isEmpty()) {
-                                        ((Chat) res.chats.get(0)).address = res.full_chat.about;
-                                    }
                                     MessagesController.this.putUsers(res.users, false);
                                     MessagesController.this.putChats(res.chats, false);
                                     if (res.full_chat.stickerset != null) {
@@ -1789,7 +1785,7 @@ public class MessagesController implements NotificationCenterDelegate {
             } else {
                 dialogId = (long) (-currentChat.id);
             }
-            if (this.loadingPeerSettings.indexOfKey(dialogId) >= 0) {
+            if (this.loadingPeerSettings.indexOfKey(dialogId) < 0) {
                 this.loadingPeerSettings.put(dialogId, Boolean.valueOf(true));
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("request spam button for " + dialogId);
@@ -2364,9 +2360,11 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
+        TL_channels_deleteMessages req;
         long newTaskId;
         NativeByteBuffer data;
         Throwable e;
+        final int i;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
             ArrayList<Integer> toSend = null;
             if (taskId == 0) {
@@ -2394,8 +2392,6 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             NativeByteBuffer data2;
             if (channelId != 0) {
-                TL_channels_deleteMessages req;
-                final int i;
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
                     newTaskId = taskId;
@@ -3379,7 +3375,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         objects.add(messageObject);
                         if (z) {
                             if (message.media instanceof TL_messageMediaUnsupported) {
-                                if (message.media.bytes != null && (message.media.bytes.length == 0 || (message.media.bytes.length == 1 && message.media.bytes[0] < (byte) 74))) {
+                                if (message.media.bytes != null && (message.media.bytes.length == 0 || (message.media.bytes.length == 1 && message.media.bytes[0] < (byte) 75))) {
                                     messagesToReload.add(Integer.valueOf(message.id));
                                 }
                             } else if (message.media instanceof TL_messageMediaWebPage) {
@@ -4028,7 +4024,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
-                Chat chat;
                 User user;
                 Integer value;
                 final LongSparseArray<TL_dialog> new_dialogs_dict = new LongSparseArray();
@@ -4048,6 +4043,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 Message lastMessage = null;
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     if (lastMessage == null || message.date < lastMessage.date) {
                         lastMessage = message;
@@ -6042,13 +6038,13 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
-        int channelPts;
         Throwable e;
         long newTaskId;
         TL_updates_getChannelDifference req;
         final int i;
         final int i2;
         if (!this.gettingDifferenceChannels.get(channelId)) {
+            int channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = this.channelsPts.get(channelId);
@@ -7982,8 +7978,6 @@ public class MessagesController implements NotificationCenterDelegate {
                         contactsIds.add(Integer.valueOf(-update.user_id));
                     }
                 }
-            } else if (update instanceof TL_updateNewGeoChatMessage) {
-                continue;
             } else if (update instanceof TL_updateNewEncryptedMessage) {
                 ArrayList<Message> decryptedMessages = SecretChatHelper.getInstance(this.currentAccount).decryptMessage(((TL_updateNewEncryptedMessage) update).message);
                 if (!(decryptedMessages == null || decryptedMessages.isEmpty())) {
@@ -8281,8 +8275,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     message.unread = false;
                     message.media_unread = false;
                 }
-                if (message.out && (message.message == null || message.message.length() == 0)) {
-                    message.message = "-1";
+                if (message.out && message.message == null) {
+                    message.message = TtmlNode.ANONYMOUS_REGION_ID;
                     message.attachPath = TtmlNode.ANONYMOUS_REGION_ID;
                 }
                 ImageLoader.saveMessageThumbs(message);

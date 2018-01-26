@@ -50,6 +50,7 @@ public class ShareActivity extends Activity {
             }
             SerializedData serializedData = new SerializedData(Utilities.hexToBytes(message));
             Message mess = Message.TLdeserialize(serializedData, serializedData.readInt32(false), false);
+            mess.readAttachPath(serializedData);
             if (mess == null) {
                 finish();
                 return;

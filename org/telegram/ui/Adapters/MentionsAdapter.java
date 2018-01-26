@@ -71,7 +71,6 @@ import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class MentionsAdapter extends SelectionAdapter {
-    private boolean allowNewMentions = true;
     private SparseArray<BotInfo> botInfo;
     private int botsCount;
     private int channelLastReqId;
@@ -187,10 +186,6 @@ public class MentionsAdapter extends SelectionAdapter {
         this.searchingContextUsername = null;
         this.searchingContextQuery = null;
         this.noUserName = false;
-    }
-
-    public void setAllowNewMentions(boolean value) {
-        this.allowNewMentions = value;
     }
 
     public void setParentFragment(ChatActivity fragment) {
@@ -760,23 +755,21 @@ public class MentionsAdapter extends SelectionAdapter {
                         if (user != null && (usernameOnly || !UserObject.isUserSelf(user))) {
                             if (newResultsHashMap.indexOfKey(user.id) < 0) {
                                 if (usernameString.length() == 0) {
-                                    if (!user.deleted && (this.allowNewMentions || !(this.allowNewMentions || user.username == null || user.username.length() == 0))) {
+                                    if (!user.deleted) {
                                         newResult.add(user);
                                     }
                                 } else if (user.username != null && user.username.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) {
                                     newResult.add(user);
                                     newMap.put(user.id, user);
-                                } else if (this.allowNewMentions || !(user.username == null || user.username.length() == 0)) {
-                                    if (user.first_name != null && user.first_name.length() > 0 && user.first_name.toLowerCase().startsWith(usernameString)) {
-                                        newResult.add(user);
-                                        newMap.put(user.id, user);
-                                    } else if (user.last_name != null && user.last_name.length() > 0 && user.last_name.toLowerCase().startsWith(usernameString)) {
-                                        newResult.add(user);
-                                        newMap.put(user.id, user);
-                                    } else if (hasSpace && ContactsController.formatName(user.first_name, user.last_name).toLowerCase().startsWith(usernameString)) {
-                                        newResult.add(user);
-                                        newMap.put(user.id, user);
-                                    }
+                                } else if (user.first_name != null && user.first_name.length() > 0 && user.first_name.toLowerCase().startsWith(usernameString)) {
+                                    newResult.add(user);
+                                    newMap.put(user.id, user);
+                                } else if (user.last_name != null && user.last_name.length() > 0 && user.last_name.toLowerCase().startsWith(usernameString)) {
+                                    newResult.add(user);
+                                    newMap.put(user.id, user);
+                                } else if (hasSpace && ContactsController.formatName(user.first_name, user.last_name).toLowerCase().startsWith(usernameString)) {
+                                    newResult.add(user);
+                                    newMap.put(user.id, user);
                                 }
                             }
                         }

@@ -522,7 +522,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 }
             }
 
-            public boolean checkInlinePermissons() {
+            public boolean checkInlinePermissions() {
                 return EmbedBottomSheet.this.checkInlinePermissions();
             }
 

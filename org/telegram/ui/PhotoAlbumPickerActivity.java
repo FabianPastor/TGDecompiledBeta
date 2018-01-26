@@ -357,6 +357,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     }
                     info.isVideo = photoEntry.isVideo;
                     info.caption = photoEntry.caption != null ? photoEntry.caption.toString() : null;
+                    info.entities = photoEntry.entities;
                     info.masks = !photoEntry.stickers.isEmpty() ? new ArrayList(photoEntry.stickers) : null;
                     info.ttl = photoEntry.ttl;
                 } else if (object instanceof SearchImage) {
@@ -367,6 +368,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                         info.searchImage = searchImage;
                     }
                     info.caption = searchImage.caption != null ? searchImage.caption.toString() : null;
+                    info.entities = searchImage.entities;
                     info.masks = !searchImage.stickers.isEmpty() ? new ArrayList(searchImage.stickers) : null;
                     info.ttl = searchImage.ttl;
                     searchImage.date = (int) (System.currentTimeMillis() / 1000);

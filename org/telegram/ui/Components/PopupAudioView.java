@@ -53,7 +53,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
     public void setMessageObject(MessageObject messageObject) {
         if (this.currentMessageObject != messageObject) {
             this.currentAccount = messageObject.currentAccount;
-            this.seekBar.setColors(Theme.getColor(Theme.key_chat_inAudioSeekbar), Theme.getColor(Theme.key_chat_inAudioSeekbarFill), Theme.getColor(Theme.key_chat_inAudioSeekbarSelected));
+            this.seekBar.setColors(Theme.getColor(Theme.key_chat_inAudioSeekbar), Theme.getColor(Theme.key_chat_inAudioSeekbar), Theme.getColor(Theme.key_chat_inAudioSeekbarFill), Theme.getColor(Theme.key_chat_inAudioSeekbarFill), Theme.getColor(Theme.key_chat_inAudioSeekbarSelected));
             this.progressView.setProgressColors(-2497813, -7944712);
             this.currentMessageObject = messageObject;
             this.wasLayout = false;

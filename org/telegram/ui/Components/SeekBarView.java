@@ -9,6 +9,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SeekBarView extends FrameLayout {
+    private float bufferedProgress;
     private SeekBarViewDelegate delegate;
     private Paint innerPaint1 = new Paint(1);
     private Paint outerPaint1;
@@ -108,6 +109,10 @@ public class SeekBarView extends FrameLayout {
         }
     }
 
+    public void setBufferedProgress(float progress) {
+        this.bufferedProgress = progress;
+    }
+
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (this.progressToSet >= 0.0f && getMeasuredWidth() > 0) {
@@ -123,6 +128,9 @@ public class SeekBarView extends FrameLayout {
     protected void onDraw(Canvas canvas) {
         int y = (getMeasuredHeight() - this.thumbHeight) / 2;
         canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
+        if (this.bufferedProgress > 0.0f) {
+            canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (this.bufferedProgress * ((float) (getMeasuredWidth() - this.thumbWidth))) + ((float) (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
+        }
         canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) ((this.thumbWidth / 2) + this.thumbX), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.outerPaint1);
         canvas.drawCircle((float) (this.thumbX + (this.thumbWidth / 2)), (float) ((this.thumbHeight / 2) + y), (float) AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f), this.outerPaint1);
     }

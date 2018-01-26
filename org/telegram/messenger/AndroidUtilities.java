@@ -52,6 +52,7 @@ import android.util.DisplayMetrics;
 import android.util.StateSet;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -884,6 +885,18 @@ Error: java.util.NoSuchElementException
             FileLog.e(e2);
         }
         return size;
+    }
+
+    public static void setEnabled(View view, boolean enabled) {
+        if (view != null) {
+            view.setEnabled(enabled);
+            if (view instanceof ViewGroup) {
+                ViewGroup viewGroup = (ViewGroup) view;
+                for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                    setEnabled(viewGroup.getChildAt(i), enabled);
+                }
+            }
+        }
     }
 
     public static CharSequence getTrimmedString(CharSequence src) {

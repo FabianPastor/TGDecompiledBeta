@@ -8,6 +8,7 @@ import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import java.io.File;
@@ -20,6 +21,7 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RadialProgress;
@@ -28,10 +30,15 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
     private int TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
     private boolean buttonPressed;
     private int buttonState;
+    private int buttonX;
+    private int buttonY;
     private int currentAccount = UserConfig.selectedAccount;
     private MessageObject currentMessageObject;
     private StaticLayout descriptionLayout;
     private int descriptionY = AndroidUtilities.dp(29.0f);
+    private int hasMiniProgress;
+    private boolean miniButtonPressed;
+    private int miniButtonState;
     private RadialProgress radialProgress = new RadialProgress(this);
     private StaticLayout titleLayout;
     private int titleY = AndroidUtilities.dp(9.0f);
@@ -59,7 +66,12 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
         }
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(56.0f));
         int x = LocaleController.isRTL ? (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(8.0f)) - AndroidUtilities.dp(52.0f) : AndroidUtilities.dp(8.0f);
-        this.radialProgress.setProgressRect(AndroidUtilities.dp(4.0f) + x, AndroidUtilities.dp(6.0f), AndroidUtilities.dp(48.0f) + x, AndroidUtilities.dp(50.0f));
+        RadialProgress radialProgress = this.radialProgress;
+        int dp = AndroidUtilities.dp(4.0f) + x;
+        this.buttonX = dp;
+        int dp2 = AndroidUtilities.dp(6.0f);
+        this.buttonY = dp2;
+        radialProgress.setProgressRect(dp, dp2, AndroidUtilities.dp(48.0f) + x, AndroidUtilities.dp(50.0f));
     }
 
     public void setMessageObject(MessageObject messageObject) {
@@ -77,9 +89,93 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
         return this.currentMessageObject;
     }
 
+    private boolean checkAudioMotionEvent(MotionEvent event) {
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        int side = AndroidUtilities.dp(36.0f);
+        boolean area = false;
+        if (this.miniButtonState >= 0) {
+            int offset = AndroidUtilities.dp(27.0f);
+            if (x < this.buttonX + offset || x > (this.buttonX + offset) + side || y < this.buttonY + offset || y > (this.buttonY + offset) + side) {
+                area = false;
+            } else {
+                area = true;
+            }
+        }
+        if (event.getAction() == 0) {
+            if (!area) {
+                return false;
+            }
+            this.miniButtonPressed = true;
+            invalidate();
+            updateRadialProgressBackground();
+            return true;
+        } else if (!this.miniButtonPressed) {
+            return false;
+        } else {
+            if (event.getAction() == 1) {
+                this.miniButtonPressed = false;
+                playSoundEffect(0);
+                didPressedMiniButton(true);
+                invalidate();
+            } else if (event.getAction() == 3) {
+                this.miniButtonPressed = false;
+                invalidate();
+            } else if (event.getAction() == 2 && !area) {
+                this.miniButtonPressed = false;
+                invalidate();
+            }
+            updateRadialProgressBackground();
+            return false;
+        }
+    }
+
+    public boolean onTouchEvent(MotionEvent event) {
+        if (this.currentMessageObject == null) {
+            return super.onTouchEvent(event);
+        }
+        boolean result = checkAudioMotionEvent(event);
+        if (event.getAction() != 3) {
+            return result;
+        }
+        this.miniButtonPressed = false;
+        this.buttonPressed = false;
+        return false;
+    }
+
+    private void updateRadialProgressBackground() {
+        this.radialProgress.swapBackground(getDrawableForCurrentState());
+        if (this.hasMiniProgress != 0) {
+            this.radialProgress.swapMiniBackground(getMiniDrawableForCurrentState());
+        }
+    }
+
+    private void didPressedMiniButton(boolean animated) {
+        if (this.miniButtonState == 0) {
+            this.miniButtonState = 1;
+            this.radialProgress.setProgress(0.0f, false);
+            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
+            this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+            invalidate();
+        } else if (this.miniButtonState == 1) {
+            if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
+                MediaController.getInstance().cleanupPlayer(true, true);
+            }
+            this.miniButtonState = 0;
+            FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.currentMessageObject.getDocument());
+            this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+            invalidate();
+        }
+    }
+
     public void didPressedButton() {
         if (this.buttonState == 0) {
             if (MediaController.getInstance().findMessageInPlaylistAndPlay(this.currentMessageObject)) {
+                if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
+                    this.miniButtonState = 1;
+                    this.radialProgress.setProgress(0.0f, false);
+                    this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+                }
                 this.buttonState = 1;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
@@ -126,6 +222,19 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
         this.radialProgress.draw(canvas);
     }
 
+    private Drawable getMiniDrawableForCurrentState() {
+        int i = 0;
+        if (this.miniButtonState < 0) {
+            return null;
+        }
+        this.radialProgress.setAlphaForPrevious(false);
+        Drawable[] drawableArr = Theme.chat_fileMiniStatesDrawable[this.miniButtonState + 2];
+        if (this.miniButtonPressed) {
+            i = 1;
+        }
+        return drawableArr[i];
+    }
+
     private Drawable getDrawableForCurrentState() {
         int i = 0;
         if (this.buttonState == -1) {
@@ -158,9 +267,52 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
         if (cacheFile.exists() && cacheFile.length() == 0) {
             cacheFile.delete();
         }
-        if (cacheFile.exists()) {
+        boolean fileExists = cacheFile.exists();
+        if (SharedConfig.streamMedia && ((int) this.currentMessageObject.getDialogId()) != 0) {
+            this.hasMiniProgress = fileExists ? 1 : 2;
+            fileExists = true;
+        }
+        boolean playing;
+        Float progress;
+        if (this.hasMiniProgress != 0) {
+            boolean z;
+            this.radialProgress.setMiniProgressBackgroundColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outLoader : Theme.key_chat_inLoader));
+            playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+            if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
+                this.buttonState = 0;
+            } else {
+                this.buttonState = 1;
+            }
+            this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
+            if (this.hasMiniProgress == 1) {
+                DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+                this.miniButtonState = -1;
+            } else {
+                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
+                if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
+                    this.miniButtonState = 1;
+                    progress = ImageLoader.getInstance().getFileProgress(fileName);
+                    if (progress != null) {
+                        this.radialProgress.setProgress(progress.floatValue(), animated);
+                    } else {
+                        this.radialProgress.setProgress(0.0f, animated);
+                    }
+                } else {
+                    this.radialProgress.setProgress(0.0f, animated);
+                    this.miniButtonState = 0;
+                }
+            }
+            RadialProgress radialProgress = this.radialProgress;
+            Drawable miniDrawableForCurrentState = getMiniDrawableForCurrentState();
+            if (this.miniButtonState == 1) {
+                z = true;
+            } else {
+                z = false;
+            }
+            radialProgress.setMiniBackground(miniDrawableForCurrentState, z, animated);
+        } else if (fileExists) {
             DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-            boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+            playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
             if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
                 this.buttonState = 0;
             } else {
@@ -168,24 +320,24 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             }
             this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
             invalidate();
-            return;
-        }
-        DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
-        if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
-            this.buttonState = 4;
-            Float progress = ImageLoader.getInstance().getFileProgress(fileName);
-            if (progress != null) {
-                this.radialProgress.setProgress(progress.floatValue(), animated);
-            } else {
-                this.radialProgress.setProgress(0.0f, animated);
-            }
-            this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
         } else {
-            this.buttonState = 2;
-            this.radialProgress.setProgress(0.0f, animated);
-            this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
+            DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
+            if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
+                this.buttonState = 4;
+                progress = ImageLoader.getInstance().getFileProgress(fileName);
+                if (progress != null) {
+                    this.radialProgress.setProgress(progress.floatValue(), animated);
+                } else {
+                    this.radialProgress.setProgress(0.0f, animated);
+                }
+                this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
+            } else {
+                this.buttonState = 2;
+                this.radialProgress.setProgress(0.0f, animated);
+                this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
+            }
+            invalidate();
         }
-        invalidate();
     }
 
     public void onFailedDownload(String fileName) {
@@ -199,7 +351,11 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
 
     public void onProgressDownload(String fileName, float progress) {
         this.radialProgress.setProgress(progress, true);
-        if (this.buttonState != 4) {
+        if (this.hasMiniProgress != 0) {
+            if (this.miniButtonState != 1) {
+                updateButtonState(false);
+            }
+        } else if (this.buttonState != 4) {
             updateButtonState(false);
         }
     }

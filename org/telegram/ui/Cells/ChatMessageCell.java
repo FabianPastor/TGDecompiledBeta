@@ -228,6 +228,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private boolean hasGamePreview;
     private boolean hasInvoicePreview;
     private boolean hasLinkPreview;
+    private int hasMiniProgress;
     private boolean hasNewLineForTime;
     private boolean hasOldCaptionPreview;
     private int highlightProgress;
@@ -282,6 +283,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     private boolean mediaBackground;
     private int mediaOffsetY;
     private boolean mediaWasInvisible;
+    private int miniButtonPressed;
+    private int miniButtonState;
     private StaticLayout nameLayout;
     private float nameOffsetX;
     private int nameWidth;
@@ -933,7 +936,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.buttonPressed = 0;
                 playSoundEffect(0);
                 didPressedButton(false);
-                updateRadialProgressBackground(true);
+                updateRadialProgressBackground();
                 invalidate();
                 return false;
             } else if (!this.imagePressed) {
@@ -975,31 +978,40 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             invalidate();
             return result;
         }
-        boolean area;
         int side = AndroidUtilities.dp(36.0f);
-        if (this.buttonState == 0 || this.buttonState == 1 || this.buttonState == 2) {
-            if (x >= this.buttonX - AndroidUtilities.dp(12.0f) && x <= (this.buttonX - AndroidUtilities.dp(12.0f)) + this.backgroundWidth) {
-                if (y >= (this.drawInstantView ? this.buttonY : this.namesOffset + this.mediaOffsetY)) {
-                    if (y <= (this.drawInstantView ? this.buttonY + side : (this.namesOffset + this.mediaOffsetY) + AndroidUtilities.dp(82.0f))) {
-                        area = true;
+        boolean area = false;
+        boolean area2 = false;
+        if (this.miniButtonState >= 0) {
+            int offset = AndroidUtilities.dp(27.0f);
+            area2 = x >= this.buttonX + offset && x <= (this.buttonX + offset) + side && y >= this.buttonY + offset && y <= (this.buttonY + offset) + side;
+        }
+        if (!area2) {
+            if (this.buttonState == 0 || this.buttonState == 1 || this.buttonState == 2) {
+                if (x >= this.buttonX - AndroidUtilities.dp(12.0f) && x <= (this.buttonX - AndroidUtilities.dp(12.0f)) + this.backgroundWidth) {
+                    if (y >= (this.drawInstantView ? this.buttonY : this.namesOffset + this.mediaOffsetY)) {
+                        if (y <= (this.drawInstantView ? this.buttonY + side : (this.namesOffset + this.mediaOffsetY) + AndroidUtilities.dp(82.0f))) {
+                            area = true;
+                        }
                     }
                 }
+                area = false;
+            } else {
+                area = x >= this.buttonX && x <= this.buttonX + side && y >= this.buttonY && y <= this.buttonY + side;
             }
-            area = false;
-        } else {
-            area = x >= this.buttonX && x <= this.buttonX + side && y >= this.buttonY && y <= this.buttonY + side;
         }
         if (event.getAction() == 0) {
-            if (!area) {
+            if (!area && !area2) {
                 return result;
             }
-            this.buttonPressed = 1;
+            if (area) {
+                this.buttonPressed = 1;
+            } else {
+                this.miniButtonPressed = 1;
+            }
             invalidate();
-            updateRadialProgressBackground(true);
+            updateRadialProgressBackground();
             return true;
-        } else if (this.buttonPressed == 0) {
-            return result;
-        } else {
+        } else if (this.buttonPressed != 0) {
             if (event.getAction() == 1) {
                 this.buttonPressed = 0;
                 playSoundEffect(0);
@@ -1012,7 +1024,24 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.buttonPressed = 0;
                 invalidate();
             }
-            updateRadialProgressBackground(true);
+            updateRadialProgressBackground();
+            return result;
+        } else if (this.miniButtonPressed == 0) {
+            return result;
+        } else {
+            if (event.getAction() == 1) {
+                this.miniButtonPressed = 0;
+                playSoundEffect(0);
+                didPressedMiniButton(true);
+                invalidate();
+            } else if (event.getAction() == 3) {
+                this.miniButtonPressed = 0;
+                invalidate();
+            } else if (event.getAction() == 2 && !area2) {
+                this.miniButtonPressed = 0;
+                invalidate();
+            }
+            updateRadialProgressBackground();
             return result;
         }
     }
@@ -1083,6 +1112,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
         if (event.getAction() == 3) {
             this.buttonPressed = 0;
+            this.miniButtonPressed = 0;
             this.pressedBotButton = -1;
             this.linkPreviewPressed = false;
             this.otherPressed = false;
@@ -1308,6 +1338,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                 } else if (!this.seekBar.isDragging()) {
                     this.seekBar.setProgress(this.currentMessageObject.audioProgress);
+                    this.seekBar.setBufferedProgress(this.currentMessageObject.bufferedProgress);
                 }
                 duration = 0;
                 if (this.documentAttachType == 3) {
@@ -1672,8 +1703,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             return;
         }
         resetPressedLink(-1);
-        if (!(this.buttonPressed == 0 && this.pressedBotButton == -1)) {
+        if (!(this.buttonPressed == 0 && this.miniButtonPressed == 0 && this.pressedBotButton == -1)) {
             this.buttonPressed = 0;
+            this.miniButtonState = 0;
             this.pressedBotButton = -1;
             invalidate();
         }
@@ -1693,7 +1725,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     public void setCheckPressed(boolean value, boolean pressed) {
         this.isCheckPressed = value;
         this.isPressed = pressed;
-        updateRadialProgressBackground(true);
+        updateRadialProgressBackground();
         if (this.useSeekBarWaweform) {
             this.seekBarWaveform.setSelected(isDrawSelectedBackground());
         } else {
@@ -1717,7 +1749,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.isHighlightedAnimated = true;
                 this.highlightProgress = 300;
             }
-            updateRadialProgressBackground(true);
+            updateRadialProgressBackground();
             if (this.useSeekBarWaweform) {
                 this.seekBarWaveform.setSelected(isDrawSelectedBackground());
             } else {
@@ -1729,7 +1761,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     public void setPressed(boolean pressed) {
         super.setPressed(pressed);
-        updateRadialProgressBackground(true);
+        updateRadialProgressBackground();
         if (this.useSeekBarWaweform) {
             this.seekBarWaveform.setSelected(isDrawSelectedBackground());
         } else {
@@ -1738,9 +1770,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         invalidate();
     }
 
-    private void updateRadialProgressBackground(boolean swap) {
-        if (!this.drawRadialCheckBackground && swap) {
+    private void updateRadialProgressBackground() {
+        if (!this.drawRadialCheckBackground) {
             this.radialProgress.swapBackground(getDrawableForCurrentState());
+            if (this.hasMiniProgress != 0) {
+                this.radialProgress.swapMiniBackground(getMiniDrawableForCurrentState());
+            }
         }
     }
 
@@ -1993,22 +2028,27 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
+        int maxWidth;
+        String str;
         int dp;
         int linkPreviewMaxWidth;
         String description;
         Photo photo;
         TLObject document;
         int duration;
+        boolean smallImage;
         TL_webDocument webDocument;
         TL_webDocument webDocument2;
         int additinalWidth;
+        int height;
+        int width;
         Throwable e;
-        int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
         int textWidth;
         int maxPhotoWidth;
         ArrayList arrayList;
+        DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp2;
@@ -2016,7 +2056,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         String fileName;
         boolean autoDownload;
         int seconds;
-        CharSequence str;
+        CharSequence str2;
         String price;
         SpannableStringBuilder spannableStringBuilder;
         int mWidth;
@@ -2040,8 +2080,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (messageChanged || dataChanged || groupChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int a;
             int i;
-            int height;
-            int width;
+            int lineLeft;
             float f;
             int timeWidthTotal;
             int widthForCaption;
@@ -2110,6 +2149,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             this.linkPreviewPressed = false;
             this.buttonPressed = 0;
+            this.miniButtonPressed = 0;
             this.pressedBotButton = -1;
             this.linkPreviewHeight = 0;
             this.mediaOffsetY = 0;
@@ -2132,6 +2172,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.infoLayout = null;
             this.cancelLoading = false;
             this.buttonState = -1;
+            this.miniButtonState = -1;
+            this.hasMiniProgress = 0;
             this.currentUrl = null;
             this.photoNotSet = false;
             this.drawBackground = true;
@@ -2154,10 +2196,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            int maxWidth;
             int count;
-            String str2;
-            DocumentAttribute attribute;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -2218,9 +2257,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     count = ((TL_pageBlockCollage) block).items.size();
                                 }
                             }
-                            str2 = LocaleController.formatString("Of", R.string.Of, Integer.valueOf(1), Integer.valueOf(count));
-                            this.photosCountWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str2));
-                            this.photosCountLayout = new StaticLayout(str2, Theme.chat_durationPaint, this.photosCountWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                            str = LocaleController.formatString("Of", R.string.Of, Integer.valueOf(1), Integer.valueOf(count));
+                            this.photosCountWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
+                            this.photosCountLayout = new StaticLayout(str, Theme.chat_durationPaint, this.photosCountWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                         }
                     }
                 } else if ("telegram_channel".equals(webpageType)) {
@@ -2298,7 +2337,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     String title;
                     String author;
                     String type;
-                    boolean smallImage;
                     int restLines;
                     int restLinesCount;
                     if (AndroidUtilities.isTablet()) {
@@ -2758,19 +2796,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.drawPhotoImage = true;
                                 if (type != null) {
                                     seconds = duration - ((duration / 60) * 60);
-                                    str2 = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
-                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str2));
-                                    this.videoInfoLayout = new StaticLayout(str2, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
+                                    this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     if (this.hasInvoicePreview) {
                                         if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                            str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                         } else if (messageObject.messageOwner.media.test) {
-                                            str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                         } else {
-                                            str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                         }
                                         price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                        spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                        spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                         spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                         this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                         this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -2790,16 +2828,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     if (this.drawInstantView) {
                                         this.instantWidth = AndroidUtilities.dp(33.0f);
                                         if (this.drawInstantViewType == 1) {
-                                            str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                            str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                         } else if (this.drawInstantViewType == 2) {
-                                            str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                            str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                         } else if (this.drawInstantViewType == 3) {
-                                            str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                            str = LocaleController.getString("InstantView", R.string.InstantView);
                                         } else {
-                                            str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                            str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                         }
                                         mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                         this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                         this.totalHeight += AndroidUtilities.dp(46.0f);
                                         this.instantTextX = (this.drawInstantViewType == 0 ? 0 : AndroidUtilities.dp(8.0f)) + (((int) (((double) this.instantWidth) - Math.ceil((double) this.instantViewLayout.getLineWidth(0)))) / 2);
@@ -2863,20 +2901,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     updateButtonState(dataChanged);
                                 }
                                 if (this.hasGamePreview) {
-                                    str2 = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
-                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str2));
-                                    this.videoInfoLayout = new StaticLayout(str2, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
+                                    this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 }
                                 if (this.hasInvoicePreview) {
                                     if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                        str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                     } else if (messageObject.messageOwner.media.test) {
-                                        str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                     } else {
-                                        str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                     }
                                     price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                    spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                    spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                     spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                     this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -2896,16 +2934,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.drawInstantView) {
                                     this.instantWidth = AndroidUtilities.dp(33.0f);
                                     if (this.drawInstantViewType == 1) {
-                                        str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                        str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                     } else if (this.drawInstantViewType == 2) {
-                                        str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                        str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                     } else if (this.drawInstantViewType == 3) {
-                                        str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                        str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                     } else {
-                                        str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                        str = LocaleController.getString("InstantView", R.string.InstantView);
                                     }
                                     mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                     this.totalHeight += AndroidUtilities.dp(46.0f);
                                     if (this.drawInstantViewType == 0) {
@@ -3043,19 +3081,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.drawPhotoImage = true;
                             if (type != null) {
                                 seconds = duration - ((duration / 60) * 60);
-                                str2 = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
-                                this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str2));
-                                this.videoInfoLayout = new StaticLayout(str2, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
+                                this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
+                                this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 if (this.hasInvoicePreview) {
                                     if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                        str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                     } else if (messageObject.messageOwner.media.test) {
-                                        str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                     } else {
-                                        str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                     }
                                     price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                    spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                    spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                     spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                     this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -3075,16 +3113,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.drawInstantView) {
                                     this.instantWidth = AndroidUtilities.dp(33.0f);
                                     if (this.drawInstantViewType == 1) {
-                                        str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                        str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                     } else if (this.drawInstantViewType == 2) {
-                                        str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                        str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                     } else if (this.drawInstantViewType == 3) {
-                                        str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                        str = LocaleController.getString("InstantView", R.string.InstantView);
                                     } else {
-                                        str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                        str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                     }
                                     mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                     this.totalHeight += AndroidUtilities.dp(46.0f);
                                     if (this.drawInstantViewType == 0) {
@@ -3150,20 +3188,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 updateButtonState(dataChanged);
                             }
                             if (this.hasGamePreview) {
-                                str2 = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
-                                this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str2));
-                                this.videoInfoLayout = new StaticLayout(str2, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
+                                this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
+                                this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             }
                             if (this.hasInvoicePreview) {
                                 if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                    str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                    str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                 } else if (messageObject.messageOwner.media.test) {
-                                    str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                    str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                 } else {
-                                    str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                    str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                 }
                                 price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                 spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                 this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                 this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -3183,16 +3221,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             if (this.drawInstantView) {
                                 this.instantWidth = AndroidUtilities.dp(33.0f);
                                 if (this.drawInstantViewType == 1) {
-                                    str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                    str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                 } else if (this.drawInstantViewType == 2) {
-                                    str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                    str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                 } else if (this.drawInstantViewType == 3) {
-                                    str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                    str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                 } else {
-                                    str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                    str = LocaleController.getString("InstantView", R.string.InstantView);
                                 }
                                 mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                 this.totalHeight += AndroidUtilities.dp(46.0f);
                                 if (this.drawInstantViewType == 0) {
@@ -3592,19 +3630,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     this.drawPhotoImage = true;
                                     if (type != null) {
                                         seconds = duration - ((duration / 60) * 60);
-                                        str2 = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
-                                        this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str2));
-                                        this.videoInfoLayout = new StaticLayout(str2, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
+                                        this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
+                                        this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                         if (this.hasInvoicePreview) {
                                             if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                                str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                                str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                             } else if (messageObject.messageOwner.media.test) {
-                                                str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                                str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                             } else {
-                                                str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                                str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                             }
                                             price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                            spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                            spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                             spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                             this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                             this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -3624,16 +3662,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         if (this.drawInstantView) {
                                             this.instantWidth = AndroidUtilities.dp(33.0f);
                                             if (this.drawInstantViewType == 1) {
-                                                str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                                str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                             } else if (this.drawInstantViewType == 2) {
-                                                str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                                str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                             } else if (this.drawInstantViewType == 3) {
-                                                str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                                str = LocaleController.getString("InstantView", R.string.InstantView);
                                             } else {
-                                                str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                                str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                             }
                                             mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                            this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                            this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                             this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                             this.totalHeight += AndroidUtilities.dp(46.0f);
                                             if (this.drawInstantViewType == 0) {
@@ -3699,20 +3737,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         updateButtonState(dataChanged);
                                     }
                                     if (this.hasGamePreview) {
-                                        str2 = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
-                                        this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str2));
-                                        this.videoInfoLayout = new StaticLayout(str2, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
+                                        this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
+                                        this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     }
                                     if (this.hasInvoicePreview) {
                                         if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                            str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                         } else if (messageObject.messageOwner.media.test) {
-                                            str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                         } else {
-                                            str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                         }
                                         price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                        spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                        spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                         spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                         this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                         this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -3732,16 +3770,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     if (this.drawInstantView) {
                                         this.instantWidth = AndroidUtilities.dp(33.0f);
                                         if (this.drawInstantViewType == 1) {
-                                            str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                            str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                         } else if (this.drawInstantViewType == 2) {
-                                            str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                            str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                         } else if (this.drawInstantViewType == 3) {
-                                            str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                            str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                         } else {
-                                            str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                            str = LocaleController.getString("InstantView", R.string.InstantView);
                                         }
                                         mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                         this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                         this.totalHeight += AndroidUtilities.dp(46.0f);
                                         if (this.drawInstantViewType == 0) {
@@ -3879,19 +3917,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.drawPhotoImage = true;
                                 if (type != null) {
                                     seconds = duration - ((duration / 60) * 60);
-                                    str2 = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
-                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str2));
-                                    this.videoInfoLayout = new StaticLayout(str2, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
+                                    this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     if (this.hasInvoicePreview) {
                                         if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                            str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                         } else if (messageObject.messageOwner.media.test) {
-                                            str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                         } else {
-                                            str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                         }
                                         price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                        spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                        spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                         spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                         this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                         this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -3911,16 +3949,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     if (this.drawInstantView) {
                                         this.instantWidth = AndroidUtilities.dp(33.0f);
                                         if (this.drawInstantViewType == 1) {
-                                            str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                            str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                         } else if (this.drawInstantViewType == 2) {
-                                            str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                            str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                         } else if (this.drawInstantViewType == 3) {
-                                            str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                            str = LocaleController.getString("InstantView", R.string.InstantView);
                                         } else {
-                                            str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                            str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                         }
                                         mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                         this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                         this.totalHeight += AndroidUtilities.dp(46.0f);
                                         if (this.drawInstantViewType == 0) {
@@ -3986,20 +4024,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     updateButtonState(dataChanged);
                                 }
                                 if (this.hasGamePreview) {
-                                    str2 = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
-                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str2));
-                                    this.videoInfoLayout = new StaticLayout(str2, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
+                                    this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 }
                                 if (this.hasInvoicePreview) {
                                     if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                        str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                     } else if (messageObject.messageOwner.media.test) {
-                                        str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                     } else {
-                                        str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                     }
                                     price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                    spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                    spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                     spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                     this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -4019,16 +4057,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.drawInstantView) {
                                     this.instantWidth = AndroidUtilities.dp(33.0f);
                                     if (this.drawInstantViewType == 1) {
-                                        str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                        str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                     } else if (this.drawInstantViewType == 2) {
-                                        str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                        str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                     } else if (this.drawInstantViewType == 3) {
-                                        str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                        str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                     } else {
-                                        str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                        str = LocaleController.getString("InstantView", R.string.InstantView);
                                     }
                                     mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                     this.totalHeight += AndroidUtilities.dp(46.0f);
                                     if (this.drawInstantViewType == 0) {
@@ -4392,19 +4430,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.drawPhotoImage = true;
                                 if (type != null) {
                                     seconds = duration - ((duration / 60) * 60);
-                                    str2 = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
-                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str2));
-                                    this.videoInfoLayout = new StaticLayout(str2, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
+                                    this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     if (this.hasInvoicePreview) {
                                         if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                            str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                         } else if (messageObject.messageOwner.media.test) {
-                                            str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                         } else {
-                                            str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                         }
                                         price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                        spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                        spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                         spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                         this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                         this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -4424,16 +4462,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     if (this.drawInstantView) {
                                         this.instantWidth = AndroidUtilities.dp(33.0f);
                                         if (this.drawInstantViewType == 1) {
-                                            str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                            str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                         } else if (this.drawInstantViewType == 2) {
-                                            str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                            str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                         } else if (this.drawInstantViewType == 3) {
-                                            str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                            str = LocaleController.getString("InstantView", R.string.InstantView);
                                         } else {
-                                            str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                            str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                         }
                                         mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                         this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                         this.totalHeight += AndroidUtilities.dp(46.0f);
                                         if (this.drawInstantViewType == 0) {
@@ -4499,20 +4537,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     updateButtonState(dataChanged);
                                 }
                                 if (this.hasGamePreview) {
-                                    str2 = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
-                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str2));
-                                    this.videoInfoLayout = new StaticLayout(str2, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
+                                    this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 }
                                 if (this.hasInvoicePreview) {
                                     if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                        str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                     } else if (messageObject.messageOwner.media.test) {
-                                        str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                     } else {
-                                        str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                     }
                                     price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                    spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                    spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                     spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                     this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -4532,16 +4570,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.drawInstantView) {
                                     this.instantWidth = AndroidUtilities.dp(33.0f);
                                     if (this.drawInstantViewType == 1) {
-                                        str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                        str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                     } else if (this.drawInstantViewType == 2) {
-                                        str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                        str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                     } else if (this.drawInstantViewType == 3) {
-                                        str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                        str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                     } else {
-                                        str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                        str = LocaleController.getString("InstantView", R.string.InstantView);
                                     }
                                     mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                     this.totalHeight += AndroidUtilities.dp(46.0f);
                                     if (this.drawInstantViewType == 0) {
@@ -4679,19 +4717,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.drawPhotoImage = true;
                             if (type != null) {
                                 seconds = duration - ((duration / 60) * 60);
-                                str2 = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
-                                this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str2));
-                                this.videoInfoLayout = new StaticLayout(str2, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
+                                this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
+                                this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 if (this.hasInvoicePreview) {
                                     if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                        str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                     } else if (messageObject.messageOwner.media.test) {
-                                        str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                     } else {
-                                        str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                     }
                                     price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                    spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                    spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                     spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                     this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -4711,16 +4749,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.drawInstantView) {
                                     this.instantWidth = AndroidUtilities.dp(33.0f);
                                     if (this.drawInstantViewType == 1) {
-                                        str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                        str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                     } else if (this.drawInstantViewType == 2) {
-                                        str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                        str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                     } else if (this.drawInstantViewType == 3) {
-                                        str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                        str = LocaleController.getString("InstantView", R.string.InstantView);
                                     } else {
-                                        str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                        str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                     }
                                     mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                     this.totalHeight += AndroidUtilities.dp(46.0f);
                                     if (this.drawInstantViewType == 0) {
@@ -4786,20 +4824,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 updateButtonState(dataChanged);
                             }
                             if (this.hasGamePreview) {
-                                str2 = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
-                                this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str2));
-                                this.videoInfoLayout = new StaticLayout(str2, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
+                                this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
+                                this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             }
                             if (this.hasInvoicePreview) {
                                 if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                    str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                    str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                                 } else if (messageObject.messageOwner.media.test) {
-                                    str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                    str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                 } else {
-                                    str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                    str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                 }
                                 price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                                spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                                spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                                 spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                                 this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                                 this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -4819,16 +4857,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             if (this.drawInstantView) {
                                 this.instantWidth = AndroidUtilities.dp(33.0f);
                                 if (this.drawInstantViewType == 1) {
-                                    str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                                    str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                                 } else if (this.drawInstantViewType == 2) {
-                                    str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                                    str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                                 } else if (this.drawInstantViewType == 3) {
-                                    str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                                    str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                                 } else {
-                                    str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                                    str = LocaleController.getString("InstantView", R.string.InstantView);
                                 }
                                 mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                                this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                                 this.totalHeight += AndroidUtilities.dp(46.0f);
                                 if (this.drawInstantViewType == 0) {
@@ -5256,15 +5294,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (type != null) {
                                     if (type.equals(MimeTypes.BASE_TYPE_VIDEO) && duration != 0) {
                                         seconds = duration - ((duration / 60) * 60);
-                                        str2 = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
-                                        this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str2));
-                                        this.videoInfoLayout = new StaticLayout(str2, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
+                                        this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
+                                        this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     }
                                 }
                                 if (this.hasGamePreview) {
-                                    str2 = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
-                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str2));
-                                    this.videoInfoLayout = new StaticLayout(str2, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
+                                    this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 }
                             }
                             z = false;
@@ -5340,14 +5378,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.drawPhotoImage = true;
                             if (type != null) {
                                 seconds = duration - ((duration / 60) * 60);
-                                str2 = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
-                                this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str2));
-                                this.videoInfoLayout = new StaticLayout(str2, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
+                                this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
+                                this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             }
                             if (this.hasGamePreview) {
-                                str2 = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
-                                this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str2));
-                                this.videoInfoLayout = new StaticLayout(str2, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
+                                this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
+                                this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             }
                         } else {
                             this.photoImage.setImageBitmap((Drawable) null);
@@ -5356,14 +5394,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         }
                         if (this.hasInvoicePreview) {
                             if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                str2 = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
                             } else if (messageObject.messageOwner.media.test) {
-                                str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                             } else {
-                                str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                             }
                             price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
-                            spannableStringBuilder = new SpannableStringBuilder(price + " " + str);
+                            spannableStringBuilder = new SpannableStringBuilder(price + " " + str2);
                             spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
                             this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(spannableStringBuilder, 0, spannableStringBuilder.length()));
                             this.videoInfoLayout = new StaticLayout(spannableStringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -5386,16 +5424,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (this.drawInstantView) {
                         this.instantWidth = AndroidUtilities.dp(33.0f);
                         if (this.drawInstantViewType == 1) {
-                            str2 = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                            str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
                         } else if (this.drawInstantViewType == 2) {
-                            str2 = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                            str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
                         } else if (this.drawInstantViewType == 3) {
-                            str2 = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                            str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
                         } else {
-                            str2 = LocaleController.getString("InstantView", R.string.InstantView);
+                            str = LocaleController.getString("InstantView", R.string.InstantView);
                         }
                         mWidth = this.backgroundWidth - AndroidUtilities.dp(75.0f);
-                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str2, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        this.instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, (float) mWidth, TruncateAt.END), Theme.chat_instantViewPaint, mWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                         this.instantWidth = this.backgroundWidth - AndroidUtilities.dp(34.0f);
                         this.totalHeight += AndroidUtilities.dp(46.0f);
                         if (this.instantViewLayout != null && this.instantViewLayout.getLineCount() > 0) {
@@ -5786,9 +5824,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         }
                         this.photoImage.setParentMessageObject(messageObject);
                     } else if (messageObject.type == 8) {
-                        str2 = AndroidUtilities.formatFileSize((long) messageObject.messageOwner.media.document.size);
-                        this.infoWidth = (int) Math.ceil((double) Theme.chat_infoPaint.measureText(str2));
-                        this.infoLayout = new StaticLayout(str2, Theme.chat_infoPaint, this.infoWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        str = AndroidUtilities.formatFileSize((long) messageObject.messageOwner.media.document.size);
+                        this.infoWidth = (int) Math.ceil((double) Theme.chat_infoPaint.measureText(str));
+                        this.infoLayout = new StaticLayout(str, Theme.chat_infoPaint, this.infoWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                         if (!messageObject.isSecretPhoto()) {
                             this.photoImage.setNeedsQualityThumb(true);
                             this.photoImage.setShouldGenerateQualityThumb(true);
@@ -6510,6 +6548,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         int linkPreviewY;
         int x;
         int y;
+        float progress;
         int x1;
         int y1;
         RadialProgress radialProgress;
@@ -6524,7 +6563,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         int i = isDrawSelectedBackground() ? this.currentPosition != null ? 2 : 1 : 0;
         imageReceiver.setPressed(i);
         imageReceiver = this.photoImage;
-        boolean z = (PhotoViewer.getInstance().isShowingImage(this.currentMessageObject) || SecretMediaViewer.getInstance().isShowingImage(this.currentMessageObject)) ? false : true;
+        boolean z = (PhotoViewer.isShowingImage(this.currentMessageObject) || SecretMediaViewer.getInstance().isShowingImage(this.currentMessageObject)) ? false : true;
         imageReceiver.setVisible(z, false);
         if (!this.photoImage.getVisible()) {
             this.mediaWasInvisible = true;
@@ -6868,7 +6907,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             Theme.chat_photoStatesDrawables[drawable][this.buttonPressed].draw(canvas);
             if (this.currentMessageObject.messageOwner.destroyTime != 0) {
                 if (!this.currentMessageObject.isOutOwner()) {
-                    float progress;
                     progress = ((float) Math.max(0, (((long) this.currentMessageObject.messageOwner.destroyTime) * 1000) - (System.currentTimeMillis() + ((long) (ConnectionsManager.getInstance(this.currentAccount).getTimeDifference() * 1000))))) / (((float) this.currentMessageObject.messageOwner.ttl) * 1000.0f);
                     Theme.chat_deleteProgressPaint.setAlpha((int) (255.0f * this.controlsAlpha));
                     canvas.drawArc(this.deleteProgressRect, -90.0f, -360.0f * progress, true, Theme.chat_deleteProgressPaint);
@@ -7404,6 +7442,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
     }
 
+    private Drawable getMiniDrawableForCurrentState() {
+        if (this.miniButtonState < 0) {
+            return null;
+        }
+        if (this.documentAttachType != 3 && this.documentAttachType != 5) {
+            return null;
+        }
+        this.radialProgress.setAlphaForPrevious(false);
+        Drawable[] drawableArr = Theme.chat_fileMiniStatesDrawable[this.currentMessageObject.isOutOwner() ? this.miniButtonState : this.miniButtonState + 2];
+        int i = (isDrawSelectedBackground() || this.miniButtonPressed != 0) ? 1 : 0;
+        return drawableArr[i];
+    }
+
     private Drawable getDrawableForCurrentState() {
         int i = 3;
         int i2 = 0;
@@ -7465,6 +7516,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             return null;
         } else {
             this.radialProgress.setAlphaForPrevious(false);
+            this.radialProgress.setAlphaForMiniPrevious(true);
             Drawable[] drawableArr3 = Theme.chat_fileStatesDrawable[this.currentMessageObject.isOutOwner() ? this.buttonState : this.buttonState + 5];
             i = (isDrawSelectedBackground() || this.buttonPressed != 0) ? 1 : 0;
             return drawableArr3[i];
@@ -7537,6 +7589,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             fileName = FileLoader.getAttachFileName(this.currentPhotoObject);
             fileExists = this.currentMessageObject.mediaExists;
         }
+        if (SharedConfig.streamMedia && ((int) this.currentMessageObject.getDialogId()) != 0 && (this.documentAttachType == 5 || this.documentAttachType == 4)) {
+            this.hasMiniProgress = fileExists ? 1 : 2;
+            fileExists = true;
+        }
         if (TextUtils.isEmpty(fileName)) {
             this.radialProgress.setBackground(null, false, false);
             return;
@@ -7544,6 +7600,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         boolean fromBot = this.currentMessageObject.messageOwner.params != null && this.currentMessageObject.messageOwner.params.containsKey("query_id");
         Float progress;
         if (this.documentAttachType == 3 || this.documentAttachType == 5) {
+            RadialProgress radialProgress;
             if ((this.currentMessageObject.isOut() && this.currentMessageObject.isSending()) || (this.currentMessageObject.isSendError() && fromBot)) {
                 DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(this.currentMessageObject.messageOwner.attachPath, this.currentMessageObject, this);
                 this.buttonState = 4;
@@ -7556,7 +7613,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (progress == null && SendMessagesHelper.getInstance(this.currentAccount).isSendingMessage(this.currentMessageObject.getId())) {
                         progress = Float.valueOf(1.0f);
                     }
-                    RadialProgress radialProgress = this.radialProgress;
+                    radialProgress = this.radialProgress;
                     if (progress != null) {
                         floatValue = progress.floatValue();
                     } else {
@@ -7564,9 +7621,45 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                     radialProgress.setProgress(floatValue, false);
                 }
+            } else if (this.hasMiniProgress != 0) {
+                boolean z;
+                this.radialProgress.setMiniProgressBackgroundColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outLoader : Theme.key_chat_inLoader));
+                playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
+                    this.buttonState = 0;
+                } else {
+                    this.buttonState = 1;
+                }
+                this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
+                if (this.hasMiniProgress == 1) {
+                    DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+                    this.miniButtonState = -1;
+                } else {
+                    DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
+                    if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
+                        this.miniButtonState = 1;
+                        progress = ImageLoader.getInstance().getFileProgress(fileName);
+                        if (progress != null) {
+                            this.radialProgress.setProgress(progress.floatValue(), animated);
+                        } else {
+                            this.radialProgress.setProgress(0.0f, animated);
+                        }
+                    } else {
+                        this.radialProgress.setProgress(0.0f, animated);
+                        this.miniButtonState = 0;
+                    }
+                }
+                radialProgress = this.radialProgress;
+                Drawable miniDrawableForCurrentState = getMiniDrawableForCurrentState();
+                if (this.miniButtonState == 1) {
+                    z = true;
+                } else {
+                    z = false;
+                }
+                radialProgress.setMiniBackground(miniDrawableForCurrentState, z, animated);
             } else if (fileExists) {
                 DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-                boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+                playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
                 if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
                     this.buttonState = 0;
                 } else {
@@ -7612,35 +7705,35 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         setMessageObject(this.currentMessageObject, this.currentMessagesGroup, this.pinnedBottom, this.pinnedTop);
                     }
                     invalidate();
-                    return;
-                }
-                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
-                setProgress = 0.0f;
-                progressVisible = false;
-                if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
-                    progressVisible = true;
-                    this.buttonState = 1;
-                    progress = ImageLoader.getInstance().getFileProgress(fileName);
-                    setProgress = progress != null ? progress.floatValue() : 0.0f;
                 } else {
-                    boolean autoDownload = false;
-                    if (this.currentMessageObject.type == 1) {
-                        autoDownload = DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject);
-                    } else if (this.currentMessageObject.type == 8 && MessageObject.isNewGifDocument(this.currentMessageObject.messageOwner.media.document)) {
-                        autoDownload = DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject);
-                    } else if (this.currentMessageObject.type == 5) {
-                        autoDownload = DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject);
-                    }
-                    if (this.cancelLoading || !autoDownload) {
-                        this.buttonState = 0;
-                    } else {
+                    DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
+                    setProgress = 0.0f;
+                    progressVisible = false;
+                    if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
                         progressVisible = true;
                         this.buttonState = 1;
+                        progress = ImageLoader.getInstance().getFileProgress(fileName);
+                        setProgress = progress != null ? progress.floatValue() : 0.0f;
+                    } else {
+                        boolean autoDownload = false;
+                        if (this.currentMessageObject.type == 1) {
+                            autoDownload = DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject);
+                        } else if (this.currentMessageObject.type == 8 && MessageObject.isNewGifDocument(this.currentMessageObject.messageOwner.media.document)) {
+                            autoDownload = DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject);
+                        } else if (this.currentMessageObject.type == 5) {
+                            autoDownload = DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject);
+                        }
+                        if (this.cancelLoading || !autoDownload) {
+                            this.buttonState = 0;
+                        } else {
+                            progressVisible = true;
+                            this.buttonState = 1;
+                        }
                     }
+                    this.radialProgress.setBackground(getDrawableForCurrentState(), progressVisible, animated);
+                    this.radialProgress.setProgress(setProgress, false);
+                    invalidate();
                 }
-                this.radialProgress.setBackground(getDrawableForCurrentState(), progressVisible, animated);
-                this.radialProgress.setProgress(setProgress, false);
-                invalidate();
             } else if (this.currentMessageObject.messageOwner.attachPath != null && this.currentMessageObject.messageOwner.attachPath.length() > 0) {
                 DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(this.currentMessageObject.messageOwner.attachPath, this.currentMessageObject, this);
                 boolean needProgress = this.currentMessageObject.messageOwner.attachPath == null || !this.currentMessageObject.messageOwner.attachPath.startsWith("http");
@@ -7679,25 +7772,53 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
                 invalidate();
-                return;
-            }
-            DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
-            setProgress = 0.0f;
-            progressVisible = false;
-            if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
-                progressVisible = true;
-                this.buttonState = 1;
-                progress = ImageLoader.getInstance().getFileProgress(fileName);
-                setProgress = progress != null ? progress.floatValue() : 0.0f;
-            } else if (this.cancelLoading || !((this.documentAttachType == 0 && DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject)) || (this.documentAttachType == 2 && MessageObject.isNewGifDocument(this.documentAttach) && DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject)))) {
-                this.buttonState = 0;
             } else {
-                progressVisible = true;
-                this.buttonState = 1;
+                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
+                setProgress = 0.0f;
+                progressVisible = false;
+                if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
+                    progressVisible = true;
+                    this.buttonState = 1;
+                    progress = ImageLoader.getInstance().getFileProgress(fileName);
+                    setProgress = progress != null ? progress.floatValue() : 0.0f;
+                } else if (this.cancelLoading || !((this.documentAttachType == 0 && DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject)) || (this.documentAttachType == 2 && MessageObject.isNewGifDocument(this.documentAttach) && DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject)))) {
+                    this.buttonState = 0;
+                } else {
+                    progressVisible = true;
+                    this.buttonState = 1;
+                }
+                this.radialProgress.setProgress(setProgress, false);
+                this.radialProgress.setBackground(getDrawableForCurrentState(), progressVisible, animated);
+                invalidate();
             }
-            this.radialProgress.setProgress(setProgress, false);
-            this.radialProgress.setBackground(getDrawableForCurrentState(), progressVisible, animated);
-            invalidate();
+        } else {
+            return;
+        }
+        if (this.hasMiniProgress == 0) {
+            this.radialProgress.setMiniBackground(null, false, animated);
+        }
+    }
+
+    private void didPressedMiniButton(boolean animated) {
+        if (this.miniButtonState == 0) {
+            if (this.documentAttachType == 3 || this.documentAttachType == 5) {
+                this.miniButtonState = 1;
+                this.radialProgress.setProgress(0.0f, false);
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, 0);
+                this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+                invalidate();
+            }
+        } else if (this.miniButtonState != 1) {
+        } else {
+            if (this.documentAttachType == 3 || this.documentAttachType == 5) {
+                if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
+                    MediaController.getInstance().cleanupPlayer(true, true);
+                }
+                this.miniButtonState = 0;
+                FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.documentAttach);
+                this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+                invalidate();
+            }
         }
     }
 
@@ -7757,6 +7878,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
                 invalidate();
             } else if (this.delegate.needPlayMessage(this.currentMessageObject)) {
+                if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
+                    this.miniButtonState = 1;
+                    this.radialProgress.setProgress(0.0f, false);
+                    this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+                }
                 this.buttonState = 1;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
@@ -7861,7 +7987,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     public void onProgressDownload(String fileName, float progress) {
         this.radialProgress.setProgress(progress, true);
         if (this.documentAttachType == 3 || this.documentAttachType == 5) {
-            if (this.buttonState != 4) {
+            if (this.hasMiniProgress != 0) {
+                if (this.miniButtonState != 1) {
+                    updateButtonState(false);
+                }
+            } else if (this.buttonState != 4) {
                 updateButtonState(false);
             }
         } else if (this.buttonState != 1) {
@@ -8355,17 +8485,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (this.documentAttachType == 3) {
                         if (this.currentMessageObject.isOutOwner()) {
                             this.seekBarWaveform.setColors(Theme.getColor(Theme.key_chat_outVoiceSeekbar), Theme.getColor(Theme.key_chat_outVoiceSeekbarFill), Theme.getColor(Theme.key_chat_outVoiceSeekbarSelected));
-                            this.seekBar.setColors(Theme.getColor(Theme.key_chat_outAudioSeekbar), Theme.getColor(Theme.key_chat_outAudioSeekbarFill), Theme.getColor(Theme.key_chat_outAudioSeekbarSelected));
+                            this.seekBar.setColors(Theme.getColor(Theme.key_chat_outAudioSeekbar), Theme.getColor(Theme.key_chat_outAudioCacheSeekbar), Theme.getColor(Theme.key_chat_outAudioSeekbarFill), Theme.getColor(Theme.key_chat_outAudioSeekbarFill), Theme.getColor(Theme.key_chat_outAudioSeekbarSelected));
                         } else {
                             this.seekBarWaveform.setColors(Theme.getColor(Theme.key_chat_inVoiceSeekbar), Theme.getColor(Theme.key_chat_inVoiceSeekbarFill), Theme.getColor(Theme.key_chat_inVoiceSeekbarSelected));
-                            this.seekBar.setColors(Theme.getColor(Theme.key_chat_inAudioSeekbar), Theme.getColor(Theme.key_chat_inAudioSeekbarFill), Theme.getColor(Theme.key_chat_inAudioSeekbarSelected));
+                            this.seekBar.setColors(Theme.getColor(Theme.key_chat_inAudioSeekbar), Theme.getColor(Theme.key_chat_inAudioCacheSeekbar), Theme.getColor(Theme.key_chat_inAudioSeekbarFill), Theme.getColor(Theme.key_chat_inAudioSeekbarFill), Theme.getColor(Theme.key_chat_inAudioSeekbarSelected));
                         }
                     } else if (this.documentAttachType == 5) {
                         this.documentAttachType = 5;
                         if (this.currentMessageObject.isOutOwner()) {
-                            this.seekBar.setColors(Theme.getColor(Theme.key_chat_outAudioSeekbar), Theme.getColor(Theme.key_chat_outAudioSeekbarFill), Theme.getColor(Theme.key_chat_outAudioSeekbarSelected));
+                            this.seekBar.setColors(Theme.getColor(Theme.key_chat_outAudioSeekbar), Theme.getColor(Theme.key_chat_outAudioCacheSeekbar), Theme.getColor(Theme.key_chat_outAudioSeekbarFill), Theme.getColor(Theme.key_chat_outAudioSeekbarFill), Theme.getColor(Theme.key_chat_outAudioSeekbarSelected));
                         } else {
-                            this.seekBar.setColors(Theme.getColor(Theme.key_chat_inAudioSeekbar), Theme.getColor(Theme.key_chat_inAudioSeekbarFill), Theme.getColor(Theme.key_chat_inAudioSeekbarSelected));
+                            this.seekBar.setColors(Theme.getColor(Theme.key_chat_inAudioSeekbar), Theme.getColor(Theme.key_chat_inAudioCacheSeekbar), Theme.getColor(Theme.key_chat_inAudioSeekbarFill), Theme.getColor(Theme.key_chat_inAudioSeekbarFill), Theme.getColor(Theme.key_chat_inAudioSeekbarSelected));
                         }
                     }
                 }

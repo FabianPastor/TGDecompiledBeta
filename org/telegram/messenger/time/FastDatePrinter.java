@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import org.telegram.tgnet.TLRPC;
 
 public class FastDatePrinter implements Serializable, DatePrinter {
     public static final int FULL = 0;
@@ -485,7 +486,7 @@ public class FastDatePrinter implements Serializable, DatePrinter {
                 case 'H':
                     rule = selectNumberRule(11, tokenLen);
                     break;
-                case 'K':
+                case TLRPC.LAYER /*75*/:
                     rule = selectNumberRule(10, tokenLen);
                     break;
                 case 'M':

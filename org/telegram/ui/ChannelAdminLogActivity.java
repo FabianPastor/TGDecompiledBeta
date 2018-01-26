@@ -923,8 +923,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             } else if (messageObject1.isRoundVideo()) {
                                 cell.checkRoundVideoPlayback(false);
                                 if (!(MediaController.getInstance().isPlayingMessage(messageObject1) || messageObject1.audioProgress == 0.0f)) {
-                                    messageObject1.audioProgress = 0.0f;
-                                    messageObject1.audioProgressSec = 0;
+                                    messageObject1.resetPlayingProgress();
                                     cell.invalidate();
                                 }
                             }
@@ -1560,10 +1559,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         if (messageObject.type == 0 && messageObject.messageOwner.message != null) {
             return str + messageObject.messageOwner.message;
         }
-        if (messageObject.messageOwner.media == null || messageObject.messageOwner.media.caption == null) {
+        if (messageObject.messageOwner.media == null || messageObject.messageOwner.message == null) {
             return str + messageObject.messageText;
         }
-        return str + messageObject.messageOwner.media.caption;
+        return str + messageObject.messageOwner.message;
     }
 
     private TextureView createTextureView(boolean add) {

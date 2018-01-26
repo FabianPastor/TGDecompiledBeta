@@ -189,25 +189,25 @@ public final class DynamiteModule {
         String str2;
         String str3;
         try {
-            str3 = "com.google.android.gms.dynamite.descriptors.";
-            str2 = "ModuleDescriptor";
-            Class loadClass = context.getApplicationContext().getClassLoader().loadClass(new StringBuilder(((String.valueOf(str3).length() + 1) + String.valueOf(str).length()) + String.valueOf(str2).length()).append(str3).append(str).append(".").append(str2).toString());
+            str2 = "com.google.android.gms.dynamite.descriptors.";
+            str3 = "ModuleDescriptor";
+            Class loadClass = context.getApplicationContext().getClassLoader().loadClass(new StringBuilder(((String.valueOf(str2).length() + 1) + String.valueOf(str).length()) + String.valueOf(str3).length()).append(str2).append(str).append(".").append(str3).toString());
             Field declaredField = loadClass.getDeclaredField("MODULE_ID");
             Field declaredField2 = loadClass.getDeclaredField("MODULE_VERSION");
             if (declaredField.get(null).equals(str)) {
                 return declaredField2.getInt(null);
             }
-            str3 = String.valueOf(declaredField.get(null));
-            Log.e("DynamiteModule", new StringBuilder((String.valueOf(str3).length() + 51) + String.valueOf(str).length()).append("Module descriptor id '").append(str3).append("' didn't match expected id '").append(str).append("'").toString());
+            str2 = String.valueOf(declaredField.get(null));
+            Log.e("DynamiteModule", new StringBuilder((String.valueOf(str2).length() + 51) + String.valueOf(str).length()).append("Module descriptor id '").append(str2).append("' didn't match expected id '").append(str).append("'").toString());
             return 0;
         } catch (ClassNotFoundException e) {
             Log.w("DynamiteModule", new StringBuilder(String.valueOf(str).length() + 45).append("Local module descriptor class for ").append(str).append(" not found.").toString());
             return 0;
         } catch (Exception e2) {
-            str3 = "DynamiteModule";
-            str2 = "Failed to load module descriptor class: ";
+            str2 = "DynamiteModule";
+            str3 = "Failed to load module descriptor class: ";
             String valueOf = String.valueOf(e2.getMessage());
-            Log.e(str3, valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2));
+            Log.e(str2, valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3));
             return 0;
         }
     }

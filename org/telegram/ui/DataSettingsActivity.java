@@ -17,6 +17,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -42,6 +43,8 @@ public class DataSettingsActivity extends BaseFragment {
     private int autoDownloadMediaRow;
     private int callsSection2Row;
     private int callsSectionRow;
+    private int enableCacheStreamRow;
+    private int enableStreamRow;
     private int filesRow;
     private int gifsRow;
     private ListAdapter listAdapter;
@@ -58,6 +61,8 @@ public class DataSettingsActivity extends BaseFragment {
     private int roamingUsageRow;
     private int rowCount;
     private int storageUsageRow;
+    private int streamSection2Row;
+    private int streamSectionRow;
     private int usageSection2Row;
     private int usageSectionRow;
     private int useLessDataForCallsRow;
@@ -162,6 +167,9 @@ public class DataSettingsActivity extends BaseFragment {
                     } else if (position == DataSettingsActivity.this.proxySectionRow) {
                         headerCell.setText(LocaleController.getString("Proxy", R.string.Proxy));
                         return;
+                    } else if (position == DataSettingsActivity.this.streamSectionRow) {
+                        headerCell.setText(LocaleController.getString("Streaming", R.string.Streaming));
+                        return;
                     } else {
                         return;
                     }
@@ -170,8 +178,15 @@ public class DataSettingsActivity extends BaseFragment {
                     if (position == DataSettingsActivity.this.autoDownloadMediaRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("AutoDownloadMedia", R.string.AutoDownloadMedia), DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled, true);
                         return;
+                    } else if (position == DataSettingsActivity.this.enableStreamRow) {
+                        checkCell.setTextAndCheck(LocaleController.getString("EnableStreaming", R.string.EnableStreaming), SharedConfig.streamMedia, true);
+                        return;
+                    } else if (position == DataSettingsActivity.this.enableCacheStreamRow) {
+                        checkCell.setTextAndCheck(LocaleController.getString("CacheStreamFile", R.string.CacheStreamFile), SharedConfig.saveStreamMedia, true);
+                        return;
+                    } else {
+                        return;
                     }
-                    return;
                 default:
                     return;
             }
@@ -179,8 +194,9 @@ public class DataSettingsActivity extends BaseFragment {
 
         public void onViewAttachedToWindow(ViewHolder holder) {
             int viewType = holder.getItemViewType();
+            int position;
             if (viewType == 1) {
-                int position = holder.getAdapterPosition();
+                position = holder.getAdapterPosition();
                 TextSettingsCell textCell = holder.itemView;
                 if (position < DataSettingsActivity.this.photosRow || position > DataSettingsActivity.this.gifsRow) {
                     textCell.setEnabled(true, null);
@@ -188,7 +204,15 @@ public class DataSettingsActivity extends BaseFragment {
                     textCell.setEnabled(DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled, null);
                 }
             } else if (viewType == 3) {
-                holder.itemView.setChecked(DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled);
+                TextCheckCell checkCell = holder.itemView;
+                position = holder.getAdapterPosition();
+                if (position == DataSettingsActivity.this.enableCacheStreamRow) {
+                    checkCell.setChecked(SharedConfig.saveStreamMedia);
+                } else if (position == DataSettingsActivity.this.enableStreamRow) {
+                    checkCell.setChecked(SharedConfig.streamMedia);
+                } else if (position == DataSettingsActivity.this.autoDownloadMediaRow) {
+                    checkCell.setChecked(DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled);
+                }
             }
         }
 
@@ -197,7 +221,7 @@ public class DataSettingsActivity extends BaseFragment {
             if (position == DataSettingsActivity.this.photosRow || position == DataSettingsActivity.this.voiceMessagesRow || position == DataSettingsActivity.this.videoMessagesRow || position == DataSettingsActivity.this.videosRow || position == DataSettingsActivity.this.filesRow || position == DataSettingsActivity.this.musicRow || position == DataSettingsActivity.this.gifsRow) {
                 return DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled;
             }
-            return position == DataSettingsActivity.this.storageUsageRow || position == DataSettingsActivity.this.useLessDataForCallsRow || position == DataSettingsActivity.this.mobileUsageRow || position == DataSettingsActivity.this.roamingUsageRow || position == DataSettingsActivity.this.wifiUsageRow || position == DataSettingsActivity.this.proxyRow || position == DataSettingsActivity.this.resetDownloadRow || position == DataSettingsActivity.this.autoDownloadMediaRow;
+            return position == DataSettingsActivity.this.storageUsageRow || position == DataSettingsActivity.this.useLessDataForCallsRow || position == DataSettingsActivity.this.mobileUsageRow || position == DataSettingsActivity.this.roamingUsageRow || position == DataSettingsActivity.this.wifiUsageRow || position == DataSettingsActivity.this.proxyRow || position == DataSettingsActivity.this.resetDownloadRow || position == DataSettingsActivity.this.autoDownloadMediaRow || position == DataSettingsActivity.this.enableCacheStreamRow || position == DataSettingsActivity.this.enableStreamRow;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -224,13 +248,13 @@ public class DataSettingsActivity extends BaseFragment {
         }
 
         public int getItemViewType(int position) {
-            if (position == DataSettingsActivity.this.mediaDownloadSection2Row || position == DataSettingsActivity.this.usageSection2Row || position == DataSettingsActivity.this.callsSection2Row || position == DataSettingsActivity.this.proxySection2Row) {
+            if (position == DataSettingsActivity.this.mediaDownloadSection2Row || position == DataSettingsActivity.this.streamSection2Row || position == DataSettingsActivity.this.usageSection2Row || position == DataSettingsActivity.this.callsSection2Row || position == DataSettingsActivity.this.proxySection2Row) {
                 return 0;
             }
-            if (position == DataSettingsActivity.this.mediaDownloadSectionRow || position == DataSettingsActivity.this.callsSectionRow || position == DataSettingsActivity.this.usageSectionRow || position == DataSettingsActivity.this.proxySectionRow) {
+            if (position == DataSettingsActivity.this.mediaDownloadSectionRow || position == DataSettingsActivity.this.streamSectionRow || position == DataSettingsActivity.this.callsSectionRow || position == DataSettingsActivity.this.usageSectionRow || position == DataSettingsActivity.this.proxySectionRow) {
                 return 2;
             }
-            if (position == DataSettingsActivity.this.autoDownloadMediaRow) {
+            if (position == DataSettingsActivity.this.autoDownloadMediaRow || position == DataSettingsActivity.this.enableCacheStreamRow || position == DataSettingsActivity.this.enableStreamRow) {
                 return 3;
             }
             return 1;
@@ -291,6 +315,16 @@ public class DataSettingsActivity extends BaseFragment {
         i = this.rowCount;
         this.rowCount = i + 1;
         this.mediaDownloadSection2Row = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.streamSectionRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.enableStreamRow = i;
+        this.enableCacheStreamRow = -1;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.streamSection2Row = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.callsSectionRow = i;
@@ -458,6 +492,12 @@ public class DataSettingsActivity extends BaseFragment {
                     DataSettingsActivity.this.presentFragment(new DataUsageActivity(1));
                 } else if (position == DataSettingsActivity.this.proxyRow) {
                     DataSettingsActivity.this.presentFragment(new ProxySettingsActivity());
+                } else if (position == DataSettingsActivity.this.enableStreamRow) {
+                    SharedConfig.toggleStreamMedia();
+                    ((TextCheckCell) view).setChecked(SharedConfig.streamMedia);
+                } else if (position == DataSettingsActivity.this.enableCacheStreamRow) {
+                    SharedConfig.toggleSaveStreamMedia();
+                    ((TextCheckCell) view).setChecked(SharedConfig.saveStreamMedia);
                 }
             }
         });

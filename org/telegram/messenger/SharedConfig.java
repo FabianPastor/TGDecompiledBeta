@@ -33,8 +33,10 @@ public class SharedConfig {
     public static int repeatMode;
     public static boolean roundCamera16to9 = false;
     public static boolean saveIncomingPhotos;
+    public static boolean saveStreamMedia = true;
     public static boolean saveToGallery;
     public static boolean shuffleMusic;
+    public static boolean streamMedia = true;
     private static final Object sync = new Object();
     public static boolean useFingerprint = true;
     public static boolean useSystemEmoji;
@@ -109,6 +111,8 @@ public class SharedConfig {
             fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
             allowBigEmoji = preferences.getBoolean("allowBigEmoji", false);
             useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
+            streamMedia = preferences.getBoolean("streamMedia", true);
+            saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
             configLoaded = true;
         }
     }
@@ -227,6 +231,20 @@ public class SharedConfig {
         directShare = !directShare;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("direct_share", directShare);
+        editor.commit();
+    }
+
+    public static void toggleStreamMedia() {
+        streamMedia = !streamMedia;
+        Editor editor = MessagesController.getGlobalMainSettings().edit();
+        editor.putBoolean("streamMedia", streamMedia);
+        editor.commit();
+    }
+
+    public static void toggleSaveStreamMedia() {
+        saveStreamMedia = !saveStreamMedia;
+        Editor editor = MessagesController.getGlobalMainSettings().edit();
+        editor.putBoolean("saveStreamMedia", saveStreamMedia);
         editor.commit();
     }
 

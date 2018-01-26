@@ -2831,4 +2831,8 @@ public class LocaleController {
         }
         return dst.toString();
     }
+
+    public static String addNbsp(String src) {
+        return src.replace(' ', ' ');
+    }
 }

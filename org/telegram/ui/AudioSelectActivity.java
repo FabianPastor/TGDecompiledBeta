@@ -262,7 +262,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                         message.from_id = clientUserId;
                         peer.user_id = clientUserId;
                         message.date = (int) (System.currentTimeMillis() / 1000);
-                        message.message = "-1";
+                        message.message = TtmlNode.ANONYMOUS_REGION_ID;
                         message.attachPath = audioEntry.path;
                         message.media = new TL_messageMediaDocument();
                         MessageMedia messageMedia = message.media;

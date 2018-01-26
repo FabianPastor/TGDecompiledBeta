@@ -323,7 +323,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             message.from_id = clientUserId;
             peer.user_id = clientUserId;
             message.date = (int) (System.currentTimeMillis() / 1000);
-            message.message = "-1";
+            message.message = TtmlNode.ANONYMOUS_REGION_ID;
             message.media = new TL_messageMediaDocument();
             MessageMedia messageMedia = message.media;
             messageMedia.flags |= 3;
@@ -597,7 +597,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         }
         if (this.drawLinkImageView) {
             if (this.inlineResult != null) {
-                this.linkImageView.setVisible(!PhotoViewer.getInstance().isShowingImage(this.inlineResult), false);
+                this.linkImageView.setVisible(!PhotoViewer.isShowingImage(this.inlineResult), false);
             }
             canvas.save();
             if ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == 1.0f)) {

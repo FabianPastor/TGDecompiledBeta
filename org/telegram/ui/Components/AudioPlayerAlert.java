@@ -1363,6 +1363,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         if (this.seekBarView != null) {
             if (!this.seekBarView.isDragging()) {
                 this.seekBarView.setProgress(messageObject.audioProgress);
+                this.seekBarView.setBufferedProgress(messageObject.bufferedProgress);
             }
             if (this.lastTime != messageObject.audioProgressSec) {
                 this.lastTime = messageObject.audioProgressSec;
@@ -1382,7 +1383,13 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         if (cacheFile == null) {
             cacheFile = FileLoader.getPathToMessage(messageObject.messageOwner);
         }
-        if (cacheFile.exists()) {
+        boolean canStream;
+        if (SharedConfig.streamMedia && ((int) messageObject.getDialogId()) != 0 && messageObject.isMusic()) {
+            canStream = true;
+        } else {
+            canStream = false;
+        }
+        if (cacheFile.exists() || canStream) {
             DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             this.progressView.setVisibility(4);
             this.seekBarView.setVisibility(0);

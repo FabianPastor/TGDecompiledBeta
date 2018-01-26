@@ -224,6 +224,7 @@
     <string name="BytesSent">Bytes sent</string>
     <string name="CacheClear">Clear</string>
     <string name="CacheEmpty">Empty</string>
+    <string name="CacheStreamFile">Cache stream content</string>
     <string name="CalculatingSize">Calculating...</string>
     <string name="Call">Call</string>
     <string name="CallAgain">Call Again</string>
@@ -253,6 +254,7 @@
     <string name="CancelLinkExpired">Link is invalid or expired.</string>
     <string name="CancelLinkSuccess">The deletion process was cancelled for your account %1$s. You may close this window now.</string>
     <string name="CancelRegistration">Cancel registration</string>
+    <string name="CantPlayVideo">App was unable to play this video. Try to play it with external player?</string>
     <string name="Caption">Caption</string>
     <string name="ChangeLanguageLater">You can change your language in the Settings later.</string>
     <string name="ChangePasscode">Change Passcode</string>
@@ -542,6 +544,7 @@
     <string name="EnableAnimations">Enable Animations</string>
     <string name="EnableProxyAlert">Are you sure you want to enable this proxy?</string>
     <string name="EnableProxyAlert2">You can change your proxy server later in the Settings (Data and Storage).</string>
+    <string name="EnableStreaming">Music and Video streaming</string>
     <string name="EnabledPasswordText">You have enabled Two-Step verification.\nYou\'ll need the password you set up here to log in to your Telegram account.</string>
     <string name="EncryptedChatStartedIncoming">You joined the secret chat.</string>
     <string name="EncryptedChatStartedOutgoing">%s joined your secret chat.</string>
@@ -1441,7 +1444,7 @@
     <string name="SendingVideo">Sending video...</string>
     <string name="SendingVideoStatus">sending video...</string>
     <string name="SentAppCode">We\'ve sent the code to the **Telegram** app on your other device.</string>
-    <string name="SentCallCode">We\'ve sent an activation call to your phone **%1$s**.\n\nDon\'t take it, Telegram will process everything automatically.</string>
+    <string name="SentCallCode">We\'re calling your phone **%1$s**.\n\nDon\'t accept the call, Telegram will process everything automatically.</string>
     <string name="SentCallOnly">We are calling your phone **%1$s** to dictate a code.</string>
     <string name="SentSmsCode">We\'ve sent an SMS with an activation code to your phone **%1$s**.</string>
     <string name="ServiceNotifications">Service notifications</string>
@@ -1521,6 +1524,7 @@
     <string name="StopLiveLocationAlertToGroup">Are you sure you want to stop sharing live location with %1$s?</string>
     <string name="StopLiveLocationAlertToUser">Are you sure you want to stop sharing live location with %1$s?</string>
     <string name="StorageUsage">Storage Usage</string>
+    <string name="Streaming">Streaming</string>
     <string name="Subscribers_few">%1$d subscribers</string>
     <string name="Subscribers_many">%1$d subscribers</string>
     <string name="Subscribers_one">%1$d subscriber</string>

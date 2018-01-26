@@ -502,4 +502,12 @@ public class SerializedData extends AbstractSerializedData {
     public NativeByteBuffer readByteBuffer(boolean exception) {
         return null;
     }
+
+    public int remaining() {
+        try {
+            return this.in.available();
+        } catch (Exception e) {
+            return ConnectionsManager.DEFAULT_DATACENTER_ID;
+        }
+    }
 }

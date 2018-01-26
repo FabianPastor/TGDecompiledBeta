@@ -2,7 +2,6 @@ package com.google.android.gms.internal;
 
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
-import org.telegram.tgnet.TLRPC;
 
 public final class zzcme extends zzfjm<zzcme> {
     private static volatile zzcme[] zzjln;
@@ -406,7 +405,7 @@ public final class zzcme extends zzfjm<zzcme> {
                 case 66:
                     this.zzjlw = com_google_android_gms_internal_zzfjj.readString();
                     continue;
-                case TLRPC.LAYER /*74*/:
+                case 74:
                     this.zzdb = com_google_android_gms_internal_zzfjj.readString();
                     continue;
                 case 82:

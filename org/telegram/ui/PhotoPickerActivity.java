@@ -527,7 +527,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             imageView.setImageResource(R.drawable.nophotos);
                         }
                         cell.setChecked(PhotoPickerActivity.this.allowIndices ? PhotoPickerActivity.this.selectedPhotosOrder.indexOf(Integer.valueOf(photoEntry.imageId)) : -1, PhotoPickerActivity.this.selectedPhotos.containsKey(Integer.valueOf(photoEntry.imageId)), false);
-                        showing = PhotoViewer.getInstance().isShowingImage(photoEntry.path);
+                        showing = PhotoViewer.isShowingImage(photoEntry.path);
                     } else {
                         SearchImage photoEntry2;
                         if (PhotoPickerActivity.this.searchResult.isEmpty() && PhotoPickerActivity.this.lastSearchString == null) {
@@ -547,9 +547,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         cell.videoInfoContainer.setVisibility(4);
                         cell.setChecked(PhotoPickerActivity.this.allowIndices ? PhotoPickerActivity.this.selectedPhotosOrder.indexOf(photoEntry2.id) : -1, PhotoPickerActivity.this.selectedPhotos.containsKey(photoEntry2.id), false);
                         if (photoEntry2.document != null) {
-                            showing = PhotoViewer.getInstance().isShowingImage(FileLoader.getPathToAttach(photoEntry2.document, true).getAbsolutePath());
+                            showing = PhotoViewer.isShowingImage(FileLoader.getPathToAttach(photoEntry2.document, true).getAbsolutePath());
                         } else {
-                            showing = PhotoViewer.getInstance().isShowingImage(photoEntry2.imageUrl);
+                            showing = PhotoViewer.isShowingImage(photoEntry2.imageUrl);
                         }
                     }
                     imageView.getImageReceiver().setVisible(!showing, true);

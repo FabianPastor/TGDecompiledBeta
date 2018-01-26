@@ -24,6 +24,7 @@ import org.telegram.ui.ActionBar.Theme;
 @TargetApi(10)
 public class VideoTimelinePlayView extends View {
     private static final Object sync = new Object();
+    private float bufferedProgress = 0.5f;
     private AsyncTask<Integer, Integer, Bitmap> currentTask;
     private VideoTimelineViewDelegate delegate;
     private Drawable drawableLeft;

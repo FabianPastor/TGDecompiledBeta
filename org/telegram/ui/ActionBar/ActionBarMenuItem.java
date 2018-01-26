@@ -715,6 +715,11 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    public boolean isSubItemVisible(int id) {
+        View view = this.popupLayout.findViewWithTag(Integer.valueOf(id));
+        return view != null && view.getVisibility() == 0;
+    }
+
     public void showSubItem(int id) {
         View view = this.popupLayout.findViewWithTag(Integer.valueOf(id));
         if (view != null) {

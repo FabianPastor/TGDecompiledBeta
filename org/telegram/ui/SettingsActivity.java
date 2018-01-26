@@ -1441,11 +1441,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
         if (this.avatarImage != null) {
             this.avatarImage.setImage(photo, "50_50", this.avatarDrawable);
-            this.avatarImage.getImageReceiver().setVisible(!PhotoViewer.getInstance().isShowingImage(photoBig), false);
+            this.avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig), false);
             this.nameTextView.setText(UserObject.getUserName(user));
             this.onlineTextView.setText(LocaleController.getString("Online", R.string.Online));
             ImageReceiver imageReceiver = this.avatarImage.getImageReceiver();
-            if (PhotoViewer.getInstance().isShowingImage(photoBig)) {
+            if (PhotoViewer.isShowingImage(photoBig)) {
                 z = false;
             }
             imageReceiver.setVisible(z, false);

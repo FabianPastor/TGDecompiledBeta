@@ -45,6 +45,7 @@ public class VideoPlayer implements EventListener, VideoListener {
     private boolean audioPlayerReady;
     private boolean autoplay;
     private VideoPlayerDelegate delegate;
+    private boolean isStreaming;
     private boolean lastReportedPlayWhenReady;
     private int lastReportedPlaybackState = 1;
     private Handler mainHandler = new Handler();
@@ -186,20 +187,28 @@ public class VideoPlayer implements EventListener, VideoListener {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void preparePlayer(Uri uri, String type) {
+        boolean z;
         MediaSource mediaSource;
-        boolean z = false;
+        boolean z2 = false;
         this.videoPlayerReady = false;
         this.mixedAudio = false;
+        String scheme = uri.getScheme();
+        if (scheme == null || scheme.startsWith("file")) {
+            z = false;
+        } else {
+            z = true;
+        }
+        this.isStreaming = z;
         ensurePleyaerCreated();
         switch (type.hashCode()) {
             case 3680:
                 if (type.equals("ss")) {
-                    z = true;
+                    z2 = true;
                     break;
                 }
             case 103407:
                 if (type.equals("hls")) {
-                    z = true;
+                    z2 = true;
                     break;
                 }
             case 3075986:
@@ -207,10 +216,10 @@ public class VideoPlayer implements EventListener, VideoListener {
                     break;
                 }
             default:
-                z = true;
+                z2 = true;
                 break;
         }
-        switch (z) {
+        switch (z2) {
             case false:
                 mediaSource = new DashMediaSource(uri, this.mediaDataSourceFactory, new DefaultDashChunkSource.Factory(this.mediaDataSourceFactory), this.mainHandler, null);
                 break;
@@ -351,11 +360,19 @@ public class VideoPlayer implements EventListener, VideoListener {
     }
 
     public int getBufferedPercentage() {
-        return this.player != null ? this.player.getBufferedPercentage() : 0;
+        if (this.isStreaming) {
+            return this.player != null ? this.player.getBufferedPercentage() : 0;
+        } else {
+            return 100;
+        }
     }
 
     public long getBufferedPosition() {
-        return this.player != null ? this.player.getBufferedPosition() : 0;
+        if (this.isStreaming) {
+            return this.player != null ? this.player.getBufferedPosition() : 0;
+        } else {
+            return this.player.getDuration();
+        }
     }
 
     public boolean isPlaying() {

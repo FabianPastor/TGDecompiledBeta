@@ -3,6 +3,7 @@ package org.telegram.messenger.secretmedia;
 import android.content.Context;
 import android.net.Uri;
 import java.io.IOException;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.exoplayer2.upstream.AssetDataSource;
 import org.telegram.messenger.exoplayer2.upstream.ContentDataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
@@ -22,6 +23,7 @@ public final class ExtendedDefaultDataSource implements DataSource {
     private DataSource dataSource;
     private final DataSource encryptedFileDataSource;
     private final DataSource fileDataSource;
+    private TransferListener<? super DataSource> listener;
 
     public ExtendedDefaultDataSource(Context context, TransferListener<? super DataSource> listener, String userAgent, boolean allowCrossProtocolRedirects) {
         this(context, listener, userAgent, 8000, 8000, allowCrossProtocolRedirects);
@@ -37,6 +39,7 @@ public final class ExtendedDefaultDataSource implements DataSource {
         this.encryptedFileDataSource = new EncryptedFileDataSource(listener);
         this.assetDataSource = new AssetDataSource(context, listener);
         this.contentDataSource = new ContentDataSource(context, listener);
+        this.listener = listener;
     }
 
     public long open(DataSpec dataSpec) throws IOException {
@@ -50,6 +53,8 @@ public final class ExtendedDefaultDataSource implements DataSource {
             } else {
                 this.dataSource = this.fileDataSource;
             }
+        } else if ("tg".equals(scheme)) {
+            this.dataSource = FileLoader.getStreamLoadOperation(this.listener);
         } else if (SCHEME_ASSET.equals(scheme)) {
             this.dataSource = this.assetDataSource;
         } else if (SCHEME_CONTENT.equals(scheme)) {

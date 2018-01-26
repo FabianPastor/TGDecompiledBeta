@@ -45,8 +45,6 @@ import org.telegram.tgnet.TLRPC.TL_channels_joinChannel;
 import org.telegram.tgnet.TLRPC.TL_contacts_importContacts;
 import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_geochats_sendMedia;
-import org.telegram.tgnet.TLRPC.TL_geochats_sendMessage;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonPornography;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonSpam;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonViolence;
@@ -94,7 +92,7 @@ public class AlertsCreator {
             if (!(request instanceof TL_messages_createChat)) {
                 if (!(request instanceof TL_channels_createChannel)) {
                     if (!(request instanceof TL_messages_editMessage)) {
-                        if (!(request instanceof TL_messages_sendMessage) && !(request instanceof TL_messages_sendMedia) && !(request instanceof TL_geochats_sendMessage) && !(request instanceof TL_messages_sendBroadcast) && !(request instanceof TL_messages_sendInlineBotResult) && !(request instanceof TL_geochats_sendMedia) && !(request instanceof TL_messages_forwardMessages)) {
+                        if (!(request instanceof TL_messages_sendMessage) && !(request instanceof TL_messages_sendMedia) && !(request instanceof TL_messages_sendBroadcast) && !(request instanceof TL_messages_sendInlineBotResult) && !(request instanceof TL_messages_forwardMessages)) {
                             if (!(request instanceof TL_messages_importChatInvite)) {
                                 if (!(request instanceof TL_messages_getAttachedStickers)) {
                                     if (!(request instanceof TL_account_confirmPhone)) {

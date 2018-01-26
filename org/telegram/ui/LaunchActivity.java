@@ -1032,11 +1032,11 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private void showPasscodeActivity() {
         if (this.passcodeView != null) {
             SharedConfig.appLocked = true;
-            if (SecretMediaViewer.getInstance().isVisible()) {
+            if (SecretMediaViewer.hasInstance() && SecretMediaViewer.getInstance().isVisible()) {
                 SecretMediaViewer.getInstance().closePhoto(false, false);
-            } else if (PhotoViewer.getInstance().isVisible()) {
+            } else if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
                 PhotoViewer.getInstance().closePhoto(false, true);
-            } else if (ArticleViewer.getInstance().isVisible()) {
+            } else if (ArticleViewer.hasInstance() && ArticleViewer.getInstance().isVisible()) {
                 ArticleViewer.getInstance().close(false, true);
             }
             this.passcodeView.onShow();
@@ -1675,11 +1675,11 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     boolean removeLast = AndroidUtilities.isTablet() ? this.layersActionBarLayout.fragmentsStack.size() > 0 && (this.layersActionBarLayout.fragmentsStack.get(this.layersActionBarLayout.fragmentsStack.size() - 1) instanceof DialogsActivity) : this.actionBarLayout.fragmentsStack.size() > 1 && (this.actionBarLayout.fragmentsStack.get(this.actionBarLayout.fragmentsStack.size() - 1) instanceof DialogsActivity);
                     this.actionBarLayout.presentFragment(dialogsActivity, removeLast, true, true);
                     pushOpened = true;
-                    if (SecretMediaViewer.getInstance().isVisible()) {
+                    if (SecretMediaViewer.hasInstance() && SecretMediaViewer.getInstance().isVisible()) {
                         SecretMediaViewer.getInstance().closePhoto(false, false);
-                    } else if (PhotoViewer.getInstance().isVisible()) {
+                    } else if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
                         PhotoViewer.getInstance().closePhoto(false, true);
-                    } else if (ArticleViewer.getInstance().isVisible()) {
+                    } else if (ArticleViewer.hasInstance() && ArticleViewer.getInstance().isVisible()) {
                         ArticleViewer.getInstance().close(false, true);
                     }
                     this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
@@ -1837,11 +1837,11 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                     });
                                     boolean removeLast = AndroidUtilities.isTablet() ? LaunchActivity.this.layersActionBarLayout.fragmentsStack.size() > 0 && (LaunchActivity.this.layersActionBarLayout.fragmentsStack.get(LaunchActivity.this.layersActionBarLayout.fragmentsStack.size() - 1) instanceof DialogsActivity) : LaunchActivity.this.actionBarLayout.fragmentsStack.size() > 1 && (LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1) instanceof DialogsActivity);
                                     LaunchActivity.this.actionBarLayout.presentFragment(fragment, removeLast, true, true);
-                                    if (SecretMediaViewer.getInstance().isVisible()) {
+                                    if (SecretMediaViewer.hasInstance() && SecretMediaViewer.getInstance().isVisible()) {
                                         SecretMediaViewer.getInstance().closePhoto(false, false);
-                                    } else if (PhotoViewer.getInstance().isVisible()) {
+                                    } else if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
                                         PhotoViewer.getInstance().closePhoto(false, true);
-                                    } else if (ArticleViewer.getInstance().isVisible()) {
+                                    } else if (ArticleViewer.hasInstance() && ArticleViewer.getInstance().isVisible()) {
                                         ArticleViewer.getInstance().close(false, true);
                                     }
                                     LaunchActivity.this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
@@ -2365,7 +2365,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         }
         ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
         AndroidUtilities.unregisterUpdates();
-        if (PhotoViewer.getInstance().isVisible()) {
+        if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onPause();
         }
     }
@@ -2381,10 +2381,21 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     protected void onDestroy() {
-        PhotoViewer.getInstance().destroyPhotoViewer();
-        SecretMediaViewer.getInstance().destroyPhotoViewer();
-        ArticleViewer.getInstance().destroyArticleViewer();
-        StickerPreviewViewer.getInstance().destroy();
+        if (PhotoViewer.getPipInstance() != null) {
+            PhotoViewer.getPipInstance().destroyPhotoViewer();
+        }
+        if (PhotoViewer.hasInstance()) {
+            PhotoViewer.getInstance().destroyPhotoViewer();
+        }
+        if (SecretMediaViewer.hasInstance()) {
+            SecretMediaViewer.getInstance().destroyPhotoViewer();
+        }
+        if (ArticleViewer.hasInstance()) {
+            ArticleViewer.getInstance().destroyArticleViewer();
+        }
+        if (StickerPreviewViewer.hasInstance()) {
+            StickerPreviewViewer.getInstance().destroy();
+        }
         PipRoundVideoView pipRoundVideoView = PipRoundVideoView.getInstance();
         MediaController.getInstance().setBaseActivity(this, false);
         MediaController.getInstance().setFeedbackView(this.actionBarLayout, false);
@@ -2451,7 +2462,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         AndroidUtilities.checkForUpdates(this);
         ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
         updateCurrentConnectionState(this.currentAccount);
-        if (PhotoViewer.getInstance().isVisible()) {
+        if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onResume();
         }
         if (PipRoundVideoView.getInstance() != null && MediaController.getInstance().isMessagePaused()) {
@@ -3025,11 +3036,11 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     public void onBackPressed() {
         if (this.passcodeView.getVisibility() == 0) {
             finish();
-        } else if (SecretMediaViewer.getInstance().isVisible()) {
+        } else if (SecretMediaViewer.hasInstance() && SecretMediaViewer.getInstance().isVisible()) {
             SecretMediaViewer.getInstance().closePhoto(true, false);
-        } else if (PhotoViewer.getInstance().isVisible()) {
+        } else if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().closePhoto(true, false);
-        } else if (ArticleViewer.getInstance().isVisible()) {
+        } else if (ArticleViewer.hasInstance() && ArticleViewer.getInstance().isVisible()) {
             ArticleViewer.getInstance().close(true, false);
         } else if (this.drawerLayoutContainer.isDrawerOpened()) {
             this.drawerLayoutContainer.closeDrawer(false);
@@ -3088,13 +3099,13 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     public boolean onPreIme() {
-        if (SecretMediaViewer.getInstance().isVisible()) {
+        if (SecretMediaViewer.hasInstance() && SecretMediaViewer.getInstance().isVisible()) {
             SecretMediaViewer.getInstance().closePhoto(true, false);
             return true;
-        } else if (PhotoViewer.getInstance().isVisible()) {
+        } else if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().closePhoto(true, false);
             return true;
-        } else if (!ArticleViewer.getInstance().isVisible()) {
+        } else if (!ArticleViewer.hasInstance() || !ArticleViewer.getInstance().isVisible()) {
             return false;
         } else {
             ArticleViewer.getInstance().close(true, false);
@@ -3104,10 +3115,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == 82 && !SharedConfig.isWaitingForPasscodeEnter) {
-            if (PhotoViewer.getInstance().isVisible()) {
+            if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
                 return super.onKeyUp(keyCode, event);
             }
-            if (ArticleViewer.getInstance().isVisible()) {
+            if (ArticleViewer.hasInstance() && ArticleViewer.getInstance().isVisible()) {
                 return super.onKeyUp(keyCode, event);
             }
             if (AndroidUtilities.isTablet()) {
@@ -3134,7 +3145,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
 
     public boolean needPresentFragment(BaseFragment fragment, boolean removeLast, boolean forceWithoutAnimation, ActionBarLayout layout) {
         boolean z = true;
-        if (ArticleViewer.getInstance().isVisible()) {
+        if (ArticleViewer.hasInstance() && ArticleViewer.getInstance().isVisible()) {
             ArticleViewer.getInstance().close(false, true);
         }
         if (AndroidUtilities.isTablet()) {

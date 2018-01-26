@@ -169,6 +169,10 @@ public class StickerPreviewViewer {
         return localInstance;
     }
 
+    public static boolean hasInstance() {
+        return Instance != null;
+    }
+
     public void reset() {
         if (this.openStickerPreviewRunnable != null) {
             AndroidUtilities.cancelRunOnUIThread(this.openStickerPreviewRunnable);

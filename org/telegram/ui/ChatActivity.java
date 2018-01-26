@@ -4271,7 +4271,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.chatListView.setOnItemClickListener(ChatActivity.this.onItemClickListener);
                     ChatActivity.this.chatListView.setClickable(true);
                     ChatActivity.this.chatListView.setLongClickable(true);
-                    ChatActivity.this.mentionsAdapter.setAllowNewMentions(true);
                     ChatActivity.this.actionModeTitleContainer.setVisibility(8);
                     ChatActivity.this.selectedMessagesCountTextView.setVisibility(0);
                     ChatActivityEnterView chatActivityEnterView = ChatActivity.this.chatActivityEnterView;
@@ -4996,6 +4995,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     }
                                     info.isVideo = photoEntry.isVideo;
                                     info.caption = photoEntry.caption != null ? photoEntry.caption.toString() : null;
+                                    info.entities = photoEntry.entities;
                                     info.masks = !photoEntry.stickers.isEmpty() ? new ArrayList(photoEntry.stickers) : null;
                                     info.ttl = photoEntry.ttl;
                                     info.videoEditedInfo = photoEntry.editedInfo;
@@ -7346,7 +7346,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }, this);
             return;
         }
-        SendMessagesHelper.prepareSendingVideo(videoPath, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject, null, 0);
+        SendMessagesHelper.prepareSendingVideo(videoPath, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject, null, null, 0);
         showReplyPanel(false, null, null, null, false);
         DataQuery.getInstance(this.currentAccount).cleanDraft(this.dialog_id, true);
     }
@@ -7439,7 +7439,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     openVideoEditor(videoPath, null);
                 }
             } else {
-                SendMessagesHelper.prepareSendingPhoto(null, uri, this.dialog_id, this.replyingMessageObject, null, null, null, 0);
+                SendMessagesHelper.prepareSendingPhoto(null, uri, this.dialog_id, this.replyingMessageObject, null, null, null, null, 0);
             }
             showReplyPanel(false, null, null, null, false);
             DataQuery.getInstance(this.currentAccount).cleanDraft(this.dialog_id, true);
@@ -9350,8 +9350,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 } else if (messageObject1.isRoundVideo()) {
                                     cell.checkRoundVideoPlayback(false);
                                     if (!(MediaController.getInstance().isPlayingMessage(messageObject1) || messageObject1.audioProgress == 0.0f)) {
-                                        messageObject1.audioProgress = 0.0f;
-                                        messageObject1.audioProgressSec = 0;
+                                        messageObject1.resetPlayingProgress();
                                         cell.invalidate();
                                     }
                                 }
@@ -9926,7 +9925,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     public boolean extendActionMode(Menu menu) {
-        if (!(this.chatActivityEnterView.getSelectionLength() == 0 || menu.findItem(16908321) == null)) {
+        if (!PhotoViewer.hasInstance() || !PhotoViewer.getInstance().isVisible() ? this.chatActivityEnterView.getSelectionLength() == 0 || menu.findItem(16908321) == null : PhotoViewer.getInstance().getSelectiongLength() == 0 || menu.findItem(16908321) == null) {
             if (VERSION.SDK_INT >= edit) {
                 menu.removeItem(16908341);
             }
@@ -11674,9 +11673,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
             chatActivityEnterView.setEditingMessageObject(messageObject, z);
             updateBottomOverlay();
-            if (this.chatActivityEnterView.isEditingCaption()) {
-                this.mentionsAdapter.setAllowNewMentions(false);
-            }
             this.actionModeTitleContainer.setVisibility(0);
             this.selectedMessagesCountTextView.setVisibility(8);
             checkEditTimer();
@@ -11735,10 +11731,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (messageObject.type == 0 && messageObject.messageOwner.message != null) {
             return str + messageObject.messageOwner.message;
         }
-        if (messageObject.messageOwner.media == null || messageObject.messageOwner.media.caption == null) {
+        if (messageObject.messageOwner.media == null || messageObject.messageOwner.message == null) {
             return str + messageObject.messageText;
         }
-        return str + messageObject.messageOwner.media.caption;
+        return str + messageObject.messageOwner.message;
     }
 
     private void saveMessageToGallery(MessageObject messageObject) {
@@ -12396,18 +12392,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     public void sendMedia(PhotoEntry photoEntry, VideoEditedInfo videoEditedInfo) {
         if (photoEntry.isVideo) {
             if (videoEditedInfo != null) {
-                SendMessagesHelper.prepareSendingVideo(photoEntry.path, videoEditedInfo.estimatedSize, videoEditedInfo.estimatedDuration, videoEditedInfo.resultWidth, videoEditedInfo.resultHeight, videoEditedInfo, this.dialog_id, this.replyingMessageObject, photoEntry.caption != null ? photoEntry.caption.toString() : null, photoEntry.ttl);
+                SendMessagesHelper.prepareSendingVideo(photoEntry.path, videoEditedInfo.estimatedSize, videoEditedInfo.estimatedDuration, videoEditedInfo.resultWidth, videoEditedInfo.resultHeight, videoEditedInfo, this.dialog_id, this.replyingMessageObject, photoEntry.caption, photoEntry.entities, photoEntry.ttl);
             } else {
-                SendMessagesHelper.prepareSendingVideo(photoEntry.path, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject, photoEntry.caption != null ? photoEntry.caption.toString() : null, photoEntry.ttl);
+                SendMessagesHelper.prepareSendingVideo(photoEntry.path, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject, photoEntry.caption, photoEntry.entities, photoEntry.ttl);
             }
             showReplyPanel(false, null, null, null, false);
             DataQuery.getInstance(this.currentAccount).cleanDraft(this.dialog_id, true);
         } else if (photoEntry.imagePath != null) {
-            SendMessagesHelper.prepareSendingPhoto(photoEntry.imagePath, null, this.dialog_id, this.replyingMessageObject, photoEntry.caption, photoEntry.stickers, null, photoEntry.ttl);
+            SendMessagesHelper.prepareSendingPhoto(photoEntry.imagePath, null, this.dialog_id, this.replyingMessageObject, photoEntry.caption, photoEntry.entities, photoEntry.stickers, null, photoEntry.ttl);
             showReplyPanel(false, null, null, null, false);
             DataQuery.getInstance(this.currentAccount).cleanDraft(this.dialog_id, true);
         } else if (photoEntry.path != null) {
-            SendMessagesHelper.prepareSendingPhoto(photoEntry.path, null, this.dialog_id, this.replyingMessageObject, photoEntry.caption, photoEntry.stickers, null, photoEntry.ttl);
+            SendMessagesHelper.prepareSendingPhoto(photoEntry.path, null, this.dialog_id, this.replyingMessageObject, photoEntry.caption, photoEntry.entities, photoEntry.stickers, null, photoEntry.ttl);
             showReplyPanel(false, null, null, null, false);
             DataQuery.getInstance(this.currentAccount).cleanDraft(this.dialog_id, true);
         }

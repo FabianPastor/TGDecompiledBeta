@@ -383,6 +383,10 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
         return localInstance;
     }
 
+    public static boolean hasInstance() {
+        return Instance != null;
+    }
+
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.messagesDeleted) {
             if (this.currentMessageObject == null || ((Integer) args[1]).intValue() != 0 || !args[0].contains(Integer.valueOf(this.currentMessageObject.getId()))) {

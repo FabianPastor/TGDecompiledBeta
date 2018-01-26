@@ -207,7 +207,6 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     private class ControlsView extends FrameLayout {
-        private int bufferedPercentage;
         private int bufferedPosition;
         private AnimatorSet currentAnimation;
         private int currentProgressX;
@@ -256,9 +255,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             }
         }
 
-        public void setBufferedProgress(int position, int percentage) {
+        public void setBufferedProgress(int position) {
             this.bufferedPosition = position;
-            this.bufferedPercentage = percentage;
             invalidate();
         }
 
@@ -464,13 +462,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     } else {
                         progressX = progressLineX + ((int) (((float) (progressLineEndX - progressLineX)) * (((float) this.progress) / ((float) this.duration))));
                     }
-                    if (!(this.bufferedPercentage == 0 || this.duration == 0)) {
-                        int start = progressLineX + (this.bufferedPosition * ((progressLineEndX - progressLineX) / this.duration));
-                        int additional = 0;
-                        if (progressX < start) {
-                            additional = start - progressX;
-                        }
-                        canvas.drawRect((float) (start - additional), (float) progressLineY, (((float) ((progressLineEndX - start) * this.bufferedPercentage)) / 100.0f) + ((float) start), (float) (AndroidUtilities.dp(3.0f) + progressLineY), WebPlayerView.this.inFullscreen ? this.progressBufferedPaint : this.progressInnerPaint);
+                    if (!(this.bufferedPosition == 0 || this.duration == 0)) {
+                        canvas.drawRect((float) progressLineX, (float) progressLineY, (((float) (progressLineEndX - progressLineX)) * (((float) this.bufferedPosition) / ((float) this.duration))) + ((float) progressLineX), (float) (AndroidUtilities.dp(3.0f) + progressLineY), WebPlayerView.this.inFullscreen ? this.progressBufferedPaint : this.progressInnerPaint);
                     }
                     canvas.drawRect((float) progressLineX, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressPaint);
                     if (!WebPlayerView.this.isInline) {
@@ -932,7 +925,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     public interface WebPlayerViewDelegate {
-        boolean checkInlinePermissons();
+        boolean checkInlinePermissions();
 
         ViewGroup getTextureViewContainer();
 
@@ -986,7 +979,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             }
             this.result[1] = "dash";
             boolean encrypted = false;
-            String[] extra = new String[]{TtmlNode.ANONYMOUS_REGION_ID, "&el=info", "&el=embedded", "&el=detailpage", "&el=vevo"};
+            String otherUrl = null;
+            String[] extra = new String[]{TtmlNode.ANONYMOUS_REGION_ID, "&el=leanback", "&el=embedded", "&el=detailpage", "&el=vevo"};
             for (String str : extra) {
                 String videoInfo = WebPlayerView.this.downloadUrlContent(this, "https://www.youtube.com/get_video_info?" + params + str);
                 if (isCancelled()) {
@@ -1009,6 +1003,34 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                     FileLog.e(e2);
                                 }
                             }
+                        } else if (args[a].startsWith("url_encoded_fmt_stream_map")) {
+                            args2 = args[a].split("=");
+                            if (args2.length == 2) {
+                                try {
+                                    String[] args3 = URLDecoder.decode(args2[1], C.UTF8_NAME).split("&");
+                                    String currentUrl = null;
+                                    boolean isMp4 = false;
+                                    for (String split : args3) {
+                                        String[] args4 = split.split("=");
+                                        if (args4[0].startsWith("type")) {
+                                            if (URLDecoder.decode(args4[1], C.UTF8_NAME).contains(MimeTypes.VIDEO_MP4)) {
+                                                isMp4 = true;
+                                            }
+                                        } else if (args4[0].startsWith(UpdateFragment.FRAGMENT_URL)) {
+                                            currentUrl = URLDecoder.decode(args4[1], C.UTF8_NAME);
+                                        } else if (args4[0].startsWith("itag")) {
+                                            currentUrl = null;
+                                            isMp4 = false;
+                                        }
+                                        if (isMp4 && currentUrl != null) {
+                                            otherUrl = currentUrl;
+                                            break;
+                                        }
+                                    }
+                                } catch (Throwable e22) {
+                                    FileLog.e(e22);
+                                }
+                            }
                         } else if (args[a].startsWith("use_cipher_signature")) {
                             args2 = args[a].split("=");
                             if (args2.length == 2 && args2[1].toLowerCase().equals("true")) {
@@ -1019,8 +1041,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             if (args2.length == 2) {
                                 try {
                                     hls = URLDecoder.decode(args2[1], C.UTF8_NAME);
-                                } catch (Throwable e22) {
-                                    FileLog.e(e22);
+                                } catch (Throwable e222) {
+                                    FileLog.e(e222);
                                 }
                             }
                         } else if (args[a].startsWith("livestream")) {
@@ -1042,6 +1064,10 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     break;
                 }
             }
+            if (this.result[0] == null && otherUrl != null) {
+                this.result[0] = otherUrl;
+                this.result[1] = "other";
+            }
             if (this.result[0] != null && ((encrypted || this.result[0].contains("/s/")) && embedCode != null)) {
                 encrypted = true;
                 int index = this.result[0].indexOf("/s/");
@@ -1059,8 +1085,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             if (value instanceof String) {
                                 jsUrl = (String) value;
                             }
-                        } catch (Throwable e222) {
-                            FileLog.e(e222);
+                        } catch (Throwable e2222) {
+                            FileLog.e(e2222);
                         }
                     }
                     if (jsUrl != null) {
@@ -1104,8 +1130,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                         if (!(TextUtils.isEmpty(functionCode) || playerId == null)) {
                                             preferences.edit().putString(playerId, functionCode).putString(playerId + "n", functionName).commit();
                                         }
-                                    } catch (Throwable e2222) {
-                                        FileLog.e(e2222);
+                                    } catch (Throwable e22222) {
+                                        FileLog.e(e22222);
                                     }
                                 }
                             }
@@ -1116,12 +1142,12 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             } else {
                                 functionCode = functionCode + "window." + WebPlayerView.this.interfaceName + ".returnResultToJava(" + functionName + "('" + this.sig.substring(3) + "'));";
                             }
-                            final String functionCodeFinal = functionCode;
                             try {
+                                final String str2 = functionCode;
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
                                         if (VERSION.SDK_INT >= 21) {
-                                            WebPlayerView.this.webView.evaluateJavascript(functionCodeFinal, new ValueCallback<String>() {
+                                            WebPlayerView.this.webView.evaluateJavascript(str2, new ValueCallback<String>() {
                                                 public void onReceiveValue(String value) {
                                                     YoutubeVideoTask.this.result[0] = YoutubeVideoTask.this.result[0].replace(YoutubeVideoTask.this.sig, "/signature/" + value.substring(1, value.length() - 1));
                                                     YoutubeVideoTask.this.countDownLatch.countDown();
@@ -1130,7 +1156,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                             return;
                                         }
                                         try {
-                                            WebPlayerView.this.webView.loadUrl("data:text/html;charset=utf-8;base64," + Base64.encodeToString(("<script>" + functionCodeFinal + "</script>").getBytes(C.UTF8_NAME), 0));
+                                            WebPlayerView.this.webView.loadUrl("data:text/html;charset=utf-8;base64," + Base64.encodeToString(("<script>" + str2 + "</script>").getBytes(C.UTF8_NAME), 0));
                                         } catch (Throwable e) {
                                             FileLog.e(e);
                                         }
@@ -1138,8 +1164,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                 });
                                 this.countDownLatch.await();
                                 encrypted = false;
-                            } catch (Throwable e22222) {
-                                FileLog.e(e22222);
+                            } catch (Throwable e222222) {
+                                FileLog.e(e222222);
                             }
                         }
                     }
@@ -1157,7 +1183,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         }
 
         protected void onPostExecute(String[] result) {
-            if (result != null) {
+            if (result[0] != null) {
                 WebPlayerView.this.initied = true;
                 WebPlayerView.this.playVideoUrl = result[0];
                 WebPlayerView.this.playVideoType = result[1];
@@ -1189,6 +1215,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     protected String downloadUrlContent(AsyncTask parentTask, String url, HashMap<String, String> headers, boolean tryGzip) {
+        URL downloadUrl;
         Throwable e;
         boolean canRetry = true;
         InputStream httpConnectionStream = null;
@@ -1196,7 +1223,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         StringBuilder result = null;
         URLConnection httpConnection = null;
         try {
-            httpConnection = new URL(url).openConnection();
+            downloadUrl = new URL(url);
+            httpConnection = downloadUrl.openConnection();
             httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
             if (tryGzip) {
                 httpConnection.addRequestProperty("Accept-Encoding", "gzip, deflate");
@@ -1218,7 +1246,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 if (status == 302 || status == 301 || status == 303) {
                     String newUrl = httpURLConnection.getHeaderField("Location");
                     String cookies = httpURLConnection.getHeaderField("Set-Cookie");
-                    httpConnection = new URL(newUrl).openConnection();
+                    downloadUrl = new URL(newUrl);
+                    httpConnection = downloadUrl.openConnection();
                     httpConnection.setRequestProperty("Cookie", cookies);
                     httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
                     if (tryGzip) {
@@ -1240,21 +1269,31 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             } else {
                 httpConnectionStream = httpConnection.getInputStream();
             }
-        } catch (Throwable e2) {
-            if (e2 instanceof SocketTimeoutException) {
+        } catch (Exception e2) {
+            if (httpConnectionStream != null) {
+                try {
+                    httpConnectionStream.close();
+                } catch (Exception e3) {
+                }
+            }
+            httpConnection = downloadUrl.openConnection();
+            httpConnection.connect();
+            httpConnectionStream = httpConnection.getInputStream();
+        } catch (Throwable e4) {
+            if (e4 instanceof SocketTimeoutException) {
                 if (ConnectionsManager.isNetworkOnline()) {
                     canRetry = false;
                 }
-            } else if (e2 instanceof UnknownHostException) {
+            } else if (e4 instanceof UnknownHostException) {
                 canRetry = false;
-            } else if (e2 instanceof SocketException) {
-                if (e2.getMessage() != null && e2.getMessage().contains("ECONNRESET")) {
+            } else if (e4 instanceof SocketException) {
+                if (e4.getMessage() != null && e4.getMessage().contains("ECONNRESET")) {
                     canRetry = false;
                 }
-            } else if (e2 instanceof FileNotFoundException) {
+            } else if (e4 instanceof FileNotFoundException) {
                 canRetry = false;
             }
-            FileLog.e(e2);
+            FileLog.e(e4);
         }
         if (canRetry) {
             if (httpConnection != null) {
@@ -1266,8 +1305,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             }
                         }
                     }
-                } catch (Throwable e22) {
-                    FileLog.e(e22);
+                } catch (Throwable e42) {
+                    FileLog.e(e42);
                 }
             }
             if (httpConnectionStream != null) {
@@ -1287,8 +1326,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                     try {
                                         result.append(new String(data, 0, read, C.UTF8_NAME));
                                         result2 = result;
-                                    } catch (Exception e3) {
-                                        e22 = e3;
+                                    } catch (Exception e5) {
+                                        e42 = e5;
                                     }
                                 } else if (read == -1) {
                                     done = true;
@@ -1296,24 +1335,24 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                 } else {
                                     result = result2;
                                 }
-                            } catch (Exception e4) {
-                                e22 = e4;
+                            } catch (Exception e6) {
+                                e42 = e6;
                                 result = result2;
                             }
                         } catch (Throwable th) {
-                            e22 = th;
+                            e42 = th;
                             result = result2;
                         }
                     }
                     result = result2;
                 } catch (Throwable th2) {
-                    e22 = th2;
-                    FileLog.e(e22);
+                    e42 = th2;
+                    FileLog.e(e42);
                     if (httpConnectionStream != null) {
                         try {
                             httpConnectionStream.close();
-                        } catch (Throwable e222) {
-                            FileLog.e(e222);
+                        } catch (Throwable e422) {
+                            FileLog.e(e422);
                         }
                     }
                     if (done) {
@@ -1330,7 +1369,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             return result.toString();
         }
         return null;
-        FileLog.e(e222);
+        FileLog.e(e422);
         if (httpConnectionStream != null) {
             httpConnectionStream.close();
         }
@@ -1358,7 +1397,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             public void run() {
                 if (WebPlayerView.this.videoPlayer != null && WebPlayerView.this.videoPlayer.isPlaying()) {
                     WebPlayerView.this.controlsView.setProgress((int) (WebPlayerView.this.videoPlayer.getCurrentPosition() / 1000));
-                    WebPlayerView.this.controlsView.setBufferedProgress((int) (WebPlayerView.this.videoPlayer.getBufferedPosition() / 1000), WebPlayerView.this.videoPlayer.getBufferedPercentage());
+                    WebPlayerView.this.controlsView.setBufferedProgress((int) (WebPlayerView.this.videoPlayer.getBufferedPosition() / 1000));
                     AndroidUtilities.runOnUIThread(WebPlayerView.this.progressRunnable, 1000);
                 }
             }
@@ -1549,7 +1588,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             this.controlsView.addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
             this.inlineButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    if (WebPlayerView.this.textureView != null && WebPlayerView.this.delegate.checkInlinePermissons() && !WebPlayerView.this.changingTextureView && !WebPlayerView.this.switchingInlineMode && WebPlayerView.this.firstFrameRendered) {
+                    if (WebPlayerView.this.textureView != null && WebPlayerView.this.delegate.checkInlinePermissions() && !WebPlayerView.this.changingTextureView && !WebPlayerView.this.switchingInlineMode && WebPlayerView.this.firstFrameRendered) {
                         WebPlayerView.this.switchingInlineMode = true;
                         if (WebPlayerView.this.isInline) {
                             ViewGroup parent = (ViewGroup) WebPlayerView.this.aspectRatioFrameLayout.getParent();

@@ -126,7 +126,10 @@ public abstract class AudioInfo {
             if (header[4] == (byte) 102 && header[5] == (byte) 116 && header[6] == (byte) 121 && header[7] == (byte) 112) {
                 return new M4AInfo(input);
             }
-            return new MP3Info(input, file.length());
+            if (file.getAbsolutePath().endsWith("mp3")) {
+                return new MP3Info(input, file.length());
+            }
+            return null;
         } catch (Exception e) {
             return null;
         }

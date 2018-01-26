@@ -61,7 +61,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private boolean keyboardVisible;
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
-    private EditTextBoldCursor messageEditText;
+    private EditTextCaption messageEditText;
     private AnimatorSet runningAnimation;
     private AnimatorSet runningAnimation2;
     private ObjectAnimator runningAnimationAudio;
@@ -103,7 +103,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 }
             }
         });
-        this.messageEditText = new EditTextBoldCursor(context) {
+        this.messageEditText = new EditTextCaption(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 try {
                     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -323,6 +323,19 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             if (this.delegate != null) {
                 this.delegate.onTextChanged(this.messageEditText.getText());
             }
+        }
+    }
+
+    public int getSelectionLength() {
+        int i = 0;
+        if (this.messageEditText == null) {
+            return i;
+        }
+        try {
+            return this.messageEditText.getSelectionEnd() - this.messageEditText.getSelectionStart();
+        } catch (Throwable e) {
+            FileLog.e(e);
+            return i;
         }
     }
 

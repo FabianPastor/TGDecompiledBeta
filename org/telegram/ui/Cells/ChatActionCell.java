@@ -120,7 +120,7 @@ public class ChatActionCell extends BaseCell {
                     }
                 }
                 ImageReceiver imageReceiver = this.imageReceiver;
-                if (PhotoViewer.getInstance().isShowingImage(this.currentMessageObject)) {
+                if (PhotoViewer.isShowingImage(this.currentMessageObject)) {
                     z = false;
                 }
                 imageReceiver.setVisible(z, false);

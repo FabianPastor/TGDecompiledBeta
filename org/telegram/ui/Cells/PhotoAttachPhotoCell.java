@@ -107,7 +107,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
             this.imageView.setOrientation(this.photoEntry.orientation, true);
             this.imageView.setImage("thumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, null, getResources().getDrawable(R.drawable.nophotos));
         }
-        boolean showing = PhotoViewer.getInstance().isShowingImage(this.photoEntry.path);
+        boolean showing = PhotoViewer.isShowingImage(this.photoEntry.path);
         ImageReceiver imageReceiver = this.imageView.getImageReceiver();
         if (showing) {
             z = false;

@@ -115,12 +115,18 @@ import org.telegram.tgnet.TLRPC.TL_messageForwarded_old;
 import org.telegram.tgnet.TLRPC.TL_messageForwarded_old2;
 import org.telegram.tgnet.TLRPC.TL_messageMediaContact;
 import org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
+import org.telegram.tgnet.TLRPC.TL_messageMediaDocument_layer68;
+import org.telegram.tgnet.TLRPC.TL_messageMediaDocument_layer74;
+import org.telegram.tgnet.TLRPC.TL_messageMediaDocument_old;
 import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGame;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGeo;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGeoLive;
 import org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
+import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto_layer68;
+import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto_layer74;
+import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto_old;
 import org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
@@ -169,6 +175,7 @@ public class MessageObject {
     public float audioProgress;
     public int audioProgressSec;
     public StringBuilder botButtonsLayout;
+    public float bufferedProgress;
     public CharSequence caption;
     public int contentType;
     public int currentAccount;
@@ -937,12 +944,15 @@ public class MessageObject {
         int dateMonth = rightNow.get(2);
         this.dateKey = String.format("%d_%02d_%02d", new Object[]{Integer.valueOf(dateYear), Integer.valueOf(dateMonth), Integer.valueOf(dateDay)});
         this.monthKey = String.format("%d_%02d", new Object[]{Integer.valueOf(dateYear), Integer.valueOf(dateMonth)});
-        if (this.messageOwner.message != null && this.messageOwner.id < 0 && this.messageOwner.message.length() > 6 && (isVideo() || isNewGif() || isRoundVideo())) {
-            this.videoEditedInfo = new VideoEditedInfo();
-            if (this.videoEditedInfo.parseString(this.messageOwner.message)) {
-                this.videoEditedInfo.roundVideo = isRoundVideo();
-            } else {
-                this.videoEditedInfo = null;
+        if (!(this.messageOwner.message == null || this.messageOwner.id >= 0 || this.messageOwner.params == null)) {
+            String ve = (String) this.messageOwner.params.get("ve");
+            if (ve != null && (isVideo() || isNewGif() || isRoundVideo())) {
+                this.videoEditedInfo = new VideoEditedInfo();
+                if (this.videoEditedInfo.parseString(ve)) {
+                    this.videoEditedInfo.roundVideo = isRoundVideo();
+                } else {
+                    this.videoEditedInfo = null;
+                }
             }
         }
         generateCaption();
@@ -1346,10 +1356,10 @@ public class MessageObject {
                 message.media = newMessage.media;
                 message.media.webpage = new TL_webPage();
                 message.media.webpage.site_name = LocaleController.getString("EventLogOriginalCaption", R.string.EventLogOriginalCaption);
-                if (TextUtils.isEmpty(oldMessage.media.caption)) {
+                if (TextUtils.isEmpty(oldMessage.message)) {
                     message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty);
                 } else {
-                    message.media.webpage.description = oldMessage.media.caption;
+                    message.media.webpage.description = oldMessage.message;
                 }
             }
             message.reply_markup = newMessage.reply_markup;
@@ -2288,16 +2298,43 @@ public class MessageObject {
     }
 
     public void generateCaption() {
-        if (this.caption == null && !isRoundVideo() && this.messageOwner.media != null && !TextUtils.isEmpty(this.messageOwner.media.caption)) {
-            this.caption = Emoji.replaceEmoji(this.messageOwner.media.caption, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
-            if (containsUrls(this.caption)) {
-                try {
-                    Linkify.addLinks((Spannable) this.caption, 5);
-                } catch (Throwable e) {
-                    FileLog.e(e);
+        if (this.caption == null && !isRoundVideo() && !isMediaEmpty() && !TextUtils.isEmpty(this.messageOwner.message)) {
+            boolean hasEntities;
+            boolean useManualParse;
+            this.caption = Emoji.replaceEmoji(this.messageOwner.message, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            if (this.messageOwner.send_state != 0) {
+                hasEntities = false;
+                for (int a = 0; a < this.messageOwner.entities.size(); a++) {
+                    if (!(this.messageOwner.entities.get(a) instanceof TL_inputMessageEntityMentionName)) {
+                        hasEntities = true;
+                        break;
+                    }
+                }
+            } else {
+                hasEntities = !this.messageOwner.entities.isEmpty();
+            }
+            if (hasEntities || !(this.eventId != 0 || (this.messageOwner.media instanceof TL_messageMediaPhoto_old) || (this.messageOwner.media instanceof TL_messageMediaPhoto_layer68) || (this.messageOwner.media instanceof TL_messageMediaPhoto_layer74) || (this.messageOwner.media instanceof TL_messageMediaDocument_old) || (this.messageOwner.media instanceof TL_messageMediaDocument_layer68) || (this.messageOwner.media instanceof TL_messageMediaDocument_layer74) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.id < 0))) {
+                useManualParse = false;
+            } else {
+                useManualParse = true;
+            }
+            if (useManualParse) {
+                if (containsUrls(this.caption)) {
+                    try {
+                        Linkify.addLinks((Spannable) this.caption, 5);
+                    } catch (Throwable e) {
+                        FileLog.e(e);
+                    }
                 }
                 addUsernamesAndHashtags(isOutOwner(), this.caption, true);
+            } else {
+                try {
+                    Linkify.addLinks((Spannable) this.caption, 4);
+                } catch (Throwable e2) {
+                    FileLog.e(e2);
+                }
             }
+            addEntitiesToText(this.caption, useManualParse);
         }
     }
 
@@ -2359,6 +2396,75 @@ public class MessageObject {
         }
     }
 
+    public void resetPlayingProgress() {
+        this.audioProgress = 0.0f;
+        this.audioProgressSec = 0;
+        this.bufferedProgress = 0.0f;
+    }
+
+    private boolean addEntitiesToText(CharSequence text, boolean useManualParse) {
+        boolean hasUrls = false;
+        if (!(text instanceof Spannable)) {
+            return false;
+        }
+        Spannable spannable = (Spannable) text;
+        int count = this.messageOwner.entities.size();
+        URLSpan[] spans = (URLSpan[]) spannable.getSpans(0, text.length(), URLSpan.class);
+        if (spans != null && spans.length > 0) {
+            hasUrls = true;
+        }
+        for (int a = 0; a < count; a++) {
+            MessageEntity entity = (MessageEntity) this.messageOwner.entities.get(a);
+            if (entity.length > 0 && entity.offset >= 0 && entity.offset < this.messageOwner.message.length()) {
+                if (entity.offset + entity.length > this.messageOwner.message.length()) {
+                    entity.length = this.messageOwner.message.length() - entity.offset;
+                }
+                if ((!useManualParse || (entity instanceof TL_messageEntityBold) || (entity instanceof TL_messageEntityItalic) || (entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityPre) || (entity instanceof TL_messageEntityMentionName) || (entity instanceof TL_inputMessageEntityMentionName)) && spans != null && spans.length > 0) {
+                    for (int b = 0; b < spans.length; b++) {
+                        if (spans[b] != null) {
+                            int start = spannable.getSpanStart(spans[b]);
+                            int end = spannable.getSpanEnd(spans[b]);
+                            if ((entity.offset <= start && entity.offset + entity.length >= start) || (entity.offset <= end && entity.offset + entity.length >= end)) {
+                                spannable.removeSpan(spans[b]);
+                                spans[b] = null;
+                            }
+                        }
+                    }
+                }
+                if (entity instanceof TL_messageEntityBold) {
+                    spannable.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), entity.offset, entity.offset + entity.length, 33);
+                } else if (entity instanceof TL_messageEntityItalic) {
+                    spannable.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), entity.offset, entity.offset + entity.length, 33);
+                } else if ((entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityPre)) {
+                    spannable.setSpan(new URLSpanMono(spannable, entity.offset, entity.offset + entity.length, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
+                } else if (entity instanceof TL_messageEntityMentionName) {
+                    spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
+                } else if (entity instanceof TL_inputMessageEntityMentionName) {
+                    spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
+                } else if (!useManualParse) {
+                    String url = this.messageOwner.message.substring(entity.offset, entity.offset + entity.length);
+                    if (entity instanceof TL_messageEntityBotCommand) {
+                        spannable.setSpan(new URLSpanBotCommand(url, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
+                    } else if ((entity instanceof TL_messageEntityHashtag) || (entity instanceof TL_messageEntityMention)) {
+                        spannable.setSpan(new URLSpanNoUnderline(url), entity.offset, entity.offset + entity.length, 33);
+                    } else if (entity instanceof TL_messageEntityEmail) {
+                        spannable.setSpan(new URLSpanReplacement("mailto:" + url), entity.offset, entity.offset + entity.length, 33);
+                    } else if (entity instanceof TL_messageEntityUrl) {
+                        hasUrls = true;
+                        if (url.toLowerCase().startsWith("http") || url.toLowerCase().startsWith("tg://")) {
+                            spannable.setSpan(new URLSpan(url), entity.offset, entity.offset + entity.length, 33);
+                        } else {
+                            spannable.setSpan(new URLSpan("http://" + url), entity.offset, entity.offset + entity.length, 33);
+                        }
+                    } else if (entity instanceof TL_messageEntityTextUrl) {
+                        spannable.setSpan(new URLSpanReplacement(entity.url), entity.offset, entity.offset + entity.length, 33);
+                    }
+                }
+            }
+        }
+        return hasUrls;
+    }
+
     public void generateLayout(User fromUser) {
         if (this.type == 0 && this.messageOwner.to_id != null && !TextUtils.isEmpty(this.messageText)) {
             boolean hasEntities;
@@ -2407,64 +2513,7 @@ public class MessageObject {
                     FileLog.e(e);
                 }
             }
-            boolean hasUrls = false;
-            if (this.messageText instanceof Spannable) {
-                Spannable spannable = (Spannable) this.messageText;
-                int count = this.messageOwner.entities.size();
-                URLSpan[] spans = (URLSpan[]) spannable.getSpans(0, this.messageText.length(), URLSpan.class);
-                if (spans != null && spans.length > 0) {
-                    hasUrls = true;
-                }
-                for (a = 0; a < count; a++) {
-                    MessageEntity entity = (MessageEntity) this.messageOwner.entities.get(a);
-                    if (entity.length > 0 && entity.offset >= 0 && entity.offset < this.messageOwner.message.length()) {
-                        if (entity.offset + entity.length > this.messageOwner.message.length()) {
-                            entity.length = this.messageOwner.message.length() - entity.offset;
-                        }
-                        if (((entity instanceof TL_messageEntityBold) || (entity instanceof TL_messageEntityItalic) || (entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityPre) || (entity instanceof TL_messageEntityMentionName) || (entity instanceof TL_inputMessageEntityMentionName)) && spans != null && spans.length > 0) {
-                            for (int b = 0; b < spans.length; b++) {
-                                if (spans[b] != null) {
-                                    int start = spannable.getSpanStart(spans[b]);
-                                    int end = spannable.getSpanEnd(spans[b]);
-                                    if ((entity.offset <= start && entity.offset + entity.length >= start) || (entity.offset <= end && entity.offset + entity.length >= end)) {
-                                        spannable.removeSpan(spans[b]);
-                                        spans[b] = null;
-                                    }
-                                }
-                            }
-                        }
-                        if (entity instanceof TL_messageEntityBold) {
-                            spannable.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), entity.offset, entity.offset + entity.length, 33);
-                        } else if (entity instanceof TL_messageEntityItalic) {
-                            spannable.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), entity.offset, entity.offset + entity.length, 33);
-                        } else if ((entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityPre)) {
-                            spannable.setSpan(new URLSpanMono(spannable, entity.offset, entity.offset + entity.length, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
-                        } else if (entity instanceof TL_messageEntityMentionName) {
-                            spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
-                        } else if (entity instanceof TL_inputMessageEntityMentionName) {
-                            spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
-                        } else if (!useManualParse) {
-                            String url = this.messageOwner.message.substring(entity.offset, entity.offset + entity.length);
-                            if (entity instanceof TL_messageEntityBotCommand) {
-                                spannable.setSpan(new URLSpanBotCommand(url, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
-                            } else if ((entity instanceof TL_messageEntityHashtag) || (entity instanceof TL_messageEntityMention)) {
-                                spannable.setSpan(new URLSpanNoUnderline(url), entity.offset, entity.offset + entity.length, 33);
-                            } else if (entity instanceof TL_messageEntityEmail) {
-                                spannable.setSpan(new URLSpanReplacement("mailto:" + url), entity.offset, entity.offset + entity.length, 33);
-                            } else if (entity instanceof TL_messageEntityUrl) {
-                                hasUrls = true;
-                                if (url.toLowerCase().startsWith("http") || url.toLowerCase().startsWith("tg://")) {
-                                    spannable.setSpan(new URLSpan(url), entity.offset, entity.offset + entity.length, 33);
-                                } else {
-                                    spannable.setSpan(new URLSpan("http://" + url), entity.offset, entity.offset + entity.length, 33);
-                                }
-                            } else if (entity instanceof TL_messageEntityTextUrl) {
-                                spannable.setSpan(new URLSpanReplacement(entity.url), entity.offset, entity.offset + entity.length, 33);
-                            }
-                        }
-                    }
-                }
-            }
+            boolean hasUrls = addEntitiesToText(this.messageText, useManualParse);
             boolean needShare = this.eventId == 0 && !isOutOwner() && (!(this.messageOwner.fwd_from == null || (this.messageOwner.fwd_from.saved_from_peer == null && this.messageOwner.fwd_from.from_id == 0 && this.messageOwner.fwd_from.channel_id == 0)) || (this.messageOwner.from_id > 0 && (this.messageOwner.to_id.channel_id != 0 || this.messageOwner.to_id.chat_id != 0 || (this.messageOwner.media instanceof TL_messageMediaGame) || (this.messageOwner.media instanceof TL_messageMediaInvoice))));
             this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
             int i = this.generatedWithMinSize;
