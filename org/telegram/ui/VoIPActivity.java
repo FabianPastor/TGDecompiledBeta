@@ -71,7 +71,6 @@ import org.telegram.messenger.voip.VoIPBaseService.StateListener;
 import org.telegram.messenger.voip.VoIPController;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.TL_encryptedChat;
 import org.telegram.tgnet.TLRPC.User;
@@ -345,7 +344,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
                 intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
                 intent.putExtra("currentAccount", VoIPActivity.this.currentAccount);
-                intent.setFlags(TLRPC.MESSAGE_FLAG_EDITED);
+                intent.setFlags(32768);
                 intent.putExtra("userId", VoIPActivity.this.user.id);
                 VoIPActivity.this.startActivity(intent);
                 VoIPActivity.this.finish();

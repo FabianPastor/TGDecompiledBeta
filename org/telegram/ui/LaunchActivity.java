@@ -1082,7 +1082,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             Integer push_msg_id = Integer.valueOf(0);
             Integer open_settings = Integer.valueOf(0);
             Integer open_new_dialog = Integer.valueOf(0);
-            long dialogId = (intent == null || intent.getExtras() == null) ? 0 : intent.getExtras().getLong("dialogId", 0);
+            long dialogId = 0;
+            if (SharedConfig.directShare) {
+                dialogId = (intent == null || intent.getExtras() == null) ? 0 : intent.getExtras().getLong("dialogId", 0);
+            }
             boolean showDialogsList = false;
             boolean showPlayer = false;
             boolean showLocations = false;
@@ -2484,6 +2487,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         EmbedBottomSheet embedBottomSheet = EmbedBottomSheet.getInstance();
         if (embedBottomSheet != null) {
             embedBottomSheet.onConfigurationChanged(newConfig);
+        }
+        PhotoViewer photoViewer = PhotoViewer.getPipInstance();
+        if (photoViewer != null) {
+            photoViewer.onConfigurationChanged(newConfig);
         }
         ThemeEditorView editorView = ThemeEditorView.getInstance();
         if (editorView != null) {

@@ -49,6 +49,13 @@ public class BaseFragment {
         this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
+    public void setCurrentAccount(int account) {
+        if (this.fragmentView != null) {
+            throw new IllegalStateException("trying to set current account when fragment UI already created");
+        }
+        this.currentAccount = account;
+    }
+
     public ActionBar getActionBar() {
         return this.actionBar;
     }

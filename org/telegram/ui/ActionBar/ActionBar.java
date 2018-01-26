@@ -383,7 +383,7 @@ public class ActionBar extends FrameLayout {
                         if (ActionBar.this.titleTextView != null) {
                             ActionBar.this.titleTextView.setVisibility(4);
                         }
-                        if (ActionBar.this.subtitleTextView != null) {
+                        if (!(ActionBar.this.subtitleTextView == null || TextUtils.isEmpty(ActionBar.this.subtitleTextView.getText()))) {
                             ActionBar.this.subtitleTextView.setVisibility(4);
                         }
                         if (ActionBar.this.menu != null) {
@@ -444,7 +444,7 @@ public class ActionBar extends FrameLayout {
             if (this.titleTextView != null) {
                 this.titleTextView.setVisibility(0);
             }
-            if (this.subtitleTextView != null) {
+            if (!(this.subtitleTextView == null || TextUtils.isEmpty(this.subtitleTextView.getText()))) {
                 this.subtitleTextView.setVisibility(0);
             }
             if (this.menu != null) {
@@ -501,7 +501,7 @@ public class ActionBar extends FrameLayout {
         if (this.titleTextView != null) {
             this.titleTextView.setVisibility(visible ? 4 : 0);
         }
-        if (this.subtitleTextView != null) {
+        if (!(this.subtitleTextView == null || TextUtils.isEmpty(this.subtitleTextView.getText()))) {
             SimpleTextView simpleTextView = this.subtitleTextView;
             if (!visible) {
                 i = 0;

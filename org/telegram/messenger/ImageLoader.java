@@ -44,7 +44,6 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputEncryptedFile;
@@ -405,7 +404,7 @@ public class ImageLoader {
                 }
                 if (httpConnectionStream != null) {
                     try {
-                        byte[] data = new byte[TLRPC.MESSAGE_FLAG_EDITED];
+                        byte[] data = new byte[32768];
                         int totalLoaded = 0;
                         while (!isCancelled()) {
                             int read = httpConnectionStream.read(data);

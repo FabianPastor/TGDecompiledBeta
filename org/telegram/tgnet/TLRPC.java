@@ -6269,7 +6269,7 @@ public class TLRPC {
             this.flags = this.bots_inline ? this.flags | 4 : this.flags & -5;
             this.flags = this.phone_calls ? this.flags | 8 : this.flags & -9;
             this.flags = this.groups ? this.flags | 1024 : this.flags & -1025;
-            this.flags = this.channels ? this.flags | TLRPC.MESSAGE_FLAG_EDITED : this.flags & -32769;
+            this.flags = this.channels ? this.flags | 32768 : this.flags & -32769;
             stream.writeInt32(this.flags);
             stream.writeInt32(this.offset);
             stream.writeInt32(this.limit);
@@ -14626,7 +14626,7 @@ public class TLRPC {
             if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 this.admin_rights = TL_channelAdminRights.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 this.banned_rights = TL_channelBannedRights.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
             if ((this.flags & 131072) != 0) {
@@ -14663,7 +14663,7 @@ public class TLRPC {
             if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 this.admin_rights.serializeToStream(stream);
             }
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 this.banned_rights.serializeToStream(stream);
             }
             if ((this.flags & 131072) != 0) {
@@ -18842,7 +18842,7 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 this.views = stream.readInt32(exception);
             }
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 this.edit_date = stream.readInt32(exception);
             }
             if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
@@ -18900,7 +18900,7 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 stream.writeInt32(this.views);
             }
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 stream.writeInt32(this.edit_date);
             }
             if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
@@ -25056,7 +25056,7 @@ public class TLRPC {
                 z = false;
             }
             this.bot = z;
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -25133,7 +25133,7 @@ public class TLRPC {
             this.flags = this.mutual_contact ? this.flags | 4096 : this.flags & -4097;
             this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
-            this.flags = this.bot_chat_history ? this.flags | TLRPC.MESSAGE_FLAG_EDITED : this.flags & -32769;
+            this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
             this.flags = this.bot_nochats ? this.flags | C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.restricted ? this.flags | 262144 : this.flags & -262145;
@@ -26915,7 +26915,7 @@ public class TLRPC {
             if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 this.admin_rights = TL_channelAdminRights.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 this.banned_rights = TL_channelBannedRights.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
         }
@@ -26950,7 +26950,7 @@ public class TLRPC {
             if ((this.flags & MessagesController.UPDATE_MASK_CHAT_ADMINS) != 0) {
                 this.admin_rights.serializeToStream(stream);
             }
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 this.banned_rights.serializeToStream(stream);
             }
         }
@@ -28374,7 +28374,7 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 this.views = stream.readInt32(exception);
             }
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 this.edit_date = stream.readInt32(exception);
             }
         }
@@ -28428,7 +28428,7 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 stream.writeInt32(this.views);
             }
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 stream.writeInt32(this.edit_date);
             }
             writeAttachPath(stream);
@@ -28521,7 +28521,7 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 this.views = stream.readInt32(exception);
             }
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 this.edit_date = stream.readInt32(exception);
             }
             if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
@@ -28576,7 +28576,7 @@ public class TLRPC {
             if ((this.flags & 1024) != 0) {
                 stream.writeInt32(this.views);
             }
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 stream.writeInt32(this.edit_date);
             }
             if ((this.flags & C.DEFAULT_BUFFER_SEGMENT_SIZE) != 0) {
@@ -30067,7 +30067,7 @@ public class TLRPC {
                 z = false;
             }
             this.bot = z;
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -30141,7 +30141,7 @@ public class TLRPC {
             this.flags = this.mutual_contact ? this.flags | 4096 : this.flags & -4097;
             this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
-            this.flags = this.bot_chat_history ? this.flags | TLRPC.MESSAGE_FLAG_EDITED : this.flags & -32769;
+            this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
             this.flags = this.bot_nochats ? this.flags | C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.restricted ? this.flags | 262144 : this.flags & -262145;
@@ -30214,7 +30214,7 @@ public class TLRPC {
                 z = false;
             }
             this.bot = z;
-            if ((this.flags & TLRPC.MESSAGE_FLAG_EDITED) != 0) {
+            if ((this.flags & 32768) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -30270,7 +30270,7 @@ public class TLRPC {
             this.flags = this.mutual_contact ? this.flags | 4096 : this.flags & -4097;
             this.flags = this.deleted ? this.flags | MessagesController.UPDATE_MASK_CHANNEL : this.flags & -8193;
             this.flags = this.bot ? this.flags | MessagesController.UPDATE_MASK_CHAT_ADMINS : this.flags & -16385;
-            this.flags = this.bot_chat_history ? this.flags | TLRPC.MESSAGE_FLAG_EDITED : this.flags & -32769;
+            this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
             this.flags = this.bot_nochats ? this.flags | C.DEFAULT_BUFFER_SEGMENT_SIZE : this.flags & -65537;
             this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
             this.flags = this.explicit_content ? this.flags | 262144 : this.flags & -262145;

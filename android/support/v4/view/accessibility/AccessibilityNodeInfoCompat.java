@@ -7,7 +7,6 @@ import android.view.accessibility.AccessibilityNodeInfo.CollectionInfo;
 import android.view.accessibility.AccessibilityNodeInfo.CollectionItemInfo;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.exoplayer2.C;
-import org.telegram.tgnet.TLRPC;
 
 public class AccessibilityNodeInfoCompat {
     private final AccessibilityNodeInfo mInfo;
@@ -256,7 +255,7 @@ public class AccessibilityNodeInfoCompat {
                 return "ACTION_SCROLL_BACKWARD";
             case MessagesController.UPDATE_MASK_CHAT_ADMINS /*16384*/:
                 return "ACTION_COPY";
-            case TLRPC.MESSAGE_FLAG_EDITED /*32768*/:
+            case 32768:
                 return "ACTION_PASTE";
             case C.DEFAULT_BUFFER_SEGMENT_SIZE /*65536*/:
                 return "ACTION_CUT";

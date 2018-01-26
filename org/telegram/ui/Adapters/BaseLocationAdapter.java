@@ -22,7 +22,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.TL_geoPoint;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
@@ -176,7 +175,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                             }
                             if (httpConnectionStream != null) {
                                 try {
-                                    byte[] data = new byte[TLRPC.MESSAGE_FLAG_EDITED];
+                                    byte[] data = new byte[32768];
                                     StringBuilder result2 = null;
                                     while (!isCancelled()) {
                                         try {

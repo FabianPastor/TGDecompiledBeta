@@ -52,7 +52,6 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.User;
@@ -965,7 +964,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 intent.putExtra("encId", (int) (dialog_id >> 32));
             }
             intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-            intent.setFlags(TLRPC.MESSAGE_FLAG_EDITED);
+            intent.setFlags(32768);
             startActivity(intent);
             onFinish();
             finish();

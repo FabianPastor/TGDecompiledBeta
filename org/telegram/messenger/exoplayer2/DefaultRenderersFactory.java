@@ -66,11 +66,11 @@ public class DefaultRenderersFactory implements RenderersFactory {
     }
 
     protected void buildVideoRenderers(Context context, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, long allowedVideoJoiningTimeMs, Handler eventHandler, VideoRendererEventListener eventListener, int extensionRendererMode, ArrayList<Renderer> out) {
-        int extensionRendererIndex;
         Throwable e;
         ArrayList<Renderer> arrayList = out;
         arrayList.add(new MediaCodecVideoRenderer(context, MediaCodecSelector.DEFAULT, allowedVideoJoiningTimeMs, drmSessionManager, false, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY));
         if (extensionRendererMode != 0) {
+            int extensionRendererIndex;
             int extensionRendererIndex2 = out.size();
             if (extensionRendererMode == 2) {
                 extensionRendererIndex = extensionRendererIndex2 - 1;
@@ -98,11 +98,11 @@ public class DefaultRenderersFactory implements RenderersFactory {
     }
 
     protected void buildAudioRenderers(Context context, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, AudioProcessor[] audioProcessors, Handler eventHandler, AudioRendererEventListener eventListener, int extensionRendererMode, ArrayList<Renderer> out) {
-        int extensionRendererIndex;
         Exception e;
         ArrayList<Renderer> arrayList = out;
         arrayList.add(new MediaCodecAudioRenderer(MediaCodecSelector.DEFAULT, drmSessionManager, true, eventHandler, eventListener, AudioCapabilities.getCapabilities(context), audioProcessors));
         if (extensionRendererMode != 0) {
+            int extensionRendererIndex;
             int extensionRendererIndex2 = out.size();
             if (extensionRendererMode == 2) {
                 extensionRendererIndex = extensionRendererIndex2 - 1;

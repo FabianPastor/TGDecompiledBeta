@@ -22,7 +22,6 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
 
 @SuppressLint({"InlinedApi"})
 @TargetApi(16)
@@ -160,7 +159,7 @@ public final class MediaCodecUtil {
         AVC_LEVEL_NUMBER_TO_CONST.put(41, 4096);
         AVC_LEVEL_NUMBER_TO_CONST.put(42, MessagesController.UPDATE_MASK_CHANNEL);
         AVC_LEVEL_NUMBER_TO_CONST.put(50, MessagesController.UPDATE_MASK_CHAT_ADMINS);
-        AVC_LEVEL_NUMBER_TO_CONST.put(51, TLRPC.MESSAGE_FLAG_EDITED);
+        AVC_LEVEL_NUMBER_TO_CONST.put(51, 32768);
         AVC_LEVEL_NUMBER_TO_CONST.put(52, C.DEFAULT_BUFFER_SEGMENT_SIZE);
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L30", Integer.valueOf(1));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L60", Integer.valueOf(4));
@@ -182,7 +181,7 @@ public final class MediaCodecUtil {
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("H93", Integer.valueOf(512));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("H120", Integer.valueOf(2048));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("H123", Integer.valueOf(MessagesController.UPDATE_MASK_CHANNEL));
-        HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("H150", Integer.valueOf(TLRPC.MESSAGE_FLAG_EDITED));
+        HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("H150", Integer.valueOf(32768));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("H153", Integer.valueOf(131072));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("H156", Integer.valueOf(524288));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("H180", Integer.valueOf(2097152));
@@ -493,7 +492,7 @@ public final class MediaCodecUtil {
                 return 2228224;
             case MessagesController.UPDATE_MASK_CHAT_ADMINS /*16384*/:
                 return 5652480;
-            case TLRPC.MESSAGE_FLAG_EDITED /*32768*/:
+            case 32768:
                 return 9437184;
             case C.DEFAULT_BUFFER_SEGMENT_SIZE /*65536*/:
                 return 9437184;

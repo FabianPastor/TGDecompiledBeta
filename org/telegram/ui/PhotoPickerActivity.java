@@ -69,7 +69,6 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.FoundGif;
@@ -1305,7 +1304,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         }
                         if (httpConnectionStream != null) {
                             try {
-                                byte[] data = new byte[TLRPC.MESSAGE_FLAG_EDITED];
+                                byte[] data = new byte[32768];
                                 StringBuilder result2 = null;
                                 while (!isCancelled()) {
                                     try {

@@ -49,7 +49,6 @@ import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.Message;
@@ -353,7 +352,7 @@ public class NotificationsController {
                         }
                         Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
                         intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-                        intent.setFlags(TLRPC.MESSAGE_FLAG_EDITED);
+                        intent.setFlags(32768);
                         PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
                         String name = LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
                         Builder mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(NotificationsController.this.total_unread_count).setContentIntent(contentIntent).setGroup(NotificationsController.this.notificationGroup).setGroupSummary(true).setColor(-13851168);
@@ -1820,7 +1819,7 @@ public class NotificationsController {
                     }
                     intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
                     intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-                    intent.setFlags(TLRPC.MESSAGE_FLAG_EDITED);
+                    intent.setFlags(32768);
                     if (((int) dialog_id) != 0) {
                         if (this.pushDialogs.size() == 1) {
                             if (chat_id != 0) {
@@ -1859,12 +1858,12 @@ public class NotificationsController {
                     }
                     if (UserConfig.getActivatedAccountsCount() > 1) {
                         detailText = TtmlNode.ANONYMOUS_REGION_ID;
-                    } else if (this.pushMessages.size() != 1) {
+                    } else if (this.pushDialogs.size() != 1) {
                         detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser());
                     } else {
                         detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser()) + "・";
                     }
-                    if (this.pushMessages.size() != 1) {
+                    if (this.pushDialogs.size() != 1 || VERSION.SDK_INT < 23) {
                         if (this.pushDialogs.size() != 1) {
                             detailText = detailText + LocaleController.formatPluralString("NewMessages", this.total_unread_count);
                         } else {
@@ -2121,7 +2120,7 @@ public class NotificationsController {
             }
             intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
             intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-            intent.setFlags(TLRPC.MESSAGE_FLAG_EDITED);
+            intent.setFlags(32768);
             if (((int) dialog_id) != 0) {
                 if (this.pushDialogs.size() == 1) {
                     if (chat_id != 0) {
@@ -2150,17 +2149,15 @@ public class NotificationsController {
             replace = false;
             if (UserConfig.getActivatedAccountsCount() > 1) {
                 detailText = TtmlNode.ANONYMOUS_REGION_ID;
-            } else if (this.pushMessages.size() != 1) {
+            } else if (this.pushDialogs.size() != 1) {
                 detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser()) + "・";
             } else {
                 detailText = UserObject.getFirstName(UserConfig.getInstance(this.currentAccount).getCurrentUser());
             }
-            if (this.pushMessages.size() != 1) {
-                if (this.pushDialogs.size() != 1) {
-                    detailText = detailText + LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", this.total_unread_count), LocaleController.formatPluralString("FromChats", this.pushDialogs.size()));
-                } else {
-                    detailText = detailText + LocaleController.formatPluralString("NewMessages", this.total_unread_count);
-                }
+            if (this.pushDialogs.size() != 1) {
+                detailText = detailText + LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", this.total_unread_count), LocaleController.formatPluralString("FromChats", this.pushDialogs.size()));
+            } else {
+                detailText = detailText + LocaleController.formatPluralString("NewMessages", this.total_unread_count);
             }
             mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup(this.notificationGroup).setGroupSummary(true).setColor(-13851168);
             vibrationPattern = null;
@@ -2415,7 +2412,7 @@ public class NotificationsController {
                     }
                     intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
                     intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-                    intent.setFlags(TLRPC.MESSAGE_FLAG_EDITED);
+                    intent.setFlags(32768);
                     if (chat != null) {
                         intent.putExtra("chatId", chat.id);
                     } else if (user != null) {
@@ -2439,7 +2436,7 @@ public class NotificationsController {
                     notificationBuilder.extend(summaryExtender);
                     date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
                     builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
-                    if (this.pushMessages.size() == 1) {
+                    if (this.pushDialogs.size() == 1) {
                         builder.setSubText(summary);
                     }
                     if (photoPath != null) {
@@ -2550,7 +2547,7 @@ public class NotificationsController {
                     }
                     intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
                     intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-                    intent.setFlags(TLRPC.MESSAGE_FLAG_EDITED);
+                    intent.setFlags(32768);
                     if (chat != null) {
                         intent.putExtra("chatId", chat.id);
                     } else if (user != null) {
@@ -2574,7 +2571,7 @@ public class NotificationsController {
                     notificationBuilder.extend(summaryExtender);
                     date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
                     builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
-                    if (this.pushMessages.size() == 1) {
+                    if (this.pushDialogs.size() == 1) {
                         builder.setSubText(summary);
                     }
                     if (photoPath != null) {

@@ -1357,7 +1357,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 this.dialogsSearchAdapter.loadRecentSearch();
             }
         } else if (id == NotificationCenter.didLoadedReplyMessages) {
-            updateVisibleRows(0);
+            updateVisibleRows(32768);
         } else if (id == NotificationCenter.reloadHints && this.dialogsSearchAdapter != null) {
             this.dialogsSearchAdapter.notifyDataSetChanged();
         }

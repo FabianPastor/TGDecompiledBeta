@@ -24,7 +24,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.ChatBigEmptyView;
@@ -69,7 +68,7 @@ public class ThemeDescription {
     public static int FLAG_HINTTEXTCOLOR = 8388608;
     public static int FLAG_IMAGECOLOR = 8;
     public static int FLAG_LINKCOLOR = 2;
-    public static int FLAG_LISTGLOWCOLOR = TLRPC.MESSAGE_FLAG_EDITED;
+    public static int FLAG_LISTGLOWCOLOR = 32768;
     public static int FLAG_PROGRESSBAR = 2048;
     public static int FLAG_SECTIONS = 524288;
     public static int FLAG_SELECTOR = 4096;

@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
@@ -138,7 +139,6 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
@@ -1757,7 +1757,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         if (!PhotoViewer.this.groupedPhotosListView.currentPhotos.isEmpty()) {
                             offset = 0 + PhotoViewer.this.groupedPhotosListView.getMeasuredHeight();
                         }
-                        if (PhotoViewer.this.videoSeekbarControlFrameLayout.getVisibility() == 0) {
+                        if (PhotoViewer.this.videoPlayControlFrameLayout.getTag() != null) {
                             offset += PhotoViewer.this.videoSeekbarControlFrameLayout.getMeasuredHeight();
                         }
                         childTop -= offset;
@@ -2494,6 +2494,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         WindowInsets oldInsets = (WindowInsets) PhotoViewer.this.lastInsets;
                         PhotoViewer.this.lastInsets = insets;
                         if (oldInsets == null || !oldInsets.toString().equals(insets.toString())) {
+                            if (PhotoViewer.this.animationInProgress == 1) {
+                                PhotoViewer.this.animatingImageView.setTranslationX(PhotoViewer.this.animatingImageView.getTranslationX() - ((float) PhotoViewer.this.getLeftInset()));
+                                PhotoViewer.this.animationValues[0][2] = PhotoViewer.this.animatingImageView.getTranslationX();
+                            }
                             PhotoViewer.this.windowView.requestLayout();
                         }
                         return insets.consumeSystemWindowInsets();
@@ -2540,9 +2544,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             if (PhotoViewer.this.currentMessageObject != null) {
                                 f = FileLoader.getPathToMessage(PhotoViewer.this.currentMessageObject.messageOwner);
                             } else if (PhotoViewer.this.currentFileLocation != null) {
-                                TLObject access$6900 = PhotoViewer.this.currentFileLocation;
+                                TLObject access$7300 = PhotoViewer.this.currentFileLocation;
                                 boolean z = PhotoViewer.this.avatarsDialogId != 0 || PhotoViewer.this.isEvent;
-                                f = FileLoader.getPathToAttach(access$6900, z);
+                                f = FileLoader.getPathToAttach(access$7300, z);
                             }
                             if (f == null || !f.exists()) {
                                 builder = new Builder(PhotoViewer.this.parentActivity);
@@ -2606,6 +2610,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             args.putBoolean("onlySelect", true);
                             args.putInt("dialogsType", 3);
                             r0 = new DialogsActivity(args);
+                            r0.setCurrentAccount(PhotoViewer.this.currentMessageObject.currentAccount);
                             ArrayList<MessageObject> fmessages = new ArrayList();
                             fmessages.add(PhotoViewer.this.currentMessageObject);
                             final ArrayList<MessageObject> arrayList = fmessages;
@@ -2814,9 +2819,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             return true;
                         }
                     } else if (PhotoViewer.this.currentFileLocation != null) {
-                        TLObject access$6900 = PhotoViewer.this.currentFileLocation;
+                        TLObject access$7300 = PhotoViewer.this.currentFileLocation;
                         boolean z = PhotoViewer.this.avatarsDialogId != 0 || PhotoViewer.this.isEvent;
-                        if (FileLoader.getPathToAttach(access$6900, z).exists()) {
+                        if (FileLoader.getPathToAttach(access$7300, z).exists()) {
                             return true;
                         }
                     }
@@ -3508,10 +3513,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     }
                     if (PhotoViewer.this.allowMentions) {
                         PhotoViewer.this.mentionListAnimation = new AnimatorSet();
-                        AnimatorSet access$10700 = PhotoViewer.this.mentionListAnimation;
+                        AnimatorSet access$11100 = PhotoViewer.this.mentionListAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, "alpha", new float[]{0.0f});
-                        access$10700.playTogether(animatorArr);
+                        access$11100.playTogether(animatorArr);
                         PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 if (PhotoViewer.this.mentionListAnimation != null && PhotoViewer.this.mentionListAnimation.equals(animation)) {
@@ -4215,10 +4220,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             PhotoViewer.this.switchingInlineMode = false;
                             if (VERSION.SDK_INT >= 21) {
                                 PhotoViewer.this.aspectRatioFrameLayout.getLocationInWindow(PhotoViewer.this.pipPosition);
-                                int[] access$12000 = PhotoViewer.this.pipPosition;
-                                access$12000[0] = access$12000[0] - PhotoViewer.this.getLeftInset();
-                                access$12000 = PhotoViewer.this.pipPosition;
-                                access$12000[1] = (int) (((float) access$12000[1]) - PhotoViewer.this.containerView.getTranslationY());
+                                int[] access$12400 = PhotoViewer.this.pipPosition;
+                                access$12400[0] = access$12400[0] - PhotoViewer.this.getLeftInset();
+                                access$12400 = PhotoViewer.this.pipPosition;
+                                access$12400[1] = (int) (((float) access$12400[1]) - PhotoViewer.this.containerView.getTranslationY());
                                 AnimatorSet animatorSet = new AnimatorSet();
                                 r1 = new Animator[15];
                                 r1[0] = ObjectAnimator.ofFloat(PhotoViewer.this.textureImageView, "scaleX", new float[]{1.0f});
@@ -4266,8 +4271,15 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     this.videoSeekbarControlFrameLayout.setTranslationY((float) (-AndroidUtilities.dp(48.0f)));
                     this.videoPlayControlFrameLayout.setTranslationY((float) (-AndroidUtilities.dp(48.0f)));
                 }
-                this.videoSeekbarControlFrameLayout.setVisibility(0);
-                this.videoPlayControlFrameLayout.setVisibility(0);
+                if (this.isActionBarVisible) {
+                    this.videoSeekbarControlFrameLayout.setVisibility(0);
+                    this.videoPlayControlFrameLayout.setVisibility(0);
+                    this.videoSeekbarControlFrameLayout.setAlpha(1.0f);
+                    this.videoPlayControlFrameLayout.setAlpha(1.0f);
+                } else {
+                    this.videoSeekbarControlFrameLayout.setAlpha(0.0f);
+                    this.videoPlayControlFrameLayout.setAlpha(0.0f);
+                }
                 this.videoPlayControlFrameLayout.setTag(Integer.valueOf(1));
             }
             this.bottomLayout.setTag(null);
@@ -4710,14 +4722,14 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$12900 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$13100 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[3];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this.editorDoneLayout, "translationY", new float[]{(float) AndroidUtilities.dp(48.0f), 0.0f});
                     float[] fArr = new float[2];
                     r13[1] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     fArr = new float[2];
                     r13[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoCropView, "alpha", new float[]{0.0f, 1.0f});
-                    access$12900.playTogether(r13);
+                    access$13100.playTogether(r13);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -4854,12 +4866,12 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$12900 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$13100 = PhotoViewer.this.imageMoveAnimation;
                     r12 = new Animator[2];
                     float[] fArr = new float[2];
                     r12[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     r12[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoFilterView.getToolsView(), "translationY", new float[]{(float) AndroidUtilities.dp(186.0f), 0.0f});
-                    access$12900.playTogether(r12);
+                    access$13100.playTogether(r12);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -4963,13 +4975,13 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$12900 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$13100 = PhotoViewer.this.imageMoveAnimation;
                     Animator[] animatorArr = new Animator[3];
                     float[] fArr = new float[2];
                     animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoPaintView.getColorPicker(), "translationY", new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
                     animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoPaintView.getToolsView(), "translationY", new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
-                    access$12900.playTogether(animatorArr);
+                    access$13100.playTogether(animatorArr);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -6946,7 +6958,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                 this.animationValues[0][7] = 0.0f;
                                 this.animationValues[1][0] = object.scale;
                                 this.animationValues[1][1] = object.scale;
-                                this.animationValues[1][2] = ((float) object.viewX) + (((float) drawRegion.left) * object.scale);
+                                this.animationValues[1][2] = (((float) object.viewX) + (((float) drawRegion.left) * object.scale)) - ((float) getLeftInset());
                                 this.animationValues[1][3] = ((float) object.viewY) + (((float) drawRegion.top) * object.scale);
                                 this.animationValues[1][4] = ((float) clipHorizontal) * object.scale;
                                 this.animationValues[1][5] = ((float) clipTop) * object.scale;
@@ -7186,6 +7198,12 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         redraw(0);
         if (this.videoPlayer != null) {
             this.videoPlayer.seekTo(this.videoPlayer.getCurrentPosition() + 1);
+        }
+    }
+
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (this.pipVideoView != null) {
+            this.pipVideoView.onConfigurationChanged();
         }
     }
 
@@ -7982,7 +8000,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             try {
                                 FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
                                 Document document = this.currentMessageObject.getDocument();
-                                uri = Uri.parse("tg://" + this.currentMessageObject.getFileName() + ("?id=" + document.id + "&hash=" + document.access_hash + "&dc=" + document.dc_id + "&size=" + document.size + "&mime=" + URLEncoder.encode(document.mime_type, C.UTF8_NAME) + "&name=" + URLEncoder.encode(FileLoader.getDocumentFileName(document), C.UTF8_NAME)));
+                                uri = Uri.parse("tg://" + this.currentMessageObject.getFileName() + ("?account=" + this.currentMessageObject.currentAccount + "&id=" + document.id + "&hash=" + document.access_hash + "&dc=" + document.dc_id + "&size=" + document.size + "&mime=" + URLEncoder.encode(document.mime_type, C.UTF8_NAME) + "&name=" + URLEncoder.encode(FileLoader.getDocumentFileName(document), C.UTF8_NAME)));
                                 checkProgress(0, false);
                             } catch (Exception e) {
                             }
@@ -8244,7 +8262,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 width = (this.rotationValue == 90 || this.rotationValue == 270) ? this.resultHeight : this.resultWidth;
                 height = (this.rotationValue == 90 || this.rotationValue == 270) ? this.resultWidth : this.resultHeight;
                 this.estimatedSize = (int) (((float) (this.audioFramesSize + this.videoFramesSize)) * (((float) this.estimatedDuration) / this.videoDuration));
-                this.estimatedSize += (this.estimatedSize / TLRPC.MESSAGE_FLAG_EDITED) * 16;
+                this.estimatedSize += (this.estimatedSize / 32768) * 16;
             }
             if (this.videoTimelineView.getLeftProgress() == 0.0f) {
                 this.startTime = -1;
@@ -8407,25 +8425,25 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             public void onAnimationEnd(Animator animation) {
                 if (animation.equals(PhotoViewer.this.qualityChooseViewAnimation)) {
                     PhotoViewer.this.qualityChooseViewAnimation = new AnimatorSet();
-                    AnimatorSet access$16000;
+                    AnimatorSet access$16100;
                     Animator[] animatorArr;
                     if (show) {
                         PhotoViewer.this.qualityChooseView.setVisibility(0);
                         PhotoViewer.this.qualityPicker.setVisibility(0);
-                        access$16000 = PhotoViewer.this.qualityChooseViewAnimation;
+                        access$16100 = PhotoViewer.this.qualityChooseViewAnimation;
                         animatorArr = new Animator[3];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityChooseView, "translationY", new float[]{0.0f});
                         animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityPicker, "translationY", new float[]{0.0f});
                         animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, "translationY", new float[]{(float) (-AndroidUtilities.dp(48.0f))});
-                        access$16000.playTogether(animatorArr);
+                        access$16100.playTogether(animatorArr);
                     } else {
                         PhotoViewer.this.qualityChooseView.setVisibility(4);
                         PhotoViewer.this.qualityPicker.setVisibility(4);
-                        access$16000 = PhotoViewer.this.qualityChooseViewAnimation;
+                        access$16100 = PhotoViewer.this.qualityChooseViewAnimation;
                         animatorArr = new Animator[2];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.pickerView, "translationY", new float[]{0.0f});
                         animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, "translationY", new float[]{(float) (-AndroidUtilities.dp(48.0f))});
-                        access$16000.playTogether(animatorArr);
+                        access$16100.playTogether(animatorArr);
                     }
                     PhotoViewer.this.qualityChooseViewAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animation) {

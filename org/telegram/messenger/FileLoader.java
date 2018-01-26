@@ -884,6 +884,13 @@ public class FileLoader {
         }
     }
 
+    public static String fixFileName(String fileName) {
+        if (fileName != null) {
+            return fileName.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*]+", TtmlNode.ANONYMOUS_REGION_ID).trim();
+        }
+        return fileName;
+    }
+
     public static String getDocumentFileName(Document document) {
         String fileName = null;
         if (document != null) {
@@ -898,9 +905,7 @@ public class FileLoader {
                 }
             }
         }
-        if (fileName != null) {
-            fileName = fileName.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*]+", TtmlNode.ANONYMOUS_REGION_ID).trim();
-        }
+        fileName = fixFileName(fileName);
         return fileName != null ? fileName : TtmlNode.ANONYMOUS_REGION_ID;
     }
 

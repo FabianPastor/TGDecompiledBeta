@@ -88,6 +88,7 @@ public class DialogCell extends BaseCell {
     private boolean isDialogCell;
     private boolean isSelected;
     private int lastMessageDate;
+    private CharSequence lastMessageString;
     private CharSequence lastPrintString = null;
     private int lastSendState;
     private boolean lastUnreadState;
@@ -239,6 +240,7 @@ public class DialogCell extends BaseCell {
         } else {
             messageFormat = "%s: %s";
         }
+        this.lastMessageString = this.message != null ? this.message.messageText : null;
         String name;
         SpannableStringBuilder stringBuilder;
         Object messageString2;
@@ -869,6 +871,9 @@ public class DialogCell extends BaseCell {
                     if ((this.lastPrintString != null && printString == null) || ((this.lastPrintString == null && printString != null) || !(this.lastPrintString == null || printString == null || this.lastPrintString.equals(printString)))) {
                         continueUpdate = true;
                     }
+                }
+                if (!(continueUpdate || (32768 & mask) == 0 || this.message == null || this.message.messageText == this.lastMessageString)) {
+                    continueUpdate = true;
                 }
                 if (!(continueUpdate || (mask & 2) == 0 || this.chat != null)) {
                     continueUpdate = true;
