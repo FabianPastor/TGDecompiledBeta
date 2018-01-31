@@ -55,6 +55,7 @@ public class ProfileSearchCell extends BaseCell {
     private int nameLockLeft;
     private int nameLockTop;
     private int nameTop;
+    private int nameWidth;
     private StaticLayout onlineLayout;
     private int onlineLeft;
     private int paddingRight;
@@ -113,7 +114,6 @@ public class ProfileSearchCell extends BaseCell {
     public void buildLayout() {
         CharSequence nameString;
         TextPaint currentNamePaint;
-        int nameWidth;
         int onlineWidth;
         int avatarLeft;
         this.drawNameBroadcast = false;
@@ -208,36 +208,35 @@ public class ProfileSearchCell extends BaseCell {
             currentNamePaint = Theme.dialogs_namePaint;
         }
         if (LocaleController.isRTL) {
-            nameWidth = (getMeasuredWidth() - this.nameLeft) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline);
-            onlineWidth = nameWidth;
+            onlineWidth = (getMeasuredWidth() - this.nameLeft) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline);
+            this.nameWidth = onlineWidth;
         } else {
-            nameWidth = (getMeasuredWidth() - this.nameLeft) - AndroidUtilities.dp(14.0f);
-            onlineWidth = nameWidth;
+            onlineWidth = (getMeasuredWidth() - this.nameLeft) - AndroidUtilities.dp(14.0f);
+            this.nameWidth = onlineWidth;
         }
         if (this.drawNameLock) {
-            nameWidth -= AndroidUtilities.dp(6.0f) + Theme.dialogs_lockDrawable.getIntrinsicWidth();
+            this.nameWidth -= AndroidUtilities.dp(6.0f) + Theme.dialogs_lockDrawable.getIntrinsicWidth();
         } else if (this.drawNameBroadcast) {
-            nameWidth -= AndroidUtilities.dp(6.0f) + Theme.dialogs_broadcastDrawable.getIntrinsicWidth();
+            this.nameWidth -= AndroidUtilities.dp(6.0f) + Theme.dialogs_broadcastDrawable.getIntrinsicWidth();
         } else if (this.drawNameGroup) {
-            nameWidth -= AndroidUtilities.dp(6.0f) + Theme.dialogs_groupDrawable.getIntrinsicWidth();
+            this.nameWidth -= AndroidUtilities.dp(6.0f) + Theme.dialogs_groupDrawable.getIntrinsicWidth();
         } else if (this.drawNameBot) {
-            nameWidth -= AndroidUtilities.dp(6.0f) + Theme.dialogs_botDrawable.getIntrinsicWidth();
+            this.nameWidth -= AndroidUtilities.dp(6.0f) + Theme.dialogs_botDrawable.getIntrinsicWidth();
         }
-        int nameWidth2 = nameWidth - this.paddingRight;
+        this.nameWidth -= this.paddingRight;
         onlineWidth -= this.paddingRight;
         if (this.drawCount) {
             TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.dialog_id);
             if (dialog == null || dialog.unread_count == 0) {
                 this.lastUnreadCount = 0;
                 this.countLayout = null;
-                nameWidth = nameWidth2;
             } else {
                 this.lastUnreadCount = dialog.unread_count;
                 String countString = String.format("%d", new Object[]{Integer.valueOf(dialog.unread_count)});
                 this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) Theme.dialogs_countTextPaint.measureText(countString)));
                 this.countLayout = new StaticLayout(countString, Theme.dialogs_countTextPaint, this.countWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                 int w = this.countWidth + AndroidUtilities.dp(18.0f);
-                nameWidth = nameWidth2 - w;
+                this.nameWidth -= w;
                 if (LocaleController.isRTL) {
                     this.countLeft = AndroidUtilities.dp(19.0f);
                     this.nameLeft += w;
@@ -248,9 +247,8 @@ public class ProfileSearchCell extends BaseCell {
         } else {
             this.lastUnreadCount = 0;
             this.countLayout = null;
-            nameWidth = nameWidth2;
         }
-        this.nameLayout = new StaticLayout(TextUtils.ellipsize(nameString, currentNamePaint, (float) (nameWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentNamePaint, nameWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        this.nameLayout = new StaticLayout(TextUtils.ellipsize(nameString, currentNamePaint, (float) (this.nameWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentNamePaint, this.nameWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         if (this.chat == null || this.subLabel != null) {
             if (LocaleController.isRTL) {
                 this.onlineLeft = AndroidUtilities.dp(11.0f);
@@ -296,8 +294,8 @@ public class ProfileSearchCell extends BaseCell {
         if (LocaleController.isRTL) {
             if (this.nameLayout.getLineCount() > 0 && this.nameLayout.getLineLeft(0) == 0.0f) {
                 widthpx = Math.ceil((double) this.nameLayout.getLineWidth(0));
-                if (widthpx < ((double) nameWidth)) {
-                    this.nameLeft = (int) (((double) this.nameLeft) + (((double) nameWidth) - widthpx));
+                if (widthpx < ((double) this.nameWidth)) {
+                    this.nameLeft = (int) (((double) this.nameLeft) + (((double) this.nameWidth) - widthpx));
                 }
             }
             if (this.onlineLayout != null && this.onlineLayout.getLineCount() > 0 && this.onlineLayout.getLineLeft(0) == 0.0f) {
@@ -307,10 +305,10 @@ public class ProfileSearchCell extends BaseCell {
                 }
             }
         } else {
-            if (this.nameLayout.getLineCount() > 0 && this.nameLayout.getLineRight(0) == ((float) nameWidth)) {
+            if (this.nameLayout.getLineCount() > 0 && this.nameLayout.getLineRight(0) == ((float) this.nameWidth)) {
                 widthpx = Math.ceil((double) this.nameLayout.getLineWidth(0));
-                if (widthpx < ((double) nameWidth)) {
-                    this.nameLeft = (int) (((double) this.nameLeft) - (((double) nameWidth) - widthpx));
+                if (widthpx < ((double) this.nameWidth)) {
+                    this.nameLeft = (int) (((double) this.nameLeft) - (((double) this.nameWidth) - widthpx));
                 }
             }
             if (this.onlineLayout != null && this.onlineLayout.getLineCount() > 0 && this.onlineLayout.getLineRight(0) == ((float) onlineWidth)) {
@@ -428,9 +426,9 @@ public class ProfileSearchCell extends BaseCell {
                 canvas.restore();
                 if (this.drawCheck) {
                     if (LocaleController.isRTL) {
-                        x = (this.nameLeft - AndroidUtilities.dp(4.0f)) - Theme.dialogs_checkDrawable.getIntrinsicWidth();
+                        x = (int) (((((double) this.nameLeft) + (((double) this.nameWidth) - Math.ceil((double) this.nameLayout.getLineWidth(0)))) - ((double) AndroidUtilities.dp(6.0f))) - ((double) Theme.dialogs_verifiedDrawable.getIntrinsicWidth()));
                     } else {
-                        x = (this.nameLeft + ((int) this.nameLayout.getLineWidth(0))) + AndroidUtilities.dp(4.0f);
+                        x = (int) ((((float) this.nameLeft) + this.nameLayout.getLineRight(0)) + ((float) AndroidUtilities.dp(6.0f)));
                     }
                     BaseCell.setDrawableBounds(Theme.dialogs_verifiedDrawable, x, this.nameLockTop);
                     BaseCell.setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, x, this.nameLockTop);

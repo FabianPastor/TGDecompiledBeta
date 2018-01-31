@@ -2967,10 +2967,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
         Throwable e;
-        final AlertDialog finalProgress;
-        final int i;
-        final String str;
-        final String str2;
         if (fullPath != null) {
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
@@ -2983,6 +2979,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 final File sourceFile = file;
                 final boolean[] cancelled = new boolean[]{false};
                 if (sourceFile.exists()) {
+                    final AlertDialog finalProgress;
+                    final int i;
+                    final String str;
+                    final String str2;
                     AlertDialog progressDialog = null;
                     if (!(context == null || type == 0)) {
                         try {
@@ -3957,7 +3957,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         return lastColorFormat;
     }
 
-    private int selectTrack(MediaExtractor extractor, boolean audio) {
+    private int findTrack(MediaExtractor extractor, boolean audio) {
         int numTracks = extractor.getTrackCount();
         for (int i = 0; i < numTracks; i++) {
             String mime = extractor.getTrackFormat(i).getString("mime");
@@ -4009,35 +4009,60 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         });
     }
 
-    private long readAndWriteTrack(MessageObject messageObject, MediaExtractor extractor, MP4Builder mediaMuxer, BufferInfo info, long start, long end, File file, boolean isAudio) throws Exception {
-        int trackIndex = selectTrack(extractor, isAudio);
-        if (trackIndex < 0) {
-            return -1;
-        }
-        extractor.selectTrack(trackIndex);
-        MediaFormat trackFormat = extractor.getTrackFormat(trackIndex);
-        int muxerTrackIndex = mediaMuxer.addTrack(trackFormat, isAudio);
-        int maxBufferSize = trackFormat.getInteger("max-input-size");
+    private long readAndWriteTracks(MessageObject messageObject, MediaExtractor extractor, MP4Builder mediaMuxer, BufferInfo info, long start, long end, File file, boolean needAudio) throws Exception {
+        int videoTrackIndex = findTrack(extractor, false);
+        int audioTrackIndex = needAudio ? findTrack(extractor, true) : -1;
+        int muxerVideoTrackIndex = -1;
+        int muxerAudioTrackIndex = -1;
         boolean inputDone = false;
-        if (start > 0) {
-            extractor.seekTo(start, 0);
-        } else {
-            extractor.seekTo(0, 0);
+        int maxBufferSize = 0;
+        if (videoTrackIndex >= 0) {
+            extractor.selectTrack(videoTrackIndex);
+            MediaFormat trackFormat = extractor.getTrackFormat(videoTrackIndex);
+            muxerVideoTrackIndex = mediaMuxer.addTrack(trackFormat, false);
+            maxBufferSize = trackFormat.getInteger("max-input-size");
+            if (start > 0) {
+                extractor.seekTo(start, 0);
+            } else {
+                extractor.seekTo(0, 0);
+            }
+        }
+        if (audioTrackIndex >= 0) {
+            extractor.selectTrack(audioTrackIndex);
+            trackFormat = extractor.getTrackFormat(audioTrackIndex);
+            muxerAudioTrackIndex = mediaMuxer.addTrack(trackFormat, true);
+            maxBufferSize = Math.max(trackFormat.getInteger("max-input-size"), maxBufferSize);
+            if (start > 0) {
+                extractor.seekTo(start, 0);
+            } else {
+                extractor.seekTo(0, 0);
+            }
         }
         ByteBuffer buffer = ByteBuffer.allocateDirect(maxBufferSize);
+        if (audioTrackIndex < 0 && videoTrackIndex < 0) {
+            return -1;
+        }
         long startTime = -1;
         checkConversionCanceled();
         while (!inputDone) {
+            int muxerTrackIndex;
             checkConversionCanceled();
             boolean eof = false;
+            info.size = extractor.readSampleData(buffer, 0);
             int index = extractor.getSampleTrackIndex();
-            if (index == trackIndex) {
-                info.size = extractor.readSampleData(buffer, 0);
+            if (index == videoTrackIndex) {
+                muxerTrackIndex = muxerVideoTrackIndex;
+            } else if (index == audioTrackIndex) {
+                muxerTrackIndex = muxerAudioTrackIndex;
+            } else {
+                muxerTrackIndex = -1;
+            }
+            if (muxerTrackIndex != -1) {
                 if (VERSION.SDK_INT < 21) {
                     buffer.position(0);
                     buffer.limit(info.size);
                 }
-                if (!isAudio) {
+                if (index != audioTrackIndex) {
                     byte[] array = buffer.array();
                     if (array != null) {
                         int offset = buffer.arrayOffset();
@@ -4068,7 +4093,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     eof = true;
                 }
                 if (info.size > 0 && !eof) {
-                    if (start > 0 && startTime == -1) {
+                    if (index == videoTrackIndex && start > 0 && startTime == -1) {
                         startTime = info.presentationTimeUs;
                     }
                     if (end < 0 || info.presentationTimeUs < end) {
@@ -4093,7 +4118,13 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 inputDone = true;
             }
         }
-        extractor.unselectTrack(trackIndex);
+        if (videoTrackIndex >= 0) {
+            extractor.unselectTrack(videoTrackIndex);
+        }
+        if (audioTrackIndex < 0) {
+            return startTime;
+        }
+        extractor.unselectTrack(audioTrackIndex);
         return startTime;
     }
 
@@ -4109,7 +4140,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean convertVideo(MessageObject messageObject) {
-        long videoStartTime;
         Throwable e;
         Throwable th;
         String videoPath = messageObject.videoEditedInfo.originalPath;
@@ -4122,6 +4152,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         int originalHeight = messageObject.videoEditedInfo.originalHeight;
         int bitrate = messageObject.videoEditedInfo.bitrate;
         int rotateRender = 0;
+        boolean isSecret = ((int) messageObject.getDialogId()) == 0;
         File file = new File(messageObject.messageOwner.attachPath);
         int temp;
         if (VERSION.SDK_INT < 18 && resultHeight > resultWidth && resultWidth != originalWidth && resultHeight != originalHeight) {
@@ -4161,7 +4192,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
         this.videoConvertFirstWrite = true;
         boolean error = false;
-        long videoStartTime2 = startTime;
         long time = System.currentTimeMillis();
         if (resultWidth == 0 || resultHeight == 0) {
             preferences.edit().putBoolean("isPreviousOk", true).commit();
@@ -4176,32 +4206,29 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             movie.setCacheFile(file);
             movie.setRotation(rotationValue);
             movie.setSize(resultWidth, resultHeight);
-            mP4Builder = new MP4Builder().createMovie(movie);
+            mP4Builder = new MP4Builder().createMovie(movie, isSecret);
             MediaExtractor extractor2 = new MediaExtractor();
             try {
                 extractor2.setDataSource(videoPath);
                 checkConversionCanceled();
-                long videoTime;
                 if (resultWidth == originalWidth && resultHeight == originalHeight && rotateRender == 0 && !messageObject.videoEditedInfo.roundVideo) {
-                    videoTime = readAndWriteTrack(messageObject, extractor2, mP4Builder, info, startTime, endTime, file, false);
-                    if (videoTime != -1) {
-                        videoStartTime = videoTime;
-                    }
-                    videoStartTime = videoStartTime2;
+                    readAndWriteTracks(messageObject, extractor2, mP4Builder, info, startTime, endTime, file, bitrate != -1);
                 } else {
-                    int videoIndex = selectTrack(extractor2, false);
+                    int videoIndex = findTrack(extractor2, false);
+                    int audioIndex = bitrate != -1 ? findTrack(extractor2, true) : -1;
                     if (videoIndex >= 0) {
                         int colorFormat;
                         MediaCodec decoder = null;
                         MediaCodec encoder = null;
                         InputSurface inputSurface = null;
                         OutputSurface outputSurface = null;
-                        videoTime = -1;
+                        long videoTime = -1;
                         boolean outputDone = false;
-                        boolean inputDone = false;
+                        boolean z = false;
                         boolean decoderDone = false;
                         int swapUV = 0;
                         int videoTrackIndex = -5;
+                        int audioTrackIndex = -5;
                         int processorType = 0;
                         String manufacturer = Build.MANUFACTURER.toLowerCase();
                         if (VERSION.SDK_INT < 18) {
@@ -4265,15 +4292,26 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                             }
                         }
                         extractor2.selectTrack(videoIndex);
+                        MediaFormat videoFormat = extractor2.getTrackFormat(videoIndex);
+                        ByteBuffer audioBuffer = null;
+                        if (audioIndex >= 0) {
+                            extractor2.selectTrack(audioIndex);
+                            MediaFormat audioFormat = extractor2.getTrackFormat(audioIndex);
+                            audioBuffer = ByteBuffer.allocateDirect(audioFormat.getInteger("max-input-size"));
+                            audioTrackIndex = mP4Builder.addTrack(audioFormat, true);
+                        }
                         if (startTime > 0) {
                             extractor2.seekTo(startTime, 0);
                         } else {
                             extractor2.seekTo(0, 0);
                         }
-                        MediaFormat inputFormat = extractor2.getTrackFormat(videoIndex);
                         MediaFormat outputFormat = MediaFormat.createVideoFormat("video/avc", resultWidth, resultHeight);
                         outputFormat.setInteger("color-format", colorFormat);
-                        outputFormat.setInteger("bitrate", bitrate > 0 ? bitrate : 921600);
+                        String str = "bitrate";
+                        if (bitrate <= 0) {
+                            bitrate = 921600;
+                        }
+                        outputFormat.setInteger(str, bitrate);
                         outputFormat.setInteger("frame-rate", 25);
                         outputFormat.setInteger("i-frame-interval", 10);
                         if (VERSION.SDK_INT < 18) {
@@ -4292,7 +4330,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 inputSurface = inputSurface2;
                                 FileLog.e(e);
                                 error = true;
-                                videoStartTime = videoStartTime2;
                                 extractor2.unselectTrack(videoIndex);
                                 if (outputSurface != null) {
                                     outputSurface.release();
@@ -4309,7 +4346,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                     encoder.release();
                                 }
                                 checkConversionCanceled();
-                                readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
                                 if (extractor2 != null) {
                                     extractor2.release();
                                 }
@@ -4332,18 +4368,17 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                             } catch (Throwable th2) {
                                 th = th2;
                                 extractor = extractor2;
-                                videoStartTime = videoStartTime2;
                             }
                         }
                         try {
                             encoder.start();
-                            decoder = MediaCodec.createDecoderByType(inputFormat.getString("mime"));
+                            decoder = MediaCodec.createDecoderByType(videoFormat.getString("mime"));
                             if (VERSION.SDK_INT >= 18) {
                                 outputSurface = new OutputSurface();
                             } else {
                                 outputSurface = new OutputSurface(resultWidth, resultHeight, rotateRender);
                             }
-                            decoder.configure(inputFormat, outputSurface.getSurface(), null, 0);
+                            decoder.configure(videoFormat, outputSurface.getSurface(), null, 0);
                             decoder.start();
                             ByteBuffer[] decoderInputBuffers = null;
                             ByteBuffer[] encoderOutputBuffers = null;
@@ -4359,7 +4394,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                             while (!outputDone) {
                                 int inputBufIndex;
                                 checkConversionCanceled();
-                                if (!inputDone) {
+                                if (!z) {
                                     boolean eof = false;
                                     int index = extractor2.getSampleTrackIndex();
                                     if (index == videoIndex) {
@@ -4374,10 +4409,30 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                             int chunkSize = extractor2.readSampleData(inputBuf, 0);
                                             if (chunkSize < 0) {
                                                 decoder.queueInputBuffer(inputBufIndex, 0, 0, 0, 4);
-                                                inputDone = true;
+                                                z = true;
                                             } else {
                                                 decoder.queueInputBuffer(inputBufIndex, 0, chunkSize, extractor2.getSampleTime(), 0);
                                                 extractor2.advance();
+                                            }
+                                        }
+                                    } else if (audioIndex != -1 && index == audioIndex) {
+                                        info.size = extractor2.readSampleData(audioBuffer, 0);
+                                        if (VERSION.SDK_INT < 21) {
+                                            audioBuffer.position(0);
+                                            audioBuffer.limit(info.size);
+                                        }
+                                        if (info.size >= 0) {
+                                            info.presentationTimeUs = extractor2.getSampleTime();
+                                            extractor2.advance();
+                                        } else {
+                                            info.size = 0;
+                                            z = true;
+                                        }
+                                        if (info.size > 0 && (endTime < 0 || info.presentationTimeUs < endTime)) {
+                                            info.offset = 0;
+                                            info.flags = extractor2.getSampleFlags();
+                                            if (mP4Builder.writeSampleData(audioTrackIndex, audioBuffer, info, false)) {
+                                                didWriteData(messageObject, file, false, false);
                                             }
                                         }
                                     } else if (index == -1) {
@@ -4387,7 +4442,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                         inputBufIndex = decoder.dequeueInputBuffer(2500);
                                         if (inputBufIndex >= 0) {
                                             decoder.queueInputBuffer(inputBufIndex, 0, 0, 0, 4);
-                                            inputDone = true;
+                                            z = true;
                                         }
                                     }
                                 }
@@ -4471,7 +4526,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                             } else {
                                                 boolean doRender = VERSION.SDK_INT >= 18 ? info.size != 0 : (info.size == 0 && info.presentationTimeUs == 0) ? false : true;
                                                 if (endTime > 0 && info.presentationTimeUs >= endTime) {
-                                                    inputDone = true;
+                                                    z = true;
                                                     decoderDone = true;
                                                     doRender = false;
                                                     info.flags |= 4;
@@ -4529,93 +4584,29 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                     }
                                 }
                             }
-                            if (videoTime != -1) {
-                                videoStartTime = videoTime;
-                            } else {
-                                videoStartTime = videoStartTime2;
-                            }
                         } catch (Exception e4) {
                             e3 = e4;
                         } catch (Throwable th22) {
                             th = th22;
                             extractor = extractor2;
-                            videoStartTime = videoStartTime2;
                         }
-                        try {
-                            extractor2.unselectTrack(videoIndex);
-                            if (outputSurface != null) {
-                                outputSurface.release();
-                            }
-                            if (inputSurface != null) {
-                                inputSurface.release();
-                            }
-                            if (decoder != null) {
-                                decoder.stop();
-                                decoder.release();
-                            }
-                            if (encoder != null) {
-                                encoder.stop();
-                                encoder.release();
-                            }
-                            checkConversionCanceled();
-                        } catch (Exception e5) {
-                            e3 = e5;
-                            extractor = extractor2;
-                            error = true;
-                            try {
-                                FileLog.e(e3);
-                                if (extractor != null) {
-                                    extractor.release();
-                                }
-                                if (mP4Builder != null) {
-                                    try {
-                                        mP4Builder.finishMovie();
-                                    } catch (Throwable e32) {
-                                        FileLog.e(e32);
-                                    }
-                                }
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.d("time = " + (System.currentTimeMillis() - time));
-                                }
-                                preferences.edit().putBoolean("isPreviousOk", true).commit();
-                                didWriteData(messageObject, file, true, error);
-                                return true;
-                            } catch (Throwable th3) {
-                                th = th3;
-                                if (extractor != null) {
-                                    extractor.release();
-                                }
-                                if (mP4Builder != null) {
-                                    try {
-                                        mP4Builder.finishMovie();
-                                    } catch (Throwable e322) {
-                                        FileLog.e(e322);
-                                    }
-                                }
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.d("time = " + (System.currentTimeMillis() - time));
-                                }
-                                throw th;
-                            }
-                        } catch (Throwable th4) {
-                            th = th4;
-                            extractor = extractor2;
-                            if (extractor != null) {
-                                extractor.release();
-                            }
-                            if (mP4Builder != null) {
-                                mP4Builder.finishMovie();
-                            }
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("time = " + (System.currentTimeMillis() - time));
-                            }
-                            throw th;
+                        extractor2.unselectTrack(videoIndex);
+                        if (outputSurface != null) {
+                            outputSurface.release();
                         }
+                        if (inputSurface != null) {
+                            inputSurface.release();
+                        }
+                        if (decoder != null) {
+                            decoder.stop();
+                            decoder.release();
+                        }
+                        if (encoder != null) {
+                            encoder.stop();
+                            encoder.release();
+                        }
+                        checkConversionCanceled();
                     }
-                    videoStartTime = videoStartTime2;
-                }
-                if (!(error || bitrate == -1)) {
-                    readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
                 }
                 if (extractor2 != null) {
                     extractor2.release();
@@ -4629,32 +4620,51 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 } else {
                     extractor = extractor2;
                 }
-            } catch (Exception e6) {
-                e322 = e6;
+            } catch (Exception e5) {
+                e3 = e5;
                 extractor = extractor2;
-                videoStartTime = videoStartTime2;
                 error = true;
-                FileLog.e(e322);
-                if (extractor != null) {
-                    extractor.release();
+                try {
+                    FileLog.e(e3);
+                    if (extractor != null) {
+                        extractor.release();
+                    }
+                    if (mP4Builder != null) {
+                        try {
+                            mP4Builder.finishMovie();
+                        } catch (Throwable e32) {
+                            FileLog.e(e32);
+                        }
+                    }
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("time = " + (System.currentTimeMillis() - time));
+                    }
+                    preferences.edit().putBoolean("isPreviousOk", true).commit();
+                    didWriteData(messageObject, file, true, error);
+                    return true;
+                } catch (Throwable th3) {
+                    th = th3;
+                    if (extractor != null) {
+                        extractor.release();
+                    }
+                    if (mP4Builder != null) {
+                        try {
+                            mP4Builder.finishMovie();
+                        } catch (Throwable e322) {
+                            FileLog.e(e322);
+                        }
+                    }
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("time = " + (System.currentTimeMillis() - time));
+                    }
+                    throw th;
                 }
-                if (mP4Builder != null) {
-                    mP4Builder.finishMovie();
-                }
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("time = " + (System.currentTimeMillis() - time));
-                }
-                preferences.edit().putBoolean("isPreviousOk", true).commit();
-                didWriteData(messageObject, file, true, error);
-                return true;
             } catch (Throwable th222) {
                 th = th222;
                 extractor = extractor2;
-                videoStartTime = videoStartTime2;
             }
-        } catch (Exception e7) {
-            e322 = e7;
-            videoStartTime = videoStartTime2;
+        } catch (Exception e6) {
+            e322 = e6;
             error = true;
             FileLog.e(e322);
             if (extractor != null) {
@@ -4669,19 +4679,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             preferences.edit().putBoolean("isPreviousOk", true).commit();
             didWriteData(messageObject, file, true, error);
             return true;
-        } catch (Throwable th5) {
-            th = th5;
-            videoStartTime = videoStartTime2;
-            if (extractor != null) {
-                extractor.release();
-            }
-            if (mP4Builder != null) {
-                mP4Builder.finishMovie();
-            }
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("time = " + (System.currentTimeMillis() - time));
-            }
-            throw th;
         }
         preferences.edit().putBoolean("isPreviousOk", true).commit();
         didWriteData(messageObject, file, true, error);

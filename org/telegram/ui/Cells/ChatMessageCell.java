@@ -897,7 +897,21 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         int y = (int) event.getY();
         boolean result = false;
         if (event.getAction() == 0) {
-            if (this.buttonState != -1 && x >= this.buttonX && x <= this.buttonX + AndroidUtilities.dp(48.0f) && y >= this.buttonY && y <= this.buttonY + AndroidUtilities.dp(48.0f)) {
+            boolean area2 = false;
+            int side = AndroidUtilities.dp(48.0f);
+            if (this.miniButtonState >= 0) {
+                int offset = AndroidUtilities.dp(27.0f);
+                if (x < this.buttonX + offset || x > (this.buttonX + offset) + side || y < this.buttonY + offset || y > (this.buttonY + offset) + side) {
+                    area2 = false;
+                } else {
+                    area2 = true;
+                }
+            }
+            if (area2) {
+                this.miniButtonPressed = 1;
+                invalidate();
+                result = true;
+            } else if (this.buttonState != -1 && x >= this.buttonX && x <= this.buttonX + side && y >= this.buttonY && y <= this.buttonY + side) {
                 this.buttonPressed = 1;
                 invalidate();
                 result = true;
@@ -916,34 +930,31 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     result = false;
                 }
             }
-            if (!this.imagePressed) {
-                return result;
+            if (this.imagePressed) {
+                if (this.currentMessageObject.isSendError()) {
+                    this.imagePressed = false;
+                    result = false;
+                } else if (this.currentMessageObject.type == 8 && this.buttonState == -1 && SharedConfig.autoplayGifs && this.photoImage.getAnimation() == null) {
+                    this.imagePressed = false;
+                    result = false;
+                } else if (this.currentMessageObject.type == 5 && this.buttonState != -1) {
+                    this.imagePressed = false;
+                    result = false;
+                }
             }
-            if (this.currentMessageObject.isSendError()) {
-                this.imagePressed = false;
-                return false;
-            } else if (this.currentMessageObject.type == 8 && this.buttonState == -1 && SharedConfig.autoplayGifs && this.photoImage.getAnimation() == null) {
-                this.imagePressed = false;
-                return false;
-            } else if (this.currentMessageObject.type != 5 || this.buttonState == -1) {
-                return result;
-            } else {
-                this.imagePressed = false;
-                return false;
-            }
-        } else if (event.getAction() != 1) {
-            return false;
-        } else {
+        } else if (event.getAction() == 1) {
             if (this.buttonPressed == 1) {
                 this.buttonPressed = 0;
                 playSoundEffect(0);
                 didPressedButton(false);
                 updateRadialProgressBackground();
                 invalidate();
-                return false;
-            } else if (!this.imagePressed) {
-                return false;
-            } else {
+            } else if (this.miniButtonPressed == 1) {
+                this.miniButtonPressed = 0;
+                playSoundEffect(0);
+                didPressedMiniButton(false);
+                invalidate();
+            } else if (this.imagePressed) {
                 this.imagePressed = false;
                 if (this.buttonState == -1 || this.buttonState == 2 || this.buttonState == 3) {
                     playSoundEffect(0);
@@ -953,9 +964,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     didPressedButton(false);
                 }
                 invalidate();
-                return false;
             }
         }
+        return result;
     }
 
     private boolean checkAudioMotionEvent(MotionEvent event) {
@@ -1664,6 +1675,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        setTranslationX(0.0f);
         this.avatarImage.onAttachedToWindow();
         this.avatarImage.setParentView((View) getParent());
         this.replyImageReceiver.onAttachedToWindow();
@@ -2030,19 +2042,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
+        int maxWidth;
         int a;
         String str;
-        int dp;
-        int linkPreviewMaxWidth;
-        String author;
         String description;
         Photo photo;
-        String type;
         int duration;
         boolean smallImage;
         TL_webDocument webDocument;
-        int additinalWidth;
-        int width;
+        TL_webDocument webDocument2;
+        int height;
         Throwable e;
         int lineLeft;
         boolean authorIsRTL;
@@ -2050,9 +2059,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         int textWidth;
         int maxPhotoWidth;
         ArrayList arrayList;
+        DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
-        int dp2;
+        int dp;
+        String fileName;
+        boolean autoDownload;
         int seconds;
         CharSequence str2;
         String price;
@@ -2077,7 +2089,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
         if (messageChanged || dataChanged || groupChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int i;
-            int height;
+            int dp2;
+            int linkPreviewMaxWidth;
+            int width;
             float f;
             int timeWidthTotal;
             int widthForCaption;
@@ -2193,11 +2207,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            int maxWidth;
             int count;
-            DocumentAttribute attribute;
-            String fileName;
-            boolean autoDownload;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -2325,8 +2335,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 setMessageObjectInternal(messageObject);
                 i = messageObject.textWidth;
-                dp = (this.hasGamePreview || this.hasInvoicePreview) ? AndroidUtilities.dp(10.0f) : 0;
-                this.backgroundWidth = dp + i;
+                dp2 = (this.hasGamePreview || this.hasInvoicePreview) ? AndroidUtilities.dp(10.0f) : 0;
+                this.backgroundWidth = dp2 + i;
                 this.totalHeight = (messageObject.textHeight + AndroidUtilities.dp(19.5f)) + this.namesOffset;
                 if (this.drawPinnedTop) {
                     this.namesOffset -= AndroidUtilities.dp(1.0f);
@@ -2336,8 +2346,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
                     String site_name;
                     String title;
+                    String author;
                     TLObject document;
-                    TL_webDocument webDocument2;
+                    String type;
+                    int additinalWidth;
                     int restLines;
                     int restLinesCount;
                     int durationWidth;
@@ -2382,12 +2394,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.currentMessageObject.photoThumbs != null) {
                                     z = true;
                                     this.isSmallImage = z;
-                                    webDocument2 = null;
+                                    webDocument = null;
                                 }
                             }
                             z = false;
                             this.isSmallImage = z;
-                            webDocument2 = null;
+                            webDocument = null;
                         }
                         smallImage = false;
                         if (type.equals("app")) {
@@ -2397,11 +2409,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         if (this.currentMessageObject.photoThumbs != null) {
                             z = true;
                             this.isSmallImage = z;
-                            webDocument2 = null;
+                            webDocument = null;
                         }
                         z = false;
                         this.isSmallImage = z;
-                        webDocument2 = null;
+                        webDocument = null;
                     } else if (this.hasInvoicePreview) {
                         site_name = messageObject.messageOwner.media.title;
                         title = null;
@@ -2409,12 +2421,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         photo = null;
                         author = null;
                         document = null;
-                        webDocument = ((TL_messageMediaInvoice) messageObject.messageOwner.media).photo;
+                        webDocument2 = ((TL_messageMediaInvoice) messageObject.messageOwner.media).photo;
                         duration = 0;
                         type = "invoice";
                         this.isSmallImage = false;
                         smallImage = false;
-                        webDocument2 = webDocument;
+                        webDocument = webDocument2;
                     } else {
                         TL_game game = messageObject.messageOwner.media.game;
                         site_name = game.title;
@@ -2427,7 +2439,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         type = "game";
                         this.isSmallImage = false;
                         smallImage = false;
-                        webDocument2 = null;
+                        webDocument = null;
                     }
                     if (this.hasInvoicePreview) {
                         additinalWidth = 0;
@@ -2573,15 +2585,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             if (document == null) {
                                 if (photo == null) {
-                                    if (webDocument2 != null) {
-                                        if (webDocument2.mime_type.startsWith("image/")) {
-                                            webDocument = webDocument2;
+                                    if (webDocument != null) {
+                                        if (webDocument.mime_type.startsWith("image/")) {
+                                            webDocument2 = webDocument;
                                         } else {
-                                            webDocument = null;
+                                            webDocument2 = null;
                                         }
                                         this.drawImageButton = false;
                                     }
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else {
                                     if (type != null) {
                                         if (type.equals("photo")) {
@@ -2589,36 +2601,36 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                             this.drawImageButton = z;
                                             arrayList = messageObject.photoThumbs;
                                             if (this.drawImageButton) {
-                                                dp = maxPhotoWidth;
+                                                dp2 = maxPhotoWidth;
                                             } else {
-                                                dp = AndroidUtilities.getPhotoSize();
+                                                dp2 = AndroidUtilities.getPhotoSize();
                                             }
-                                            this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                                            this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
                                             this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                             if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                                 this.currentPhotoObjectThumb = null;
-                                                webDocument = webDocument2;
+                                                webDocument2 = webDocument;
                                             }
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
                                     }
                                     z = false;
                                     this.drawImageButton = z;
                                     arrayList = messageObject.photoThumbs;
                                     if (this.drawImageButton) {
-                                        dp = maxPhotoWidth;
+                                        dp2 = maxPhotoWidth;
                                     } else {
-                                        dp = AndroidUtilities.getPhotoSize();
+                                        dp2 = AndroidUtilities.getPhotoSize();
                                     }
                                     if (this.drawImageButton) {
                                     }
-                                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
                                     this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                     if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                         this.currentPhotoObjectThumb = null;
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 }
                             } else if (!MessageObject.isGifDocument(document)) {
                                 if (!SharedConfig.autoplayGifs) {
@@ -2635,12 +2647,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
+                                dp = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp;
+                                photoSize.w = dp;
                                 this.documentAttach = document;
                                 this.documentAttachType = 2;
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else if (!MessageObject.isVideoDocument(document)) {
                                 this.currentPhotoObject = document.thumb;
                                 for (a = 0; a < document.attributes.size(); a++) {
@@ -2653,11 +2665,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
+                                dp = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp;
+                                photoSize.w = dp;
                                 createDocumentLayout(0, messageObject);
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else if (!MessageObject.isStickerDocument(document)) {
                                 this.currentPhotoObject = document.thumb;
                                 for (a = 0; a < document.attributes.size(); a++) {
@@ -2670,17 +2682,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
+                                dp = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp;
+                                photoSize.w = dp;
                                 this.documentAttach = document;
                                 this.documentAttachType = 6;
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else if (MessageObject.isRoundVideoDocument(document)) {
                                 this.currentPhotoObject = document.thumb;
                                 this.documentAttach = document;
                                 this.documentAttachType = 7;
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else {
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                 if (!MessageObject.isStickerDocument(document)) {
@@ -2693,7 +2705,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         this.totalHeight += AndroidUtilities.dp(44.0f);
                                         this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
                                         calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     } else if (MessageObject.isMusicDocument(document)) {
                                         durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
                                         this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
@@ -2704,7 +2716,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                         maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                         calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     } else {
                                         createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
                                         this.drawImageButton = true;
@@ -2712,17 +2724,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                             this.totalHeight += AndroidUtilities.dp(100.0f);
                                             this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
                                             this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         } else {
                                             this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
                                             this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                                             this.totalHeight += AndroidUtilities.dp(64.0f);
                                             this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
                                     }
                                 }
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             }
                             if (this.currentPhotoObject == null) {
                             }
@@ -2754,7 +2766,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         this.currentPhotoObjectThumb.size = -1;
                                     }
                                 } else {
-                                    webDocument.size = -1;
+                                    webDocument2.size = -1;
                                 }
                                 if (!smallImage) {
                                 }
@@ -2773,8 +2785,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument == null) {
-                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, 1);
+                                if (webDocument2 == null) {
+                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, 1);
                                 } else if (this.documentAttachType != 6) {
                                     this.photoImage.setImage(this.documentAttach, null, this.currentPhotoFilter, null, this.currentPhotoObject == null ? this.currentPhotoObject.location : null, "b1", this.documentAttach.size, "webp", 1);
                                 } else if (this.documentAttachType != 4) {
@@ -3030,7 +3042,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject == null) {
-                                webDocument.size = -1;
+                                webDocument2.size = -1;
                             } else {
                                 this.currentPhotoObject.size = -1;
                                 if (this.currentPhotoObjectThumb != null) {
@@ -3054,8 +3066,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.photoImage.setImageCoords(0, 0, width, height);
                             this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                             this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                            if (webDocument == null) {
-                                this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, 1);
+                            if (webDocument2 == null) {
+                                this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, 1);
                             } else if (this.documentAttachType != 6) {
                                 if (this.currentPhotoObject == null) {
                                 }
@@ -3413,12 +3425,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         }
                                         photoSize = this.currentPhotoObject;
                                         photoSize2 = this.currentPhotoObject;
-                                        dp2 = AndroidUtilities.dp(150.0f);
-                                        photoSize2.h = dp2;
-                                        photoSize.w = dp2;
+                                        dp = AndroidUtilities.dp(150.0f);
+                                        photoSize2.h = dp;
+                                        photoSize.w = dp;
                                         this.documentAttach = document;
                                         this.documentAttachType = 2;
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     } else if (!MessageObject.isVideoDocument(document)) {
                                         this.currentPhotoObject = document.thumb;
                                         for (a = 0; a < document.attributes.size(); a++) {
@@ -3431,11 +3443,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         }
                                         photoSize = this.currentPhotoObject;
                                         photoSize2 = this.currentPhotoObject;
-                                        dp2 = AndroidUtilities.dp(150.0f);
-                                        photoSize2.h = dp2;
-                                        photoSize.w = dp2;
+                                        dp = AndroidUtilities.dp(150.0f);
+                                        photoSize2.h = dp;
+                                        photoSize.w = dp;
                                         createDocumentLayout(0, messageObject);
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     } else if (!MessageObject.isStickerDocument(document)) {
                                         this.currentPhotoObject = document.thumb;
                                         for (a = 0; a < document.attributes.size(); a++) {
@@ -3448,17 +3460,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         }
                                         photoSize = this.currentPhotoObject;
                                         photoSize2 = this.currentPhotoObject;
-                                        dp2 = AndroidUtilities.dp(150.0f);
-                                        photoSize2.h = dp2;
-                                        photoSize.w = dp2;
+                                        dp = AndroidUtilities.dp(150.0f);
+                                        photoSize2.h = dp;
+                                        photoSize.w = dp;
                                         this.documentAttach = document;
                                         this.documentAttachType = 6;
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     } else if (MessageObject.isRoundVideoDocument(document)) {
                                         this.currentPhotoObject = document.thumb;
                                         this.documentAttach = document;
                                         this.documentAttachType = 7;
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     } else {
                                         calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                         if (MessageObject.isStickerDocument(document)) {
@@ -3471,7 +3483,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                                 this.totalHeight += AndroidUtilities.dp(44.0f);
                                                 this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
                                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                                webDocument = webDocument2;
+                                                webDocument2 = webDocument;
                                             } else if (MessageObject.isMusicDocument(document)) {
                                                 durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
                                                 this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
@@ -3482,7 +3494,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                                 maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                                 maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                                webDocument = webDocument2;
+                                                webDocument2 = webDocument;
                                             } else {
                                                 createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
                                                 this.drawImageButton = true;
@@ -3490,17 +3502,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                                     this.totalHeight += AndroidUtilities.dp(100.0f);
                                                     this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
                                                     this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                                    webDocument = webDocument2;
+                                                    webDocument2 = webDocument;
                                                 } else {
                                                     this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
                                                     this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                                                     this.totalHeight += AndroidUtilities.dp(64.0f);
                                                     this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                                    webDocument = webDocument2;
+                                                    webDocument2 = webDocument;
                                                 }
                                             }
                                         }
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
                                 } else if (photo == null) {
                                     if (type != null) {
@@ -3509,48 +3521,48 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                             this.drawImageButton = z;
                                             arrayList = messageObject.photoThumbs;
                                             if (this.drawImageButton) {
-                                                dp = AndroidUtilities.getPhotoSize();
+                                                dp2 = AndroidUtilities.getPhotoSize();
                                             } else {
-                                                dp = maxPhotoWidth;
+                                                dp2 = maxPhotoWidth;
                                             }
                                             if (this.drawImageButton) {
                                             }
-                                            this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                                            this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
                                             this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                             if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                                 this.currentPhotoObjectThumb = null;
-                                                webDocument = webDocument2;
+                                                webDocument2 = webDocument;
                                             }
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
                                     }
                                     z = false;
                                     this.drawImageButton = z;
                                     arrayList = messageObject.photoThumbs;
                                     if (this.drawImageButton) {
-                                        dp = maxPhotoWidth;
+                                        dp2 = maxPhotoWidth;
                                     } else {
-                                        dp = AndroidUtilities.getPhotoSize();
+                                        dp2 = AndroidUtilities.getPhotoSize();
                                     }
                                     if (this.drawImageButton) {
                                     }
-                                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
                                     this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                     if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                         this.currentPhotoObjectThumb = null;
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else {
-                                    if (webDocument2 != null) {
-                                        if (webDocument2.mime_type.startsWith("image/")) {
-                                            webDocument = null;
+                                    if (webDocument != null) {
+                                        if (webDocument.mime_type.startsWith("image/")) {
+                                            webDocument2 = null;
                                         } else {
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
                                         this.drawImageButton = false;
                                     }
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 }
                                 if (this.currentPhotoObject == null) {
                                 }
@@ -3584,7 +3596,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                             this.currentPhotoObjectThumb.size = -1;
                                         }
                                     } else {
-                                        webDocument.size = -1;
+                                        webDocument2.size = -1;
                                     }
                                     if (smallImage) {
                                     }
@@ -3603,8 +3615,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     this.photoImage.setImageCoords(0, 0, width, height);
                                     this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                     this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                    if (webDocument == null) {
-                                        this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, 1);
+                                    if (webDocument2 == null) {
+                                        this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, 1);
                                     } else if (this.documentAttachType != 6) {
                                         if (this.currentPhotoObject == null) {
                                         }
@@ -3866,7 +3878,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                                 if (this.currentPhotoObject == null) {
-                                    webDocument.size = -1;
+                                    webDocument2.size = -1;
                                 } else {
                                     this.currentPhotoObject.size = -1;
                                     if (this.currentPhotoObjectThumb != null) {
@@ -3890,8 +3902,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument == null) {
-                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, 1);
+                                if (webDocument2 == null) {
+                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, 1);
                                 } else if (this.documentAttachType != 6) {
                                     if (this.currentPhotoObject == null) {
                                     }
@@ -4197,15 +4209,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             if (document == null) {
                                 if (photo == null) {
-                                    if (webDocument2 != null) {
-                                        if (webDocument2.mime_type.startsWith("image/")) {
-                                            webDocument = webDocument2;
+                                    if (webDocument != null) {
+                                        if (webDocument.mime_type.startsWith("image/")) {
+                                            webDocument2 = webDocument;
                                         } else {
-                                            webDocument = null;
+                                            webDocument2 = null;
                                         }
                                         this.drawImageButton = false;
                                     }
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else {
                                     if (type != null) {
                                         if (type.equals("photo")) {
@@ -4213,38 +4225,38 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                             this.drawImageButton = z;
                                             arrayList = messageObject.photoThumbs;
                                             if (this.drawImageButton) {
-                                                dp = AndroidUtilities.getPhotoSize();
+                                                dp2 = AndroidUtilities.getPhotoSize();
                                             } else {
-                                                dp = maxPhotoWidth;
+                                                dp2 = maxPhotoWidth;
                                             }
                                             if (this.drawImageButton) {
                                             }
-                                            this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                                            this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
                                             this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                             if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                                 this.currentPhotoObjectThumb = null;
-                                                webDocument = webDocument2;
+                                                webDocument2 = webDocument;
                                             }
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
                                     }
                                     z = false;
                                     this.drawImageButton = z;
                                     arrayList = messageObject.photoThumbs;
                                     if (this.drawImageButton) {
-                                        dp = maxPhotoWidth;
+                                        dp2 = maxPhotoWidth;
                                     } else {
-                                        dp = AndroidUtilities.getPhotoSize();
+                                        dp2 = AndroidUtilities.getPhotoSize();
                                     }
                                     if (this.drawImageButton) {
                                     }
-                                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
                                     this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                     if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                         this.currentPhotoObjectThumb = null;
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 }
                             } else if (!MessageObject.isGifDocument(document)) {
                                 if (SharedConfig.autoplayGifs) {
@@ -4263,12 +4275,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
+                                dp = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp;
+                                photoSize.w = dp;
                                 this.documentAttach = document;
                                 this.documentAttachType = 2;
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else if (!MessageObject.isVideoDocument(document)) {
                                 this.currentPhotoObject = document.thumb;
                                 for (a = 0; a < document.attributes.size(); a++) {
@@ -4281,11 +4293,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
+                                dp = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp;
+                                photoSize.w = dp;
                                 createDocumentLayout(0, messageObject);
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else if (!MessageObject.isStickerDocument(document)) {
                                 this.currentPhotoObject = document.thumb;
                                 for (a = 0; a < document.attributes.size(); a++) {
@@ -4298,12 +4310,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
+                                dp = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp;
+                                photoSize.w = dp;
                                 this.documentAttach = document;
                                 this.documentAttachType = 6;
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else if (MessageObject.isRoundVideoDocument(document)) {
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                 if (MessageObject.isStickerDocument(document)) {
@@ -4316,7 +4328,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         this.totalHeight += AndroidUtilities.dp(44.0f);
                                         this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
                                         calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     } else if (MessageObject.isMusicDocument(document)) {
                                         createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
                                         this.drawImageButton = true;
@@ -4325,12 +4337,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                             this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                                             this.totalHeight += AndroidUtilities.dp(64.0f);
                                             this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         } else {
                                             this.totalHeight += AndroidUtilities.dp(100.0f);
                                             this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
                                             this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
                                     } else {
                                         durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
@@ -4342,15 +4354,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                         maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                         calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
                                 }
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else {
                                 this.currentPhotoObject = document.thumb;
                                 this.documentAttach = document;
                                 this.documentAttachType = 7;
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             }
                             if (this.currentPhotoObject == null) {
                             }
@@ -4384,7 +4396,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         this.currentPhotoObjectThumb.size = -1;
                                     }
                                 } else {
-                                    webDocument.size = -1;
+                                    webDocument2.size = -1;
                                 }
                                 if (smallImage) {
                                 }
@@ -4403,8 +4415,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument == null) {
-                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, 1);
+                                if (webDocument2 == null) {
+                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, 1);
                                 } else if (this.documentAttachType != 6) {
                                     if (this.currentPhotoObject == null) {
                                     }
@@ -4666,7 +4678,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject == null) {
-                                webDocument.size = -1;
+                                webDocument2.size = -1;
                             } else {
                                 this.currentPhotoObject.size = -1;
                                 if (this.currentPhotoObjectThumb != null) {
@@ -4690,8 +4702,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.photoImage.setImageCoords(0, 0, width, height);
                             this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                             this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                            if (webDocument == null) {
-                                this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, 1);
+                            if (webDocument2 == null) {
+                                this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, 1);
                             } else if (this.documentAttachType != 6) {
                                 if (this.currentPhotoObject == null) {
                                 }
@@ -5022,14 +5034,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp2 = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp2;
-                                    photoSize.w = dp2;
+                                    dp = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp;
+                                    photoSize.w = dp;
                                 }
                             }
                             this.documentAttach = document;
                             this.documentAttachType = 2;
-                            webDocument = webDocument2;
+                            webDocument2 = webDocument;
                         } else if (!MessageObject.isVideoDocument(document)) {
                             this.currentPhotoObject = document.thumb;
                             if (this.currentPhotoObject != null && (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0)) {
@@ -5044,13 +5056,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp2 = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp2;
-                                    photoSize.w = dp2;
+                                    dp = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp;
+                                    photoSize.w = dp;
                                 }
                             }
                             createDocumentLayout(0, messageObject);
-                            webDocument = webDocument2;
+                            webDocument2 = webDocument;
                         } else if (!MessageObject.isStickerDocument(document)) {
                             this.currentPhotoObject = document.thumb;
                             if (this.currentPhotoObject != null && (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0)) {
@@ -5065,19 +5077,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp2 = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp2;
-                                    photoSize.w = dp2;
+                                    dp = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp;
+                                    photoSize.w = dp;
                                 }
                             }
                             this.documentAttach = document;
                             this.documentAttachType = 6;
-                            webDocument = webDocument2;
+                            webDocument2 = webDocument;
                         } else if (MessageObject.isRoundVideoDocument(document)) {
                             this.currentPhotoObject = document.thumb;
                             this.documentAttach = document;
                             this.documentAttachType = 7;
-                            webDocument = webDocument2;
+                            webDocument2 = webDocument;
                         } else {
                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                             if (MessageObject.isStickerDocument(document)) {
@@ -5090,7 +5102,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     this.totalHeight += AndroidUtilities.dp(44.0f);
                                     this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else if (MessageObject.isMusicDocument(document)) {
                                     durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
                                     this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
@@ -5105,7 +5117,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                     }
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else {
                                     createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
                                     this.drawImageButton = true;
@@ -5113,17 +5125,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         this.totalHeight += AndroidUtilities.dp(100.0f);
                                         this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
                                         this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     } else {
                                         this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
                                         this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                                         this.totalHeight += AndroidUtilities.dp(64.0f);
                                         this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
                                 }
                             }
-                            webDocument = webDocument2;
+                            webDocument2 = webDocument;
                         }
                     } else if (photo == null) {
                         if (type != null) {
@@ -5132,51 +5144,51 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.drawImageButton = z;
                                 arrayList = messageObject.photoThumbs;
                                 if (this.drawImageButton) {
-                                    dp = AndroidUtilities.getPhotoSize();
+                                    dp2 = AndroidUtilities.getPhotoSize();
                                 } else {
-                                    dp = maxPhotoWidth;
+                                    dp2 = maxPhotoWidth;
                                 }
                                 if (this.drawImageButton) {
                                 }
-                                this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                                this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
                                 this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                 if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                     this.currentPhotoObjectThumb = null;
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 }
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             }
                         }
                         z = false;
                         this.drawImageButton = z;
                         arrayList = messageObject.photoThumbs;
                         if (this.drawImageButton) {
-                            dp = maxPhotoWidth;
+                            dp2 = maxPhotoWidth;
                         } else {
-                            dp = AndroidUtilities.getPhotoSize();
+                            dp2 = AndroidUtilities.getPhotoSize();
                         }
                         if (this.drawImageButton) {
                         }
-                        this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
+                        this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
                         this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                         if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                             this.currentPhotoObjectThumb = null;
-                            webDocument = webDocument2;
+                            webDocument2 = webDocument;
                         }
-                        webDocument = webDocument2;
+                        webDocument2 = webDocument;
                     } else {
-                        if (webDocument2 != null) {
-                            if (webDocument2.mime_type.startsWith("image/")) {
-                                webDocument = null;
+                        if (webDocument != null) {
+                            if (webDocument.mime_type.startsWith("image/")) {
+                                webDocument2 = null;
                             } else {
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             }
                             this.drawImageButton = false;
                         }
-                        webDocument = webDocument2;
+                        webDocument2 = webDocument;
                     }
                     if (!(this.documentAttachType == 5 || this.documentAttachType == 3 || this.documentAttachType == 1)) {
-                        if (this.currentPhotoObject == null || webDocument != null) {
+                        if (this.currentPhotoObject == null || webDocument2 != null) {
                             if (type != null) {
                                 if (type.equals("photo")) {
                                     if (!type.equals("document") || this.documentAttachType == 6) {
@@ -5209,7 +5221,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         this.currentPhotoObjectThumb.size = -1;
                                     }
                                 } else {
-                                    webDocument.size = -1;
+                                    webDocument2.size = -1;
                                 }
                                 if (smallImage || this.documentAttachType == 7) {
                                     height = maxPhotoWidth;
@@ -5244,8 +5256,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument == null) {
-                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, 1);
+                                if (webDocument2 == null) {
+                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, 1);
                                 } else if (this.documentAttachType != 6) {
                                     if (this.currentPhotoObject == null) {
                                     }
@@ -5327,7 +5339,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                             maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject == null) {
-                                webDocument.size = -1;
+                                webDocument2.size = -1;
                             } else {
                                 this.currentPhotoObject.size = -1;
                                 if (this.currentPhotoObjectThumb != null) {
@@ -5351,8 +5363,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             this.photoImage.setImageCoords(0, 0, width, height);
                             this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                             this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                            if (webDocument == null) {
-                                this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, 1);
+                            if (webDocument2 == null) {
+                                this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, 1);
                             } else if (this.documentAttachType != 6) {
                                 if (this.currentPhotoObject == null) {
                                 }
@@ -5739,11 +5751,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         String str4 = this.currentUrl;
                         Drawable[] drawableArr = Theme.chat_locationDrawable;
                         if (messageObject.isOutOwner()) {
-                            dp = 1;
+                            dp2 = 1;
                         } else {
-                            dp = 0;
+                            dp2 = 0;
                         }
-                        imageReceiver3.setImage(str4, null, drawableArr[dp], null, 0);
+                        imageReceiver3.setImage(str4, null, drawableArr[dp2], null, 0);
                     }
                 } else if (messageObject.type == 13) {
                     float maxWidth2;
@@ -6236,9 +6248,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             } else {
                 HashMap<String, BotButton> oldByPosition;
                 int rows = messageObject.messageOwner.reply_markup.rows.size();
-                dp = (AndroidUtilities.dp(48.0f) * rows) + AndroidUtilities.dp(1.0f);
-                this.keyboardHeight = dp;
-                this.substractBackgroundHeight = dp;
+                dp2 = (AndroidUtilities.dp(48.0f) * rows) + AndroidUtilities.dp(1.0f);
+                this.keyboardHeight = dp2;
+                this.substractBackgroundHeight = dp2;
                 this.widthForButtons = this.backgroundWidth;
                 boolean fullWidth = false;
                 if (messageObject.wantedBotKeyboardWidth > this.widthForButtons) {
@@ -7445,16 +7457,24 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     }
 
     private Drawable getMiniDrawableForCurrentState() {
+        int i = 1;
         if (this.miniButtonState < 0) {
             return null;
         }
-        if (this.documentAttachType != 3 && this.documentAttachType != 5) {
+        if (this.documentAttachType == 3 || this.documentAttachType == 5) {
+            this.radialProgress.setAlphaForPrevious(false);
+            Drawable[] drawableArr = Theme.chat_fileMiniStatesDrawable[this.currentMessageObject.isOutOwner() ? this.miniButtonState : this.miniButtonState + 2];
+            int i2 = (isDrawSelectedBackground() || this.miniButtonPressed != 0) ? 1 : 0;
+            return drawableArr[i2];
+        } else if (this.documentAttachType != 4) {
             return null;
+        } else {
+            Drawable[] drawableArr2 = Theme.chat_fileMiniStatesDrawable[this.miniButtonState + 4];
+            if (this.miniButtonPressed == 0) {
+                i = 0;
+            }
+            return drawableArr2[i];
         }
-        this.radialProgress.setAlphaForPrevious(false);
-        Drawable[] drawableArr = Theme.chat_fileMiniStatesDrawable[this.currentMessageObject.isOutOwner() ? this.miniButtonState : this.miniButtonState + 2];
-        int i = (isDrawSelectedBackground() || this.miniButtonPressed != 0) ? 1 : 0;
-        return drawableArr[i];
     }
 
     private Drawable getDrawableForCurrentState() {
@@ -7601,8 +7621,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
         boolean fromBot = this.currentMessageObject.messageOwner.params != null && this.currentMessageObject.messageOwner.params.containsKey("query_id");
         Float progress;
+        RadialProgress radialProgress;
+        Drawable miniDrawableForCurrentState;
+        boolean z;
         if (this.documentAttachType == 3 || this.documentAttachType == 5) {
-            RadialProgress radialProgress;
             if ((this.currentMessageObject.isOut() && this.currentMessageObject.isSending()) || (this.currentMessageObject.isSendError() && fromBot)) {
                 DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(this.currentMessageObject.messageOwner.attachPath, this.currentMessageObject, this);
                 this.buttonState = 4;
@@ -7624,7 +7646,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     radialProgress.setProgress(floatValue, false);
                 }
             } else if (this.hasMiniProgress != 0) {
-                boolean z;
                 this.radialProgress.setMiniProgressBackgroundColor(Theme.getColor(this.currentMessageObject.isOutOwner() ? Theme.key_chat_outLoader : Theme.key_chat_inLoader));
                 playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
                 if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
@@ -7652,13 +7673,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     }
                 }
                 radialProgress = this.radialProgress;
-                Drawable miniDrawableForCurrentState = getMiniDrawableForCurrentState();
+                miniDrawableForCurrentState = getMiniDrawableForCurrentState();
                 if (this.miniButtonState == 1) {
                     z = true;
                 } else {
                     z = false;
                 }
-                radialProgress.setMiniBackground(miniDrawableForCurrentState, z, animated);
+                radialProgress.setMiniBackground(miniDrawableForCurrentState, z, animated, AndroidUtilities.dp(44.0f));
             } else if (fileExists) {
                 DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
                 playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
@@ -7691,7 +7712,37 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if (!(this.currentMessageObject.messageOwner.attachPath == null || this.currentMessageObject.messageOwner.attachPath.length() == 0)) {
                     DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
                 }
-                if (fileExists) {
+                if (this.hasMiniProgress != 0) {
+                    this.radialProgress.setMiniProgressBackgroundColor(Theme.getColor(Theme.key_chat_inLoaderPhoto));
+                    this.buttonState = 3;
+                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
+                    if (this.hasMiniProgress == 1) {
+                        DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+                        this.miniButtonState = -1;
+                    } else {
+                        DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.currentMessageObject, this);
+                        if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
+                            this.miniButtonState = 1;
+                            progress = ImageLoader.getInstance().getFileProgress(fileName);
+                            if (progress != null) {
+                                this.radialProgress.setProgress(progress.floatValue(), animated);
+                            } else {
+                                this.radialProgress.setProgress(0.0f, animated);
+                            }
+                        } else {
+                            this.radialProgress.setProgress(0.0f, animated);
+                            this.miniButtonState = 0;
+                        }
+                    }
+                    radialProgress = this.radialProgress;
+                    miniDrawableForCurrentState = getMiniDrawableForCurrentState();
+                    if (this.miniButtonState == 1) {
+                        z = true;
+                    } else {
+                        z = false;
+                    }
+                    radialProgress.setMiniBackground(miniDrawableForCurrentState, z, animated, AndroidUtilities.dp(48.0f));
+                } else if (fileExists) {
                     DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
                     if (this.currentMessageObject.isSecretPhoto()) {
                         this.buttonState = -1;
@@ -7797,30 +7848,29 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             return;
         }
         if (this.hasMiniProgress == 0) {
-            this.radialProgress.setMiniBackground(null, false, animated);
+            this.radialProgress.setMiniBackground(null, false, animated, 0);
         }
     }
 
     private void didPressedMiniButton(boolean animated) {
         if (this.miniButtonState == 0) {
+            this.miniButtonState = 1;
+            this.radialProgress.setProgress(0.0f, false);
             if (this.documentAttachType == 3 || this.documentAttachType == 5) {
-                this.miniButtonState = 1;
-                this.radialProgress.setProgress(0.0f, false);
                 FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, 0);
-                this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
-                invalidate();
+            } else if (this.documentAttachType == 4) {
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
             }
-        } else if (this.miniButtonState != 1) {
-        } else {
-            if (this.documentAttachType == 3 || this.documentAttachType == 5) {
-                if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
-                    MediaController.getInstance().cleanupPlayer(true, true);
-                }
-                this.miniButtonState = 0;
-                FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.documentAttach);
-                this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
-                invalidate();
+            this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false, AndroidUtilities.dp(44.0f));
+            invalidate();
+        } else if (this.miniButtonState == 1) {
+            if ((this.documentAttachType == 3 || this.documentAttachType == 5) && MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
+                MediaController.getInstance().cleanupPlayer(true, true);
             }
+            this.miniButtonState = 0;
+            FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.documentAttach);
+            this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false, AndroidUtilities.dp(44.0f));
+            invalidate();
         }
     }
 
@@ -7883,7 +7933,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
                     this.miniButtonState = 1;
                     this.radialProgress.setProgress(0.0f, false);
-                    this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+                    this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false, AndroidUtilities.dp(44.0f));
                 }
                 this.buttonState = 1;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
@@ -7927,6 +7977,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.buttonState = -1;
             this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
         } else if (this.buttonState == 3) {
+            if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
+                this.miniButtonState = 1;
+                this.radialProgress.setProgress(0.0f, false);
+                this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false, AndroidUtilities.dp(48.0f));
+            }
             this.delegate.didPressedImage(this);
         } else if (this.buttonState != 4) {
         } else {
@@ -7994,6 +8049,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     updateButtonState(false);
                 }
             } else if (this.buttonState != 4) {
+                updateButtonState(false);
+            }
+        } else if (this.hasMiniProgress != 0) {
+            if (this.miniButtonState != 1) {
                 updateButtonState(false);
             }
         } else if (this.buttonState != 1) {
@@ -8953,7 +9012,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     }
 
     public void drawTimeLayout(Canvas canvas) {
-        if ((this.drawTime && !this.groupPhotoInvisible) || !this.mediaBackground) {
+        if (((this.drawTime && !this.groupPhotoInvisible) || !this.mediaBackground) && this.timeLayout != null) {
             int x;
             int y;
             if (this.currentMessageObject.type == 5) {

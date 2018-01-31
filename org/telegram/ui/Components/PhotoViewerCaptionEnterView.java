@@ -34,7 +34,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.TLRPC.Document;
@@ -48,7 +47,6 @@ import org.telegram.ui.Components.SizeNotifierFrameLayoutPhoto.SizeNotifierFrame
 public class PhotoViewerCaptionEnterView extends FrameLayout implements NotificationCenterDelegate, SizeNotifierFrameLayoutPhotoDelegate {
     private int audioInterfaceState;
     private final int captionMaxLength = Callback.DEFAULT_DRAG_ANIMATION_DURATION;
-    private int currentAccount = UserConfig.selectedAccount;
     private ActionMode currentActionMode;
     private PhotoViewerCaptionEnterViewDelegate delegate;
     private ImageView emojiButton;
@@ -296,7 +294,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public void onCreate() {
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
         this.sizeNotifierLayout.setDelegate(this);
     }
 
@@ -306,7 +304,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             closeKeyboard();
         }
         this.keyboardVisible = false;
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.emojiDidLoaded);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
         if (this.sizeNotifierLayout != null) {
             this.sizeNotifierLayout.setDelegate(null);
         }

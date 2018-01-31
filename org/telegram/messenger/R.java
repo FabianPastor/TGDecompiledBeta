@@ -375,6 +375,8 @@ public final class R {
         public static final int ic_storage_gallery = NUM;
         public static final int ic_video = NUM;
         public static final int ic_volume_up_white_24dp = NUM;
+        public static final int inline_video_pause = NUM;
+        public static final int inline_video_play = NUM;
         public static final int instant_camera = NUM;
         public static final int intro_fast_arrow = NUM;
         public static final int intro_fast_arrow_shadow = NUM;
@@ -518,7 +520,6 @@ public final class R {
         public static final int passcode_check = NUM;
         public static final int passcode_delete = NUM;
         public static final int passcode_logo = NUM;
-        public static final int pausevideo = NUM;
         public static final int permissions_contacts = NUM;
         public static final int phone_activate = NUM;
         public static final int phone_change = NUM;
@@ -550,7 +551,6 @@ public final class R {
         public static final int place_x = NUM;
         public static final int play_big = NUM;
         public static final int player = NUM;
-        public static final int playvideo = NUM;
         public static final int plus = NUM;
         public static final int popup_fixed = NUM;
         public static final int popup_fixed_alert = NUM;
@@ -1011,7 +1011,6 @@ public final class R {
         public static final int BytesSent = NUM;
         public static final int CacheClear = NUM;
         public static final int CacheEmpty = NUM;
-        public static final int CacheStreamFile = NUM;
         public static final int CalculatingSize = NUM;
         public static final int Call = NUM;
         public static final int CallAgain = NUM;
@@ -2306,6 +2305,7 @@ public final class R {
         public static final int Stickers_two = NUM;
         public static final int Stickers_zero = NUM;
         public static final int StopAllLocationSharings = NUM;
+        public static final int StopDownload = NUM;
         public static final int StopLiveLocation = NUM;
         public static final int StopLiveLocationAlertAll = NUM;
         public static final int StopLiveLocationAlertToGroup = NUM;

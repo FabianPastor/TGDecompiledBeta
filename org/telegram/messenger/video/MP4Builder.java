@@ -50,6 +50,7 @@ public class MP4Builder {
     private FileOutputStream fos = null;
     private InterleaveChunkMdat mdat = null;
     private ByteBuffer sizeBuffer = null;
+    private boolean splitMdat;
     private HashMap<Track, long[]> track2SampleSizes = new HashMap();
     private boolean writeNewMdat = true;
     private long writedSinceLastMdat = 0;
@@ -122,7 +123,7 @@ public class MP4Builder {
         }
     }
 
-    public MP4Builder createMovie(Mp4Movie mp4Movie) throws Exception {
+    public MP4Builder createMovie(Mp4Movie mp4Movie, boolean split) throws Exception {
         this.currentMp4Movie = mp4Movie;
         this.fos = new FileOutputStream(mp4Movie.getCacheFile());
         this.fc = this.fos.getChannel();
@@ -130,6 +131,7 @@ public class MP4Builder {
         fileTypeBox.getBox(this.fc);
         this.dataOffset += fileTypeBox.getSize();
         this.writedSinceLastMdat += this.dataOffset;
+        this.splitMdat = split;
         this.mdat = new InterleaveChunkMdat();
         this.sizeBuffer = ByteBuffer.allocateDirect(4);
         return this;
@@ -159,8 +161,10 @@ public class MP4Builder {
         this.writedSinceLastMdat += (long) bufferInfo.size;
         boolean flush = false;
         if (this.writedSinceLastMdat >= 32768) {
-            flushCurrentMdat();
-            this.writeNewMdat = true;
+            if (this.splitMdat) {
+                flushCurrentMdat();
+                this.writeNewMdat = true;
+            }
             flush = true;
             this.writedSinceLastMdat -= 32768;
         }

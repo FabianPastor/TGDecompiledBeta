@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import android.text.TextUtils;
 import android.util.SparseArray;
 import java.io.File;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class FileLoader {
     public static final int MEDIA_DIR_VIDEO = 2;
     private static volatile DispatchQueue fileLoaderQueue = new DispatchQueue("fileUploadQueue");
     private static SparseArray<File> mediaDirs = null;
+    private ArrayList<FileLoadOperation> activeFileLoadOperation = new ArrayList();
     private LinkedList<FileLoadOperation> audioLoadOperationQueue = new LinkedList();
     private int currentAccount;
     private int currentAudioLoadOperationsCount = 0;
@@ -367,6 +369,33 @@ public class FileLoader {
             FileLog.e(e);
         }
         return result[0].booleanValue();
+    }
+
+    public float getBufferedProgressFromPosition(float position, String fileName) {
+        if (TextUtils.isEmpty(fileName)) {
+            return 0.0f;
+        }
+        final CountDownLatch semaphore = new CountDownLatch(1);
+        final Float[] result = new Float[1];
+        final String str = fileName;
+        final float f = position;
+        Utilities.stageQueue.postRunnable(new Runnable() {
+            public void run() {
+                FileLoadOperation loadOperation = (FileLoadOperation) FileLoader.this.loadOperationPaths.get(str);
+                if (loadOperation != null) {
+                    result[0] = Float.valueOf(loadOperation.getDownloadedLengthFromOffset(f));
+                } else {
+                    result[0] = Float.valueOf(1.0f);
+                }
+                semaphore.countDown();
+            }
+        });
+        try {
+            semaphore.await();
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
+        return result[0].floatValue();
     }
 
     public void loadFile(PhotoSize photo, String ext, int cacheType) {

@@ -457,6 +457,10 @@ public class FileLoadOperation {
         }
     }
 
+    protected float getDownloadedLengthFromOffset(float progress) {
+        return (((float) getDownloadedLengthFromOffsetInternal((int) (((float) this.totalBytesCount) * progress), this.totalBytesCount)) / ((float) this.totalBytesCount)) + progress;
+    }
+
     protected int getDownloadedLengthFromOffset(int offset, int length) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final int[] result = new int[1];
@@ -703,6 +707,9 @@ public class FileLoadOperation {
                     this.downloadedBytes = 0;
                     this.requestedBytesCount = 0;
                 }
+            }
+            if (this.downloadedBytes != 0 && this.totalBytesCount > 0) {
+                this.delegate.didChangedLoadProgress(this, Math.min(1.0f, ((float) this.downloadedBytes) / ((float) this.totalBytesCount)));
             }
             try {
                 this.fileOutputStream = new RandomAccessFile(this.cacheFileTemp, "rws");

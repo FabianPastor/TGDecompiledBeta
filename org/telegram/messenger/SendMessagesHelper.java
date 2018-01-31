@@ -1209,6 +1209,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             MessageFwdHeader messageFwdHeader;
                             boolean groupedIdChanged = false;
                             Message newMsg = new TL_message();
+                            boolean forwardFromSaved = msgObj.getDialogId() == ((long) myId) && msgObj.messageOwner.from_id != UserConfig.getInstance(this.currentAccount).getClientUserId();
                             if (msgObj.isForwarded()) {
                                 newMsg.fwd_from = new TL_messageFwdHeader();
                                 newMsg.fwd_from.flags = msgObj.messageOwner.fwd_from.flags;
@@ -1218,7 +1219,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 newMsg.fwd_from.channel_post = msgObj.messageOwner.fwd_from.channel_post;
                                 newMsg.fwd_from.post_author = msgObj.messageOwner.fwd_from.post_author;
                                 newMsg.flags = 4;
-                            } else {
+                            } else if (!forwardFromSaved) {
                                 newMsg.fwd_from = new TL_messageFwdHeader();
                                 newMsg.fwd_from.channel_post = msgObj.getId();
                                 messageFwdHeader = newMsg.fwd_from;
@@ -1413,11 +1414,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                 updates.updates.remove(a);
                                                 a--;
                                                 if (update instanceof TL_updateNewMessage) {
-                                                    message = ((TL_updateNewMessage) update).message;
-                                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewDifferenceParams(-1, update.pts, -1, update.pts_count);
+                                                    TL_updateNewMessage updateNewMessage = (TL_updateNewMessage) update;
+                                                    message = updateNewMessage.message;
+                                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewDifferenceParams(-1, updateNewMessage.pts, -1, updateNewMessage.pts_count);
                                                 } else {
-                                                    message = ((TL_updateNewChannelMessage) update).message;
-                                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewChannelDifferenceParams(update.pts, update.pts_count, message.to_id.channel_id);
+                                                    TL_updateNewChannelMessage updateNewChannelMessage = (TL_updateNewChannelMessage) update;
+                                                    message = updateNewChannelMessage.message;
+                                                    MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processNewChannelDifferenceParams(updateNewChannelMessage.pts, updateNewChannelMessage.pts_count, message.to_id.channel_id);
                                                     if (isMegagroupFinal) {
                                                         message.flags |= Integer.MIN_VALUE;
                                                     }
@@ -1801,15 +1804,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     private void sendMessage(String message, String caption, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params, int ttl) {
         Throwable e;
-        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
+            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
-            long groupId;
-            DelayedMessage delayedMessage;
-            DelayedMessage delayedMessage2;
-            DelayedMessage delayedMessage3;
             if (message == null && caption == null) {
                 caption = TtmlNode.ANONYMOUS_REGION_ID;
             }
@@ -2353,11 +2352,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             newMsg.send_state = 1;
             newMsgObj = new MessageObject(this.currentAccount, newMsg, true);
             try {
+                DelayedMessage delayedMessage;
+                DelayedMessage delayedMessage2;
+                DelayedMessage delayedMessage3;
                 newMsgObj.replyMessageObject = reply_to_msg;
                 if (!newMsgObj.isForwarded() && ((newMsgObj.type == 3 || videoEditedInfo != null || newMsgObj.type == 2) && !TextUtils.isEmpty(newMsg.attachPath))) {
                     newMsgObj.attachPathExists = true;
                 }
-                groupId = 0;
+                if (newMsgObj.videoEditedInfo != null && videoEditedInfo == null) {
+                    videoEditedInfo = newMsgObj.videoEditedInfo;
+                }
+                long groupId = 0;
                 boolean isFinalGroupMedia = false;
                 if (params != null) {
                     String groupIdStr = (String) params.get("groupId");
@@ -2401,273 +2406,285 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                     delayedMessage = delayedMessage3;
                 }
-            } catch (Exception e6) {
-                e = e6;
-                FileLog.e(e);
-                MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsg);
-                if (newMsgObj != null) {
-                    newMsgObj.messageOwner.send_state = 2;
-                }
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.id));
-                processSentMessage(newMsg.id);
-            }
-            try {
-                if (BuildVars.LOGS_ENABLED && sendToPeer != null) {
-                    FileLog.d("send message user_id = " + sendToPeer.user_id + " chat_id = " + sendToPeer.chat_id + " channel_id = " + sendToPeer.channel_id + " access_hash = " + sendToPeer.access_hash);
-                }
-                TL_decryptedMessage reqSend;
-                ArrayList<Long> random_ids;
-                if (type == 0 || !(type != 9 || message == null || encryptedChat == null)) {
-                    if (encryptedChat != null) {
-                        if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 73) {
-                            reqSend = new TL_decryptedMessage();
-                        } else {
-                            reqSend = new TL_decryptedMessage_layer45();
-                        }
-                        reqSend.ttl = newMsg.ttl;
-                        if (!(entities == null || entities.isEmpty())) {
-                            reqSend.entities = entities;
-                            reqSend.flags |= 128;
-                        }
-                        if (!(reply_to_msg == null || reply_to_msg.messageOwner.random_id == 0)) {
-                            reqSend.reply_to_random_id = reply_to_msg.messageOwner.random_id;
-                            reqSend.flags |= 8;
-                        }
-                        if (params != null) {
-                            if (params.get("bot_name") != null) {
-                                reqSend.via_bot_name = (String) params.get("bot_name");
-                                reqSend.flags |= 2048;
+                try {
+                    if (BuildVars.LOGS_ENABLED && sendToPeer != null) {
+                        FileLog.d("send message user_id = " + sendToPeer.user_id + " chat_id = " + sendToPeer.chat_id + " channel_id = " + sendToPeer.channel_id + " access_hash = " + sendToPeer.access_hash);
+                    }
+                    TL_decryptedMessage reqSend;
+                    ArrayList<Long> random_ids;
+                    if (type == 0 || !(type != 9 || message == null || encryptedChat == null)) {
+                        if (encryptedChat != null) {
+                            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 73) {
+                                reqSend = new TL_decryptedMessage();
+                            } else {
+                                reqSend = new TL_decryptedMessage_layer45();
                             }
-                        }
-                        reqSend.random_id = newMsg.random_id;
-                        reqSend.message = message;
-                        if (webPage == null || webPage.url == null) {
-                            reqSend.media = new TL_decryptedMessageMediaEmpty();
-                        } else {
-                            reqSend.media = new TL_decryptedMessageMediaWebPage();
-                            reqSend.media.url = webPage.url;
-                            reqSend.flags |= 512;
-                        }
-                        SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
-                        if (retryMessageObject == null) {
-                            DataQuery.getInstance(this.currentAccount).cleanDraft(peer, false);
-                        }
-                        delayedMessage3 = delayedMessage;
-                    } else if (sendToPeers != null) {
-                        TL_messages_sendBroadcast reqSend2 = new TL_messages_sendBroadcast();
-                        random_ids = new ArrayList();
-                        for (a = 0; a < sendToPeers.size(); a++) {
-                            random_ids.add(Long.valueOf(Utilities.random.nextLong()));
-                        }
-                        reqSend2.message = message;
-                        reqSend2.contacts = sendToPeers;
-                        reqSend2.media = new TL_inputMediaEmpty();
-                        reqSend2.random_id = random_ids;
-                        performSendMessageRequest(reqSend2, newMsgObj, null);
-                        delayedMessage3 = delayedMessage;
-                    } else {
-                        TL_messages_sendMessage reqSend3 = new TL_messages_sendMessage();
-                        reqSend3.message = message;
-                        reqSend3.clear_draft = retryMessageObject == null;
-                        if (newMsg.to_id instanceof TL_peerChannel) {
-                            reqSend3.silent = MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("silent_" + peer, false);
-                        }
-                        reqSend3.peer = sendToPeer;
-                        reqSend3.random_id = newMsg.random_id;
-                        if (reply_to_msg != null) {
-                            reqSend3.flags |= 1;
-                            reqSend3.reply_to_msg_id = reply_to_msg.getId();
-                        }
-                        if (!searchLinks) {
-                            reqSend3.no_webpage = true;
-                        }
-                        if (!(entities == null || entities.isEmpty())) {
-                            reqSend3.entities = entities;
-                            reqSend3.flags |= 8;
-                        }
-                        performSendMessageRequest(reqSend3, newMsgObj, null);
-                        if (retryMessageObject == null) {
-                            DataQuery.getInstance(this.currentAccount).cleanDraft(peer, false);
-                        }
-                        delayedMessage3 = delayedMessage;
-                    }
-                } else if ((type < 1 || type > 3) && ((type < 5 || type > 8) && (type != 9 || encryptedChat == null))) {
-                    if (type == 4) {
-                        TL_messages_forwardMessages reqSend4 = new TL_messages_forwardMessages();
-                        reqSend4.to_peer = sendToPeer;
-                        reqSend4.with_my_score = retryMessageObject.messageOwner.with_my_score;
-                        if (retryMessageObject.messageOwner.ttl != 0) {
-                            chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-retryMessageObject.messageOwner.ttl));
-                            reqSend4.from_peer = new TL_inputPeerChannel();
-                            reqSend4.from_peer.channel_id = -retryMessageObject.messageOwner.ttl;
-                            if (chat != null) {
-                                reqSend4.from_peer.access_hash = chat.access_hash;
+                            reqSend.ttl = newMsg.ttl;
+                            if (!(entities == null || entities.isEmpty())) {
+                                reqSend.entities = entities;
+                                reqSend.flags |= 128;
                             }
-                        } else {
-                            reqSend4.from_peer = new TL_inputPeerEmpty();
-                        }
-                        if (retryMessageObject.messageOwner.to_id instanceof TL_peerChannel) {
-                            reqSend4.silent = MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("silent_" + peer, false);
-                        }
-                        reqSend4.random_id.add(Long.valueOf(newMsg.random_id));
-                        if (retryMessageObject.getId() >= 0) {
-                            reqSend4.id.add(Integer.valueOf(retryMessageObject.getId()));
-                        } else if (retryMessageObject.messageOwner.fwd_msg_id != 0) {
-                            reqSend4.id.add(Integer.valueOf(retryMessageObject.messageOwner.fwd_msg_id));
-                        } else if (retryMessageObject.messageOwner.fwd_from != null) {
-                            reqSend4.id.add(Integer.valueOf(retryMessageObject.messageOwner.fwd_from.channel_post));
-                        }
-                        performSendMessageRequest(reqSend4, newMsgObj, null);
-                        delayedMessage3 = delayedMessage;
-                        return;
-                    }
-                    if (type == 9) {
-                        reqSend = new TL_messages_sendInlineBotResult();
-                        reqSend.peer = sendToPeer;
-                        reqSend.random_id = newMsg.random_id;
-                        if (reply_to_msg != null) {
-                            reqSend.flags |= 1;
-                            reqSend.reply_to_msg_id = reply_to_msg.getId();
-                        }
-                        if (newMsg.to_id instanceof TL_peerChannel) {
-                            reqSend.silent = MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("silent_" + peer, false);
-                        }
-                        reqSend.query_id = Utilities.parseLong((String) params.get("query_id")).longValue();
-                        reqSend.id = (String) params.get(TtmlNode.ATTR_ID);
-                        if (retryMessageObject == null) {
-                            reqSend.clear_draft = true;
-                            DataQuery.getInstance(this.currentAccount).cleanDraft(peer, false);
-                        }
-                        performSendMessageRequest(reqSend, newMsgObj, null);
-                    }
-                    delayedMessage3 = delayedMessage;
-                } else if (encryptedChat == null) {
-                    TLObject reqSend5;
-                    InputMedia inputMedia = null;
-                    if (type == 1) {
-                        if (location instanceof TL_messageMediaVenue) {
-                            inputMedia = new TL_inputMediaVenue();
-                            inputMedia.address = location.address;
-                            inputMedia.title = location.title;
-                            inputMedia.provider = location.provider;
-                            inputMedia.venue_id = location.venue_id;
-                            inputMedia.venue_type = TtmlNode.ANONYMOUS_REGION_ID;
-                        } else if (location instanceof TL_messageMediaGeoLive) {
-                            inputMedia = new TL_inputMediaGeoLive();
-                            inputMedia.period = location.period;
-                        } else {
-                            inputMedia = new TL_inputMediaGeoPoint();
-                        }
-                        inputMedia.geo_point = new TL_inputGeoPoint();
-                        inputMedia.geo_point.lat = location.geo.lat;
-                        inputMedia.geo_point._long = location.geo._long;
-                        delayedMessage3 = delayedMessage;
-                    } else if (type == 2 || (type == 9 && photo != null)) {
-                        if (photo.access_hash == 0) {
-                            inputMedia = new TL_inputMediaUploadedPhoto();
-                            if (ttl != 0) {
-                                inputMedia.ttl_seconds = ttl;
-                                newMsg.ttl = ttl;
-                                inputMedia.flags |= 2;
+                            if (!(reply_to_msg == null || reply_to_msg.messageOwner.random_id == 0)) {
+                                reqSend.reply_to_random_id = reply_to_msg.messageOwner.random_id;
+                                reqSend.flags |= 8;
                             }
                             if (params != null) {
-                                String masks = (String) params.get("masks");
-                                if (masks != null) {
-                                    AbstractSerializedData serializedData = new SerializedData(Utilities.hexToBytes(masks));
-                                    int count = serializedData.readInt32(false);
-                                    for (a = 0; a < count; a++) {
-                                        inputMedia.stickers.add(InputDocument.TLdeserialize(serializedData, serializedData.readInt32(false), false));
-                                    }
-                                    inputMedia.flags |= 1;
+                                if (params.get("bot_name") != null) {
+                                    reqSend.via_bot_name = (String) params.get("bot_name");
+                                    reqSend.flags |= 2048;
                                 }
                             }
-                            if (delayedMessage == null) {
-                                delayedMessage2 = new DelayedMessage(peer);
-                                delayedMessage2.type = 0;
-                                delayedMessage2.obj = newMsgObj;
-                                delayedMessage2.originalPath = originalPath;
+                            reqSend.random_id = newMsg.random_id;
+                            reqSend.message = message;
+                            if (webPage == null || webPage.url == null) {
+                                reqSend.media = new TL_decryptedMessageMediaEmpty();
                             } else {
-                                delayedMessage3 = delayedMessage;
+                                reqSend.media = new TL_decryptedMessageMediaWebPage();
+                                reqSend.media.url = webPage.url;
+                                reqSend.flags |= 512;
                             }
-                            if (path != null && path.length() > 0) {
-                                if (path.startsWith("http")) {
-                                    delayedMessage3.httpLocation = path;
-                                }
+                            SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
+                            if (retryMessageObject == null) {
+                                DataQuery.getInstance(this.currentAccount).cleanDraft(peer, false);
                             }
-                            delayedMessage3.location = ((PhotoSize) photo.sizes.get(photo.sizes.size() - 1)).location;
+                            delayedMessage3 = delayedMessage;
+                        } else if (sendToPeers != null) {
+                            TL_messages_sendBroadcast reqSend2 = new TL_messages_sendBroadcast();
+                            random_ids = new ArrayList();
+                            for (a = 0; a < sendToPeers.size(); a++) {
+                                random_ids.add(Long.valueOf(Utilities.random.nextLong()));
+                            }
+                            reqSend2.message = message;
+                            reqSend2.contacts = sendToPeers;
+                            reqSend2.media = new TL_inputMediaEmpty();
+                            reqSend2.random_id = random_ids;
+                            performSendMessageRequest(reqSend2, newMsgObj, null);
+                            delayedMessage3 = delayedMessage;
                         } else {
-                            media = new TL_inputMediaPhoto();
-                            media.id = new TL_inputPhoto();
-                            media.id.id = photo.id;
-                            media.id.access_hash = photo.access_hash;
-                            inputMedia = media;
+                            TL_messages_sendMessage reqSend3 = new TL_messages_sendMessage();
+                            reqSend3.message = message;
+                            reqSend3.clear_draft = retryMessageObject == null;
+                            if (newMsg.to_id instanceof TL_peerChannel) {
+                                reqSend3.silent = MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("silent_" + peer, false);
+                            }
+                            reqSend3.peer = sendToPeer;
+                            reqSend3.random_id = newMsg.random_id;
+                            if (reply_to_msg != null) {
+                                reqSend3.flags |= 1;
+                                reqSend3.reply_to_msg_id = reply_to_msg.getId();
+                            }
+                            if (!searchLinks) {
+                                reqSend3.no_webpage = true;
+                            }
+                            if (!(entities == null || entities.isEmpty())) {
+                                reqSend3.entities = entities;
+                                reqSend3.flags |= 8;
+                            }
+                            performSendMessageRequest(reqSend3, newMsgObj, null);
+                            if (retryMessageObject == null) {
+                                DataQuery.getInstance(this.currentAccount).cleanDraft(peer, false);
+                            }
                             delayedMessage3 = delayedMessage;
                         }
-                    } else if (type == 3) {
-                        if (document.access_hash == 0) {
+                    } else if ((type < 1 || type > 3) && ((type < 5 || type > 8) && (type != 9 || encryptedChat == null))) {
+                        if (type == 4) {
+                            TL_messages_forwardMessages reqSend4 = new TL_messages_forwardMessages();
+                            reqSend4.to_peer = sendToPeer;
+                            reqSend4.with_my_score = retryMessageObject.messageOwner.with_my_score;
+                            if (retryMessageObject.messageOwner.ttl != 0) {
+                                chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-retryMessageObject.messageOwner.ttl));
+                                reqSend4.from_peer = new TL_inputPeerChannel();
+                                reqSend4.from_peer.channel_id = -retryMessageObject.messageOwner.ttl;
+                                if (chat != null) {
+                                    reqSend4.from_peer.access_hash = chat.access_hash;
+                                }
+                            } else {
+                                reqSend4.from_peer = new TL_inputPeerEmpty();
+                            }
+                            if (retryMessageObject.messageOwner.to_id instanceof TL_peerChannel) {
+                                reqSend4.silent = MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("silent_" + peer, false);
+                            }
+                            reqSend4.random_id.add(Long.valueOf(newMsg.random_id));
+                            if (retryMessageObject.getId() >= 0) {
+                                reqSend4.id.add(Integer.valueOf(retryMessageObject.getId()));
+                            } else if (retryMessageObject.messageOwner.fwd_msg_id != 0) {
+                                reqSend4.id.add(Integer.valueOf(retryMessageObject.messageOwner.fwd_msg_id));
+                            } else if (retryMessageObject.messageOwner.fwd_from != null) {
+                                reqSend4.id.add(Integer.valueOf(retryMessageObject.messageOwner.fwd_from.channel_post));
+                            }
+                            performSendMessageRequest(reqSend4, newMsgObj, null);
+                            delayedMessage3 = delayedMessage;
+                            return;
+                        }
+                        if (type == 9) {
+                            reqSend = new TL_messages_sendInlineBotResult();
+                            reqSend.peer = sendToPeer;
+                            reqSend.random_id = newMsg.random_id;
+                            if (reply_to_msg != null) {
+                                reqSend.flags |= 1;
+                                reqSend.reply_to_msg_id = reply_to_msg.getId();
+                            }
+                            if (newMsg.to_id instanceof TL_peerChannel) {
+                                reqSend.silent = MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("silent_" + peer, false);
+                            }
+                            reqSend.query_id = Utilities.parseLong((String) params.get("query_id")).longValue();
+                            reqSend.id = (String) params.get(TtmlNode.ATTR_ID);
+                            if (retryMessageObject == null) {
+                                reqSend.clear_draft = true;
+                                DataQuery.getInstance(this.currentAccount).cleanDraft(peer, false);
+                            }
+                            performSendMessageRequest(reqSend, newMsgObj, null);
+                        }
+                        delayedMessage3 = delayedMessage;
+                    } else if (encryptedChat == null) {
+                        TLObject reqSend5;
+                        InputMedia inputMedia = null;
+                        if (type == 1) {
+                            if (location instanceof TL_messageMediaVenue) {
+                                inputMedia = new TL_inputMediaVenue();
+                                inputMedia.address = location.address;
+                                inputMedia.title = location.title;
+                                inputMedia.provider = location.provider;
+                                inputMedia.venue_id = location.venue_id;
+                                inputMedia.venue_type = TtmlNode.ANONYMOUS_REGION_ID;
+                            } else if (location instanceof TL_messageMediaGeoLive) {
+                                inputMedia = new TL_inputMediaGeoLive();
+                                inputMedia.period = location.period;
+                            } else {
+                                inputMedia = new TL_inputMediaGeoPoint();
+                            }
+                            inputMedia.geo_point = new TL_inputGeoPoint();
+                            inputMedia.geo_point.lat = location.geo.lat;
+                            inputMedia.geo_point._long = location.geo._long;
+                            delayedMessage3 = delayedMessage;
+                        } else if (type == 2 || (type == 9 && photo != null)) {
+                            if (photo.access_hash == 0) {
+                                inputMedia = new TL_inputMediaUploadedPhoto();
+                                if (ttl != 0) {
+                                    inputMedia.ttl_seconds = ttl;
+                                    newMsg.ttl = ttl;
+                                    inputMedia.flags |= 2;
+                                }
+                                if (params != null) {
+                                    String masks = (String) params.get("masks");
+                                    if (masks != null) {
+                                        AbstractSerializedData serializedData = new SerializedData(Utilities.hexToBytes(masks));
+                                        int count = serializedData.readInt32(false);
+                                        for (a = 0; a < count; a++) {
+                                            inputMedia.stickers.add(InputDocument.TLdeserialize(serializedData, serializedData.readInt32(false), false));
+                                        }
+                                        inputMedia.flags |= 1;
+                                    }
+                                }
+                                if (delayedMessage == null) {
+                                    delayedMessage2 = new DelayedMessage(peer);
+                                    delayedMessage2.type = 0;
+                                    delayedMessage2.obj = newMsgObj;
+                                    delayedMessage2.originalPath = originalPath;
+                                } else {
+                                    delayedMessage3 = delayedMessage;
+                                }
+                                if (path != null && path.length() > 0) {
+                                    if (path.startsWith("http")) {
+                                        delayedMessage3.httpLocation = path;
+                                    }
+                                }
+                                delayedMessage3.location = ((PhotoSize) photo.sizes.get(photo.sizes.size() - 1)).location;
+                            } else {
+                                media = new TL_inputMediaPhoto();
+                                media.id = new TL_inputPhoto();
+                                media.id.id = photo.id;
+                                media.id.access_hash = photo.access_hash;
+                                inputMedia = media;
+                                delayedMessage3 = delayedMessage;
+                            }
+                        } else if (type == 3) {
+                            if (document.access_hash == 0) {
+                                inputMedia = new TL_inputMediaUploadedDocument();
+                                inputMedia.mime_type = document.mime_type;
+                                inputMedia.attributes = document.attributes;
+                                if (!MessageObject.isRoundVideoDocument(document) && (videoEditedInfo == null || !(videoEditedInfo.muted || videoEditedInfo.roundVideo))) {
+                                    inputMedia.nosound_video = true;
+                                }
+                                if (ttl != 0) {
+                                    inputMedia.ttl_seconds = ttl;
+                                    newMsg.ttl = ttl;
+                                    inputMedia.flags |= 2;
+                                }
+                                if (delayedMessage == null) {
+                                    delayedMessage2 = new DelayedMessage(peer);
+                                    delayedMessage2.type = 1;
+                                    delayedMessage2.obj = newMsgObj;
+                                    delayedMessage2.originalPath = originalPath;
+                                } else {
+                                    delayedMessage3 = delayedMessage;
+                                }
+                                delayedMessage3.location = document.thumb.location;
+                                delayedMessage3.videoEditedInfo = videoEditedInfo;
+                            } else {
+                                media = new TL_inputMediaDocument();
+                                media.id = new TL_inputDocument();
+                                media.id.id = document.id;
+                                media.id.access_hash = document.access_hash;
+                                inputMedia = media;
+                                delayedMessage3 = delayedMessage;
+                            }
+                        } else if (type == 6) {
+                            inputMedia = new TL_inputMediaContact();
+                            inputMedia.phone_number = user.phone;
+                            inputMedia.first_name = user.first_name;
+                            inputMedia.last_name = user.last_name;
+                            delayedMessage3 = delayedMessage;
+                        } else if (type == 7 || type == 9) {
+                            if (document.access_hash == 0) {
+                                if (encryptedChat == null && originalPath != null && originalPath.length() > 0) {
+                                    if (originalPath.startsWith("http") && params != null) {
+                                        inputMedia = new TL_inputMediaGifExternal();
+                                        String[] args = ((String) params.get(UpdateFragment.FRAGMENT_URL)).split("\\|");
+                                        if (args.length == 2) {
+                                            ((TL_inputMediaGifExternal) inputMedia).url = args[0];
+                                            inputMedia.q = args[1];
+                                        }
+                                        delayedMessage3 = delayedMessage;
+                                        inputMedia.mime_type = document.mime_type;
+                                        inputMedia.attributes = document.attributes;
+                                    }
+                                }
+                                inputMedia = new TL_inputMediaUploadedDocument();
+                                if (ttl != 0) {
+                                    inputMedia.ttl_seconds = ttl;
+                                    newMsg.ttl = ttl;
+                                    inputMedia.flags |= 2;
+                                }
+                                delayedMessage2 = new DelayedMessage(peer);
+                                delayedMessage2.originalPath = originalPath;
+                                delayedMessage2.type = 2;
+                                delayedMessage2.obj = newMsgObj;
+                                delayedMessage2.location = document.thumb.location;
+                                inputMedia.mime_type = document.mime_type;
+                                inputMedia.attributes = document.attributes;
+                            } else {
+                                media = new TL_inputMediaDocument();
+                                media.id = new TL_inputDocument();
+                                media.id.id = document.id;
+                                media.id.access_hash = document.access_hash;
+                                inputMedia = media;
+                                delayedMessage3 = delayedMessage;
+                            }
+                        } else if (type != 8) {
+                            delayedMessage3 = delayedMessage;
+                        } else if (document.access_hash == 0) {
                             inputMedia = new TL_inputMediaUploadedDocument();
                             inputMedia.mime_type = document.mime_type;
                             inputMedia.attributes = document.attributes;
-                            if (!MessageObject.isRoundVideoDocument(document) && (videoEditedInfo == null || !(videoEditedInfo.muted || videoEditedInfo.roundVideo))) {
-                                inputMedia.nosound_video = true;
-                            }
-                            if (ttl != 0) {
-                                inputMedia.ttl_seconds = ttl;
-                                newMsg.ttl = ttl;
-                                inputMedia.flags |= 2;
-                            }
-                            if (delayedMessage == null) {
-                                delayedMessage2 = new DelayedMessage(peer);
-                                delayedMessage2.type = 1;
-                                delayedMessage2.obj = newMsgObj;
-                                delayedMessage2.originalPath = originalPath;
-                            } else {
-                                delayedMessage3 = delayedMessage;
-                            }
-                            delayedMessage3.location = document.thumb.location;
-                            delayedMessage3.videoEditedInfo = videoEditedInfo;
-                        } else {
-                            media = new TL_inputMediaDocument();
-                            media.id = new TL_inputDocument();
-                            media.id.id = document.id;
-                            media.id.access_hash = document.access_hash;
-                            inputMedia = media;
-                            delayedMessage3 = delayedMessage;
-                        }
-                    } else if (type == 6) {
-                        inputMedia = new TL_inputMediaContact();
-                        inputMedia.phone_number = user.phone;
-                        inputMedia.first_name = user.first_name;
-                        inputMedia.last_name = user.last_name;
-                        delayedMessage3 = delayedMessage;
-                    } else if (type == 7 || type == 9) {
-                        if (document.access_hash == 0) {
-                            if (encryptedChat == null && originalPath != null && originalPath.length() > 0) {
-                                if (originalPath.startsWith("http") && params != null) {
-                                    inputMedia = new TL_inputMediaGifExternal();
-                                    String[] args = ((String) params.get(UpdateFragment.FRAGMENT_URL)).split("\\|");
-                                    if (args.length == 2) {
-                                        ((TL_inputMediaGifExternal) inputMedia).url = args[0];
-                                        inputMedia.q = args[1];
-                                    }
-                                    delayedMessage3 = delayedMessage;
-                                    inputMedia.mime_type = document.mime_type;
-                                    inputMedia.attributes = document.attributes;
-                                }
-                            }
-                            inputMedia = new TL_inputMediaUploadedDocument();
                             if (ttl != 0) {
                                 inputMedia.ttl_seconds = ttl;
                                 newMsg.ttl = ttl;
                                 inputMedia.flags |= 2;
                             }
                             delayedMessage2 = new DelayedMessage(peer);
-                            delayedMessage2.originalPath = originalPath;
-                            delayedMessage2.type = 2;
+                            delayedMessage2.type = 3;
                             delayedMessage2.obj = newMsgObj;
-                            delayedMessage2.location = document.thumb.location;
-                            inputMedia.mime_type = document.mime_type;
-                            inputMedia.attributes = document.attributes;
                         } else {
                             media = new TL_inputMediaDocument();
                             media.id = new TL_inputDocument();
@@ -2676,50 +2693,53 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             inputMedia = media;
                             delayedMessage3 = delayedMessage;
                         }
-                    } else if (type != 8) {
-                        delayedMessage3 = delayedMessage;
-                    } else if (document.access_hash == 0) {
-                        inputMedia = new TL_inputMediaUploadedDocument();
-                        inputMedia.mime_type = document.mime_type;
-                        inputMedia.attributes = document.attributes;
-                        if (ttl != 0) {
-                            inputMedia.ttl_seconds = ttl;
-                            newMsg.ttl = ttl;
-                            inputMedia.flags |= 2;
-                        }
-                        delayedMessage2 = new DelayedMessage(peer);
-                        delayedMessage2.type = 3;
-                        delayedMessage2.obj = newMsgObj;
-                    } else {
-                        media = new TL_inputMediaDocument();
-                        media.id = new TL_inputDocument();
-                        media.id.id = document.id;
-                        media.id.access_hash = document.access_hash;
-                        inputMedia = media;
-                        delayedMessage3 = delayedMessage;
-                    }
-                    if (sendToPeers != null) {
-                        request = new TL_messages_sendBroadcast();
-                        random_ids = new ArrayList();
-                        for (a = 0; a < sendToPeers.size(); a++) {
-                            random_ids.add(Long.valueOf(Utilities.random.nextLong()));
-                        }
-                        request.contacts = sendToPeers;
-                        request.media = inputMedia;
-                        request.random_id = random_ids;
-                        request.message = TtmlNode.ANONYMOUS_REGION_ID;
-                        if (delayedMessage3 != null) {
-                            delayedMessage3.sendRequest = request;
-                        }
-                        reqSend5 = request;
-                        if (retryMessageObject == null) {
-                            DataQuery.getInstance(this.currentAccount).cleanDraft(peer, false);
-                        }
-                    } else if (groupId != 0) {
-                        if (delayedMessage3.sendRequest != null) {
-                            request = (TL_messages_sendMultiMedia) delayedMessage3.sendRequest;
+                        if (sendToPeers != null) {
+                            request = new TL_messages_sendBroadcast();
+                            random_ids = new ArrayList();
+                            for (a = 0; a < sendToPeers.size(); a++) {
+                                random_ids.add(Long.valueOf(Utilities.random.nextLong()));
+                            }
+                            request.contacts = sendToPeers;
+                            request.media = inputMedia;
+                            request.random_id = random_ids;
+                            request.message = TtmlNode.ANONYMOUS_REGION_ID;
+                            if (delayedMessage3 != null) {
+                                delayedMessage3.sendRequest = request;
+                            }
+                            reqSend5 = request;
+                            if (retryMessageObject == null) {
+                                DataQuery.getInstance(this.currentAccount).cleanDraft(peer, false);
+                            }
+                        } else if (groupId != 0) {
+                            if (delayedMessage3.sendRequest != null) {
+                                request = (TL_messages_sendMultiMedia) delayedMessage3.sendRequest;
+                            } else {
+                                request = new TL_messages_sendMultiMedia();
+                                request.peer = sendToPeer;
+                                if (newMsg.to_id instanceof TL_peerChannel) {
+                                    request.silent = MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("silent_" + peer, false);
+                                }
+                                if (reply_to_msg != null) {
+                                    request.flags |= 1;
+                                    request.reply_to_msg_id = reply_to_msg.getId();
+                                }
+                                delayedMessage3.sendRequest = request;
+                            }
+                            delayedMessage3.messageObjects.add(newMsgObj);
+                            delayedMessage3.messages.add(newMsg);
+                            delayedMessage3.originalPaths.add(originalPath);
+                            TL_inputSingleMedia inputSingleMedia = new TL_inputSingleMedia();
+                            inputSingleMedia.random_id = newMsg.random_id;
+                            inputSingleMedia.media = inputMedia;
+                            inputSingleMedia.message = caption;
+                            if (!(entities == null || entities.isEmpty())) {
+                                inputSingleMedia.entities = entities;
+                                inputSingleMedia.flags |= 1;
+                            }
+                            request.multi_media.add(inputSingleMedia);
+                            reqSend5 = request;
                         } else {
-                            request = new TL_messages_sendMultiMedia();
+                            request = new TL_messages_sendMedia();
                             request.peer = sendToPeer;
                             if (newMsg.to_id instanceof TL_peerChannel) {
                                 request.silent = MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("silent_" + peer, false);
@@ -2728,251 +2748,269 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 request.flags |= 1;
                                 request.reply_to_msg_id = reply_to_msg.getId();
                             }
-                            delayedMessage3.sendRequest = request;
-                        }
-                        delayedMessage3.messageObjects.add(newMsgObj);
-                        delayedMessage3.messages.add(newMsg);
-                        delayedMessage3.originalPaths.add(originalPath);
-                        TL_inputSingleMedia inputSingleMedia = new TL_inputSingleMedia();
-                        inputSingleMedia.random_id = newMsg.random_id;
-                        inputSingleMedia.media = inputMedia;
-                        inputSingleMedia.message = caption;
-                        if (!(entities == null || entities.isEmpty())) {
-                            inputSingleMedia.entities = entities;
-                            inputSingleMedia.flags |= 1;
-                        }
-                        request.multi_media.add(inputSingleMedia);
-                        reqSend5 = request;
-                    } else {
-                        request = new TL_messages_sendMedia();
-                        request.peer = sendToPeer;
-                        if (newMsg.to_id instanceof TL_peerChannel) {
-                            request.silent = MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("silent_" + peer, false);
-                        }
-                        if (reply_to_msg != null) {
-                            request.flags |= 1;
-                            request.reply_to_msg_id = reply_to_msg.getId();
-                        }
-                        request.random_id = newMsg.random_id;
-                        request.media = inputMedia;
-                        request.message = caption;
-                        if (!(entities == null || entities.isEmpty())) {
-                            request.entities = entities;
-                            request.flags |= 8;
-                        }
-                        if (delayedMessage3 != null) {
-                            delayedMessage3.sendRequest = request;
-                        }
-                        reqSend5 = request;
-                    }
-                    if (groupId != 0) {
-                        performSendDelayedMessage(delayedMessage3);
-                    } else if (type == 1) {
-                        performSendMessageRequest(reqSend5, newMsgObj, null);
-                    } else if (type == 2) {
-                        if (photo.access_hash == 0) {
-                            performSendDelayedMessage(delayedMessage3);
-                        } else {
-                            performSendMessageRequest(reqSend5, newMsgObj, null, null, true);
-                        }
-                    } else if (type == 3) {
-                        if (document.access_hash == 0) {
-                            performSendDelayedMessage(delayedMessage3);
-                        } else {
-                            performSendMessageRequest(reqSend5, newMsgObj, null);
-                        }
-                    } else if (type == 6) {
-                        performSendMessageRequest(reqSend5, newMsgObj, null);
-                    } else if (type == 7) {
-                        if (document.access_hash != 0 || delayedMessage3 == null) {
-                            performSendMessageRequest(reqSend5, newMsgObj, originalPath);
-                        } else {
-                            performSendDelayedMessage(delayedMessage3);
-                        }
-                    } else if (type != 8) {
-                    } else {
-                        if (document.access_hash == 0) {
-                            performSendDelayedMessage(delayedMessage3);
-                        } else {
-                            performSendMessageRequest(reqSend5, newMsgObj, null);
-                        }
-                    }
-                } else {
-                    DecryptedMessage reqSend6;
-                    TL_inputEncryptedFile encryptedFile;
-                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 73) {
-                        reqSend6 = new TL_decryptedMessage();
-                        if (groupId != 0) {
-                            reqSend6.grouped_id = groupId;
-                            reqSend6.flags |= 131072;
-                        }
-                    } else {
-                        reqSend6 = new TL_decryptedMessage_layer45();
-                    }
-                    reqSend6.ttl = newMsg.ttl;
-                    if (!(entities == null || entities.isEmpty())) {
-                        reqSend6.entities = entities;
-                        reqSend6.flags |= 128;
-                    }
-                    if (!(reply_to_msg == null || reply_to_msg.messageOwner.random_id == 0)) {
-                        reqSend6.reply_to_random_id = reply_to_msg.messageOwner.random_id;
-                        reqSend6.flags |= 8;
-                    }
-                    reqSend6.flags |= 512;
-                    if (params != null) {
-                        if (params.get("bot_name") != null) {
-                            reqSend6.via_bot_name = (String) params.get("bot_name");
-                            reqSend6.flags |= 2048;
-                        }
-                    }
-                    reqSend6.random_id = newMsg.random_id;
-                    reqSend6.message = TtmlNode.ANONYMOUS_REGION_ID;
-                    if (type == 1) {
-                        if (location instanceof TL_messageMediaVenue) {
-                            reqSend6.media = new TL_decryptedMessageMediaVenue();
-                            reqSend6.media.address = location.address;
-                            reqSend6.media.title = location.title;
-                            reqSend6.media.provider = location.provider;
-                            reqSend6.media.venue_id = location.venue_id;
-                        } else {
-                            reqSend6.media = new TL_decryptedMessageMediaGeoPoint();
-                        }
-                        reqSend6.media.lat = location.geo.lat;
-                        reqSend6.media._long = location.geo._long;
-                        SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
-                        delayedMessage3 = delayedMessage;
-                    } else {
-                        if (type == 2 || (type == 9 && photo != null)) {
-                            PhotoSize small = (PhotoSize) photo.sizes.get(0);
-                            PhotoSize big = (PhotoSize) photo.sizes.get(photo.sizes.size() - 1);
-                            ImageLoader.fillPhotoSizeWithBytes(small);
-                            reqSend6.media = new TL_decryptedMessageMediaPhoto();
-                            reqSend6.media.caption = caption;
-                            if (small.bytes != null) {
-                                ((TL_decryptedMessageMediaPhoto) reqSend6.media).thumb = small.bytes;
-                            } else {
-                                ((TL_decryptedMessageMediaPhoto) reqSend6.media).thumb = new byte[0];
+                            request.random_id = newMsg.random_id;
+                            request.media = inputMedia;
+                            request.message = caption;
+                            if (!(entities == null || entities.isEmpty())) {
+                                request.entities = entities;
+                                request.flags |= 8;
                             }
-                            reqSend6.media.thumb_h = small.h;
-                            reqSend6.media.thumb_w = small.w;
-                            reqSend6.media.w = big.w;
-                            reqSend6.media.h = big.h;
-                            reqSend6.media.size = big.size;
-                            if (big.location.key == null || groupId != 0) {
-                                if (delayedMessage == null) {
-                                    delayedMessage2 = new DelayedMessage(peer);
-                                    delayedMessage2.encryptedChat = encryptedChat;
-                                    delayedMessage2.type = 0;
-                                    delayedMessage2.originalPath = originalPath;
-                                    delayedMessage2.sendEncryptedRequest = reqSend6;
-                                    delayedMessage2.obj = newMsgObj;
-                                } else {
-                                    delayedMessage3 = delayedMessage;
-                                }
-                                if (!TextUtils.isEmpty(path)) {
-                                    if (path.startsWith("http")) {
-                                        delayedMessage3.httpLocation = path;
-                                        if (groupId == 0) {
-                                            performSendDelayedMessage(delayedMessage3);
-                                        }
-                                    }
-                                }
-                                delayedMessage3.location = ((PhotoSize) photo.sizes.get(photo.sizes.size() - 1)).location;
-                                if (groupId == 0) {
-                                    performSendDelayedMessage(delayedMessage3);
-                                }
+                            if (delayedMessage3 != null) {
+                                delayedMessage3.sendRequest = request;
+                            }
+                            reqSend5 = request;
+                        }
+                        if (groupId != 0) {
+                            performSendDelayedMessage(delayedMessage3);
+                        } else if (type == 1) {
+                            performSendMessageRequest(reqSend5, newMsgObj, null);
+                        } else if (type == 2) {
+                            if (photo.access_hash == 0) {
+                                performSendDelayedMessage(delayedMessage3);
                             } else {
-                                encryptedFile = new TL_inputEncryptedFile();
-                                encryptedFile.id = big.location.volume_id;
-                                encryptedFile.access_hash = big.location.secret;
-                                reqSend6.media.key = big.location.key;
-                                reqSend6.media.iv = big.location.iv;
-                                SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
+                                performSendMessageRequest(reqSend5, newMsgObj, null, null, true);
                             }
                         } else if (type == 3) {
-                            ImageLoader.fillPhotoSizeWithBytes(document.thumb);
-                            if (MessageObject.isNewGifDocument(document) || MessageObject.isRoundVideoDocument(document)) {
-                                reqSend6.media = new TL_decryptedMessageMediaDocument();
-                                reqSend6.media.attributes = document.attributes;
-                                if (document.thumb == null || document.thumb.bytes == null) {
-                                    ((TL_decryptedMessageMediaDocument) reqSend6.media).thumb = new byte[0];
-                                } else {
-                                    ((TL_decryptedMessageMediaDocument) reqSend6.media).thumb = document.thumb.bytes;
-                                }
+                            if (document.access_hash == 0) {
+                                performSendDelayedMessage(delayedMessage3);
                             } else {
-                                reqSend6.media = new TL_decryptedMessageMediaVideo();
-                                if (document.thumb == null || document.thumb.bytes == null) {
-                                    ((TL_decryptedMessageMediaVideo) reqSend6.media).thumb = new byte[0];
-                                } else {
-                                    ((TL_decryptedMessageMediaVideo) reqSend6.media).thumb = document.thumb.bytes;
-                                }
-                            }
-                            reqSend6.media.caption = caption;
-                            reqSend6.media.mime_type = MimeTypes.VIDEO_MP4;
-                            reqSend6.media.size = document.size;
-                            for (a = 0; a < document.attributes.size(); a++) {
-                                attribute = (DocumentAttribute) document.attributes.get(a);
-                                if (attribute instanceof TL_documentAttributeVideo) {
-                                    reqSend6.media.w = attribute.w;
-                                    reqSend6.media.h = attribute.h;
-                                    reqSend6.media.duration = attribute.duration;
-                                    break;
-                                }
-                            }
-                            reqSend6.media.thumb_h = document.thumb.h;
-                            reqSend6.media.thumb_w = document.thumb.w;
-                            if (document.key == null || groupId != 0) {
-                                if (delayedMessage == null) {
-                                    delayedMessage2 = new DelayedMessage(peer);
-                                    delayedMessage2.encryptedChat = encryptedChat;
-                                    delayedMessage2.type = 1;
-                                    delayedMessage2.sendEncryptedRequest = reqSend6;
-                                    delayedMessage2.originalPath = originalPath;
-                                    delayedMessage2.obj = newMsgObj;
-                                } else {
-                                    delayedMessage3 = delayedMessage;
-                                }
-                                delayedMessage3.videoEditedInfo = videoEditedInfo;
-                                if (groupId == 0) {
-                                    performSendDelayedMessage(delayedMessage3);
-                                }
-                            } else {
-                                encryptedFile = new TL_inputEncryptedFile();
-                                encryptedFile.id = document.id;
-                                encryptedFile.access_hash = document.access_hash;
-                                reqSend6.media.key = document.key;
-                                reqSend6.media.iv = document.iv;
-                                SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
-                                delayedMessage3 = delayedMessage;
+                                performSendMessageRequest(reqSend5, newMsgObj, null);
                             }
                         } else if (type == 6) {
-                            reqSend6.media = new TL_decryptedMessageMediaContact();
-                            reqSend6.media.phone_number = user.phone;
-                            reqSend6.media.first_name = user.first_name;
-                            reqSend6.media.last_name = user.last_name;
-                            reqSend6.media.user_id = user.id;
+                            performSendMessageRequest(reqSend5, newMsgObj, null);
+                        } else if (type == 7) {
+                            if (document.access_hash != 0 || delayedMessage3 == null) {
+                                performSendMessageRequest(reqSend5, newMsgObj, originalPath);
+                            } else {
+                                performSendDelayedMessage(delayedMessage3);
+                            }
+                        } else if (type != 8) {
+                        } else {
+                            if (document.access_hash == 0) {
+                                performSendDelayedMessage(delayedMessage3);
+                            } else {
+                                performSendMessageRequest(reqSend5, newMsgObj, null);
+                            }
+                        }
+                    } else {
+                        DecryptedMessage reqSend6;
+                        TL_inputEncryptedFile encryptedFile;
+                        if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 73) {
+                            reqSend6 = new TL_decryptedMessage();
+                            if (groupId != 0) {
+                                reqSend6.grouped_id = groupId;
+                                reqSend6.flags |= 131072;
+                            }
+                        } else {
+                            reqSend6 = new TL_decryptedMessage_layer45();
+                        }
+                        reqSend6.ttl = newMsg.ttl;
+                        if (!(entities == null || entities.isEmpty())) {
+                            reqSend6.entities = entities;
+                            reqSend6.flags |= 128;
+                        }
+                        if (!(reply_to_msg == null || reply_to_msg.messageOwner.random_id == 0)) {
+                            reqSend6.reply_to_random_id = reply_to_msg.messageOwner.random_id;
+                            reqSend6.flags |= 8;
+                        }
+                        reqSend6.flags |= 512;
+                        if (params != null) {
+                            if (params.get("bot_name") != null) {
+                                reqSend6.via_bot_name = (String) params.get("bot_name");
+                                reqSend6.flags |= 2048;
+                            }
+                        }
+                        reqSend6.random_id = newMsg.random_id;
+                        reqSend6.message = TtmlNode.ANONYMOUS_REGION_ID;
+                        if (type == 1) {
+                            if (location instanceof TL_messageMediaVenue) {
+                                reqSend6.media = new TL_decryptedMessageMediaVenue();
+                                reqSend6.media.address = location.address;
+                                reqSend6.media.title = location.title;
+                                reqSend6.media.provider = location.provider;
+                                reqSend6.media.venue_id = location.venue_id;
+                            } else {
+                                reqSend6.media = new TL_decryptedMessageMediaGeoPoint();
+                            }
+                            reqSend6.media.lat = location.geo.lat;
+                            reqSend6.media._long = location.geo._long;
                             SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
                             delayedMessage3 = delayedMessage;
-                        } else if (type == 7 || (type == 9 && document != null)) {
-                            if (MessageObject.isStickerDocument(document)) {
-                                reqSend6.media = new TL_decryptedMessageMediaExternalDocument();
-                                reqSend6.media.id = document.id;
-                                reqSend6.media.date = document.date;
-                                reqSend6.media.access_hash = document.access_hash;
-                                reqSend6.media.mime_type = document.mime_type;
-                                reqSend6.media.size = document.size;
-                                reqSend6.media.dc_id = document.dc_id;
-                                reqSend6.media.attributes = document.attributes;
-                                if (document.thumb == null) {
-                                    ((TL_decryptedMessageMediaExternalDocument) reqSend6.media).thumb = new TL_photoSizeEmpty();
-                                    ((TL_decryptedMessageMediaExternalDocument) reqSend6.media).thumb.type = "s";
+                        } else {
+                            if (type == 2 || (type == 9 && photo != null)) {
+                                PhotoSize small = (PhotoSize) photo.sizes.get(0);
+                                PhotoSize big = (PhotoSize) photo.sizes.get(photo.sizes.size() - 1);
+                                ImageLoader.fillPhotoSizeWithBytes(small);
+                                reqSend6.media = new TL_decryptedMessageMediaPhoto();
+                                reqSend6.media.caption = caption;
+                                if (small.bytes != null) {
+                                    ((TL_decryptedMessageMediaPhoto) reqSend6.media).thumb = small.bytes;
                                 } else {
-                                    ((TL_decryptedMessageMediaExternalDocument) reqSend6.media).thumb = document.thumb;
+                                    ((TL_decryptedMessageMediaPhoto) reqSend6.media).thumb = new byte[0];
                                 }
+                                reqSend6.media.thumb_h = small.h;
+                                reqSend6.media.thumb_w = small.w;
+                                reqSend6.media.w = big.w;
+                                reqSend6.media.h = big.h;
+                                reqSend6.media.size = big.size;
+                                if (big.location.key == null || groupId != 0) {
+                                    if (delayedMessage == null) {
+                                        delayedMessage2 = new DelayedMessage(peer);
+                                        delayedMessage2.encryptedChat = encryptedChat;
+                                        delayedMessage2.type = 0;
+                                        delayedMessage2.originalPath = originalPath;
+                                        delayedMessage2.sendEncryptedRequest = reqSend6;
+                                        delayedMessage2.obj = newMsgObj;
+                                    } else {
+                                        delayedMessage3 = delayedMessage;
+                                    }
+                                    if (!TextUtils.isEmpty(path)) {
+                                        if (path.startsWith("http")) {
+                                            delayedMessage3.httpLocation = path;
+                                            if (groupId == 0) {
+                                                performSendDelayedMessage(delayedMessage3);
+                                            }
+                                        }
+                                    }
+                                    delayedMessage3.location = ((PhotoSize) photo.sizes.get(photo.sizes.size() - 1)).location;
+                                    if (groupId == 0) {
+                                        performSendDelayedMessage(delayedMessage3);
+                                    }
+                                } else {
+                                    encryptedFile = new TL_inputEncryptedFile();
+                                    encryptedFile.id = big.location.volume_id;
+                                    encryptedFile.access_hash = big.location.secret;
+                                    reqSend6.media.key = big.location.key;
+                                    reqSend6.media.iv = big.location.iv;
+                                    SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
+                                }
+                            } else if (type == 3) {
+                                ImageLoader.fillPhotoSizeWithBytes(document.thumb);
+                                if (MessageObject.isNewGifDocument(document) || MessageObject.isRoundVideoDocument(document)) {
+                                    reqSend6.media = new TL_decryptedMessageMediaDocument();
+                                    reqSend6.media.attributes = document.attributes;
+                                    if (document.thumb == null || document.thumb.bytes == null) {
+                                        ((TL_decryptedMessageMediaDocument) reqSend6.media).thumb = new byte[0];
+                                    } else {
+                                        ((TL_decryptedMessageMediaDocument) reqSend6.media).thumb = document.thumb.bytes;
+                                    }
+                                } else {
+                                    reqSend6.media = new TL_decryptedMessageMediaVideo();
+                                    if (document.thumb == null || document.thumb.bytes == null) {
+                                        ((TL_decryptedMessageMediaVideo) reqSend6.media).thumb = new byte[0];
+                                    } else {
+                                        ((TL_decryptedMessageMediaVideo) reqSend6.media).thumb = document.thumb.bytes;
+                                    }
+                                }
+                                reqSend6.media.caption = caption;
+                                reqSend6.media.mime_type = MimeTypes.VIDEO_MP4;
+                                reqSend6.media.size = document.size;
+                                for (a = 0; a < document.attributes.size(); a++) {
+                                    attribute = (DocumentAttribute) document.attributes.get(a);
+                                    if (attribute instanceof TL_documentAttributeVideo) {
+                                        reqSend6.media.w = attribute.w;
+                                        reqSend6.media.h = attribute.h;
+                                        reqSend6.media.duration = attribute.duration;
+                                        break;
+                                    }
+                                }
+                                reqSend6.media.thumb_h = document.thumb.h;
+                                reqSend6.media.thumb_w = document.thumb.w;
+                                if (document.key == null || groupId != 0) {
+                                    if (delayedMessage == null) {
+                                        delayedMessage2 = new DelayedMessage(peer);
+                                        delayedMessage2.encryptedChat = encryptedChat;
+                                        delayedMessage2.type = 1;
+                                        delayedMessage2.sendEncryptedRequest = reqSend6;
+                                        delayedMessage2.originalPath = originalPath;
+                                        delayedMessage2.obj = newMsgObj;
+                                    } else {
+                                        delayedMessage3 = delayedMessage;
+                                    }
+                                    delayedMessage3.videoEditedInfo = videoEditedInfo;
+                                    if (groupId == 0) {
+                                        performSendDelayedMessage(delayedMessage3);
+                                    }
+                                } else {
+                                    encryptedFile = new TL_inputEncryptedFile();
+                                    encryptedFile.id = document.id;
+                                    encryptedFile.access_hash = document.access_hash;
+                                    reqSend6.media.key = document.key;
+                                    reqSend6.media.iv = document.iv;
+                                    SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
+                                    delayedMessage3 = delayedMessage;
+                                }
+                            } else if (type == 6) {
+                                reqSend6.media = new TL_decryptedMessageMediaContact();
+                                reqSend6.media.phone_number = user.phone;
+                                reqSend6.media.first_name = user.first_name;
+                                reqSend6.media.last_name = user.last_name;
+                                reqSend6.media.user_id = user.id;
                                 SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
                                 delayedMessage3 = delayedMessage;
-                            } else {
-                                ImageLoader.fillPhotoSizeWithBytes(document.thumb);
+                            } else if (type == 7 || (type == 9 && document != null)) {
+                                if (MessageObject.isStickerDocument(document)) {
+                                    reqSend6.media = new TL_decryptedMessageMediaExternalDocument();
+                                    reqSend6.media.id = document.id;
+                                    reqSend6.media.date = document.date;
+                                    reqSend6.media.access_hash = document.access_hash;
+                                    reqSend6.media.mime_type = document.mime_type;
+                                    reqSend6.media.size = document.size;
+                                    reqSend6.media.dc_id = document.dc_id;
+                                    reqSend6.media.attributes = document.attributes;
+                                    if (document.thumb == null) {
+                                        ((TL_decryptedMessageMediaExternalDocument) reqSend6.media).thumb = new TL_photoSizeEmpty();
+                                        ((TL_decryptedMessageMediaExternalDocument) reqSend6.media).thumb.type = "s";
+                                    } else {
+                                        ((TL_decryptedMessageMediaExternalDocument) reqSend6.media).thumb = document.thumb;
+                                    }
+                                    SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
+                                    delayedMessage3 = delayedMessage;
+                                } else {
+                                    ImageLoader.fillPhotoSizeWithBytes(document.thumb);
+                                    reqSend6.media = new TL_decryptedMessageMediaDocument();
+                                    reqSend6.media.attributes = document.attributes;
+                                    reqSend6.media.caption = caption;
+                                    if (document.thumb == null || document.thumb.bytes == null) {
+                                        ((TL_decryptedMessageMediaDocument) reqSend6.media).thumb = new byte[0];
+                                        reqSend6.media.thumb_h = 0;
+                                        reqSend6.media.thumb_w = 0;
+                                    } else {
+                                        ((TL_decryptedMessageMediaDocument) reqSend6.media).thumb = document.thumb.bytes;
+                                        reqSend6.media.thumb_h = document.thumb.h;
+                                        reqSend6.media.thumb_w = document.thumb.w;
+                                    }
+                                    reqSend6.media.size = document.size;
+                                    reqSend6.media.mime_type = document.mime_type;
+                                    if (document.key == null) {
+                                        delayedMessage2 = new DelayedMessage(peer);
+                                        delayedMessage2.originalPath = originalPath;
+                                        delayedMessage2.sendEncryptedRequest = reqSend6;
+                                        delayedMessage2.type = 2;
+                                        delayedMessage2.obj = newMsgObj;
+                                        delayedMessage2.encryptedChat = encryptedChat;
+                                        if (path != null && path.length() > 0) {
+                                            if (path.startsWith("http")) {
+                                                delayedMessage2.httpLocation = path;
+                                            }
+                                        }
+                                        performSendDelayedMessage(delayedMessage2);
+                                    } else {
+                                        encryptedFile = new TL_inputEncryptedFile();
+                                        encryptedFile.id = document.id;
+                                        encryptedFile.access_hash = document.access_hash;
+                                        reqSend6.media.key = document.key;
+                                        reqSend6.media.iv = document.iv;
+                                        SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
+                                        delayedMessage3 = delayedMessage;
+                                    }
+                                }
+                            } else if (type == 8) {
+                                delayedMessage2 = new DelayedMessage(peer);
+                                delayedMessage2.encryptedChat = encryptedChat;
+                                delayedMessage2.sendEncryptedRequest = reqSend6;
+                                delayedMessage2.obj = newMsgObj;
+                                delayedMessage2.type = 3;
                                 reqSend6.media = new TL_decryptedMessageMediaDocument();
                                 reqSend6.media.attributes = document.attributes;
                                 reqSend6.media.caption = caption;
@@ -2985,81 +3023,48 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     reqSend6.media.thumb_h = document.thumb.h;
                                     reqSend6.media.thumb_w = document.thumb.w;
                                 }
-                                reqSend6.media.size = document.size;
                                 reqSend6.media.mime_type = document.mime_type;
-                                if (document.key == null) {
-                                    delayedMessage2 = new DelayedMessage(peer);
-                                    delayedMessage2.originalPath = originalPath;
-                                    delayedMessage2.sendEncryptedRequest = reqSend6;
-                                    delayedMessage2.type = 2;
-                                    delayedMessage2.obj = newMsgObj;
-                                    delayedMessage2.encryptedChat = encryptedChat;
-                                    if (path != null && path.length() > 0) {
-                                        if (path.startsWith("http")) {
-                                            delayedMessage2.httpLocation = path;
-                                        }
-                                    }
-                                    performSendDelayedMessage(delayedMessage2);
-                                } else {
-                                    encryptedFile = new TL_inputEncryptedFile();
-                                    encryptedFile.id = document.id;
-                                    encryptedFile.access_hash = document.access_hash;
-                                    reqSend6.media.key = document.key;
-                                    reqSend6.media.iv = document.iv;
-                                    SecretChatHelper.getInstance(this.currentAccount).performSendEncryptedRequest(reqSend6, newMsgObj.messageOwner, encryptedChat, encryptedFile, null, newMsgObj);
-                                    delayedMessage3 = delayedMessage;
-                                }
+                                reqSend6.media.size = document.size;
+                                delayedMessage2.originalPath = originalPath;
+                                performSendDelayedMessage(delayedMessage2);
                             }
-                        } else if (type == 8) {
-                            delayedMessage2 = new DelayedMessage(peer);
-                            delayedMessage2.encryptedChat = encryptedChat;
-                            delayedMessage2.sendEncryptedRequest = reqSend6;
-                            delayedMessage2.obj = newMsgObj;
-                            delayedMessage2.type = 3;
-                            reqSend6.media = new TL_decryptedMessageMediaDocument();
-                            reqSend6.media.attributes = document.attributes;
-                            reqSend6.media.caption = caption;
-                            if (document.thumb == null || document.thumb.bytes == null) {
-                                ((TL_decryptedMessageMediaDocument) reqSend6.media).thumb = new byte[0];
-                                reqSend6.media.thumb_h = 0;
-                                reqSend6.media.thumb_w = 0;
+                            delayedMessage3 = delayedMessage;
+                        }
+                        if (groupId != 0) {
+                            TL_messages_sendEncryptedMultiMedia request;
+                            if (delayedMessage3.sendEncryptedRequest != null) {
+                                request = (TL_messages_sendEncryptedMultiMedia) delayedMessage3.sendEncryptedRequest;
                             } else {
-                                ((TL_decryptedMessageMediaDocument) reqSend6.media).thumb = document.thumb.bytes;
-                                reqSend6.media.thumb_h = document.thumb.h;
-                                reqSend6.media.thumb_w = document.thumb.w;
+                                request = new TL_messages_sendEncryptedMultiMedia();
+                                delayedMessage3.sendEncryptedRequest = request;
                             }
-                            reqSend6.media.mime_type = document.mime_type;
-                            reqSend6.media.size = document.size;
-                            delayedMessage2.originalPath = originalPath;
-                            performSendDelayedMessage(delayedMessage2);
+                            delayedMessage3.messageObjects.add(newMsgObj);
+                            delayedMessage3.messages.add(newMsg);
+                            delayedMessage3.originalPaths.add(originalPath);
+                            delayedMessage3.upload = true;
+                            request.messages.add(reqSend6);
+                            encryptedFile = new TL_inputEncryptedFile();
+                            encryptedFile.id = type == 3 ? 1 : 0;
+                            request.files.add(encryptedFile);
+                            performSendDelayedMessage(delayedMessage3);
                         }
-                        delayedMessage3 = delayedMessage;
-                    }
-                    if (groupId != 0) {
-                        TL_messages_sendEncryptedMultiMedia request;
-                        if (delayedMessage3.sendEncryptedRequest != null) {
-                            request = (TL_messages_sendEncryptedMultiMedia) delayedMessage3.sendEncryptedRequest;
-                        } else {
-                            request = new TL_messages_sendEncryptedMultiMedia();
-                            delayedMessage3.sendEncryptedRequest = request;
+                        if (retryMessageObject == null) {
+                            DataQuery.getInstance(this.currentAccount).cleanDraft(peer, false);
                         }
-                        delayedMessage3.messageObjects.add(newMsgObj);
-                        delayedMessage3.messages.add(newMsg);
-                        delayedMessage3.originalPaths.add(originalPath);
-                        delayedMessage3.upload = true;
-                        request.messages.add(reqSend6);
-                        encryptedFile = new TL_inputEncryptedFile();
-                        encryptedFile.id = type == 3 ? 1 : 0;
-                        request.files.add(encryptedFile);
-                        performSendDelayedMessage(delayedMessage3);
                     }
-                    if (retryMessageObject == null) {
-                        DataQuery.getInstance(this.currentAccount).cleanDraft(peer, false);
+                } catch (Exception e6) {
+                    e = e6;
+                    delayedMessage3 = delayedMessage;
+                    FileLog.e(e);
+                    MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsg);
+                    if (newMsgObj != null) {
+                        newMsgObj.messageOwner.send_state = 2;
                     }
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsg.id));
+                    processSentMessage(newMsg.id);
                 }
             } catch (Exception e7) {
                 e = e7;
-                delayedMessage3 = delayedMessage;
                 FileLog.e(e);
                 MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsg);
                 if (newMsgObj != null) {
@@ -3481,7 +3486,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             while (a < updatesArr.size()) {
                                 Update update = (Update) updatesArr.get(a);
                                 if (update instanceof TL_updateMessageID) {
-                                    newIds.put(update.random_id, Integer.valueOf(((TL_updateMessageID) update).id));
+                                    TL_updateMessageID updateMessageID = (TL_updateMessageID) update;
+                                    newIds.put(updateMessageID.random_id, Integer.valueOf(updateMessageID.id));
                                     updatesArr.remove(a);
                                     a--;
                                 } else if (update instanceof TL_updateNewMessage) {

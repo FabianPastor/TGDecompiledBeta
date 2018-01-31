@@ -120,6 +120,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private InputEncryptedFile encryptedFile;
     private InputFile file;
     private boolean isFrontface = true;
+    private boolean isSecretChat;
     private byte[] iv;
     private byte[] key;
     private float[] mMVPMatrix;
@@ -363,11 +364,24 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             };
         }
 
-        public void startRecording(File outputFile, int size, int bitRate, EGLContext sharedContext) {
+        public void startRecording(File outputFile, EGLContext sharedContext) {
+            int resolution;
+            int bitrate;
+            String model = Build.DEVICE;
+            if (model == null) {
+                model = TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            if (model.startsWith("zeroflte") || model.startsWith("zenlte")) {
+                resolution = 320;
+                bitrate = 600000;
+            } else {
+                resolution = PsExtractor.VIDEO_STREAM_MASK;
+                bitrate = 400000;
+            }
             this.videoFile = outputFile;
-            this.videoWidth = size;
-            this.videoHeight = size;
-            this.videoBitrate = bitRate;
+            this.videoWidth = resolution;
+            this.videoHeight = resolution;
+            this.videoBitrate = bitrate;
             this.sharedEglContext = sharedContext;
             synchronized (this.sync) {
                 if (this.running) {
@@ -799,7 +813,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 movie.setCacheFile(this.videoFile);
                 movie.setRotation(0);
                 movie.setSize(this.videoWidth, this.videoHeight);
-                this.mediaMuxer = new MP4Builder().createMovie(movie);
+                this.mediaMuxer = new MP4Builder().createMovie(movie, InstantCameraView.this.isSecretChat);
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         if (!InstantCameraView.this.cancelled) {
@@ -1239,20 +1253,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if ((this.eglContext.equals(this.egl10.eglGetCurrentContext()) && this.eglSurface.equals(this.egl10.eglGetCurrentSurface(12377))) || this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
                 this.cameraSurface.updateTexImage();
                 if (!this.recording) {
-                    int resolution;
-                    int bitrate;
-                    String model = Build.DEVICE;
-                    if (model == null) {
-                        model = TtmlNode.ANONYMOUS_REGION_ID;
-                    }
-                    if (model.startsWith("zeroflte") || model.startsWith("zenlte")) {
-                        resolution = 320;
-                        bitrate = 600000;
-                    } else {
-                        resolution = PsExtractor.VIDEO_STREAM_MASK;
-                        bitrate = 400000;
-                    }
-                    this.videoEncoder.startRecording(InstantCameraView.this.cameraFile, resolution, bitrate, EGL14.eglGetCurrentContext());
+                    this.videoEncoder.startRecording(InstantCameraView.this.cameraFile, EGL14.eglGetCurrentContext());
                     this.recording = true;
                     int orientation = this.currentSession.getCurrentOrientation();
                     if (orientation == 90 || orientation == 270) {
@@ -1443,6 +1444,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         setWillNotDraw(false);
         setBackgroundColor(-NUM);
         this.baseFragment = parentFragment;
+        this.isSecretChat = this.baseFragment.getCurrentEncryptedChat() != null;
         this.paint = new Paint(1) {
             public void setAlpha(int a) {
                 super.setAlpha(a);

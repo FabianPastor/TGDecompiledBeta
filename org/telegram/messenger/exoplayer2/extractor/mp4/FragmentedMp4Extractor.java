@@ -341,7 +341,6 @@ public final class FragmentedMp4Extractor implements Extractor {
 
     private void onMoovContainerAtomRead(ContainerAtom moov) throws ParserException {
         int i;
-        Track track;
         Assertions.checkState(this.sideloadedTrack == null, "Unexpected moov box.");
         DrmInitData drmInitData = getDrmInitDataFromAtoms(moov.leafChildren);
         ContainerAtom mvex = moov.getContainerAtomOfType(Atom.TYPE_mvex);
@@ -360,6 +359,7 @@ public final class FragmentedMp4Extractor implements Extractor {
         SparseArray<Track> tracks = new SparseArray();
         int moovContainerChildrenSize = moov.containerChildren.size();
         for (i = 0; i < moovContainerChildrenSize; i++) {
+            Track track;
             ContainerAtom atom2 = (ContainerAtom) moov.containerChildren.get(i);
             if (atom2.type == Atom.TYPE_trak) {
                 track = AtomParsers.parseTrak(atom2, moov.getLeafAtomOfType(Atom.TYPE_mvhd), duration, drmInitData, (this.flags & 32) != 0, false);

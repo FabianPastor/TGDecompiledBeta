@@ -155,7 +155,7 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             this.miniButtonState = 1;
             this.radialProgress.setProgress(0.0f, false);
             FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
-            this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+            this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false, AndroidUtilities.dp(44.0f));
             invalidate();
         } else if (this.miniButtonState == 1) {
             if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
@@ -163,7 +163,7 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             }
             this.miniButtonState = 0;
             FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.currentMessageObject.getDocument());
-            this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+            this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false, AndroidUtilities.dp(44.0f));
             invalidate();
         }
     }
@@ -174,7 +174,7 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
                 if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
                     this.miniButtonState = 1;
                     this.radialProgress.setProgress(0.0f, false);
-                    this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+                    this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false, AndroidUtilities.dp(44.0f));
                 }
                 this.buttonState = 1;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
@@ -309,7 +309,7 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
             } else {
                 z = false;
             }
-            radialProgress.setMiniBackground(miniDrawableForCurrentState, z, animated);
+            radialProgress.setMiniBackground(miniDrawableForCurrentState, z, animated, AndroidUtilities.dp(44.0f));
         } else if (fileExists) {
             DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);

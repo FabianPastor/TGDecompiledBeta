@@ -162,7 +162,7 @@ public class Browser {
             boolean internalUri = isInternalUri(uri, forceBrowser);
             if (tryTelegraph) {
                 try {
-                    if (uri.getHost().toLowerCase().equals("telegra.ph") || uri.toString().contains("telegram.org/faq")) {
+                    if (uri.getHost().toLowerCase().equals("telegra.ph") || uri.toString().toLowerCase().contains("telegram.org/faq")) {
                         final AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(context, 1)};
                         TLObject req = new TL_messages_getWebPagePreview();
                         req.message = uri.toString();

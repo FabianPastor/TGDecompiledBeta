@@ -356,7 +356,7 @@ public class BottomSheet extends Dialog {
             if (BottomSheet.this.onContainerTouchEvent(ev)) {
                 return true;
             }
-            if (BottomSheet.this.canDismissWithTouchOutside() && ev != null && ((ev.getAction() == 0 || ev.getAction() == 2) && ((!this.startedTracking && !this.maybeStartTracking) || ev.getPointerCount() == 1))) {
+            if (BottomSheet.this.canDismissWithTouchOutside() && ev != null && ((ev.getAction() == 0 || ev.getAction() == 2) && !this.startedTracking && !this.maybeStartTracking && ev.getPointerCount() == 1)) {
                 this.startedTrackingX = (int) ev.getX();
                 this.startedTrackingY = (int) ev.getY();
                 if (this.startedTrackingY < BottomSheet.this.containerView.getTop() || this.startedTrackingX < BottomSheet.this.containerView.getLeft() || this.startedTrackingX > BottomSheet.this.containerView.getRight()) {

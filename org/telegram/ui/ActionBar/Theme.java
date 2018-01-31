@@ -105,7 +105,7 @@ public class Theme {
     public static Paint chat_docBackPaint = null;
     public static TextPaint chat_docNamePaint = null;
     public static TextPaint chat_durationPaint = null;
-    public static Drawable[][] chat_fileMiniStatesDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{4, 2}));
+    public static Drawable[][] chat_fileMiniStatesDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{6, 2}));
     public static Drawable[][] chat_fileStatesDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{10, 2}));
     public static TextPaint chat_forwardNamePaint = null;
     public static TextPaint chat_gamePaint = null;
@@ -2445,6 +2445,10 @@ public class Theme {
             chat_fileMiniStatesDrawable[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.audio_mini_arrow);
             chat_fileMiniStatesDrawable[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.transparent);
             chat_fileMiniStatesDrawable[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.transparent);
+            chat_fileMiniStatesDrawable[4][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.audio_mini_arrow);
+            chat_fileMiniStatesDrawable[4][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.audio_mini_arrow);
+            chat_fileMiniStatesDrawable[5][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.transparent);
+            chat_fileMiniStatesDrawable[5][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.transparent);
             chat_fileStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_play_m);
             chat_fileStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_play_m);
             chat_fileStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_pause_m);
@@ -2647,6 +2651,10 @@ public class Theme {
                 setCombinedDrawableColor(chat_fileMiniStatesDrawable[a + 2][0], getColor(key_chat_inBubble), true);
                 setCombinedDrawableColor(chat_fileMiniStatesDrawable[a + 2][1], getColor(key_chat_inLoaderSelected), false);
                 setCombinedDrawableColor(chat_fileMiniStatesDrawable[a + 2][1], getColor(key_chat_inBubbleSelected), true);
+                setCombinedDrawableColor(chat_fileMiniStatesDrawable[a + 4][0], getColor(key_chat_mediaLoaderPhoto), false);
+                setCombinedDrawableColor(chat_fileMiniStatesDrawable[a + 4][0], getColor(key_chat_mediaLoaderPhotoIcon), true);
+                setCombinedDrawableColor(chat_fileMiniStatesDrawable[a + 4][1], getColor(key_chat_mediaLoaderPhotoSelected), false);
+                setCombinedDrawableColor(chat_fileMiniStatesDrawable[a + 4][1], getColor(key_chat_mediaLoaderPhotoIconSelected), true);
             }
             for (a = 0; a < 5; a++) {
                 setCombinedDrawableColor(chat_fileStatesDrawable[a][0], getColor(key_chat_outLoader), false);
@@ -2921,12 +2929,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
+                    SharedPreferences preferences;
                     int selectedBackground;
                     File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
                         int i;
-                        SharedPreferences preferences;
                         if (!MessagesController.getGlobalMainSettings().getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

@@ -181,8 +181,7 @@ public class DataSettingsActivity extends BaseFragment {
                     } else if (position == DataSettingsActivity.this.enableStreamRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("EnableStreaming", R.string.EnableStreaming), SharedConfig.streamMedia, true);
                         return;
-                    } else if (position == DataSettingsActivity.this.enableCacheStreamRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("CacheStreamFile", R.string.CacheStreamFile), SharedConfig.saveStreamMedia, true);
+                    } else if (position != DataSettingsActivity.this.enableCacheStreamRow) {
                         return;
                     } else {
                         return;

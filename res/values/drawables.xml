@@ -833,6 +833,14 @@
     <drawable name="ic_volume_up_white_24dp">res/drawable-hdpi-v4/ic_volume_up_white_24dp.png</drawable>
     <drawable name="ic_volume_up_white_24dp">res/drawable-xhdpi-v4/ic_volume_up_white_24dp.png</drawable>
     <drawable name="ic_volume_up_white_24dp">res/drawable-xxhdpi-v4/ic_volume_up_white_24dp.png</drawable>
+    <drawable name="inline_video_pause">res/drawable-mdpi-v4/inline_video_pause.png</drawable>
+    <drawable name="inline_video_pause">res/drawable-hdpi-v4/inline_video_pause.png</drawable>
+    <drawable name="inline_video_pause">res/drawable-xhdpi-v4/inline_video_pause.png</drawable>
+    <drawable name="inline_video_pause">res/drawable-xxhdpi-v4/inline_video_pause.png</drawable>
+    <drawable name="inline_video_play">res/drawable-mdpi-v4/inline_video_play.png</drawable>
+    <drawable name="inline_video_play">res/drawable-hdpi-v4/inline_video_play.png</drawable>
+    <drawable name="inline_video_play">res/drawable-xhdpi-v4/inline_video_play.png</drawable>
+    <drawable name="inline_video_play">res/drawable-xxhdpi-v4/inline_video_play.png</drawable>
     <drawable name="instant_camera">res/drawable-mdpi-v4/instant_camera.png</drawable>
     <drawable name="instant_camera">res/drawable-hdpi-v4/instant_camera.png</drawable>
     <drawable name="instant_camera">res/drawable-xhdpi-v4/instant_camera.png</drawable>
@@ -1353,10 +1361,6 @@
     <drawable name="passcode_logo">res/drawable-hdpi-v4/passcode_logo.png</drawable>
     <drawable name="passcode_logo">res/drawable-xhdpi-v4/passcode_logo.png</drawable>
     <drawable name="passcode_logo">res/drawable-xxhdpi-v4/passcode_logo.png</drawable>
-    <drawable name="pausevideo">res/drawable-mdpi-v4/pausevideo.png</drawable>
-    <drawable name="pausevideo">res/drawable-hdpi-v4/pausevideo.png</drawable>
-    <drawable name="pausevideo">res/drawable-xhdpi-v4/pausevideo.png</drawable>
-    <drawable name="pausevideo">res/drawable-xxhdpi-v4/pausevideo.png</drawable>
     <drawable name="permissions_contacts">res/drawable-mdpi-v4/permissions_contacts.png</drawable>
     <drawable name="permissions_contacts">res/drawable-hdpi-v4/permissions_contacts.png</drawable>
     <drawable name="permissions_contacts">res/drawable-xhdpi-v4/permissions_contacts.png</drawable>
@@ -1475,10 +1479,6 @@
     <drawable name="player">res/drawable-hdpi-v4/player.png</drawable>
     <drawable name="player">res/drawable-xhdpi-v4/player.png</drawable>
     <drawable name="player">res/drawable-xxhdpi-v4/player.png</drawable>
-    <drawable name="playvideo">res/drawable-mdpi-v4/playvideo.png</drawable>
-    <drawable name="playvideo">res/drawable-hdpi-v4/playvideo.png</drawable>
-    <drawable name="playvideo">res/drawable-xhdpi-v4/playvideo.png</drawable>
-    <drawable name="playvideo">res/drawable-xxhdpi-v4/playvideo.png</drawable>
     <drawable name="plus">res/drawable-mdpi-v4/plus.png</drawable>
     <drawable name="plus">res/drawable-hdpi-v4/plus.png</drawable>
     <drawable name="plus">res/drawable-xhdpi-v4/plus.png</drawable>

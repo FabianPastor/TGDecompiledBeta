@@ -490,18 +490,18 @@ public class MessagesController implements NotificationCenterDelegate {
                 return AndroidUtilities.compare(ltype, rtype);
             }
             if (ltype == 0) {
-                return AndroidUtilities.compare(lhs.pts, rhs.pts);
+                return AndroidUtilities.compare(MessagesController.getUpdatePts(lhs), MessagesController.getUpdatePts(rhs));
             }
             if (ltype == 1) {
-                return AndroidUtilities.compare(lhs.qts, rhs.qts);
+                return AndroidUtilities.compare(MessagesController.getUpdateQts(lhs), MessagesController.getUpdateQts(rhs));
             }
             if (ltype != 2) {
                 return 0;
             }
-            int lChannel = MessagesController.this.getUpdateChannelId(lhs);
-            int rChannel = MessagesController.this.getUpdateChannelId(rhs);
+            int lChannel = MessagesController.getUpdateChannelId(lhs);
+            int rChannel = MessagesController.getUpdateChannelId(rhs);
             if (lChannel == rChannel) {
-                return AndroidUtilities.compare(lhs.pts, rhs.pts);
+                return AndroidUtilities.compare(MessagesController.getUpdatePts(lhs), MessagesController.getUpdatePts(rhs));
             }
             return AndroidUtilities.compare(lChannel, rChannel);
         }
@@ -2363,6 +2363,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
         long newTaskId;
         NativeByteBuffer data;
+        NativeByteBuffer data2;
         Throwable e;
         final int i;
         TL_messages_deleteMessages req;
@@ -2391,7 +2392,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance(this.currentAccount).updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
-            NativeByteBuffer data2;
             if (channelId != 0) {
                 TL_channels_deleteMessages req2;
                 if (taskRequest != null) {
@@ -4025,7 +4025,9 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
+                Chat chat;
                 User user;
+                Integer value;
                 final LongSparseArray<TL_dialog> new_dialogs_dict = new LongSparseArray();
                 final LongSparseArray<MessageObject> new_dialogMessage = new LongSparseArray();
                 SparseArray usersDict = new SparseArray();
@@ -4043,7 +4045,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 Message lastMessage = null;
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     if (lastMessage == null || message.date < lastMessage.date) {
                         lastMessage = message;
@@ -4115,7 +4116,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
-                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -4477,8 +4477,6 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void checkLastDialogMessage(TL_dialog dialog, InputPeer peer, long taskId) {
         Throwable e;
-        long newTaskId;
-        final TL_dialog tL_dialog;
         final int lower_id = (int) dialog.id;
         if (lower_id != 0 && this.checkingLastMessagesDialogs.indexOfKey(lower_id) < 0) {
             InputPeer inputPeer;
@@ -4490,6 +4488,8 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             req.peer = inputPeer;
             if (req.peer != null && !(req.peer instanceof TL_inputPeerChannel)) {
+                long newTaskId;
+                final TL_dialog tL_dialog;
                 req.limit = 1;
                 this.checkingLastMessagesDialogs.put(lower_id, true);
                 if (taskId == 0) {
@@ -4589,6 +4589,7 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
+                Chat chat;
                 final LongSparseArray<TL_dialog> new_dialogs_dict = new LongSparseArray();
                 final LongSparseArray<MessageObject> new_dialogMessage = new LongSparseArray();
                 SparseArray usersDict = new SparseArray(dialogsRes.users.size());
@@ -4603,7 +4604,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(c.id, c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -6039,13 +6039,13 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
-        int channelPts;
         Throwable e;
         long newTaskId;
         TL_updates_getChannelDifference req;
         final int i;
         final int i2;
         if (!this.gettingDifferenceChannels.get(channelId)) {
+            int channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = this.channelsPts.get(channelId);
@@ -6481,7 +6481,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     res.other_updates.remove(a);
                                     a--;
                                 } else if (MessagesController.this.getUpdateType(upd) == 2) {
-                                    int channelId = MessagesController.this.getUpdateChannelId(upd);
+                                    int channelId = MessagesController.getUpdateChannelId(upd);
                                     int channelPts = MessagesController.this.channelsPts.get(channelId);
                                     if (channelPts == 0) {
                                         channelPts = MessagesStorage.getInstance(MessagesController.this.currentAccount).getChannelPtsSync(channelId);
@@ -6489,7 +6489,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                             MessagesController.this.channelsPts.put(channelId, channelPts);
                                         }
                                     }
-                                    if (channelPts != 0 && upd.pts <= channelPts) {
+                                    if (channelPts != 0 && MessagesController.getUpdatePts(upd) <= channelPts) {
                                         res.other_updates.remove(a);
                                         a--;
                                     }
@@ -7100,14 +7100,131 @@ public class MessagesController implements NotificationCenterDelegate {
         return 3;
     }
 
-    private int getUpdateChannelId(Update update) {
+    private static int getUpdatePts(Update update) {
+        if (update instanceof TL_updateDeleteMessages) {
+            return ((TL_updateDeleteMessages) update).pts;
+        }
+        if (update instanceof TL_updateNewChannelMessage) {
+            return ((TL_updateNewChannelMessage) update).pts;
+        }
+        if (update instanceof TL_updateReadHistoryOutbox) {
+            return ((TL_updateReadHistoryOutbox) update).pts;
+        }
+        if (update instanceof TL_updateNewMessage) {
+            return ((TL_updateNewMessage) update).pts;
+        }
+        if (update instanceof TL_updateEditMessage) {
+            return ((TL_updateEditMessage) update).pts;
+        }
+        if (update instanceof TL_updateWebPage) {
+            return ((TL_updateWebPage) update).pts;
+        }
+        if (update instanceof TL_updateReadHistoryInbox) {
+            return ((TL_updateReadHistoryInbox) update).pts;
+        }
+        if (update instanceof TL_updateChannelWebPage) {
+            return ((TL_updateChannelWebPage) update).pts;
+        }
+        if (update instanceof TL_updateDeleteChannelMessages) {
+            return ((TL_updateDeleteChannelMessages) update).pts;
+        }
+        if (update instanceof TL_updateEditChannelMessage) {
+            return ((TL_updateEditChannelMessage) update).pts;
+        }
+        if (update instanceof TL_updateReadMessagesContents) {
+            return ((TL_updateReadMessagesContents) update).pts;
+        }
+        if (update instanceof TL_updateChannelTooLong) {
+            return ((TL_updateChannelTooLong) update).pts;
+        }
+        return 0;
+    }
+
+    private static int getUpdatePtsCount(Update update) {
+        if (update instanceof TL_updateDeleteMessages) {
+            return ((TL_updateDeleteMessages) update).pts_count;
+        }
+        if (update instanceof TL_updateNewChannelMessage) {
+            return ((TL_updateNewChannelMessage) update).pts_count;
+        }
+        if (update instanceof TL_updateReadHistoryOutbox) {
+            return ((TL_updateReadHistoryOutbox) update).pts_count;
+        }
+        if (update instanceof TL_updateNewMessage) {
+            return ((TL_updateNewMessage) update).pts_count;
+        }
+        if (update instanceof TL_updateEditMessage) {
+            return ((TL_updateEditMessage) update).pts_count;
+        }
+        if (update instanceof TL_updateWebPage) {
+            return ((TL_updateWebPage) update).pts_count;
+        }
+        if (update instanceof TL_updateReadHistoryInbox) {
+            return ((TL_updateReadHistoryInbox) update).pts_count;
+        }
+        if (update instanceof TL_updateChannelWebPage) {
+            return ((TL_updateChannelWebPage) update).pts_count;
+        }
+        if (update instanceof TL_updateDeleteChannelMessages) {
+            return ((TL_updateDeleteChannelMessages) update).pts_count;
+        }
+        if (update instanceof TL_updateEditChannelMessage) {
+            return ((TL_updateEditChannelMessage) update).pts_count;
+        }
+        if (update instanceof TL_updateReadMessagesContents) {
+            return ((TL_updateReadMessagesContents) update).pts_count;
+        }
+        return 0;
+    }
+
+    private static int getUpdateQts(Update update) {
+        if (update instanceof TL_updateNewEncryptedMessage) {
+            return ((TL_updateNewEncryptedMessage) update).qts;
+        }
+        return 0;
+    }
+
+    private static int getUpdateChannelId(Update update) {
         if (update instanceof TL_updateNewChannelMessage) {
             return ((TL_updateNewChannelMessage) update).message.to_id.channel_id;
         }
         if (update instanceof TL_updateEditChannelMessage) {
             return ((TL_updateEditChannelMessage) update).message.to_id.channel_id;
         }
-        return update.channel_id;
+        if (update instanceof TL_updateReadChannelOutbox) {
+            return ((TL_updateReadChannelOutbox) update).channel_id;
+        }
+        if (update instanceof TL_updateChannelMessageViews) {
+            return ((TL_updateChannelMessageViews) update).channel_id;
+        }
+        if (update instanceof TL_updateChannelTooLong) {
+            return ((TL_updateChannelTooLong) update).channel_id;
+        }
+        if (update instanceof TL_updateChannelPinnedMessage) {
+            return ((TL_updateChannelPinnedMessage) update).channel_id;
+        }
+        if (update instanceof TL_updateChannelReadMessagesContents) {
+            return ((TL_updateChannelReadMessagesContents) update).channel_id;
+        }
+        if (update instanceof TL_updateChannelAvailableMessages) {
+            return ((TL_updateChannelAvailableMessages) update).channel_id;
+        }
+        if (update instanceof TL_updateChannel) {
+            return ((TL_updateChannel) update).channel_id;
+        }
+        if (update instanceof TL_updateChannelWebPage) {
+            return ((TL_updateChannelWebPage) update).channel_id;
+        }
+        if (update instanceof TL_updateDeleteChannelMessages) {
+            return ((TL_updateDeleteChannelMessages) update).channel_id;
+        }
+        if (update instanceof TL_updateReadChannelInbox) {
+            return ((TL_updateReadChannelInbox) update).channel_id;
+        }
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.e("trying to get unknown update channel_id for " + update);
+        }
+        return 0;
     }
 
     public void processUpdates(Updates updates, boolean fromQueue) {
@@ -7363,6 +7480,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     TL_updates updatesNew;
                     int b;
                     Update update2;
+                    int pts2;
+                    int count2;
                     if (getUpdateType(update) != 0) {
                         if (getUpdateType(update) != 1) {
                             if (getUpdateType(update) != 2) {
@@ -7388,16 +7507,18 @@ public class MessagesController implements NotificationCenterDelegate {
                             }
                             updatesNew = new TL_updates();
                             updatesNew.updates.add(update);
-                            updatesNew.pts = update.pts;
-                            updatesNew.pts_count = update.pts_count;
+                            updatesNew.pts = getUpdatePts(update);
+                            updatesNew.pts_count = getUpdatePtsCount(update);
                             for (b = a + 1; b < updates.updates.size(); b = (b - 1) + 1) {
                                 update2 = (Update) updates.updates.get(b);
-                                if (getUpdateType(update2) != 2 || channelId != getUpdateChannelId(update2) || updatesNew.pts + update2.pts_count != update2.pts) {
+                                pts2 = getUpdatePts(update2);
+                                count2 = getUpdatePtsCount(update2);
+                                if (getUpdateType(update2) != 2 || channelId != getUpdateChannelId(update2) || updatesNew.pts + count2 != pts2) {
                                     break;
                                 }
                                 updatesNew.updates.add(update2);
-                                updatesNew.pts = update2.pts;
-                                updatesNew.pts_count += update2.pts_count;
+                                updatesNew.pts = pts2;
+                                updatesNew.pts_count += count2;
                                 updates.updates.remove(b);
                             }
                             if (skipUpdate) {
@@ -7449,14 +7570,15 @@ public class MessagesController implements NotificationCenterDelegate {
                         } else {
                             updatesNew = new TL_updates();
                             updatesNew.updates.add(update);
-                            updatesNew.pts = update.qts;
+                            updatesNew.pts = getUpdateQts(update);
                             for (b = a + 1; b < updates.updates.size(); b = (b - 1) + 1) {
                                 update2 = (Update) updates.updates.get(b);
-                                if (getUpdateType(update2) != 1 || updatesNew.pts + 1 != update2.qts) {
+                                int qts2 = getUpdateQts(update2);
+                                if (getUpdateType(update2) != 1 || updatesNew.pts + 1 != qts2) {
                                     break;
                                 }
                                 updatesNew.updates.add(update2);
-                                updatesNew.pts = update2.qts;
+                                updatesNew.pts = qts2;
                                 updates.updates.remove(b);
                             }
                             if (MessagesStorage.getInstance(this.currentAccount).getLastQtsValue() == 0 || MessagesStorage.getInstance(this.currentAccount).getLastQtsValue() + updatesNew.updates.size() == updatesNew.pts) {
@@ -7483,16 +7605,18 @@ public class MessagesController implements NotificationCenterDelegate {
                     } else {
                         updatesNew = new TL_updates();
                         updatesNew.updates.add(update);
-                        updatesNew.pts = update.pts;
-                        updatesNew.pts_count = update.pts_count;
+                        updatesNew.pts = getUpdatePts(update);
+                        updatesNew.pts_count = getUpdatePtsCount(update);
                         for (b = a + 1; b < updates.updates.size(); b = (b - 1) + 1) {
                             update2 = (Update) updates.updates.get(b);
-                            if (getUpdateType(update2) != 0 || updatesNew.pts + update2.pts_count != update2.pts) {
+                            pts2 = getUpdatePts(update2);
+                            count2 = getUpdatePtsCount(update2);
+                            if (getUpdateType(update2) != 0 || updatesNew.pts + count2 != pts2) {
                                 break;
                             }
                             updatesNew.updates.add(update2);
-                            updatesNew.pts = update2.pts;
-                            updatesNew.pts_count += update2.pts_count;
+                            updatesNew.pts = pts2;
+                            updatesNew.pts_count += count2;
                             updates.updates.remove(b);
                         }
                         if (MessagesStorage.getInstance(this.currentAccount).getLastPtsValue() + updatesNew.pts_count == updatesNew.pts) {
@@ -7681,11 +7805,12 @@ public class MessagesController implements NotificationCenterDelegate {
         int interfaceUpdateMask = 0;
         int size3 = updates.size();
         for (int c = 0; c < size3; c++) {
-            Update update = (Update) updates.get(c);
+            Update baseUpdate = (Update) updates.get(c);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("process update " + update);
+                FileLog.d("process update " + baseUpdate);
             }
             Message message;
+            int chat_id;
             int user_id;
             int count;
             MessageEntity entity;
@@ -7694,20 +7819,20 @@ public class MessagesController implements NotificationCenterDelegate {
             Integer value;
             MessageObject obj;
             ArrayList<MessageObject> arr;
-            if ((update instanceof TL_updateNewMessage) || (update instanceof TL_updateNewChannelMessage)) {
-                if (update instanceof TL_updateNewMessage) {
-                    message = ((TL_updateNewMessage) update).message;
+            if ((baseUpdate instanceof TL_updateNewMessage) || (baseUpdate instanceof TL_updateNewChannelMessage)) {
+                if (baseUpdate instanceof TL_updateNewMessage) {
+                    message = ((TL_updateNewMessage) baseUpdate).message;
                 } else {
-                    message = ((TL_updateNewChannelMessage) update).message;
+                    message = ((TL_updateNewChannelMessage) baseUpdate).message;
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.d(update + " channelId = " + message.to_id.channel_id);
+                        FileLog.d(baseUpdate + " channelId = " + message.to_id.channel_id);
                     }
                     if (!message.out && message.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
                         message.out = true;
                     }
                 }
                 chat = null;
-                int chat_id = 0;
+                chat_id = 0;
                 user_id = 0;
                 if (message.to_id.channel_id != 0) {
                     chat_id = message.to_id.channel_id;
@@ -7835,7 +7960,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                     pushMessages.add(obj);
                 }
-            } else if (update instanceof TL_updateReadMessagesContents) {
+            } else if (baseUpdate instanceof TL_updateReadMessagesContents) {
+                TL_updateReadMessagesContents update = (TL_updateReadMessagesContents) baseUpdate;
                 if (markAsReadMessages == null) {
                     markAsReadMessages = new ArrayList();
                 }
@@ -7843,49 +7969,51 @@ public class MessagesController implements NotificationCenterDelegate {
                 for (a = 0; a < size; a++) {
                     markAsReadMessages.add(Long.valueOf((long) ((Integer) update.messages.get(a)).intValue()));
                 }
-            } else if (update instanceof TL_updateChannelReadMessagesContents) {
+            } else if (baseUpdate instanceof TL_updateChannelReadMessagesContents) {
+                TL_updateChannelReadMessagesContents update2 = (TL_updateChannelReadMessagesContents) baseUpdate;
                 if (markAsReadMessages == null) {
                     markAsReadMessages = new ArrayList();
                 }
-                size = update.messages.size();
+                size = update2.messages.size();
                 for (a = 0; a < size; a++) {
-                    markAsReadMessages.add(Long.valueOf(((long) ((Integer) update.messages.get(a)).intValue()) | (((long) update.channel_id) << 32)));
+                    markAsReadMessages.add(Long.valueOf(((long) ((Integer) update2.messages.get(a)).intValue()) | (((long) update2.channel_id) << 32)));
                 }
-            } else if ((update instanceof TL_updateReadHistoryInbox) || (update instanceof TL_updateReadHistoryOutbox)) {
-                Peer peer;
-                if (update instanceof TL_updateReadHistoryInbox) {
-                    peer = ((TL_updateReadHistoryInbox) update).peer;
-                    if (markAsReadMessagesInbox == null) {
-                        markAsReadMessagesInbox = new SparseLongArray();
-                    }
-                    if (peer.chat_id != 0) {
-                        markAsReadMessagesInbox.put(-peer.chat_id, (long) update.max_id);
-                        dialog_id = (long) (-peer.chat_id);
-                    } else {
-                        markAsReadMessagesInbox.put(peer.user_id, (long) update.max_id);
-                        dialog_id = (long) peer.user_id;
-                    }
-                    read_max = this.dialogs_read_inbox_max;
+            } else if (baseUpdate instanceof TL_updateReadHistoryInbox) {
+                TL_updateReadHistoryInbox update3 = (TL_updateReadHistoryInbox) baseUpdate;
+                if (markAsReadMessagesInbox == null) {
+                    markAsReadMessagesInbox = new SparseLongArray();
+                }
+                if (update3.peer.chat_id != 0) {
+                    markAsReadMessagesInbox.put(-update3.peer.chat_id, (long) update3.max_id);
+                    dialog_id = (long) (-update3.peer.chat_id);
                 } else {
-                    peer = ((TL_updateReadHistoryOutbox) update).peer;
-                    if (markAsReadMessagesOutbox == null) {
-                        markAsReadMessagesOutbox = new SparseLongArray();
-                    }
-                    if (peer.chat_id != 0) {
-                        markAsReadMessagesOutbox.put(-peer.chat_id, (long) update.max_id);
-                        dialog_id = (long) (-peer.chat_id);
-                    } else {
-                        markAsReadMessagesOutbox.put(peer.user_id, (long) update.max_id);
-                        dialog_id = (long) peer.user_id;
-                    }
-                    read_max = this.dialogs_read_outbox_max;
+                    markAsReadMessagesInbox.put(update3.peer.user_id, (long) update3.max_id);
+                    dialog_id = (long) update3.peer.user_id;
                 }
-                value = (Integer) read_max.get(Long.valueOf(dialog_id));
+                value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(dialog_id));
                 if (value == null) {
-                    value = Integer.valueOf(MessagesStorage.getInstance(this.currentAccount).getDialogReadMax(update instanceof TL_updateReadHistoryOutbox, dialog_id));
+                    value = Integer.valueOf(MessagesStorage.getInstance(this.currentAccount).getDialogReadMax(false, dialog_id));
                 }
-                read_max.put(Long.valueOf(dialog_id), Integer.valueOf(Math.max(value.intValue(), update.max_id)));
-            } else if (update instanceof TL_updateDeleteMessages) {
+                this.dialogs_read_inbox_max.put(Long.valueOf(dialog_id), Integer.valueOf(Math.max(value.intValue(), update3.max_id)));
+            } else if (baseUpdate instanceof TL_updateReadHistoryOutbox) {
+                TL_updateReadHistoryOutbox update4 = (TL_updateReadHistoryOutbox) baseUpdate;
+                if (markAsReadMessagesOutbox == null) {
+                    markAsReadMessagesOutbox = new SparseLongArray();
+                }
+                if (update4.peer.chat_id != 0) {
+                    markAsReadMessagesOutbox.put(-update4.peer.chat_id, (long) update4.max_id);
+                    dialog_id = (long) (-update4.peer.chat_id);
+                } else {
+                    markAsReadMessagesOutbox.put(update4.peer.user_id, (long) update4.max_id);
+                    dialog_id = (long) update4.peer.user_id;
+                }
+                value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(dialog_id));
+                if (value == null) {
+                    value = Integer.valueOf(MessagesStorage.getInstance(this.currentAccount).getDialogReadMax(true, dialog_id));
+                }
+                this.dialogs_read_outbox_max.put(Long.valueOf(dialog_id), Integer.valueOf(Math.max(value.intValue(), update4.max_id)));
+            } else if (baseUpdate instanceof TL_updateDeleteMessages) {
+                TL_updateDeleteMessages update5 = (TL_updateDeleteMessages) baseUpdate;
                 if (deletedMessages == null) {
                     deletedMessages = new SparseArray();
                 }
@@ -7894,35 +8022,47 @@ public class MessagesController implements NotificationCenterDelegate {
                     arrayList = new ArrayList();
                     deletedMessages.put(0, arrayList);
                 }
-                arrayList.addAll(update.messages);
-            } else if ((update instanceof TL_updateUserTyping) || (update instanceof TL_updateChatUserTyping)) {
-                if (update.user_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                    uid = (long) (-update.chat_id);
+                arrayList.addAll(update5.messages);
+            } else if ((baseUpdate instanceof TL_updateUserTyping) || (baseUpdate instanceof TL_updateChatUserTyping)) {
+                SendMessageAction action;
+                if (baseUpdate instanceof TL_updateUserTyping) {
+                    TL_updateUserTyping update6 = (TL_updateUserTyping) baseUpdate;
+                    user_id = update6.user_id;
+                    action = update6.action;
+                    chat_id = 0;
+                } else {
+                    TL_updateChatUserTyping update7 = (TL_updateChatUserTyping) baseUpdate;
+                    chat_id = update7.chat_id;
+                    user_id = update7.user_id;
+                    action = update7.action;
+                }
+                if (user_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+                    uid = (long) (-chat_id);
                     if (uid == 0) {
-                        uid = (long) update.user_id;
+                        uid = (long) user_id;
                     }
                     arr = (ArrayList) this.printingUsers.get(Long.valueOf(uid));
-                    if (!(update.action instanceof TL_sendMessageCancelAction)) {
+                    if (!(action instanceof TL_sendMessageCancelAction)) {
                         if (arr == null) {
                             arr = new ArrayList();
                             this.printingUsers.put(Long.valueOf(uid), arr);
                         }
                         exist = false;
-                        r5 = arr.iterator();
-                        while (r5.hasNext()) {
-                            u = (PrintingUser) r5.next();
-                            if (u.userId == update.user_id) {
+                        Iterator it = arr.iterator();
+                        while (it.hasNext()) {
+                            u = (PrintingUser) it.next();
+                            if (u.userId == user_id) {
                                 exist = true;
                                 u.lastTime = currentTime;
-                                if (u.action.getClass() != update.action.getClass()) {
+                                if (u.action.getClass() != action.getClass()) {
                                     printChanged = true;
                                 }
-                                u.action = update.action;
+                                u.action = action;
                                 if (!exist) {
                                     newUser = new PrintingUser();
-                                    newUser.userId = update.user_id;
+                                    newUser.userId = user_id;
                                     newUser.lastTime = currentTime;
-                                    newUser.action = update.action;
+                                    newUser.action = action;
                                     arr.add(newUser);
                                     printChanged = true;
                                 }
@@ -7930,16 +8070,16 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                         if (exist) {
                             newUser = new PrintingUser();
-                            newUser.userId = update.user_id;
+                            newUser.userId = user_id;
                             newUser.lastTime = currentTime;
-                            newUser.action = update.action;
+                            newUser.action = action;
                             arr.add(newUser);
                             printChanged = true;
                         }
                     } else if (arr != null) {
                         size = arr.size();
                         for (a = 0; a < size; a++) {
-                            if (((PrintingUser) arr.get(a)).userId == update.user_id) {
+                            if (((PrintingUser) arr.get(a)).userId == user_id) {
                                 arr.remove(a);
                                 printChanged = true;
                                 break;
@@ -7949,41 +8089,43 @@ public class MessagesController implements NotificationCenterDelegate {
                             this.printingUsers.remove(Long.valueOf(uid));
                         }
                     }
-                    this.onlinePrivacy.put(Integer.valueOf(update.user_id), Integer.valueOf(ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()));
+                    this.onlinePrivacy.put(Integer.valueOf(user_id), Integer.valueOf(ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()));
                 }
-            } else if (update instanceof TL_updateChatParticipants) {
+            } else if (baseUpdate instanceof TL_updateChatParticipants) {
+                TL_updateChatParticipants update8 = (TL_updateChatParticipants) baseUpdate;
                 interfaceUpdateMask |= 32;
                 if (chatInfoToUpdate == null) {
                     chatInfoToUpdate = new ArrayList();
                 }
-                chatInfoToUpdate.add(update.participants);
-            } else if (update instanceof TL_updateUserStatus) {
+                chatInfoToUpdate.add(update8.participants);
+            } else if (baseUpdate instanceof TL_updateUserStatus) {
                 interfaceUpdateMask |= 4;
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateUserName) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateUserName) {
                 interfaceUpdateMask |= 1;
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateUserPhoto) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateUserPhoto) {
                 interfaceUpdateMask |= 2;
-                MessagesStorage.getInstance(this.currentAccount).clearUserPhotos(update.user_id);
+                MessagesStorage.getInstance(this.currentAccount).clearUserPhotos(((TL_updateUserPhoto) baseUpdate).user_id);
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateUserPhone) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateUserPhone) {
                 interfaceUpdateMask |= 1024;
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateContactRegistered) {
-                if (this.enableJoined && usersDict.containsKey(Integer.valueOf(update.user_id)) && !MessagesStorage.getInstance(this.currentAccount).isDialogHasMessages((long) update.user_id)) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateContactRegistered) {
+                TL_updateContactRegistered update9 = (TL_updateContactRegistered) baseUpdate;
+                if (this.enableJoined && usersDict.containsKey(Integer.valueOf(update9.user_id)) && !MessagesStorage.getInstance(this.currentAccount).isDialogHasMessages((long) update9.user_id)) {
                     newMessage = new TL_messageService();
                     newMessage.action = new TL_messageActionUserJoined();
                     r5 = UserConfig.getInstance(this.currentAccount).getNewMessageId();
@@ -7992,11 +8134,11 @@ public class MessagesController implements NotificationCenterDelegate {
                     UserConfig.getInstance(this.currentAccount).saveConfig(false);
                     newMessage.unread = false;
                     newMessage.flags = 256;
-                    newMessage.date = update.date;
-                    newMessage.from_id = update.user_id;
+                    newMessage.date = update9.date;
+                    newMessage.from_id = update9.user_id;
                     newMessage.to_id = new TL_peerUser();
                     newMessage.to_id.user_id = UserConfig.getInstance(this.currentAccount).getClientUserId();
-                    newMessage.dialog_id = (long) update.user_id;
+                    newMessage.dialog_id = (long) update9.user_id;
                     if (messagesArr == null) {
                         messagesArr = new ArrayList();
                     }
@@ -8012,32 +8154,33 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                     arr.add(r9);
                 }
-            } else if (update instanceof TL_updateContactLink) {
+            } else if (baseUpdate instanceof TL_updateContactLink) {
+                TL_updateContactLink update10 = (TL_updateContactLink) baseUpdate;
                 if (contactsIds == null) {
                     contactsIds = new ArrayList();
                 }
                 int idx;
-                if (update.my_link instanceof TL_contactLinkContact) {
-                    idx = contactsIds.indexOf(Integer.valueOf(-update.user_id));
+                if (update10.my_link instanceof TL_contactLinkContact) {
+                    idx = contactsIds.indexOf(Integer.valueOf(-update10.user_id));
                     if (idx != -1) {
                         contactsIds.remove(idx);
                     }
-                    if (!contactsIds.contains(Integer.valueOf(update.user_id))) {
-                        contactsIds.add(Integer.valueOf(update.user_id));
+                    if (!contactsIds.contains(Integer.valueOf(update10.user_id))) {
+                        contactsIds.add(Integer.valueOf(update10.user_id));
                     }
                 } else {
-                    idx = contactsIds.indexOf(Integer.valueOf(update.user_id));
+                    idx = contactsIds.indexOf(Integer.valueOf(update10.user_id));
                     if (idx != -1) {
                         contactsIds.remove(idx);
                     }
-                    if (!contactsIds.contains(Integer.valueOf(update.user_id))) {
-                        contactsIds.add(Integer.valueOf(-update.user_id));
+                    if (!contactsIds.contains(Integer.valueOf(update10.user_id))) {
+                        contactsIds.add(Integer.valueOf(-update10.user_id));
                     }
                 }
-            } else if (update instanceof TL_updateNewEncryptedMessage) {
-                ArrayList<Message> decryptedMessages = SecretChatHelper.getInstance(this.currentAccount).decryptMessage(((TL_updateNewEncryptedMessage) update).message);
+            } else if (baseUpdate instanceof TL_updateNewEncryptedMessage) {
+                ArrayList<Message> decryptedMessages = SecretChatHelper.getInstance(this.currentAccount).decryptMessage(((TL_updateNewEncryptedMessage) baseUpdate).message);
                 if (!(decryptedMessages == null || decryptedMessages.isEmpty())) {
-                    uid = ((long) ((TL_updateNewEncryptedMessage) update).message.chat_id) << 32;
+                    uid = ((long) ((TL_updateNewEncryptedMessage) baseUpdate).message.chat_id) << 32;
                     if (messages == null) {
                         messages = new LongSparseArray();
                     }
@@ -8062,21 +8205,21 @@ public class MessagesController implements NotificationCenterDelegate {
                         pushMessages.add(obj);
                     }
                 }
-            } else if (update instanceof TL_updateEncryptedChatTyping) {
-                EncryptedChat encryptedChat = getEncryptedChatDB(update.chat_id, true);
+            } else if (baseUpdate instanceof TL_updateEncryptedChatTyping) {
+                TL_updateEncryptedChatTyping update11 = (TL_updateEncryptedChatTyping) baseUpdate;
+                EncryptedChat encryptedChat = getEncryptedChatDB(update11.chat_id, true);
                 if (encryptedChat != null) {
-                    update.user_id = encryptedChat.user_id;
-                    uid = ((long) update.chat_id) << 32;
+                    uid = ((long) update11.chat_id) << 32;
                     arr = (ArrayList) this.printingUsers.get(Long.valueOf(uid));
                     if (arr == null) {
                         arr = new ArrayList();
                         this.printingUsers.put(Long.valueOf(uid), arr);
                     }
                     exist = false;
-                    r5 = arr.iterator();
-                    while (r5.hasNext()) {
-                        u = (PrintingUser) r5.next();
-                        if (u.userId == update.user_id) {
+                    size = arr.size();
+                    for (a = 0; a < size; a++) {
+                        u = (PrintingUser) arr.get(a);
+                        if (u.userId == encryptedChat.user_id) {
                             exist = true;
                             u.lastTime = currentTime;
                             u.action = new TL_sendMessageTypingAction();
@@ -8085,33 +8228,36 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                     if (!exist) {
                         newUser = new PrintingUser();
-                        newUser.userId = update.user_id;
+                        newUser.userId = encryptedChat.user_id;
                         newUser.lastTime = currentTime;
                         newUser.action = new TL_sendMessageTypingAction();
                         arr.add(newUser);
                         printChanged = true;
                     }
-                    this.onlinePrivacy.put(Integer.valueOf(update.user_id), Integer.valueOf(ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()));
+                    this.onlinePrivacy.put(Integer.valueOf(encryptedChat.user_id), Integer.valueOf(ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()));
                 }
-            } else if (update instanceof TL_updateEncryptedMessagesRead) {
+            } else if (baseUpdate instanceof TL_updateEncryptedMessagesRead) {
+                TL_updateEncryptedMessagesRead update12 = (TL_updateEncryptedMessagesRead) baseUpdate;
                 if (markAsReadEncrypted == null) {
                     markAsReadEncrypted = new SparseIntArray();
                 }
-                markAsReadEncrypted.put(update.chat_id, Math.max(update.max_date, update.date));
+                markAsReadEncrypted.put(update12.chat_id, Math.max(update12.max_date, update12.date));
                 if (tasks == null) {
                     tasks = new ArrayList();
                 }
-                tasks.add((TL_updateEncryptedMessagesRead) update);
-            } else if (update instanceof TL_updateChatParticipantAdd) {
-                MessagesStorage.getInstance(this.currentAccount).updateChatInfo(update.chat_id, update.user_id, 0, update.inviter_id, update.version);
-            } else if (update instanceof TL_updateChatParticipantDelete) {
-                MessagesStorage.getInstance(this.currentAccount).updateChatInfo(update.chat_id, update.user_id, 1, 0, update.version);
-            } else if ((update instanceof TL_updateDcOptions) || (update instanceof TL_updateConfig)) {
+                tasks.add((TL_updateEncryptedMessagesRead) baseUpdate);
+            } else if (baseUpdate instanceof TL_updateChatParticipantAdd) {
+                TL_updateChatParticipantAdd update13 = (TL_updateChatParticipantAdd) baseUpdate;
+                MessagesStorage.getInstance(this.currentAccount).updateChatInfo(update13.chat_id, update13.user_id, 0, update13.inviter_id, update13.version);
+            } else if (baseUpdate instanceof TL_updateChatParticipantDelete) {
+                TL_updateChatParticipantDelete update14 = (TL_updateChatParticipantDelete) baseUpdate;
+                MessagesStorage.getInstance(this.currentAccount).updateChatInfo(update14.chat_id, update14.user_id, 1, 0, update14.version);
+            } else if ((baseUpdate instanceof TL_updateDcOptions) || (baseUpdate instanceof TL_updateConfig)) {
                 ConnectionsManager.getInstance(this.currentAccount).updateDcSettings();
-            } else if (update instanceof TL_updateEncryption) {
-                SecretChatHelper.getInstance(this.currentAccount).processUpdateEncryption((TL_updateEncryption) update, usersDict);
-            } else if (update instanceof TL_updateUserBlocked) {
-                TL_updateUserBlocked finalUpdate = (TL_updateUserBlocked) update;
+            } else if (baseUpdate instanceof TL_updateEncryption) {
+                SecretChatHelper.getInstance(this.currentAccount).processUpdateEncryption((TL_updateEncryption) baseUpdate, usersDict);
+            } else if (baseUpdate instanceof TL_updateUserBlocked) {
+                TL_updateUserBlocked finalUpdate = (TL_updateUserBlocked) baseUpdate;
                 if (finalUpdate.blocked) {
                     ArrayList<Integer> ids = new ArrayList();
                     ids.add(Integer.valueOf(finalUpdate.user_id));
@@ -8134,22 +8280,22 @@ public class MessagesController implements NotificationCenterDelegate {
                         });
                     }
                 });
-            } else if (update instanceof TL_updateNotifySettings) {
+            } else if (baseUpdate instanceof TL_updateNotifySettings) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateServiceNotification) {
-                TL_updateServiceNotification notification = (TL_updateServiceNotification) update;
-                if (notification.popup && notification.message != null && notification.message.length() > 0) {
-                    final TL_updateServiceNotification tL_updateServiceNotification = notification;
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateServiceNotification) {
+                TL_updateServiceNotification update15 = (TL_updateServiceNotification) baseUpdate;
+                if (update15.popup && update15.message != null && update15.message.length() > 0) {
+                    final TL_updateServiceNotification tL_updateServiceNotification = update15;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             NotificationCenter.getInstance(MessagesController.this.currentAccount).postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(2), tL_updateServiceNotification.message);
                         }
                     });
                 }
-                if ((notification.flags & 2) != 0) {
+                if ((update15.flags & 2) != 0) {
                     newMessage = new TL_message();
                     r5 = UserConfig.getInstance(this.currentAccount).getNewMessageId();
                     newMessage.id = r5;
@@ -8157,8 +8303,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     UserConfig.getInstance(this.currentAccount).saveConfig(false);
                     newMessage.unread = true;
                     newMessage.flags = 256;
-                    if (notification.inbox_date != 0) {
-                        newMessage.date = notification.inbox_date;
+                    if (update15.inbox_date != 0) {
+                        newMessage.date = update15.inbox_date;
                     } else {
                         newMessage.date = (int) (System.currentTimeMillis() / 1000);
                     }
@@ -8166,13 +8312,13 @@ public class MessagesController implements NotificationCenterDelegate {
                     newMessage.to_id = new TL_peerUser();
                     newMessage.to_id.user_id = UserConfig.getInstance(this.currentAccount).getClientUserId();
                     newMessage.dialog_id = 777000;
-                    if (update.media != null) {
-                        newMessage.media = update.media;
+                    if (update15.media != null) {
+                        newMessage.media = update15.media;
                         newMessage.flags |= 512;
                     }
-                    newMessage.message = notification.message;
-                    if (notification.entities != null) {
-                        newMessage.entities = notification.entities;
+                    newMessage.message = update15.message;
+                    if (update15.entities != null) {
+                        newMessage.entities = update15.entities;
                     }
                     if (messagesArr == null) {
                         messagesArr = new ArrayList();
@@ -8193,153 +8339,163 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                     pushMessages.add(r9);
                 }
-            } else if (update instanceof TL_updateDialogPinned) {
+            } else if (baseUpdate instanceof TL_updateDialogPinned) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updatePinnedDialogs) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updatePinnedDialogs) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updatePrivacy) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updatePrivacy) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateWebPage) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateWebPage) {
+                TL_updateWebPage update16 = (TL_updateWebPage) baseUpdate;
                 if (webPages == null) {
                     webPages = new LongSparseArray();
                 }
-                webPages.put(update.webpage.id, update.webpage);
-            } else if (update instanceof TL_updateChannelWebPage) {
+                webPages.put(update16.webpage.id, update16.webpage);
+            } else if (baseUpdate instanceof TL_updateChannelWebPage) {
+                TL_updateChannelWebPage update17 = (TL_updateChannelWebPage) baseUpdate;
                 if (webPages == null) {
                     webPages = new LongSparseArray();
                 }
-                webPages.put(update.webpage.id, update.webpage);
-            } else if (update instanceof TL_updateChannelTooLong) {
+                webPages.put(update17.webpage.id, update17.webpage);
+            } else if (baseUpdate instanceof TL_updateChannelTooLong) {
+                TL_updateChannelTooLong update18 = (TL_updateChannelTooLong) baseUpdate;
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d(update + " channelId = " + update.channel_id);
+                    FileLog.d(baseUpdate + " channelId = " + update18.channel_id);
                 }
-                int channelPts = this.channelsPts.get(update.channel_id);
+                int channelPts = this.channelsPts.get(update18.channel_id);
                 if (channelPts == 0) {
-                    channelPts = MessagesStorage.getInstance(this.currentAccount).getChannelPtsSync(update.channel_id);
+                    channelPts = MessagesStorage.getInstance(this.currentAccount).getChannelPtsSync(update18.channel_id);
                     if (channelPts == 0) {
-                        chat = (Chat) chatsDict.get(Integer.valueOf(update.channel_id));
+                        chat = (Chat) chatsDict.get(Integer.valueOf(update18.channel_id));
                         if (chat == null || chat.min) {
-                            chat = getChat(Integer.valueOf(update.channel_id));
+                            chat = getChat(Integer.valueOf(update18.channel_id));
                         }
                         if (chat == null || chat.min) {
-                            chat = MessagesStorage.getInstance(this.currentAccount).getChatSync(update.channel_id);
+                            chat = MessagesStorage.getInstance(this.currentAccount).getChatSync(update18.channel_id);
                             putChat(chat, true);
                         }
                         if (!(chat == null || chat.min)) {
                             loadUnknownChannel(chat, 0);
                         }
                     } else {
-                        this.channelsPts.put(update.channel_id, channelPts);
+                        this.channelsPts.put(update18.channel_id, channelPts);
                     }
                 }
                 if (channelPts != 0) {
-                    if ((update.flags & 1) == 0) {
-                        getChannelDifference(update.channel_id);
-                    } else if (update.pts > channelPts) {
-                        getChannelDifference(update.channel_id);
+                    if ((update18.flags & 1) == 0) {
+                        getChannelDifference(update18.channel_id);
+                    } else if (update18.pts > channelPts) {
+                        getChannelDifference(update18.channel_id);
                     }
                 }
-            } else if ((update instanceof TL_updateReadChannelInbox) || (update instanceof TL_updateReadChannelOutbox)) {
-                long message_id = ((long) update.max_id) | (((long) update.channel_id) << 32);
-                dialog_id = (long) (-update.channel_id);
-                if (update instanceof TL_updateReadChannelInbox) {
-                    read_max = this.dialogs_read_inbox_max;
-                    if (markAsReadMessagesInbox == null) {
-                        markAsReadMessagesInbox = new SparseLongArray();
-                    }
-                    markAsReadMessagesInbox.put(-update.channel_id, message_id);
-                } else {
-                    read_max = this.dialogs_read_outbox_max;
-                    if (markAsReadMessagesOutbox == null) {
-                        markAsReadMessagesOutbox = new SparseLongArray();
-                    }
-                    markAsReadMessagesOutbox.put(-update.channel_id, message_id);
+            } else if (baseUpdate instanceof TL_updateReadChannelInbox) {
+                TL_updateReadChannelInbox update19 = (TL_updateReadChannelInbox) baseUpdate;
+                message_id = ((long) update19.max_id) | (((long) update19.channel_id) << 32);
+                dialog_id = (long) (-update19.channel_id);
+                if (markAsReadMessagesInbox == null) {
+                    markAsReadMessagesInbox = new SparseLongArray();
                 }
-                value = (Integer) read_max.get(Long.valueOf(dialog_id));
+                markAsReadMessagesInbox.put(-update19.channel_id, message_id);
+                value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(dialog_id));
                 if (value == null) {
-                    value = Integer.valueOf(MessagesStorage.getInstance(this.currentAccount).getDialogReadMax(update instanceof TL_updateReadChannelOutbox, dialog_id));
+                    value = Integer.valueOf(MessagesStorage.getInstance(this.currentAccount).getDialogReadMax(false, dialog_id));
                 }
-                read_max.put(Long.valueOf(dialog_id), Integer.valueOf(Math.max(value.intValue(), update.max_id)));
-            } else if (update instanceof TL_updateDeleteChannelMessages) {
+                this.dialogs_read_inbox_max.put(Long.valueOf(dialog_id), Integer.valueOf(Math.max(value.intValue(), update19.max_id)));
+            } else if (baseUpdate instanceof TL_updateReadChannelOutbox) {
+                TL_updateReadChannelOutbox update20 = (TL_updateReadChannelOutbox) baseUpdate;
+                message_id = ((long) update20.max_id) | (((long) update20.channel_id) << 32);
+                dialog_id = (long) (-update20.channel_id);
+                if (markAsReadMessagesOutbox == null) {
+                    markAsReadMessagesOutbox = new SparseLongArray();
+                }
+                markAsReadMessagesOutbox.put(-update20.channel_id, message_id);
+                value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(dialog_id));
+                if (value == null) {
+                    value = Integer.valueOf(MessagesStorage.getInstance(this.currentAccount).getDialogReadMax(true, dialog_id));
+                }
+                this.dialogs_read_outbox_max.put(Long.valueOf(dialog_id), Integer.valueOf(Math.max(value.intValue(), update20.max_id)));
+            } else if (baseUpdate instanceof TL_updateDeleteChannelMessages) {
+                TL_updateDeleteChannelMessages update21 = (TL_updateDeleteChannelMessages) baseUpdate;
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d(update + " channelId = " + update.channel_id);
+                    FileLog.d(baseUpdate + " channelId = " + update21.channel_id);
                 }
                 if (deletedMessages == null) {
                     deletedMessages = new SparseArray();
                 }
-                arrayList = (ArrayList) deletedMessages.get(update.channel_id);
+                arrayList = (ArrayList) deletedMessages.get(update21.channel_id);
                 if (arrayList == null) {
                     arrayList = new ArrayList();
-                    deletedMessages.put(update.channel_id, arrayList);
+                    deletedMessages.put(update21.channel_id, arrayList);
                 }
-                arrayList.addAll(update.messages);
-            } else if (update instanceof TL_updateChannel) {
+                arrayList.addAll(update21.messages);
+            } else if (baseUpdate instanceof TL_updateChannel) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d(update + " channelId = " + update.channel_id);
+                    FileLog.d(baseUpdate + " channelId = " + ((TL_updateChannel) baseUpdate).channel_id);
                 }
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateChannelMessageViews) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateChannelMessageViews) {
+                TL_updateChannelMessageViews update22 = (TL_updateChannelMessageViews) baseUpdate;
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d(update + " channelId = " + update.channel_id);
+                    FileLog.d(baseUpdate + " channelId = " + update22.channel_id);
                 }
-                TL_updateChannelMessageViews updateChannelMessageViews = (TL_updateChannelMessageViews) update;
                 if (channelViews == null) {
                     channelViews = new SparseArray();
                 }
-                SparseIntArray array = (SparseIntArray) channelViews.get(update.channel_id);
+                SparseIntArray array = (SparseIntArray) channelViews.get(update22.channel_id);
                 if (array == null) {
                     array = new SparseIntArray();
-                    channelViews.put(update.channel_id, array);
+                    channelViews.put(update22.channel_id, array);
                 }
-                array.put(updateChannelMessageViews.id, update.views);
-            } else if (update instanceof TL_updateChatParticipantAdmin) {
-                MessagesStorage.getInstance(this.currentAccount).updateChatInfo(update.chat_id, update.user_id, 2, update.is_admin ? 1 : 0, update.version);
-            } else if (update instanceof TL_updateChatAdmins) {
+                array.put(update22.id, update22.views);
+            } else if (baseUpdate instanceof TL_updateChatParticipantAdmin) {
+                TL_updateChatParticipantAdmin update23 = (TL_updateChatParticipantAdmin) baseUpdate;
+                MessagesStorage.getInstance(this.currentAccount).updateChatInfo(update23.chat_id, update23.user_id, 2, update23.is_admin ? 1 : 0, update23.version);
+            } else if (baseUpdate instanceof TL_updateChatAdmins) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateStickerSets) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateStickerSets) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateStickerSetsOrder) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateStickerSetsOrder) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateNewStickerSet) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateNewStickerSet) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateDraftMessage) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateDraftMessage) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateSavedGifs) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateSavedGifs) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if ((update instanceof TL_updateEditChannelMessage) || (update instanceof TL_updateEditMessage)) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if ((baseUpdate instanceof TL_updateEditChannelMessage) || (baseUpdate instanceof TL_updateEditMessage)) {
                 clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
-                if (update instanceof TL_updateEditChannelMessage) {
-                    message = ((TL_updateEditChannelMessage) update).message;
+                if (baseUpdate instanceof TL_updateEditChannelMessage) {
+                    message = ((TL_updateEditChannelMessage) baseUpdate).message;
                     chat = (Chat) chatsDict.get(Integer.valueOf(message.to_id.channel_id));
                     if (chat == null) {
                         chat = getChat(Integer.valueOf(message.to_id.channel_id));
@@ -8352,7 +8508,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         message.flags |= Integer.MIN_VALUE;
                     }
                 } else {
-                    message = ((TL_updateEditMessage) update).message;
+                    message = ((TL_updateEditMessage) baseUpdate).message;
                     if (message.dialog_id == ((long) clientUserId)) {
                         message.unread = false;
                         message.media_unread = false;
@@ -8422,42 +8578,44 @@ public class MessagesController implements NotificationCenterDelegate {
                     editingMessages.put(message.dialog_id, arr);
                 }
                 arr.add(obj);
-            } else if (update instanceof TL_updateChannelPinnedMessage) {
+            } else if (baseUpdate instanceof TL_updateChannelPinnedMessage) {
+                TL_updateChannelPinnedMessage update24 = (TL_updateChannelPinnedMessage) baseUpdate;
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d(update + " channelId = " + update.channel_id);
+                    FileLog.d(baseUpdate + " channelId = " + update24.channel_id);
                 }
-                MessagesStorage.getInstance(this.currentAccount).updateChannelPinnedMessage(update.channel_id, ((TL_updateChannelPinnedMessage) update).id);
-            } else if (update instanceof TL_updateReadFeaturedStickers) {
+                MessagesStorage.getInstance(this.currentAccount).updateChannelPinnedMessage(update24.channel_id, update24.id);
+            } else if (baseUpdate instanceof TL_updateReadFeaturedStickers) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updatePhoneCall) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updatePhoneCall) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateLangPack) {
-                LocaleController.getInstance().saveRemoteLocaleStrings(update.difference, this.currentAccount);
-            } else if (update instanceof TL_updateLangPackTooLong) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateLangPack) {
+                LocaleController.getInstance().saveRemoteLocaleStrings(((TL_updateLangPack) baseUpdate).difference, this.currentAccount);
+            } else if (baseUpdate instanceof TL_updateLangPackTooLong) {
                 LocaleController.getInstance().reloadCurrentRemoteLocale(this.currentAccount);
-            } else if (update instanceof TL_updateFavedStickers) {
+            } else if (baseUpdate instanceof TL_updateFavedStickers) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateContactsReset) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateContactsReset) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList();
                 }
-                updatesOnMainThread.add(update);
-            } else if (update instanceof TL_updateChannelAvailableMessages) {
+                updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TL_updateChannelAvailableMessages) {
+                TL_updateChannelAvailableMessages update25 = (TL_updateChannelAvailableMessages) baseUpdate;
                 if (clearHistoryMessages == null) {
                     clearHistoryMessages = new SparseIntArray();
                 }
-                int currentValue = clearHistoryMessages.get(update.channel_id);
-                if (currentValue == 0 || currentValue < update.available_min_id) {
-                    clearHistoryMessages.put(update.channel_id, update.available_min_id);
+                int currentValue = clearHistoryMessages.get(update25.channel_id);
+                if (currentValue == 0 || currentValue < update25.available_min_id) {
+                    clearHistoryMessages.put(update25.channel_id, update25.available_min_id);
                 }
             }
         }
@@ -8532,11 +8690,9 @@ public class MessagesController implements NotificationCenterDelegate {
                     Editor editor = null;
                     size = updatesOnMainThreadFinal.size();
                     for (a = 0; a < size; a++) {
-                        Update update = (Update) updatesOnMainThreadFinal.get(a);
-                        User toDbUser = new TL_user();
-                        toDbUser.id = update.user_id;
-                        User currentUser = MessagesController.this.getUser(Integer.valueOf(update.user_id));
-                        if (update instanceof TL_updatePrivacy) {
+                        Update baseUpdate = (Update) updatesOnMainThreadFinal.get(a);
+                        if (baseUpdate instanceof TL_updatePrivacy) {
+                            TL_updatePrivacy update = (TL_updatePrivacy) baseUpdate;
                             if (update.key instanceof TL_privacyKeyStatusTimestamp) {
                                 ContactsController.getInstance(MessagesController.this.currentAccount).setPrivacyRules(update.rules, 0);
                             } else if (update.key instanceof TL_privacyKeyChatInvite) {
@@ -8544,43 +8700,51 @@ public class MessagesController implements NotificationCenterDelegate {
                             } else if (update.key instanceof TL_privacyKeyPhoneCall) {
                                 ContactsController.getInstance(MessagesController.this.currentAccount).setPrivacyRules(update.rules, 2);
                             }
-                        } else if (update instanceof TL_updateUserStatus) {
-                            if (update.status instanceof TL_userStatusRecently) {
-                                update.status.expires = -100;
-                            } else if (update.status instanceof TL_userStatusLastWeek) {
-                                update.status.expires = -101;
-                            } else if (update.status instanceof TL_userStatusLastMonth) {
-                                update.status.expires = -102;
+                        } else if (baseUpdate instanceof TL_updateUserStatus) {
+                            TL_updateUserStatus update2 = (TL_updateUserStatus) baseUpdate;
+                            currentUser = MessagesController.this.getUser(Integer.valueOf(update2.user_id));
+                            if (update2.status instanceof TL_userStatusRecently) {
+                                update2.status.expires = -100;
+                            } else if (update2.status instanceof TL_userStatusLastWeek) {
+                                update2.status.expires = -101;
+                            } else if (update2.status instanceof TL_userStatusLastMonth) {
+                                update2.status.expires = -102;
                             }
                             if (currentUser != null) {
-                                currentUser.id = update.user_id;
-                                currentUser.status = update.status;
+                                currentUser.id = update2.user_id;
+                                currentUser.status = update2.status;
                             }
-                            toDbUser.status = update.status;
+                            toDbUser = new TL_user();
+                            toDbUser.id = update2.user_id;
+                            toDbUser.status = update2.status;
                             dbUsersStatus.add(toDbUser);
-                            if (update.user_id == UserConfig.getInstance(MessagesController.this.currentAccount).getClientUserId()) {
-                                NotificationsController.getInstance(MessagesController.this.currentAccount).setLastOnlineFromOtherDevice(update.status.expires);
+                            if (update2.user_id == UserConfig.getInstance(MessagesController.this.currentAccount).getClientUserId()) {
+                                NotificationsController.getInstance(MessagesController.this.currentAccount).setLastOnlineFromOtherDevice(update2.status.expires);
                             }
-                        } else if (update instanceof TL_updateUserName) {
+                        } else if (baseUpdate instanceof TL_updateUserName) {
+                            TL_updateUserName update3 = (TL_updateUserName) baseUpdate;
+                            currentUser = MessagesController.this.getUser(Integer.valueOf(update3.user_id));
                             if (currentUser != null) {
                                 if (!UserObject.isContact(currentUser)) {
-                                    currentUser.first_name = update.first_name;
-                                    currentUser.last_name = update.last_name;
+                                    currentUser.first_name = update3.first_name;
+                                    currentUser.last_name = update3.last_name;
                                 }
-                                if (currentUser.username != null && currentUser.username.length() > 0) {
+                                if (!TextUtils.isEmpty(currentUser.username)) {
                                     MessagesController.this.objectsByUsernames.remove(currentUser.username);
                                 }
-                                if (update.username != null && update.username.length() > 0) {
-                                    MessagesController.this.objectsByUsernames.put(update.username, currentUser);
+                                if (TextUtils.isEmpty(update3.username)) {
+                                    MessagesController.this.objectsByUsernames.put(update3.username, currentUser);
                                 }
-                                currentUser.username = update.username;
+                                currentUser.username = update3.username;
                             }
-                            toDbUser.first_name = update.first_name;
-                            toDbUser.last_name = update.last_name;
-                            toDbUser.username = update.username;
+                            toDbUser = new TL_user();
+                            toDbUser.id = update3.user_id;
+                            toDbUser.first_name = update3.first_name;
+                            toDbUser.last_name = update3.last_name;
+                            toDbUser.username = update3.username;
                             dbUsers.add(toDbUser);
-                        } else if (update instanceof TL_updateDialogPinned) {
-                            TL_updateDialogPinned updateDialogPinned = (TL_updateDialogPinned) update;
+                        } else if (baseUpdate instanceof TL_updateDialogPinned) {
+                            TL_updateDialogPinned updateDialogPinned = (TL_updateDialogPinned) baseUpdate;
                             if (updateDialogPinned.peer instanceof TL_peerUser) {
                                 did = (long) updateDialogPinned.peer.user_id;
                             } else if (updateDialogPinned.peer instanceof TL_peerChat) {
@@ -8593,13 +8757,14 @@ public class MessagesController implements NotificationCenterDelegate {
                                 UserConfig.getInstance(MessagesController.this.currentAccount).saveConfig(false);
                                 MessagesController.this.loadPinnedDialogs(did, null);
                             }
-                        } else if (update instanceof TL_updatePinnedDialogs) {
+                        } else if (baseUpdate instanceof TL_updatePinnedDialogs) {
                             ArrayList<Long> order;
+                            TL_updatePinnedDialogs update4 = (TL_updatePinnedDialogs) baseUpdate;
                             UserConfig.getInstance(MessagesController.this.currentAccount).pinnedDialogsLoaded = false;
                             UserConfig.getInstance(MessagesController.this.currentAccount).saveConfig(false);
-                            if ((update.flags & 1) != 0) {
+                            if ((update4.flags & 1) != 0) {
                                 order = new ArrayList();
-                                ArrayList<Peer> peers = ((TL_updatePinnedDialogs) update).order;
+                                ArrayList<Peer> peers = ((TL_updatePinnedDialogs) baseUpdate).order;
                                 size2 = peers.size();
                                 for (b = 0; b < size2; b++) {
                                     peer = (Peer) peers.get(b);
@@ -8616,15 +8781,21 @@ public class MessagesController implements NotificationCenterDelegate {
                                 order = null;
                             }
                             MessagesController.this.loadPinnedDialogs(0, order);
-                        } else if (update instanceof TL_updateUserPhoto) {
+                        } else if (baseUpdate instanceof TL_updateUserPhoto) {
+                            TL_updateUserPhoto update5 = (TL_updateUserPhoto) baseUpdate;
+                            currentUser = MessagesController.this.getUser(Integer.valueOf(update5.user_id));
                             if (currentUser != null) {
-                                currentUser.photo = update.photo;
+                                currentUser.photo = update5.photo;
                             }
-                            toDbUser.photo = update.photo;
+                            toDbUser = new TL_user();
+                            toDbUser.id = update5.user_id;
+                            toDbUser.photo = update5.photo;
                             dbUsers.add(toDbUser);
-                        } else if (update instanceof TL_updateUserPhone) {
+                        } else if (baseUpdate instanceof TL_updateUserPhone) {
+                            TL_updateUserPhone update6 = (TL_updateUserPhone) baseUpdate;
+                            currentUser = MessagesController.this.getUser(Integer.valueOf(update6.user_id));
                             if (currentUser != null) {
-                                currentUser.phone = update.phone;
+                                currentUser.phone = update6.phone;
                                 final User user = currentUser;
                                 Utilities.phoneBookQueue.postRunnable(new Runnable() {
                                     public void run() {
@@ -8632,38 +8803,40 @@ public class MessagesController implements NotificationCenterDelegate {
                                     }
                                 });
                             }
-                            toDbUser.phone = update.phone;
+                            toDbUser = new TL_user();
+                            toDbUser.id = update6.user_id;
+                            toDbUser.phone = update6.phone;
                             dbUsers.add(toDbUser);
-                        } else if (update instanceof TL_updateNotifySettings) {
-                            TL_updateNotifySettings updateNotifySettings = (TL_updateNotifySettings) update;
-                            if ((update.notify_settings instanceof TL_peerNotifySettings) && (updateNotifySettings.peer instanceof TL_notifyPeer)) {
+                        } else if (baseUpdate instanceof TL_updateNotifySettings) {
+                            TL_updateNotifySettings update7 = (TL_updateNotifySettings) baseUpdate;
+                            if ((update7.notify_settings instanceof TL_peerNotifySettings) && (update7.peer instanceof TL_notifyPeer)) {
                                 if (editor == null) {
                                     editor = MessagesController.this.notificationsPreferences.edit();
                                 }
-                                if (updateNotifySettings.peer.peer.user_id != 0) {
-                                    dialog_id = (long) updateNotifySettings.peer.peer.user_id;
-                                } else if (updateNotifySettings.peer.peer.chat_id != 0) {
-                                    dialog_id = (long) (-updateNotifySettings.peer.peer.chat_id);
+                                if (update7.peer.peer.user_id != 0) {
+                                    dialog_id = (long) update7.peer.peer.user_id;
+                                } else if (update7.peer.peer.chat_id != 0) {
+                                    dialog_id = (long) (-update7.peer.peer.chat_id);
                                 } else {
-                                    dialog_id = (long) (-updateNotifySettings.peer.peer.channel_id);
+                                    dialog_id = (long) (-update7.peer.peer.channel_id);
                                 }
                                 dialog = (TL_dialog) MessagesController.this.dialogs_dict.get(dialog_id);
                                 if (dialog != null) {
-                                    dialog.notify_settings = update.notify_settings;
+                                    dialog.notify_settings = update7.notify_settings;
                                 }
-                                editor.putBoolean("silent_" + dialog_id, update.notify_settings.silent);
+                                editor.putBoolean("silent_" + dialog_id, update7.notify_settings.silent);
                                 int currentTime = ConnectionsManager.getInstance(MessagesController.this.currentAccount).getCurrentTime();
-                                if (update.notify_settings.mute_until > currentTime) {
+                                if (update7.notify_settings.mute_until > currentTime) {
                                     int until = 0;
-                                    if (update.notify_settings.mute_until > 31536000 + currentTime) {
+                                    if (update7.notify_settings.mute_until > 31536000 + currentTime) {
                                         editor.putInt("notify2_" + dialog_id, 2);
                                         if (dialog != null) {
                                             dialog.notify_settings.mute_until = ConnectionsManager.DEFAULT_DATACENTER_ID;
                                         }
                                     } else {
-                                        until = update.notify_settings.mute_until;
+                                        until = update7.notify_settings.mute_until;
                                         editor.putInt("notify2_" + dialog_id, 3);
-                                        editor.putInt("notifyuntil_" + dialog_id, update.notify_settings.mute_until);
+                                        editor.putInt("notifyuntil_" + dialog_id, update7.notify_settings.mute_until);
                                         if (dialog != null) {
                                             dialog.notify_settings.mute_until = until;
                                         }
@@ -8678,15 +8851,16 @@ public class MessagesController implements NotificationCenterDelegate {
                                     MessagesStorage.getInstance(MessagesController.this.currentAccount).setDialogFlags(dialog_id, 0);
                                 }
                             }
-                        } else if (update instanceof TL_updateChannel) {
-                            dialog = (TL_dialog) MessagesController.this.dialogs_dict.get(-((long) update.channel_id));
-                            Chat chat = MessagesController.this.getChat(Integer.valueOf(update.channel_id));
+                        } else if (baseUpdate instanceof TL_updateChannel) {
+                            TL_updateChannel update8 = (TL_updateChannel) baseUpdate;
+                            dialog = (TL_dialog) MessagesController.this.dialogs_dict.get(-((long) update8.channel_id));
+                            Chat chat = MessagesController.this.getChat(Integer.valueOf(update8.channel_id));
                             if (chat != null) {
                                 if (dialog == null && (chat instanceof TL_channel) && !chat.left) {
-                                    final Update update2 = update;
+                                    final TL_updateChannel tL_updateChannel = update8;
                                     Utilities.stageQueue.postRunnable(new Runnable() {
                                         public void run() {
-                                            MessagesController.this.getChannelDifference(update2.channel_id, 1, 0, null);
+                                            MessagesController.this.getChannelDifference(tL_updateChannel.channel_id, 1, 0, null);
                                         }
                                     });
                                 } else if (chat.left && dialog != null) {
@@ -8694,26 +8868,28 @@ public class MessagesController implements NotificationCenterDelegate {
                                 }
                             }
                             updateMask |= MessagesController.UPDATE_MASK_CHANNEL;
-                            MessagesController.this.loadFullChat(update.channel_id, 0, true);
-                        } else if (update instanceof TL_updateChatAdmins) {
+                            MessagesController.this.loadFullChat(update8.channel_id, 0, true);
+                        } else if (baseUpdate instanceof TL_updateChatAdmins) {
                             updateMask |= MessagesController.UPDATE_MASK_CHAT_ADMINS;
-                        } else if (update instanceof TL_updateStickerSets) {
-                            DataQuery.getInstance(MessagesController.this.currentAccount).loadStickers(update.masks ? 1 : 0, false, true);
-                        } else if (update instanceof TL_updateStickerSetsOrder) {
-                            DataQuery.getInstance(MessagesController.this.currentAccount).reorderStickers(update.masks ? 1 : 0, ((TL_updateStickerSetsOrder) update).order);
-                        } else if (update instanceof TL_updateFavedStickers) {
+                        } else if (baseUpdate instanceof TL_updateStickerSets) {
+                            TL_updateStickerSets update9 = (TL_updateStickerSets) baseUpdate;
+                            DataQuery.getInstance(MessagesController.this.currentAccount).loadStickers(0, false, true);
+                        } else if (baseUpdate instanceof TL_updateStickerSetsOrder) {
+                            DataQuery.getInstance(MessagesController.this.currentAccount).reorderStickers(((TL_updateStickerSetsOrder) baseUpdate).masks ? 1 : 0, ((TL_updateStickerSetsOrder) baseUpdate).order);
+                        } else if (baseUpdate instanceof TL_updateFavedStickers) {
                             DataQuery.getInstance(MessagesController.this.currentAccount).loadRecents(2, false, false, true);
-                        } else if (update instanceof TL_updateContactsReset) {
+                        } else if (baseUpdate instanceof TL_updateContactsReset) {
                             ContactsController.getInstance(MessagesController.this.currentAccount).forceImportContacts();
-                        } else if (update instanceof TL_updateNewStickerSet) {
-                            DataQuery.getInstance(MessagesController.this.currentAccount).addNewStickerSet(update.stickerset);
-                        } else if (update instanceof TL_updateSavedGifs) {
+                        } else if (baseUpdate instanceof TL_updateNewStickerSet) {
+                            DataQuery.getInstance(MessagesController.this.currentAccount).addNewStickerSet(((TL_updateNewStickerSet) baseUpdate).stickerset);
+                        } else if (baseUpdate instanceof TL_updateSavedGifs) {
                             MessagesController.this.emojiPreferences.edit().putLong("lastGifLoadTime", 0).commit();
-                        } else if (update instanceof TL_updateRecentStickers) {
+                        } else if (baseUpdate instanceof TL_updateRecentStickers) {
                             MessagesController.this.emojiPreferences.edit().putLong("lastStickersLoadTime", 0).commit();
-                        } else if (update instanceof TL_updateDraftMessage) {
+                        } else if (baseUpdate instanceof TL_updateDraftMessage) {
+                            TL_updateDraftMessage update10 = (TL_updateDraftMessage) baseUpdate;
                             hasDraftUpdates = true;
-                            peer = ((TL_updateDraftMessage) update).peer;
+                            peer = ((TL_updateDraftMessage) baseUpdate).peer;
                             if (peer.user_id != 0) {
                                 did = (long) peer.user_id;
                             } else if (peer.channel_id != 0) {
@@ -8721,11 +8897,11 @@ public class MessagesController implements NotificationCenterDelegate {
                             } else {
                                 did = (long) (-peer.chat_id);
                             }
-                            DataQuery.getInstance(MessagesController.this.currentAccount).saveDraft(did, update.draft, null, true);
-                        } else if (update instanceof TL_updateReadFeaturedStickers) {
+                            DataQuery.getInstance(MessagesController.this.currentAccount).saveDraft(did, update10.draft, null, true);
+                        } else if (baseUpdate instanceof TL_updateReadFeaturedStickers) {
                             DataQuery.getInstance(MessagesController.this.currentAccount).markFaturedStickersAsRead(false);
-                        } else if (update instanceof TL_updatePhoneCall) {
-                            PhoneCall call = ((TL_updatePhoneCall) update).phone_call;
+                        } else if (baseUpdate instanceof TL_updatePhoneCall) {
+                            PhoneCall call = ((TL_updatePhoneCall) baseUpdate).phone_call;
                             VoIPService svc = VoIPService.getSharedInstance();
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.d("Received call in update: " + call);
@@ -8782,7 +8958,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     VoIPService.callIShouldHavePutIntoIntent = call;
                                 }
                             }
-                        } else if (!(update instanceof TL_updateGroupCall) && (update instanceof TL_updateGroupCallParticipant)) {
+                        } else if (!(baseUpdate instanceof TL_updateGroupCall) && (baseUpdate instanceof TL_updateGroupCallParticipant)) {
                         }
                     }
                     if (editor != null) {
@@ -8895,7 +9071,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     public void run() {
                         int size;
                         int b;
-                        int key;
                         MessageObject obj;
                         int a;
                         int updateMask = 0;
@@ -8908,6 +9083,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 Editor editor = MessagesController.this.notificationsPreferences.edit();
                                 size = markAsReadMessagesInboxFinal.size();
                                 for (b = 0; b < size; b++) {
+                                    int key;
                                     key = markAsReadMessagesInboxFinal.keyAt(b);
                                     messageId = (int) markAsReadMessagesInboxFinal.valueAt(b);
                                     dialog = (TL_dialog) MessagesController.this.dialogs_dict.get((long) key);
@@ -9052,8 +9228,8 @@ public class MessagesController implements NotificationCenterDelegate {
         if (tasks != null) {
             size = tasks.size();
             for (a = 0; a < size; a++) {
-                TL_updateEncryptedMessagesRead update2 = (TL_updateEncryptedMessagesRead) tasks.get(a);
-                MessagesStorage.getInstance(this.currentAccount).createTaskForSecretChat(update2.chat_id, update2.max_date, update2.date, 1, null);
+                update12 = (TL_updateEncryptedMessagesRead) tasks.get(a);
+                MessagesStorage.getInstance(this.currentAccount).createTaskForSecretChat(update12.chat_id, update12.max_date, update12.date, 1, null);
             }
         }
         return true;

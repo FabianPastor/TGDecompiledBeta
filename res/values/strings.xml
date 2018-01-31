@@ -224,7 +224,6 @@
     <string name="BytesSent">Bytes sent</string>
     <string name="CacheClear">Clear</string>
     <string name="CacheEmpty">Empty</string>
-    <string name="CacheStreamFile">Cache stream content</string>
     <string name="CalculatingSize">Calculating...</string>
     <string name="Call">Call</string>
     <string name="CallAgain">Call Again</string>
@@ -1519,6 +1518,7 @@
     <string name="Stickers_two">%1$d stickers</string>
     <string name="Stickers_zero">%1$d stickers</string>
     <string name="StopAllLocationSharings">STOP ALL</string>
+    <string name="StopDownload">Stop download</string>
     <string name="StopLiveLocation">Stop Sharing Location</string>
     <string name="StopLiveLocationAlertAll">Are you sure you want to stop sharing your live location?</string>
     <string name="StopLiveLocationAlertToGroup">Are you sure you want to stop sharing live location with %1$s?</string>

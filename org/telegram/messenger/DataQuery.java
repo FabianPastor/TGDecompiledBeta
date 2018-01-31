@@ -3549,7 +3549,6 @@ public class DataQuery {
         if (message == null || message[0] == null) {
             return null;
         }
-        int a;
         MessageEntity entity;
         ArrayList<MessageEntity> entities = null;
         int start = -1;
@@ -3560,6 +3559,7 @@ public class DataQuery {
         String bold = "**";
         String italic = "__";
         while (true) {
+            int a;
             int index = TextUtils.indexOf(message[0], !isPre ? "`" : "```", lastIndex);
             if (index == -1) {
                 break;

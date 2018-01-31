@@ -108,6 +108,7 @@ import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageEntityBold;
 import org.telegram.tgnet.TLRPC.TL_messageEntityCode;
 import org.telegram.tgnet.TLRPC.TL_messageEntityItalic;
+import org.telegram.tgnet.TLRPC.TL_messageEntityMentionName;
 import org.telegram.tgnet.TLRPC.TL_messageEntityPre;
 import org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC.TL_peerUser;
@@ -2700,6 +2701,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                             entity.length++;
                                         }
                                         stringBuilder.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, true), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
+                                    } else if (entity instanceof TL_messageEntityMentionName) {
+                                        if ((entity.offset + entity.length) + addToOffset < stringBuilder.length() && stringBuilder.charAt((entity.offset + entity.length) + addToOffset) == ' ') {
+                                            entity.length++;
+                                        }
+                                        stringBuilder.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, true), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
                                     } else if (entity instanceof TL_messageEntityCode) {
                                         stringBuilder.insert((entity.offset + entity.length) + addToOffset, "`");
                                         stringBuilder.insert(entity.offset + addToOffset, "`");

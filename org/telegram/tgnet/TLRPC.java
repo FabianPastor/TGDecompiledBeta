@@ -12676,62 +12676,6 @@ public class TLRPC {
     }
 
     public static abstract class Update extends TLObject {
-        public SendMessageAction action;
-        public int available_min_id;
-        public boolean blocked;
-        public int channel_id;
-        public EncryptedChat chat;
-        public int chat_id;
-        public long chat_instance;
-        public byte[] data;
-        public int date;
-        public ArrayList<TL_dcOption> dc_options = new ArrayList();
-        public TL_langPackDifference difference;
-        public DraftMessage draft;
-        public boolean enabled;
-        public ArrayList<MessageEntity> entities = new ArrayList();
-        public String first_name;
-        public int flags;
-        public ContactLink foreign_link;
-        public String game_short_name;
-        public GeoPoint geo;
-        public int inbox_date;
-        public int inviter_id;
-        public boolean is_admin;
-        public PrivacyKey key;
-        public String last_name;
-        public boolean masks;
-        public int max_date;
-        public int max_id;
-        public MessageMedia media;
-        public ArrayList<Integer> messages = new ArrayList();
-        public ContactLink my_link;
-        public PeerNotifySettings notify_settings;
-        public String offset;
-        public GroupCallParticipant participant;
-        public ChatParticipants participants;
-        public String phone;
-        public PhoneCall phone_call;
-        public UserProfilePhoto photo;
-        public boolean pinned;
-        public boolean popup;
-        public boolean previous;
-        public int pts;
-        public int pts_count;
-        public int qts;
-        public String query;
-        public long query_id;
-        public long random_id;
-        public ArrayList<PrivacyRule> rules = new ArrayList();
-        public UserStatus status;
-        public TL_messages_stickerSet stickerset;
-        public String type;
-        public int user_id;
-        public String username;
-        public int version;
-        public int views;
-        public WebPage webpage;
-
         public static Update TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             Update result = null;
             switch (constructor) {
@@ -12810,9 +12754,6 @@ public class TLRPC {
                 case -451831443:
                     result = new TL_updateFavedStickers();
                     break;
-                case -415938591:
-                    result = new TL_updateBotCallbackQuery();
-                    break;
                 case -364179876:
                     result = new TL_updateChatParticipantAdd();
                     break;
@@ -12828,9 +12769,6 @@ public class TLRPC {
                 case -298113238:
                     result = new TL_updatePrivacy();
                     break;
-                case -103646630:
-                    result = new TL_updateInlineBotCallbackQuery();
-                    break;
                 case 92188360:
                     result = new TL_updateGroupCallParticipant();
                     break;
@@ -12839,9 +12777,6 @@ public class TLRPC {
                     break;
                 case 196268545:
                     result = new TL_updateStickerSetsOrder();
-                    break;
-                case 239663460:
-                    result = new TL_updateBotInlineSend();
                     break;
                 case 281165899:
                     result = new TL_updateLangPackTooLong();
@@ -12873,9 +12808,6 @@ public class TLRPC {
                 case 791617983:
                     result = new TL_updateReadHistoryOutbox();
                     break;
-                case 861169551:
-                    result = new TL_updatePtsChanged();
-                    break;
                 case 956179895:
                     result = new TL_updateEncryptedMessagesRead();
                     break;
@@ -12890,9 +12822,6 @@ public class TLRPC {
                     break;
                 case 1318109142:
                     result = new TL_updateMessageID();
-                    break;
-                case 1417832080:
-                    result = new TL_updateBotInlineQuery();
                     break;
                 case 1442983757:
                     result = new TL_updateLangPack();
@@ -22905,105 +22834,9 @@ public class TLRPC {
         }
     }
 
-    public static class TL_updateBotCallbackQuery extends Update {
-        public static int constructor = -415938591;
-        public int msg_id;
-        public Peer peer;
-
-        public void readParams(AbstractSerializedData stream, boolean exception) {
-            this.flags = stream.readInt32(exception);
-            this.query_id = stream.readInt64(exception);
-            this.user_id = stream.readInt32(exception);
-            this.peer = Peer.TLdeserialize(stream, stream.readInt32(exception), exception);
-            this.msg_id = stream.readInt32(exception);
-            this.chat_instance = stream.readInt64(exception);
-            if ((this.flags & 1) != 0) {
-                this.data = stream.readByteArray(exception);
-            }
-            if ((this.flags & 2) != 0) {
-                this.game_short_name = stream.readString(exception);
-            }
-        }
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
-            stream.writeInt32(this.flags);
-            stream.writeInt64(this.query_id);
-            stream.writeInt32(this.user_id);
-            this.peer.serializeToStream(stream);
-            stream.writeInt32(this.msg_id);
-            stream.writeInt64(this.chat_instance);
-            if ((this.flags & 1) != 0) {
-                stream.writeByteArray(this.data);
-            }
-            if ((this.flags & 2) != 0) {
-                stream.writeString(this.game_short_name);
-            }
-        }
-    }
-
-    public static class TL_updateBotInlineQuery extends Update {
-        public static int constructor = NUM;
-
-        public void readParams(AbstractSerializedData stream, boolean exception) {
-            this.flags = stream.readInt32(exception);
-            this.query_id = stream.readInt64(exception);
-            this.user_id = stream.readInt32(exception);
-            this.query = stream.readString(exception);
-            if ((this.flags & 1) != 0) {
-                this.geo = GeoPoint.TLdeserialize(stream, stream.readInt32(exception), exception);
-            }
-            this.offset = stream.readString(exception);
-        }
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
-            stream.writeInt32(this.flags);
-            stream.writeInt64(this.query_id);
-            stream.writeInt32(this.user_id);
-            stream.writeString(this.query);
-            if ((this.flags & 1) != 0) {
-                this.geo.serializeToStream(stream);
-            }
-            stream.writeString(this.offset);
-        }
-    }
-
-    public static class TL_updateBotInlineSend extends Update {
-        public static int constructor = 239663460;
-        public String id;
-        public TL_inputBotInlineMessageID msg_id;
-
-        public void readParams(AbstractSerializedData stream, boolean exception) {
-            this.flags = stream.readInt32(exception);
-            this.user_id = stream.readInt32(exception);
-            this.query = stream.readString(exception);
-            if ((this.flags & 1) != 0) {
-                this.geo = GeoPoint.TLdeserialize(stream, stream.readInt32(exception), exception);
-            }
-            this.id = stream.readString(exception);
-            if ((this.flags & 2) != 0) {
-                this.msg_id = TL_inputBotInlineMessageID.TLdeserialize(stream, stream.readInt32(exception), exception);
-            }
-        }
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
-            stream.writeInt32(this.flags);
-            stream.writeInt32(this.user_id);
-            stream.writeString(this.query);
-            if ((this.flags & 1) != 0) {
-                this.geo.serializeToStream(stream);
-            }
-            stream.writeString(this.id);
-            if ((this.flags & 2) != 0) {
-                this.msg_id.serializeToStream(stream);
-            }
-        }
-    }
-
     public static class TL_updateChannel extends Update {
         public static int constructor = -NUM;
+        public int channel_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.channel_id = stream.readInt32(exception);
@@ -23017,6 +22850,8 @@ public class TLRPC {
 
     public static class TL_updateChannelAvailableMessages extends Update {
         public static int constructor = NUM;
+        public int available_min_id;
+        public int channel_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.channel_id = stream.readInt32(exception);
@@ -23032,7 +22867,9 @@ public class TLRPC {
 
     public static class TL_updateChannelMessageViews extends Update {
         public static int constructor = -NUM;
+        public int channel_id;
         public int id;
+        public int views;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.channel_id = stream.readInt32(exception);
@@ -23050,6 +22887,7 @@ public class TLRPC {
 
     public static class TL_updateChannelPinnedMessage extends Update {
         public static int constructor = -NUM;
+        public int channel_id;
         public int id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
@@ -23066,6 +22904,8 @@ public class TLRPC {
 
     public static class TL_updateChannelReadMessagesContents extends Update {
         public static int constructor = -NUM;
+        public int channel_id;
+        public ArrayList<Integer> messages = new ArrayList();
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.channel_id = stream.readInt32(exception);
@@ -23093,6 +22933,9 @@ public class TLRPC {
 
     public static class TL_updateChannelTooLong extends Update {
         public static int constructor = -352032773;
+        public int channel_id;
+        public int flags;
+        public int pts;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.flags = stream.readInt32(exception);
@@ -23114,6 +22957,10 @@ public class TLRPC {
 
     public static class TL_updateChannelWebPage extends Update {
         public static int constructor = NUM;
+        public int channel_id;
+        public int pts;
+        public int pts_count;
+        public WebPage webpage;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.channel_id = stream.readInt32(exception);
@@ -23133,6 +22980,9 @@ public class TLRPC {
 
     public static class TL_updateChatAdmins extends Update {
         public static int constructor = NUM;
+        public int chat_id;
+        public boolean enabled;
+        public int version;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.chat_id = stream.readInt32(exception);
@@ -23150,6 +23000,11 @@ public class TLRPC {
 
     public static class TL_updateChatParticipantAdd extends Update {
         public static int constructor = -364179876;
+        public int chat_id;
+        public int date;
+        public int inviter_id;
+        public int user_id;
+        public int version;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.chat_id = stream.readInt32(exception);
@@ -23171,6 +23026,10 @@ public class TLRPC {
 
     public static class TL_updateChatParticipantAdmin extends Update {
         public static int constructor = -NUM;
+        public int chat_id;
+        public boolean is_admin;
+        public int user_id;
+        public int version;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.chat_id = stream.readInt32(exception);
@@ -23190,6 +23049,9 @@ public class TLRPC {
 
     public static class TL_updateChatParticipantDelete extends Update {
         public static int constructor = NUM;
+        public int chat_id;
+        public int user_id;
+        public int version;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.chat_id = stream.readInt32(exception);
@@ -23207,6 +23069,7 @@ public class TLRPC {
 
     public static class TL_updateChatParticipants extends Update {
         public static int constructor = 125178264;
+        public ChatParticipants participants;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.participants = ChatParticipants.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23220,6 +23083,9 @@ public class TLRPC {
 
     public static class TL_updateChatUserTyping extends Update {
         public static int constructor = -NUM;
+        public SendMessageAction action;
+        public int chat_id;
+        public int user_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.chat_id = stream.readInt32(exception);
@@ -23245,6 +23111,9 @@ public class TLRPC {
 
     public static class TL_updateContactLink extends Update {
         public static int constructor = -NUM;
+        public ContactLink foreign_link;
+        public ContactLink my_link;
+        public int user_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.user_id = stream.readInt32(exception);
@@ -23262,6 +23131,8 @@ public class TLRPC {
 
     public static class TL_updateContactRegistered extends Update {
         public static int constructor = 628472761;
+        public int date;
+        public int user_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.user_id = stream.readInt32(exception);
@@ -23285,6 +23156,7 @@ public class TLRPC {
 
     public static class TL_updateDcOptions extends Update {
         public static int constructor = -NUM;
+        public ArrayList<TL_dcOption> dc_options = new ArrayList();
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             if (stream.readInt32(exception) == 481674261) {
@@ -23317,6 +23189,10 @@ public class TLRPC {
 
     public static class TL_updateDeleteChannelMessages extends Update {
         public static int constructor = -NUM;
+        public int channel_id;
+        public ArrayList<Integer> messages = new ArrayList();
+        public int pts;
+        public int pts_count;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.channel_id = stream.readInt32(exception);
@@ -23348,6 +23224,9 @@ public class TLRPC {
 
     public static class TL_updateDeleteMessages extends Update {
         public static int constructor = -NUM;
+        public ArrayList<Integer> messages = new ArrayList();
+        public int pts;
+        public int pts_count;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             if (stream.readInt32(exception) == 481674261) {
@@ -23377,7 +23256,9 @@ public class TLRPC {
 
     public static class TL_updateDialogPinned extends Update {
         public static int constructor = -686710068;
+        public int flags;
         public Peer peer;
+        public boolean pinned;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.flags = stream.readInt32(exception);
@@ -23395,6 +23276,7 @@ public class TLRPC {
 
     public static class TL_updateDraftMessage extends Update {
         public static int constructor = -299124375;
+        public DraftMessage draft;
         public Peer peer;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
@@ -23412,6 +23294,8 @@ public class TLRPC {
     public static class TL_updateEditChannelMessage extends Update {
         public static int constructor = 457133559;
         public Message message;
+        public int pts;
+        public int pts_count;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.message = Message.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23430,6 +23314,8 @@ public class TLRPC {
     public static class TL_updateEditMessage extends Update {
         public static int constructor = -469536605;
         public Message message;
+        public int pts;
+        public int pts_count;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.message = Message.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23447,6 +23333,7 @@ public class TLRPC {
 
     public static class TL_updateEncryptedChatTyping extends Update {
         public static int constructor = 386986326;
+        public int chat_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.chat_id = stream.readInt32(exception);
@@ -23460,6 +23347,9 @@ public class TLRPC {
 
     public static class TL_updateEncryptedMessagesRead extends Update {
         public static int constructor = 956179895;
+        public int chat_id;
+        public int date;
+        public int max_date;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.chat_id = stream.readInt32(exception);
@@ -23477,6 +23367,8 @@ public class TLRPC {
 
     public static class TL_updateEncryption extends Update {
         public static int constructor = -NUM;
+        public EncryptedChat chat;
+        public int date;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.chat = EncryptedChat.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23515,6 +23407,7 @@ public class TLRPC {
     public static class TL_updateGroupCallParticipant extends Update {
         public static int constructor = 92188360;
         public TL_inputGroupCall call;
+        public GroupCallParticipant participant;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.call = TL_inputGroupCall.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23528,42 +23421,9 @@ public class TLRPC {
         }
     }
 
-    public static class TL_updateInlineBotCallbackQuery extends Update {
-        public static int constructor = -103646630;
-        public TL_inputBotInlineMessageID msg_id;
-
-        public void readParams(AbstractSerializedData stream, boolean exception) {
-            this.flags = stream.readInt32(exception);
-            this.query_id = stream.readInt64(exception);
-            this.user_id = stream.readInt32(exception);
-            this.msg_id = TL_inputBotInlineMessageID.TLdeserialize(stream, stream.readInt32(exception), exception);
-            this.chat_instance = stream.readInt64(exception);
-            if ((this.flags & 1) != 0) {
-                this.data = stream.readByteArray(exception);
-            }
-            if ((this.flags & 2) != 0) {
-                this.game_short_name = stream.readString(exception);
-            }
-        }
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
-            stream.writeInt32(this.flags);
-            stream.writeInt64(this.query_id);
-            stream.writeInt32(this.user_id);
-            this.msg_id.serializeToStream(stream);
-            stream.writeInt64(this.chat_instance);
-            if ((this.flags & 1) != 0) {
-                stream.writeByteArray(this.data);
-            }
-            if ((this.flags & 2) != 0) {
-                stream.writeString(this.game_short_name);
-            }
-        }
-    }
-
     public static class TL_updateLangPack extends Update {
         public static int constructor = NUM;
+        public TL_langPackDifference difference;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.difference = TL_langPackDifference.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23586,6 +23446,7 @@ public class TLRPC {
     public static class TL_updateMessageID extends Update {
         public static int constructor = NUM;
         public int id;
+        public long random_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.id = stream.readInt32(exception);
@@ -23602,6 +23463,8 @@ public class TLRPC {
     public static class TL_updateNewChannelMessage extends Update {
         public static int constructor = NUM;
         public Message message;
+        public int pts;
+        public int pts_count;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.message = Message.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23620,6 +23483,7 @@ public class TLRPC {
     public static class TL_updateNewEncryptedMessage extends Update {
         public static int constructor = 314359194;
         public EncryptedMessage message;
+        public int qts;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.message = EncryptedMessage.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23636,6 +23500,8 @@ public class TLRPC {
     public static class TL_updateNewMessage extends Update {
         public static int constructor = 522914557;
         public Message message;
+        public int pts;
+        public int pts_count;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.message = Message.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23653,6 +23519,7 @@ public class TLRPC {
 
     public static class TL_updateNewStickerSet extends Update {
         public static int constructor = NUM;
+        public TL_messages_stickerSet stickerset;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.stickerset = TL_messages_stickerSet.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23666,6 +23533,7 @@ public class TLRPC {
 
     public static class TL_updateNotifySettings extends Update {
         public static int constructor = -NUM;
+        public PeerNotifySettings notify_settings;
         public NotifyPeer peer;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
@@ -23682,6 +23550,7 @@ public class TLRPC {
 
     public static class TL_updatePhoneCall extends Update {
         public static int constructor = -NUM;
+        public PhoneCall phone_call;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.phone_call = PhoneCall.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23695,6 +23564,7 @@ public class TLRPC {
 
     public static class TL_updatePinnedDialogs extends Update {
         public static int constructor = -657787251;
+        public int flags;
         public ArrayList<Peer> order = new ArrayList();
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
@@ -23734,6 +23604,8 @@ public class TLRPC {
 
     public static class TL_updatePrivacy extends Update {
         public static int constructor = -298113238;
+        public PrivacyKey key;
+        public ArrayList<PrivacyRule> rules = new ArrayList();
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.key = PrivacyKey.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23766,16 +23638,10 @@ public class TLRPC {
         }
     }
 
-    public static class TL_updatePtsChanged extends Update {
-        public static int constructor = 861169551;
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
-        }
-    }
-
     public static class TL_updateReadChannelInbox extends Update {
         public static int constructor = NUM;
+        public int channel_id;
+        public int max_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.channel_id = stream.readInt32(exception);
@@ -23791,6 +23657,8 @@ public class TLRPC {
 
     public static class TL_updateReadChannelOutbox extends Update {
         public static int constructor = 634833351;
+        public int channel_id;
+        public int max_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.channel_id = stream.readInt32(exception);
@@ -23814,7 +23682,10 @@ public class TLRPC {
 
     public static class TL_updateReadHistoryInbox extends Update {
         public static int constructor = -NUM;
+        public int max_id;
         public Peer peer;
+        public int pts;
+        public int pts_count;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.peer = Peer.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23834,7 +23705,10 @@ public class TLRPC {
 
     public static class TL_updateReadHistoryOutbox extends Update {
         public static int constructor = 791617983;
+        public int max_id;
         public Peer peer;
+        public int pts;
+        public int pts_count;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.peer = Peer.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -23854,6 +23728,9 @@ public class TLRPC {
 
     public static class TL_updateReadMessagesContents extends Update {
         public static int constructor = NUM;
+        public ArrayList<Integer> messages = new ArrayList();
+        public int pts;
+        public int pts_count;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             if (stream.readInt32(exception) == 481674261) {
@@ -23899,7 +23776,13 @@ public class TLRPC {
 
     public static class TL_updateServiceNotification extends Update {
         public static int constructor = -337352679;
+        public ArrayList<MessageEntity> entities = new ArrayList();
+        public int flags;
+        public int inbox_date;
+        public MessageMedia media;
         public String message;
+        public boolean popup;
+        public String type;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             boolean z;
@@ -24147,6 +24030,8 @@ public class TLRPC {
 
     public static class TL_updateStickerSetsOrder extends Update {
         public static int constructor = 196268545;
+        public int flags;
+        public boolean masks;
         public ArrayList<Long> order = new ArrayList();
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
@@ -24183,6 +24068,8 @@ public class TLRPC {
 
     public static class TL_updateUserBlocked extends Update {
         public static int constructor = -NUM;
+        public boolean blocked;
+        public int user_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.user_id = stream.readInt32(exception);
@@ -24198,6 +24085,10 @@ public class TLRPC {
 
     public static class TL_updateUserName extends Update {
         public static int constructor = -NUM;
+        public String first_name;
+        public String last_name;
+        public int user_id;
+        public String username;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.user_id = stream.readInt32(exception);
@@ -24217,6 +24108,8 @@ public class TLRPC {
 
     public static class TL_updateUserPhone extends Update {
         public static int constructor = 314130811;
+        public String phone;
+        public int user_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.user_id = stream.readInt32(exception);
@@ -24232,6 +24125,10 @@ public class TLRPC {
 
     public static class TL_updateUserPhoto extends Update {
         public static int constructor = -NUM;
+        public int date;
+        public UserProfilePhoto photo;
+        public boolean previous;
+        public int user_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.user_id = stream.readInt32(exception);
@@ -24251,6 +24148,8 @@ public class TLRPC {
 
     public static class TL_updateUserStatus extends Update {
         public static int constructor = 469489699;
+        public UserStatus status;
+        public int user_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.user_id = stream.readInt32(exception);
@@ -24266,6 +24165,8 @@ public class TLRPC {
 
     public static class TL_updateUserTyping extends Update {
         public static int constructor = NUM;
+        public SendMessageAction action;
+        public int user_id;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.user_id = stream.readInt32(exception);
@@ -24281,6 +24182,9 @@ public class TLRPC {
 
     public static class TL_updateWebPage extends Update {
         public static int constructor = NUM;
+        public int pts;
+        public int pts_count;
+        public WebPage webpage;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.webpage = WebPage.TLdeserialize(stream, stream.readInt32(exception), exception);

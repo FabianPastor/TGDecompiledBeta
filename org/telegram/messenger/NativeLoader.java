@@ -13,10 +13,10 @@ import java.util.zip.ZipFile;
 import net.hockeyapp.android.Constants;
 
 public class NativeLoader {
-    private static final String LIB_NAME = "tmessages.27";
-    private static final String LIB_SO_NAME = "libtmessages.27.so";
-    private static final int LIB_VERSION = 27;
-    private static final String LOCALE_LIB_SO_NAME = "libtmessages.27loc.so";
+    private static final String LIB_NAME = "tmessages.28";
+    private static final String LIB_SO_NAME = "libtmessages.28.so";
+    private static final int LIB_VERSION = 28;
+    private static final String LOCALE_LIB_SO_NAME = "libtmessages.28loc.so";
     private static volatile boolean nativeLoaded = false;
     private String crashPath = TtmlNode.ANONYMOUS_REGION_ID;
 

@@ -507,8 +507,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private int newUnreadMessageCount;
     OnItemClickListenerExtended onItemClickListener = new OnItemClickListenerExtended() {
         public void onItemClick(View view, int position, float x, float y) {
+            ChatActivity.this.wasManualScroll = true;
             if (ChatActivity.this.actionBar.isActionModeShowed()) {
-                ChatActivity.this.wasManualScroll = true;
                 boolean outside = false;
                 if (view instanceof ChatMessageCell) {
                     if (((ChatMessageCell) view).isInsideBackground(x, y)) {
@@ -525,6 +525,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     };
     OnItemLongClickListenerExtended onItemLongClickListener = new OnItemLongClickListenerExtended() {
         public boolean onItemClick(View view, int position, float x, float y) {
+            ChatActivity.this.wasManualScroll = true;
             if (ChatActivity.this.actionBar.isActionModeShowed()) {
                 boolean outside = false;
                 if (view instanceof ChatMessageCell) {
@@ -536,7 +537,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
                 ChatActivity.this.processRowSelect(view, outside);
             } else {
-                ChatActivity.this.wasManualScroll = true;
                 ChatActivity.this.createMenu(view, false, true);
             }
             return true;
@@ -3278,7 +3278,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             private float totalDy = 0.0f;
 
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == 1) {
+                if (newState == 2) {
+                    ChatActivity.this.wasManualScroll = true;
+                } else if (newState == 1) {
                     ChatActivity.this.wasManualScroll = true;
                     ChatActivity.this.scrollingFloatingDate = true;
                     ChatActivity.this.checkTextureViewPosition = true;
@@ -11738,6 +11740,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 case 0:
                     if (this.selectedObjectGroup == null) {
                         if (SendMessagesHelper.getInstance(this.currentAccount).retrySendMessage(this.selectedObject, false)) {
+                            updateVisibleRows();
                             moveScrollToLastMessage();
                             break;
                         }
@@ -11789,7 +11792,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     this.selectedObject = null;
                     this.selectedObjectGroup = null;
                     return;
-                    break;
                 case 5:
                     File locFile = null;
                     if (!TextUtils.isEmpty(this.selectedObject.messageOwner.attachPath)) {

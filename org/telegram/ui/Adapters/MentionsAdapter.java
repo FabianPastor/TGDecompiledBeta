@@ -193,6 +193,7 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public void setChatInfo(ChatFull chatInfo) {
+        this.currentAccount = UserConfig.selectedAccount;
         this.info = chatInfo;
         if (!(this.inlineMediaEnabled || this.foundContextBot == null || this.parentFragment == null)) {
             Chat chat = this.parentFragment.getCurrentChat();

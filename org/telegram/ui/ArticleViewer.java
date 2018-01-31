@@ -6643,7 +6643,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             TextureView textureView = this.videoTextureView;
             this.videoCrossfadeAlpha = 0.0f;
             textureView.setAlpha(0.0f);
-            this.videoPlayButton.setImageResource(R.drawable.playvideo);
+            this.videoPlayButton.setImageResource(R.drawable.inline_video_play);
             if (this.videoPlayer == null) {
                 long duration;
                 this.videoPlayer = new VideoPlayer();
@@ -6670,7 +6670,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             if (!ArticleViewer.this.videoPlayer.isPlaying() || playbackState == 4) {
                                 if (ArticleViewer.this.isPlaying) {
                                     ArticleViewer.this.isPlaying = false;
-                                    ArticleViewer.this.videoPlayButton.setImageResource(R.drawable.playvideo);
+                                    ArticleViewer.this.videoPlayButton.setImageResource(R.drawable.inline_video_play);
                                     AndroidUtilities.cancelRunOnUIThread(ArticleViewer.this.updateProgressRunnable);
                                     if (playbackState == 4 && !ArticleViewer.this.videoPlayerSeekbar.isDragging()) {
                                         ArticleViewer.this.videoPlayerSeekbar.setProgress(0.0f);
@@ -6681,7 +6681,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                                 }
                             } else if (!ArticleViewer.this.isPlaying) {
                                 ArticleViewer.this.isPlaying = true;
-                                ArticleViewer.this.videoPlayButton.setImageResource(R.drawable.pausevideo);
+                                ArticleViewer.this.videoPlayButton.setImageResource(R.drawable.inline_video_pause);
                                 AndroidUtilities.runOnUIThread(ArticleViewer.this.updateProgressRunnable);
                             }
                             ArticleViewer.this.updateVideoPlayerTime();
@@ -6753,7 +6753,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         }
         if (this.isPlaying) {
             this.isPlaying = false;
-            this.videoPlayButton.setImageResource(R.drawable.playvideo);
+            this.videoPlayButton.setImageResource(R.drawable.inline_video_play);
             AndroidUtilities.cancelRunOnUIThread(this.updateProgressRunnable);
         }
         this.bottomLayout.setVisibility(8);
