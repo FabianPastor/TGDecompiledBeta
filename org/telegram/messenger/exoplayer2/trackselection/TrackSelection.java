@@ -13,6 +13,10 @@ public interface TrackSelection {
 
     boolean blacklist(int i, long j);
 
+    void disable();
+
+    void enable();
+
     int evaluateQueueSize(long j, List<? extends MediaChunk> list);
 
     Format getFormat(int i);
@@ -37,5 +41,7 @@ public interface TrackSelection {
 
     int length();
 
-    void updateSelectedTrack(long j);
+    void onPlaybackSpeed(float f);
+
+    void updateSelectedTrack(long j, long j2, long j3);
 }

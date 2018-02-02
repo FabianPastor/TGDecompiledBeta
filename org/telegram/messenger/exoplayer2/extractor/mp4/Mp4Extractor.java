@@ -16,6 +16,8 @@ import org.telegram.messenger.exoplayer2.extractor.ExtractorsFactory;
 import org.telegram.messenger.exoplayer2.extractor.GaplessInfoHolder;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
+import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
+import org.telegram.messenger.exoplayer2.extractor.SeekPoint;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.metadata.Metadata;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -31,10 +33,12 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         }
     };
     public static final int FLAG_WORKAROUND_IGNORE_EDIT_LISTS = 1;
+    private static final long MAXIMUM_READ_AHEAD_BYTES_STREAM = 10485760;
     private static final long RELOAD_MINIMUM_SEEK_DISTANCE = 262144;
     private static final int STATE_READING_ATOM_HEADER = 0;
     private static final int STATE_READING_ATOM_PAYLOAD = 1;
     private static final int STATE_READING_SAMPLE = 2;
+    private long[][] accumulatedSampleSizes;
     private ParsableByteArray atomData;
     private final ParsableByteArray atomHeader;
     private int atomHeaderBytesRead;
@@ -43,6 +47,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
     private final Stack<ContainerAtom> containerAtoms;
     private long durationUs;
     private ExtractorOutput extractorOutput;
+    private int firstVideoTrackIndex;
     private final int flags;
     private boolean isQuickTime;
     private final ParsableByteArray nalLength;
@@ -50,6 +55,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
     private int parserState;
     private int sampleBytesWritten;
     private int sampleCurrentNalBytesRemaining;
+    private int sampleTrackIndex;
     private Mp4Track[] tracks;
 
     @Retention(RetentionPolicy.SOURCE)
@@ -83,6 +89,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         this.containerAtoms = new Stack();
         this.nalStartCode = new ParsableByteArray(NalUnitUtil.NAL_START_CODE);
         this.nalLength = new ParsableByteArray(4);
+        this.sampleTrackIndex = -1;
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
@@ -96,6 +103,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
     public void seek(long position, long timeUs) {
         this.containerAtoms.clear();
         this.atomHeaderBytesRead = 0;
+        this.sampleTrackIndex = -1;
         this.sampleBytesWritten = 0;
         this.sampleCurrentNalBytesRemaining = 0;
         if (position == 0) {
@@ -137,20 +145,49 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         return this.durationUs;
     }
 
-    public long getPosition(long timeUs) {
-        long earliestSamplePosition = Long.MAX_VALUE;
-        for (Mp4Track track : this.tracks) {
-            TrackSampleTable sampleTable = track.sampleTable;
-            int sampleIndex = sampleTable.getIndexOfEarlierOrEqualSynchronizationSample(timeUs);
+    public SeekPoints getSeekPoints(long timeUs) {
+        if (this.tracks.length == 0) {
+            return new SeekPoints(SeekPoint.START);
+        }
+        TrackSampleTable sampleTable;
+        long firstTimeUs;
+        long firstOffset;
+        long secondTimeUs = C.TIME_UNSET;
+        long secondOffset = -1;
+        if (this.firstVideoTrackIndex != -1) {
+            sampleTable = this.tracks[this.firstVideoTrackIndex].sampleTable;
+            int sampleIndex = getSynchronizationSampleIndex(sampleTable, timeUs);
             if (sampleIndex == -1) {
-                sampleIndex = sampleTable.getIndexOfLaterOrEqualSynchronizationSample(timeUs);
+                return new SeekPoints(SeekPoint.START);
             }
-            long offset = sampleTable.offsets[sampleIndex];
-            if (offset < earliestSamplePosition) {
-                earliestSamplePosition = offset;
+            long sampleTimeUs = sampleTable.timestampsUs[sampleIndex];
+            firstTimeUs = sampleTimeUs;
+            firstOffset = sampleTable.offsets[sampleIndex];
+            if (sampleTimeUs < timeUs && sampleIndex < sampleTable.sampleCount - 1) {
+                int secondSampleIndex = sampleTable.getIndexOfLaterOrEqualSynchronizationSample(timeUs);
+                if (!(secondSampleIndex == -1 || secondSampleIndex == sampleIndex)) {
+                    secondTimeUs = sampleTable.timestampsUs[secondSampleIndex];
+                    secondOffset = sampleTable.offsets[secondSampleIndex];
+                }
+            }
+        } else {
+            firstTimeUs = timeUs;
+            firstOffset = Long.MAX_VALUE;
+        }
+        for (int i = 0; i < this.tracks.length; i++) {
+            if (i != this.firstVideoTrackIndex) {
+                sampleTable = this.tracks[i].sampleTable;
+                firstOffset = maybeAdjustSeekOffset(sampleTable, firstTimeUs, firstOffset);
+                if (secondTimeUs != C.TIME_UNSET) {
+                    secondOffset = maybeAdjustSeekOffset(sampleTable, secondTimeUs, secondOffset);
+                }
             }
         }
-        return earliestSamplePosition;
+        SeekPoint firstSeekPoint = new SeekPoint(firstTimeUs, firstOffset);
+        if (secondTimeUs == C.TIME_UNSET) {
+            return new SeekPoints(firstSeekPoint);
+        }
+        return new SeekPoints(firstSeekPoint, new SeekPoint(secondTimeUs, secondOffset));
     }
 
     private void enterReadingAtomHeaderState() {
@@ -257,24 +294,10 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         }
     }
 
-    private static boolean processFtypAtom(ParsableByteArray atomData) {
-        atomData.setPosition(8);
-        if (atomData.readInt() == BRAND_QUICKTIME) {
-            return true;
-        }
-        atomData.skipBytes(4);
-        while (atomData.bytesLeft() > 0) {
-            if (atomData.readInt() == BRAND_QUICKTIME) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void processMoovAtom(ContainerAtom moov) throws ParserException {
+        int firstVideoTrackIndex = -1;
         long durationUs = C.TIME_UNSET;
         List<Mp4Track> tracks = new ArrayList();
-        long earliestSampleOffset = Long.MAX_VALUE;
         Metadata metadata = null;
         GaplessInfoHolder gaplessInfoHolder = new GaplessInfoHolder();
         LeafAtom udta = moov.getLeafAtomOfType(Atom.TYPE_udta);
@@ -303,39 +326,43 @@ public final class Mp4Extractor implements Extractor, SeekMap {
                         }
                         mp4Track.trackOutput.format(format);
                         durationUs = Math.max(durationUs, track.durationUs);
-                        tracks.add(mp4Track);
-                        long firstSampleOffset = trackSampleTable.offsets[0];
-                        if (firstSampleOffset < earliestSampleOffset) {
-                            earliestSampleOffset = firstSampleOffset;
+                        if (track.type == 2 && firstVideoTrackIndex == -1) {
+                            firstVideoTrackIndex = tracks.size();
                         }
+                        tracks.add(mp4Track);
                     }
                 }
             }
         }
+        this.firstVideoTrackIndex = firstVideoTrackIndex;
         this.durationUs = durationUs;
         this.tracks = (Mp4Track[]) tracks.toArray(new Mp4Track[tracks.size()]);
+        this.accumulatedSampleSizes = calculateAccumulatedSampleSizes(this.tracks);
         this.extractorOutput.endTracks();
         this.extractorOutput.seekMap(this);
     }
 
     private int readSample(ExtractorInput input, PositionHolder positionHolder) throws IOException, InterruptedException {
-        int trackIndex = getTrackIndexOfEarliestCurrentSample();
-        if (trackIndex == -1) {
-            return -1;
+        long inputPosition = input.getPosition();
+        if (this.sampleTrackIndex == -1) {
+            this.sampleTrackIndex = getTrackIndexOfNextReadSample(inputPosition);
+            if (this.sampleTrackIndex == -1) {
+                return -1;
+            }
         }
-        Mp4Track track = this.tracks[trackIndex];
+        Mp4Track track = this.tracks[this.sampleTrackIndex];
         TrackOutput trackOutput = track.trackOutput;
         int sampleIndex = track.sampleIndex;
         long position = track.sampleTable.offsets[sampleIndex];
         int sampleSize = track.sampleTable.sizes[sampleIndex];
-        if (track.track.sampleTransformation == 1) {
-            position += 8;
-            sampleSize -= 8;
-        }
-        long skipAmount = (position - input.getPosition()) + ((long) this.sampleBytesWritten);
+        long skipAmount = (position - inputPosition) + ((long) this.sampleBytesWritten);
         if (skipAmount < 0 || skipAmount >= RELOAD_MINIMUM_SEEK_DISTANCE) {
             positionHolder.position = position;
             return 1;
+        }
+        if (track.track.sampleTransformation == 1) {
+            skipAmount += 8;
+            sampleSize -= 8;
         }
         input.skipFully((int) skipAmount);
         int writtenBytes;
@@ -370,26 +397,42 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         }
         trackOutput.sampleMetadata(track.sampleTable.timestampsUs[sampleIndex], track.sampleTable.flags[sampleIndex], sampleSize, 0, null);
         track.sampleIndex++;
+        this.sampleTrackIndex = -1;
         this.sampleBytesWritten = 0;
         this.sampleCurrentNalBytesRemaining = 0;
         return 0;
     }
 
-    private int getTrackIndexOfEarliestCurrentSample() {
-        int earliestSampleTrackIndex = -1;
-        long earliestSampleOffset = Long.MAX_VALUE;
+    private int getTrackIndexOfNextReadSample(long inputPosition) {
+        long preferredSkipAmount = Long.MAX_VALUE;
+        boolean preferredRequiresReload = true;
+        int preferredTrackIndex = -1;
+        long preferredAccumulatedBytes = Long.MAX_VALUE;
+        long minAccumulatedBytes = Long.MAX_VALUE;
+        boolean minAccumulatedBytesRequiresReload = true;
+        int minAccumulatedBytesTrackIndex = -1;
         for (int trackIndex = 0; trackIndex < this.tracks.length; trackIndex++) {
             Mp4Track track = this.tracks[trackIndex];
             int sampleIndex = track.sampleIndex;
             if (sampleIndex != track.sampleTable.sampleCount) {
-                long trackSampleOffset = track.sampleTable.offsets[sampleIndex];
-                if (trackSampleOffset < earliestSampleOffset) {
-                    earliestSampleOffset = trackSampleOffset;
-                    earliestSampleTrackIndex = trackIndex;
+                long sampleOffset = track.sampleTable.offsets[sampleIndex];
+                long sampleAccumulatedBytes = this.accumulatedSampleSizes[trackIndex][sampleIndex];
+                long skipAmount = sampleOffset - inputPosition;
+                boolean requiresReload = skipAmount < 0 || skipAmount >= RELOAD_MINIMUM_SEEK_DISTANCE;
+                if ((!requiresReload && preferredRequiresReload) || (requiresReload == preferredRequiresReload && skipAmount < preferredSkipAmount)) {
+                    preferredRequiresReload = requiresReload;
+                    preferredSkipAmount = skipAmount;
+                    preferredTrackIndex = trackIndex;
+                    preferredAccumulatedBytes = sampleAccumulatedBytes;
+                }
+                if (sampleAccumulatedBytes < minAccumulatedBytes) {
+                    minAccumulatedBytes = sampleAccumulatedBytes;
+                    minAccumulatedBytesRequiresReload = requiresReload;
+                    minAccumulatedBytesTrackIndex = trackIndex;
                 }
             }
         }
-        return earliestSampleTrackIndex;
+        return (minAccumulatedBytes == Long.MAX_VALUE || !minAccumulatedBytesRequiresReload || preferredAccumulatedBytes < MAXIMUM_READ_AHEAD_BYTES_STREAM + minAccumulatedBytes) ? preferredTrackIndex : minAccumulatedBytesTrackIndex;
     }
 
     private void updateSampleIndices(long timeUs) {
@@ -401,6 +444,71 @@ public final class Mp4Extractor implements Extractor, SeekMap {
             }
             track.sampleIndex = sampleIndex;
         }
+    }
+
+    private static long[][] calculateAccumulatedSampleSizes(Mp4Track[] tracks) {
+        int i;
+        long[][] accumulatedSampleSizes = new long[tracks.length][];
+        int[] nextSampleIndex = new int[tracks.length];
+        long[] nextSampleTimesUs = new long[tracks.length];
+        boolean[] tracksFinished = new boolean[tracks.length];
+        for (i = 0; i < tracks.length; i++) {
+            accumulatedSampleSizes[i] = new long[tracks[i].sampleTable.sampleCount];
+            nextSampleTimesUs[i] = tracks[i].sampleTable.timestampsUs[0];
+        }
+        long accumulatedSampleSize = 0;
+        int finishedTracks = 0;
+        while (finishedTracks < tracks.length) {
+            long minTimeUs = Long.MAX_VALUE;
+            int minTimeTrackIndex = -1;
+            i = 0;
+            while (i < tracks.length) {
+                if (!tracksFinished[i] && nextSampleTimesUs[i] <= minTimeUs) {
+                    minTimeTrackIndex = i;
+                    minTimeUs = nextSampleTimesUs[i];
+                }
+                i++;
+            }
+            int trackSampleIndex = nextSampleIndex[minTimeTrackIndex];
+            accumulatedSampleSizes[minTimeTrackIndex][trackSampleIndex] = accumulatedSampleSize;
+            accumulatedSampleSize += (long) tracks[minTimeTrackIndex].sampleTable.sizes[trackSampleIndex];
+            trackSampleIndex++;
+            nextSampleIndex[minTimeTrackIndex] = trackSampleIndex;
+            if (trackSampleIndex < accumulatedSampleSizes[minTimeTrackIndex].length) {
+                nextSampleTimesUs[minTimeTrackIndex] = tracks[minTimeTrackIndex].sampleTable.timestampsUs[trackSampleIndex];
+            } else {
+                tracksFinished[minTimeTrackIndex] = true;
+                finishedTracks++;
+            }
+        }
+        return accumulatedSampleSizes;
+    }
+
+    private static long maybeAdjustSeekOffset(TrackSampleTable sampleTable, long seekTimeUs, long offset) {
+        int sampleIndex = getSynchronizationSampleIndex(sampleTable, seekTimeUs);
+        return sampleIndex == -1 ? offset : Math.min(sampleTable.offsets[sampleIndex], offset);
+    }
+
+    private static int getSynchronizationSampleIndex(TrackSampleTable sampleTable, long timeUs) {
+        int sampleIndex = sampleTable.getIndexOfEarlierOrEqualSynchronizationSample(timeUs);
+        if (sampleIndex == -1) {
+            return sampleTable.getIndexOfLaterOrEqualSynchronizationSample(timeUs);
+        }
+        return sampleIndex;
+    }
+
+    private static boolean processFtypAtom(ParsableByteArray atomData) {
+        atomData.setPosition(8);
+        if (atomData.readInt() == BRAND_QUICKTIME) {
+            return true;
+        }
+        atomData.skipBytes(4);
+        while (atomData.bytesLeft() > 0) {
+            if (atomData.readInt() == BRAND_QUICKTIME) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean shouldParseLeafAtom(int atom) {

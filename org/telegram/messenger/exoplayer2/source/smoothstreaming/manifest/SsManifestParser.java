@@ -408,7 +408,7 @@ public class SsManifestParser implements Parser<SsManifest> {
             StreamElement[] streamElementArray = new StreamElement[this.streamElements.size()];
             this.streamElements.toArray(streamElementArray);
             if (this.protectionElement != null) {
-                DrmInitData drmInitData = new DrmInitData(new SchemeData(this.protectionElement.uuid, null, MimeTypes.VIDEO_MP4, this.protectionElement.data));
+                DrmInitData drmInitData = new DrmInitData(new SchemeData(this.protectionElement.uuid, MimeTypes.VIDEO_MP4, this.protectionElement.data));
                 for (StreamElement streamElement : streamElementArray) {
                     for (int i = 0; i < streamElement.formats.length; i++) {
                         streamElement.formats[i] = streamElement.formats[i].copyWithDrmInitData(drmInitData);

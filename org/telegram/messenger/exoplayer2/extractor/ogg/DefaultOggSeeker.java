@@ -4,6 +4,8 @@ import java.io.EOFException;
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
+import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
+import org.telegram.messenger.exoplayer2.extractor.SeekPoint;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 final class DefaultOggSeeker implements OggSeeker {
@@ -35,11 +37,11 @@ final class DefaultOggSeeker implements OggSeeker {
             return true;
         }
 
-        public long getPosition(long timeUs) {
+        public SeekPoints getSeekPoints(long timeUs) {
             if (timeUs == 0) {
-                return DefaultOggSeeker.this.startPosition;
+                return new SeekPoints(new SeekPoint(0, DefaultOggSeeker.this.startPosition));
             }
-            return DefaultOggSeeker.this.getEstimatedPosition(DefaultOggSeeker.this.startPosition, DefaultOggSeeker.this.streamReader.convertTimeToGranule(timeUs), 30000);
+            return new SeekPoints(new SeekPoint(timeUs, DefaultOggSeeker.this.getEstimatedPosition(DefaultOggSeeker.this.startPosition, DefaultOggSeeker.this.streamReader.convertTimeToGranule(timeUs), 30000)));
         }
 
         public long getDurationUs() {
@@ -143,7 +145,7 @@ final class DefaultOggSeeker implements OggSeeker {
                     this.end = this.start;
                     return this.start;
                 }
-                return Math.min(Math.max((input.getPosition() - ((long) ((granuleDistance <= 0 ? 2 : 1) * pageSize))) + (((this.end - this.start) * granuleDistance) / (this.endGranule - this.startGranule)), this.start), this.end - 1);
+                return Math.min(Math.max((input.getPosition() - (((long) pageSize) * (granuleDistance <= 0 ? 2 : 1))) + (((this.end - this.start) * granuleDistance) / (this.endGranule - this.startGranule)), this.start), this.end - 1);
             }
             input.skipFully(pageSize);
             return -(this.pageHeader.granulePosition + 2);

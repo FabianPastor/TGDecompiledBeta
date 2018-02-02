@@ -24,6 +24,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.source.hls.DefaultHlsExtractorFactory;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
@@ -166,7 +167,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             color = 1;
         } else if (name.contains(".pdf") || name.contains(".ppt") || name.contains(".key")) {
             color = 2;
-        } else if (name.contains(".zip") || name.contains(".rar") || name.contains(".ai") || name.contains(".mp3") || name.contains(".mov") || name.contains(".avi")) {
+        } else if (name.contains(".zip") || name.contains(".rar") || name.contains(".ai") || name.contains(DefaultHlsExtractorFactory.MP3_FILE_EXTENSION) || name.contains(".mov") || name.contains(".avi")) {
             color = 3;
         }
         if (color == -1) {

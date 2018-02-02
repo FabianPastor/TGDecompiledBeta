@@ -16,6 +16,7 @@ import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
 public final class SampleQueue implements TrackOutput {
+    public static final int ADVANCE_FAILED = -1;
     private static final int INITIAL_SCRATCH_SIZE = 32;
     private final int allocationLength;
     private final Allocator allocator;
@@ -130,6 +131,10 @@ public final class SampleQueue implements TrackOutput {
         return this.metadataQueue.hasNextSample();
     }
 
+    public int getFirstIndex() {
+        return this.metadataQueue.getFirstIndex();
+    }
+
     public int getReadIndex() {
         return this.metadataQueue.getReadIndex();
     }
@@ -144,6 +149,10 @@ public final class SampleQueue implements TrackOutput {
 
     public long getLargestQueuedTimestampUs() {
         return this.metadataQueue.getLargestQueuedTimestampUs();
+    }
+
+    public long getFirstTimestampUs() {
+        return this.metadataQueue.getFirstTimestampUs();
     }
 
     public void rewind() {
@@ -163,12 +172,16 @@ public final class SampleQueue implements TrackOutput {
         discardDownstreamTo(this.metadataQueue.discardToEnd());
     }
 
-    public void advanceToEnd() {
-        this.metadataQueue.advanceToEnd();
+    public int advanceToEnd() {
+        return this.metadataQueue.advanceToEnd();
     }
 
-    public boolean advanceTo(long timeUs, boolean toKeyframe, boolean allowTimeBeyondBuffer) {
+    public int advanceTo(long timeUs, boolean toKeyframe, boolean allowTimeBeyondBuffer) {
         return this.metadataQueue.advanceTo(timeUs, toKeyframe, allowTimeBeyondBuffer);
+    }
+
+    public boolean setReadPosition(int sampleIndex) {
+        return this.metadataQueue.setReadPosition(sampleIndex);
     }
 
     public int read(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired, boolean loadingFinished, long decodeOnlyUntilUs) {

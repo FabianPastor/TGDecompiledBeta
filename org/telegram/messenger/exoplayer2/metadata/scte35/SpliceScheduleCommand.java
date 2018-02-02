@@ -43,7 +43,7 @@ public final class SpliceScheduleCommand extends SpliceCommand {
         public final boolean autoReturn;
         public final int availNum;
         public final int availsExpected;
-        public final long breakDuration;
+        public final long breakDurationUs;
         public final List<ComponentSplice> componentSpliceList;
         public final boolean outOfNetworkIndicator;
         public final boolean programSpliceFlag;
@@ -52,7 +52,7 @@ public final class SpliceScheduleCommand extends SpliceCommand {
         public final int uniqueProgramId;
         public final long utcSpliceTime;
 
-        private Event(long spliceEventId, boolean spliceEventCancelIndicator, boolean outOfNetworkIndicator, boolean programSpliceFlag, List<ComponentSplice> componentSpliceList, long utcSpliceTime, boolean autoReturn, long breakDuration, int uniqueProgramId, int availNum, int availsExpected) {
+        private Event(long spliceEventId, boolean spliceEventCancelIndicator, boolean outOfNetworkIndicator, boolean programSpliceFlag, List<ComponentSplice> componentSpliceList, long utcSpliceTime, boolean autoReturn, long breakDurationUs, int uniqueProgramId, int availNum, int availsExpected) {
             this.spliceEventId = spliceEventId;
             this.spliceEventCancelIndicator = spliceEventCancelIndicator;
             this.outOfNetworkIndicator = outOfNetworkIndicator;
@@ -60,7 +60,7 @@ public final class SpliceScheduleCommand extends SpliceCommand {
             this.componentSpliceList = Collections.unmodifiableList(componentSpliceList);
             this.utcSpliceTime = utcSpliceTime;
             this.autoReturn = autoReturn;
-            this.breakDuration = breakDuration;
+            this.breakDurationUs = breakDurationUs;
             this.uniqueProgramId = uniqueProgramId;
             this.availNum = availNum;
             this.availsExpected = availsExpected;
@@ -99,7 +99,7 @@ public final class SpliceScheduleCommand extends SpliceCommand {
                 z2 = false;
             }
             this.autoReturn = z2;
-            this.breakDuration = in.readLong();
+            this.breakDurationUs = in.readLong();
             this.uniqueProgramId = in.readInt();
             this.availNum = in.readInt();
             this.availsExpected = in.readInt();
@@ -116,7 +116,7 @@ public final class SpliceScheduleCommand extends SpliceCommand {
             int availNum = 0;
             int availsExpected = 0;
             boolean autoReturn = false;
-            long duration = C.TIME_UNSET;
+            long breakDurationUs = C.TIME_UNSET;
             if (!spliceEventCancelIndicator) {
                 int headerByte = sectionData.readUnsignedByte();
                 outOfNetworkIndicator = (headerByte & 128) != 0;
@@ -135,13 +135,13 @@ public final class SpliceScheduleCommand extends SpliceCommand {
                 if (durationFlag) {
                     long firstByte = (long) sectionData.readUnsignedByte();
                     autoReturn = (128 & firstByte) != 0;
-                    duration = ((1 & firstByte) << 32) | sectionData.readUnsignedInt();
+                    breakDurationUs = (1000 * (((1 & firstByte) << 32) | sectionData.readUnsignedInt())) / 90;
                 }
                 uniqueProgramId = sectionData.readUnsignedShort();
                 availNum = sectionData.readUnsignedByte();
                 availsExpected = sectionData.readUnsignedByte();
             }
-            return new Event(spliceEventId, spliceEventCancelIndicator, outOfNetworkIndicator, programSpliceFlag, componentSplices, utcSpliceTime, autoReturn, duration, uniqueProgramId, availNum, availsExpected);
+            return new Event(spliceEventId, spliceEventCancelIndicator, outOfNetworkIndicator, programSpliceFlag, componentSplices, utcSpliceTime, autoReturn, breakDurationUs, uniqueProgramId, availNum, availsExpected);
         }
 
         private void writeToParcel(Parcel dest) {
@@ -176,7 +176,7 @@ public final class SpliceScheduleCommand extends SpliceCommand {
                 i2 = 0;
             }
             dest.writeByte((byte) i2);
-            dest.writeLong(this.breakDuration);
+            dest.writeLong(this.breakDurationUs);
             dest.writeInt(this.uniqueProgramId);
             dest.writeInt(this.availNum);
             dest.writeInt(this.availsExpected);

@@ -7,6 +7,8 @@ import org.telegram.messenger.exoplayer2.upstream.Allocator;
 public interface LoadControl {
     Allocator getAllocator();
 
+    long getBackBufferDurationUs();
+
     void onPrepared();
 
     void onReleased();
@@ -15,7 +17,9 @@ public interface LoadControl {
 
     void onTracksSelected(Renderer[] rendererArr, TrackGroupArray trackGroupArray, TrackSelectionArray trackSelectionArray);
 
-    boolean shouldContinueLoading(long j);
+    boolean retainBackBufferFromKeyframe();
 
-    boolean shouldStartPlayback(long j, boolean z);
+    boolean shouldContinueLoading(boolean z, long j, float f);
+
+    boolean shouldStartPlayback(long j, float f, boolean z);
 }

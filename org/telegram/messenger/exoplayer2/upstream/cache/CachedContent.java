@@ -12,6 +12,7 @@ final class CachedContent {
     public final int id;
     public final String key;
     private long length;
+    private boolean locked;
 
     public CachedContent(DataInputStream input) throws IOException {
         this(input.readInt(), input.readUTF(), input.readLong());
@@ -38,6 +39,14 @@ final class CachedContent {
         this.length = length;
     }
 
+    public boolean isLocked() {
+        return this.locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
     public void addSpan(SimpleCacheSpan span) {
         this.cachedSpans.add(span);
     }
@@ -62,7 +71,7 @@ final class CachedContent {
         return createOpenHole;
     }
 
-    public long getCachedBytes(long position, long length) {
+    public long getCachedBytesLength(long position, long length) {
         SimpleCacheSpan span = getSpan(position);
         if (span.isHoleSpan()) {
             long j;

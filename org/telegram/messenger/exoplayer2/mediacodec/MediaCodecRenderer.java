@@ -22,9 +22,7 @@ import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.decoder.DecoderCounters;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
-import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.drm.DrmSession;
-import org.telegram.messenger.exoplayer2.drm.DrmSession.DrmSessionException;
 import org.telegram.messenger.exoplayer2.drm.DrmSessionManager;
 import org.telegram.messenger.exoplayer2.drm.FrameworkMediaCrypto;
 import org.telegram.messenger.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
@@ -129,11 +127,19 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         }
     }
 
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface ReconfigurationState {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface ReinitializationState {
+    }
+
     protected abstract void configureCodec(MediaCodecInfo mediaCodecInfo, MediaCodec mediaCodec, Format format, MediaCrypto mediaCrypto) throws DecoderQueryException;
 
     protected abstract boolean processOutputBuffer(long j, long j2, MediaCodec mediaCodec, ByteBuffer byteBuffer, int i, int i2, long j3, boolean z) throws ExoPlaybackException;
 
-    protected abstract int supportsFormat(MediaCodecSelector mediaCodecSelector, Format format) throws DecoderQueryException;
+    protected abstract int supportsFormat(MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, Format format) throws DecoderQueryException;
 
     public MediaCodecRenderer(int trackType, MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys) {
         super(trackType);
@@ -156,11 +162,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
 
     public final int supportsFormat(Format format) throws ExoPlaybackException {
         try {
-            int formatSupport = supportsFormat(this.mediaCodecSelector, format);
-            if ((formatSupport & 7) <= 2 || isDrmSchemeSupported(this.drmSessionManager, format.drmInitData)) {
-                return formatSupport;
-            }
-            return (formatSupport & -8) | 2;
+            return supportsFormat(this.mediaCodecSelector, this.drmSessionManager, format);
         } catch (DecoderQueryException e) {
             throw ExoPlaybackException.createForRenderer(e, getIndex());
         }
@@ -178,15 +180,12 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
             boolean drmSessionRequiresSecureDecoder = false;
             if (this.drmSession != null) {
                 FrameworkMediaCrypto mediaCrypto = (FrameworkMediaCrypto) this.drmSession.getMediaCrypto();
-                if (mediaCrypto == null) {
-                    DrmSessionException drmError = this.drmSession.getError();
-                    if (drmError != null) {
-                        throw ExoPlaybackException.createForRenderer(drmError, getIndex());
-                    }
+                if (mediaCrypto != null) {
+                    wrappedMediaCrypto = mediaCrypto.getWrappedMediaCrypto();
+                    drmSessionRequiresSecureDecoder = mediaCrypto.requiresSecureDecoderComponent(mimeType);
+                } else if (this.drmSession.getError() == null) {
                     return;
                 }
-                wrappedMediaCrypto = mediaCrypto.getWrappedMediaCrypto();
-                drmSessionRequiresSecureDecoder = mediaCrypto.requiresSecureDecoderComponent(mimeType);
             }
             if (this.codecInfo == null) {
                 try {
@@ -255,6 +254,14 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
 
     protected final MediaCodecInfo getCodecInfo() {
         return this.codecInfo;
+    }
+
+    protected final MediaFormat getMediaFormatForPlayback(Format format) {
+        MediaFormat mediaFormat = format.getFrameworkMediaFormatV16();
+        if (Util.SDK_INT >= 23) {
+            configureMediaFormatForPlaybackV23(mediaFormat);
+        }
+        return mediaFormat;
     }
 
     protected void onEnabled(boolean joining) throws ExoPlaybackException {
@@ -394,7 +401,8 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
             } while (feedInputBuffer());
             TraceUtil.endSection();
         } else {
-            skipSource(positionUs);
+            DecoderCounters decoderCounters = this.decoderCounters;
+            decoderCounters.skippedInputBufferCount += skipSource(positionUs);
             this.flagsOnlyBuffer.clear();
             result = readSource(this.formatHolder, this.flagsOnlyBuffer, false);
             if (result == -5) {
@@ -742,14 +750,9 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         return false;
     }
 
-    private static boolean isDrmSchemeSupported(DrmSessionManager drmSessionManager, DrmInitData drmInitData) {
-        if (drmInitData == null) {
-            return true;
-        }
-        if (drmSessionManager == null) {
-            return false;
-        }
-        return drmSessionManager.canAcquireSession(drmInitData);
+    @TargetApi(23)
+    private static void configureMediaFormatForPlaybackV23(MediaFormat mediaFormat) {
+        mediaFormat.setInteger("priority", 0);
     }
 
     private static boolean codecNeedsFlushWorkaround(String name) {
@@ -757,7 +760,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     private int codecAdaptationWorkaroundMode(String name) {
-        if (Util.SDK_INT <= 24 && "OMX.Exynos.avc.dec.secure".equals(name) && (Util.MODEL.startsWith("SM-T585") || Util.MODEL.startsWith("SM-A520"))) {
+        if (Util.SDK_INT <= 25 && "OMX.Exynos.avc.dec.secure".equals(name) && (Util.MODEL.startsWith("SM-T585") || Util.MODEL.startsWith("SM-A510") || Util.MODEL.startsWith("SM-A520") || Util.MODEL.startsWith("SM-J700"))) {
             return 2;
         }
         if (Util.SDK_INT >= 24 || ((!"OMX.Nvidia.h264.decode".equals(name) && !"OMX.Nvidia.h264.decode.secure".equals(name)) || (!"flounder".equals(Util.DEVICE) && !"flounder_lte".equals(Util.DEVICE) && !"grouper".equals(Util.DEVICE) && !"tilapia".equals(Util.DEVICE)))) {

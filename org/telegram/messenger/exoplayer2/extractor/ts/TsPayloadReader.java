@@ -3,6 +3,7 @@ package org.telegram.messenger.exoplayer2.extractor.ts;
 import android.util.SparseArray;
 import java.util.Collections;
 import java.util.List;
+import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
@@ -88,7 +89,7 @@ public interface TsPayloadReader {
         }
     }
 
-    void consume(ParsableByteArray parsableByteArray, boolean z);
+    void consume(ParsableByteArray parsableByteArray, boolean z) throws ParserException;
 
     void init(TimestampAdjuster timestampAdjuster, ExtractorOutput extractorOutput, TrackIdGenerator trackIdGenerator);
 

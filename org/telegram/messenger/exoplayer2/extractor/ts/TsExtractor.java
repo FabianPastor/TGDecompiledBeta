@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
@@ -44,7 +45,8 @@ public final class TsExtractor implements Extractor {
     private static final int SNIFF_TS_PACKET_COUNT = 5;
     private static final int TS_PACKET_SIZE = 188;
     private static final int TS_PAT_PID = 0;
-    public static final int TS_STREAM_TYPE_AAC = 15;
+    public static final int TS_STREAM_TYPE_AAC_ADTS = 15;
+    public static final int TS_STREAM_TYPE_AAC_LATM = 17;
     public static final int TS_STREAM_TYPE_AC3 = 129;
     public static final int TS_STREAM_TYPE_DTS = 138;
     public static final int TS_STREAM_TYPE_DVBSUBS = 89;
@@ -58,6 +60,7 @@ public final class TsExtractor implements Extractor {
     public static final int TS_STREAM_TYPE_MPA_LSF = 4;
     public static final int TS_STREAM_TYPE_SPLICE_INFO = 134;
     private static final int TS_SYNC_BYTE = 71;
+    private int bytesSinceLastSync;
     private final SparseIntArray continuityCounters;
     private TsPayloadReader id3Reader;
     private final int mode;
@@ -267,7 +270,7 @@ public final class TsExtractor implements Extractor {
             this.timestampAdjusters = new ArrayList();
             this.timestampAdjusters.add(timestampAdjuster);
         }
-        this.tsPacketBuffer = new ParsableByteArray((int) BUFFER_SIZE);
+        this.tsPacketBuffer = new ParsableByteArray(new byte[BUFFER_SIZE], 0);
         this.trackIds = new SparseBooleanArray();
         this.tsPayloadReaders = new SparseArray();
         this.continuityCounters = new SparseIntArray();
@@ -306,6 +309,7 @@ public final class TsExtractor implements Extractor {
         this.tsPacketBuffer.reset();
         this.continuityCounters.clear();
         resetPayloadReaders();
+        this.bytesSinceLastSync = 0;
     }
 
     public void release() {
@@ -331,14 +335,20 @@ public final class TsExtractor implements Extractor {
         }
         limit = this.tsPacketBuffer.limit();
         int position = this.tsPacketBuffer.getPosition();
+        int searchStart = position;
         while (position < limit && data[position] != TS_SYNC_BYTE) {
             position++;
         }
         this.tsPacketBuffer.setPosition(position);
         int endOfPacket = position + TS_PACKET_SIZE;
         if (endOfPacket > limit) {
-            return 0;
+            this.bytesSinceLastSync += position - searchStart;
+            if (this.mode != 2 || this.bytesSinceLastSync <= 376) {
+                return 0;
+            }
+            throw new ParserException("Cannot find sync byte. Most likely not a Transport Stream.");
         }
+        this.bytesSinceLastSync = 0;
         int tsPacketHeader = this.tsPacketBuffer.readInt();
         if ((8388608 & tsPacketHeader) != 0) {
             this.tsPacketBuffer.setPosition(endOfPacket);
@@ -347,35 +357,28 @@ public final class TsExtractor implements Extractor {
         boolean payloadUnitStartIndicator = (4194304 & tsPacketHeader) != 0;
         int pid = (2096896 & tsPacketHeader) >> 8;
         boolean adaptationFieldExists = (tsPacketHeader & 32) != 0;
-        boolean payloadExists = (tsPacketHeader & 16) != 0;
-        boolean discontinuityFound = false;
+        TsPayloadReader payloadReader = (tsPacketHeader & 16) != 0 ? (TsPayloadReader) this.tsPayloadReaders.get(pid) : null;
+        if (payloadReader == null) {
+            this.tsPacketBuffer.setPosition(endOfPacket);
+            return 0;
+        }
         if (this.mode != 2) {
             int continuityCounter = tsPacketHeader & 15;
             int previousCounter = this.continuityCounters.get(pid, continuityCounter - 1);
             this.continuityCounters.put(pid, continuityCounter);
             if (previousCounter == continuityCounter) {
-                if (payloadExists) {
-                    this.tsPacketBuffer.setPosition(endOfPacket);
-                    return 0;
-                }
+                this.tsPacketBuffer.setPosition(endOfPacket);
+                return 0;
             } else if (continuityCounter != ((previousCounter + 1) & 15)) {
-                discontinuityFound = true;
+                payloadReader.seek();
             }
         }
         if (adaptationFieldExists) {
             this.tsPacketBuffer.skipBytes(this.tsPacketBuffer.readUnsignedByte());
         }
-        if (payloadExists) {
-            TsPayloadReader payloadReader = (TsPayloadReader) this.tsPayloadReaders.get(pid);
-            if (payloadReader != null) {
-                if (discontinuityFound) {
-                    payloadReader.seek();
-                }
-                this.tsPacketBuffer.setLimit(endOfPacket);
-                payloadReader.consume(this.tsPacketBuffer, payloadUnitStartIndicator);
-                this.tsPacketBuffer.setLimit(limit);
-            }
-        }
+        this.tsPacketBuffer.setLimit(endOfPacket);
+        payloadReader.consume(this.tsPacketBuffer, payloadUnitStartIndicator);
+        this.tsPacketBuffer.setLimit(limit);
         this.tsPacketBuffer.setPosition(endOfPacket);
         return 0;
     }

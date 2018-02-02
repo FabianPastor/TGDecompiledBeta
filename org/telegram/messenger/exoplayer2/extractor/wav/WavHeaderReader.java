@@ -4,12 +4,14 @@ import android.util.Log;
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
+import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 final class WavHeaderReader {
     private static final String TAG = "WavHeaderReader";
+    private static final int TYPE_FLOAT = 3;
     private static final int TYPE_PCM = 1;
     private static final int TYPE_WAVE_FORMAT_EXTENSIBLE = 65534;
 
@@ -64,17 +66,25 @@ final class WavHeaderReader {
         if (blockAlignment != expectedBlockAlignment) {
             throw new ParserException("Expected block alignment: " + expectedBlockAlignment + "; got: " + blockAlignment);
         }
-        int encoding = Util.getPcmEncoding(bitsPerSample);
+        int encoding;
+        switch (type) {
+            case 1:
+            case TYPE_WAVE_FORMAT_EXTENSIBLE /*65534*/:
+                encoding = Util.getPcmEncoding(bitsPerSample);
+                break;
+            case 3:
+                encoding = bitsPerSample == 32 ? 4 : 0;
+                break;
+            default:
+                Log.e(TAG, "Unsupported WAV format type: " + type);
+                return null;
+        }
         if (encoding == 0) {
-            Log.e(TAG, "Unsupported WAV bit depth: " + bitsPerSample);
-            return null;
-        } else if (type == 1 || type == TYPE_WAVE_FORMAT_EXTENSIBLE) {
-            input.advancePeekPosition(((int) chunkHeader.size) - 16);
-            return new WavHeader(numChannels, sampleRateHz, averageBytesPerSecond, blockAlignment, bitsPerSample, encoding);
-        } else {
-            Log.e(TAG, "Unsupported WAV format type: " + type);
+            Log.e(TAG, "Unsupported WAV bit depth " + bitsPerSample + " for type " + type);
             return null;
         }
+        input.advancePeekPosition(((int) chunkHeader.size) - 16);
+        return new WavHeader(numChannels, sampleRateHz, averageBytesPerSecond, blockAlignment, bitsPerSample, encoding);
     }
 
     public static void skipToData(ExtractorInput input, WavHeader wavHeader) throws IOException, InterruptedException {
@@ -83,7 +93,7 @@ final class WavHeaderReader {
         input.resetPeekPosition();
         ParsableByteArray scratch = new ParsableByteArray(8);
         ChunkHeader chunkHeader = ChunkHeader.peek(input, scratch);
-        while (chunkHeader.id != Util.getIntegerCodeForString("data")) {
+        while (chunkHeader.id != Util.getIntegerCodeForString(DataSchemeDataSource.SCHEME_DATA)) {
             Log.w(TAG, "Ignoring unknown WAV chunk: " + chunkHeader.id);
             long bytesToSkip = 8 + chunkHeader.size;
             if (chunkHeader.id == Util.getIntegerCodeForString("RIFF")) {

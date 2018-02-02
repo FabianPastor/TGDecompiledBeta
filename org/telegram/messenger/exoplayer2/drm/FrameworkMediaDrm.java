@@ -5,22 +5,30 @@ import android.media.DeniedByServerException;
 import android.media.MediaCrypto;
 import android.media.MediaCryptoException;
 import android.media.MediaDrm;
+import android.media.MediaDrm.KeyStatus;
+import android.media.MediaDrmException;
 import android.media.NotProvisionedException;
-import android.media.ResourceBusyException;
 import android.media.UnsupportedSchemeException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.DefaultKeyRequest;
+import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.DefaultKeyStatus;
+import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.DefaultProvisionRequest;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.KeyRequest;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.OnEventListener;
+import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.OnKeyStatusChangeListener;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.ProvisionRequest;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
-@TargetApi(18)
+@TargetApi(23)
 public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto> {
     private final MediaDrm mediaDrm;
+    private final UUID uuid;
 
     public static FrameworkMediaDrm newInstance(UUID uuid) throws UnsupportedDrmException {
         try {
@@ -33,7 +41,13 @@ public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto
     }
 
     private FrameworkMediaDrm(UUID uuid) throws UnsupportedSchemeException {
-        this.mediaDrm = new MediaDrm((UUID) Assertions.checkNotNull(uuid));
+        Assertions.checkNotNull(uuid);
+        Assertions.checkArgument(!C.COMMON_PSSH_UUID.equals(uuid), "Use C.CLEARKEY_UUID instead");
+        if (Util.SDK_INT < 27 && C.CLEARKEY_UUID.equals(uuid)) {
+            uuid = C.COMMON_PSSH_UUID;
+        }
+        this.uuid = uuid;
+        this.mediaDrm = new MediaDrm(uuid);
     }
 
     public void setOnEventListener(final OnEventListener<? super FrameworkMediaCrypto> listener) {
@@ -44,7 +58,29 @@ public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto
         });
     }
 
-    public byte[] openSession() throws NotProvisionedException, ResourceBusyException {
+    public void setOnKeyStatusChangeListener(final OnKeyStatusChangeListener<? super FrameworkMediaCrypto> listener) {
+        if (Util.SDK_INT < 23) {
+            throw new UnsupportedOperationException();
+        }
+        MediaDrm.OnKeyStatusChangeListener onKeyStatusChangeListener;
+        MediaDrm mediaDrm = this.mediaDrm;
+        if (listener == null) {
+            onKeyStatusChangeListener = null;
+        } else {
+            onKeyStatusChangeListener = new MediaDrm.OnKeyStatusChangeListener() {
+                public void onKeyStatusChange(MediaDrm md, byte[] sessionId, List<KeyStatus> keyInfo, boolean hasNewUsableKey) {
+                    List<ExoMediaDrm.KeyStatus> exoKeyInfo = new ArrayList();
+                    for (KeyStatus keyStatus : keyInfo) {
+                        exoKeyInfo.add(new DefaultKeyStatus(keyStatus.getStatusCode(), keyStatus.getKeyId()));
+                    }
+                    listener.onKeyStatusChange(FrameworkMediaDrm.this, sessionId, exoKeyInfo, hasNewUsableKey);
+                }
+            };
+        }
+        mediaDrm.setOnKeyStatusChangeListener(onKeyStatusChangeListener, null);
+    }
+
+    public byte[] openSession() throws MediaDrmException {
         return this.mediaDrm.openSession();
     }
 
@@ -53,16 +89,8 @@ public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto
     }
 
     public KeyRequest getKeyRequest(byte[] scope, byte[] init, String mimeType, int keyType, HashMap<String, String> optionalParameters) throws NotProvisionedException {
-        final MediaDrm.KeyRequest request = this.mediaDrm.getKeyRequest(scope, init, mimeType, keyType, optionalParameters);
-        return new KeyRequest() {
-            public byte[] getData() {
-                return request.getData();
-            }
-
-            public String getDefaultUrl() {
-                return request.getDefaultUrl();
-            }
-        };
+        MediaDrm.KeyRequest request = this.mediaDrm.getKeyRequest(scope, init, mimeType, keyType, optionalParameters);
+        return new DefaultKeyRequest(request.getData(), request.getDefaultUrl());
     }
 
     public byte[] provideKeyResponse(byte[] scope, byte[] response) throws NotProvisionedException, DeniedByServerException {
@@ -70,16 +98,8 @@ public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto
     }
 
     public ProvisionRequest getProvisionRequest() {
-        final MediaDrm.ProvisionRequest provisionRequest = this.mediaDrm.getProvisionRequest();
-        return new ProvisionRequest() {
-            public byte[] getData() {
-                return provisionRequest.getData();
-            }
-
-            public String getDefaultUrl() {
-                return provisionRequest.getDefaultUrl();
-            }
-        };
+        MediaDrm.ProvisionRequest request = this.mediaDrm.getProvisionRequest();
+        return new DefaultProvisionRequest(request.getData(), request.getDefaultUrl());
     }
 
     public void provideProvisionResponse(byte[] response) throws DeniedByServerException {
@@ -114,8 +134,8 @@ public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto
         this.mediaDrm.setPropertyByteArray(propertyName, value);
     }
 
-    public FrameworkMediaCrypto createMediaCrypto(UUID uuid, byte[] initData) throws MediaCryptoException {
-        boolean forceAllowInsecureDecoderComponents = Util.SDK_INT < 21 && C.WIDEVINE_UUID.equals(uuid) && "L3".equals(getPropertyString("securityLevel"));
-        return new FrameworkMediaCrypto(new MediaCrypto(uuid, initData), forceAllowInsecureDecoderComponents);
+    public FrameworkMediaCrypto createMediaCrypto(byte[] initData) throws MediaCryptoException {
+        boolean forceAllowInsecureDecoderComponents = Util.SDK_INT < 21 && C.WIDEVINE_UUID.equals(this.uuid) && "L3".equals(getPropertyString("securityLevel"));
+        return new FrameworkMediaCrypto(new MediaCrypto(this.uuid, initData), forceAllowInsecureDecoderComponents);
     }
 }

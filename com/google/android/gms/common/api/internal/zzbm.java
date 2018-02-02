@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 
 public final class zzbm implements Callback {
     private static final Object sLock = new Object();
@@ -35,7 +34,7 @@ public final class zzbm implements Callback {
     private final Context mContext;
     private final Handler mHandler;
     private final GoogleApiAvailability zzfmy;
-    private final Map<zzh<?>, zzbo<?>> zzfpy = new ConcurrentHashMap(5, AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION, 1);
+    private final Map<zzh<?>, zzbo<?>> zzfpy = new ConcurrentHashMap(5, 0.75f, 1);
     private long zzfrx = 120000;
     private long zzfry = DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
     private long zzfta = 10000;

@@ -22,6 +22,8 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
 
     protected abstract O createOutputBuffer();
 
+    protected abstract E createUnexpectedDecodeException(Throwable th);
+
     protected abstract E decode(I i, O o, boolean z);
 
     protected SimpleDecoder(I[] inputBuffers, O[] outputBuffers) {
@@ -179,6 +181,25 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
             boolean resetDecoder = this.flushed;
             this.flushed = false;
         }
+        if (this.exception != null) {
+            synchronized (this.lock) {
+            }
+            return false;
+        }
+        synchronized (this.lock) {
+            if (this.flushed) {
+                releaseOutputBufferInternal(outputBuffer);
+            } else if (outputBuffer.isDecodeOnly()) {
+                this.skippedOutputBufferCount++;
+                releaseOutputBufferInternal(outputBuffer);
+            } else {
+                outputBuffer.skippedOutputBufferCount = this.skippedOutputBufferCount;
+                this.skippedOutputBufferCount = 0;
+                this.queuedOutputBuffers.addLast(outputBuffer);
+            }
+            releaseInputBufferInternal(inputBuffer);
+        }
+        return true;
     }
 
     private boolean canDecodeBuffer() {

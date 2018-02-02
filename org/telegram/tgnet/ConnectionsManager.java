@@ -50,6 +50,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
+import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 import org.telegram.tgnet.TLRPC.TL_config;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.Updates;
@@ -200,7 +201,7 @@ public class ConnectionsManager {
                         len = array.length();
                         arrayList = new ArrayList(len);
                         for (a = 0; a < len; a++) {
-                            arrayList.add(array.getJSONObject(a).getString("data"));
+                            arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
                         }
                         Collections.sort(arrayList, new Comparator<String>() {
                             public int compare(String o1, String o2) {
@@ -236,7 +237,7 @@ public class ConnectionsManager {
             len = array.length();
             arrayList = new ArrayList(len);
             for (a = 0; a < len; a++) {
-                arrayList.add(array.getJSONObject(a).getString("data"));
+                arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
             }
             Collections.sort(arrayList, /* anonymous class already generated */);
             builder = new StringBuilder();
@@ -433,6 +434,7 @@ public class ConnectionsManager {
                     tLObject.freeResources();
                     ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new RequestDelegateInternal() {
                         public void run(long response, int errorCode, String errorText, int networkType) {
+                            Throwable e;
                             TLObject resp = null;
                             TL_error error = null;
                             if (response != 0) {
@@ -440,8 +442,8 @@ public class ConnectionsManager {
                                     NativeByteBuffer buff = NativeByteBuffer.wrap(response);
                                     buff.reused = true;
                                     resp = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
-                                } catch (Exception e) {
-                                    e = e;
+                                } catch (Exception e2) {
+                                    e = e2;
                                     FileLog.e(e);
                                     return;
                                 }
@@ -454,11 +456,10 @@ public class ConnectionsManager {
                                         FileLog.e(tLObject + " got error " + error2.code + " " + error2.text);
                                     }
                                     error = error2;
-                                } catch (Exception e2) {
-                                    Throwable e3;
-                                    e3 = e2;
+                                } catch (Exception e3) {
+                                    e = e3;
                                     error = error2;
-                                    FileLog.e(e3);
+                                    FileLog.e(e);
                                     return;
                                 }
                             }

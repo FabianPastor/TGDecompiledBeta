@@ -85,6 +85,7 @@ public class FileLoadOperation {
     private InputFileLocation location;
     private ArrayList<Range> notCheckedCdnRanges;
     private ArrayList<Range> notLoadedBytesRanges;
+    private ArrayList<Range> notLoadedBytesRangesCopy;
     private ArrayList<Range> notRequestedBytesRanges;
     private int renameRetryCount;
     private ArrayList<RequestInfo> requestInfos;
@@ -109,7 +110,7 @@ public class FileLoadOperation {
         void didFinishLoadingFile(FileLoadOperation fileLoadOperation, File file);
     }
 
-    private class Range {
+    public static class Range {
         private int end;
         private int start;
 
@@ -429,13 +430,13 @@ public class FileLoadOperation {
         return result[0];
     }
 
-    private int getDownloadedLengthFromOffsetInternal(int offset, int length) {
-        if (this.notLoadedBytesRanges != null && this.state != 3 && !this.notLoadedBytesRanges.isEmpty()) {
-            int count = this.notLoadedBytesRanges.size();
+    private int getDownloadedLengthFromOffsetInternal(ArrayList<Range> ranges, int offset, int length) {
+        if (ranges != null && this.state != 3 && !ranges.isEmpty()) {
+            int count = ranges.size();
             Range minRange = null;
             int availableLength = length;
             for (int a = 0; a < count; a++) {
-                Range range = (Range) this.notLoadedBytesRanges.get(a);
+                Range range = (Range) ranges.get(a);
                 if (offset <= range.start && (minRange == null || range.start < minRange.start)) {
                     minRange = range;
                 }
@@ -458,7 +459,10 @@ public class FileLoadOperation {
     }
 
     protected float getDownloadedLengthFromOffset(float progress) {
-        return (((float) getDownloadedLengthFromOffsetInternal((int) (((float) this.totalBytesCount) * progress), this.totalBytesCount)) / ((float) this.totalBytesCount)) + progress;
+        if (this.totalBytesCount == 0 || this.notLoadedBytesRanges == null) {
+            return 0.0f;
+        }
+        return (((float) getDownloadedLengthFromOffsetInternal(this.notLoadedBytesRanges, (int) (((float) this.totalBytesCount) * progress), this.totalBytesCount)) / ((float) this.totalBytesCount)) + progress;
     }
 
     protected int getDownloadedLengthFromOffset(int offset, int length) {
@@ -468,7 +472,7 @@ public class FileLoadOperation {
         final int i2 = length;
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
-                result[0] = FileLoadOperation.this.getDownloadedLengthFromOffsetInternal(i, i2);
+                result[0] = FileLoadOperation.this.getDownloadedLengthFromOffsetInternal(FileLoadOperation.this.notLoadedBytesRanges, i, i2);
                 countDownLatch.countDown();
             }
         });
@@ -495,6 +499,12 @@ public class FileLoadOperation {
                 }
             }
         });
+    }
+
+    private void copytNotLoadedRanges() {
+        if (this.notLoadedBytesRanges != null) {
+            this.notLoadedBytesRangesCopy = new ArrayList(this.notLoadedBytesRanges);
+        }
     }
 
     public boolean start() {
@@ -615,31 +625,31 @@ public class FileLoadOperation {
             this.cacheFileTemp = new File(this.tempPath, fileNameTemp);
             boolean newKeyGenerated = false;
             if (this.encryptFile) {
-                File file = new File(FileLoader.getInternalCacheDir(), fileNameFinal + ".key");
-                RandomAccessFile file2 = new RandomAccessFile(file, "rws");
-                len = file.length();
+                File keyFile = new File(FileLoader.getInternalCacheDir(), fileNameFinal + ".key");
+                RandomAccessFile file = new RandomAccessFile(keyFile, "rws");
+                len = keyFile.length();
                 this.encryptKey = new byte[32];
                 this.encryptIv = new byte[16];
                 if (len <= 0 || len % 48 != 0) {
                     try {
                         Utilities.random.nextBytes(this.encryptKey);
                         Utilities.random.nextBytes(this.encryptIv);
-                        file2.write(this.encryptKey);
-                        file2.write(this.encryptIv);
+                        file.write(this.encryptKey);
+                        file.write(this.encryptIv);
                         newKeyGenerated = true;
                     } catch (Throwable e2) {
                         FileLog.e(e2);
                     }
                 } else {
-                    file2.read(this.encryptKey, 0, 32);
-                    file2.read(this.encryptIv, 0, 16);
+                    file.read(this.encryptKey, 0, 32);
+                    file.read(this.encryptIv, 0, 16);
                 }
                 try {
-                    file2.getChannel().close();
+                    file.getChannel().close();
                 } catch (Throwable e22) {
                     FileLog.e(e22);
                 }
-                file2.close();
+                file.close();
             }
             if (fileNameParts != null) {
                 this.cacheFileParts = new File(this.tempPath, fileNameParts);
@@ -709,6 +719,7 @@ public class FileLoadOperation {
                 }
             }
             if (this.downloadedBytes != 0 && this.totalBytesCount > 0) {
+                copytNotLoadedRanges();
                 this.delegate.didChangedLoadProgress(this, Math.min(1.0f, ((float) this.downloadedBytes) / ((float) this.totalBytesCount)));
             }
             try {
@@ -1016,7 +1027,7 @@ public class FileLoadOperation {
                         }
                         if (!checked) {
                             fileOffset = cdnCheckPart * 131072;
-                            int availableSize = getDownloadedLengthFromOffsetInternal(fileOffset, 131072);
+                            int availableSize = getDownloadedLengthFromOffsetInternal(this.notLoadedBytesRanges, fileOffset, 131072);
                             if (availableSize != 0 && (availableSize == 131072 || ((this.totalBytesCount > 0 && availableSize == this.totalBytesCount - fileOffset) || (this.totalBytesCount <= 0 && finishedDownloading)))) {
                                 TL_cdnFileHash hash = (TL_cdnFileHash) this.cdnHashes.get(fileOffset);
                                 if (this.fileReadStream == null) {
@@ -1048,6 +1059,7 @@ public class FileLoadOperation {
                         this.fiv.write(this.iv);
                     }
                     if (this.totalBytesCount > 0 && this.state == 1) {
+                        copytNotLoadedRanges();
                         this.delegate.didChangedLoadProgress(this, Math.min(1.0f, ((float) this.downloadedBytes) / ((float) this.totalBytesCount)));
                     }
                     a = 0;

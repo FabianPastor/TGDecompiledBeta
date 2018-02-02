@@ -2,7 +2,6 @@ package org.telegram.messenger.exoplayer2.source.dash;
 
 import android.net.Uri;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
@@ -18,89 +17,52 @@ import org.telegram.messenger.exoplayer2.source.dash.manifest.Period;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.RangedUri;
 import org.telegram.messenger.exoplayer2.source.dash.manifest.Representation;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
-import org.telegram.messenger.exoplayer2.upstream.DataSourceInputStream;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
+import org.telegram.messenger.exoplayer2.upstream.ParsingLoadable;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public final class DashUtil {
-    public static DashManifest loadManifest(DataSource dataSource, String manifestUri) throws IOException {
-        InputStream inputStream = new DataSourceInputStream(dataSource, new DataSpec(Uri.parse(manifestUri), 2));
-        try {
-            inputStream.open();
-            DashManifest parse = new DashManifestParser().parse(dataSource.getUri(), inputStream);
-            return parse;
-        } finally {
-            inputStream.close();
-        }
-    }
-
-    public static DrmInitData loadDrmInitData(DataSource dataSource, DashManifest dashManifest) throws IOException, InterruptedException {
-        if (dashManifest.getPeriodCount() < 1) {
-            return null;
-        }
-        Period period = dashManifest.getPeriod(0);
-        int adaptationSetIndex = period.getAdaptationSetIndex(2);
-        if (adaptationSetIndex == -1) {
-            adaptationSetIndex = period.getAdaptationSetIndex(1);
-            if (adaptationSetIndex == -1) {
-                return null;
-            }
-        }
-        AdaptationSet adaptationSet = (AdaptationSet) period.adaptationSets.get(adaptationSetIndex);
-        if (adaptationSet.representations.isEmpty()) {
-            return null;
-        }
-        Representation representation = (Representation) adaptationSet.representations.get(0);
-        DrmInitData drmInitData = representation.format.drmInitData;
-        if (drmInitData != null) {
-            return drmInitData;
-        }
-        Format sampleFormat = loadSampleFormat(dataSource, representation);
-        if (sampleFormat != null) {
-            drmInitData = sampleFormat.drmInitData;
-        }
-        if (drmInitData == null) {
-            return null;
-        }
-        return drmInitData;
+    public static DashManifest loadManifest(DataSource dataSource, Uri uri) throws IOException {
+        ParsingLoadable<DashManifest> loadable = new ParsingLoadable(dataSource, new DataSpec(uri, 3), 4, new DashManifestParser());
+        loadable.load();
+        return (DashManifest) loadable.getResult();
     }
 
     public static DrmInitData loadDrmInitData(DataSource dataSource, Period period) throws IOException, InterruptedException {
+        int primaryTrackType = 2;
         Representation representation = getFirstRepresentation(period, 2);
         if (representation == null) {
+            primaryTrackType = 1;
             representation = getFirstRepresentation(period, 1);
             if (representation == null) {
                 return null;
             }
         }
-        DrmInitData drmInitData = representation.format.drmInitData;
-        if (drmInitData != null) {
-            return drmInitData;
+        Format manifestFormat = representation.format;
+        Format sampleFormat = loadSampleFormat(dataSource, primaryTrackType, representation);
+        if (sampleFormat == null) {
+            return manifestFormat.drmInitData;
         }
-        Format sampleFormat = loadSampleFormat(dataSource, representation);
-        if (sampleFormat != null) {
-            return sampleFormat.drmInitData;
-        }
-        return null;
+        return sampleFormat.copyWithManifestFormatInfo(manifestFormat).drmInitData;
     }
 
-    public static Format loadSampleFormat(DataSource dataSource, Representation representation) throws IOException, InterruptedException {
-        ChunkExtractorWrapper extractorWrapper = loadInitializationData(dataSource, representation, false);
+    public static Format loadSampleFormat(DataSource dataSource, int trackType, Representation representation) throws IOException, InterruptedException {
+        ChunkExtractorWrapper extractorWrapper = loadInitializationData(dataSource, trackType, representation, false);
         return extractorWrapper == null ? null : extractorWrapper.getSampleFormats()[0];
     }
 
-    public static ChunkIndex loadChunkIndex(DataSource dataSource, Representation representation) throws IOException, InterruptedException {
-        ChunkExtractorWrapper extractorWrapper = loadInitializationData(dataSource, representation, true);
+    public static ChunkIndex loadChunkIndex(DataSource dataSource, int trackType, Representation representation) throws IOException, InterruptedException {
+        ChunkExtractorWrapper extractorWrapper = loadInitializationData(dataSource, trackType, representation, true);
         return extractorWrapper == null ? null : (ChunkIndex) extractorWrapper.getSeekMap();
     }
 
-    private static ChunkExtractorWrapper loadInitializationData(DataSource dataSource, Representation representation, boolean loadIndex) throws IOException, InterruptedException {
+    private static ChunkExtractorWrapper loadInitializationData(DataSource dataSource, int trackType, Representation representation, boolean loadIndex) throws IOException, InterruptedException {
         RangedUri initializationUri = representation.getInitializationUri();
         if (initializationUri == null) {
             return null;
         }
         RangedUri requestUri;
-        ChunkExtractorWrapper extractorWrapper = newWrappedExtractor(representation.format);
+        ChunkExtractorWrapper extractorWrapper = newWrappedExtractor(trackType, representation.format);
         if (loadIndex) {
             RangedUri indexUri = representation.getIndexUri();
             if (indexUri == null) {
@@ -122,10 +84,10 @@ public final class DashUtil {
         new InitializationChunk(dataSource, new DataSpec(requestUri.resolveUri(representation.baseUrl), requestUri.start, requestUri.length, representation.getCacheKey()), representation.format, 0, null, extractorWrapper).load();
     }
 
-    private static ChunkExtractorWrapper newWrappedExtractor(Format format) {
+    private static ChunkExtractorWrapper newWrappedExtractor(int trackType, Format format) {
         String mimeType = format.containerMimeType;
         boolean isWebm = mimeType.startsWith(MimeTypes.VIDEO_WEBM) || mimeType.startsWith(MimeTypes.AUDIO_WEBM);
-        return new ChunkExtractorWrapper(isWebm ? new MatroskaExtractor() : new FragmentedMp4Extractor(), format);
+        return new ChunkExtractorWrapper(isWebm ? new MatroskaExtractor() : new FragmentedMp4Extractor(), trackType, format);
     }
 
     private static Representation getFirstRepresentation(Period period, int type) {

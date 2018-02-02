@@ -8,25 +8,27 @@ import java.util.List;
 import org.telegram.messenger.exoplayer2.C;
 
 public class DashManifest {
-    public final long availabilityStartTime;
-    public final long duration;
+    public final long availabilityStartTimeMs;
+    public final long durationMs;
     public final boolean dynamic;
     public final Uri location;
-    public final long minBufferTime;
-    public final long minUpdatePeriod;
+    public final long minBufferTimeMs;
+    public final long minUpdatePeriodMs;
     private final List<Period> periods;
-    public final long suggestedPresentationDelay;
-    public final long timeShiftBufferDepth;
+    public final long publishTimeMs;
+    public final long suggestedPresentationDelayMs;
+    public final long timeShiftBufferDepthMs;
     public final UtcTimingElement utcTiming;
 
-    public DashManifest(long availabilityStartTime, long duration, long minBufferTime, boolean dynamic, long minUpdatePeriod, long timeShiftBufferDepth, long suggestedPresentationDelay, UtcTimingElement utcTiming, Uri location, List<Period> periods) {
-        this.availabilityStartTime = availabilityStartTime;
-        this.duration = duration;
-        this.minBufferTime = minBufferTime;
+    public DashManifest(long availabilityStartTimeMs, long durationMs, long minBufferTimeMs, boolean dynamic, long minUpdatePeriodMs, long timeShiftBufferDepthMs, long suggestedPresentationDelayMs, long publishTimeMs, UtcTimingElement utcTiming, Uri location, List<Period> periods) {
+        this.availabilityStartTimeMs = availabilityStartTimeMs;
+        this.durationMs = durationMs;
+        this.minBufferTimeMs = minBufferTimeMs;
         this.dynamic = dynamic;
-        this.minUpdatePeriod = minUpdatePeriod;
-        this.timeShiftBufferDepth = timeShiftBufferDepth;
-        this.suggestedPresentationDelay = suggestedPresentationDelay;
+        this.minUpdatePeriodMs = minUpdatePeriodMs;
+        this.timeShiftBufferDepthMs = timeShiftBufferDepthMs;
+        this.suggestedPresentationDelayMs = suggestedPresentationDelayMs;
+        this.publishTimeMs = publishTimeMs;
         this.utcTiming = utcTiming;
         this.location = location;
         if (periods == null) {
@@ -47,10 +49,10 @@ public class DashManifest {
         if (index != this.periods.size() - 1) {
             return ((Period) this.periods.get(index + 1)).startMs - ((Period) this.periods.get(index)).startMs;
         }
-        if (this.duration == C.TIME_UNSET) {
+        if (this.durationMs == C.TIME_UNSET) {
             return C.TIME_UNSET;
         }
-        return this.duration - ((Period) this.periods.get(index)).startMs;
+        return this.durationMs - ((Period) this.periods.get(index)).startMs;
     }
 
     public final long getPeriodDurationUs(int index) {
@@ -71,10 +73,10 @@ public class DashManifest {
                 }
             } else {
                 Period period = getPeriod(periodIndex);
-                copyPeriods.add(new Period(period.id, period.startMs - shiftMs, copyAdaptationSets(period.adaptationSets, linkedList)));
+                copyPeriods.add(new Period(period.id, period.startMs - shiftMs, copyAdaptationSets(period.adaptationSets, linkedList), period.eventStreams));
             }
         }
-        return new DashManifest(this.availabilityStartTime, this.duration != C.TIME_UNSET ? this.duration - shiftMs : C.TIME_UNSET, this.minBufferTime, this.dynamic, this.minUpdatePeriod, this.timeShiftBufferDepth, this.suggestedPresentationDelay, this.utcTiming, this.location, copyPeriods);
+        return new DashManifest(this.availabilityStartTimeMs, this.durationMs != C.TIME_UNSET ? this.durationMs - shiftMs : C.TIME_UNSET, this.minBufferTimeMs, this.dynamic, this.minUpdatePeriodMs, this.timeShiftBufferDepthMs, this.suggestedPresentationDelayMs, this.publishTimeMs, this.utcTiming, this.location, copyPeriods);
     }
 
     private static ArrayList<AdaptationSet> copyAdaptationSets(List<AdaptationSet> adaptationSets, LinkedList<RepresentationKey> keys) {

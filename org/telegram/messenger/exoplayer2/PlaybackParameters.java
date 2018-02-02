@@ -1,5 +1,7 @@
 package org.telegram.messenger.exoplayer2;
 
+import org.telegram.messenger.exoplayer2.util.Assertions;
+
 public final class PlaybackParameters {
     public static final PlaybackParameters DEFAULT = new PlaybackParameters(1.0f, 1.0f);
     public final float pitch;
@@ -7,12 +9,18 @@ public final class PlaybackParameters {
     public final float speed;
 
     public PlaybackParameters(float speed, float pitch) {
+        boolean z = true;
+        Assertions.checkArgument(speed > 0.0f);
+        if (pitch <= 0.0f) {
+            z = false;
+        }
+        Assertions.checkArgument(z);
         this.speed = speed;
         this.pitch = pitch;
         this.scaledUsPerMs = Math.round(1000.0f * speed);
     }
 
-    public long getSpeedAdjustedDurationUs(long timeMs) {
+    public long getMediaTimeUsForPlayoutTimeMs(long timeMs) {
         return ((long) this.scaledUsPerMs) * timeMs;
     }
 

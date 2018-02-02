@@ -6,14 +6,16 @@ import android.media.MediaCrypto;
 import android.media.MediaFormat;
 import android.os.Handler;
 import java.nio.ByteBuffer;
+import org.telegram.messenger.exoplayer2.BaseRenderer;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.PlaybackParameters;
 import org.telegram.messenger.exoplayer2.audio.AudioRendererEventListener.EventDispatcher;
-import org.telegram.messenger.exoplayer2.audio.AudioTrack.ConfigurationException;
-import org.telegram.messenger.exoplayer2.audio.AudioTrack.InitializationException;
-import org.telegram.messenger.exoplayer2.audio.AudioTrack.Listener;
-import org.telegram.messenger.exoplayer2.audio.AudioTrack.WriteException;
+import org.telegram.messenger.exoplayer2.audio.AudioSink.ConfigurationException;
+import org.telegram.messenger.exoplayer2.audio.AudioSink.InitializationException;
+import org.telegram.messenger.exoplayer2.audio.AudioSink.Listener;
+import org.telegram.messenger.exoplayer2.audio.AudioSink.WriteException;
+import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.drm.DrmSessionManager;
 import org.telegram.messenger.exoplayer2.drm.FrameworkMediaCrypto;
 import org.telegram.messenger.exoplayer2.mediacodec.MediaCodecInfo;
@@ -27,17 +29,19 @@ import org.telegram.messenger.exoplayer2.util.Util;
 @TargetApi(16)
 public class MediaCodecAudioRenderer extends MediaCodecRenderer implements MediaClock {
     private boolean allowPositionDiscontinuity;
-    private final AudioTrack audioTrack;
+    private final AudioSink audioSink;
     private int channelCount;
     private boolean codecNeedsDiscardChannelsWorkaround;
     private long currentPositionUs;
+    private int encoderDelay;
+    private int encoderPadding;
     private final EventDispatcher eventDispatcher;
     private boolean passthroughEnabled;
     private MediaFormat passthroughMediaFormat;
     private int pcmEncoding;
 
-    private final class AudioTrackListener implements Listener {
-        private AudioTrackListener() {
+    private final class AudioSinkListener implements Listener {
+        private AudioSinkListener() {
         }
 
         public void onAudioSessionId(int audioSessionId) {
@@ -69,40 +73,50 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
     }
 
     public MediaCodecAudioRenderer(MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, Handler eventHandler, AudioRendererEventListener eventListener) {
-        this(mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, null, new AudioProcessor[0]);
+        this(mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, (AudioCapabilities) null, new AudioProcessor[0]);
     }
 
     public MediaCodecAudioRenderer(MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, Handler eventHandler, AudioRendererEventListener eventListener, AudioCapabilities audioCapabilities, AudioProcessor... audioProcessors) {
-        super(1, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys);
-        this.audioTrack = new AudioTrack(audioCapabilities, audioProcessors, new AudioTrackListener());
-        this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
+        this(mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, new DefaultAudioSink(audioCapabilities, audioProcessors));
     }
 
-    protected int supportsFormat(MediaCodecSelector mediaCodecSelector, Format format) throws DecoderQueryException {
+    public MediaCodecAudioRenderer(MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, Handler eventHandler, AudioRendererEventListener eventListener, AudioSink audioSink) {
+        super(1, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys);
+        this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
+        this.audioSink = audioSink;
+        audioSink.setListener(new AudioSinkListener());
+    }
+
+    protected int supportsFormat(MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, Format format) throws DecoderQueryException {
         String mimeType = format.sampleMimeType;
         if (!MimeTypes.isAudio(mimeType)) {
             return 0;
         }
-        int tunnelingSupport;
-        if (Util.SDK_INT >= 21) {
-            tunnelingSupport = 32;
-        } else {
-            tunnelingSupport = 0;
-        }
-        if (allowPassthrough(mimeType) && mediaCodecSelector.getPassthroughDecoderInfo() != null) {
+        int tunnelingSupport = Util.SDK_INT >= 21 ? 32 : 0;
+        boolean supportsFormatDrm = BaseRenderer.supportsFormatDrm(drmSessionManager, format.drmInitData);
+        if (supportsFormatDrm && allowPassthrough(mimeType) && mediaCodecSelector.getPassthroughDecoderInfo() != null) {
             return (tunnelingSupport | 8) | 4;
         }
-        MediaCodecInfo decoderInfo = mediaCodecSelector.getDecoderInfo(mimeType, false);
-        if (decoderInfo == null) {
+        if ((MimeTypes.AUDIO_RAW.equals(mimeType) && !this.audioSink.isEncodingSupported(format.pcmEncoding)) || !this.audioSink.isEncodingSupported(2)) {
             return 1;
         }
-        boolean decoderCapable;
-        if (Util.SDK_INT < 21 || ((format.sampleRate == -1 || decoderInfo.isAudioSampleRateSupportedV21(format.sampleRate)) && (format.channelCount == -1 || decoderInfo.isAudioChannelCountSupportedV21(format.channelCount)))) {
-            decoderCapable = true;
-        } else {
-            decoderCapable = false;
+        boolean requiresSecureDecryption = false;
+        DrmInitData drmInitData = format.drmInitData;
+        if (drmInitData != null) {
+            for (int i = 0; i < drmInitData.schemeDataCount; i++) {
+                requiresSecureDecryption |= drmInitData.get(i).requiresSecureDecryption;
+            }
         }
-        return (tunnelingSupport | 8) | (decoderCapable ? 4 : 3);
+        MediaCodecInfo decoderInfo = mediaCodecSelector.getDecoderInfo(mimeType, requiresSecureDecryption);
+        if (decoderInfo == null) {
+            return (!requiresSecureDecryption || mediaCodecSelector.getDecoderInfo(mimeType, false) == null) ? 1 : 2;
+        } else {
+            if (!supportsFormatDrm) {
+                return 2;
+            }
+            boolean decoderCapable = Util.SDK_INT < 21 || ((format.sampleRate == -1 || decoderInfo.isAudioSampleRateSupportedV21(format.sampleRate)) && (format.channelCount == -1 || decoderInfo.isAudioChannelCountSupportedV21(format.channelCount)));
+            return (tunnelingSupport | 8) | (decoderCapable ? 4 : 3);
+        }
     }
 
     protected MediaCodecInfo getDecoderInfo(MediaCodecSelector mediaCodecSelector, Format format, boolean requiresSecureDecoder) throws DecoderQueryException {
@@ -118,19 +132,21 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
     }
 
     protected boolean allowPassthrough(String mimeType) {
-        return this.audioTrack.isPassthroughSupported(mimeType);
+        int encoding = MimeTypes.getEncoding(mimeType);
+        return encoding != 0 && this.audioSink.isEncodingSupported(encoding);
     }
 
     protected void configureCodec(MediaCodecInfo codecInfo, MediaCodec codec, Format format, MediaCrypto crypto) {
         this.codecNeedsDiscardChannelsWorkaround = codecNeedsDiscardChannelsWorkaround(codecInfo.name);
+        MediaFormat mediaFormat = getMediaFormatForPlayback(format);
         if (this.passthroughEnabled) {
-            this.passthroughMediaFormat = format.getFrameworkMediaFormatV16();
+            this.passthroughMediaFormat = mediaFormat;
             this.passthroughMediaFormat.setString("mime", MimeTypes.AUDIO_RAW);
             codec.configure(this.passthroughMediaFormat, null, crypto, 0);
             this.passthroughMediaFormat.setString("mime", format.sampleMimeType);
             return;
         }
-        codec.configure(format.getFrameworkMediaFormatV16(), null, crypto, 0);
+        codec.configure(mediaFormat, null, crypto, 0);
         this.passthroughMediaFormat = null;
     }
 
@@ -143,23 +159,33 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
     }
 
     protected void onInputFormatChanged(Format newFormat) throws ExoPlaybackException {
+        int i;
+        int i2 = 0;
         super.onInputFormatChanged(newFormat);
         this.eventDispatcher.inputFormatChanged(newFormat);
         this.pcmEncoding = MimeTypes.AUDIO_RAW.equals(newFormat.sampleMimeType) ? newFormat.pcmEncoding : 2;
         this.channelCount = newFormat.channelCount;
+        if (newFormat.encoderDelay != -1) {
+            i = newFormat.encoderDelay;
+        } else {
+            i = 0;
+        }
+        this.encoderDelay = i;
+        if (newFormat.encoderPadding != -1) {
+            i2 = newFormat.encoderPadding;
+        }
+        this.encoderPadding = i2;
     }
 
     protected void onOutputFormatChanged(MediaCodec codec, MediaFormat outputFormat) throws ExoPlaybackException {
+        int encoding;
         MediaFormat format;
         int[] channelMap;
-        boolean passthrough = false;
         if (this.passthroughMediaFormat != null) {
-            passthrough = true;
-        }
-        String mimeType = passthrough ? this.passthroughMediaFormat.getString("mime") : MimeTypes.AUDIO_RAW;
-        if (passthrough) {
+            encoding = MimeTypes.getEncoding(this.passthroughMediaFormat.getString("mime"));
             format = this.passthroughMediaFormat;
         } else {
+            encoding = this.pcmEncoding;
             format = outputFormat;
         }
         int channelCount = format.getInteger("channel-count");
@@ -173,7 +199,7 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
             channelMap = null;
         }
         try {
-            this.audioTrack.configure(mimeType, channelCount, sampleRate, this.pcmEncoding, 0, channelMap);
+            this.audioSink.configure(encoding, channelCount, sampleRate, 0, channelMap, this.encoderDelay, this.encoderPadding);
         } catch (ConfigurationException e) {
             throw ExoPlaybackException.createForRenderer(e, getIndex());
         }
@@ -193,32 +219,33 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
         this.eventDispatcher.enabled(this.decoderCounters);
         int tunnelingAudioSessionId = getConfiguration().tunnelingAudioSessionId;
         if (tunnelingAudioSessionId != 0) {
-            this.audioTrack.enableTunnelingV21(tunnelingAudioSessionId);
+            this.audioSink.enableTunnelingV21(tunnelingAudioSessionId);
         } else {
-            this.audioTrack.disableTunneling();
+            this.audioSink.disableTunneling();
         }
     }
 
     protected void onPositionReset(long positionUs, boolean joining) throws ExoPlaybackException {
         super.onPositionReset(positionUs, joining);
-        this.audioTrack.reset();
+        this.audioSink.reset();
         this.currentPositionUs = positionUs;
         this.allowPositionDiscontinuity = true;
     }
 
     protected void onStarted() {
         super.onStarted();
-        this.audioTrack.play();
+        this.audioSink.play();
     }
 
     protected void onStopped() {
-        this.audioTrack.pause();
+        this.audioSink.pause();
+        updateCurrentPosition();
         super.onStopped();
     }
 
     protected void onDisabled() {
         try {
-            this.audioTrack.release();
+            this.audioSink.release();
             try {
                 super.onDisabled();
             } finally {
@@ -234,31 +261,26 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
     }
 
     public boolean isEnded() {
-        return super.isEnded() && this.audioTrack.isEnded();
+        return super.isEnded() && this.audioSink.isEnded();
     }
 
     public boolean isReady() {
-        return this.audioTrack.hasPendingData() || super.isReady();
+        return this.audioSink.hasPendingData() || super.isReady();
     }
 
     public long getPositionUs() {
-        long newCurrentPositionUs = this.audioTrack.getCurrentPositionUs(isEnded());
-        if (newCurrentPositionUs != Long.MIN_VALUE) {
-            if (!this.allowPositionDiscontinuity) {
-                newCurrentPositionUs = Math.max(this.currentPositionUs, newCurrentPositionUs);
-            }
-            this.currentPositionUs = newCurrentPositionUs;
-            this.allowPositionDiscontinuity = false;
+        if (getState() == 2) {
+            updateCurrentPosition();
         }
         return this.currentPositionUs;
     }
 
     public PlaybackParameters setPlaybackParameters(PlaybackParameters playbackParameters) {
-        return this.audioTrack.setPlaybackParameters(playbackParameters);
+        return this.audioSink.setPlaybackParameters(playbackParameters);
     }
 
     public PlaybackParameters getPlaybackParameters() {
-        return this.audioTrack.getPlaybackParameters();
+        return this.audioSink.getPlaybackParameters();
     }
 
     protected boolean processOutputBuffer(long positionUs, long elapsedRealtimeUs, MediaCodec codec, ByteBuffer buffer, int bufferIndex, int bufferFlags, long bufferPresentationTimeUs, boolean shouldSkip) throws ExoPlaybackException {
@@ -270,11 +292,11 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
             codec.releaseOutputBuffer(bufferIndex, false);
             r2 = this.decoderCounters;
             r2.skippedOutputBufferCount++;
-            this.audioTrack.handleDiscontinuity();
+            this.audioSink.handleDiscontinuity();
             return true;
         } else {
             try {
-                if (!this.audioTrack.handleBuffer(buffer, bufferPresentationTimeUs)) {
+                if (!this.audioSink.handleBuffer(buffer, bufferPresentationTimeUs)) {
                     return false;
                 }
                 codec.releaseOutputBuffer(bufferIndex, false);
@@ -293,7 +315,7 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
 
     protected void renderToEndOfStream() throws ExoPlaybackException {
         try {
-            this.audioTrack.playToEndOfStream();
+            this.audioSink.playToEndOfStream();
         } catch (WriteException e) {
             throw ExoPlaybackException.createForRenderer(e, getIndex());
         }
@@ -302,14 +324,25 @@ public class MediaCodecAudioRenderer extends MediaCodecRenderer implements Media
     public void handleMessage(int messageType, Object message) throws ExoPlaybackException {
         switch (messageType) {
             case 2:
-                this.audioTrack.setVolume(((Float) message).floatValue());
+                this.audioSink.setVolume(((Float) message).floatValue());
                 return;
             case 3:
-                this.audioTrack.setAudioAttributes((AudioAttributes) message);
+                this.audioSink.setAudioAttributes((AudioAttributes) message);
                 return;
             default:
                 super.handleMessage(messageType, message);
                 return;
+        }
+    }
+
+    private void updateCurrentPosition() {
+        long newCurrentPositionUs = this.audioSink.getCurrentPositionUs(isEnded());
+        if (newCurrentPositionUs != Long.MIN_VALUE) {
+            if (!this.allowPositionDiscontinuity) {
+                newCurrentPositionUs = Math.max(this.currentPositionUs, newCurrentPositionUs);
+            }
+            this.currentPositionUs = newCurrentPositionUs;
+            this.allowPositionDiscontinuity = false;
         }
     }
 

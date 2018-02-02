@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.audioinfo.mp3.ID3v1Genre;
+import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 
 public class M4AInfo extends AudioInfo {
     private static final String ASCII = "ISO8859_1";
@@ -189,7 +190,7 @@ public class M4AInfo extends AudioInfo {
                 LOGGER.log(this.debugLevel, child.toString());
             }
             if (child.getRemaining() != 0) {
-                data(child.nextChildUpTo("data"));
+                data(child.nextChildUpTo(DataSchemeDataSource.SCHEME_DATA));
             } else if (LOGGER.isLoggable(this.debugLevel)) {
                 LOGGER.log(this.debugLevel, child.getPath() + ": contains no value");
             }

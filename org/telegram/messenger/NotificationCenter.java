@@ -96,6 +96,7 @@ public class NotificationCenter {
     public static final int openedChatChanged;
     public static final int paymentFinished;
     public static final int peerSettingsDidLoaded;
+    public static final int playerDidStartPlaying;
     public static final int privacyRulesUpdated;
     public static final int proxySettingsChanged;
     public static final int pushMessagesUpdated;
@@ -488,6 +489,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         notificationsCountUpdated = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        playerDidStartPlaying = i;
     }
 
     public static NotificationCenter getInstance(int num) {

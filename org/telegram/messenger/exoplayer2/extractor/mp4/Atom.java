@@ -45,6 +45,8 @@ import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.telegram.messenger.exoplayer2.source.hls.DefaultHlsExtractorFactory;
+import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -55,7 +57,7 @@ abstract class Atom {
     public static final int HEADER_SIZE = 8;
     public static final int LONG_HEADER_SIZE = 16;
     public static final int TYPE_TTML = Util.getIntegerCodeForString("TTML");
-    public static final int TYPE__mp3 = Util.getIntegerCodeForString(".mp3");
+    public static final int TYPE__mp3 = Util.getIntegerCodeForString(DefaultHlsExtractorFactory.MP3_FILE_EXTENSION);
     public static final int TYPE_ac_3 = Util.getIntegerCodeForString(AudioSampleEntry.TYPE8);
     public static final int TYPE_alac = Util.getIntegerCodeForString("alac");
     public static final int TYPE_avc1 = Util.getIntegerCodeForString(VisualSampleEntry.TYPE3);
@@ -67,7 +69,7 @@ abstract class Atom {
     public static final int TYPE_ctts = Util.getIntegerCodeForString(CompositionTimeToSample.TYPE);
     public static final int TYPE_d263 = Util.getIntegerCodeForString("d263");
     public static final int TYPE_dac3 = Util.getIntegerCodeForString("dac3");
-    public static final int TYPE_data = Util.getIntegerCodeForString("data");
+    public static final int TYPE_data = Util.getIntegerCodeForString(DataSchemeDataSource.SCHEME_DATA);
     public static final int TYPE_ddts = Util.getIntegerCodeForString("ddts");
     public static final int TYPE_dec3 = Util.getIntegerCodeForString("dec3");
     public static final int TYPE_dtsc = Util.getIntegerCodeForString("dtsc");

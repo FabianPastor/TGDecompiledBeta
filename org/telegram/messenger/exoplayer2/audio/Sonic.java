@@ -9,10 +9,10 @@ final class Sonic {
     private static final int AMDF_FREQUENCY = 4000;
     private static final int MAXIMUM_PITCH = 400;
     private static final int MINIMUM_PITCH = 65;
-    private static final boolean USE_CHORD_PITCH = false;
     private final short[] downSampleBuffer = new short[this.maxRequired];
     private short[] inputBuffer;
     private int inputBufferSize = this.maxRequired;
+    private final int inputSampleRateHz;
     private int maxDiff;
     private final int maxPeriod;
     private final int maxRequired = (this.maxPeriod * 2);
@@ -26,20 +26,20 @@ final class Sonic {
     private int oldRatePosition;
     private short[] outputBuffer;
     private int outputBufferSize;
-    private float pitch;
+    private final float pitch;
     private short[] pitchBuffer;
     private int pitchBufferSize;
     private int prevMinDiff;
     private int prevPeriod;
+    private final float rate;
     private int remainingInputToCopy;
-    private final int sampleRate;
-    private float speed;
+    private final float speed;
 
-    public Sonic(int sampleRate, int numChannels) {
-        this.sampleRate = sampleRate;
+    public Sonic(int inputSampleRateHz, int numChannels, float speed, float pitch, int outputSampleRateHz) {
+        this.inputSampleRateHz = inputSampleRateHz;
         this.numChannels = numChannels;
-        this.minPeriod = sampleRate / MAXIMUM_PITCH;
-        this.maxPeriod = sampleRate / MINIMUM_PITCH;
+        this.minPeriod = inputSampleRateHz / MAXIMUM_PITCH;
+        this.maxPeriod = inputSampleRateHz / MINIMUM_PITCH;
         this.inputBuffer = new short[(this.maxRequired * numChannels)];
         this.outputBufferSize = this.maxRequired;
         this.outputBuffer = new short[(this.maxRequired * numChannels)];
@@ -48,24 +48,9 @@ final class Sonic {
         this.oldRatePosition = 0;
         this.newRatePosition = 0;
         this.prevPeriod = 0;
-        this.speed = 1.0f;
-        this.pitch = 1.0f;
-    }
-
-    public void setSpeed(float speed) {
         this.speed = speed;
-    }
-
-    public float getSpeed() {
-        return this.speed;
-    }
-
-    public void setPitch(float pitch) {
         this.pitch = pitch;
-    }
-
-    public float getPitch() {
-        return this.pitch;
+        this.rate = ((float) inputSampleRateHz) / ((float) outputSampleRateHz);
     }
 
     public void queueInput(ShortBuffer buffer) {
@@ -86,7 +71,8 @@ final class Sonic {
 
     public void queueEndOfStream() {
         int remainingSamples = this.numInputSamples;
-        int expectedOutputSamples = this.numOutputSamples + ((int) ((((((float) remainingSamples) / (this.speed / this.pitch)) + ((float) this.numPitchSamples)) / this.pitch) + 0.5f));
+        float r = this.rate * this.pitch;
+        int expectedOutputSamples = this.numOutputSamples + ((int) ((((((float) remainingSamples) / (this.speed / this.pitch)) + ((float) this.numPitchSamples)) / r) + 0.5f));
         enlargeInputBufferIfNeeded((this.maxRequired * 2) + remainingSamples);
         for (int xSample = 0; xSample < (this.maxRequired * 2) * this.numChannels; xSample++) {
             this.inputBuffer[(this.numChannels * remainingSamples) + xSample] = (short) 0;
@@ -194,8 +180,8 @@ final class Sonic {
         int skip;
         int period;
         int retPeriod;
-        if (this.sampleRate > AMDF_FREQUENCY) {
-            skip = this.sampleRate / AMDF_FREQUENCY;
+        if (this.inputSampleRateHz > AMDF_FREQUENCY) {
+            skip = this.inputSampleRateHz / AMDF_FREQUENCY;
         } else {
             skip = 1;
         }
@@ -250,27 +236,6 @@ final class Sonic {
         }
     }
 
-    private void adjustPitch(int originalNumOutputSamples) {
-        if (this.numOutputSamples != originalNumOutputSamples) {
-            moveNewSamplesToPitchBuffer(originalNumOutputSamples);
-            int position = 0;
-            while (this.numPitchSamples - position >= this.maxRequired) {
-                int period = findPitchPeriod(this.pitchBuffer, position, false);
-                int newPeriod = (int) (((float) period) / this.pitch);
-                enlargeOutputBufferIfNeeded(newPeriod);
-                if (this.pitch >= 1.0f) {
-                    overlapAdd(newPeriod, this.numChannels, this.outputBuffer, this.numOutputSamples, this.pitchBuffer, position, this.pitchBuffer, (position + period) - newPeriod);
-                } else {
-                    int i = period;
-                    overlapAddWithSeparation(i, this.numChannels, newPeriod - period, this.outputBuffer, this.numOutputSamples, this.pitchBuffer, position, this.pitchBuffer, position);
-                }
-                this.numOutputSamples += newPeriod;
-                position += period;
-            }
-            removePitchSamples(position);
-        }
-    }
-
     private short interpolate(short[] in, int inPos, int oldSampleRate, int newSampleRate) {
         int rightPosition = (this.oldRatePosition + 1) * newSampleRate;
         int ratio = rightPosition - (this.newRatePosition * oldSampleRate);
@@ -280,8 +245,8 @@ final class Sonic {
 
     private void adjustRate(float rate, int originalNumOutputSamples) {
         if (this.numOutputSamples != originalNumOutputSamples) {
-            int newSampleRate = (int) (((float) this.sampleRate) / rate);
-            int oldSampleRate = this.sampleRate;
+            int newSampleRate = (int) (((float) this.inputSampleRateHz) / rate);
+            int oldSampleRate = this.inputSampleRateHz;
             while (true) {
                 if (newSampleRate <= MessagesController.UPDATE_MASK_CHAT_ADMINS && oldSampleRate <= MessagesController.UPDATE_MASK_CHAT_ADMINS) {
                     break;
@@ -362,14 +327,15 @@ final class Sonic {
     private void processStreamInput() {
         int originalNumOutputSamples = this.numOutputSamples;
         float s = this.speed / this.pitch;
+        float r = this.rate * this.pitch;
         if (((double) s) > 1.00001d || ((double) s) < 0.99999d) {
             changeSpeed(s);
         } else {
             copyToOutput(this.inputBuffer, 0, this.numInputSamples);
             this.numInputSamples = 0;
         }
-        if (this.pitch != 1.0f) {
-            adjustRate(this.pitch, originalNumOutputSamples);
+        if (r != 1.0f) {
+            adjustRate(r, originalNumOutputSamples);
         }
     }
 
@@ -383,28 +349,6 @@ final class Sonic {
                 o += numChannels;
                 d += numChannels;
                 u += numChannels;
-            }
-        }
-    }
-
-    private static void overlapAddWithSeparation(int numSamples, int numChannels, int separation, short[] out, int outPos, short[] rampDown, int rampDownPos, short[] rampUp, int rampUpPos) {
-        for (int i = 0; i < numChannels; i++) {
-            int o = (outPos * numChannels) + i;
-            int u = (rampUpPos * numChannels) + i;
-            int d = (rampDownPos * numChannels) + i;
-            for (int t = 0; t < numSamples + separation; t++) {
-                if (t < separation) {
-                    out[o] = (short) ((rampDown[d] * (numSamples - t)) / numSamples);
-                    d += numChannels;
-                } else if (t < numSamples) {
-                    out[o] = (short) (((rampDown[d] * (numSamples - t)) + (rampUp[u] * (t - separation))) / numSamples);
-                    d += numChannels;
-                    u += numChannels;
-                } else {
-                    out[o] = (short) ((rampUp[u] * (t - separation)) / numSamples);
-                    u += numChannels;
-                }
-                o += numChannels;
             }
         }
     }

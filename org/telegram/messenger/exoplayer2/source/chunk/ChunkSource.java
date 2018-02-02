@@ -2,9 +2,12 @@ package org.telegram.messenger.exoplayer2.source.chunk;
 
 import java.io.IOException;
 import java.util.List;
+import org.telegram.messenger.exoplayer2.SeekParameters;
 
 public interface ChunkSource {
-    void getNextChunk(MediaChunk mediaChunk, long j, ChunkHolder chunkHolder);
+    long getAdjustedSeekPositionUs(long j, SeekParameters seekParameters);
+
+    void getNextChunk(MediaChunk mediaChunk, long j, long j2, ChunkHolder chunkHolder);
 
     int getPreferredQueueSize(long j, List<? extends MediaChunk> list);
 

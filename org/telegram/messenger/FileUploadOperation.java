@@ -450,8 +450,14 @@ public class FileUploadOperation {
                                     FileUploadOperation.this.delegate.didFailedUploadingFile(FileUploadOperation.this);
                                     FileUploadOperation.this.cleanup();
                                 } else if (FileUploadOperation.this.state == 1) {
+                                    long size;
                                     FileUploadOperation.this.uploadedBytesCount = FileUploadOperation.this.uploadedBytesCount + ((long) i);
-                                    FileUploadOperation.this.delegate.didChangedUploadProgress(FileUploadOperation.this, ((float) FileUploadOperation.this.uploadedBytesCount) / ((float) FileUploadOperation.this.totalFileSize));
+                                    if (FileUploadOperation.this.estimatedSize != 0) {
+                                        size = Math.max(FileUploadOperation.this.availableSize, (long) FileUploadOperation.this.estimatedSize);
+                                    } else {
+                                        size = FileUploadOperation.this.totalFileSize;
+                                    }
+                                    FileUploadOperation.this.delegate.didChangedUploadProgress(FileUploadOperation.this, ((float) FileUploadOperation.this.uploadedBytesCount) / ((float) size));
                                     FileUploadOperation.this.currentUploadRequetsCount = FileUploadOperation.this.currentUploadRequetsCount - 1;
                                     if (FileUploadOperation.this.isLastPart && FileUploadOperation.this.currentUploadRequetsCount == 0 && FileUploadOperation.this.state == 1) {
                                         FileUploadOperation.this.state = 3;

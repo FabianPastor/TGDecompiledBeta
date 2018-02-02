@@ -6,9 +6,10 @@ import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 
 public interface MediaSource {
+    public static final String MEDIA_SOURCE_REUSED_ERROR_MESSAGE = "MediaSource instances are not allowed to be reused.";
 
     public interface Listener {
-        void onSourceInfoRefreshed(Timeline timeline, Object obj);
+        void onSourceInfoRefreshed(MediaSource mediaSource, Timeline timeline, Object obj);
     }
 
     public static final class MediaPeriodId {

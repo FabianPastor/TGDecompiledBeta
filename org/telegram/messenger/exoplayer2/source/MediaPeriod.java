@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.source;
 
 import java.io.IOException;
+import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 
 public interface MediaPeriod extends SequenceableLoader {
@@ -11,7 +12,9 @@ public interface MediaPeriod extends SequenceableLoader {
 
     boolean continueLoading(long j);
 
-    void discardBuffer(long j);
+    void discardBuffer(long j, boolean z);
+
+    long getAdjustedSeekPositionUs(long j, SeekParameters seekParameters);
 
     long getBufferedPositionUs();
 
@@ -24,6 +27,8 @@ public interface MediaPeriod extends SequenceableLoader {
     void prepare(Callback callback, long j);
 
     long readDiscontinuity();
+
+    void reevaluateBuffer(long j);
 
     long seekToUs(long j);
 

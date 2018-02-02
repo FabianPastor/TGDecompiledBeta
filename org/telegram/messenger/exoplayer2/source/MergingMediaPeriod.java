@@ -4,20 +4,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.source.MediaPeriod.Callback;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 final class MergingMediaPeriod implements MediaPeriod, Callback {
     private Callback callback;
+    private SequenceableLoader compositeSequenceableLoader;
+    private final CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory;
     private MediaPeriod[] enabledPeriods;
     private int pendingChildPrepareCount;
     public final MediaPeriod[] periods;
-    private SequenceableLoader sequenceableLoader;
     private final IdentityHashMap<SampleStream, Integer> streamPeriodIndices = new IdentityHashMap();
     private TrackGroupArray trackGroups;
 
-    public MergingMediaPeriod(MediaPeriod... periods) {
+    public MergingMediaPeriod(CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory, MediaPeriod... periods) {
+        this.compositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory;
         this.periods = periods;
     }
 
@@ -41,11 +44,11 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
 
     public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
         int i;
+        int j;
         int[] streamChildIndices = new int[selections.length];
         int[] selectionChildIndices = new int[selections.length];
         for (i = 0; i < selections.length; i++) {
             int i2;
-            int j;
             if (streams[i] == null) {
                 i2 = -1;
             } else {
@@ -101,22 +104,26 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
         System.arraycopy(newStreams, 0, streams, 0, newStreams.length);
         this.enabledPeriods = new MediaPeriod[enabledPeriodsList.size()];
         enabledPeriodsList.toArray(this.enabledPeriods);
-        this.sequenceableLoader = new CompositeSequenceableLoader(this.enabledPeriods);
+        this.compositeSequenceableLoader = this.compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(this.enabledPeriods);
         return positionUs;
     }
 
-    public void discardBuffer(long positionUs) {
+    public void discardBuffer(long positionUs, boolean toKeyframe) {
         for (MediaPeriod period : this.enabledPeriods) {
-            period.discardBuffer(positionUs);
+            period.discardBuffer(positionUs, toKeyframe);
         }
     }
 
+    public void reevaluateBuffer(long positionUs) {
+        this.compositeSequenceableLoader.reevaluateBuffer(positionUs);
+    }
+
     public boolean continueLoading(long positionUs) {
-        return this.sequenceableLoader.continueLoading(positionUs);
+        return this.compositeSequenceableLoader.continueLoading(positionUs);
     }
 
     public long getNextLoadPositionUs() {
-        return this.sequenceableLoader.getNextLoadPositionUs();
+        return this.compositeSequenceableLoader.getNextLoadPositionUs();
     }
 
     public long readDiscontinuity() {
@@ -143,7 +150,7 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
     }
 
     public long getBufferedPositionUs() {
-        return this.sequenceableLoader.getBufferedPositionUs();
+        return this.compositeSequenceableLoader.getBufferedPositionUs();
     }
 
     public long seekToUs(long positionUs) {
@@ -154,6 +161,10 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
             }
         }
         return positionUs;
+    }
+
+    public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
+        return this.enabledPeriods[0].getAdjustedSeekPositionUs(positionUs, seekParameters);
     }
 
     public void onPrepared(MediaPeriod ignored) {

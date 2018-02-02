@@ -6,27 +6,56 @@ import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.source.SampleStream;
 
 final class HlsSampleStream implements SampleStream {
-    public final int group;
+    private int sampleQueueIndex = -1;
     private final HlsSampleStreamWrapper sampleStreamWrapper;
+    private final int trackGroupIndex;
 
-    public HlsSampleStream(HlsSampleStreamWrapper sampleStreamWrapper, int group) {
+    public HlsSampleStream(HlsSampleStreamWrapper sampleStreamWrapper, int trackGroupIndex) {
         this.sampleStreamWrapper = sampleStreamWrapper;
-        this.group = group;
+        this.trackGroupIndex = trackGroupIndex;
+    }
+
+    public void unbindSampleQueue() {
+        if (this.sampleQueueIndex != -1) {
+            this.sampleStreamWrapper.unbindSampleQueue(this.trackGroupIndex);
+            this.sampleQueueIndex = -1;
+        }
     }
 
     public boolean isReady() {
-        return this.sampleStreamWrapper.isReady(this.group);
+        return ensureBoundSampleQueue() && this.sampleStreamWrapper.isReady(this.sampleQueueIndex);
     }
 
     public void maybeThrowError() throws IOException {
-        this.sampleStreamWrapper.maybeThrowError();
+        if (ensureBoundSampleQueue() || !this.sampleStreamWrapper.isMappingFinished()) {
+            this.sampleStreamWrapper.maybeThrowError();
+            return;
+        }
+        throw new SampleQueueMappingException(this.sampleStreamWrapper.getTrackGroups().get(this.trackGroupIndex).getFormat(0).sampleMimeType);
     }
 
     public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean requireFormat) {
-        return this.sampleStreamWrapper.readData(this.group, formatHolder, buffer, requireFormat);
+        if (ensureBoundSampleQueue()) {
+            return this.sampleStreamWrapper.readData(this.sampleQueueIndex, formatHolder, buffer, requireFormat);
+        }
+        return -3;
     }
 
-    public void skipData(long positionUs) {
-        this.sampleStreamWrapper.skipData(this.group, positionUs);
+    public int skipData(long positionUs) {
+        if (ensureBoundSampleQueue()) {
+            return this.sampleStreamWrapper.skipData(this.sampleQueueIndex, positionUs);
+        }
+        return 0;
+    }
+
+    private boolean ensureBoundSampleQueue() {
+        if (this.sampleQueueIndex != -1) {
+            return true;
+        }
+        this.sampleQueueIndex = this.sampleStreamWrapper.bindSampleQueueToSampleStream(this.trackGroupIndex);
+        if (this.sampleQueueIndex == -1) {
+            return false;
+        }
+        return true;
     }
 }

@@ -11,4 +11,6 @@ public interface SequenceableLoader {
     long getBufferedPositionUs();
 
     long getNextLoadPositionUs();
+
+    void reevaluateBuffer(long j);
 }

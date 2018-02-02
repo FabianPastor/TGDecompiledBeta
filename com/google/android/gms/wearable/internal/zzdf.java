@@ -9,6 +9,7 @@ import com.google.android.gms.wearable.DataItemAsset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 
 public final class zzdf extends zzc implements DataItem {
     private final int zzhwi;
@@ -30,7 +31,7 @@ public final class zzdf extends zzc implements DataItem {
     }
 
     public final byte[] getData() {
-        return getByteArray("data");
+        return getByteArray(DataSchemeDataSource.SCHEME_DATA);
     }
 
     public final Uri getUri() {

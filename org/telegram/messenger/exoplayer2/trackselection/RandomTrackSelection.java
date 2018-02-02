@@ -40,7 +40,7 @@ public final class RandomTrackSelection extends BaseTrackSelection {
         this.selectedIndex = random.nextInt(this.length);
     }
 
-    public void updateSelectedTrack(long bufferedDurationUs) {
+    public void updateSelectedTrack(long playbackPositionUs, long bufferedDurationUs, long availableDurationUs) {
         int i;
         long nowMs = SystemClock.elapsedRealtime();
         int nonBlacklistedFormatCount = 0;

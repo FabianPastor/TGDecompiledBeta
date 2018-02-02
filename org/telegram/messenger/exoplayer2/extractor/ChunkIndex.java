@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2.extractor;
 
+import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class ChunkIndex implements SeekMap {
@@ -35,7 +36,12 @@ public final class ChunkIndex implements SeekMap {
         return this.durationUs;
     }
 
-    public long getPosition(long timeUs) {
-        return this.offsets[getChunkIndex(timeUs)];
+    public SeekPoints getSeekPoints(long timeUs) {
+        int chunkIndex = getChunkIndex(timeUs);
+        SeekPoint seekPoint = new SeekPoint(this.timesUs[chunkIndex], this.offsets[chunkIndex]);
+        if (seekPoint.timeUs >= timeUs || chunkIndex == this.length - 1) {
+            return new SeekPoints(seekPoint);
+        }
+        return new SeekPoints(seekPoint, new SeekPoint(this.timesUs[chunkIndex + 1], this.offsets[chunkIndex + 1]));
     }
 }

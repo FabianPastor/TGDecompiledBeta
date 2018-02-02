@@ -78,7 +78,6 @@ import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -605,11 +604,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (this.scale <= 0.5f) {
                 sc = this.scale / 0.5f;
                 alpha = sc;
-            } else if (this.scale <= AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION) {
+            } else if (this.scale <= 0.75f) {
                 sc = 1.0f - (((this.scale - 0.5f) / 0.25f) * 0.1f);
                 alpha = 1.0f;
             } else {
-                sc = 0.9f + (((this.scale - AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION) / 0.25f) * 0.1f);
+                sc = 0.9f + (((this.scale - 0.75f) / 0.25f) * 0.1f);
                 alpha = 1.0f;
             }
             long dt = System.currentTimeMillis() - this.lastUpdateTime;

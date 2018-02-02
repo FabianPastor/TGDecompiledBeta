@@ -3,7 +3,6 @@ package org.telegram.messenger.exoplayer2.upstream.cache;
 import android.util.Log;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.NavigableSet;
 import java.util.TreeSet;
 import org.telegram.messenger.exoplayer2.extractor.ChunkIndex;
 import org.telegram.messenger.exoplayer2.upstream.cache.Cache.Listener;
@@ -41,12 +40,9 @@ public final class CachedRegionTracker implements Listener {
         this.cacheKey = cacheKey;
         this.chunkIndex = chunkIndex;
         synchronized (this) {
-            NavigableSet<CacheSpan> cacheSpans = cache.addListener(cacheKey, this);
-            if (cacheSpans != null) {
-                Iterator<CacheSpan> spanIterator = cacheSpans.descendingIterator();
-                while (spanIterator.hasNext()) {
-                    mergeSpan((CacheSpan) spanIterator.next());
-                }
+            Iterator<CacheSpan> spanIterator = cache.addListener(cacheKey, this).descendingIterator();
+            while (spanIterator.hasNext()) {
+                mergeSpan((CacheSpan) spanIterator.next());
             }
         }
     }

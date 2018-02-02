@@ -40,6 +40,10 @@ final class ResamplingAudioProcessor implements AudioProcessor {
         return 2;
     }
 
+    public int getOutputSampleRateHz() {
+        return this.sampleRateHz;
+    }
+
     public void queueInput(ByteBuffer inputBuffer) {
         int resampledSize;
         int position = inputBuffer.position();

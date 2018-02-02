@@ -19,6 +19,11 @@ public final class ParsableBitArray {
         reset(data, data.length);
     }
 
+    public void reset(ParsableByteArray parsableByteArray) {
+        reset(parsableByteArray.data, parsableByteArray.limit());
+        setPosition(parsableByteArray.getPosition() * 8);
+    }
+
     public void reset(byte[] data, int limit) {
         this.data = data;
         this.byteOffset = 0;
@@ -92,6 +97,36 @@ public final class ParsableBitArray {
         }
         assertValidOffset();
         return returnValue;
+    }
+
+    public void readBits(byte[] buffer, int offset, int numBits) {
+        int to = offset + (numBits >> 3);
+        for (int i = offset; i < to; i++) {
+            byte[] bArr = this.data;
+            int i2 = this.byteOffset;
+            this.byteOffset = i2 + 1;
+            buffer[i] = (byte) (bArr[i2] << this.bitOffset);
+            buffer[i] = (byte) (buffer[i] | ((this.data[this.byteOffset] & 255) >> (8 - this.bitOffset)));
+        }
+        int bitsLeft = numBits & 7;
+        if (bitsLeft != 0) {
+            buffer[to] = (byte) (buffer[to] & (255 >> bitsLeft));
+            if (this.bitOffset + bitsLeft > 8) {
+                byte b = buffer[to];
+                byte[] bArr2 = this.data;
+                int i3 = this.byteOffset;
+                this.byteOffset = i3 + 1;
+                buffer[to] = (byte) (b | ((byte) ((bArr2[i3] & 255) << this.bitOffset)));
+                this.bitOffset -= 8;
+            }
+            this.bitOffset += bitsLeft;
+            buffer[to] = (byte) (buffer[to] | ((byte) (((this.data[this.byteOffset] & 255) >> (8 - this.bitOffset)) << (8 - bitsLeft))));
+            if (this.bitOffset == 8) {
+                this.bitOffset = 0;
+                this.byteOffset++;
+            }
+            assertValidOffset();
+        }
     }
 
     public void byteAlign() {

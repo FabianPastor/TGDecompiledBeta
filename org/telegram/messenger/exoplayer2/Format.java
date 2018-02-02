@@ -116,8 +116,8 @@ public final class Format implements Parcelable {
         return new Format(id, null, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, null, -1, -1, -1, -1, -1, selectionFlags, language, accessibilityChannel, subsampleOffsetUs, initializationData, drmInitData, null);
     }
 
-    public static Format createImageSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, List<byte[]> initializationData, String language, DrmInitData drmInitData) {
-        return new Format(id, null, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, null, -1, -1, -1, -1, -1, 0, language, -1, Long.MAX_VALUE, initializationData, drmInitData, null);
+    public static Format createImageSampleFormat(String id, String sampleMimeType, String codecs, int bitrate, int selectionFlags, List<byte[]> initializationData, String language, DrmInitData drmInitData) {
+        return new Format(id, null, sampleMimeType, codecs, bitrate, -1, -1, -1, -1.0f, -1, -1.0f, null, -1, null, -1, -1, -1, -1, -1, selectionFlags, language, -1, Long.MAX_VALUE, initializationData, drmInitData, null);
     }
 
     public static Format createContainerFormat(String id, String containerMimeType, String sampleMimeType, String codecs, int bitrate, int selectionFlags, String language) {
@@ -205,15 +205,15 @@ public final class Format implements Parcelable {
         return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
     }
 
-    public Format copyWithContainerInfo(String id, String codecs, int bitrate, int width, int height, int selectionFlags, String language) {
-        return new Format(id, this.containerMimeType, this.sampleMimeType, codecs, bitrate, this.maxInputSize, width, height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, selectionFlags, language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
+    public Format copyWithContainerInfo(String id, String sampleMimeType, String codecs, int bitrate, int width, int height, int selectionFlags, String language) {
+        return new Format(id, this.containerMimeType, sampleMimeType, codecs, bitrate, this.maxInputSize, width, height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, selectionFlags, language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
     }
 
     public Format copyWithManifestFormatInfo(Format manifestFormat) {
         if (this == manifestFormat) {
             return this;
         }
-        return new Format(manifestFormat.id, this.containerMimeType, this.sampleMimeType, this.codecs == null ? manifestFormat.codecs : this.codecs, this.bitrate == -1 ? manifestFormat.bitrate : this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate == -1.0f ? manifestFormat.frameRate : this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags | manifestFormat.selectionFlags, this.language == null ? manifestFormat.language : this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, manifestFormat.drmInitData != null ? manifestFormat.drmInitData : this.drmInitData, this.metadata);
+        return new Format(manifestFormat.id, this.containerMimeType, this.sampleMimeType, this.codecs == null ? manifestFormat.codecs : this.codecs, this.bitrate == -1 ? manifestFormat.bitrate : this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate == -1.0f ? manifestFormat.frameRate : this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags | manifestFormat.selectionFlags, this.language == null ? manifestFormat.language : this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, DrmInitData.createSessionCreationData(manifestFormat.drmInitData, this.drmInitData), this.metadata);
     }
 
     public Format copyWithGaplessInfo(int encoderDelay, int encoderPadding) {
@@ -226,6 +226,10 @@ public final class Format implements Parcelable {
 
     public Format copyWithMetadata(Metadata metadata) {
         return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate, this.rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, metadata);
+    }
+
+    public Format copyWithRotationDegrees(int rotationDegrees) {
+        return new Format(this.id, this.containerMimeType, this.sampleMimeType, this.codecs, this.bitrate, this.maxInputSize, this.width, this.height, this.frameRate, rotationDegrees, this.pixelWidthHeightRatio, this.projectionData, this.stereoMode, this.colorInfo, this.channelCount, this.sampleRate, this.pcmEncoding, this.encoderDelay, this.encoderPadding, this.selectionFlags, this.language, this.accessibilityChannel, this.subsampleOffsetUs, this.initializationData, this.drmInitData, this.metadata);
     }
 
     public int getPixelCount() {
@@ -245,8 +249,6 @@ public final class Format implements Parcelable {
         maybeSetIntegerV16(format, "rotation-degrees", this.rotationDegrees);
         maybeSetIntegerV16(format, "channel-count", this.channelCount);
         maybeSetIntegerV16(format, "sample-rate", this.sampleRate);
-        maybeSetIntegerV16(format, "encoder-delay", this.encoderDelay);
-        maybeSetIntegerV16(format, "encoder-padding", this.encoderPadding);
         for (int i = 0; i < this.initializationData.size(); i++) {
             format.setByteBuffer("csd-" + i, ByteBuffer.wrap((byte[]) this.initializationData.get(i)));
         }

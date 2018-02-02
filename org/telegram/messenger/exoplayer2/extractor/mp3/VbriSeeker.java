@@ -1,16 +1,20 @@
 package org.telegram.messenger.exoplayer2.extractor.mp3;
 
+import android.util.Log;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.extractor.MpegAudioHeader;
+import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
+import org.telegram.messenger.exoplayer2.extractor.SeekPoint;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 final class VbriSeeker implements Seeker {
+    private static final String TAG = "VbriSeeker";
     private final long durationUs;
     private final long[] positions;
     private final long[] timesUs;
 
-    public static VbriSeeker create(MpegAudioHeader mpegAudioHeader, ParsableByteArray frame, long position, long inputLength) {
+    public static VbriSeeker create(long inputLength, long position, MpegAudioHeader mpegAudioHeader, ParsableByteArray frame) {
         frame.skipBytes(10);
         int numFrames = frame.readInt();
         if (numFrames <= 0) {
@@ -22,14 +26,13 @@ final class VbriSeeker implements Seeker {
         int scale = frame.readUnsignedShort();
         int entrySize = frame.readUnsignedShort();
         frame.skipBytes(2);
-        position += (long) mpegAudioHeader.frameSize;
-        long[] timesUs = new long[(entryCount + 1)];
-        long[] positions = new long[(entryCount + 1)];
-        timesUs[0] = 0;
-        positions[0] = position;
-        for (int index = 1; index < timesUs.length; index++) {
+        long minPosition = position + ((long) mpegAudioHeader.frameSize);
+        long[] timesUs = new long[entryCount];
+        long[] positions = new long[entryCount];
+        for (int index = 0; index < entryCount; index++) {
             int segmentSize;
-            long j;
+            timesUs[index] = (((long) index) * durationUs) / ((long) entryCount);
+            positions[index] = Math.max(position, minPosition);
             switch (entrySize) {
                 case 1:
                     segmentSize = frame.readUnsignedByte();
@@ -47,13 +50,9 @@ final class VbriSeeker implements Seeker {
                     return null;
             }
             position += (long) (segmentSize * scale);
-            timesUs[index] = (((long) index) * durationUs) / ((long) entryCount);
-            if (inputLength == -1) {
-                j = position;
-            } else {
-                j = Math.min(inputLength, position);
-            }
-            positions[index] = j;
+        }
+        if (!(inputLength == -1 || inputLength == position)) {
+            Log.w(TAG, "VBRI data size mismatch: " + inputLength + ", " + position);
         }
         return new VbriSeeker(timesUs, positions, durationUs);
     }
@@ -68,8 +67,13 @@ final class VbriSeeker implements Seeker {
         return true;
     }
 
-    public long getPosition(long timeUs) {
-        return this.positions[Util.binarySearchFloor(this.timesUs, timeUs, true, true)];
+    public SeekPoints getSeekPoints(long timeUs) {
+        int tableIndex = Util.binarySearchFloor(this.timesUs, timeUs, true, true);
+        SeekPoint seekPoint = new SeekPoint(this.timesUs[tableIndex], this.positions[tableIndex]);
+        if (seekPoint.timeUs >= timeUs || tableIndex == this.timesUs.length - 1) {
+            return new SeekPoints(seekPoint);
+        }
+        return new SeekPoints(seekPoint, new SeekPoint(this.timesUs[tableIndex + 1], this.positions[tableIndex + 1]));
     }
 
     public long getTimeUs(long position) {

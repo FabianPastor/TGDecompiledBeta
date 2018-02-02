@@ -1,5 +1,7 @@
 package org.telegram.messenger.exoplayer2.util;
 
+import android.os.SystemClock;
+
 public final class ConditionVariable {
     private boolean isOpen;
 
@@ -27,5 +29,15 @@ public final class ConditionVariable {
         while (!this.isOpen) {
             wait();
         }
+    }
+
+    public synchronized boolean block(long timeout) throws InterruptedException {
+        long now = SystemClock.elapsedRealtime();
+        long end = now + timeout;
+        while (!this.isOpen && now < end) {
+            wait(end - now);
+            now = SystemClock.elapsedRealtime();
+        }
+        return this.isOpen;
     }
 }

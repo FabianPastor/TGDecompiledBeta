@@ -47,6 +47,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.voip.VoIPBaseService.StateListener;
 import org.telegram.tgnet.ConnectionsManager;
@@ -135,7 +136,7 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
                             VoIPService.this.startOutgoingCall();
                         }
                     };
-                    AndroidUtilities.runOnUIThread(this.delayedStartOutgoingCall, 2000);
+                    AndroidUtilities.runOnUIThread(this.delayedStartOutgoingCall, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                     if (intent.getBooleanExtra("start_incall_activity", false)) {
                         startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
                     }

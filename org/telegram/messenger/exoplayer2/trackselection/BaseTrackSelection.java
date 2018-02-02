@@ -43,6 +43,12 @@ public abstract class BaseTrackSelection implements TrackSelection {
         this.blacklistUntilTimes = new long[this.length];
     }
 
+    public void enable() {
+    }
+
+    public void disable() {
+    }
+
     public final TrackGroup getTrackGroup() {
         return this.group;
     }
@@ -83,6 +89,9 @@ public abstract class BaseTrackSelection implements TrackSelection {
 
     public final int getSelectedIndexInTrackGroup() {
         return this.tracks[getSelectedIndex()];
+    }
+
+    public void onPlaybackSpeed(float playbackSpeed) {
     }
 
     public int evaluateQueueSize(long playbackPositionUs, List<? extends MediaChunk> queue) {

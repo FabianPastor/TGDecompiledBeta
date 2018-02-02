@@ -22,7 +22,7 @@ public final class SpliceInsertCommand extends SpliceCommand {
     public final boolean autoReturn;
     public final int availNum;
     public final int availsExpected;
-    public final long breakDuration;
+    public final long breakDurationUs;
     public final List<ComponentSplice> componentSpliceList;
     public final boolean outOfNetworkIndicator;
     public final boolean programSpliceFlag;
@@ -55,7 +55,7 @@ public final class SpliceInsertCommand extends SpliceCommand {
         }
     }
 
-    private SpliceInsertCommand(long spliceEventId, boolean spliceEventCancelIndicator, boolean outOfNetworkIndicator, boolean programSpliceFlag, boolean spliceImmediateFlag, long programSplicePts, long programSplicePlaybackPositionUs, List<ComponentSplice> componentSpliceList, boolean autoReturn, long breakDuration, int uniqueProgramId, int availNum, int availsExpected) {
+    private SpliceInsertCommand(long spliceEventId, boolean spliceEventCancelIndicator, boolean outOfNetworkIndicator, boolean programSpliceFlag, boolean spliceImmediateFlag, long programSplicePts, long programSplicePlaybackPositionUs, List<ComponentSplice> componentSpliceList, boolean autoReturn, long breakDurationUs, int uniqueProgramId, int availNum, int availsExpected) {
         this.spliceEventId = spliceEventId;
         this.spliceEventCancelIndicator = spliceEventCancelIndicator;
         this.outOfNetworkIndicator = outOfNetworkIndicator;
@@ -65,7 +65,7 @@ public final class SpliceInsertCommand extends SpliceCommand {
         this.programSplicePlaybackPositionUs = programSplicePlaybackPositionUs;
         this.componentSpliceList = Collections.unmodifiableList(componentSpliceList);
         this.autoReturn = autoReturn;
-        this.breakDuration = breakDuration;
+        this.breakDurationUs = breakDurationUs;
         this.uniqueProgramId = uniqueProgramId;
         this.availNum = availNum;
         this.availsExpected = availsExpected;
@@ -111,7 +111,7 @@ public final class SpliceInsertCommand extends SpliceCommand {
             z2 = false;
         }
         this.autoReturn = z2;
-        this.breakDuration = in.readLong();
+        this.breakDurationUs = in.readLong();
         this.uniqueProgramId = in.readInt();
         this.availNum = in.readInt();
         this.availsExpected = in.readInt();
@@ -129,7 +129,7 @@ public final class SpliceInsertCommand extends SpliceCommand {
         int availNum = 0;
         int availsExpected = 0;
         boolean autoReturn = false;
-        long duration = C.TIME_UNSET;
+        long breakDurationUs = C.TIME_UNSET;
         if (!spliceEventCancelIndicator) {
             int headerByte = sectionData.readUnsignedByte();
             outOfNetworkIndicator = (headerByte & 128) != 0;
@@ -154,13 +154,13 @@ public final class SpliceInsertCommand extends SpliceCommand {
             if (durationFlag) {
                 long firstByte = (long) sectionData.readUnsignedByte();
                 autoReturn = (128 & firstByte) != 0;
-                duration = ((1 & firstByte) << 32) | sectionData.readUnsignedInt();
+                breakDurationUs = (1000 * (((1 & firstByte) << 32) | sectionData.readUnsignedInt())) / 90;
             }
             uniqueProgramId = sectionData.readUnsignedShort();
             availNum = sectionData.readUnsignedByte();
             availsExpected = sectionData.readUnsignedByte();
         }
-        return new SpliceInsertCommand(spliceEventId, spliceEventCancelIndicator, outOfNetworkIndicator, programSpliceFlag, spliceImmediateFlag, programSplicePts, timestampAdjuster.adjustTsTimestamp(programSplicePts), componentSplices, autoReturn, duration, uniqueProgramId, availNum, availsExpected);
+        return new SpliceInsertCommand(spliceEventId, spliceEventCancelIndicator, outOfNetworkIndicator, programSpliceFlag, spliceImmediateFlag, programSplicePts, timestampAdjuster.adjustTsTimestamp(programSplicePts), componentSplices, autoReturn, breakDurationUs, uniqueProgramId, availNum, availsExpected);
     }
 
     public void writeToParcel(Parcel dest, int flags) {
@@ -202,7 +202,7 @@ public final class SpliceInsertCommand extends SpliceCommand {
             i2 = 0;
         }
         dest.writeByte((byte) i2);
-        dest.writeLong(this.breakDuration);
+        dest.writeLong(this.breakDurationUs);
         dest.writeInt(this.uniqueProgramId);
         dest.writeInt(this.availNum);
         dest.writeInt(this.availsExpected);

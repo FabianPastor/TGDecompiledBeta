@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2.metadata.id3;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.os.Parcelable.Creator;
 import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.util.Util;
@@ -113,8 +112,8 @@ public final class ChapterTocFrame extends Id3Frame {
         dest.writeByte((byte) i2);
         dest.writeStringArray(this.children);
         dest.writeInt(this.subFrames.length);
-        for (Parcelable writeParcelable : this.subFrames) {
-            dest.writeParcelable(writeParcelable, 0);
+        for (Id3Frame subFrame : this.subFrames) {
+            dest.writeParcelable(subFrame, 0);
         }
     }
 }

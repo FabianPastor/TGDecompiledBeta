@@ -1,12 +1,12 @@
 package org.telegram.messenger.exoplayer2.upstream.cache;
 
 import android.os.ConditionVariable;
+import android.util.Log;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -15,12 +15,11 @@ import org.telegram.messenger.exoplayer2.upstream.cache.Cache.Listener;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 public final class SimpleCache implements Cache {
+    private static final String TAG = "SimpleCache";
     private final File cacheDir;
     private final CacheEvictor evictor;
     private final CachedContentIndex index;
-    private CacheException initializationException;
     private final HashMap<String, ArrayList<Listener>> listeners;
-    private final HashMap<String, CacheSpan> lockedSpans;
     private long totalSpace;
 
     public SimpleCache(File cacheDir, CacheEvictor evictor) {
@@ -39,7 +38,6 @@ public final class SimpleCache implements Cache {
         this.totalSpace = 0;
         this.cacheDir = cacheDir;
         this.evictor = evictor;
-        this.lockedSpans = new HashMap();
         this.index = index;
         this.listeners = new HashMap();
         final ConditionVariable conditionVariable = new ConditionVariable();
@@ -47,11 +45,7 @@ public final class SimpleCache implements Cache {
             public void run() {
                 synchronized (SimpleCache.this) {
                     conditionVariable.open();
-                    try {
-                        SimpleCache.this.initialize();
-                    } catch (CacheException e) {
-                        SimpleCache.this.initializationException = e;
-                    }
+                    SimpleCache.this.initialize();
                     SimpleCache.this.evictor.onCacheInitialized();
                 }
             }
@@ -80,14 +74,14 @@ public final class SimpleCache implements Cache {
     }
 
     public synchronized NavigableSet<CacheSpan> getCachedSpans(String key) {
-        NavigableSet<CacheSpan> navigableSet;
+        NavigableSet<CacheSpan> treeSet;
         CachedContent cachedContent = this.index.get(key);
         if (cachedContent == null || cachedContent.isEmpty()) {
-            navigableSet = null;
+            treeSet = new TreeSet();
         } else {
-            navigableSet = new TreeSet(cachedContent.getSpans());
+            treeSet = new TreeSet(cachedContent.getSpans());
         }
-        return navigableSet;
+        return treeSet;
     }
 
     public synchronized Set<String> getKeys() {
@@ -111,43 +105,54 @@ public final class SimpleCache implements Cache {
 
     public synchronized SimpleCacheSpan startReadWriteNonBlocking(String key, long position) throws CacheException {
         SimpleCacheSpan newCacheSpan;
-        if (this.initializationException != null) {
-            throw this.initializationException;
-        }
         SimpleCacheSpan cacheSpan = getSpan(key, position);
         if (cacheSpan.isCached) {
             newCacheSpan = this.index.get(key).touch(cacheSpan);
             notifySpanTouched(cacheSpan, newCacheSpan);
-        } else if (this.lockedSpans.containsKey(key)) {
-            newCacheSpan = null;
         } else {
-            this.lockedSpans.put(key, cacheSpan);
-            newCacheSpan = cacheSpan;
+            CachedContent cachedContent = this.index.getOrAdd(key);
+            if (cachedContent.isLocked()) {
+                newCacheSpan = null;
+            } else {
+                cachedContent.setLocked(true);
+                newCacheSpan = cacheSpan;
+            }
         }
         return newCacheSpan;
     }
 
     public synchronized File startFile(String key, long position, long maxLength) throws CacheException {
-        Assertions.checkState(this.lockedSpans.containsKey(key));
+        CachedContent cachedContent;
+        cachedContent = this.index.get(key);
+        Assertions.checkNotNull(cachedContent);
+        Assertions.checkState(cachedContent.isLocked());
         if (!this.cacheDir.exists()) {
             removeStaleSpansAndCachedContents();
             this.cacheDir.mkdirs();
         }
         this.evictor.onStartFile(this, key, position, maxLength);
-        return SimpleCacheSpan.getCacheFile(this.cacheDir, this.index.assignIdForKey(key), position, System.currentTimeMillis());
+        return SimpleCacheSpan.getCacheFile(this.cacheDir, cachedContent.id, position, System.currentTimeMillis());
     }
 
     public synchronized void commitFile(File file) throws CacheException {
         boolean z = true;
         synchronized (this) {
+            boolean z2;
             SimpleCacheSpan span = SimpleCacheSpan.createCacheEntry(file, this.index);
-            Assertions.checkState(span != null);
-            Assertions.checkState(this.lockedSpans.containsKey(span.key));
+            if (span != null) {
+                z2 = true;
+            } else {
+                z2 = false;
+            }
+            Assertions.checkState(z2);
+            CachedContent cachedContent = this.index.get(span.key);
+            Assertions.checkNotNull(cachedContent);
+            Assertions.checkState(cachedContent.isLocked());
             if (file.exists()) {
                 if (file.length() == 0) {
                     file.delete();
                 } else {
-                    Long length = Long.valueOf(getContentLength(span.key));
+                    Long length = Long.valueOf(cachedContent.getLength());
                     if (length.longValue() != -1) {
                         if (span.position + span.length > length.longValue()) {
                             z = false;
@@ -163,7 +168,10 @@ public final class SimpleCache implements Cache {
     }
 
     public synchronized void releaseHoleSpan(CacheSpan holeSpan) {
-        Assertions.checkState(holeSpan == this.lockedSpans.remove(holeSpan.key));
+        CachedContent cachedContent = this.index.get(holeSpan.key);
+        Assertions.checkNotNull(cachedContent);
+        Assertions.checkState(cachedContent.isLocked());
+        cachedContent.setLocked(false);
         notifyAll();
     }
 
@@ -181,7 +189,7 @@ public final class SimpleCache implements Cache {
         }
     }
 
-    private void initialize() throws CacheException {
+    private void initialize() {
         if (this.cacheDir.exists()) {
             this.index.load();
             File[] files = this.cacheDir.listFiles();
@@ -197,8 +205,13 @@ public final class SimpleCache implements Cache {
                     }
                 }
                 this.index.removeEmpty();
-                this.index.store();
-                return;
+                try {
+                    this.index.store();
+                    return;
+                } catch (CacheException e) {
+                    Log.e(TAG, "Storing index file failed", e);
+                    return;
+                }
             }
             return;
         }
@@ -206,7 +219,7 @@ public final class SimpleCache implements Cache {
     }
 
     private void addSpan(SimpleCacheSpan span) {
-        this.index.add(span.key).addSpan(span);
+        this.index.getOrAdd(span.key).addSpan(span);
         this.totalSpace += span.length;
         notifySpanAdded(span);
     }
@@ -217,10 +230,8 @@ public final class SimpleCache implements Cache {
             this.totalSpace -= span.length;
             if (removeEmptyCachedContent) {
                 try {
-                    if (cachedContent.isEmpty()) {
-                        this.index.removeEmpty(cachedContent.key);
-                        this.index.store();
-                    }
+                    this.index.maybeRemove(cachedContent.key);
+                    this.index.store();
                 } catch (Throwable th) {
                     notifySpanRemoved(span);
                 }
@@ -234,7 +245,7 @@ public final class SimpleCache implements Cache {
     }
 
     private void removeStaleSpansAndCachedContents() throws CacheException {
-        LinkedList<CacheSpan> spansToBeRemoved = new LinkedList();
+        ArrayList<CacheSpan> spansToBeRemoved = new ArrayList();
         for (CachedContent cachedContent : this.index.getAll()) {
             Iterator it = cachedContent.getSpans().iterator();
             while (it.hasNext()) {
@@ -244,9 +255,8 @@ public final class SimpleCache implements Cache {
                 }
             }
         }
-        Iterator it2 = spansToBeRemoved.iterator();
-        while (it2.hasNext()) {
-            removeSpan((CacheSpan) it2.next(), false);
+        for (int i = 0; i < spansToBeRemoved.size(); i++) {
+            removeSpan((CacheSpan) spansToBeRemoved.get(i), false);
         }
         this.index.removeEmpty();
         this.index.store();
@@ -285,14 +295,14 @@ public final class SimpleCache implements Cache {
     public synchronized boolean isCached(String key, long position, long length) {
         boolean z;
         CachedContent cachedContent = this.index.get(key);
-        z = cachedContent != null && cachedContent.getCachedBytes(position, length) >= length;
+        z = cachedContent != null && cachedContent.getCachedBytesLength(position, length) >= length;
         return z;
     }
 
-    public synchronized long getCachedBytes(String key, long position, long length) {
+    public synchronized long getCachedLength(String key, long position, long length) {
         CachedContent cachedContent;
         cachedContent = this.index.get(key);
-        return cachedContent != null ? cachedContent.getCachedBytes(position, length) : -length;
+        return cachedContent != null ? cachedContent.getCachedBytesLength(position, length) : -length;
     }
 
     public synchronized void setContentLength(String key, long length) throws CacheException {

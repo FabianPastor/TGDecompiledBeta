@@ -11,15 +11,18 @@ import org.telegram.messenger.exoplayer2.util.Util;
 public final class DefaultDataSource implements DataSource {
     private static final String SCHEME_ASSET = "asset";
     private static final String SCHEME_CONTENT = "content";
+    private static final String SCHEME_RAW = "rawresource";
     private static final String SCHEME_RTMP = "rtmp";
     private static final String TAG = "DefaultDataSource";
     private DataSource assetDataSource;
     private final DataSource baseDataSource;
     private DataSource contentDataSource;
     private final Context context;
+    private DataSource dataSchemeDataSource;
     private DataSource dataSource;
     private DataSource fileDataSource;
     private final TransferListener<? super DataSource> listener;
+    private DataSource rawResourceDataSource;
     private DataSource rtmpDataSource;
 
     public DefaultDataSource(Context context, TransferListener<? super DataSource> listener, String userAgent, boolean allowCrossProtocolRedirects) {
@@ -51,6 +54,10 @@ public final class DefaultDataSource implements DataSource {
             this.dataSource = getContentDataSource();
         } else if (SCHEME_RTMP.equals(scheme)) {
             this.dataSource = getRtmpDataSource();
+        } else if (DataSchemeDataSource.SCHEME_DATA.equals(scheme)) {
+            this.dataSource = getDataSchemeDataSource();
+        } else if ("rawresource".equals(scheme)) {
+            this.dataSource = getRawResourceDataSource();
         } else {
             this.dataSource = this.baseDataSource;
         }
@@ -116,5 +123,19 @@ public final class DefaultDataSource implements DataSource {
             }
         }
         return this.rtmpDataSource;
+    }
+
+    private DataSource getDataSchemeDataSource() {
+        if (this.dataSchemeDataSource == null) {
+            this.dataSchemeDataSource = new DataSchemeDataSource();
+        }
+        return this.dataSchemeDataSource;
+    }
+
+    private DataSource getRawResourceDataSource() {
+        if (this.rawResourceDataSource == null) {
+            this.rawResourceDataSource = new RawResourceDataSource(this.context, this.listener);
+        }
+        return this.rawResourceDataSource;
     }
 }

@@ -47,7 +47,6 @@ import org.telegram.messenger.MediaController.SavedFilterState;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
@@ -200,7 +199,7 @@ public class PhotoFilterView extends FrameLayout {
 
         public float[] interpolateCurve() {
             int a;
-            float[] points = new float[]{-0.001f, this.blacksLevel / 100.0f, 0.0f, this.blacksLevel / 100.0f, 0.25f, this.shadowsLevel / 100.0f, 0.5f, this.midtonesLevel / 100.0f, AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION, this.highlightsLevel / 100.0f, 1.0f, this.whitesLevel / 100.0f, 1.001f, this.whitesLevel / 100.0f};
+            float[] points = new float[]{-0.001f, this.blacksLevel / 100.0f, 0.0f, this.blacksLevel / 100.0f, 0.25f, this.shadowsLevel / 100.0f, 0.5f, this.midtonesLevel / 100.0f, 0.75f, this.highlightsLevel / 100.0f, 1.0f, this.whitesLevel / 100.0f, 1.001f, this.whitesLevel / 100.0f};
             ArrayList<Float> dataPoints = new ArrayList(PhotoFilterView.curveGranularity);
             ArrayList<Float> interpolatedPoints = new ArrayList(PhotoFilterView.curveGranularity);
             interpolatedPoints.add(Float.valueOf(points[0]));
@@ -1691,7 +1690,7 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     private float getHighlightsValue() {
-        return ((this.highlightsValue * AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION) + 100.0f) / 100.0f;
+        return ((this.highlightsValue * 0.75f) + 100.0f) / 100.0f;
     }
 
     private float getEnhanceValue() {

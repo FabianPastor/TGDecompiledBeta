@@ -6,6 +6,8 @@ import java.util.Collections;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
+import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
+import org.telegram.messenger.exoplayer2.extractor.SeekPoint;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.messenger.exoplayer2.util.FlacStreamInfo;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -66,8 +68,14 @@ final class FlacReader extends StreamReader {
             return true;
         }
 
-        public long getPosition(long timeUs) {
-            return this.firstFrameOffset + this.seekPointOffsets[Util.binarySearchFloor(this.seekPointGranules, FlacReader.this.convertTimeToGranule(timeUs), true, true)];
+        public SeekPoints getSeekPoints(long timeUs) {
+            int index = Util.binarySearchFloor(this.seekPointGranules, FlacReader.this.convertTimeToGranule(timeUs), true, true);
+            long seekTimeUs = FlacReader.this.convertGranuleToTime(this.seekPointGranules[index]);
+            SeekPoint seekPoint = new SeekPoint(seekTimeUs, this.firstFrameOffset + this.seekPointOffsets[index]);
+            if (seekTimeUs >= timeUs || index == this.seekPointGranules.length - 1) {
+                return new SeekPoints(seekPoint);
+            }
+            return new SeekPoints(seekPoint, new SeekPoint(FlacReader.this.convertGranuleToTime(this.seekPointGranules[index + 1]), this.firstFrameOffset + this.seekPointOffsets[index + 1]));
         }
 
         public long getDurationUs() {

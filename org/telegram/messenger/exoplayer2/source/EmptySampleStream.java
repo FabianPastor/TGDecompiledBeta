@@ -17,6 +17,7 @@ public final class EmptySampleStream implements SampleStream {
         return -4;
     }
 
-    public void skipData(long positionUs) {
+    public int skipData(long positionUs) {
+        return 0;
     }
 }

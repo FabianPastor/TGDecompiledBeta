@@ -389,6 +389,14 @@ public class PipVideoView {
         }
     }
 
+    public void updatePlayButton() {
+        if (this.controlsView instanceof MiniControlsView) {
+            MiniControlsView miniControlsView = this.controlsView;
+            miniControlsView.updatePlayButton();
+            miniControlsView.invalidate();
+        }
+    }
+
     private static int getSideCoord(boolean isX, int side, float p, int sideSize) {
         int total;
         int result;

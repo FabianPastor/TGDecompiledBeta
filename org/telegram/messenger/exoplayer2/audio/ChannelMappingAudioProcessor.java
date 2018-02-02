@@ -64,6 +64,10 @@ final class ChannelMappingAudioProcessor implements AudioProcessor {
         return 2;
     }
 
+    public int getOutputSampleRateHz() {
+        return this.sampleRateHz;
+    }
+
     public void queueInput(ByteBuffer inputBuffer) {
         int position = inputBuffer.position();
         int limit = inputBuffer.limit();

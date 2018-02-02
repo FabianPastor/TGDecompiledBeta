@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.util.Util;
 
-final class WebvttCssStyle {
+public final class WebvttCssStyle {
     public static final int FONT_SIZE_UNIT_EM = 2;
     public static final int FONT_SIZE_UNIT_PERCENT = 3;
     public static final int FONT_SIZE_UNIT_PIXEL = 1;

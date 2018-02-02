@@ -425,10 +425,12 @@ public class ProfileSearchCell extends BaseCell {
                 this.nameLayout.draw(canvas);
                 canvas.restore();
                 if (this.drawCheck) {
-                    if (LocaleController.isRTL) {
-                        x = (int) (((((double) this.nameLeft) + (((double) this.nameWidth) - Math.ceil((double) this.nameLayout.getLineWidth(0)))) - ((double) AndroidUtilities.dp(6.0f))) - ((double) Theme.dialogs_verifiedDrawable.getIntrinsicWidth()));
-                    } else {
+                    if (!LocaleController.isRTL) {
                         x = (int) ((((float) this.nameLeft) + this.nameLayout.getLineRight(0)) + ((float) AndroidUtilities.dp(6.0f)));
+                    } else if (this.nameLayout.getLineLeft(0) == 0.0f) {
+                        x = (this.nameLeft - AndroidUtilities.dp(6.0f)) - Theme.dialogs_verifiedDrawable.getIntrinsicWidth();
+                    } else {
+                        x = (int) (((((double) (this.nameLeft + this.nameWidth)) - Math.ceil((double) this.nameLayout.getLineWidth(0))) - ((double) AndroidUtilities.dp(6.0f))) - ((double) Theme.dialogs_verifiedDrawable.getIntrinsicWidth()));
                     }
                     BaseCell.setDrawableBounds(Theme.dialogs_verifiedDrawable, x, this.nameLockTop);
                     BaseCell.setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, x, this.nameLockTop);

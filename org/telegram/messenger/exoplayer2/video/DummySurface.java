@@ -16,15 +16,22 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 @TargetApi(17)
 public final class DummySurface extends Surface {
     private static final int EGL_PROTECTED_CONTENT_EXT = 12992;
+    private static final String EXTENSION_PROTECTED_CONTENT = "EGL_EXT_protected_content";
+    private static final String EXTENSION_SURFACELESS_CONTEXT = "EGL_KHR_surfaceless_context";
+    private static final int SECURE_MODE_NONE = 0;
+    private static final int SECURE_MODE_PROTECTED_PBUFFER = 2;
+    private static final int SECURE_MODE_SURFACELESS_CONTEXT = 1;
     private static final String TAG = "DummySurface";
-    private static boolean secureSupported;
-    private static boolean secureSupportedInitialized;
+    private static int secureMode;
+    private static boolean secureModeInitialized;
     public final boolean secure;
     private final DummySurfaceThread thread;
     private boolean threadReleased;
@@ -47,17 +54,12 @@ public final class DummySurface extends Surface {
             super("dummySurface");
         }
 
-        public DummySurface init(boolean secure) {
-            int i = 1;
+        public DummySurface init(int secureMode) {
             start();
             this.handler = new Handler(getLooper(), this);
             boolean wasInterrupted = false;
             synchronized (this) {
-                Handler handler = this.handler;
-                if (!secure) {
-                    i = 0;
-                }
-                handler.obtainMessage(1, i, 0).sendToTarget();
+                this.handler.obtainMessage(1, secureMode, 0).sendToTarget();
                 while (this.surface == null && this.initException == null && this.initError == null) {
                     try {
                         wait();
@@ -90,7 +92,7 @@ public final class DummySurface extends Surface {
             switch (msg.what) {
                 case 1:
                     try {
-                        initInternal(msg.arg1 != 0);
+                        initInternal(msg.arg1);
                         synchronized (this) {
                             notify();
                         }
@@ -131,9 +133,9 @@ public final class DummySurface extends Surface {
             return true;
         }
 
-        private void initInternal(boolean secure) {
+        private void initInternal(int secureMode) {
             int[] glAttributes;
-            int[] pbufferAttributes;
+            EGLSurface surface;
             this.display = EGL14.eglGetDisplay(0);
             Assertions.checkState(this.display != null, "eglGetDisplay failed");
             int[] version = new int[2];
@@ -143,25 +145,31 @@ public final class DummySurface extends Surface {
             boolean z = EGL14.eglChooseConfig(this.display, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12327, 12344, 12339, 4, 12344}, 0, configs, 0, 1, numConfigs, 0) && numConfigs[0] > 0 && configs[0] != null;
             Assertions.checkState(z, "eglChooseConfig failed");
             EGLConfig config = configs[0];
-            if (secure) {
-                glAttributes = new int[]{12440, 2, DummySurface.EGL_PROTECTED_CONTENT_EXT, 1, 12344};
-            } else {
+            if (secureMode == 0) {
                 glAttributes = new int[]{12440, 2, 12344};
+            } else {
+                glAttributes = new int[]{12440, 2, DummySurface.EGL_PROTECTED_CONTENT_EXT, 1, 12344};
             }
             this.context = EGL14.eglCreateContext(this.display, config, EGL14.EGL_NO_CONTEXT, glAttributes, 0);
             Assertions.checkState(this.context != null, "eglCreateContext failed");
-            if (secure) {
-                pbufferAttributes = new int[]{12375, 1, 12374, 1, DummySurface.EGL_PROTECTED_CONTENT_EXT, 1, 12344};
+            if (secureMode == 1) {
+                surface = EGL14.EGL_NO_SURFACE;
             } else {
-                pbufferAttributes = new int[]{12375, 1, 12374, 1, 12344};
+                int[] pbufferAttributes;
+                if (secureMode == 2) {
+                    pbufferAttributes = new int[]{12375, 1, 12374, 1, DummySurface.EGL_PROTECTED_CONTENT_EXT, 1, 12344};
+                } else {
+                    pbufferAttributes = new int[]{12375, 1, 12374, 1, 12344};
+                }
+                this.pbuffer = EGL14.eglCreatePbufferSurface(this.display, config, pbufferAttributes, 0);
+                Assertions.checkState(this.pbuffer != null, "eglCreatePbufferSurface failed");
+                surface = this.pbuffer;
             }
-            this.pbuffer = EGL14.eglCreatePbufferSurface(this.display, config, pbufferAttributes, 0);
-            Assertions.checkState(this.pbuffer != null, "eglCreatePbufferSurface failed");
-            Assertions.checkState(EGL14.eglMakeCurrent(this.display, this.pbuffer, this.pbuffer, this.context), "eglMakeCurrent failed");
+            Assertions.checkState(EGL14.eglMakeCurrent(this.display, surface, surface, this.context), "eglMakeCurrent failed");
             GLES20.glGenTextures(1, this.textureIdHolder, 0);
             this.surfaceTexture = new SurfaceTexture(this.textureIdHolder[0]);
             this.surfaceTexture.setOnFrameAvailableListener(this);
-            this.surface = new DummySurface(this, this.surfaceTexture, secure);
+            this.surface = new DummySurface(this, this.surfaceTexture, secureMode != 0);
         }
 
         private void releaseInternal() {
@@ -197,26 +205,39 @@ public final class DummySurface extends Surface {
         }
     }
 
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface SecureMode {
+    }
+
     public static synchronized boolean isSecureSupported(Context context) {
         boolean z = true;
         synchronized (DummySurface.class) {
-            if (!secureSupportedInitialized) {
-                if (Util.SDK_INT < 24 || !enableSecureDummySurfaceV24(context)) {
-                    z = false;
-                }
-                secureSupported = z;
-                secureSupportedInitialized = true;
+            if (!secureModeInitialized) {
+                secureMode = Util.SDK_INT < 24 ? 0 : getSecureModeV24(context);
+                secureModeInitialized = true;
             }
-            z = secureSupported;
+            if (secureMode == 0) {
+                z = false;
+            }
         }
         return z;
     }
 
     public static DummySurface newInstanceV17(Context context, boolean secure) {
+        boolean z;
+        int i = 0;
         assertApiLevel17OrHigher();
-        boolean z = !secure || isSecureSupported(context);
+        if (!secure || isSecureSupported(context)) {
+            z = true;
+        } else {
+            z = false;
+        }
         Assertions.checkState(z);
-        return new DummySurfaceThread().init(secure);
+        DummySurfaceThread thread = new DummySurfaceThread();
+        if (secure) {
+            i = secureMode;
+        }
+        return thread.init(i);
     }
 
     private DummySurface(DummySurfaceThread thread, SurfaceTexture surfaceTexture, boolean secure) {
@@ -242,17 +263,17 @@ public final class DummySurface extends Surface {
     }
 
     @TargetApi(24)
-    private static boolean enableSecureDummySurfaceV24(Context context) {
+    private static int getSecureModeV24(Context context) {
+        if (Util.SDK_INT < 26 && ("samsung".equals(Util.MANUFACTURER) || "XT1650".equals(Util.MODEL))) {
+            return 0;
+        }
+        if (Util.SDK_INT < 26 && !context.getPackageManager().hasSystemFeature("android.hardware.vr.high_performance")) {
+            return 0;
+        }
         String eglExtensions = EGL14.eglQueryString(EGL14.eglGetDisplay(0), 12373);
-        if (eglExtensions == null || !eglExtensions.contains("EGL_EXT_protected_content")) {
-            return false;
+        if (eglExtensions == null || !eglExtensions.contains(EXTENSION_PROTECTED_CONTENT)) {
+            return 0;
         }
-        if (Util.SDK_INT == 24 && "samsung".equals(Util.MANUFACTURER)) {
-            return false;
-        }
-        if (Util.SDK_INT >= 26 || context.getPackageManager().hasSystemFeature("android.hardware.vr.high_performance")) {
-            return true;
-        }
-        return false;
+        return eglExtensions.contains(EXTENSION_SURFACELESS_CONTEXT) ? 1 : 2;
     }
 }

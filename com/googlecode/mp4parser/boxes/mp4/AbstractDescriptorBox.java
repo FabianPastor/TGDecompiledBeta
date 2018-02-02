@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.aspectj.lang.JoinPoint.StaticPart;
 import org.aspectj.runtime.reflect.Factory;
+import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 
 public class AbstractDescriptorBox extends AbstractFullBox {
     private static final /* synthetic */ StaticPart ajc$tjp_0 = null;
@@ -27,7 +28,7 @@ public class AbstractDescriptorBox extends AbstractFullBox {
         ajc$tjp_1 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "getDescriptor", "com.googlecode.mp4parser.boxes.mp4.AbstractDescriptorBox", TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, "com.googlecode.mp4parser.boxes.mp4.objectdescriptors.BaseDescriptor"), 58);
         ajc$tjp_2 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "getDescriptorAsString", "com.googlecode.mp4parser.boxes.mp4.AbstractDescriptorBox", TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, "java.lang.String"), 62);
         ajc$tjp_3 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "setDescriptor", "com.googlecode.mp4parser.boxes.mp4.AbstractDescriptorBox", "com.googlecode.mp4parser.boxes.mp4.objectdescriptors.BaseDescriptor", "descriptor", TtmlNode.ANONYMOUS_REGION_ID, "void"), 66);
-        ajc$tjp_4 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "setData", "com.googlecode.mp4parser.boxes.mp4.AbstractDescriptorBox", "java.nio.ByteBuffer", "data", TtmlNode.ANONYMOUS_REGION_ID, "void"), 70);
+        ajc$tjp_4 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "setData", "com.googlecode.mp4parser.boxes.mp4.AbstractDescriptorBox", "java.nio.ByteBuffer", DataSchemeDataSource.SCHEME_DATA, TtmlNode.ANONYMOUS_REGION_ID, "void"), 70);
     }
 
     static {

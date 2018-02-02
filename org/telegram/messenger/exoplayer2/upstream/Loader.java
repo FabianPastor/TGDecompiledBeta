@@ -152,8 +152,14 @@ public final class Loader implements LoaderErrorThrower {
                             this.callback.onLoadCanceled(this.loadable, nowMs, durationMs, false);
                             return;
                         case 2:
-                            this.callback.onLoadCompleted(this.loadable, nowMs, durationMs);
-                            return;
+                            try {
+                                this.callback.onLoadCompleted(this.loadable, nowMs, durationMs);
+                                return;
+                            } catch (RuntimeException e) {
+                                Log.e(TAG, "Unexpected exception handling load completed", e);
+                                Loader.this.fatalError = new UnexpectedLoaderException(e);
+                                return;
+                            }
                         case 3:
                             this.currentError = (IOException) msg.obj;
                             int retryAction = this.callback.onLoadError(this.loadable, nowMs, durationMs, this.currentError);
@@ -214,7 +220,9 @@ public final class Loader implements LoaderErrorThrower {
         }
 
         public void run() {
-            sendEmptyMessage(0);
+            if (getLooper().getThread().isAlive()) {
+                sendEmptyMessage(0);
+            }
         }
 
         public void handleMessage(Message msg) {

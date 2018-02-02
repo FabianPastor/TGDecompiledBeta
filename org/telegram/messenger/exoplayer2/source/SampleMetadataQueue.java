@@ -9,7 +9,7 @@ import org.telegram.messenger.exoplayer2.util.Util;
 
 final class SampleMetadataQueue {
     private static final int SAMPLE_CAPACITY_INCREMENT = 1000;
-    private int absoluteStartIndex;
+    private int absoluteFirstIndex;
     private int capacity = SAMPLE_CAPACITY_INCREMENT;
     private CryptoData[] cryptoDatas = new CryptoData[this.capacity];
     private int[] flags = new int[this.capacity];
@@ -19,7 +19,7 @@ final class SampleMetadataQueue {
     private int length;
     private long[] offsets = new long[this.capacity];
     private int readPosition;
-    private int relativeStartIndex;
+    private int relativeFirstIndex;
     private int[] sizes = new int[this.capacity];
     private int[] sourceIds = new int[this.capacity];
     private long[] timesUs = new long[this.capacity];
@@ -36,8 +36,8 @@ final class SampleMetadataQueue {
 
     public void reset(boolean resetUpstreamFormat) {
         this.length = 0;
-        this.absoluteStartIndex = 0;
-        this.relativeStartIndex = 0;
+        this.absoluteFirstIndex = 0;
+        this.relativeFirstIndex = 0;
         this.readPosition = 0;
         this.upstreamKeyframeRequired = true;
         this.largestDiscardedTimestampUs = Long.MIN_VALUE;
@@ -49,7 +49,7 @@ final class SampleMetadataQueue {
     }
 
     public int getWriteIndex() {
-        return this.absoluteStartIndex + this.length;
+        return this.absoluteFirstIndex + this.length;
     }
 
     public long discardUpstreamSamples(int discardFromIndex) {
@@ -69,8 +69,12 @@ final class SampleMetadataQueue {
         this.upstreamSourceId = sourceId;
     }
 
+    public int getFirstIndex() {
+        return this.absoluteFirstIndex;
+    }
+
     public int getReadIndex() {
-        return this.absoluteStartIndex + this.readPosition;
+        return this.absoluteFirstIndex + this.readPosition;
     }
 
     public int peekSourceId() {
@@ -87,6 +91,10 @@ final class SampleMetadataQueue {
 
     public synchronized long getLargestQueuedTimestampUs() {
         return this.largestQueuedTimestampUs;
+    }
+
+    public synchronized long getFirstTimestampUs() {
+        return this.length == 0 ? Long.MIN_VALUE : this.timesUs[this.relativeFirstIndex];
     }
 
     public synchronized void rewind() {
@@ -123,32 +131,43 @@ final class SampleMetadataQueue {
         return i;
     }
 
-    public synchronized boolean advanceTo(long timeUs, boolean toKeyframe, boolean allowTimeBeyondBuffer) {
-        boolean z;
+    public synchronized int advanceTo(long timeUs, boolean toKeyframe, boolean allowTimeBeyondBuffer) {
+        int i;
         int relativeReadIndex = getRelativeIndex(this.readPosition);
         if (!hasNextSample() || timeUs < this.timesUs[relativeReadIndex] || (timeUs > this.largestQueuedTimestampUs && !allowTimeBeyondBuffer)) {
+            i = -1;
+        } else {
+            i = findSampleBefore(relativeReadIndex, this.length - this.readPosition, timeUs, toKeyframe);
+            if (i == -1) {
+                i = -1;
+            } else {
+                this.readPosition += i;
+            }
+        }
+        return i;
+    }
+
+    public synchronized int advanceToEnd() {
+        int skipCount;
+        skipCount = this.length - this.readPosition;
+        this.readPosition = this.length;
+        return skipCount;
+    }
+
+    public synchronized boolean setReadPosition(int sampleIndex) {
+        boolean z;
+        if (this.absoluteFirstIndex > sampleIndex || sampleIndex > this.absoluteFirstIndex + this.length) {
             z = false;
         } else {
-            int offset = findSampleBefore(relativeReadIndex, this.length - this.readPosition, timeUs, toKeyframe);
-            if (offset == -1) {
-                z = false;
-            } else {
-                this.readPosition += offset;
-                z = true;
-            }
+            this.readPosition = sampleIndex - this.absoluteFirstIndex;
+            z = true;
         }
         return z;
     }
 
-    public synchronized void advanceToEnd() {
-        if (hasNextSample()) {
-            this.readPosition = this.length;
-        }
-    }
-
     public synchronized long discardTo(long timeUs, boolean toKeyframe, boolean stopAtReadPosition) {
         long j;
-        if (this.length == 0 || timeUs < this.timesUs[this.relativeStartIndex]) {
+        if (this.length == 0 || timeUs < this.timesUs[this.relativeFirstIndex]) {
             j = -1;
         } else {
             int searchLength;
@@ -156,7 +175,7 @@ final class SampleMetadataQueue {
             if (stopAtReadPosition) {
                 if (this.readPosition != this.length) {
                     searchLength = this.readPosition + 1;
-                    discardCount = findSampleBefore(this.relativeStartIndex, searchLength, timeUs, toKeyframe);
+                    discardCount = findSampleBefore(this.relativeFirstIndex, searchLength, timeUs, toKeyframe);
                     if (discardCount != -1) {
                         j = -1;
                     } else {
@@ -165,7 +184,7 @@ final class SampleMetadataQueue {
                 }
             }
             searchLength = this.length;
-            discardCount = findSampleBefore(this.relativeStartIndex, searchLength, timeUs, toKeyframe);
+            discardCount = findSampleBefore(this.relativeFirstIndex, searchLength, timeUs, toKeyframe);
             if (discardCount != -1) {
                 j = discardSamples(discardCount);
             } else {
@@ -237,15 +256,15 @@ final class SampleMetadataQueue {
             int[] newSizes = new int[newCapacity];
             CryptoData[] newCryptoDatas = new CryptoData[newCapacity];
             Format[] newFormats = new Format[newCapacity];
-            int beforeWrap = this.capacity - this.relativeStartIndex;
-            System.arraycopy(this.offsets, this.relativeStartIndex, newOffsets, 0, beforeWrap);
-            System.arraycopy(this.timesUs, this.relativeStartIndex, newTimesUs, 0, beforeWrap);
-            System.arraycopy(this.flags, this.relativeStartIndex, newFlags, 0, beforeWrap);
-            System.arraycopy(this.sizes, this.relativeStartIndex, newSizes, 0, beforeWrap);
-            System.arraycopy(this.cryptoDatas, this.relativeStartIndex, newCryptoDatas, 0, beforeWrap);
-            System.arraycopy(this.formats, this.relativeStartIndex, newFormats, 0, beforeWrap);
-            System.arraycopy(this.sourceIds, this.relativeStartIndex, newSourceIds, 0, beforeWrap);
-            int afterWrap = this.relativeStartIndex;
+            int beforeWrap = this.capacity - this.relativeFirstIndex;
+            System.arraycopy(this.offsets, this.relativeFirstIndex, newOffsets, 0, beforeWrap);
+            System.arraycopy(this.timesUs, this.relativeFirstIndex, newTimesUs, 0, beforeWrap);
+            System.arraycopy(this.flags, this.relativeFirstIndex, newFlags, 0, beforeWrap);
+            System.arraycopy(this.sizes, this.relativeFirstIndex, newSizes, 0, beforeWrap);
+            System.arraycopy(this.cryptoDatas, this.relativeFirstIndex, newCryptoDatas, 0, beforeWrap);
+            System.arraycopy(this.formats, this.relativeFirstIndex, newFormats, 0, beforeWrap);
+            System.arraycopy(this.sourceIds, this.relativeFirstIndex, newSourceIds, 0, beforeWrap);
+            int afterWrap = this.relativeFirstIndex;
             System.arraycopy(this.offsets, 0, newOffsets, beforeWrap, afterWrap);
             System.arraycopy(this.timesUs, 0, newTimesUs, beforeWrap, afterWrap);
             System.arraycopy(this.flags, 0, newFlags, beforeWrap, afterWrap);
@@ -260,7 +279,7 @@ final class SampleMetadataQueue {
             this.cryptoDatas = newCryptoDatas;
             this.formats = newFormats;
             this.sourceIds = newSourceIds;
-            this.relativeStartIndex = 0;
+            this.relativeFirstIndex = 0;
             this.length = this.capacity;
             this.capacity = newCapacity;
         }
@@ -289,7 +308,7 @@ final class SampleMetadataQueue {
                         relativeSampleIndex = this.capacity - 1;
                     }
                 }
-                discardUpstreamSamples(this.absoluteStartIndex + retainCount);
+                discardUpstreamSamples(this.absoluteFirstIndex + retainCount);
             }
         }
         return z;
@@ -313,19 +332,19 @@ final class SampleMetadataQueue {
     private long discardSamples(int discardCount) {
         this.largestDiscardedTimestampUs = Math.max(this.largestDiscardedTimestampUs, getLargestTimestamp(discardCount));
         this.length -= discardCount;
-        this.absoluteStartIndex += discardCount;
-        this.relativeStartIndex += discardCount;
-        if (this.relativeStartIndex >= this.capacity) {
-            this.relativeStartIndex -= this.capacity;
+        this.absoluteFirstIndex += discardCount;
+        this.relativeFirstIndex += discardCount;
+        if (this.relativeFirstIndex >= this.capacity) {
+            this.relativeFirstIndex -= this.capacity;
         }
         this.readPosition -= discardCount;
         if (this.readPosition < 0) {
             this.readPosition = 0;
         }
         if (this.length != 0) {
-            return this.offsets[this.relativeStartIndex];
+            return this.offsets[this.relativeFirstIndex];
         }
-        int relativeLastDiscardIndex = (this.relativeStartIndex == 0 ? this.capacity : this.relativeStartIndex) - 1;
+        int relativeLastDiscardIndex = (this.relativeFirstIndex == 0 ? this.capacity : this.relativeFirstIndex) - 1;
         return this.offsets[relativeLastDiscardIndex] + ((long) this.sizes[relativeLastDiscardIndex]);
     }
 
@@ -349,7 +368,7 @@ final class SampleMetadataQueue {
     }
 
     private int getRelativeIndex(int offset) {
-        int relativeIndex = this.relativeStartIndex + offset;
+        int relativeIndex = this.relativeFirstIndex + offset;
         return relativeIndex < this.capacity ? relativeIndex : relativeIndex - this.capacity;
     }
 }

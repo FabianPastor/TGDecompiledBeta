@@ -39,7 +39,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.InputDocument;
@@ -1233,7 +1232,7 @@ Error: java.util.NoSuchElementException
                 break;
             }
         }
-        StickerPosition defaultPosition = new StickerPosition(centerPositionForEntity(), AdaptiveTrackSelection.DEFAULT_BANDWIDTH_FRACTION, 0.0f);
+        StickerPosition defaultPosition = new StickerPosition(centerPositionForEntity(), 0.75f, 0.0f);
         if (maskCoords == null || this.faces == null || this.faces.size() == 0) {
             return defaultPosition;
         }

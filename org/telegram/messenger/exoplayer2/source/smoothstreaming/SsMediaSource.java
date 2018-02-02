@@ -11,14 +11,16 @@ import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.Timeline;
-import org.telegram.messenger.exoplayer2.source.AdaptiveMediaSourceEventListener;
-import org.telegram.messenger.exoplayer2.source.AdaptiveMediaSourceEventListener.EventDispatcher;
+import org.telegram.messenger.exoplayer2.source.CompositeSequenceableLoaderFactory;
+import org.telegram.messenger.exoplayer2.source.DefaultCompositeSequenceableLoaderFactory;
 import org.telegram.messenger.exoplayer2.source.MediaPeriod;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
 import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
+import org.telegram.messenger.exoplayer2.source.MediaSourceEventListener;
+import org.telegram.messenger.exoplayer2.source.MediaSourceEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline;
-import org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory;
+import org.telegram.messenger.exoplayer2.source.ads.AdsMediaSource.MediaSourceFactory;
 import org.telegram.messenger.exoplayer2.source.smoothstreaming.manifest.SsManifest;
 import org.telegram.messenger.exoplayer2.source.smoothstreaming.manifest.SsManifest.StreamElement;
 import org.telegram.messenger.exoplayer2.source.smoothstreaming.manifest.SsManifestParser;
@@ -38,12 +40,13 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
     public static final int DEFAULT_MIN_LOADABLE_RETRY_COUNT = 3;
     private static final int MINIMUM_MANIFEST_REFRESH_PERIOD_MS = 5000;
     private static final long MIN_LIVE_DEFAULT_START_POSITION_US = 5000000;
-    private final Factory chunkSourceFactory;
+    private final org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory chunkSourceFactory;
+    private final CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory;
     private final EventDispatcher eventDispatcher;
     private final long livePresentationDelayMs;
     private SsManifest manifest;
     private DataSource manifestDataSource;
-    private final DataSource.Factory manifestDataSourceFactory;
+    private final org.telegram.messenger.exoplayer2.upstream.DataSource.Factory manifestDataSourceFactory;
     private long manifestLoadStartTimestamp;
     private Loader manifestLoader;
     private LoaderErrorThrower manifestLoaderErrorThrower;
@@ -54,43 +57,110 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
     private final int minLoadableRetryCount;
     private Listener sourceListener;
 
+    public static final class Factory implements MediaSourceFactory {
+        private final org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory chunkSourceFactory;
+        private CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory = new DefaultCompositeSequenceableLoaderFactory();
+        private boolean isCreateCalled;
+        private long livePresentationDelayMs = 30000;
+        private final org.telegram.messenger.exoplayer2.upstream.DataSource.Factory manifestDataSourceFactory;
+        private Parser<? extends SsManifest> manifestParser;
+        private int minLoadableRetryCount = 3;
+
+        public Factory(org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory chunkSourceFactory, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory manifestDataSourceFactory) {
+            this.chunkSourceFactory = (org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory) Assertions.checkNotNull(chunkSourceFactory);
+            this.manifestDataSourceFactory = manifestDataSourceFactory;
+        }
+
+        public Factory setMinLoadableRetryCount(int minLoadableRetryCount) {
+            Assertions.checkState(!this.isCreateCalled);
+            this.minLoadableRetryCount = minLoadableRetryCount;
+            return this;
+        }
+
+        public Factory setLivePresentationDelayMs(long livePresentationDelayMs) {
+            Assertions.checkState(!this.isCreateCalled);
+            this.livePresentationDelayMs = livePresentationDelayMs;
+            return this;
+        }
+
+        public Factory setManifestParser(Parser<? extends SsManifest> manifestParser) {
+            Assertions.checkState(!this.isCreateCalled);
+            this.manifestParser = (Parser) Assertions.checkNotNull(manifestParser);
+            return this;
+        }
+
+        public Factory setCompositeSequenceableLoaderFactory(CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory) {
+            Assertions.checkState(!this.isCreateCalled);
+            this.compositeSequenceableLoaderFactory = (CompositeSequenceableLoaderFactory) Assertions.checkNotNull(compositeSequenceableLoaderFactory);
+            return this;
+        }
+
+        public SsMediaSource createMediaSource(SsManifest manifest, Handler eventHandler, MediaSourceEventListener eventListener) {
+            Assertions.checkArgument(!manifest.isLive);
+            this.isCreateCalled = true;
+            return new SsMediaSource(manifest, null, null, null, this.chunkSourceFactory, this.compositeSequenceableLoaderFactory, this.minLoadableRetryCount, this.livePresentationDelayMs, eventHandler, eventListener);
+        }
+
+        public SsMediaSource createMediaSource(Uri manifestUri) {
+            return createMediaSource(manifestUri, null, null);
+        }
+
+        public SsMediaSource createMediaSource(Uri manifestUri, Handler eventHandler, MediaSourceEventListener eventListener) {
+            this.isCreateCalled = true;
+            if (this.manifestParser == null) {
+                this.manifestParser = new SsManifestParser();
+            }
+            return new SsMediaSource(null, (Uri) Assertions.checkNotNull(manifestUri), this.manifestDataSourceFactory, this.manifestParser, this.chunkSourceFactory, this.compositeSequenceableLoaderFactory, this.minLoadableRetryCount, this.livePresentationDelayMs, eventHandler, eventListener);
+        }
+
+        public int[] getSupportedTypes() {
+            return new int[]{1};
+        }
+    }
+
     static {
         ExoPlayerLibraryInfo.registerModule("goog.exo.smoothstreaming");
     }
 
-    public SsMediaSource(SsManifest manifest, Factory chunkSourceFactory, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
+    @Deprecated
+    public SsMediaSource(SsManifest manifest, org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory chunkSourceFactory, Handler eventHandler, MediaSourceEventListener eventListener) {
         this(manifest, chunkSourceFactory, 3, eventHandler, eventListener);
     }
 
-    public SsMediaSource(SsManifest manifest, Factory chunkSourceFactory, int minLoadableRetryCount, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
-        this(manifest, null, null, null, chunkSourceFactory, minLoadableRetryCount, 30000, eventHandler, eventListener);
+    @Deprecated
+    public SsMediaSource(SsManifest manifest, org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory chunkSourceFactory, int minLoadableRetryCount, Handler eventHandler, MediaSourceEventListener eventListener) {
+        this(manifest, null, null, null, chunkSourceFactory, new DefaultCompositeSequenceableLoaderFactory(), minLoadableRetryCount, 30000, eventHandler, eventListener);
     }
 
-    public SsMediaSource(Uri manifestUri, DataSource.Factory manifestDataSourceFactory, Factory chunkSourceFactory, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
+    @Deprecated
+    public SsMediaSource(Uri manifestUri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory manifestDataSourceFactory, org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory chunkSourceFactory, Handler eventHandler, MediaSourceEventListener eventListener) {
         this(manifestUri, manifestDataSourceFactory, chunkSourceFactory, 3, 30000, eventHandler, eventListener);
     }
 
-    public SsMediaSource(Uri manifestUri, DataSource.Factory manifestDataSourceFactory, Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
+    @Deprecated
+    public SsMediaSource(Uri manifestUri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory manifestDataSourceFactory, org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, MediaSourceEventListener eventListener) {
         this(manifestUri, manifestDataSourceFactory, new SsManifestParser(), chunkSourceFactory, minLoadableRetryCount, livePresentationDelayMs, eventHandler, eventListener);
     }
 
-    public SsMediaSource(Uri manifestUri, DataSource.Factory manifestDataSourceFactory, Parser<? extends SsManifest> manifestParser, Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
-        this(null, manifestUri, manifestDataSourceFactory, manifestParser, chunkSourceFactory, minLoadableRetryCount, livePresentationDelayMs, eventHandler, eventListener);
+    @Deprecated
+    public SsMediaSource(Uri manifestUri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory manifestDataSourceFactory, Parser<? extends SsManifest> manifestParser, org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, MediaSourceEventListener eventListener) {
+        this(null, manifestUri, manifestDataSourceFactory, manifestParser, chunkSourceFactory, new DefaultCompositeSequenceableLoaderFactory(), minLoadableRetryCount, livePresentationDelayMs, eventHandler, eventListener);
     }
 
-    private SsMediaSource(SsManifest manifest, Uri manifestUri, DataSource.Factory manifestDataSourceFactory, Parser<? extends SsManifest> manifestParser, Factory chunkSourceFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
+    private SsMediaSource(SsManifest manifest, Uri manifestUri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory manifestDataSourceFactory, Parser<? extends SsManifest> manifestParser, org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory chunkSourceFactory, CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory, int minLoadableRetryCount, long livePresentationDelayMs, Handler eventHandler, MediaSourceEventListener eventListener) {
         boolean z = manifest == null || !manifest.isLive;
         Assertions.checkState(z);
         this.manifest = manifest;
         if (manifestUri == null) {
             manifestUri = null;
-        } else if (!Util.toLowerInvariant(manifestUri.getLastPathSegment()).equals("manifest")) {
+        } else if (!Util.toLowerInvariant(manifestUri.getLastPathSegment()).matches("manifest(\\(.+\\))?")) {
             manifestUri = Uri.withAppendedPath(manifestUri, "Manifest");
         }
         this.manifestUri = manifestUri;
         this.manifestDataSourceFactory = manifestDataSourceFactory;
         this.manifestParser = manifestParser;
         this.chunkSourceFactory = chunkSourceFactory;
+        this.compositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory;
         this.minLoadableRetryCount = minLoadableRetryCount;
         this.livePresentationDelayMs = livePresentationDelayMs;
         this.eventDispatcher = new EventDispatcher(eventHandler, eventListener);
@@ -98,6 +168,7 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
     }
 
     public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
+        Assertions.checkState(this.sourceListener == null, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
         this.sourceListener = listener;
         if (this.manifest != null) {
             this.manifestLoaderErrorThrower = new Dummy();
@@ -117,7 +188,7 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
 
     public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
         Assertions.checkArgument(id.periodIndex == 0);
-        SsMediaPeriod period = new SsMediaPeriod(this.manifest, this.chunkSourceFactory, this.minLoadableRetryCount, this.eventDispatcher, this.manifestLoaderErrorThrower, allocator);
+        SsMediaPeriod period = new SsMediaPeriod(this.manifest, this.chunkSourceFactory, this.compositeSequenceableLoaderFactory, this.minLoadableRetryCount, this.eventDispatcher, this.manifestLoaderErrorThrower, allocator);
         this.mediaPeriods.add(period);
         return period;
     }
@@ -128,7 +199,6 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
     }
 
     public void releaseSource() {
-        this.sourceListener = null;
         this.manifest = null;
         this.manifestDataSource = null;
         this.manifestLoadStartTimestamp = 0;
@@ -202,7 +272,7 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
             Timeline singlePeriodTimeline2 = new SinglePeriodTimeline(startTimeUs + durationUs, durationUs, startTimeUs, 0, true, false);
             startTimeUs2 = startTimeUs;
         }
-        this.sourceListener.onSourceInfoRefreshed(timeline, this.manifest);
+        this.sourceListener.onSourceInfoRefreshed(this, timeline, this.manifest);
     }
 
     private void scheduleManifestRefresh() {

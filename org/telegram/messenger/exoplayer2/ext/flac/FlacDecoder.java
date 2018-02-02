@@ -40,15 +40,19 @@ final class FlacDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
         return "libflac";
     }
 
-    public DecoderInputBuffer createInputBuffer() {
+    protected DecoderInputBuffer createInputBuffer() {
         return new DecoderInputBuffer(1);
     }
 
-    public SimpleOutputBuffer createOutputBuffer() {
+    protected SimpleOutputBuffer createOutputBuffer() {
         return new SimpleOutputBuffer(this);
     }
 
-    public FlacDecoderException decode(DecoderInputBuffer inputBuffer, SimpleOutputBuffer outputBuffer, boolean reset) {
+    protected FlacDecoderException createUnexpectedDecodeException(Throwable error) {
+        return new FlacDecoderException("Unexpected decode error", error);
+    }
+
+    protected FlacDecoderException decode(DecoderInputBuffer inputBuffer, SimpleOutputBuffer outputBuffer, boolean reset) {
         Exception e;
         if (reset) {
             this.decoderJni.flush();

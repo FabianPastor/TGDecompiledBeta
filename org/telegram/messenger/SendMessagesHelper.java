@@ -712,7 +712,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     MessageObject obj2 = (MessageObject) message.messageObjects.get(b);
                                     if (obj2 == messageObject) {
                                         obj2.videoEditedInfo = null;
-                                        obj2.messageOwner.message = TtmlNode.ANONYMOUS_REGION_ID;
+                                        obj2.messageOwner.params.remove("ve");
                                         obj2.messageOwner.media.document.size = (int) finalSize;
                                         messages = new ArrayList();
                                         messages.add(obj2.messageOwner);
@@ -722,7 +722,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 }
                             } else if (message.obj == messageObject) {
                                 message.obj.videoEditedInfo = null;
-                                message.obj.messageOwner.message = TtmlNode.ANONYMOUS_REGION_ID;
+                                message.obj.messageOwner.params.remove("ve");
                                 message.obj.messageOwner.media.document.size = (int) finalSize;
                                 messages = new ArrayList();
                                 messages.add(message.obj.messageOwner);
@@ -1209,7 +1209,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             MessageFwdHeader messageFwdHeader;
                             boolean groupedIdChanged = false;
                             Message newMsg = new TL_message();
-                            boolean forwardFromSaved = msgObj.getDialogId() == ((long) myId) && msgObj.messageOwner.from_id != UserConfig.getInstance(this.currentAccount).getClientUserId();
+                            boolean forwardFromSaved = msgObj.getDialogId() == ((long) myId) && msgObj.messageOwner.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId();
                             if (msgObj.isForwarded()) {
                                 newMsg.fwd_from = new TL_messageFwdHeader();
                                 newMsg.fwd_from.flags = msgObj.messageOwner.fwd_from.flags;

@@ -11,7 +11,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
-import android.text.style.MetricAffectingSpan;
+import android.text.style.CharacterStyle;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
@@ -63,25 +63,22 @@ public class EditTextCaption extends EditTextBoldCursor {
         int start = getSelectionStart();
         int end = getSelectionEnd();
         Editable editable = getText();
-        URLSpanUserMention[] spansMentions = (URLSpanUserMention[]) editable.getSpans(start, end, URLSpanUserMention.class);
-        if (spansMentions == null || spansMentions.length <= 0) {
-            MetricAffectingSpan[] spans = (MetricAffectingSpan[]) editable.getSpans(start, end, MetricAffectingSpan.class);
-            if (spans != null && spans.length > 0) {
-                for (MetricAffectingSpan oldSpan : spans) {
-                    int spanStart = editable.getSpanStart(oldSpan);
-                    int spanEnd = editable.getSpanEnd(oldSpan);
-                    editable.removeSpan(oldSpan);
-                    if (spanStart < start) {
-                        editable.setSpan(oldSpan, spanStart, start, 33);
-                    }
-                    if (spanEnd > end) {
-                        editable.setSpan(oldSpan, end, spanEnd, 33);
-                    }
+        CharacterStyle[] spans = (CharacterStyle[]) editable.getSpans(start, end, CharacterStyle.class);
+        if (spans != null && spans.length > 0) {
+            for (CharacterStyle oldSpan : spans) {
+                int spanStart = editable.getSpanStart(oldSpan);
+                int spanEnd = editable.getSpanEnd(oldSpan);
+                editable.removeSpan(oldSpan);
+                if (spanStart < start) {
+                    editable.setSpan(oldSpan, spanStart, start, 33);
+                }
+                if (spanEnd > end) {
+                    editable.setSpan(oldSpan, end, spanEnd, 33);
                 }
             }
-            if (span != null) {
-                editable.setSpan(span, start, end, 33);
-            }
+        }
+        if (span != null) {
+            editable.setSpan(span, start, end, 33);
         }
     }
 

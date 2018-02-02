@@ -17,7 +17,8 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
     private final SparseArray<BindingTrackOutput> bindingTrackOutputs = new SparseArray();
     public final Extractor extractor;
     private boolean extractorInitialized;
-    private final Format manifestFormat;
+    private final Format primaryTrackManifestFormat;
+    private final int primaryTrackType;
     private Format[] sampleFormats;
     private SeekMap seekMap;
     private TrackOutputProvider trackOutputProvider;
@@ -45,13 +46,16 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
                 return;
             }
             this.trackOutput = trackOutputProvider.track(this.id, this.type);
-            if (this.trackOutput != null) {
+            if (this.sampleFormat != null) {
                 this.trackOutput.format(this.sampleFormat);
             }
         }
 
         public void format(Format format) {
-            this.sampleFormat = format.copyWithManifestFormatInfo(this.manifestFormat);
+            if (this.manifestFormat != null) {
+                format = format.copyWithManifestFormatInfo(this.manifestFormat);
+            }
+            this.sampleFormat = format;
             this.trackOutput.format(this.sampleFormat);
         }
 
@@ -68,9 +72,10 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
         }
     }
 
-    public ChunkExtractorWrapper(Extractor extractor, Format manifestFormat) {
+    public ChunkExtractorWrapper(Extractor extractor, int primaryTrackType, Format primaryTrackManifestFormat) {
         this.extractor = extractor;
-        this.manifestFormat = manifestFormat;
+        this.primaryTrackType = primaryTrackType;
+        this.primaryTrackManifestFormat = primaryTrackManifestFormat;
     }
 
     public SeekMap getSeekMap() {
@@ -96,13 +101,12 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
 
     public TrackOutput track(int id, int type) {
         BindingTrackOutput bindingTrackOutput = (BindingTrackOutput) this.bindingTrackOutputs.get(id);
-        if (bindingTrackOutput != null) {
-            return bindingTrackOutput;
+        if (bindingTrackOutput == null) {
+            Assertions.checkState(this.sampleFormats == null);
+            bindingTrackOutput = new BindingTrackOutput(id, type, type == this.primaryTrackType ? this.primaryTrackManifestFormat : null);
+            bindingTrackOutput.bind(this.trackOutputProvider);
+            this.bindingTrackOutputs.put(id, bindingTrackOutput);
         }
-        Assertions.checkState(this.sampleFormats == null);
-        bindingTrackOutput = new BindingTrackOutput(id, type, this.manifestFormat);
-        bindingTrackOutput.bind(this.trackOutputProvider);
-        this.bindingTrackOutputs.put(id, bindingTrackOutput);
         return bindingTrackOutput;
     }
 

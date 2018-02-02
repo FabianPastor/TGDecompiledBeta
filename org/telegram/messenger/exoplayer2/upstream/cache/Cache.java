@@ -12,7 +12,7 @@ public interface Cache {
             super(message);
         }
 
-        public CacheException(IOException cause) {
+        public CacheException(Throwable cause) {
             super(cause);
         }
     }
@@ -31,7 +31,7 @@ public interface Cache {
 
     long getCacheSpace();
 
-    long getCachedBytes(String str, long j, long j2);
+    long getCachedLength(String str, long j, long j2);
 
     NavigableSet<CacheSpan> getCachedSpans(String str);
 

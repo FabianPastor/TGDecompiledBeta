@@ -1,6 +1,7 @@
 package net.hockeyapp.android.utils;
 
 import java.io.UnsupportedEncodingException;
+import org.telegram.messenger.exoplayer2.C;
 
 public class Base64 {
 
@@ -445,7 +446,7 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
 
     public static String encodeToString(byte[] input, int flags) {
         try {
-            return new String(encode(input, flags), "US-ASCII");
+            return new String(encode(input, flags), C.ASCII_NAME);
         } catch (UnsupportedEncodingException e) {
             throw new AssertionError(e);
         }

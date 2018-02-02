@@ -11,5 +11,5 @@ public interface SampleStream {
 
     int readData(FormatHolder formatHolder, DecoderInputBuffer decoderInputBuffer, boolean z);
 
-    void skipData(long j);
+    int skipData(long j);
 }

@@ -5,6 +5,7 @@ import android.util.Pair;
 import java.util.Arrays;
 import java.util.Collections;
 import org.telegram.messenger.exoplayer2.Format;
+import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.DummyTrackOutput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
@@ -81,7 +82,7 @@ public final class AdtsReader implements ElementaryStreamReader {
         this.timeUs = pesTimeUs;
     }
 
-    public void consume(ParsableByteArray data) {
+    public void consume(ParsableByteArray data) throws ParserException {
         while (data.bytesLeft() > 0) {
             switch (this.state) {
                 case 0:
@@ -193,7 +194,7 @@ public final class AdtsReader implements ElementaryStreamReader {
         setReadingSampleState(this.id3Output, 0, 10, this.id3HeaderBuffer.readSynchSafeInt() + 10);
     }
 
-    private void parseAdtsHeader() {
+    private void parseAdtsHeader() throws ParserException {
         this.adtsScratch.setPosition(0);
         if (this.hasOutputFormat) {
             this.adtsScratch.skipBits(10);

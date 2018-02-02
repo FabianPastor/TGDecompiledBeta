@@ -10,6 +10,7 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class C {
+    public static final String ASCII_NAME = "US-ASCII";
     public static final int AUDIO_SESSION_ID_UNSET = 0;
     public static final int BUFFER_FLAG_DECODE_ONLY = Integer.MIN_VALUE;
     public static final int BUFFER_FLAG_ENCRYPTED = NUM;
@@ -20,7 +21,7 @@ public final class C {
     public static final String CENC_TYPE_cenc = "cenc";
     public static final String CENC_TYPE_cens = "cens";
     public static final int CHANNEL_OUT_7POINT1_SURROUND;
-    public static final UUID CLEARKEY_UUID = new UUID(1186680826959645954L, -5988876978535335093L);
+    public static final UUID CLEARKEY_UUID = new UUID(-2129748144642739255L, 8654423357094679310L);
     public static final int COLOR_RANGE_FULL = 1;
     public static final int COLOR_RANGE_LIMITED = 2;
     public static final int COLOR_SPACE_BT2020 = 6;
@@ -29,6 +30,7 @@ public final class C {
     public static final int COLOR_TRANSFER_HLG = 7;
     public static final int COLOR_TRANSFER_SDR = 3;
     public static final int COLOR_TRANSFER_ST2084 = 6;
+    public static final UUID COMMON_PSSH_UUID = new UUID(1186680826959645954L, -5988876978535335093L);
     public static final int CONTENT_TYPE_MOVIE = 3;
     public static final int CONTENT_TYPE_MUSIC = 2;
     public static final int CONTENT_TYPE_SONIFICATION = 4;
@@ -51,6 +53,7 @@ public final class C {
     public static final int DEFAULT_TEXT_BUFFER_SIZE = 131072;
     public static final int DEFAULT_VIDEO_BUFFER_SIZE = 13107200;
     public static final int ENCODING_AC3 = 5;
+    public static final int ENCODING_DOLBY_TRUEHD = 14;
     public static final int ENCODING_DTS = 7;
     public static final int ENCODING_DTS_HD = 8;
     public static final int ENCODING_E_AC3 = 6;
@@ -59,8 +62,10 @@ public final class C {
     public static final int ENCODING_PCM_24BIT = Integer.MIN_VALUE;
     public static final int ENCODING_PCM_32BIT = NUM;
     public static final int ENCODING_PCM_8BIT = 3;
+    public static final int ENCODING_PCM_FLOAT = 4;
     public static final int FLAG_AUDIBILITY_ENFORCED = 1;
     public static final int INDEX_UNSET = -1;
+    public static final String LANGUAGE_UNDETERMINED = "und";
     public static final int LENGTH_UNSET = -1;
     public static final long MICROS_PER_SECOND = 1000000;
     public static final int MSG_CUSTOM_BASE = 10000;
@@ -108,6 +113,7 @@ public final class C {
     public static final int TRACK_TYPE_CUSTOM_BASE = 10000;
     public static final int TRACK_TYPE_DEFAULT = 0;
     public static final int TRACK_TYPE_METADATA = 4;
+    public static final int TRACK_TYPE_NONE = 5;
     public static final int TRACK_TYPE_TEXT = 3;
     public static final int TRACK_TYPE_UNKNOWN = -1;
     public static final int TRACK_TYPE_VIDEO = 2;

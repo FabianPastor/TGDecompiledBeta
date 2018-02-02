@@ -40,7 +40,7 @@ final class VideoTagPayloadReader extends TagPayloadReader {
 
     protected void parsePayload(ParsableByteArray data, long timeUs) throws ParserException {
         int packetType = data.readUnsignedByte();
-        timeUs += ((long) data.readUnsignedInt24()) * 1000;
+        timeUs += ((long) data.readInt24()) * 1000;
         if (packetType == 0 && !this.hasOutputFormat) {
             ParsableByteArray parsableByteArray = new ParsableByteArray(new byte[data.bytesLeft()]);
             data.readBytes(parsableByteArray.data, 0, data.bytesLeft());

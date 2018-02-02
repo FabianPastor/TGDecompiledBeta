@@ -119,6 +119,7 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.SparseLongArray;
@@ -502,6 +503,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private int[] minDate = new int[2];
     private int[] minMessageId = new int[]{Integer.MIN_VALUE, Integer.MIN_VALUE};
     private TextView muteItem;
+    private MessageObject needAnimateToMessage;
     private boolean needSelectFromMessageId;
     private int newMentionsCount;
     private int newUnreadMessageCount;
@@ -5249,7 +5251,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             }
                         };
                         this.voiceHintHideRunnable = anonymousClass66;
-                        AndroidUtilities.runOnUIThread(anonymousClass66, 2000);
+                        AndroidUtilities.runOnUIThread(anonymousClass66, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                         return;
                     }
                 } else if (this.voiceHintAnimation != null) {
@@ -5269,7 +5271,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 public void run() {
                                     ChatActivity.this.hideVoiceHint();
                                 }
-                            }, 2000);
+                            }, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                         }
                     }
 
@@ -5381,7 +5383,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                             AnimatorSet.start();
                                         }
                                     }
-                                }, 2000);
+                                }, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                             }
                         });
                         AnimatorSet.setDuration(300);
@@ -7781,6 +7783,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 this.forwardEndReached[loadIndex] = true;
                             }
                             if (obj.type >= 0 && !(loadIndex == 1 && (obj.messageOwner.action instanceof TL_messageActionChatMigrateTo))) {
+                                if (this.needAnimateToMessage != null && this.needAnimateToMessage.getId() == obj.getId() && obj.getId() < 0 && obj.type == 5) {
+                                    obj = this.needAnimateToMessage;
+                                    this.animatingMessageObjects.add(obj);
+                                    this.needAnimateToMessage = null;
+                                }
                                 if (!obj.isOut() && obj.isUnread()) {
                                     wasUnread = true;
                                 }
@@ -8560,6 +8567,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         }
                         if (this.currentChat != null && this.currentChat.megagroup && ((obj.messageOwner.action instanceof TL_messageActionChatAddUser) || (obj.messageOwner.action instanceof TL_messageActionChatDeleteUser))) {
                             reloadMegagroup = true;
+                        }
+                        if (a == 0 && obj.messageOwner.id < 0 && obj.type == 5) {
+                            this.needAnimateToMessage = obj;
                         }
                         if (obj.isOut() && obj.isSending()) {
                             scrollToLastMessage(false);

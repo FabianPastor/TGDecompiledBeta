@@ -5,6 +5,7 @@ import com.googlecode.mp4parser.RequiresParseDetailAspect;
 import java.nio.ByteBuffer;
 import org.aspectj.lang.JoinPoint.StaticPart;
 import org.aspectj.runtime.reflect.Factory;
+import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 
 public class UserBox extends AbstractBox {
     public static final String TYPE = "uuid";
@@ -21,7 +22,7 @@ public class UserBox extends AbstractBox {
         Factory factory = new Factory("UserBox.java", UserBox.class);
         ajc$tjp_0 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "toString", "com.coremedia.iso.boxes.UserBox", TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, "java.lang.String"), 40);
         ajc$tjp_1 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "getData", "com.coremedia.iso.boxes.UserBox", TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, "[B"), 47);
-        ajc$tjp_2 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "setData", "com.coremedia.iso.boxes.UserBox", "[B", "data", TtmlNode.ANONYMOUS_REGION_ID, "void"), 51);
+        ajc$tjp_2 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "setData", "com.coremedia.iso.boxes.UserBox", "[B", DataSchemeDataSource.SCHEME_DATA, TtmlNode.ANONYMOUS_REGION_ID, "void"), 51);
     }
 
     public UserBox(byte[] userType) {

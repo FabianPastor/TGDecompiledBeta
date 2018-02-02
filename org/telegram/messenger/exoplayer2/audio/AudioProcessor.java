@@ -22,6 +22,8 @@ public interface AudioProcessor {
 
     int getOutputEncoding();
 
+    int getOutputSampleRateHz();
+
     boolean isActive();
 
     boolean isEnded();

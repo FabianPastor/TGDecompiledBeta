@@ -67,13 +67,13 @@ public final class Cea708Decoder extends CeaDecoder {
     private static final int COMMAND_DF1 = 153;
     private static final int COMMAND_DF2 = 154;
     private static final int COMMAND_DF3 = 155;
+    private static final int COMMAND_DF4 = 156;
     private static final int COMMAND_DF5 = 157;
     private static final int COMMAND_DF6 = 158;
     private static final int COMMAND_DF7 = 159;
     private static final int COMMAND_DLC = 142;
     private static final int COMMAND_DLW = 140;
     private static final int COMMAND_DLY = 141;
-    private static final int COMMAND_DS4 = 156;
     private static final int COMMAND_DSW = 137;
     private static final int COMMAND_ETX = 3;
     private static final int COMMAND_EXT1 = 16;
@@ -775,7 +775,7 @@ public final class Cea708Decoder extends CeaDecoder {
             case COMMAND_DF1 /*153*/:
             case COMMAND_DF2 /*154*/:
             case COMMAND_DF3 /*155*/:
-            case COMMAND_DS4 /*156*/:
+            case COMMAND_DF4 /*156*/:
             case COMMAND_DF5 /*157*/:
             case COMMAND_DF6 /*158*/:
             case 159:

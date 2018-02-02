@@ -10,6 +10,9 @@ import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorsFactory;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
+import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
+import org.telegram.messenger.exoplayer2.extractor.SeekMap.Unseekable;
+import org.telegram.messenger.exoplayer2.extractor.SeekPoint;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.util.FlacStreamInfo;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -29,6 +32,28 @@ public final class FlacExtractor implements Extractor {
     private ParsableByteArray outputBuffer;
     private ByteBuffer outputByteBuffer;
     private TrackOutput trackOutput;
+
+    private static final class FlacSeekMap implements SeekMap {
+        private final FlacDecoderJni decoderJni;
+        private final long durationUs;
+
+        public FlacSeekMap(long durationUs, FlacDecoderJni decoderJni) {
+            this.durationUs = durationUs;
+            this.decoderJni = decoderJni;
+        }
+
+        public boolean isSeekable() {
+            return true;
+        }
+
+        public SeekPoints getSeekPoints(long timeUs) {
+            return new SeekPoints(new SeekPoint(timeUs, this.decoderJni.getSeekPosition(timeUs)));
+        }
+
+        public long getDurationUs() {
+            return this.durationUs;
+        }
+    }
 
     public void init(ExtractorOutput output) {
         this.extractorOutput = output;
@@ -55,24 +80,16 @@ public final class FlacExtractor implements Extractor {
                 if (streamInfo == null) {
                     throw new IOException("Metadata decoding failed");
                 }
+                SeekMap flacSeekMap;
                 this.metadataParsed = true;
-                final FlacStreamInfo flacStreamInfo = streamInfo;
-                this.extractorOutput.seekMap(new SeekMap() {
-                    final long durationUs;
-                    final boolean isSeekable;
-
-                    public boolean isSeekable() {
-                        return this.isSeekable;
-                    }
-
-                    public long getPosition(long timeUs) {
-                        return this.isSeekable ? FlacExtractor.this.decoderJni.getSeekPosition(timeUs) : 0;
-                    }
-
-                    public long getDurationUs() {
-                        return this.durationUs;
-                    }
-                });
+                boolean isSeekable = this.decoderJni.getSeekPosition(0) != -1;
+                ExtractorOutput extractorOutput = this.extractorOutput;
+                if (isSeekable) {
+                    flacSeekMap = new FlacSeekMap(streamInfo.durationUs(), this.decoderJni);
+                } else {
+                    flacSeekMap = new Unseekable(streamInfo.durationUs(), 0);
+                }
+                extractorOutput.seekMap(flacSeekMap);
                 this.trackOutput.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_RAW, null, streamInfo.bitRate(), -1, streamInfo.channels, streamInfo.sampleRate, Util.getPcmEncoding(streamInfo.bitsPerSample), null, null, 0, null));
                 this.outputBuffer = new ParsableByteArray(streamInfo.maxDecodedFrameSize());
                 this.outputByteBuffer = ByteBuffer.wrap(this.outputBuffer.data);

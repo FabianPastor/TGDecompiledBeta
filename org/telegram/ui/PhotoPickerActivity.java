@@ -58,6 +58,7 @@ import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -965,7 +966,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             }
                         };
                         this.hintHideRunnable = anonymousClass13;
-                        AndroidUtilities.runOnUIThread(anonymousClass13, 2000);
+                        AndroidUtilities.runOnUIThread(anonymousClass13, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                         return;
                     }
                 } else if (this.hintAnimation != null) {
@@ -985,7 +986,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                 public void run() {
                                     PhotoPickerActivity.this.hideHint();
                                 }
-                            }, 2000);
+                            }, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                         }
                     }
 

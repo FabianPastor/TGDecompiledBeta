@@ -29,6 +29,10 @@ public abstract class SimpleSubtitleDecoder extends SimpleDecoder<SubtitleInputB
         return new SimpleSubtitleOutputBuffer(this);
     }
 
+    protected final SubtitleDecoderException createUnexpectedDecodeException(Throwable error) {
+        return new SubtitleDecoderException("Unexpected decode error", error);
+    }
+
     protected final void releaseOutputBuffer(SubtitleOutputBuffer buffer) {
         super.releaseOutputBuffer(buffer);
     }

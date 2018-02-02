@@ -262,8 +262,18 @@ public class MessagesStorage {
         return this.storageQueue;
     }
 
-    public File getDatabaseFile() {
-        return this.cacheFile;
+    public long getDatabaseSize() {
+        long size = 0;
+        if (this.cacheFile != null) {
+            size = 0 + this.cacheFile.length();
+        }
+        if (this.shmCacheFile != null) {
+            size += this.shmCacheFile.length();
+        }
+        if (this.walCacheFile != null) {
+            return size + this.walCacheFile.length();
+        }
+        return size;
     }
 
     public void openDatabase(boolean first) {
@@ -5881,6 +5891,7 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
+        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5933,7 +5944,6 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
-        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {

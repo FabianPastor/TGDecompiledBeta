@@ -628,6 +628,7 @@ public class DownloadController implements NotificationCenterDelegate {
     public void didReceivedNotification(int id, int account, Object... args) {
         String fileName;
         ArrayList<WeakReference<FileDownloadProgressListener>> arrayList;
+        int size;
         int a;
         WeakReference<FileDownloadProgressListener> reference;
         if (id == NotificationCenter.FileDidFailedLoad || id == NotificationCenter.httpFileDidFailedLoad) {
@@ -635,7 +636,8 @@ public class DownloadController implements NotificationCenterDelegate {
             fileName = args[0];
             arrayList = (ArrayList) this.loadingFileObservers.get(fileName);
             if (arrayList != null) {
-                for (a = 0; a < arrayList.size(); a++) {
+                size = arrayList.size();
+                for (a = 0; a < size; a++) {
                     reference = (WeakReference) arrayList.get(a);
                     if (reference.get() != null) {
                         ((FileDownloadProgressListener) reference.get()).onFailedDownload(fileName);
@@ -652,14 +654,16 @@ public class DownloadController implements NotificationCenterDelegate {
             fileName = (String) args[0];
             ArrayList<MessageObject> messageObjects = (ArrayList) this.loadingFileMessagesObservers.get(fileName);
             if (messageObjects != null) {
-                for (a = 0; a < messageObjects.size(); a++) {
+                size = messageObjects.size();
+                for (a = 0; a < size; a++) {
                     ((MessageObject) messageObjects.get(a)).mediaExists = true;
                 }
                 this.loadingFileMessagesObservers.remove(fileName);
             }
             arrayList = (ArrayList) this.loadingFileObservers.get(fileName);
             if (arrayList != null) {
-                for (a = 0; a < arrayList.size(); a++) {
+                size = arrayList.size();
+                for (a = 0; a < size; a++) {
                     reference = (WeakReference) arrayList.get(a);
                     if (reference.get() != null) {
                         ((FileDownloadProgressListener) reference.get()).onSuccessDownload(fileName);
@@ -677,9 +681,9 @@ public class DownloadController implements NotificationCenterDelegate {
             arrayList = (ArrayList) this.loadingFileObservers.get(fileName);
             if (arrayList != null) {
                 progress = args[1];
-                r20 = arrayList.iterator();
-                while (r20.hasNext()) {
-                    reference = (WeakReference) r20.next();
+                size = arrayList.size();
+                for (a = 0; a < size; a++) {
+                    reference = (WeakReference) arrayList.get(a);
                     if (reference.get() != null) {
                         ((FileDownloadProgressListener) reference.get()).onProgressDownload(fileName, progress.floatValue());
                     }
@@ -694,9 +698,9 @@ public class DownloadController implements NotificationCenterDelegate {
             if (arrayList != null) {
                 progress = (Float) args[1];
                 Boolean enc = args[2];
-                r20 = arrayList.iterator();
-                while (r20.hasNext()) {
-                    reference = (WeakReference) r20.next();
+                size = arrayList.size();
+                for (a = 0; a < size; a++) {
+                    reference = (WeakReference) arrayList.get(a);
                     if (reference.get() != null) {
                         ((FileDownloadProgressListener) reference.get()).onProgressUpload(fileName, progress.floatValue(), enc.booleanValue());
                     }
@@ -731,6 +735,8 @@ public class DownloadController implements NotificationCenterDelegate {
                                         MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 8, 0);
                                     } else if (delayedMessage.obj.isVideo()) {
                                         MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 5, 0);
+                                    } else if (delayedMessage.obj.isVoice()) {
+                                        MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 9, 0);
                                     } else if (delayedMessage.obj.getDocument() != null) {
                                         MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 3, 0);
                                     } else if (delayedMessage.location != null) {

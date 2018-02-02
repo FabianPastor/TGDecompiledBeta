@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ParserException;
-import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
 final class ScriptTagPayloadReader extends TagPayloadReader {
@@ -22,8 +21,8 @@ final class ScriptTagPayloadReader extends TagPayloadReader {
     private static final String NAME_METADATA = "onMetaData";
     private long durationUs = C.TIME_UNSET;
 
-    public ScriptTagPayloadReader(TrackOutput output) {
-        super(output);
+    public ScriptTagPayloadReader() {
+        super(null);
     }
 
     public long getDurationUs() {

@@ -3,6 +3,7 @@ package org.telegram.messenger.exoplayer2.extractor.flv;
 import android.util.Pair;
 import java.util.Collections;
 import org.telegram.messenger.exoplayer2.Format;
+import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.extractor.flv.TagPayloadReader.UnsupportedFormatException;
 import org.telegram.messenger.exoplayer2.util.CodecSpecificDataUtil;
@@ -48,7 +49,7 @@ final class AudioTagPayloadReader extends TagPayloadReader {
         return true;
     }
 
-    protected void parsePayload(ParsableByteArray data, long timeUs) {
+    protected void parsePayload(ParsableByteArray data, long timeUs) throws ParserException {
         if (this.audioFormat == 2) {
             int sampleSize = data.bytesLeft();
             this.output.sampleData(data, sampleSize);

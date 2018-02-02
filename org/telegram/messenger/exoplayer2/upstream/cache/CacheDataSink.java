@@ -25,7 +25,7 @@ public final class CacheDataSink implements DataSink {
 
     public static class CacheDataSinkException extends CacheException {
         public CacheDataSinkException(IOException cause) {
-            super(cause);
+            super((Throwable) cause);
         }
     }
 

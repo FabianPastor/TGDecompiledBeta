@@ -7,21 +7,22 @@ import org.telegram.messenger.exoplayer2.upstream.DefaultAllocator;
 import org.telegram.messenger.exoplayer2.util.PriorityTaskManager;
 import org.telegram.messenger.exoplayer2.util.Util;
 
-public final class DefaultLoadControl implements LoadControl {
-    private static final int ABOVE_HIGH_WATERMARK = 0;
-    private static final int BELOW_LOW_WATERMARK = 2;
-    private static final int BETWEEN_WATERMARKS = 1;
+public class DefaultLoadControl implements LoadControl {
     public static final int DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS = 5000;
     public static final int DEFAULT_BUFFER_FOR_PLAYBACK_MS = 2500;
     public static final int DEFAULT_MAX_BUFFER_MS = 30000;
     public static final int DEFAULT_MIN_BUFFER_MS = 15000;
+    public static final boolean DEFAULT_PRIORITIZE_TIME_OVER_SIZE_THRESHOLDS = true;
+    public static final int DEFAULT_TARGET_BUFFER_BYTES = -1;
     private final DefaultAllocator allocator;
     private final long bufferForPlaybackAfterRebufferUs;
     private final long bufferForPlaybackUs;
     private boolean isBuffering;
     private final long maxBufferUs;
     private final long minBufferUs;
+    private final boolean prioritizeTimeOverSizeThresholds;
     private final PriorityTaskManager priorityTaskManager;
+    private final int targetBufferBytesOverwrite;
     private int targetBufferSize;
 
     public DefaultLoadControl() {
@@ -29,19 +30,21 @@ public final class DefaultLoadControl implements LoadControl {
     }
 
     public DefaultLoadControl(DefaultAllocator allocator) {
-        this(allocator, DEFAULT_MIN_BUFFER_MS, DEFAULT_MAX_BUFFER_MS, 2500, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+        this(allocator, DEFAULT_MIN_BUFFER_MS, DEFAULT_MAX_BUFFER_MS, DEFAULT_BUFFER_FOR_PLAYBACK_MS, DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS, -1, true);
     }
 
-    public DefaultLoadControl(DefaultAllocator allocator, int minBufferMs, int maxBufferMs, long bufferForPlaybackMs, long bufferForPlaybackAfterRebufferMs) {
-        this(allocator, minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs, null);
+    public DefaultLoadControl(DefaultAllocator allocator, int minBufferMs, int maxBufferMs, int bufferForPlaybackMs, int bufferForPlaybackAfterRebufferMs, int targetBufferBytes, boolean prioritizeTimeOverSizeThresholds) {
+        this(allocator, minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs, targetBufferBytes, prioritizeTimeOverSizeThresholds, null);
     }
 
-    public DefaultLoadControl(DefaultAllocator allocator, int minBufferMs, int maxBufferMs, long bufferForPlaybackMs, long bufferForPlaybackAfterRebufferMs, PriorityTaskManager priorityTaskManager) {
+    public DefaultLoadControl(DefaultAllocator allocator, int minBufferMs, int maxBufferMs, int bufferForPlaybackMs, int bufferForPlaybackAfterRebufferMs, int targetBufferBytes, boolean prioritizeTimeOverSizeThresholds, PriorityTaskManager priorityTaskManager) {
         this.allocator = allocator;
         this.minBufferUs = ((long) minBufferMs) * 1000;
         this.maxBufferUs = ((long) maxBufferMs) * 1000;
-        this.bufferForPlaybackUs = bufferForPlaybackMs * 1000;
-        this.bufferForPlaybackAfterRebufferUs = bufferForPlaybackAfterRebufferMs * 1000;
+        this.bufferForPlaybackUs = ((long) bufferForPlaybackMs) * 1000;
+        this.bufferForPlaybackAfterRebufferUs = ((long) bufferForPlaybackAfterRebufferMs) * 1000;
+        this.targetBufferBytesOverwrite = targetBufferBytes;
+        this.prioritizeTimeOverSizeThresholds = prioritizeTimeOverSizeThresholds;
         this.priorityTaskManager = priorityTaskManager;
     }
 
@@ -50,12 +53,7 @@ public final class DefaultLoadControl implements LoadControl {
     }
 
     public void onTracksSelected(Renderer[] renderers, TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-        this.targetBufferSize = 0;
-        for (int i = 0; i < renderers.length; i++) {
-            if (trackSelections.get(i) != null) {
-                this.targetBufferSize += Util.getDefaultBufferSize(renderers[i].getTrackType());
-            }
-        }
+        this.targetBufferSize = this.targetBufferBytesOverwrite == -1 ? calculateTargetBufferSize(renderers, trackSelections) : this.targetBufferBytesOverwrite;
         this.allocator.setTargetBufferSize(this.targetBufferSize);
     }
 
@@ -71,14 +69,15 @@ public final class DefaultLoadControl implements LoadControl {
         return this.allocator;
     }
 
-    public boolean shouldStartPlayback(long bufferedDurationUs, boolean rebuffering) {
-        long minBufferDurationUs = rebuffering ? this.bufferForPlaybackAfterRebufferUs : this.bufferForPlaybackUs;
-        return minBufferDurationUs <= 0 || bufferedDurationUs >= minBufferDurationUs;
+    public long getBackBufferDurationUs() {
+        return 0;
     }
 
-    public boolean shouldContinueLoading(long bufferedDurationUs) {
-        boolean z = true;
-        int bufferTimeState = getBufferTimeState(bufferedDurationUs);
+    public boolean retainBackBufferFromKeyframe() {
+        return false;
+    }
+
+    public boolean shouldContinueLoading(boolean canStartPlayback, long bufferedDurationUs, float playbackSpeed) {
         boolean targetBufferSizeReached;
         if (this.allocator.getTotalBytesAllocated() >= this.targetBufferSize) {
             targetBufferSizeReached = true;
@@ -86,10 +85,21 @@ public final class DefaultLoadControl implements LoadControl {
             targetBufferSizeReached = false;
         }
         boolean wasBuffering = this.isBuffering;
-        if (!(bufferTimeState == 2 || (bufferTimeState == 1 && this.isBuffering && !targetBufferSizeReached))) {
-            z = false;
+        boolean z;
+        if (this.prioritizeTimeOverSizeThresholds) {
+            if (bufferedDurationUs < this.minBufferUs || (bufferedDurationUs <= this.maxBufferUs && this.isBuffering && !targetBufferSizeReached)) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.isBuffering = z;
+        } else {
+            z = !targetBufferSizeReached && (bufferedDurationUs < this.minBufferUs || (bufferedDurationUs <= this.maxBufferUs && this.isBuffering));
+            this.isBuffering = z;
         }
-        this.isBuffering = z;
+        if (!(this.isBuffering || canStartPlayback || targetBufferSizeReached)) {
+            this.isBuffering = true;
+        }
         if (!(this.priorityTaskManager == null || this.isBuffering == wasBuffering)) {
             if (this.isBuffering) {
                 this.priorityTaskManager.add(0);
@@ -100,11 +110,20 @@ public final class DefaultLoadControl implements LoadControl {
         return this.isBuffering;
     }
 
-    private int getBufferTimeState(long bufferedDurationUs) {
-        if (bufferedDurationUs > this.maxBufferUs) {
-            return 0;
+    public boolean shouldStartPlayback(long bufferedDurationUs, float playbackSpeed, boolean rebuffering) {
+        bufferedDurationUs = Util.getPlayoutDurationForMediaDuration(bufferedDurationUs, playbackSpeed);
+        long minBufferDurationUs = rebuffering ? this.bufferForPlaybackAfterRebufferUs : this.bufferForPlaybackUs;
+        return minBufferDurationUs <= 0 || bufferedDurationUs >= minBufferDurationUs || (!this.prioritizeTimeOverSizeThresholds && this.allocator.getTotalBytesAllocated() >= this.targetBufferSize);
+    }
+
+    protected int calculateTargetBufferSize(Renderer[] renderers, TrackSelectionArray trackSelectionArray) {
+        int targetBufferSize = 0;
+        for (int i = 0; i < renderers.length; i++) {
+            if (trackSelectionArray.get(i) != null) {
+                targetBufferSize += Util.getDefaultBufferSize(renderers[i].getTrackType());
+            }
         }
-        return bufferedDurationUs < this.minBufferUs ? 2 : 1;
+        return targetBufferSize;
     }
 
     private void reset(boolean resetAllocator) {

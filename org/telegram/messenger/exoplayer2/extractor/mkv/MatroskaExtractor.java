@@ -17,6 +17,7 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
+import org.telegram.messenger.exoplayer2.audio.Ac3Util;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData.SchemeData;
 import org.telegram.messenger.exoplayer2.extractor.ChunkIndex;
@@ -29,6 +30,7 @@ import org.telegram.messenger.exoplayer2.extractor.SeekMap;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.Unseekable;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput.CryptoData;
+import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.LongArray;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
@@ -170,12 +172,12 @@ public final class MatroskaExtractor implements Extractor {
     private static final int SSA_PREFIX_END_TIMECODE_OFFSET = 21;
     private static final byte[] SSA_TIMECODE_EMPTY = new byte[]{(byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32};
     private static final String SSA_TIMECODE_FORMAT = "%01d:%02d:%02d:%02d";
-    private static long SSA_TIMECODE_LAST_VALUE_SCALING_FACTOR = 10000;
+    private static final long SSA_TIMECODE_LAST_VALUE_SCALING_FACTOR = 10000;
     private static final byte[] SUBRIP_PREFIX = new byte[]{(byte) 49, (byte) 10, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 44, (byte) 48, (byte) 48, (byte) 48, (byte) 32, (byte) 45, (byte) 45, (byte) 62, (byte) 32, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 58, (byte) 48, (byte) 48, (byte) 44, (byte) 48, (byte) 48, (byte) 48, (byte) 10};
     private static final int SUBRIP_PREFIX_END_TIMECODE_OFFSET = 19;
     private static final byte[] SUBRIP_TIMECODE_EMPTY = new byte[]{(byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32, (byte) 32};
     private static final String SUBRIP_TIMECODE_FORMAT = "%02d:%02d:%02d,%03d";
-    private static long SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR = 1000;
+    private static final long SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR = 1000;
     private static final String TAG = "MatroskaExtractor";
     private static final int TRACK_TYPE_AUDIO = 2;
     private static final int UNSET_ENTRY_ID = -1;
@@ -283,6 +285,7 @@ public final class MatroskaExtractor implements Extractor {
         public byte[] sampleStrippedBytes;
         public long seekPreRollNs;
         public int stereoMode;
+        public TrueHdSampleRechunker trueHdSampleRechunker;
         public int type;
         public float whitePointChromaticityX;
         public float whitePointChromaticityY;
@@ -583,6 +586,7 @@ public final class MatroskaExtractor implements Extractor {
                     break;
                 case 17:
                     mimeType = MimeTypes.AUDIO_TRUEHD;
+                    this.trueHdSampleRechunker = new TrueHdSampleRechunker();
                     break;
                 case 18:
                 case 19:
@@ -676,12 +680,24 @@ public final class MatroskaExtractor implements Extractor {
                 format = Format.createTextSampleFormat(Integer.toString(trackId), mimeType, null, -1, selectionFlags, this.language, -1, this.drmInitData, Long.MAX_VALUE, initializationData);
             } else if (MimeTypes.APPLICATION_VOBSUB.equals(mimeType) || MimeTypes.APPLICATION_PGS.equals(mimeType) || MimeTypes.APPLICATION_DVBSUBS.equals(mimeType)) {
                 type = 3;
-                format = Format.createImageSampleFormat(Integer.toString(trackId), mimeType, null, -1, initializationData, this.language, this.drmInitData);
+                format = Format.createImageSampleFormat(Integer.toString(trackId), mimeType, null, -1, selectionFlags, initializationData, this.language, this.drmInitData);
             } else {
                 throw new ParserException("Unexpected MIME type.");
             }
             this.output = output.track(this.number, type);
             this.output.format(format);
+        }
+
+        public void outputPendingSampleMetadata() {
+            if (this.trueHdSampleRechunker != null) {
+                this.trueHdSampleRechunker.outputPendingSampleMetadata(this);
+            }
+        }
+
+        public void reset() {
+            if (this.trueHdSampleRechunker != null) {
+                this.trueHdSampleRechunker.reset();
+            }
         }
 
         private byte[] getHdrStaticInfo() {
@@ -791,6 +807,58 @@ public final class MatroskaExtractor implements Extractor {
         }
     }
 
+    private static final class TrueHdSampleRechunker {
+        private int blockFlags;
+        private int chunkSize;
+        private boolean foundSyncframe;
+        private int sampleCount;
+        private final byte[] syncframePrefix = new byte[12];
+        private long timeUs;
+
+        public void reset() {
+            this.foundSyncframe = false;
+        }
+
+        public void startSample(ExtractorInput input, int blockFlags, int size) throws IOException, InterruptedException {
+            if (!this.foundSyncframe) {
+                input.peekFully(this.syncframePrefix, 0, 12);
+                input.resetPeekPosition();
+                if (Ac3Util.parseTrueHdSyncframeAudioSampleCount(this.syncframePrefix) != -1) {
+                    this.foundSyncframe = true;
+                    this.sampleCount = 0;
+                } else {
+                    return;
+                }
+            }
+            if (this.sampleCount == 0) {
+                this.blockFlags = blockFlags;
+                this.chunkSize = 0;
+            }
+            this.chunkSize += size;
+        }
+
+        public void sampleMetadata(Track track, long timeUs) {
+            if (this.foundSyncframe) {
+                int i = this.sampleCount;
+                this.sampleCount = i + 1;
+                if (i == 0) {
+                    this.timeUs = timeUs;
+                }
+                if (this.sampleCount >= 8) {
+                    track.output.sampleMetadata(this.timeUs, this.blockFlags, this.chunkSize, 0, track.cryptoData);
+                    this.sampleCount = 0;
+                }
+            }
+        }
+
+        public void outputPendingSampleMetadata(Track track) {
+            if (this.foundSyncframe && this.sampleCount > 0) {
+                track.output.sampleMetadata(this.timeUs, this.blockFlags, this.chunkSize, 0, track.cryptoData);
+                this.sampleCount = 0;
+            }
+        }
+    }
+
     private final class InnerEbmlReaderOutput implements EbmlReaderOutput {
         private InnerEbmlReaderOutput() {
         }
@@ -874,6 +942,9 @@ public final class MatroskaExtractor implements Extractor {
         this.reader.reset();
         this.varintReader.reset();
         resetSample();
+        for (int i = 0; i < this.tracks.size(); i++) {
+            ((Track) this.tracks.valueAt(i)).reset();
+        }
     }
 
     public void release() {
@@ -890,6 +961,9 @@ public final class MatroskaExtractor implements Extractor {
         }
         if (continueReading) {
             return 0;
+        }
+        for (int i = 0; i < this.tracks.size(); i++) {
+            ((Track) this.tracks.valueAt(i)).outputPendingSampleMetadata();
         }
         return -1;
     }
@@ -1071,7 +1145,7 @@ public final class MatroskaExtractor implements Extractor {
                 if (this.currentTrack.cryptoData == null) {
                     throw new ParserException("Encrypted Track found but ContentEncKeyID was not found");
                 }
-                this.currentTrack.drmInitData = new DrmInitData(new SchemeData(C.UUID_NIL, null, MimeTypes.VIDEO_WEBM, this.currentTrack.cryptoData.encryptionKey));
+                this.currentTrack.drmInitData = new DrmInitData(new SchemeData(C.UUID_NIL, MimeTypes.VIDEO_WEBM, this.currentTrack.cryptoData.encryptionKey));
                 return;
             case ID_CONTENT_ENCODINGS /*28032*/:
                 if (this.currentTrack.hasContentEncryption && this.currentTrack.sampleStrippedBytes != null) {
@@ -1511,12 +1585,16 @@ public final class MatroskaExtractor implements Extractor {
     }
 
     private void commitSampleToOutput(Track track, long timeUs) {
-        if (CODEC_ID_SUBRIP.equals(track.codecId)) {
-            commitSubtitleSample(track, SUBRIP_TIMECODE_FORMAT, 19, SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR, SUBRIP_TIMECODE_EMPTY);
-        } else if (CODEC_ID_ASS.equals(track.codecId)) {
-            commitSubtitleSample(track, SSA_TIMECODE_FORMAT, 21, SSA_TIMECODE_LAST_VALUE_SCALING_FACTOR, SSA_TIMECODE_EMPTY);
+        if (track.trueHdSampleRechunker != null) {
+            track.trueHdSampleRechunker.sampleMetadata(track, timeUs);
+        } else {
+            if (CODEC_ID_SUBRIP.equals(track.codecId)) {
+                commitSubtitleSample(track, SUBRIP_TIMECODE_FORMAT, 19, SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR, SUBRIP_TIMECODE_EMPTY);
+            } else if (CODEC_ID_ASS.equals(track.codecId)) {
+                commitSubtitleSample(track, SSA_TIMECODE_FORMAT, 21, SSA_TIMECODE_LAST_VALUE_SCALING_FACTOR, SSA_TIMECODE_EMPTY);
+            }
+            track.output.sampleMetadata(timeUs, this.blockFlags, this.sampleBytesWritten, 0, track.cryptoData);
         }
-        track.output.sampleMetadata(timeUs, this.blockFlags, this.sampleBytesWritten, 0, track.cryptoData);
         this.sampleRead = true;
         resetSample();
     }
@@ -1645,6 +1723,10 @@ public final class MatroskaExtractor implements Extractor {
                     }
                 }
             } else {
+                if (track.trueHdSampleRechunker != null) {
+                    Assertions.checkState(this.sampleStrippedBytes.limit() == 0);
+                    track.trueHdSampleRechunker.startSample(input, this.blockFlags, size);
+                }
                 while (this.sampleBytesRead < size) {
                     readToOutput(input, output, size - this.sampleBytesRead);
                 }
@@ -1756,7 +1838,7 @@ public final class MatroskaExtractor implements Extractor {
         if (this.timecodeScale == C.TIME_UNSET) {
             throw new ParserException("Can't scale timecode prior to timecodeScale being set.");
         }
-        return Util.scaleLargeTimestamp(unscaledTimecode, this.timecodeScale, 1000);
+        return Util.scaleLargeTimestamp(unscaledTimecode, this.timecodeScale, SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR);
     }
 
     private static boolean isCodecSupported(String codecId) {

@@ -3,6 +3,7 @@ package org.telegram.messenger.exoplayer2.extractor.ts;
 import android.util.SparseArray;
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
@@ -60,7 +61,7 @@ public final class PsExtractor implements Extractor {
             this.pesPayloadReader.seek();
         }
 
-        public void consume(ParsableByteArray data) {
+        public void consume(ParsableByteArray data) throws ParserException {
             data.readBytes(this.pesScratch.data, 0, 3);
             this.pesScratch.setPosition(0);
             parseHeader();

@@ -1,39 +1,38 @@
 package org.telegram.messenger.exoplayer2.util;
 
-import android.os.SystemClock;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.PlaybackParameters;
 
 public final class StandaloneMediaClock implements MediaClock {
     private long baseElapsedMs;
     private long baseUs;
+    private final Clock clock;
     private PlaybackParameters playbackParameters = PlaybackParameters.DEFAULT;
     private boolean started;
 
+    public StandaloneMediaClock(Clock clock) {
+        this.clock = clock;
+    }
+
     public void start() {
         if (!this.started) {
-            this.baseElapsedMs = SystemClock.elapsedRealtime();
+            this.baseElapsedMs = this.clock.elapsedRealtime();
             this.started = true;
         }
     }
 
     public void stop() {
         if (this.started) {
-            setPositionUs(getPositionUs());
+            resetPosition(getPositionUs());
             this.started = false;
         }
     }
 
-    public void setPositionUs(long positionUs) {
+    public void resetPosition(long positionUs) {
         this.baseUs = positionUs;
         if (this.started) {
-            this.baseElapsedMs = SystemClock.elapsedRealtime();
+            this.baseElapsedMs = this.clock.elapsedRealtime();
         }
-    }
-
-    public void synchronize(MediaClock clock) {
-        setPositionUs(clock.getPositionUs());
-        this.playbackParameters = clock.getPlaybackParameters();
     }
 
     public long getPositionUs() {
@@ -41,16 +40,16 @@ public final class StandaloneMediaClock implements MediaClock {
         if (!this.started) {
             return positionUs;
         }
-        long elapsedSinceBaseMs = SystemClock.elapsedRealtime() - this.baseElapsedMs;
+        long elapsedSinceBaseMs = this.clock.elapsedRealtime() - this.baseElapsedMs;
         if (this.playbackParameters.speed == 1.0f) {
             return positionUs + C.msToUs(elapsedSinceBaseMs);
         }
-        return positionUs + this.playbackParameters.getSpeedAdjustedDurationUs(elapsedSinceBaseMs);
+        return positionUs + this.playbackParameters.getMediaTimeUsForPlayoutTimeMs(elapsedSinceBaseMs);
     }
 
     public PlaybackParameters setPlaybackParameters(PlaybackParameters playbackParameters) {
         if (this.started) {
-            setPositionUs(getPositionUs());
+            resetPosition(getPositionUs());
         }
         this.playbackParameters = playbackParameters;
         return playbackParameters;

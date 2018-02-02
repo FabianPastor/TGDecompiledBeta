@@ -76,6 +76,7 @@ import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.DefaultItemAnimator;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -2704,7 +2705,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         }
                     }
                 }
-            }, 2000);
+            }, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
         }
     }
 

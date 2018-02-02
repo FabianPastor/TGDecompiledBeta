@@ -5,7 +5,7 @@ import android.text.SpannableStringBuilder;
 import android.util.Log;
 import org.telegram.messenger.exoplayer2.text.Cue;
 
-final class WebvttCue extends Cue {
+public final class WebvttCue extends Cue {
     public final long endTime;
     public final long startTime;
 
@@ -28,7 +28,7 @@ final class WebvttCue extends Cue {
         }
     }
 
-    public static final class Builder {
+    public static class Builder {
         private static final String TAG = "WebvttCueBuilder";
         private long endTime;
         private float line;

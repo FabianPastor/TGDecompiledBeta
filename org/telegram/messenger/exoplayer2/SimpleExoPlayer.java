@@ -12,118 +12,119 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 import org.telegram.messenger.exoplayer2.ExoPlayer.ExoPlayerMessage;
 import org.telegram.messenger.exoplayer2.Player.EventListener;
+import org.telegram.messenger.exoplayer2.Player.TextComponent;
+import org.telegram.messenger.exoplayer2.Player.VideoComponent;
+import org.telegram.messenger.exoplayer2.PlayerMessage.Target;
 import org.telegram.messenger.exoplayer2.audio.AudioAttributes;
 import org.telegram.messenger.exoplayer2.audio.AudioAttributes.Builder;
 import org.telegram.messenger.exoplayer2.audio.AudioRendererEventListener;
 import org.telegram.messenger.exoplayer2.decoder.DecoderCounters;
 import org.telegram.messenger.exoplayer2.metadata.Metadata;
-import org.telegram.messenger.exoplayer2.metadata.MetadataRenderer.Output;
+import org.telegram.messenger.exoplayer2.metadata.MetadataOutput;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
 import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
 import org.telegram.messenger.exoplayer2.text.Cue;
-import org.telegram.messenger.exoplayer2.text.TextRenderer;
+import org.telegram.messenger.exoplayer2.text.TextOutput;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelector;
+import org.telegram.messenger.exoplayer2.util.Clock;
 import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.messenger.exoplayer2.video.VideoRendererEventListener;
 
 @TargetApi(16)
-public class SimpleExoPlayer implements ExoPlayer {
+public class SimpleExoPlayer implements ExoPlayer, TextComponent, VideoComponent {
     private static final String TAG = "SimpleExoPlayer";
     private AudioAttributes audioAttributes;
-    private AudioRendererEventListener audioDebugListener;
+    private final CopyOnWriteArraySet<AudioRendererEventListener> audioDebugListeners;
     private DecoderCounters audioDecoderCounters;
     private Format audioFormat;
-    private final int audioRendererCount;
     private int audioSessionId;
     private float audioVolume;
-    private final ComponentListener componentListener = new ComponentListener();
-    private final CopyOnWriteArraySet<Output> metadataOutputs = new CopyOnWriteArraySet();
-    private boolean needSetSurface = true;
+    private final ComponentListener componentListener;
+    private final CopyOnWriteArraySet<MetadataOutput> metadataOutputs;
+    private boolean needSetSurface;
     private boolean ownsSurface;
     private final ExoPlayer player;
     protected final Renderer[] renderers;
     private Surface surface;
     private SurfaceHolder surfaceHolder;
-    private final CopyOnWriteArraySet<TextRenderer.Output> textOutputs = new CopyOnWriteArraySet();
+    private final CopyOnWriteArraySet<TextOutput> textOutputs;
     private TextureView textureView;
-    private VideoRendererEventListener videoDebugListener;
+    private final CopyOnWriteArraySet<VideoRendererEventListener> videoDebugListeners;
     private DecoderCounters videoDecoderCounters;
     private Format videoFormat;
-    private final CopyOnWriteArraySet<VideoListener> videoListeners = new CopyOnWriteArraySet();
-    private final int videoRendererCount;
+    private final CopyOnWriteArraySet<org.telegram.messenger.exoplayer2.video.VideoListener> videoListeners;
     private int videoScalingMode;
 
-    public interface VideoListener {
-        void onRenderedFirstFrame();
-
-        boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture);
-
-        void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture);
-
-        void onVideoSizeChanged(int i, int i2, int i3, float f);
-    }
-
-    private final class ComponentListener implements Callback, SurfaceTextureListener, AudioRendererEventListener, Output, TextRenderer.Output, VideoRendererEventListener {
+    private final class ComponentListener implements Callback, SurfaceTextureListener, AudioRendererEventListener, MetadataOutput, TextOutput, VideoRendererEventListener {
         private ComponentListener() {
         }
 
         public void onVideoEnabled(DecoderCounters counters) {
             SimpleExoPlayer.this.videoDecoderCounters = counters;
-            if (SimpleExoPlayer.this.videoDebugListener != null) {
-                SimpleExoPlayer.this.videoDebugListener.onVideoEnabled(counters);
+            Iterator it = SimpleExoPlayer.this.videoDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((VideoRendererEventListener) it.next()).onVideoEnabled(counters);
             }
         }
 
         public void onVideoDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
-            if (SimpleExoPlayer.this.videoDebugListener != null) {
-                SimpleExoPlayer.this.videoDebugListener.onVideoDecoderInitialized(decoderName, initializedTimestampMs, initializationDurationMs);
+            Iterator it = SimpleExoPlayer.this.videoDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((VideoRendererEventListener) it.next()).onVideoDecoderInitialized(decoderName, initializedTimestampMs, initializationDurationMs);
             }
         }
 
         public void onVideoInputFormatChanged(Format format) {
             SimpleExoPlayer.this.videoFormat = format;
-            if (SimpleExoPlayer.this.videoDebugListener != null) {
-                SimpleExoPlayer.this.videoDebugListener.onVideoInputFormatChanged(format);
+            Iterator it = SimpleExoPlayer.this.videoDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((VideoRendererEventListener) it.next()).onVideoInputFormatChanged(format);
             }
         }
 
         public void onDroppedFrames(int count, long elapsed) {
-            if (SimpleExoPlayer.this.videoDebugListener != null) {
-                SimpleExoPlayer.this.videoDebugListener.onDroppedFrames(count, elapsed);
+            Iterator it = SimpleExoPlayer.this.videoDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((VideoRendererEventListener) it.next()).onDroppedFrames(count, elapsed);
             }
         }
 
         public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
             Iterator it = SimpleExoPlayer.this.videoListeners.iterator();
             while (it.hasNext()) {
-                ((VideoListener) it.next()).onVideoSizeChanged(width, height, unappliedRotationDegrees, pixelWidthHeightRatio);
+                ((org.telegram.messenger.exoplayer2.video.VideoListener) it.next()).onVideoSizeChanged(width, height, unappliedRotationDegrees, pixelWidthHeightRatio);
             }
-            if (SimpleExoPlayer.this.videoDebugListener != null) {
-                SimpleExoPlayer.this.videoDebugListener.onVideoSizeChanged(width, height, unappliedRotationDegrees, pixelWidthHeightRatio);
+            it = SimpleExoPlayer.this.videoDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((VideoRendererEventListener) it.next()).onVideoSizeChanged(width, height, unappliedRotationDegrees, pixelWidthHeightRatio);
             }
         }
 
         public void onRenderedFirstFrame(Surface surface) {
+            Iterator it;
             if (SimpleExoPlayer.this.surface == surface) {
-                Iterator it = SimpleExoPlayer.this.videoListeners.iterator();
+                it = SimpleExoPlayer.this.videoListeners.iterator();
                 while (it.hasNext()) {
-                    ((VideoListener) it.next()).onRenderedFirstFrame();
+                    ((org.telegram.messenger.exoplayer2.video.VideoListener) it.next()).onRenderedFirstFrame();
                 }
             }
-            if (SimpleExoPlayer.this.videoDebugListener != null) {
-                SimpleExoPlayer.this.videoDebugListener.onRenderedFirstFrame(surface);
+            it = SimpleExoPlayer.this.videoDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((VideoRendererEventListener) it.next()).onRenderedFirstFrame(surface);
             }
         }
 
         public void onVideoDisabled(DecoderCounters counters) {
-            if (SimpleExoPlayer.this.videoDebugListener != null) {
-                SimpleExoPlayer.this.videoDebugListener.onVideoDisabled(counters);
+            Iterator it = SimpleExoPlayer.this.videoDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((VideoRendererEventListener) it.next()).onVideoDisabled(counters);
             }
             SimpleExoPlayer.this.videoFormat = null;
             SimpleExoPlayer.this.videoDecoderCounters = null;
@@ -131,40 +132,46 @@ public class SimpleExoPlayer implements ExoPlayer {
 
         public void onAudioEnabled(DecoderCounters counters) {
             SimpleExoPlayer.this.audioDecoderCounters = counters;
-            if (SimpleExoPlayer.this.audioDebugListener != null) {
-                SimpleExoPlayer.this.audioDebugListener.onAudioEnabled(counters);
+            Iterator it = SimpleExoPlayer.this.audioDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((AudioRendererEventListener) it.next()).onAudioEnabled(counters);
             }
         }
 
         public void onAudioSessionId(int sessionId) {
             SimpleExoPlayer.this.audioSessionId = sessionId;
-            if (SimpleExoPlayer.this.audioDebugListener != null) {
-                SimpleExoPlayer.this.audioDebugListener.onAudioSessionId(sessionId);
+            Iterator it = SimpleExoPlayer.this.audioDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((AudioRendererEventListener) it.next()).onAudioSessionId(sessionId);
             }
         }
 
         public void onAudioDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
-            if (SimpleExoPlayer.this.audioDebugListener != null) {
-                SimpleExoPlayer.this.audioDebugListener.onAudioDecoderInitialized(decoderName, initializedTimestampMs, initializationDurationMs);
+            Iterator it = SimpleExoPlayer.this.audioDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((AudioRendererEventListener) it.next()).onAudioDecoderInitialized(decoderName, initializedTimestampMs, initializationDurationMs);
             }
         }
 
         public void onAudioInputFormatChanged(Format format) {
             SimpleExoPlayer.this.audioFormat = format;
-            if (SimpleExoPlayer.this.audioDebugListener != null) {
-                SimpleExoPlayer.this.audioDebugListener.onAudioInputFormatChanged(format);
+            Iterator it = SimpleExoPlayer.this.audioDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((AudioRendererEventListener) it.next()).onAudioInputFormatChanged(format);
             }
         }
 
-        public void onAudioTrackUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
-            if (SimpleExoPlayer.this.audioDebugListener != null) {
-                SimpleExoPlayer.this.audioDebugListener.onAudioTrackUnderrun(bufferSize, bufferSizeMs, elapsedSinceLastFeedMs);
+        public void onAudioSinkUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
+            Iterator it = SimpleExoPlayer.this.audioDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((AudioRendererEventListener) it.next()).onAudioSinkUnderrun(bufferSize, bufferSizeMs, elapsedSinceLastFeedMs);
             }
         }
 
         public void onAudioDisabled(DecoderCounters counters) {
-            if (SimpleExoPlayer.this.audioDebugListener != null) {
-                SimpleExoPlayer.this.audioDebugListener.onAudioDisabled(counters);
+            Iterator it = SimpleExoPlayer.this.audioDebugListeners.iterator();
+            while (it.hasNext()) {
+                ((AudioRendererEventListener) it.next()).onAudioDisabled(counters);
             }
             SimpleExoPlayer.this.audioFormat = null;
             SimpleExoPlayer.this.audioDecoderCounters = null;
@@ -174,14 +181,14 @@ public class SimpleExoPlayer implements ExoPlayer {
         public void onCues(List<Cue> cues) {
             Iterator it = SimpleExoPlayer.this.textOutputs.iterator();
             while (it.hasNext()) {
-                ((TextRenderer.Output) it.next()).onCues(cues);
+                ((TextOutput) it.next()).onCues(cues);
             }
         }
 
         public void onMetadata(Metadata metadata) {
             Iterator it = SimpleExoPlayer.this.metadataOutputs.iterator();
             while (it.hasNext()) {
-                ((Output) it.next()).onMetadata(metadata);
+                ((MetadataOutput) it.next()).onMetadata(metadata);
             }
         }
 
@@ -209,7 +216,7 @@ public class SimpleExoPlayer implements ExoPlayer {
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
             Iterator it = SimpleExoPlayer.this.videoListeners.iterator();
             while (it.hasNext()) {
-                if (((VideoListener) it.next()).onSurfaceDestroyed(surfaceTexture)) {
+                if (((org.telegram.messenger.exoplayer2.video.VideoListener) it.next()).onSurfaceDestroyed(surfaceTexture)) {
                     return false;
                 }
             }
@@ -221,56 +228,50 @@ public class SimpleExoPlayer implements ExoPlayer {
         public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
             Iterator it = SimpleExoPlayer.this.videoListeners.iterator();
             while (it.hasNext()) {
-                ((VideoListener) it.next()).onSurfaceTextureUpdated(surfaceTexture);
+                ((org.telegram.messenger.exoplayer2.video.VideoListener) it.next()).onSurfaceTextureUpdated(surfaceTexture);
             }
         }
     }
 
+    @Deprecated
+    public interface VideoListener extends org.telegram.messenger.exoplayer2.video.VideoListener {
+    }
+
     protected SimpleExoPlayer(RenderersFactory renderersFactory, TrackSelector trackSelector, LoadControl loadControl) {
+        this(renderersFactory, trackSelector, loadControl, Clock.DEFAULT);
+    }
+
+    protected SimpleExoPlayer(RenderersFactory renderersFactory, TrackSelector trackSelector, LoadControl loadControl, Clock clock) {
+        this.needSetSurface = true;
+        this.componentListener = new ComponentListener();
+        this.videoListeners = new CopyOnWriteArraySet();
+        this.textOutputs = new CopyOnWriteArraySet();
+        this.metadataOutputs = new CopyOnWriteArraySet();
+        this.videoDebugListeners = new CopyOnWriteArraySet();
+        this.audioDebugListeners = new CopyOnWriteArraySet();
         this.renderers = renderersFactory.createRenderers(new Handler(Looper.myLooper() != null ? Looper.myLooper() : Looper.getMainLooper()), this.componentListener, this.componentListener, this.componentListener, this.componentListener);
-        int videoRendererCount = 0;
-        int audioRendererCount = 0;
-        for (Renderer renderer : this.renderers) {
-            switch (renderer.getTrackType()) {
-                case 1:
-                    audioRendererCount++;
-                    break;
-                case 2:
-                    videoRendererCount++;
-                    break;
-                default:
-                    break;
-            }
-        }
-        this.videoRendererCount = videoRendererCount;
-        this.audioRendererCount = audioRendererCount;
         this.audioVolume = 1.0f;
         this.audioSessionId = 0;
         this.audioAttributes = AudioAttributes.DEFAULT;
         this.videoScalingMode = 1;
-        this.player = new ExoPlayerImpl(this.renderers, trackSelector, loadControl);
+        this.player = createExoPlayerImpl(this.renderers, trackSelector, loadControl, clock);
+    }
+
+    public VideoComponent getVideoComponent() {
+        return this;
+    }
+
+    public TextComponent getTextComponent() {
+        return this;
     }
 
     public void setVideoScalingMode(int videoScalingMode) {
         this.videoScalingMode = videoScalingMode;
-        ExoPlayerMessage[] messages = new ExoPlayerMessage[this.videoRendererCount];
-        Renderer[] rendererArr = this.renderers;
-        int length = rendererArr.length;
-        int i = 0;
-        int count = 0;
-        while (i < length) {
-            int count2;
-            Renderer renderer = rendererArr[i];
+        for (Renderer renderer : this.renderers) {
             if (renderer.getTrackType() == 2) {
-                count2 = count + 1;
-                messages[count] = new ExoPlayerMessage(renderer, 4, Integer.valueOf(videoScalingMode));
-            } else {
-                count2 = count;
+                this.player.createMessage(renderer).setType(4).setPayload(Integer.valueOf(videoScalingMode)).send();
             }
-            i++;
-            count = count2;
         }
-        this.player.sendMessages(messages);
     }
 
     public int getVideoScalingMode() {
@@ -367,24 +368,11 @@ public class SimpleExoPlayer implements ExoPlayer {
 
     public void setAudioAttributes(AudioAttributes audioAttributes) {
         this.audioAttributes = audioAttributes;
-        ExoPlayerMessage[] messages = new ExoPlayerMessage[this.audioRendererCount];
-        Renderer[] rendererArr = this.renderers;
-        int length = rendererArr.length;
-        int i = 0;
-        int count = 0;
-        while (i < length) {
-            int count2;
-            Renderer renderer = rendererArr[i];
+        for (Renderer renderer : this.renderers) {
             if (renderer.getTrackType() == 1) {
-                count2 = count + 1;
-                messages[count] = new ExoPlayerMessage(renderer, 3, audioAttributes);
-            } else {
-                count2 = count;
+                this.player.createMessage(renderer).setType(3).setPayload(audioAttributes).send();
             }
-            i++;
-            count = count2;
         }
-        this.player.sendMessages(messages);
     }
 
     public AudioAttributes getAudioAttributes() {
@@ -393,24 +381,11 @@ public class SimpleExoPlayer implements ExoPlayer {
 
     public void setVolume(float audioVolume) {
         this.audioVolume = audioVolume;
-        ExoPlayerMessage[] messages = new ExoPlayerMessage[this.audioRendererCount];
-        Renderer[] rendererArr = this.renderers;
-        int length = rendererArr.length;
-        int i = 0;
-        int count = 0;
-        while (i < length) {
-            int count2;
-            Renderer renderer = rendererArr[i];
+        for (Renderer renderer : this.renderers) {
             if (renderer.getTrackType() == 1) {
-                count2 = count + 1;
-                messages[count] = new ExoPlayerMessage(renderer, 2, Float.valueOf(audioVolume));
-            } else {
-                count2 = count;
+                this.player.createMessage(renderer).setType(2).setPayload(Float.valueOf(audioVolume)).send();
             }
-            i++;
-            count = count2;
         }
-        this.player.sendMessages(messages);
     }
 
     public float getVolume() {
@@ -450,11 +425,11 @@ public class SimpleExoPlayer implements ExoPlayer {
         return this.audioDecoderCounters;
     }
 
-    public void addVideoListener(VideoListener listener) {
+    public void addVideoListener(org.telegram.messenger.exoplayer2.video.VideoListener listener) {
         this.videoListeners.add(listener);
     }
 
-    public void removeVideoListener(VideoListener listener) {
+    public void removeVideoListener(org.telegram.messenger.exoplayer2.video.VideoListener listener) {
         this.videoListeners.remove(listener);
     }
 
@@ -471,16 +446,16 @@ public class SimpleExoPlayer implements ExoPlayer {
         removeVideoListener(listener);
     }
 
-    public void addTextOutput(TextRenderer.Output listener) {
+    public void addTextOutput(TextOutput listener) {
         this.textOutputs.add(listener);
     }
 
-    public void removeTextOutput(TextRenderer.Output listener) {
+    public void removeTextOutput(TextOutput listener) {
         this.textOutputs.remove(listener);
     }
 
     @Deprecated
-    public void setTextOutput(TextRenderer.Output output) {
+    public void setTextOutput(TextOutput output) {
         this.textOutputs.clear();
         if (output != null) {
             addTextOutput(output);
@@ -488,20 +463,20 @@ public class SimpleExoPlayer implements ExoPlayer {
     }
 
     @Deprecated
-    public void clearTextOutput(TextRenderer.Output output) {
+    public void clearTextOutput(TextOutput output) {
         removeTextOutput(output);
     }
 
-    public void addMetadataOutput(Output listener) {
+    public void addMetadataOutput(MetadataOutput listener) {
         this.metadataOutputs.add(listener);
     }
 
-    public void removeMetadataOutput(Output listener) {
+    public void removeMetadataOutput(MetadataOutput listener) {
         this.metadataOutputs.remove(listener);
     }
 
     @Deprecated
-    public void setMetadataOutput(Output output) {
+    public void setMetadataOutput(MetadataOutput output) {
         this.metadataOutputs.clear();
         if (output != null) {
             addMetadataOutput(output);
@@ -509,16 +484,40 @@ public class SimpleExoPlayer implements ExoPlayer {
     }
 
     @Deprecated
-    public void clearMetadataOutput(Output output) {
+    public void clearMetadataOutput(MetadataOutput output) {
         removeMetadataOutput(output);
     }
 
+    @Deprecated
     public void setVideoDebugListener(VideoRendererEventListener listener) {
-        this.videoDebugListener = listener;
+        this.videoDebugListeners.clear();
+        if (listener != null) {
+            addVideoDebugListener(listener);
+        }
     }
 
+    public void addVideoDebugListener(VideoRendererEventListener listener) {
+        this.videoDebugListeners.add(listener);
+    }
+
+    public void removeVideoDebugListener(VideoRendererEventListener listener) {
+        this.videoDebugListeners.remove(listener);
+    }
+
+    @Deprecated
     public void setAudioDebugListener(AudioRendererEventListener listener) {
-        this.audioDebugListener = listener;
+        this.audioDebugListeners.clear();
+        if (listener != null) {
+            addAudioDebugListener(listener);
+        }
+    }
+
+    public void addAudioDebugListener(AudioRendererEventListener listener) {
+        this.audioDebugListeners.add(listener);
+    }
+
+    public void removeAudioDebugListener(AudioRendererEventListener listener) {
+        this.audioDebugListeners.remove(listener);
     }
 
     public Looper getPlaybackLooper() {
@@ -561,6 +560,14 @@ public class SimpleExoPlayer implements ExoPlayer {
         this.player.setRepeatMode(repeatMode);
     }
 
+    public void setShuffleModeEnabled(boolean shuffleModeEnabled) {
+        this.player.setShuffleModeEnabled(shuffleModeEnabled);
+    }
+
+    public boolean getShuffleModeEnabled() {
+        return this.player.getShuffleModeEnabled();
+    }
+
     public boolean isLoading() {
         return this.player.isLoading();
     }
@@ -589,8 +596,16 @@ public class SimpleExoPlayer implements ExoPlayer {
         return this.player.getPlaybackParameters();
     }
 
+    public void setSeekParameters(SeekParameters seekParameters) {
+        this.player.setSeekParameters(seekParameters);
+    }
+
     public void stop() {
         this.player.stop();
+    }
+
+    public void stop(boolean reset) {
+        this.player.stop(reset);
     }
 
     public void release() {
@@ -606,6 +621,10 @@ public class SimpleExoPlayer implements ExoPlayer {
 
     public void sendMessages(ExoPlayerMessage... messages) {
         this.player.sendMessages(messages);
+    }
+
+    public PlayerMessage createMessage(Target target) {
+        return this.player.createMessage(target);
     }
 
     public void blockingSendMessages(ExoPlayerMessage... messages) {
@@ -642,6 +661,14 @@ public class SimpleExoPlayer implements ExoPlayer {
 
     public int getCurrentWindowIndex() {
         return this.player.getCurrentWindowIndex();
+    }
+
+    public int getNextWindowIndex() {
+        return this.player.getNextWindowIndex();
+    }
+
+    public int getPreviousWindowIndex() {
+        return this.player.getPreviousWindowIndex();
     }
 
     public long getDuration() {
@@ -684,6 +711,10 @@ public class SimpleExoPlayer implements ExoPlayer {
         return this.player.getContentPosition();
     }
 
+    protected ExoPlayer createExoPlayerImpl(Renderer[] renderers, TrackSelector trackSelector, LoadControl loadControl, Clock clock) {
+        return new ExoPlayerImpl(renderers, trackSelector, loadControl, clock);
+    }
+
     private void removeSurfaceCallbacks() {
         if (this.textureView != null) {
             if (this.textureView.getSurfaceTextureListener() != this.componentListener) {
@@ -700,27 +731,20 @@ public class SimpleExoPlayer implements ExoPlayer {
     }
 
     private void setVideoSurfaceInternal(Surface surface, boolean ownsSurface) {
-        ExoPlayerMessage[] messages = new ExoPlayerMessage[this.videoRendererCount];
-        Renderer[] rendererArr = this.renderers;
-        int length = rendererArr.length;
-        int i = 0;
-        int count = 0;
-        while (i < length) {
-            int count2;
-            Renderer renderer = rendererArr[i];
+        List<PlayerMessage> messages = new ArrayList();
+        for (Renderer renderer : this.renderers) {
             if (renderer.getTrackType() == 2) {
-                count2 = count + 1;
-                messages[count] = new ExoPlayerMessage(renderer, 1, surface);
-            } else {
-                count2 = count;
+                messages.add(this.player.createMessage(renderer).setType(1).setPayload(surface).send());
             }
-            i++;
-            count = count2;
         }
-        if (this.surface == null || this.surface == surface) {
-            this.player.sendMessages(messages);
-        } else {
-            this.player.blockingSendMessages(messages);
+        if (!(this.surface == null || this.surface == surface)) {
+            try {
+                for (PlayerMessage message : messages) {
+                    message.blockUntilDelivered();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             if (this.ownsSurface) {
                 this.surface.release();
             }

@@ -32,15 +32,15 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
 
     public SsaDecoder(List<byte[]> initializationData) {
         super(TAG);
-        if (initializationData != null) {
-            this.haveInitializationData = true;
-            String formatLine = new String((byte[]) initializationData.get(0));
-            Assertions.checkArgument(formatLine.startsWith(FORMAT_LINE_PREFIX));
-            parseFormatLine(formatLine);
-            parseHeader(new ParsableByteArray((byte[]) initializationData.get(1)));
+        if (initializationData == null || initializationData.isEmpty()) {
+            this.haveInitializationData = false;
             return;
         }
-        this.haveInitializationData = false;
+        this.haveInitializationData = true;
+        String formatLine = new String((byte[]) initializationData.get(0));
+        Assertions.checkArgument(formatLine.startsWith(FORMAT_LINE_PREFIX));
+        parseFormatLine(formatLine);
+        parseHeader(new ParsableByteArray((byte[]) initializationData.get(1)));
     }
 
     protected SsaSubtitle decode(byte[] bytes, int length, boolean reset) {
@@ -125,14 +125,21 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
                     break;
             }
         }
+        if (this.formatStartIndex == -1 || this.formatEndIndex == -1 || this.formatTextIndex == -1) {
+            this.formatKeyCount = 0;
+        }
     }
 
     private void parseDialogueLine(String dialogueLine, List<Cue> cues, LongArray cueTimesUs) {
         if (this.formatKeyCount == 0) {
-            Log.w(TAG, "Skipping dialogue line before format: " + dialogueLine);
+            Log.w(TAG, "Skipping dialogue line before complete format: " + dialogueLine);
             return;
         }
         String[] lineValues = dialogueLine.substring(DIALOGUE_LINE_PREFIX.length()).split(",", this.formatKeyCount);
+        if (lineValues.length != this.formatKeyCount) {
+            Log.w(TAG, "Skipping dialogue line with fewer columns than format: " + dialogueLine);
+            return;
+        }
         long startTimeUs = parseTimecodeUs(lineValues[this.formatStartIndex]);
         if (startTimeUs == C.TIME_UNSET) {
             Log.w(TAG, "Skipping invalid timing: " + dialogueLine);

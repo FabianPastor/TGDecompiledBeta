@@ -20,15 +20,16 @@ public final class WebvttParserUtil {
     }
 
     public static long parseTimestampUs(String timestamp) throws NumberFormatException {
-        int i = 0;
         long value = 0;
         String[] parts = timestamp.split("\\.", 2);
-        String[] subparts = parts[0].split(":");
-        while (i < subparts.length) {
-            value = (60 * value) + Long.parseLong(subparts[i]);
-            i++;
+        for (String subpart : parts[0].split(":")) {
+            value = (60 * value) + Long.parseLong(subpart);
         }
-        return ((value * 1000) + Long.parseLong(parts[1])) * 1000;
+        value *= 1000;
+        if (parts.length == 2) {
+            value += Long.parseLong(parts[1]);
+        }
+        return 1000 * value;
     }
 
     public static float parsePercentage(String s) throws NumberFormatException {

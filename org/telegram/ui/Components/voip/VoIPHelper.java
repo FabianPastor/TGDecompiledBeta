@@ -29,6 +29,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -115,7 +116,7 @@ public class VoIPHelper {
     }
 
     private static void doInitiateCall(User user, Activity activity) {
-        if (activity != null && user != null && System.currentTimeMillis() - lastCallTime >= 2000) {
+        if (activity != null && user != null && System.currentTimeMillis() - lastCallTime >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS) {
             lastCallTime = System.currentTimeMillis();
             Intent intent = new Intent(activity, VoIPService.class);
             intent.putExtra("user_id", user.id);

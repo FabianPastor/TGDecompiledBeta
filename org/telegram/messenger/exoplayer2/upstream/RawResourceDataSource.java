@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public final class RawResourceDataSource implements DataSource {
-    private static final String RAW_RESOURCE_SCHEME = "rawresource";
+    public static final String RAW_RESOURCE_SCHEME = "rawresource";
     private AssetFileDescriptor assetFileDescriptor;
     private long bytesRemaining;
     private InputStream inputStream;

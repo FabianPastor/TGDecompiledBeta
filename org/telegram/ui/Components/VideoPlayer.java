@@ -6,7 +6,8 @@ import android.net.Uri;
 import android.os.Handler;
 import android.view.TextureView;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.MediaController;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.ExoPlayer.EventListener;
@@ -36,7 +37,7 @@ import org.telegram.messenger.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import org.telegram.messenger.secretmedia.ExtendedDefaultDataSourceFactory;
 
 @SuppressLint({"NewApi"})
-public class VideoPlayer implements EventListener, VideoListener {
+public class VideoPlayer implements NotificationCenterDelegate, EventListener, VideoListener {
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private static final int RENDERER_BUILDING_STATE_BUILDING = 2;
     private static final int RENDERER_BUILDING_STATE_BUILT = 3;
@@ -77,6 +78,16 @@ public class VideoPlayer implements EventListener, VideoListener {
         void onVideoSizeChanged(int i, int i2, int i3, float f);
     }
 
+    public VideoPlayer() {
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.playerDidStartPlaying);
+    }
+
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.playerDidStartPlaying && args[0] != this && isPlaying()) {
+            pause();
+        }
+    }
+
     private void ensurePleyaerCreated() {
         if (this.player == null) {
             this.player = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 0);
@@ -88,13 +99,22 @@ public class VideoPlayer implements EventListener, VideoListener {
         if (this.mixedAudio && this.audioPlayer == null) {
             this.audioPlayer = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 0);
             this.audioPlayer.addListener(new Player.EventListener() {
-                public void onTimelineChanged(Timeline timeline, Object manifest) {
-                }
-
                 public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
                 }
 
                 public void onLoadingChanged(boolean isLoading) {
+                }
+
+                public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+                }
+
+                public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+                }
+
+                public void onPositionDiscontinuity(int reason) {
+                }
+
+                public void onSeekProcessed() {
                 }
 
                 public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
@@ -108,9 +128,6 @@ public class VideoPlayer implements EventListener, VideoListener {
                 }
 
                 public void onPlayerError(ExoPlaybackException error) {
-                }
-
-                public void onPositionDiscontinuity() {
                 }
 
                 public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
@@ -249,6 +266,7 @@ public class VideoPlayer implements EventListener, VideoListener {
             this.audioPlayer.release();
             this.audioPlayer = null;
         }
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.playerDidStartPlaying);
     }
 
     public void setTextureView(TextureView texture) {
@@ -403,23 +421,29 @@ public class VideoPlayer implements EventListener, VideoListener {
 
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         maybeReportPlayerState();
+        if (playWhenReady && playbackState == 3) {
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.playerDidStartPlaying, this);
+        }
         if (!this.videoPlayerReady && playbackState == 3) {
-            if (!MediaController.getInstance().isCurrentPlayer(this)) {
-                MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
-            }
             this.videoPlayerReady = true;
             checkPlayersReady();
         }
     }
 
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
+    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+    }
+
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+    }
+
+    public void onPositionDiscontinuity(int reason) {
+    }
+
+    public void onSeekProcessed() {
     }
 
     public void onPlayerError(ExoPlaybackException error) {
         this.delegate.onError(error);
-    }
-
-    public void onPositionDiscontinuity() {
     }
 
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {

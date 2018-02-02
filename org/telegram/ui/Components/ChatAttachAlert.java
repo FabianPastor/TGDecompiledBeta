@@ -59,6 +59,7 @@ import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.camera.CameraController.VideoTakeCallback;
 import org.telegram.messenger.camera.CameraView;
 import org.telegram.messenger.camera.CameraView.CameraViewDelegate;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -1916,7 +1917,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                     ChatAttachAlert.this.hideHint();
                                 }
                             }
-                        }, 2000);
+                        }, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                     }
                 }
 

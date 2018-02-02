@@ -9,7 +9,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ParserException;
-import org.telegram.messenger.exoplayer2.source.AdaptiveMediaSourceEventListener.EventDispatcher;
+import org.telegram.messenger.exoplayer2.source.MediaSourceEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import org.telegram.messenger.exoplayer2.source.hls.HlsDataSourceFactory;
 import org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist.HlsUrl;

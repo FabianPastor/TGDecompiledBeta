@@ -19,8 +19,8 @@ public class zzeu implements IInterface {
     }
 
     protected final Parcel zza(int i, Parcel parcel) throws RemoteException {
-        IBinder iBinder;
         Parcel obtain = Parcel.obtain();
+        IBinder iBinder;
         try {
             iBinder = this.zzalc;
             iBinder.transact(i, parcel, obtain, 0);

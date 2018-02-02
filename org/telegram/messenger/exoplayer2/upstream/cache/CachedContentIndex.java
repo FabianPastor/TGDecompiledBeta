@@ -15,8 +15,6 @@ import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.Set;
 import javax.crypto.Cipher;
@@ -55,9 +53,13 @@ class CachedContentIndex {
 
     public CachedContentIndex(File cacheDir, byte[] secretKey, boolean encrypt) {
         GeneralSecurityException e;
+        boolean z = true;
         this.encrypt = encrypt;
         if (secretKey != null) {
-            Assertions.checkArgument(secretKey.length == 16);
+            if (secretKey.length != 16) {
+                z = false;
+            }
+            Assertions.checkArgument(z);
             try {
                 this.cipher = getCipher();
                 this.secretKeySpec = new SecretKeySpec(secretKey, "AES");
@@ -69,6 +71,10 @@ class CachedContentIndex {
                 throw new IllegalStateException(e);
             }
         }
+        if (encrypt) {
+            z = false;
+        }
+        Assertions.checkState(z);
         this.cipher = null;
         this.secretKeySpec = null;
         this.keyToContent = new HashMap();
@@ -92,7 +98,7 @@ class CachedContentIndex {
         }
     }
 
-    public CachedContent add(String key) {
+    public CachedContent getOrAdd(String key) {
         CachedContent cachedContent = (CachedContent) this.keyToContent.get(key);
         if (cachedContent == null) {
             return addNew(key, -1);
@@ -109,32 +115,27 @@ class CachedContentIndex {
     }
 
     public int assignIdForKey(String key) {
-        return add(key).id;
+        return getOrAdd(key).id;
     }
 
     public String getKeyForId(int id) {
         return (String) this.idToKey.get(id);
     }
 
-    public void removeEmpty(String key) {
-        CachedContent cachedContent = (CachedContent) this.keyToContent.remove(key);
-        if (cachedContent != null) {
-            Assertions.checkState(cachedContent.isEmpty());
+    public void maybeRemove(String key) {
+        CachedContent cachedContent = (CachedContent) this.keyToContent.get(key);
+        if (cachedContent != null && cachedContent.isEmpty() && !cachedContent.isLocked()) {
+            this.keyToContent.remove(key);
             this.idToKey.remove(cachedContent.id);
             this.changed = true;
         }
     }
 
     public void removeEmpty() {
-        LinkedList<String> cachedContentToBeRemoved = new LinkedList();
-        for (CachedContent cachedContent : this.keyToContent.values()) {
-            if (cachedContent.isEmpty()) {
-                cachedContentToBeRemoved.add(cachedContent.key);
-            }
-        }
-        Iterator it = cachedContentToBeRemoved.iterator();
-        while (it.hasNext()) {
-            removeEmpty((String) it.next());
+        String[] keys = new String[this.keyToContent.size()];
+        this.keyToContent.keySet().toArray(keys);
+        for (String key : keys) {
+            maybeRemove(key);
         }
     }
 
@@ -174,7 +175,7 @@ class CachedContentIndex {
                     return false;
                 }
                 if ((input.readInt() & 1) == 0) {
-                    if (this.cipher != null) {
+                    if (this.encrypt) {
                         this.changed = true;
                     }
                     closeable = input;
@@ -267,7 +268,8 @@ class CachedContentIndex {
 
     private void writeFile() throws CacheException {
         GeneralSecurityException e;
-        IOException e2;
+        Object output;
+        Throwable e2;
         Throwable th;
         int flags = 1;
         Closeable closeable = null;
@@ -278,27 +280,20 @@ class CachedContentIndex {
             } else {
                 this.bufferedOutputStream.reset(outputStream);
             }
-            DataOutputStream output = new DataOutputStream(this.bufferedOutputStream);
-            Object output2;
+            DataOutputStream output2 = new DataOutputStream(this.bufferedOutputStream);
             try {
-                boolean writeEncrypted;
-                output.writeInt(1);
-                if (!this.encrypt || this.cipher == null) {
-                    writeEncrypted = false;
-                } else {
-                    writeEncrypted = true;
-                }
-                if (!writeEncrypted) {
+                output2.writeInt(1);
+                if (!this.encrypt) {
                     flags = 0;
                 }
-                output.writeInt(flags);
-                if (writeEncrypted) {
+                output2.writeInt(flags);
+                if (this.encrypt) {
                     byte[] initializationVector = new byte[16];
                     new Random().nextBytes(initializationVector);
-                    output.write(initializationVector);
+                    output2.write(initializationVector);
                     try {
                         this.cipher.init(1, this.secretKeySpec, new IvParameterSpec(initializationVector));
-                        output.flush();
+                        output2.flush();
                         closeable = new DataOutputStream(new CipherOutputStream(this.bufferedOutputStream, this.cipher));
                     } catch (GeneralSecurityException e3) {
                         e = e3;
@@ -308,7 +303,7 @@ class CachedContentIndex {
                         throw new IllegalStateException(e);
                     }
                 }
-                output2 = output;
+                output = output2;
                 closeable.writeInt(this.keyToContent.size());
                 int hashCode = 0;
                 for (CachedContent cachedContent : this.keyToContent.values()) {
@@ -320,7 +315,7 @@ class CachedContentIndex {
                 Util.closeQuietly((Closeable) null);
             } catch (IOException e4) {
                 e2 = e4;
-                output2 = output;
+                output = output2;
                 try {
                     throw new CacheException(e2);
                 } catch (Throwable th2) {
@@ -330,7 +325,7 @@ class CachedContentIndex {
                 }
             } catch (Throwable th3) {
                 th = th3;
-                output2 = output;
+                output = output2;
                 Util.closeQuietly(closeable);
                 throw th;
             }

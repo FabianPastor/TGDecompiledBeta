@@ -13,7 +13,7 @@ import org.telegram.messenger.exoplayer2.util.ParsableBitArray;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
 public final class Ac3Reader implements ElementaryStreamReader {
-    private static final int HEADER_SIZE = 8;
+    private static final int HEADER_SIZE = 128;
     private static final int STATE_FINDING_SYNC = 0;
     private static final int STATE_READING_HEADER = 1;
     private static final int STATE_READING_SAMPLE = 2;
@@ -39,7 +39,7 @@ public final class Ac3Reader implements ElementaryStreamReader {
     }
 
     public Ac3Reader(String language) {
-        this.headerScratchBits = new ParsableBitArray(new byte[8]);
+        this.headerScratchBits = new ParsableBitArray(new byte[128]);
         this.headerScratchBytes = new ParsableByteArray(this.headerScratchBits.data);
         this.state = 0;
         this.language = language;
@@ -74,12 +74,12 @@ public final class Ac3Reader implements ElementaryStreamReader {
                     this.bytesRead = 2;
                     break;
                 case 1:
-                    if (!continueRead(data, this.headerScratchBytes.data, 8)) {
+                    if (!continueRead(data, this.headerScratchBytes.data, 128)) {
                         break;
                     }
                     parseHeader();
                     this.headerScratchBytes.setPosition(0);
-                    this.output.sampleData(this.headerScratchBytes, 8);
+                    this.output.sampleData(this.headerScratchBytes, 128);
                     this.state = 2;
                     break;
                 case 2:

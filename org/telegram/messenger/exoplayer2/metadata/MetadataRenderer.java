@@ -19,24 +19,24 @@ public final class MetadataRenderer extends BaseRenderer implements Callback {
     private final MetadataDecoderFactory decoderFactory;
     private final FormatHolder formatHolder;
     private boolean inputStreamEnded;
-    private final Output output;
+    private final MetadataOutput output;
     private final Handler outputHandler;
     private final Metadata[] pendingMetadata;
     private int pendingMetadataCount;
     private int pendingMetadataIndex;
     private final long[] pendingMetadataTimestamps;
 
-    public interface Output {
-        void onMetadata(Metadata metadata);
+    @Deprecated
+    public interface Output extends MetadataOutput {
     }
 
-    public MetadataRenderer(Output output, Looper outputLooper) {
+    public MetadataRenderer(MetadataOutput output, Looper outputLooper) {
         this(output, outputLooper, MetadataDecoderFactory.DEFAULT);
     }
 
-    public MetadataRenderer(Output output, Looper outputLooper, MetadataDecoderFactory decoderFactory) {
+    public MetadataRenderer(MetadataOutput output, Looper outputLooper, MetadataDecoderFactory decoderFactory) {
         super(4);
-        this.output = (Output) Assertions.checkNotNull(output);
+        this.output = (MetadataOutput) Assertions.checkNotNull(output);
         this.outputHandler = outputLooper == null ? null : new Handler(outputLooper, this);
         this.decoderFactory = (MetadataDecoderFactory) Assertions.checkNotNull(decoderFactory);
         this.formatHolder = new FormatHolder();
@@ -46,7 +46,11 @@ public final class MetadataRenderer extends BaseRenderer implements Callback {
     }
 
     public int supportsFormat(Format format) {
-        return this.decoderFactory.supportsFormat(format) ? 4 : 0;
+        if (this.decoderFactory.supportsFormat(format)) {
+            return BaseRenderer.supportsFormatDrm(null, format.drmInitData) ? 4 : 2;
+        } else {
+            return 0;
+        }
     }
 
     protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {

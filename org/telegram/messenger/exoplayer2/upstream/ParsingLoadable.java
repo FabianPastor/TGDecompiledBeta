@@ -21,8 +21,12 @@ public final class ParsingLoadable<T> implements Loadable {
     }
 
     public ParsingLoadable(DataSource dataSource, Uri uri, int type, Parser<? extends T> parser) {
+        this(dataSource, new DataSpec(uri, 1), type, (Parser) parser);
+    }
+
+    public ParsingLoadable(DataSource dataSource, DataSpec dataSpec, int type, Parser<? extends T> parser) {
         this.dataSource = dataSource;
-        this.dataSpec = new DataSpec(uri, 1);
+        this.dataSpec = dataSpec;
         this.type = type;
         this.parser = parser;
     }
@@ -43,7 +47,7 @@ public final class ParsingLoadable<T> implements Loadable {
         return this.isCanceled;
     }
 
-    public final void load() throws IOException, InterruptedException {
+    public final void load() throws IOException {
         Closeable inputStream = new DataSourceInputStream(this.dataSource, this.dataSpec);
         try {
             inputStream.open();

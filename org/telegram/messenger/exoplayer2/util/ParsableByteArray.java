@@ -161,6 +161,21 @@ public final class ParsableByteArray {
         return i2 | (bArr2[i3] & 255);
     }
 
+    public int readInt24() {
+        byte[] bArr = this.data;
+        int i = this.position;
+        this.position = i + 1;
+        int i2 = ((bArr[i] & 255) << 24) >> 8;
+        byte[] bArr2 = this.data;
+        int i3 = this.position;
+        this.position = i3 + 1;
+        i2 |= (bArr2[i3] & 255) << 8;
+        bArr2 = this.data;
+        i3 = this.position;
+        this.position = i3 + 1;
+        return i2 | (bArr2[i3] & 255);
+    }
+
     public int readLittleEndianInt24() {
         byte[] bArr = this.data;
         int i = this.position;

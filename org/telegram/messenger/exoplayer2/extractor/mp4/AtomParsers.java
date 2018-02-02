@@ -324,7 +324,7 @@ final class AtomParsers {
                 remainingSamplesAtTimestampDelta--;
                 if (remainingSamplesAtTimestampDelta == 0 && remainingTimestampDeltaChanges > 0) {
                     remainingSamplesAtTimestampDelta = stts.readUnsignedIntToInt();
-                    timestampDeltaInTimeUnits = stts.readUnsignedIntToInt();
+                    timestampDeltaInTimeUnits = stts.readInt();
                     remainingTimestampDeltaChanges--;
                 }
                 offset += (long) sizes[i];
@@ -751,7 +751,7 @@ final class AtomParsers {
         return ((float) parent.readUnsignedIntToInt()) / ((float) parent.readUnsignedIntToInt());
     }
 
-    private static void parseAudioSampleEntry(ParsableByteArray parent, int atomType, int position, int size, int trackId, String language, boolean isQuickTime, DrmInitData drmInitData, StsdData out, int entryIndex) {
+    private static void parseAudioSampleEntry(ParsableByteArray parent, int atomType, int position, int size, int trackId, String language, boolean isQuickTime, DrmInitData drmInitData, StsdData out, int entryIndex) throws ParserException {
         int channelCount;
         int sampleRate;
         parent.setPosition((position + 8) + 8);

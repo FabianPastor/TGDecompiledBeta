@@ -49,4 +49,22 @@ public final class RepresentationKey implements Parcelable, Comparable<Represent
         }
         return result;
     }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        RepresentationKey that = (RepresentationKey) o;
+        if (this.periodIndex == that.periodIndex && this.adaptationSetIndex == that.adaptationSetIndex && this.representationIndex == that.representationIndex) {
+            return true;
+        }
+        return false;
+    }
+
+    public int hashCode() {
+        return (((this.periodIndex * 31) + this.adaptationSetIndex) * 31) + this.representationIndex;
+    }
 }

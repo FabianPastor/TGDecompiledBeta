@@ -12,26 +12,29 @@ import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.upstream.FileDataSource;
 import org.telegram.messenger.exoplayer2.upstream.TeeDataSource;
 import org.telegram.messenger.exoplayer2.upstream.cache.Cache.CacheException;
+import org.telegram.messenger.exoplayer2.util.Assertions;
 
 public final class CacheDataSource implements DataSource {
     public static final long DEFAULT_MAX_CACHE_FILE_SIZE = 2097152;
     public static final int FLAG_BLOCK_ON_CACHE = 1;
     public static final int FLAG_IGNORE_CACHE_FOR_UNSET_LENGTH_REQUESTS = 4;
     public static final int FLAG_IGNORE_CACHE_ON_ERROR = 2;
+    private static final long MIN_READ_BEFORE_CHECKING_CACHE = 102400;
     private final boolean blockOnCache;
     private long bytesRemaining;
     private final Cache cache;
     private final DataSource cacheReadDataSource;
     private final DataSource cacheWriteDataSource;
+    private long checkCachePosition;
     private DataSource currentDataSource;
+    private boolean currentDataSpecLengthUnset;
+    private CacheSpan currentHoleSpan;
     private boolean currentRequestIgnoresCache;
-    private boolean currentRequestUnbounded;
     private final EventListener eventListener;
     private int flags;
     private final boolean ignoreCacheForUnsetLengthRequests;
     private final boolean ignoreCacheOnError;
     private String key;
-    private CacheSpan lockedSpan;
     private long readPosition;
     private boolean seenCacheError;
     private long totalCachedBytesRead;
@@ -67,36 +70,37 @@ Error: java.util.NoSuchElementException
 */
         /*
         r4 = this;
+        r1 = 0;
         r3 = 0;
         r0 = r4.currentDataSource;
-        if (r0 != 0) goto L_0x0006;
-    L_0x0005:
-        return;
+        if (r0 != 0) goto L_0x0007;
     L_0x0006:
-        r0 = r4.currentDataSource;	 Catch:{ all -> 0x001f }
-        r0.close();	 Catch:{ all -> 0x001f }
-        r0 = 0;	 Catch:{ all -> 0x001f }
-        r4.currentDataSource = r0;	 Catch:{ all -> 0x001f }
-        r0 = 0;	 Catch:{ all -> 0x001f }
-        r4.currentRequestUnbounded = r0;	 Catch:{ all -> 0x001f }
-        r0 = r4.lockedSpan;
-        if (r0 == 0) goto L_0x0005;
-    L_0x0015:
+        return;
+    L_0x0007:
+        r0 = r4.currentDataSource;	 Catch:{ all -> 0x001e }
+        r0.close();	 Catch:{ all -> 0x001e }
+        r4.currentDataSource = r3;
+        r4.currentDataSpecLengthUnset = r1;
+        r0 = r4.currentHoleSpan;
+        if (r0 == 0) goto L_0x0006;
+    L_0x0014:
         r0 = r4.cache;
-        r1 = r4.lockedSpan;
+        r1 = r4.currentHoleSpan;
         r0.releaseHoleSpan(r1);
-        r4.lockedSpan = r3;
-        goto L_0x0005;
-    L_0x001f:
+        r4.currentHoleSpan = r3;
+        goto L_0x0006;
+    L_0x001e:
         r0 = move-exception;
-        r1 = r4.lockedSpan;
-        if (r1 == 0) goto L_0x002d;
-    L_0x0024:
+        r4.currentDataSource = r3;
+        r4.currentDataSpecLengthUnset = r1;
+        r1 = r4.currentHoleSpan;
+        if (r1 == 0) goto L_0x0030;
+    L_0x0027:
         r1 = r4.cache;
-        r2 = r4.lockedSpan;
+        r2 = r4.currentHoleSpan;
         r1.releaseHoleSpan(r2);
-        r4.lockedSpan = r3;
-    L_0x002d:
+        r4.currentHoleSpan = r3;
+    L_0x0030:
         throw r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSource.closeCurrentSource():void");
@@ -140,14 +144,14 @@ Error: java.util.NoSuchElementException
     }
 
     public long open(DataSpec dataSpec) throws IOException {
-        boolean z = true;
+        boolean z = false;
         try {
             this.uri = dataSpec.uri;
             this.flags = dataSpec.flags;
             this.key = CacheUtil.getKey(dataSpec);
             this.readPosition = dataSpec.position;
-            if (!((this.ignoreCacheOnError && this.seenCacheError) || (dataSpec.length == -1 && this.ignoreCacheForUnsetLengthRequests))) {
-                z = false;
+            if ((this.ignoreCacheOnError && this.seenCacheError) || (dataSpec.length == -1 && this.ignoreCacheForUnsetLengthRequests)) {
+                z = true;
             }
             this.currentRequestIgnoresCache = z;
             if (dataSpec.length != -1 || this.currentRequestIgnoresCache) {
@@ -161,7 +165,7 @@ Error: java.util.NoSuchElementException
                     }
                 }
             }
-            openNextSource(true);
+            openNextSource(false);
             return this.bytesRemaining;
         } catch (IOException e) {
             handleBeforeThrow(e);
@@ -177,8 +181,11 @@ Error: java.util.NoSuchElementException
             return -1;
         }
         try {
+            if (this.readPosition >= this.checkCachePosition) {
+                openNextSource(true);
+            }
             int bytesRead = this.currentDataSource.read(buffer, offset, readLength);
-            if (bytesRead >= 0) {
+            if (bytesRead != -1) {
                 if (this.currentDataSource == this.cacheReadDataSource) {
                     this.totalCachedBytesRead += (long) bytesRead;
                 }
@@ -188,17 +195,21 @@ Error: java.util.NoSuchElementException
                 }
                 this.bytesRemaining -= (long) bytesRead;
                 return bytesRead;
-            }
-            if (this.currentRequestUnbounded) {
-                setContentLength(this.readPosition);
-                this.bytesRemaining = 0;
-            }
-            closeCurrentSource();
-            if ((this.bytesRemaining > 0 || this.bytesRemaining == -1) && openNextSource(false)) {
+            } else if (this.currentDataSpecLengthUnset) {
+                setBytesRemaining(0);
+                return bytesRead;
+            } else if (this.bytesRemaining <= 0 && this.bytesRemaining != -1) {
+                return bytesRead;
+            } else {
+                closeCurrentSource();
+                openNextSource(false);
                 return read(buffer, offset, readLength);
             }
-            return bytesRead;
         } catch (IOException e) {
+            if (this.currentDataSpecLengthUnset && isCausedByPositionOutOfRange(e)) {
+                setBytesRemaining(0);
+                return -1;
+            }
             handleBeforeThrow(e);
             throw e;
         }
@@ -219,83 +230,98 @@ Error: java.util.NoSuchElementException
         }
     }
 
-    private boolean openNextSource(boolean initial) throws IOException {
-        CacheSpan span;
-        DataSpec dataSpec;
+    private void openNextSource(boolean checkCache) throws IOException {
+        CacheSpan nextSpan;
+        DataSource nextDataSource;
+        DataSpec nextDataSpec;
         if (this.currentRequestIgnoresCache) {
-            span = null;
+            nextSpan = null;
         } else if (this.blockOnCache) {
             try {
-                span = this.cache.startReadWrite(this.key, this.readPosition);
+                nextSpan = this.cache.startReadWrite(this.key, this.readPosition);
             } catch (InterruptedException e) {
                 throw new InterruptedIOException();
             }
         } else {
-            span = this.cache.startReadWriteNonBlocking(this.key, this.readPosition);
+            nextSpan = this.cache.startReadWriteNonBlocking(this.key, this.readPosition);
         }
-        if (span == null) {
-            this.currentDataSource = this.upstreamDataSource;
-            dataSpec = new DataSpec(this.uri, this.readPosition, this.bytesRemaining, this.key, this.flags);
-        } else if (span.isCached) {
-            Uri fileUri = Uri.fromFile(span.file);
-            long filePosition = this.readPosition - span.position;
-            length = span.length - filePosition;
+        if (nextSpan == null) {
+            nextDataSource = this.upstreamDataSource;
+            nextDataSpec = new DataSpec(this.uri, this.readPosition, this.bytesRemaining, this.key, this.flags);
+        } else if (nextSpan.isCached) {
+            Uri fileUri = Uri.fromFile(nextSpan.file);
+            long filePosition = this.readPosition - nextSpan.position;
+            length = nextSpan.length - filePosition;
             if (this.bytesRemaining != -1) {
                 length = Math.min(length, this.bytesRemaining);
             }
-            dataSpec = new DataSpec(fileUri, this.readPosition, filePosition, length, this.key, this.flags);
-            this.currentDataSource = this.cacheReadDataSource;
+            nextDataSpec = new DataSpec(fileUri, this.readPosition, filePosition, length, this.key, this.flags);
+            nextDataSource = this.cacheReadDataSource;
         } else {
-            if (span.isOpenEnded()) {
+            if (nextSpan.isOpenEnded()) {
                 length = this.bytesRemaining;
             } else {
-                length = span.length;
+                length = nextSpan.length;
                 if (this.bytesRemaining != -1) {
                     length = Math.min(length, this.bytesRemaining);
                 }
             }
-            DataSpec dataSpec2 = new DataSpec(this.uri, this.readPosition, length, this.key, this.flags);
+            DataSpec dataSpec = new DataSpec(this.uri, this.readPosition, length, this.key, this.flags);
             if (this.cacheWriteDataSource != null) {
-                this.currentDataSource = this.cacheWriteDataSource;
-                this.lockedSpan = span;
+                nextDataSource = this.cacheWriteDataSource;
             } else {
-                this.currentDataSource = this.upstreamDataSource;
-                this.cache.releaseHoleSpan(span);
+                nextDataSource = this.upstreamDataSource;
+                this.cache.releaseHoleSpan(nextSpan);
+                nextSpan = null;
             }
         }
-        this.currentRequestUnbounded = dataSpec.length == -1;
-        boolean successful = false;
-        long currentBytesRemaining = 0;
-        try {
-            currentBytesRemaining = this.currentDataSource.open(dataSpec);
-            successful = true;
-        } catch (IOException e2) {
-            IOException e3 = e2;
-            if (!initial && this.currentRequestUnbounded) {
-                Throwable cause = e3;
-                while (cause != null) {
-                    if ((cause instanceof DataSourceException) && ((DataSourceException) cause).reason == 0) {
-                        e3 = null;
-                        break;
+        long j = (this.currentRequestIgnoresCache || nextDataSource != this.upstreamDataSource) ? Long.MAX_VALUE : this.readPosition + MIN_READ_BEFORE_CHECKING_CACHE;
+        this.checkCachePosition = j;
+        if (checkCache) {
+            Assertions.checkState(this.currentDataSource == this.upstreamDataSource);
+            if (nextDataSource != this.upstreamDataSource) {
+                try {
+                    closeCurrentSource();
+                } catch (Throwable th) {
+                    if (nextSpan.isHoleSpan()) {
+                        this.cache.releaseHoleSpan(nextSpan);
                     }
-                    cause = cause.getCause();
                 }
-            }
-            if (e3 != null) {
-                throw e3;
+            } else {
+                return;
             }
         }
-        if (this.currentRequestUnbounded && currentBytesRemaining != -1) {
-            this.bytesRemaining = currentBytesRemaining;
-            setContentLength(dataSpec.position + this.bytesRemaining);
+        if (nextSpan != null && nextSpan.isHoleSpan()) {
+            this.currentHoleSpan = nextSpan;
         }
-        return successful;
+        this.currentDataSource = nextDataSource;
+        this.currentDataSpecLengthUnset = nextDataSpec.length == -1;
+        long resolvedLength = nextDataSource.open(nextDataSpec);
+        if (this.currentDataSpecLengthUnset && resolvedLength != -1) {
+            setBytesRemaining(resolvedLength);
+        }
     }
 
-    private void setContentLength(long length) throws IOException {
-        if (this.currentDataSource == this.cacheWriteDataSource) {
-            this.cache.setContentLength(this.key, length);
+    private static boolean isCausedByPositionOutOfRange(IOException e) {
+        Throwable cause = e;
+        while (cause != null) {
+            if ((cause instanceof DataSourceException) && ((DataSourceException) cause).reason == 0) {
+                return true;
+            }
+            cause = cause.getCause();
         }
+        return false;
+    }
+
+    private void setBytesRemaining(long bytesRemaining) throws IOException {
+        this.bytesRemaining = bytesRemaining;
+        if (isWritingToCache()) {
+            this.cache.setContentLength(this.key, this.readPosition + bytesRemaining);
+        }
+    }
+
+    private boolean isWritingToCache() {
+        return this.currentDataSource == this.cacheWriteDataSource;
     }
 
     private void handleBeforeThrow(IOException exception) {

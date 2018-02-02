@@ -77,10 +77,10 @@ public final class AtomicFile {
                 try {
                     return new AtomicFileOutputStream(this.baseName);
                 } catch (FileNotFoundException e2) {
-                    throw new IOException("Couldn't create " + this.baseName);
+                    throw new IOException("Couldn't create " + this.baseName, e2);
                 }
             }
-            throw new IOException("Couldn't create directory " + this.baseName);
+            throw new IOException("Couldn't create directory " + this.baseName, e);
         }
     }
 

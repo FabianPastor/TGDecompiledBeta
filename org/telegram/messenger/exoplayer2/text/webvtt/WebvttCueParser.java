@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import org.telegram.messenger.exoplayer2.text.webvtt.WebvttCue.Builder;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
-final class WebvttCueParser {
+public final class WebvttCueParser {
     private static final char CHAR_AMPERSAND = '&';
     private static final char CHAR_GREATER_THAN = '>';
     private static final char CHAR_LESS_THAN = '<';
@@ -104,7 +104,7 @@ final class WebvttCueParser {
         }
     }
 
-    boolean parseCue(ParsableByteArray webvttData, Builder builder, List<WebvttCssStyle> styles) {
+    public boolean parseCue(ParsableByteArray webvttData, Builder builder, List<WebvttCssStyle> styles) {
         String firstLine = webvttData.readLine();
         if (firstLine == null) {
             return false;

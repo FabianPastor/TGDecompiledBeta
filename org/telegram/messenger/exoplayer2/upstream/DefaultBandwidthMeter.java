@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.upstream;
 
 import android.os.Handler;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.exoplayer2.upstream.BandwidthMeter.EventListener;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Clock;
@@ -64,7 +65,7 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
         this.totalBytesTransferred += this.sampleBytesTransferred;
         if (sampleElapsedTimeMs > 0) {
             this.slidingPercentile.addSample((int) Math.sqrt((double) this.sampleBytesTransferred), (float) ((this.sampleBytesTransferred * 8000) / ((long) sampleElapsedTimeMs)));
-            if (this.totalElapsedTimeMs >= 2000 || this.totalBytesTransferred >= 524288) {
+            if (this.totalElapsedTimeMs >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS || this.totalBytesTransferred >= 524288) {
                 float bitrateEstimateFloat = this.slidingPercentile.getPercentile(0.5f);
                 this.bitrateEstimate = Float.isNaN(bitrateEstimateFloat) ? -1 : (long) bitrateEstimateFloat;
             }

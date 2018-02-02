@@ -1,15 +1,14 @@
 package org.telegram.messenger.exoplayer2.source;
 
-import android.net.Uri;
-import android.os.Handler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
+import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
-import org.telegram.messenger.exoplayer2.source.SingleSampleMediaSource.EventListener;
+import org.telegram.messenger.exoplayer2.source.MediaSourceEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
@@ -17,35 +16,38 @@ import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.upstream.Loader;
 import org.telegram.messenger.exoplayer2.upstream.Loader.Callback;
 import org.telegram.messenger.exoplayer2.upstream.Loader.Loadable;
-import org.telegram.messenger.exoplayer2.util.Assertions;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoadable> {
     private static final int INITIAL_SAMPLE_SIZE = 1024;
     private final Factory dataSourceFactory;
-    private final Handler eventHandler;
-    private final EventListener eventListener;
-    private final int eventSourceId;
+    private final DataSpec dataSpec;
+    private final long durationUs;
+    private int errorCount;
+    private final EventDispatcher eventDispatcher;
     final Format format;
     final Loader loader = new Loader("Loader:SingleSampleMediaPeriod");
     boolean loadingFinished;
+    boolean loadingSucceeded;
     private final int minLoadableRetryCount;
     byte[] sampleData;
     int sampleSize;
     private final ArrayList<SampleStreamImpl> sampleStreams = new ArrayList();
     private final TrackGroupArray tracks;
-    private final Uri uri;
+    final boolean treatLoadErrorsAsEndOfStream;
 
     private final class SampleStreamImpl implements SampleStream {
         private static final int STREAM_STATE_END_OF_STREAM = 2;
         private static final int STREAM_STATE_SEND_FORMAT = 0;
         private static final int STREAM_STATE_SEND_SAMPLE = 1;
+        private boolean formatSent;
         private int streamState;
 
         private SampleStreamImpl() {
         }
 
-        public void seekToUs(long positionUs) {
+        public void reset() {
             if (this.streamState == 2) {
                 this.streamState = 1;
             }
@@ -56,7 +58,9 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
         }
 
         public void maybeThrowError() throws IOException {
-            SingleSampleMediaPeriod.this.loader.maybeThrowError();
+            if (!SingleSampleMediaPeriod.this.treatLoadErrorsAsEndOfStream) {
+                SingleSampleMediaPeriod.this.loader.maybeThrowError();
+            }
         }
 
         public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean requireFormat) {
@@ -67,41 +71,48 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
                 formatHolder.format = SingleSampleMediaPeriod.this.format;
                 this.streamState = 1;
                 return -5;
+            } else if (!SingleSampleMediaPeriod.this.loadingFinished) {
+                return -3;
             } else {
-                boolean z;
-                if (this.streamState == 1) {
-                    z = true;
+                if (SingleSampleMediaPeriod.this.loadingSucceeded) {
+                    buffer.timeUs = 0;
+                    buffer.addFlag(1);
+                    buffer.ensureSpaceForWrite(SingleSampleMediaPeriod.this.sampleSize);
+                    buffer.data.put(SingleSampleMediaPeriod.this.sampleData, 0, SingleSampleMediaPeriod.this.sampleSize);
+                    sendFormat();
                 } else {
-                    z = false;
+                    buffer.addFlag(4);
                 }
-                Assertions.checkState(z);
-                if (!SingleSampleMediaPeriod.this.loadingFinished) {
-                    return -3;
-                }
-                buffer.timeUs = 0;
-                buffer.addFlag(1);
-                buffer.ensureSpaceForWrite(SingleSampleMediaPeriod.this.sampleSize);
-                buffer.data.put(SingleSampleMediaPeriod.this.sampleData, 0, SingleSampleMediaPeriod.this.sampleSize);
                 this.streamState = 2;
                 return -4;
             }
         }
 
-        public void skipData(long positionUs) {
-            if (positionUs > 0) {
-                this.streamState = 2;
+        public int skipData(long positionUs) {
+            if (positionUs <= 0 || this.streamState == 2) {
+                return 0;
+            }
+            this.streamState = 2;
+            sendFormat();
+            return 1;
+        }
+
+        private void sendFormat() {
+            if (!this.formatSent) {
+                SingleSampleMediaPeriod.this.eventDispatcher.downstreamFormatChanged(MimeTypes.getTrackType(SingleSampleMediaPeriod.this.format.sampleMimeType), SingleSampleMediaPeriod.this.format, 0, null, 0);
+                this.formatSent = true;
             }
         }
     }
 
     static final class SourceLoadable implements Loadable {
         private final DataSource dataSource;
+        public final DataSpec dataSpec;
         private byte[] sampleData;
         private int sampleSize;
-        private final Uri uri;
 
-        public SourceLoadable(Uri uri, DataSource dataSource) {
-            this.uri = uri;
+        public SourceLoadable(DataSpec dataSpec, DataSource dataSource) {
+            this.dataSpec = dataSpec;
             this.dataSource = dataSource;
         }
 
@@ -115,7 +126,7 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
         public void load() throws IOException, InterruptedException {
             this.sampleSize = 0;
             try {
-                this.dataSource.open(new DataSpec(this.uri));
+                this.dataSource.open(this.dataSpec);
                 int result = 0;
                 while (result != -1) {
                     this.sampleSize += result;
@@ -132,14 +143,14 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
         }
     }
 
-    public SingleSampleMediaPeriod(Uri uri, Factory dataSourceFactory, Format format, int minLoadableRetryCount, Handler eventHandler, EventListener eventListener, int eventSourceId) {
-        this.uri = uri;
+    public SingleSampleMediaPeriod(DataSpec dataSpec, Factory dataSourceFactory, Format format, long durationUs, int minLoadableRetryCount, EventDispatcher eventDispatcher, boolean treatLoadErrorsAsEndOfStream) {
+        this.dataSpec = dataSpec;
         this.dataSourceFactory = dataSourceFactory;
         this.format = format;
+        this.durationUs = durationUs;
         this.minLoadableRetryCount = minLoadableRetryCount;
-        this.eventHandler = eventHandler;
-        this.eventListener = eventListener;
-        this.eventSourceId = eventSourceId;
+        this.eventDispatcher = eventDispatcher;
+        this.treatLoadErrorsAsEndOfStream = treatLoadErrorsAsEndOfStream;
         TrackGroup[] trackGroupArr = new TrackGroup[1];
         trackGroupArr[0] = new TrackGroup(format);
         this.tracks = new TrackGroupArray(trackGroupArr);
@@ -154,7 +165,6 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
     }
 
     public void maybeThrowPrepareError() throws IOException {
-        this.loader.maybeThrowError();
     }
 
     public TrackGroupArray getTrackGroups() {
@@ -179,14 +189,17 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
         return positionUs;
     }
 
-    public void discardBuffer(long positionUs) {
+    public void discardBuffer(long positionUs, boolean toKeyframe) {
+    }
+
+    public void reevaluateBuffer(long positionUs) {
     }
 
     public boolean continueLoading(long positionUs) {
         if (this.loadingFinished || this.loader.isLoading()) {
             return false;
         }
-        this.loader.startLoading(new SourceLoadable(this.uri, this.dataSourceFactory.createDataSource()), this, this.minLoadableRetryCount);
+        this.eventDispatcher.loadStarted(this.dataSpec, 1, -1, this.format, 0, null, 0, this.durationUs, this.loader.startLoading(new SourceLoadable(this.dataSpec, this.dataSourceFactory.createDataSource()), this, this.minLoadableRetryCount));
         return true;
     }
 
@@ -204,32 +217,35 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
 
     public long seekToUs(long positionUs) {
         for (int i = 0; i < this.sampleStreams.size(); i++) {
-            ((SampleStreamImpl) this.sampleStreams.get(i)).seekToUs(positionUs);
+            ((SampleStreamImpl) this.sampleStreams.get(i)).reset();
         }
         return positionUs;
     }
 
+    public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
+        return positionUs;
+    }
+
     public void onLoadCompleted(SourceLoadable loadable, long elapsedRealtimeMs, long loadDurationMs) {
+        this.eventDispatcher.loadCompleted(loadable.dataSpec, 1, -1, this.format, 0, null, 0, this.durationUs, elapsedRealtimeMs, loadDurationMs, (long) loadable.sampleSize);
         this.sampleSize = loadable.sampleSize;
         this.sampleData = loadable.sampleData;
         this.loadingFinished = true;
+        this.loadingSucceeded = true;
     }
 
     public void onLoadCanceled(SourceLoadable loadable, long elapsedRealtimeMs, long loadDurationMs, boolean released) {
+        this.eventDispatcher.loadCanceled(loadable.dataSpec, 1, -1, null, 0, null, 0, this.durationUs, elapsedRealtimeMs, loadDurationMs, (long) loadable.sampleSize);
     }
 
     public int onLoadError(SourceLoadable loadable, long elapsedRealtimeMs, long loadDurationMs, IOException error) {
-        notifyLoadError(error);
-        return 0;
-    }
-
-    private void notifyLoadError(final IOException e) {
-        if (this.eventHandler != null && this.eventListener != null) {
-            this.eventHandler.post(new Runnable() {
-                public void run() {
-                    SingleSampleMediaPeriod.this.eventListener.onLoadError(SingleSampleMediaPeriod.this.eventSourceId, e);
-                }
-            });
+        this.errorCount++;
+        boolean cancel = this.treatLoadErrorsAsEndOfStream && this.errorCount >= this.minLoadableRetryCount;
+        this.eventDispatcher.loadError(loadable.dataSpec, 1, -1, this.format, 0, null, 0, this.durationUs, elapsedRealtimeMs, loadDurationMs, (long) loadable.sampleSize, error, cancel);
+        if (!cancel) {
+            return 0;
         }
+        this.loadingFinished = true;
+        return 2;
     }
 }

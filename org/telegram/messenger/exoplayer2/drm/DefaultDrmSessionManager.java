@@ -2,64 +2,51 @@ package org.telegram.messenger.exoplayer2.drm;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.media.DeniedByServerException;
-import android.media.NotProvisionedException;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.Pair;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.drm.DefaultDrmSession.ProvisioningManager;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData.SchemeData;
 import org.telegram.messenger.exoplayer2.drm.DrmSession.DrmSessionException;
-import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.KeyRequest;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.OnEventListener;
-import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.ProvisionRequest;
 import org.telegram.messenger.exoplayer2.extractor.mp4.PsshAtomUtil;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 @TargetApi(18)
-public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSession<T>, DrmSessionManager<T> {
+public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements ProvisioningManager<T>, DrmSessionManager<T> {
     private static final String CENC_SCHEME_MIME_TYPE = "cenc";
-    private static final int MAX_LICENSE_DURATION_TO_RENEW = 60;
+    public static final int INITIAL_DRM_REQUEST_RETRY_COUNT = 3;
     public static final int MODE_DOWNLOAD = 2;
     public static final int MODE_PLAYBACK = 0;
     public static final int MODE_QUERY = 1;
     public static final int MODE_RELEASE = 3;
-    private static final int MSG_KEYS = 1;
-    private static final int MSG_PROVISION = 0;
     public static final String PLAYREADY_CUSTOM_DATA_KEY = "PRCustomData";
-    private static final String TAG = "OfflineDrmSessionMngr";
-    final MediaDrmCallback callback;
+    private static final String TAG = "DefaultDrmSessionMgr";
+    private final MediaDrmCallback callback;
     private final Handler eventHandler;
     private final EventListener eventListener;
-    private DrmSessionException lastException;
-    private T mediaCrypto;
+    private final int initialDrmRequestRetryCount;
     private final ExoMediaDrm<T> mediaDrm;
-    MediaDrmHandler mediaDrmHandler;
-    private int mode = 0;
+    volatile MediaDrmHandler mediaDrmHandler;
+    private int mode;
+    private final boolean multiSession;
     private byte[] offlineLicenseKeySetId;
-    private int openCount;
     private final HashMap<String, String> optionalKeyRequestParameters;
     private Looper playbackLooper;
-    private Handler postRequestHandler;
-    PostResponseHandler postResponseHandler;
-    private boolean provisioningInProgress;
-    private HandlerThread requestHandlerThread;
-    private byte[] schemeInitData;
-    private String schemeMimeType;
-    private byte[] sessionId;
-    private int state;
-    final UUID uuid;
+    private final List<DefaultDrmSession<T>> provisioningSessions;
+    private final List<DefaultDrmSession<T>> sessions;
+    private final UUID uuid;
 
     public interface EventListener {
         void onDrmKeysLoaded();
@@ -78,82 +65,24 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
         }
 
         public void handleMessage(Message msg) {
-            if (DefaultDrmSessionManager.this.openCount == 0) {
-                return;
-            }
-            if (DefaultDrmSessionManager.this.state == 3 || DefaultDrmSessionManager.this.state == 4) {
-                switch (msg.what) {
-                    case 1:
-                        DefaultDrmSessionManager.this.state = 3;
-                        DefaultDrmSessionManager.this.postProvisionRequest();
-                        return;
-                    case 2:
-                        DefaultDrmSessionManager.this.doLicense();
-                        return;
-                    case 3:
-                        if (DefaultDrmSessionManager.this.state == 4) {
-                            DefaultDrmSessionManager.this.state = 3;
-                            DefaultDrmSessionManager.this.onError(new KeysExpiredException());
-                            return;
-                        }
-                        return;
-                    default:
-                        return;
+            byte[] sessionId = (byte[]) msg.obj;
+            for (DefaultDrmSession<T> session : DefaultDrmSessionManager.this.sessions) {
+                if (session.hasSessionId(sessionId)) {
+                    session.onMediaDrmEvent(msg.what);
+                    return;
                 }
             }
+        }
+    }
+
+    public static final class MissingSchemeDataException extends Exception {
+        private MissingSchemeDataException(UUID uuid) {
+            super("Media does not support uuid: " + uuid);
         }
     }
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface Mode {
-    }
-
-    @SuppressLint({"HandlerLeak"})
-    private class PostRequestHandler extends Handler {
-        public PostRequestHandler(Looper backgroundLooper) {
-            super(backgroundLooper);
-        }
-
-        /* JADX WARNING: inconsistent code. */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void handleMessage(Message msg) {
-            Object response;
-            try {
-                switch (msg.what) {
-                    case 0:
-                        response = DefaultDrmSessionManager.this.callback.executeProvisionRequest(DefaultDrmSessionManager.this.uuid, (ProvisionRequest) msg.obj);
-                        break;
-                    case 1:
-                        response = DefaultDrmSessionManager.this.callback.executeKeyRequest(DefaultDrmSessionManager.this.uuid, (KeyRequest) msg.obj);
-                        break;
-                    default:
-                        throw new RuntimeException();
-                }
-            } catch (Exception e) {
-                response = e;
-            }
-            DefaultDrmSessionManager.this.postResponseHandler.obtainMessage(msg.what, response).sendToTarget();
-        }
-    }
-
-    @SuppressLint({"HandlerLeak"})
-    private class PostResponseHandler extends Handler {
-        public PostResponseHandler(Looper looper) {
-            super(looper);
-        }
-
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0:
-                    DefaultDrmSessionManager.this.onProvisionResponse(msg.obj);
-                    return;
-                case 1:
-                    DefaultDrmSessionManager.this.onKeyResponse(msg.obj);
-                    return;
-                default:
-                    return;
-            }
-        }
     }
 
     private class MediaDrmEventListener implements OnEventListener<T> {
@@ -162,7 +91,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
 
         public void onEvent(ExoMediaDrm<? extends T> exoMediaDrm, byte[] sessionId, int event, int extra, byte[] data) {
             if (DefaultDrmSessionManager.this.mode == 0) {
-                DefaultDrmSessionManager.this.mediaDrmHandler.sendEmptyMessage(event);
+                DefaultDrmSessionManager.this.mediaDrmHandler.obtainMessage(event, sessionId).sendToTarget();
             }
         }
     }
@@ -183,16 +112,35 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
     }
 
     public static DefaultDrmSessionManager<FrameworkMediaCrypto> newFrameworkInstance(UUID uuid, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, EventListener eventListener) throws UnsupportedDrmException {
-        return new DefaultDrmSessionManager(uuid, FrameworkMediaDrm.newInstance(uuid), callback, optionalKeyRequestParameters, eventHandler, eventListener);
+        return new DefaultDrmSessionManager(uuid, FrameworkMediaDrm.newInstance(uuid), callback, optionalKeyRequestParameters, eventHandler, eventListener, false, 3);
     }
 
     public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, EventListener eventListener) {
+        this(uuid, mediaDrm, callback, optionalKeyRequestParameters, eventHandler, eventListener, false, 3);
+    }
+
+    public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, EventListener eventListener, boolean multiSession) {
+        this(uuid, mediaDrm, callback, optionalKeyRequestParameters, eventHandler, eventListener, multiSession, 3);
+    }
+
+    public DefaultDrmSessionManager(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters, Handler eventHandler, EventListener eventListener, boolean multiSession, int initialDrmRequestRetryCount) {
+        Assertions.checkNotNull(uuid);
+        Assertions.checkNotNull(mediaDrm);
+        Assertions.checkArgument(!C.COMMON_PSSH_UUID.equals(uuid), "Use C.CLEARKEY_UUID instead");
         this.uuid = uuid;
         this.mediaDrm = mediaDrm;
         this.callback = callback;
         this.optionalKeyRequestParameters = optionalKeyRequestParameters;
         this.eventHandler = eventHandler;
         this.eventListener = eventListener;
+        this.multiSession = multiSession;
+        this.initialDrmRequestRetryCount = initialDrmRequestRetryCount;
+        this.mode = 0;
+        this.sessions = new ArrayList();
+        this.provisioningSessions = new ArrayList();
+        if (multiSession) {
+            mediaDrm.setPropertyString("sessionSharing", "enable");
+        }
         mediaDrm.setOnEventListener(new MediaDrmEventListener());
     }
 
@@ -213,7 +161,7 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
     }
 
     public void setMode(int mode, byte[] offlineLicenseKeySetId) {
-        Assertions.checkState(this.openCount == 0);
+        Assertions.checkState(this.sessions.isEmpty());
         if (mode == 1 || mode == 3) {
             Assertions.checkNotNull(offlineLicenseKeySetId);
         }
@@ -222,11 +170,16 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
     }
 
     public boolean canAcquireSession(DrmInitData drmInitData) {
-        SchemeData schemeData = drmInitData.get(this.uuid);
-        if (schemeData == null) {
-            return false;
+        if (this.offlineLicenseKeySetId != null) {
+            return true;
         }
-        String schemeType = schemeData.type;
+        if (getSchemeData(drmInitData, this.uuid, true) == null) {
+            if (drmInitData.schemeDataCount != 1 || !drmInitData.get(0).matches(C.COMMON_PSSH_UUID)) {
+                return false;
+            }
+            Log.w(TAG, "DrmInitData only contains common PSSH SchemeData. Assuming support for: " + this.uuid);
+        }
+        String schemeType = drmInitData.schemeType;
         if (schemeType == null || "cenc".equals(schemeType)) {
             return true;
         }
@@ -237,267 +190,143 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
     }
 
     public DrmSession<T> acquireSession(Looper playbackLooper, DrmInitData drmInitData) {
+        DrmSession<T> session;
         boolean z = this.playbackLooper == null || this.playbackLooper == playbackLooper;
         Assertions.checkState(z);
-        int i = this.openCount + 1;
-        this.openCount = i;
-        if (i == 1) {
-            if (this.playbackLooper == null) {
-                this.playbackLooper = playbackLooper;
+        if (this.sessions.isEmpty()) {
+            this.playbackLooper = playbackLooper;
+            if (this.mediaDrmHandler == null) {
                 this.mediaDrmHandler = new MediaDrmHandler(playbackLooper);
-                this.postResponseHandler = new PostResponseHandler(playbackLooper);
-            }
-            this.requestHandlerThread = new HandlerThread("DrmRequestHandler");
-            this.requestHandlerThread.start();
-            this.postRequestHandler = new PostRequestHandler(this.requestHandlerThread.getLooper());
-            if (this.offlineLicenseKeySetId == null) {
-                SchemeData schemeData = drmInitData.get(this.uuid);
-                if (schemeData == null) {
-                    onError(new IllegalStateException("Media does not support uuid: " + this.uuid));
-                } else {
-                    this.schemeInitData = schemeData.data;
-                    this.schemeMimeType = schemeData.mimeType;
-                    if (Util.SDK_INT < 21) {
-                        byte[] psshData = PsshAtomUtil.parseSchemeSpecificData(this.schemeInitData, C.WIDEVINE_UUID);
-                        if (psshData != null) {
-                            this.schemeInitData = psshData;
-                        }
-                    }
-                    if (Util.SDK_INT < 26 && C.CLEARKEY_UUID.equals(this.uuid) && (MimeTypes.VIDEO_MP4.equals(this.schemeMimeType) || MimeTypes.AUDIO_MP4.equals(this.schemeMimeType))) {
-                        this.schemeMimeType = "cenc";
-                    }
-                }
-            }
-            this.state = 2;
-            openInternal(true);
-        }
-        return this;
-    }
-
-    public void releaseSession(DrmSession<T> drmSession) {
-        int i = this.openCount - 1;
-        this.openCount = i;
-        if (i == 0) {
-            this.state = 0;
-            this.provisioningInProgress = false;
-            this.mediaDrmHandler.removeCallbacksAndMessages(null);
-            this.postResponseHandler.removeCallbacksAndMessages(null);
-            this.postRequestHandler.removeCallbacksAndMessages(null);
-            this.postRequestHandler = null;
-            this.requestHandlerThread.quit();
-            this.requestHandlerThread = null;
-            this.schemeInitData = null;
-            this.schemeMimeType = null;
-            this.mediaCrypto = null;
-            this.lastException = null;
-            if (this.sessionId != null) {
-                this.mediaDrm.closeSession(this.sessionId);
-                this.sessionId = null;
             }
         }
-    }
-
-    public final int getState() {
-        return this.state;
-    }
-
-    public final DrmSessionException getError() {
-        return this.state == 1 ? this.lastException : null;
-    }
-
-    public final T getMediaCrypto() {
-        return this.mediaCrypto;
-    }
-
-    public Map<String, String> queryKeyStatus() {
-        return this.sessionId == null ? null : this.mediaDrm.queryKeyStatus(this.sessionId);
-    }
-
-    public byte[] getOfflineLicenseKeySetId() {
-        return this.offlineLicenseKeySetId;
-    }
-
-    private void openInternal(boolean allowProvisioning) {
-        try {
-            this.sessionId = this.mediaDrm.openSession();
-            this.mediaCrypto = this.mediaDrm.createMediaCrypto(this.uuid, this.sessionId);
-            this.state = 3;
-            doLicense();
-        } catch (NotProvisionedException e) {
-            if (allowProvisioning) {
-                postProvisionRequest();
-            } else {
-                onError(e);
-            }
-        } catch (Exception e2) {
-            onError(e2);
-        }
-    }
-
-    private void postProvisionRequest() {
-        if (!this.provisioningInProgress) {
-            this.provisioningInProgress = true;
-            this.postRequestHandler.obtainMessage(0, this.mediaDrm.getProvisionRequest()).sendToTarget();
-        }
-    }
-
-    private void onProvisionResponse(Object response) {
-        this.provisioningInProgress = false;
-        if (this.state != 2 && this.state != 3 && this.state != 4) {
-            return;
-        }
-        if (response instanceof Exception) {
-            onError((Exception) response);
-            return;
-        }
-        try {
-            this.mediaDrm.provideProvisionResponse((byte[]) response);
-            if (this.state == 2) {
-                openInternal(false);
-            } else {
-                doLicense();
-            }
-        } catch (DeniedByServerException e) {
-            onError(e);
-        }
-    }
-
-    private void doLicense() {
-        switch (this.mode) {
-            case 0:
-            case 1:
-                if (this.offlineLicenseKeySetId == null) {
-                    postKeyRequest(this.sessionId, 1);
-                    return;
-                } else if (restoreKeys()) {
-                    long licenseDurationRemainingSec = getLicenseDurationRemainingSec();
-                    if (this.mode == 0 && licenseDurationRemainingSec <= 60) {
-                        Log.d(TAG, "Offline license has expired or will expire soon. Remaining seconds: " + licenseDurationRemainingSec);
-                        postKeyRequest(this.sessionId, 2);
-                        return;
-                    } else if (licenseDurationRemainingSec <= 0) {
-                        onError(new KeysExpiredException());
-                        return;
-                    } else {
-                        this.state = 4;
-                        if (this.eventHandler != null && this.eventListener != null) {
-                            this.eventHandler.post(new Runnable() {
-                                public void run() {
-                                    DefaultDrmSessionManager.this.eventListener.onDrmKeysRestored();
-                                }
-                            });
-                            return;
-                        }
-                        return;
-                    }
-                } else {
-                    return;
-                }
-            case 2:
-                if (this.offlineLicenseKeySetId == null) {
-                    postKeyRequest(this.sessionId, 2);
-                    return;
-                } else if (restoreKeys()) {
-                    postKeyRequest(this.sessionId, 2);
-                    return;
-                } else {
-                    return;
-                }
-            case 3:
-                if (restoreKeys()) {
-                    postKeyRequest(this.offlineLicenseKeySetId, 3);
-                    return;
-                }
-                return;
-            default:
-                return;
-        }
-    }
-
-    private boolean restoreKeys() {
-        try {
-            this.mediaDrm.restoreKeys(this.sessionId, this.offlineLicenseKeySetId);
-            return true;
-        } catch (Exception e) {
-            Log.e(TAG, "Error trying to restore Widevine keys.", e);
-            onError(e);
-            return false;
-        }
-    }
-
-    private long getLicenseDurationRemainingSec() {
-        if (!C.WIDEVINE_UUID.equals(this.uuid)) {
-            return Long.MAX_VALUE;
-        }
-        Pair<Long, Long> pair = WidevineUtil.getLicenseDurationRemainingSec(this);
-        return Math.min(((Long) pair.first).longValue(), ((Long) pair.second).longValue());
-    }
-
-    private void postKeyRequest(byte[] scope, int keyType) {
-        try {
-            this.postRequestHandler.obtainMessage(1, this.mediaDrm.getKeyRequest(scope, this.schemeInitData, this.schemeMimeType, keyType, this.optionalKeyRequestParameters)).sendToTarget();
-        } catch (Exception e) {
-            onKeysError(e);
-        }
-    }
-
-    private void onKeyResponse(Object response) {
-        if (this.state != 3 && this.state != 4) {
-            return;
-        }
-        if (response instanceof Exception) {
-            onKeysError((Exception) response);
-            return;
-        }
-        try {
-            if (this.mode == 3) {
-                this.mediaDrm.provideKeyResponse(this.offlineLicenseKeySetId, (byte[]) response);
-                if (this.eventHandler != null && this.eventListener != null) {
+        byte[] initData = null;
+        String mimeType = null;
+        if (this.offlineLicenseKeySetId == null) {
+            SchemeData data = getSchemeData(drmInitData, this.uuid, false);
+            if (data == null) {
+                Throwable missingSchemeDataException = new MissingSchemeDataException(this.uuid);
+                if (!(this.eventHandler == null || this.eventListener == null)) {
+                    final Throwable th = missingSchemeDataException;
                     this.eventHandler.post(new Runnable() {
                         public void run() {
-                            DefaultDrmSessionManager.this.eventListener.onDrmKeysRemoved();
+                            DefaultDrmSessionManager.this.eventListener.onDrmSessionManagerError(th);
                         }
                     });
-                    return;
                 }
-                return;
+                return new ErrorStateDrmSession(new DrmSessionException(missingSchemeDataException));
             }
-            byte[] keySetId = this.mediaDrm.provideKeyResponse(this.sessionId, (byte[]) response);
-            if (!((this.mode != 2 && (this.mode != 0 || this.offlineLicenseKeySetId == null)) || keySetId == null || keySetId.length == 0)) {
-                this.offlineLicenseKeySetId = keySetId;
-            }
-            this.state = 4;
-            if (this.eventHandler != null && this.eventListener != null) {
-                this.eventHandler.post(new Runnable() {
-                    public void run() {
-                        DefaultDrmSessionManager.this.eventListener.onDrmKeysLoaded();
-                    }
-                });
-            }
-        } catch (Exception e) {
-            onKeysError(e);
+            initData = getSchemeInitData(data, this.uuid);
+            mimeType = getSchemeMimeType(data, this.uuid);
         }
-    }
-
-    private void onKeysError(Exception e) {
-        if (e instanceof NotProvisionedException) {
-            postProvisionRequest();
+        Object session2;
+        if (this.multiSession) {
+            session = null;
+            for (DefaultDrmSession<T> existingSession : this.sessions) {
+                if (existingSession.hasInitData(initData)) {
+                    session2 = existingSession;
+                    break;
+                }
+            }
+        } else if (this.sessions.isEmpty()) {
+            session = null;
         } else {
-            onError(e);
+            session2 = (DefaultDrmSession) this.sessions.get(0);
+        }
+        if (session == null) {
+            session = new DefaultDrmSession(this.uuid, this.mediaDrm, this, initData, mimeType, this.mode, this.offlineLicenseKeySetId, this.optionalKeyRequestParameters, this.callback, playbackLooper, this.eventHandler, this.eventListener, this.initialDrmRequestRetryCount);
+            this.sessions.add(session);
+        }
+        session.acquire();
+        return session;
+    }
+
+    public void releaseSession(DrmSession<T> session) {
+        if (!(session instanceof ErrorStateDrmSession)) {
+            DefaultDrmSession<T> drmSession = (DefaultDrmSession) session;
+            if (drmSession.release()) {
+                this.sessions.remove(drmSession);
+                if (this.provisioningSessions.size() > 1 && this.provisioningSessions.get(0) == drmSession) {
+                    ((DefaultDrmSession) this.provisioningSessions.get(1)).provision();
+                }
+                this.provisioningSessions.remove(drmSession);
+            }
         }
     }
 
-    private void onError(final Exception e) {
-        this.lastException = new DrmSessionException(e);
-        if (!(this.eventHandler == null || this.eventListener == null)) {
-            this.eventHandler.post(new Runnable() {
-                public void run() {
-                    DefaultDrmSessionManager.this.eventListener.onDrmSessionManagerError(e);
+    public void provisionRequired(DefaultDrmSession<T> session) {
+        this.provisioningSessions.add(session);
+        if (this.provisioningSessions.size() == 1) {
+            session.provision();
+        }
+    }
+
+    public void onProvisionCompleted() {
+        for (DefaultDrmSession<T> session : this.provisioningSessions) {
+            session.onProvisionCompleted();
+        }
+        this.provisioningSessions.clear();
+    }
+
+    public void onProvisionError(Exception error) {
+        for (DefaultDrmSession<T> session : this.provisioningSessions) {
+            session.onProvisionError(error);
+        }
+        this.provisioningSessions.clear();
+    }
+
+    private static SchemeData getSchemeData(DrmInitData drmInitData, UUID uuid, boolean allowMissingData) {
+        int i;
+        List<SchemeData> matchingSchemeDatas = new ArrayList(drmInitData.schemeDataCount);
+        for (i = 0; i < drmInitData.schemeDataCount; i++) {
+            boolean uuidMatches;
+            SchemeData schemeData = drmInitData.get(i);
+            if (schemeData.matches(uuid) || (C.CLEARKEY_UUID.equals(uuid) && schemeData.matches(C.COMMON_PSSH_UUID))) {
+                uuidMatches = true;
+            } else {
+                uuidMatches = false;
+            }
+            if (uuidMatches && (schemeData.data != null || allowMissingData)) {
+                matchingSchemeDatas.add(schemeData);
+            }
+        }
+        if (matchingSchemeDatas.isEmpty()) {
+            return null;
+        }
+        if (C.WIDEVINE_UUID.equals(uuid)) {
+            for (i = 0; i < matchingSchemeDatas.size(); i++) {
+                SchemeData matchingSchemeData = (SchemeData) matchingSchemeDatas.get(i);
+                int version = matchingSchemeData.hasData() ? PsshAtomUtil.parseVersion(matchingSchemeData.data) : -1;
+                if (Util.SDK_INT < 23 && version == 0) {
+                    return matchingSchemeData;
                 }
-            });
+                if (Util.SDK_INT >= 23 && version == 1) {
+                    return matchingSchemeData;
+                }
+            }
         }
-        if (this.state != 4) {
-            this.state = 1;
+        return (SchemeData) matchingSchemeDatas.get(0);
+    }
+
+    private static byte[] getSchemeInitData(SchemeData data, UUID uuid) {
+        byte[] schemeInitData = data.data;
+        if (Util.SDK_INT >= 21) {
+            return schemeInitData;
         }
+        byte[] psshData = PsshAtomUtil.parseSchemeSpecificData(schemeInitData, uuid);
+        if (psshData == null) {
+            return schemeInitData;
+        }
+        return psshData;
+    }
+
+    private static String getSchemeMimeType(SchemeData data, UUID uuid) {
+        String schemeMimeType = data.mimeType;
+        if (Util.SDK_INT >= 26 || !C.CLEARKEY_UUID.equals(uuid)) {
+            return schemeMimeType;
+        }
+        if (MimeTypes.VIDEO_MP4.equals(schemeMimeType) || MimeTypes.AUDIO_MP4.equals(schemeMimeType)) {
+            return "cenc";
+        }
+        return schemeMimeType;
     }
 }

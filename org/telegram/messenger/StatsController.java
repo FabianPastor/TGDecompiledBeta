@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Array;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 
 public class StatsController {
     private static volatile StatsController[] Instance = new StatsController[3];
@@ -33,7 +34,7 @@ public class StatsController {
     private Runnable saveRunnable = new Runnable() {
         public void run() {
             long newTime = System.currentTimeMillis();
-            if (Math.abs(newTime - StatsController.this.lastInternalStatsSaveTime) >= 2000) {
+            if (Math.abs(newTime - StatsController.this.lastInternalStatsSaveTime) >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS) {
                 StatsController.this.lastInternalStatsSaveTime = newTime;
                 try {
                     StatsController.this.statsFile.seek(0);
@@ -255,7 +256,7 @@ public class StatsController {
 
     private void saveStats() {
         long newTime = System.currentTimeMillis();
-        if (Math.abs(newTime - ((Long) lastStatsSaveTime.get()).longValue()) >= 2000) {
+        if (Math.abs(newTime - ((Long) lastStatsSaveTime.get()).longValue()) >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS) {
             lastStatsSaveTime.set(Long.valueOf(newTime));
             statsSaveQueue.postRunnable(this.saveRunnable);
         }

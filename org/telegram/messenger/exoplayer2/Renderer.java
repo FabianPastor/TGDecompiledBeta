@@ -1,11 +1,11 @@
 package org.telegram.messenger.exoplayer2;
 
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.ExoPlayer.ExoPlayerComponent;
+import org.telegram.messenger.exoplayer2.PlayerMessage.Target;
 import org.telegram.messenger.exoplayer2.source.SampleStream;
 import org.telegram.messenger.exoplayer2.util.MediaClock;
 
-public interface Renderer extends ExoPlayerComponent {
+public interface Renderer extends Target {
     public static final int STATE_DISABLED = 0;
     public static final int STATE_ENABLED = 1;
     public static final int STATE_STARTED = 2;

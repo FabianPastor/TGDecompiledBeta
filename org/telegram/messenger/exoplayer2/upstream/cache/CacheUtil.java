@@ -3,7 +3,6 @@ package org.telegram.messenger.exoplayer2.upstream.cache;
 import android.net.Uri;
 import java.io.EOFException;
 import java.io.IOException;
-import java.util.NavigableSet;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.upstream.cache.Cache.CacheException;
@@ -41,7 +40,7 @@ public final class CacheUtil {
         counters.alreadyCachedBytes = 0;
         counters.newlyCachedBytes = 0;
         while (left != 0) {
-            long blockLength = cache.getCachedBytes(key, start, left != -1 ? left : Long.MAX_VALUE);
+            long blockLength = cache.getCachedLength(key, start, left != -1 ? left : Long.MAX_VALUE);
             if (blockLength > 0) {
                 counters.alreadyCachedBytes += blockLength;
             } else {
@@ -74,7 +73,7 @@ public final class CacheUtil {
         long start = dataSpec.absoluteStreamPosition;
         long left = dataSpec.length != -1 ? dataSpec.length : cache.getContentLength(key);
         while (left != 0) {
-            long blockLength = cache.getCachedBytes(key, start, left != -1 ? left : Long.MAX_VALUE);
+            long blockLength = cache.getCachedLength(key, start, left != -1 ? left : Long.MAX_VALUE);
             if (blockLength <= 0) {
                 blockLength = -blockLength;
                 if (readAndDiscard(dataSpec, start, blockLength, dataSource, buffer, priorityTaskManager, priority, counters) < blockLength) {
@@ -146,13 +145,10 @@ public final class CacheUtil {
     }
 
     public static void remove(Cache cache, String key) {
-        NavigableSet<CacheSpan> cachedSpans = cache.getCachedSpans(key);
-        if (cachedSpans != null) {
-            for (CacheSpan cachedSpan : cachedSpans) {
-                try {
-                    cache.removeSpan(cachedSpan);
-                } catch (CacheException e) {
-                }
+        for (CacheSpan cachedSpan : cache.getCachedSpans(key)) {
+            try {
+                cache.removeSpan(cachedSpan);
+            } catch (CacheException e) {
             }
         }
     }

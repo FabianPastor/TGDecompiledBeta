@@ -8,11 +8,10 @@ import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorsFactory;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
-import org.telegram.messenger.exoplayer2.extractor.SeekMap;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
-public final class WavExtractor implements Extractor, SeekMap {
+public final class WavExtractor implements Extractor {
     public static final ExtractorsFactory FACTORY = new ExtractorsFactory() {
         public Extractor[] createExtractors() {
             return new Extractor[]{new WavExtractor()};
@@ -54,7 +53,7 @@ public final class WavExtractor implements Extractor, SeekMap {
         }
         if (!this.wavHeader.hasDataBounds()) {
             WavHeaderReader.skipToData(input, this.wavHeader);
-            this.extractorOutput.seekMap(this);
+            this.extractorOutput.seekMap(this.wavHeader);
         }
         int bytesAppended = this.trackOutput.sampleData(input, 32768 - this.pendingBytes, true);
         if (bytesAppended != -1) {
@@ -68,17 +67,5 @@ public final class WavExtractor implements Extractor, SeekMap {
             this.trackOutput.sampleMetadata(timeUs, 1, size, this.pendingBytes, null);
         }
         return bytesAppended == -1 ? -1 : 0;
-    }
-
-    public long getDurationUs() {
-        return this.wavHeader.getDurationUs();
-    }
-
-    public boolean isSeekable() {
-        return true;
-    }
-
-    public long getPosition(long timeUs) {
-        return this.wavHeader.getPosition(timeUs);
     }
 }

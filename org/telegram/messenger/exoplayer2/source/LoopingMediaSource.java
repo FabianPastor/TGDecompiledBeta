@@ -3,10 +3,9 @@ package org.telegram.messenger.exoplayer2.source;
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
-import org.telegram.messenger.exoplayer2.Timeline.Period;
-import org.telegram.messenger.exoplayer2.Timeline.Window;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
 import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
+import org.telegram.messenger.exoplayer2.source.ShuffleOrder.UnshuffledShuffleOrder;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.tgnet.ConnectionsManager;
@@ -15,42 +14,21 @@ public final class LoopingMediaSource implements MediaSource {
     private int childPeriodCount;
     private final MediaSource childSource;
     private final int loopCount;
+    private boolean wasPrepareSourceCalled;
 
-    private static final class InfinitelyLoopingTimeline extends Timeline {
-        private final Timeline childTimeline;
-
-        public InfinitelyLoopingTimeline(Timeline childTimeline) {
-            this.childTimeline = childTimeline;
+    private static final class InfinitelyLoopingTimeline extends ForwardingTimeline {
+        public InfinitelyLoopingTimeline(Timeline timeline) {
+            super(timeline);
         }
 
-        public int getWindowCount() {
-            return this.childTimeline.getWindowCount();
+        public int getNextWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+            int childNextWindowIndex = this.timeline.getNextWindowIndex(windowIndex, repeatMode, shuffleModeEnabled);
+            return childNextWindowIndex == -1 ? getFirstWindowIndex(shuffleModeEnabled) : childNextWindowIndex;
         }
 
-        public int getNextWindowIndex(int windowIndex, int repeatMode) {
-            int childNextWindowIndex = this.childTimeline.getNextWindowIndex(windowIndex, repeatMode);
-            return childNextWindowIndex == -1 ? 0 : childNextWindowIndex;
-        }
-
-        public int getPreviousWindowIndex(int windowIndex, int repeatMode) {
-            int childPreviousWindowIndex = this.childTimeline.getPreviousWindowIndex(windowIndex, repeatMode);
-            return childPreviousWindowIndex == -1 ? getWindowCount() - 1 : childPreviousWindowIndex;
-        }
-
-        public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
-            return this.childTimeline.getWindow(windowIndex, window, setIds, defaultPositionProjectionUs);
-        }
-
-        public int getPeriodCount() {
-            return this.childTimeline.getPeriodCount();
-        }
-
-        public Period getPeriod(int periodIndex, Period period, boolean setIds) {
-            return this.childTimeline.getPeriod(periodIndex, period, setIds);
-        }
-
-        public int getIndexOfPeriod(Object uid) {
-            return this.childTimeline.getIndexOfPeriod(uid);
+        public int getPreviousWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+            int childPreviousWindowIndex = this.timeline.getPreviousWindowIndex(windowIndex, repeatMode, shuffleModeEnabled);
+            return childPreviousWindowIndex == -1 ? getLastWindowIndex(shuffleModeEnabled) : childPreviousWindowIndex;
         }
     }
 
@@ -61,12 +39,14 @@ public final class LoopingMediaSource implements MediaSource {
         private final int loopCount;
 
         public LoopingTimeline(Timeline childTimeline, int loopCount) {
-            super(loopCount);
+            super(new UnshuffledShuffleOrder(loopCount));
             this.childTimeline = childTimeline;
             this.childPeriodCount = childTimeline.getPeriodCount();
             this.childWindowCount = childTimeline.getWindowCount();
             this.loopCount = loopCount;
-            Assertions.checkState(loopCount <= ConnectionsManager.DEFAULT_DATACENTER_ID / this.childPeriodCount, "LoopingMediaSource contains too many periods");
+            if (this.childPeriodCount > 0) {
+                Assertions.checkState(loopCount <= ConnectionsManager.DEFAULT_DATACENTER_ID / this.childPeriodCount, "LoopingMediaSource contains too many periods");
+            }
         }
 
         public int getWindowCount() {
@@ -120,10 +100,12 @@ public final class LoopingMediaSource implements MediaSource {
     }
 
     public void prepareSource(ExoPlayer player, boolean isTopLevelSource, final Listener listener) {
+        Assertions.checkState(!this.wasPrepareSourceCalled, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+        this.wasPrepareSourceCalled = true;
         this.childSource.prepareSource(player, false, new Listener() {
-            public void onSourceInfoRefreshed(Timeline timeline, Object manifest) {
+            public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
                 LoopingMediaSource.this.childPeriodCount = timeline.getPeriodCount();
-                listener.onSourceInfoRefreshed(LoopingMediaSource.this.loopCount != ConnectionsManager.DEFAULT_DATACENTER_ID ? new LoopingTimeline(timeline, LoopingMediaSource.this.loopCount) : new InfinitelyLoopingTimeline(timeline), manifest);
+                listener.onSourceInfoRefreshed(LoopingMediaSource.this, LoopingMediaSource.this.loopCount != ConnectionsManager.DEFAULT_DATACENTER_ID ? new LoopingTimeline(timeline, LoopingMediaSource.this.loopCount) : new InfinitelyLoopingTimeline(timeline), manifest);
             }
         });
     }
@@ -134,7 +116,7 @@ public final class LoopingMediaSource implements MediaSource {
 
     public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
         if (this.loopCount != ConnectionsManager.DEFAULT_DATACENTER_ID) {
-            return this.childSource.createPeriod(new MediaPeriodId(id.periodIndex % this.childPeriodCount), allocator);
+            return this.childSource.createPeriod(id.copyWithPeriodIndex(id.periodIndex % this.childPeriodCount), allocator);
         }
         return this.childSource.createPeriod(id, allocator);
     }

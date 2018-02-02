@@ -2056,6 +2056,7 @@ public final class R {
         public static final int PleaseEnterFirstPassword = NUM;
         public static final int PleaseEnterPassword = NUM;
         public static final int PleaseReEnterPassword = NUM;
+        public static final int PleaseStreamDownload = NUM;
         public static final int Points_few = NUM;
         public static final int Points_many = NUM;
         public static final int Points_one = NUM;
@@ -2437,6 +2438,7 @@ public final class R {
         public static final int VibrationDefault = NUM;
         public static final int VibrationDisabled = NUM;
         public static final int VideoCaption = NUM;
+        public static final int VideoDoesNotSupportStreaming = NUM;
         public static final int VideoMessagesAutodownload = NUM;
         public static final int ViewPackPreview = NUM;
         public static final int Vignette = NUM;

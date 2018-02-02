@@ -56,7 +56,7 @@ public interface AudioRendererEventListener {
                 final long j2 = elapsedSinceLastFeedMs;
                 this.handler.post(new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onAudioTrackUnderrun(i, j, j2);
+                        EventDispatcher.this.listener.onAudioSinkUnderrun(i, j, j2);
                     }
                 });
             }
@@ -94,5 +94,5 @@ public interface AudioRendererEventListener {
 
     void onAudioSessionId(int i);
 
-    void onAudioTrackUnderrun(int i, long j, long j2);
+    void onAudioSinkUnderrun(int i, long j, long j2);
 }

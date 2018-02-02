@@ -279,13 +279,23 @@ public abstract class MappingTrackSelector extends TrackSelector {
                 }
             }
         }
+        boolean[] rendererEnabled = determineEnabledRenderers(rendererCapabilities, trackSelections);
         MappedTrackInfo mappedTrackInfo = new MappedTrackInfo(rendererTrackTypes, rendererTrackGroupArrays, mixedMimeTypeAdaptationSupport, rendererFormatSupports, unassociatedTrackGroupArray);
         RendererConfiguration[] rendererConfigurations = new RendererConfiguration[rendererCapabilities.length];
         for (i = 0; i < rendererCapabilities.length; i++) {
-            rendererConfigurations[i] = trackSelections[i] != null ? RendererConfiguration.DEFAULT : null;
+            rendererConfigurations[i] = rendererEnabled[i] ? RendererConfiguration.DEFAULT : null;
         }
         maybeConfigureRenderersForTunneling(rendererCapabilities, rendererTrackGroupArrays, rendererFormatSupports, rendererConfigurations, trackSelections, this.tunnelingAudioSessionId);
-        return new TrackSelectorResult(trackGroups, new TrackSelectionArray(trackSelections), mappedTrackInfo, rendererConfigurations);
+        return new TrackSelectorResult(trackGroups, rendererEnabled, new TrackSelectionArray(trackSelections), mappedTrackInfo, rendererConfigurations);
+    }
+
+    private boolean[] determineEnabledRenderers(RendererCapabilities[] rendererCapabilities, TrackSelection[] trackSelections) {
+        boolean[] rendererEnabled = new boolean[trackSelections.length];
+        for (int i = 0; i < rendererEnabled.length; i++) {
+            boolean z = !this.rendererDisabledFlags.get(i) && (rendererCapabilities[i].getTrackType() == 5 || trackSelections[i] != null);
+            rendererEnabled[i] = z;
+        }
+        return rendererEnabled;
     }
 
     public final void onSelectionActivated(Object info) {

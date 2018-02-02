@@ -1350,7 +1350,11 @@ public class MessageObject {
                 message.media = new TL_messageMediaWebPage();
                 message.media.webpage = new TL_webPage();
                 message.media.webpage.site_name = LocaleController.getString("EventLogOriginalMessages", R.string.EventLogOriginalMessages);
-                message.media.webpage.description = oldMessage.message;
+                if (TextUtils.isEmpty(oldMessage.message)) {
+                    message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty);
+                } else {
+                    message.media.webpage.description = oldMessage.message;
+                }
             } else {
                 this.messageText = replaceWithLink(LocaleController.getString("EventLogEditedCaption", R.string.EventLogEditedCaption), "un1", fromUser);
                 message.media = newMessage.media;
@@ -2918,19 +2922,18 @@ public class MessageObject {
     }
 
     public boolean isSecretPhoto() {
-        boolean z = true;
         if (this.messageOwner instanceof TL_message_secret) {
-            if ((((this.messageOwner.media instanceof TL_messageMediaPhoto) || isVideo()) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isRoundVideo()) {
-                return true;
+            if (this.messageOwner.ttl <= 0 || (((!(this.messageOwner.media instanceof TL_messageMediaPhoto) && !isVideo()) || this.messageOwner.ttl > 60) && !isRoundVideo())) {
+                return false;
             }
-            return false;
+            return true;
         } else if (!(this.messageOwner instanceof TL_message)) {
             return false;
         } else {
-            if (!((this.messageOwner.media instanceof TL_messageMediaPhoto) || (this.messageOwner.media instanceof TL_messageMediaDocument)) || this.messageOwner.media.ttl_seconds == 0) {
-                z = false;
+            if (((this.messageOwner.media instanceof TL_messageMediaPhoto) || (this.messageOwner.media instanceof TL_messageMediaDocument)) && this.messageOwner.media.ttl_seconds != 0) {
+                return true;
             }
-            return z;
+            return false;
         }
     }
 

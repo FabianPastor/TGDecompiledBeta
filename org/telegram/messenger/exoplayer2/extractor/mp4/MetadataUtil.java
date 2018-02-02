@@ -188,7 +188,7 @@ final class MetadataUtil {
         if (data.readInt() == Atom.TYPE_data) {
             data.skipBytes(8);
             String value = data.readNullTerminatedString(atomSize - 16);
-            return new CommentFrame(LANGUAGE_UNDEFINED, value, value);
+            return new CommentFrame("und", value, value);
         }
         Log.w(TAG, "Failed to parse comment attribute: " + Atom.getAtomTypeString(type));
         return null;
@@ -205,7 +205,7 @@ final class MetadataUtil {
         } else if (isTextInformationFrame) {
             return new TextInformationFrame(id, null, Integer.toString(value));
         } else {
-            return new CommentFrame(LANGUAGE_UNDEFINED, id, Integer.toString(value));
+            return new CommentFrame("und", id, Integer.toString(value));
         }
     }
 
@@ -287,7 +287,7 @@ final class MetadataUtil {
         }
         data.setPosition(dataAtomPosition);
         data.skipBytes(16);
-        return new CommentFrame(LANGUAGE_UNDEFINED, name, data.readNullTerminatedString(dataAtomSize - 16));
+        return new CommentFrame("und", name, data.readNullTerminatedString(dataAtomSize - 16));
     }
 
     private static int parseUint8AttributeValue(ParsableByteArray data) {

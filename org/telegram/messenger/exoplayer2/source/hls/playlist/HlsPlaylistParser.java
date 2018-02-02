@@ -1,15 +1,17 @@
 package org.telegram.messenger.exoplayer2.source.hls.playlist;
 
 import android.net.Uri;
+import android.util.Base64;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.regex.Matcher;
@@ -17,6 +19,8 @@ import java.util.regex.Pattern;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
+import org.telegram.messenger.exoplayer2.drm.DrmInitData;
+import org.telegram.messenger.exoplayer2.drm.DrmInitData.SchemeData;
 import org.telegram.messenger.exoplayer2.source.UnrecognizedInputFormatException;
 import org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist.HlsUrl;
 import org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist.Segment;
@@ -28,10 +32,17 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
     private static final String ATTR_CLOSED_CAPTIONS_NONE = "CLOSED-CAPTIONS=NONE";
     private static final String BOOLEAN_FALSE = "NO";
     private static final String BOOLEAN_TRUE = "YES";
-    private static final String METHOD_AES128 = "AES-128";
+    private static final String KEYFORMAT_IDENTITY = "identity";
+    private static final String KEYFORMAT_WIDEVINE_PSSH_BINARY = "urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed";
+    private static final String KEYFORMAT_WIDEVINE_PSSH_JSON = "com.widevine";
+    private static final String METHOD_AES_128 = "AES-128";
     private static final String METHOD_NONE = "NONE";
+    private static final String METHOD_SAMPLE_AES = "SAMPLE-AES";
+    private static final String METHOD_SAMPLE_AES_CENC = "SAMPLE-AES-CENC";
+    private static final String METHOD_SAMPLE_AES_CTR = "SAMPLE-AES-CTR";
     private static final String PLAYLIST_HEADER = "#EXTM3U";
     private static final Pattern REGEX_ATTR_BYTERANGE = Pattern.compile("BYTERANGE=\"(\\d+(?:@\\d+)?)\\b\"");
+    private static final Pattern REGEX_AUDIO = Pattern.compile("AUDIO=\"(.+?)\"");
     private static final Pattern REGEX_AUTOSELECT = compileBooleanAttrPattern("AUTOSELECT");
     private static final Pattern REGEX_AVERAGE_BANDWIDTH = Pattern.compile("AVERAGE-BANDWIDTH=(\\d+)\\b");
     private static final Pattern REGEX_BANDWIDTH = Pattern.compile("[^-]BANDWIDTH=(\\d+)\\b");
@@ -39,12 +50,15 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
     private static final Pattern REGEX_CODECS = Pattern.compile("CODECS=\"(.+?)\"");
     private static final Pattern REGEX_DEFAULT = compileBooleanAttrPattern("DEFAULT");
     private static final Pattern REGEX_FORCED = compileBooleanAttrPattern("FORCED");
+    private static final Pattern REGEX_FRAME_RATE = Pattern.compile("FRAME-RATE=([\\d\\.]+)\\b");
+    private static final Pattern REGEX_GROUP_ID = Pattern.compile("GROUP-ID=\"(.+?)\"");
     private static final Pattern REGEX_INSTREAM_ID = Pattern.compile("INSTREAM-ID=\"((?:CC|SERVICE)\\d+)\"");
     private static final Pattern REGEX_IV = Pattern.compile("IV=([^,.*]+)");
+    private static final Pattern REGEX_KEYFORMAT = Pattern.compile("KEYFORMAT=\"(.+?)\"");
     private static final Pattern REGEX_LANGUAGE = Pattern.compile("LANGUAGE=\"(.+?)\"");
     private static final Pattern REGEX_MEDIA_DURATION = Pattern.compile("#EXTINF:([\\d\\.]+)\\b");
     private static final Pattern REGEX_MEDIA_SEQUENCE = Pattern.compile("#EXT-X-MEDIA-SEQUENCE:(\\d+)\\b");
-    private static final Pattern REGEX_METHOD = Pattern.compile("METHOD=(NONE|AES-128)");
+    private static final Pattern REGEX_METHOD = Pattern.compile("METHOD=(NONE|AES-128|SAMPLE-AES|SAMPLE-AES-CENC|SAMPLE-AES-CTR)");
     private static final Pattern REGEX_NAME = Pattern.compile("NAME=\"(.+?)\"");
     private static final Pattern REGEX_PLAYLIST_TYPE = Pattern.compile("#EXT-X-PLAYLIST-TYPE:(.+)\\b");
     private static final Pattern REGEX_RESOLUTION = Pattern.compile("RESOLUTION=(\\d+x\\d+)");
@@ -118,7 +132,7 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public HlsPlaylist parse(Uri uri, InputStream inputStream) throws IOException {
         Closeable reader = new BufferedReader(new InputStreamReader(inputStream));
-        Queue<String> extraLines = new LinkedList();
+        Queue<String> extraLines = new ArrayDeque();
         if (checkPlaylistHeader(reader)) {
             String line;
             HlsPlaylist parseMediaPlaylist;
@@ -182,104 +196,123 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
 
     private static HlsMasterPlaylist parseMasterPlaylist(LineIterator iterator, String baseUri) throws IOException {
         HashSet<String> variantUrls = new HashSet();
+        HashMap<String, String> audioGroupIdToCodecs = new HashMap();
         ArrayList<HlsUrl> variants = new ArrayList();
         ArrayList<HlsUrl> audios = new ArrayList();
         ArrayList<HlsUrl> subtitles = new ArrayList();
+        ArrayList<String> mediaTags = new ArrayList();
         ArrayList<String> tags = new ArrayList();
         Format muxedAudioFormat = null;
         List<Format> muxedCaptionFormats = null;
         boolean noClosedCaptions = false;
         while (iterator.hasNext()) {
+            String codecs;
             String line = iterator.next();
             if (line.startsWith(TAG_PREFIX)) {
                 tags.add(line);
             }
             if (line.startsWith(TAG_MEDIA)) {
-                int selectionFlags = parseSelectionFlags(line);
-                String uri = parseOptionalStringAttr(line, REGEX_URI);
-                String id = parseStringAttr(line, REGEX_NAME);
-                String language = parseOptionalStringAttr(line, REGEX_LANGUAGE);
-                String parseStringAttr = parseStringAttr(line, REGEX_TYPE);
-                Object obj = -1;
-                switch (parseStringAttr.hashCode()) {
-                    case -959297733:
-                        if (parseStringAttr.equals(TYPE_SUBTITLES)) {
-                            obj = 1;
-                            break;
+                mediaTags.add(line);
+            } else {
+                if (line.startsWith(TAG_STREAM_INF)) {
+                    int width;
+                    int height;
+                    noClosedCaptions |= line.contains(ATTR_CLOSED_CAPTIONS_NONE);
+                    int bitrate = parseIntAttr(line, REGEX_BANDWIDTH);
+                    String averageBandwidthString = parseOptionalStringAttr(line, REGEX_AVERAGE_BANDWIDTH);
+                    if (averageBandwidthString != null) {
+                        bitrate = Integer.parseInt(averageBandwidthString);
+                    }
+                    codecs = parseOptionalStringAttr(line, REGEX_CODECS);
+                    String resolutionString = parseOptionalStringAttr(line, REGEX_RESOLUTION);
+                    if (resolutionString != null) {
+                        String[] widthAndHeight = resolutionString.split("x");
+                        width = Integer.parseInt(widthAndHeight[0]);
+                        height = Integer.parseInt(widthAndHeight[1]);
+                        if (width <= 0 || height <= 0) {
+                            width = -1;
+                            height = -1;
                         }
-                        break;
-                    case -333210994:
-                        if (parseStringAttr.equals(TYPE_CLOSED_CAPTIONS)) {
-                            obj = 2;
-                            break;
-                        }
-                        break;
-                    case 62628790:
-                        if (parseStringAttr.equals(TYPE_AUDIO)) {
-                            obj = null;
-                            break;
-                        }
-                        break;
-                }
-                switch (obj) {
-                    case null:
-                        Format format = Format.createAudioContainerFormat(id, MimeTypes.APPLICATION_M3U8, null, null, -1, -1, -1, null, selectionFlags, language);
-                        if (uri != null) {
-                            audios.add(new HlsUrl(uri, format));
-                            break;
-                        }
-                        muxedAudioFormat = format;
-                        break;
-                    case 1:
-                        subtitles.add(new HlsUrl(uri, Format.createTextContainerFormat(id, MimeTypes.APPLICATION_M3U8, MimeTypes.TEXT_VTT, null, -1, selectionFlags, language)));
-                        break;
-                    case 2:
-                        String mimeType;
-                        int accessibilityChannel;
-                        String instreamId = parseStringAttr(line, REGEX_INSTREAM_ID);
-                        if (instreamId.startsWith("CC")) {
-                            mimeType = MimeTypes.APPLICATION_CEA608;
-                            accessibilityChannel = Integer.parseInt(instreamId.substring(2));
-                        } else {
-                            mimeType = MimeTypes.APPLICATION_CEA708;
-                            accessibilityChannel = Integer.parseInt(instreamId.substring(7));
-                        }
-                        if (muxedCaptionFormats == null) {
-                            muxedCaptionFormats = new ArrayList();
-                        }
-                        muxedCaptionFormats.add(Format.createTextContainerFormat(id, null, mimeType, null, -1, selectionFlags, language, accessibilityChannel));
-                        break;
-                    default:
-                        break;
-                }
-            }
-            if (line.startsWith(TAG_STREAM_INF)) {
-                int width;
-                int height;
-                int bitrate = parseIntAttr(line, REGEX_BANDWIDTH);
-                String averageBandwidthString = parseOptionalStringAttr(line, REGEX_AVERAGE_BANDWIDTH);
-                if (averageBandwidthString != null) {
-                    bitrate = Integer.parseInt(averageBandwidthString);
-                }
-                String codecs = parseOptionalStringAttr(line, REGEX_CODECS);
-                String resolutionString = parseOptionalStringAttr(line, REGEX_RESOLUTION);
-                noClosedCaptions |= line.contains(ATTR_CLOSED_CAPTIONS_NONE);
-                if (resolutionString != null) {
-                    String[] widthAndHeight = resolutionString.split("x");
-                    width = Integer.parseInt(widthAndHeight[0]);
-                    height = Integer.parseInt(widthAndHeight[1]);
-                    if (width <= 0 || height <= 0) {
+                    } else {
                         width = -1;
                         height = -1;
                     }
-                } else {
-                    width = -1;
-                    height = -1;
+                    float frameRate = -1.0f;
+                    String frameRateString = parseOptionalStringAttr(line, REGEX_FRAME_RATE);
+                    if (frameRateString != null) {
+                        frameRate = Float.parseFloat(frameRateString);
+                    }
+                    String audioGroupId = parseOptionalStringAttr(line, REGEX_AUDIO);
+                    if (!(audioGroupId == null || codecs == null)) {
+                        audioGroupIdToCodecs.put(audioGroupId, Util.getCodecsOfType(codecs, 1));
+                    }
+                    line = iterator.next();
+                    if (variantUrls.add(line)) {
+                        variants.add(new HlsUrl(line, Format.createVideoContainerFormat(Integer.toString(variants.size()), MimeTypes.APPLICATION_M3U8, null, codecs, bitrate, width, height, frameRate, null, 0)));
+                    }
                 }
-                line = iterator.next();
-                if (variantUrls.add(line)) {
-                    variants.add(new HlsUrl(line, Format.createVideoContainerFormat(Integer.toString(variants.size()), MimeTypes.APPLICATION_M3U8, null, codecs, bitrate, width, height, -1.0f, null, 0)));
-                }
+            }
+        }
+        for (int i = 0; i < mediaTags.size(); i++) {
+            line = (String) mediaTags.get(i);
+            int selectionFlags = parseSelectionFlags(line);
+            String uri = parseOptionalStringAttr(line, REGEX_URI);
+            String id = parseStringAttr(line, REGEX_NAME);
+            String language = parseOptionalStringAttr(line, REGEX_LANGUAGE);
+            String groupId = parseOptionalStringAttr(line, REGEX_GROUP_ID);
+            String parseStringAttr = parseStringAttr(line, REGEX_TYPE);
+            Object obj = -1;
+            switch (parseStringAttr.hashCode()) {
+                case -959297733:
+                    if (parseStringAttr.equals(TYPE_SUBTITLES)) {
+                        obj = 1;
+                        break;
+                    }
+                    break;
+                case -333210994:
+                    if (parseStringAttr.equals(TYPE_CLOSED_CAPTIONS)) {
+                        obj = 2;
+                        break;
+                    }
+                    break;
+                case 62628790:
+                    if (parseStringAttr.equals(TYPE_AUDIO)) {
+                        obj = null;
+                        break;
+                    }
+                    break;
+            }
+            switch (obj) {
+                case null:
+                    codecs = (String) audioGroupIdToCodecs.get(groupId);
+                    Format format = Format.createAudioContainerFormat(id, MimeTypes.APPLICATION_M3U8, codecs != null ? MimeTypes.getMediaMimeType(codecs) : null, codecs, -1, -1, -1, null, selectionFlags, language);
+                    if (uri != null) {
+                        audios.add(new HlsUrl(uri, format));
+                        break;
+                    }
+                    muxedAudioFormat = format;
+                    break;
+                case 1:
+                    subtitles.add(new HlsUrl(uri, Format.createTextContainerFormat(id, MimeTypes.APPLICATION_M3U8, MimeTypes.TEXT_VTT, null, -1, selectionFlags, language)));
+                    break;
+                case 2:
+                    String mimeType;
+                    int accessibilityChannel;
+                    String instreamId = parseStringAttr(line, REGEX_INSTREAM_ID);
+                    if (instreamId.startsWith("CC")) {
+                        mimeType = MimeTypes.APPLICATION_CEA608;
+                        accessibilityChannel = Integer.parseInt(instreamId.substring(2));
+                    } else {
+                        mimeType = MimeTypes.APPLICATION_CEA708;
+                        accessibilityChannel = Integer.parseInt(instreamId.substring(7));
+                    }
+                    if (muxedCaptionFormats == null) {
+                        muxedCaptionFormats = new ArrayList();
+                    }
+                    muxedCaptionFormats.add(Format.createTextContainerFormat(id, null, mimeType, null, -1, selectionFlags, language, accessibilityChannel));
+                    break;
+                default:
+                    break;
             }
         }
         if (noClosedCaptions) {
@@ -324,9 +357,9 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
         long segmentByteRangeOffset = 0;
         long segmentByteRangeLength = -1;
         int segmentMediaSequence = 0;
-        boolean isEncrypted = false;
         String encryptionKeyUri = null;
         String encryptionIV = null;
+        DrmInitData drmInitData = null;
         while (iterator.hasNext()) {
             String line = iterator.next();
             if (line.startsWith(TAG_PREFIX)) {
@@ -364,13 +397,20 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
             } else if (line.startsWith(TAG_MEDIA_DURATION)) {
                 segmentDurationUs = (long) (parseDoubleAttr(line, REGEX_MEDIA_DURATION) * 1000000.0d);
             } else if (line.startsWith(TAG_KEY)) {
-                isEncrypted = METHOD_AES128.equals(parseStringAttr(line, REGEX_METHOD));
-                if (isEncrypted) {
-                    encryptionKeyUri = parseStringAttr(line, REGEX_URI);
+                String method = parseOptionalStringAttr(line, REGEX_METHOD);
+                String keyFormat = parseOptionalStringAttr(line, REGEX_KEYFORMAT);
+                encryptionKeyUri = null;
+                encryptionIV = null;
+                if (!METHOD_NONE.equals(method)) {
                     encryptionIV = parseOptionalStringAttr(line, REGEX_IV);
-                } else {
-                    encryptionKeyUri = null;
-                    encryptionIV = null;
+                    if (KEYFORMAT_IDENTITY.equals(keyFormat) || keyFormat == null) {
+                        if (METHOD_AES_128.equals(method)) {
+                            encryptionKeyUri = parseStringAttr(line, REGEX_URI);
+                        }
+                    } else if (!(method == null || parseWidevineSchemeData(line, keyFormat) == null)) {
+                        String str = (METHOD_SAMPLE_AES_CENC.equals(method) || METHOD_SAMPLE_AES_CTR.equals(method)) ? C.CENC_TYPE_cenc : C.CENC_TYPE_cbcs;
+                        DrmInitData drmInitData2 = new DrmInitData(str, schemeData);
+                    }
                 }
             } else if (line.startsWith(TAG_BYTERANGE)) {
                 splitByteRange = parseStringAttr(line, REGEX_BYTERANGE).split("@");
@@ -389,7 +429,7 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                 }
             } else if (!line.startsWith("#")) {
                 String segmentEncryptionIV;
-                if (!isEncrypted) {
+                if (encryptionKeyUri == null) {
                     segmentEncryptionIV = null;
                 } else if (encryptionIV != null) {
                     segmentEncryptionIV = encryptionIV;
@@ -400,7 +440,7 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                 if (segmentByteRangeLength == -1) {
                     segmentByteRangeOffset = 0;
                 }
-                segments.add(new Segment(line, segmentDurationUs, relativeDiscontinuitySequence, segmentStartTimeUs, isEncrypted, encryptionKeyUri, segmentEncryptionIV, segmentByteRangeOffset, segmentByteRangeLength));
+                segments.add(new Segment(line, segmentDurationUs, relativeDiscontinuitySequence, segmentStartTimeUs, encryptionKeyUri, segmentEncryptionIV, segmentByteRangeOffset, segmentByteRangeLength));
                 segmentStartTimeUs += segmentDurationUs;
                 segmentDurationUs = 0;
                 if (segmentByteRangeLength != -1) {
@@ -413,7 +453,22 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                 hasEndTag = true;
             }
         }
-        return new HlsMediaPlaylist(playlistType, baseUri, tags, startOffsetUs, playlistStartTimeUs, hasDiscontinuitySequence, playlistDiscontinuitySequence, mediaSequence, version, targetDurationUs, hasIndependentSegmentsTag, hasEndTag, playlistStartTimeUs != 0, initializationSegment, segments);
+        return new HlsMediaPlaylist(playlistType, baseUri, tags, startOffsetUs, playlistStartTimeUs, hasDiscontinuitySequence, playlistDiscontinuitySequence, mediaSequence, version, targetDurationUs, hasIndependentSegmentsTag, hasEndTag, playlistStartTimeUs != 0, drmInitData, initializationSegment, segments);
+    }
+
+    private static SchemeData parseWidevineSchemeData(String line, String keyFormat) throws ParserException {
+        if (KEYFORMAT_WIDEVINE_PSSH_BINARY.equals(keyFormat)) {
+            String uriString = parseStringAttr(line, REGEX_URI);
+            return new SchemeData(C.WIDEVINE_UUID, MimeTypes.VIDEO_MP4, Base64.decode(uriString.substring(uriString.indexOf(44)), 0));
+        } else if (!KEYFORMAT_WIDEVINE_PSSH_JSON.equals(keyFormat)) {
+            return null;
+        } else {
+            try {
+                return new SchemeData(C.WIDEVINE_UUID, "hls", line.getBytes(C.UTF8_NAME));
+            } catch (Throwable e) {
+                throw new ParserException(e);
+            }
+        }
     }
 
     private static int parseIntAttr(String line, Pattern pattern) throws ParserException {

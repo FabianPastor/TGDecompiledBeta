@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.tgnet.ConnectionsManager;
 
@@ -210,33 +211,35 @@ public final class MediaCodecUtil {
     }
 
     public static synchronized List<MediaCodecInfo> getDecoderInfos(String mimeType, boolean secure) throws DecoderQueryException {
-        List<MediaCodecInfo> decoderInfos;
+        List<MediaCodecInfo> cachedDecoderInfos;
         synchronized (MediaCodecUtil.class) {
             CodecKey key = new CodecKey(mimeType, secure);
-            List<MediaCodecInfo> decoderInfos2 = (List) decoderInfosCache.get(key);
-            if (decoderInfos2 != null) {
-                decoderInfos = decoderInfos2;
-            } else {
+            cachedDecoderInfos = (List) decoderInfosCache.get(key);
+            if (cachedDecoderInfos == null) {
                 MediaCodecListCompat mediaCodecList;
                 if (Util.SDK_INT >= 21) {
                     mediaCodecList = new MediaCodecListCompatV21(secure);
                 } else {
                     mediaCodecList = new MediaCodecListCompatV16();
                 }
-                decoderInfos2 = getDecoderInfosInternal(key, mediaCodecList);
-                if (secure && decoderInfos2.isEmpty() && 21 <= Util.SDK_INT && Util.SDK_INT <= 23) {
-                    decoderInfos2 = getDecoderInfosInternal(key, new MediaCodecListCompatV16());
-                    if (!decoderInfos2.isEmpty()) {
-                        Log.w(TAG, "MediaCodecList API didn't list secure decoder for: " + mimeType + ". Assuming: " + ((MediaCodecInfo) decoderInfos2.get(0)).name);
+                ArrayList<MediaCodecInfo> decoderInfos = getDecoderInfosInternal(key, mediaCodecList, mimeType);
+                if (secure && decoderInfos.isEmpty() && 21 <= Util.SDK_INT && Util.SDK_INT <= 23) {
+                    mediaCodecList = new MediaCodecListCompatV16();
+                    decoderInfos = getDecoderInfosInternal(key, mediaCodecList, mimeType);
+                    if (!decoderInfos.isEmpty()) {
+                        Log.w(TAG, "MediaCodecList API didn't list secure decoder for: " + mimeType + ". Assuming: " + ((MediaCodecInfo) decoderInfos.get(0)).name);
                     }
                 }
-                applyWorkarounds(decoderInfos2);
-                decoderInfos2 = Collections.unmodifiableList(decoderInfos2);
-                decoderInfosCache.put(key, decoderInfos2);
-                decoderInfos = decoderInfos2;
+                if (MimeTypes.AUDIO_ATMOS.equals(mimeType)) {
+                    decoderInfos.addAll(getDecoderInfosInternal(new CodecKey(MimeTypes.AUDIO_E_AC3, key.secure), mediaCodecList, mimeType));
+                }
+                applyWorkarounds(decoderInfos);
+                List<MediaCodecInfo> unmodifiableDecoderInfos = Collections.unmodifiableList(decoderInfos);
+                decoderInfosCache.put(key, unmodifiableDecoderInfos);
+                cachedDecoderInfos = unmodifiableDecoderInfos;
             }
         }
-        return decoderInfos;
+        return cachedDecoderInfos;
     }
 
     public static int maxH264DecodableFrameSize() throws DecoderQueryException {
@@ -303,10 +306,10 @@ public final class MediaCodecUtil {
         }
     }
 
-    private static List<MediaCodecInfo> getDecoderInfosInternal(CodecKey key, MediaCodecListCompat mediaCodecList) throws DecoderQueryException {
+    private static ArrayList<MediaCodecInfo> getDecoderInfosInternal(CodecKey key, MediaCodecListCompat mediaCodecList, String requestedMimeType) throws DecoderQueryException {
         String codecName;
         try {
-            List<MediaCodecInfo> decoderInfos = new ArrayList();
+            ArrayList<MediaCodecInfo> decoderInfos = new ArrayList();
             String mimeType = key.mimeType;
             int numberOfCodecs = mediaCodecList.getCodecCount();
             boolean secureDecodersExplicit = mediaCodecList.secureDecodersExplicit();
@@ -314,7 +317,7 @@ public final class MediaCodecUtil {
             for (int i = 0; i < numberOfCodecs; i++) {
                 MediaCodecInfo codecInfo = mediaCodecList.getCodecInfoAt(i);
                 codecName = codecInfo.getName();
-                if (isCodecUsableDecoder(codecInfo, codecName, secureDecodersExplicit)) {
+                if (isCodecUsableDecoder(codecInfo, codecName, secureDecodersExplicit, requestedMimeType)) {
                     for (String supportedType : codecInfo.getSupportedTypes()) {
                         if (supportedType.equalsIgnoreCase(mimeType)) {
                             CodecCapabilities capabilities = codecInfo.getCapabilitiesForType(supportedType);
@@ -344,7 +347,7 @@ public final class MediaCodecUtil {
         }
     }
 
-    private static boolean isCodecUsableDecoder(MediaCodecInfo info, String name, boolean secureDecodersExplicit) {
+    private static boolean isCodecUsableDecoder(MediaCodecInfo info, String name, boolean secureDecodersExplicit, String requestedMimeType) {
         if (info.isEncoder()) {
             return false;
         }
@@ -378,6 +381,9 @@ public final class MediaCodecUtil {
             return false;
         }
         if (Util.SDK_INT <= 19 && Util.DEVICE.startsWith("jflte") && "OMX.qcom.video.decoder.vp8".equals(name)) {
+            return false;
+        }
+        if (MimeTypes.AUDIO_ATMOS.equals(requestedMimeType) && "OMX.MTK.AUDIO.DECODER.DSPAC3".equals(name)) {
             return false;
         }
         return true;

@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.source;
 
-import android.util.Pair;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.SparseIntArray;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,34 +13,54 @@ import java.util.Map;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
-import org.telegram.messenger.exoplayer2.ExoPlayer.ExoPlayerComponent;
-import org.telegram.messenger.exoplayer2.ExoPlayer.ExoPlayerMessage;
+import org.telegram.messenger.exoplayer2.PlayerMessage.Target;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
-import org.telegram.messenger.exoplayer2.source.MediaPeriod.Callback;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
 import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
-import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
+import org.telegram.messenger.exoplayer2.source.ShuffleOrder.DefaultShuffleOrder;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
-public final class DynamicConcatenatingMediaSource implements ExoPlayerComponent, MediaSource {
+public final class DynamicConcatenatingMediaSource implements Target, MediaSource {
     private static final int MSG_ADD = 0;
     private static final int MSG_ADD_MULTIPLE = 1;
     private static final int MSG_MOVE = 3;
+    private static final int MSG_ON_COMPLETION = 4;
     private static final int MSG_REMOVE = 2;
-    private final List<DeferredMediaPeriod> deferredMediaPeriods = new ArrayList(1);
+    private final List<DeferredMediaPeriod> deferredMediaPeriods;
     private Listener listener;
-    private final Map<MediaPeriod, MediaSource> mediaSourceByMediaPeriod = new IdentityHashMap();
-    private final List<MediaSourceHolder> mediaSourceHolders = new ArrayList();
-    private final List<MediaSource> mediaSourcesPublic = new ArrayList();
+    private final Map<MediaPeriod, MediaSource> mediaSourceByMediaPeriod;
+    private final List<MediaSourceHolder> mediaSourceHolders;
+    private final List<MediaSource> mediaSourcesPublic;
     private int periodCount;
     private ExoPlayer player;
     private boolean preventListenerNotification;
-    private final MediaSourceHolder query = new MediaSourceHolder(null, null, -1, -1, Integer.valueOf(-1));
+    private final MediaSourceHolder query;
+    private ShuffleOrder shuffleOrder;
     private int windowCount;
+
+    private static final class EventDispatcher {
+        public final Handler eventHandler;
+        public final Runnable runnable;
+
+        public EventDispatcher(Runnable runnable) {
+            Looper myLooper;
+            this.runnable = runnable;
+            if (Looper.myLooper() != null) {
+                myLooper = Looper.myLooper();
+            } else {
+                myLooper = Looper.getMainLooper();
+            }
+            this.eventHandler = new Handler(myLooper);
+        }
+
+        public void dispatchEvent() {
+            this.eventHandler.post(this.runnable);
+        }
+    }
 
     private static final class MediaSourceHolder implements Comparable<MediaSourceHolder> {
         public int firstPeriodIndexInChild;
@@ -59,6 +80,18 @@ public final class DynamicConcatenatingMediaSource implements ExoPlayerComponent
 
         public int compareTo(MediaSourceHolder other) {
             return this.firstPeriodIndexInChild - other.firstPeriodIndexInChild;
+        }
+    }
+
+    private static final class MessageData<CustomType> {
+        public final EventDispatcher actionOnCompletion;
+        public final CustomType customData;
+        public final int index;
+
+        public MessageData(int index, CustomType customData, Runnable actionOnCompletion) {
+            this.index = index;
+            this.actionOnCompletion = actionOnCompletion != null ? new EventDispatcher(actionOnCompletion) : null;
+            this.customData = customData;
         }
     }
 
@@ -146,8 +179,8 @@ public final class DynamicConcatenatingMediaSource implements ExoPlayerComponent
         private final int[] uids;
         private final int windowCount;
 
-        public ConcatenatedTimeline(Collection<MediaSourceHolder> mediaSourceHolders, int windowCount, int periodCount) {
-            super(mediaSourceHolders.size());
+        public ConcatenatedTimeline(Collection<MediaSourceHolder> mediaSourceHolders, int windowCount, int periodCount, ShuffleOrder shuffleOrder) {
+            super(shuffleOrder);
             this.windowCount = windowCount;
             this.periodCount = periodCount;
             int childCount = mediaSourceHolders.size();
@@ -168,11 +201,11 @@ public final class DynamicConcatenatingMediaSource implements ExoPlayerComponent
         }
 
         protected int getChildIndexByPeriodIndex(int periodIndex) {
-            return Util.binarySearchFloor(this.firstPeriodInChildIndices, periodIndex, true, false);
+            return Util.binarySearchFloor(this.firstPeriodInChildIndices, periodIndex + 1, false, false);
         }
 
         protected int getChildIndexByWindowIndex(int windowIndex) {
-            return Util.binarySearchFloor(this.firstWindowInChildIndices, windowIndex, true, false);
+            return Util.binarySearchFloor(this.firstWindowInChildIndices, windowIndex + 1, false, false);
         }
 
         protected int getChildIndexByChildUid(Object childUid) {
@@ -211,142 +244,97 @@ public final class DynamicConcatenatingMediaSource implements ExoPlayerComponent
         }
     }
 
-    private static final class DeferredMediaPeriod implements MediaPeriod, Callback {
-        private final Allocator allocator;
-        private Callback callback;
-        private final MediaPeriodId id;
-        private MediaPeriod mediaPeriod;
-        public final MediaSource mediaSource;
-        private long preparePositionUs;
+    public DynamicConcatenatingMediaSource() {
+        this(new DefaultShuffleOrder(0));
+    }
 
-        public DeferredMediaPeriod(MediaSource mediaSource, MediaPeriodId id, Allocator allocator) {
-            this.id = id;
-            this.allocator = allocator;
-            this.mediaSource = mediaSource;
-        }
-
-        public void createPeriod() {
-            this.mediaPeriod = this.mediaSource.createPeriod(this.id, this.allocator);
-            if (this.callback != null) {
-                this.mediaPeriod.prepare(this, this.preparePositionUs);
-            }
-        }
-
-        public void releasePeriod() {
-            if (this.mediaPeriod != null) {
-                this.mediaSource.releasePeriod(this.mediaPeriod);
-            }
-        }
-
-        public void prepare(Callback callback, long preparePositionUs) {
-            this.callback = callback;
-            this.preparePositionUs = preparePositionUs;
-            if (this.mediaPeriod != null) {
-                this.mediaPeriod.prepare(this, preparePositionUs);
-            }
-        }
-
-        public void maybeThrowPrepareError() throws IOException {
-            if (this.mediaPeriod != null) {
-                this.mediaPeriod.maybeThrowPrepareError();
-            } else {
-                this.mediaSource.maybeThrowSourceInfoRefreshError();
-            }
-        }
-
-        public TrackGroupArray getTrackGroups() {
-            return this.mediaPeriod.getTrackGroups();
-        }
-
-        public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
-            return this.mediaPeriod.selectTracks(selections, mayRetainStreamFlags, streams, streamResetFlags, positionUs);
-        }
-
-        public void discardBuffer(long positionUs) {
-            this.mediaPeriod.discardBuffer(positionUs);
-        }
-
-        public long readDiscontinuity() {
-            return this.mediaPeriod.readDiscontinuity();
-        }
-
-        public long getBufferedPositionUs() {
-            return this.mediaPeriod.getBufferedPositionUs();
-        }
-
-        public long seekToUs(long positionUs) {
-            return this.mediaPeriod.seekToUs(positionUs);
-        }
-
-        public long getNextLoadPositionUs() {
-            return this.mediaPeriod.getNextLoadPositionUs();
-        }
-
-        public boolean continueLoading(long positionUs) {
-            return this.mediaPeriod != null && this.mediaPeriod.continueLoading(positionUs);
-        }
-
-        public void onContinueLoadingRequested(MediaPeriod source) {
-            this.callback.onContinueLoadingRequested(this);
-        }
-
-        public void onPrepared(MediaPeriod mediaPeriod) {
-            this.callback.onPrepared(this);
-        }
+    public DynamicConcatenatingMediaSource(ShuffleOrder shuffleOrder) {
+        this.shuffleOrder = shuffleOrder;
+        this.mediaSourceByMediaPeriod = new IdentityHashMap();
+        this.mediaSourcesPublic = new ArrayList();
+        this.mediaSourceHolders = new ArrayList();
+        this.deferredMediaPeriods = new ArrayList(1);
+        this.query = new MediaSourceHolder(null, null, -1, -1, Integer.valueOf(-1));
     }
 
     public synchronized void addMediaSource(MediaSource mediaSource) {
-        addMediaSource(this.mediaSourcesPublic.size(), mediaSource);
+        addMediaSource(this.mediaSourcesPublic.size(), mediaSource, null);
+    }
+
+    public synchronized void addMediaSource(MediaSource mediaSource, Runnable actionOnCompletion) {
+        addMediaSource(this.mediaSourcesPublic.size(), mediaSource, actionOnCompletion);
     }
 
     public synchronized void addMediaSource(int index, MediaSource mediaSource) {
-        boolean z = true;
+        addMediaSource(index, mediaSource, null);
+    }
+
+    public synchronized void addMediaSource(int index, MediaSource mediaSource, Runnable actionOnCompletion) {
+        boolean z = false;
         synchronized (this) {
             Assertions.checkNotNull(mediaSource);
-            if (this.mediaSourcesPublic.contains(mediaSource)) {
-                z = false;
+            if (!this.mediaSourcesPublic.contains(mediaSource)) {
+                z = true;
             }
             Assertions.checkArgument(z);
             this.mediaSourcesPublic.add(index, mediaSource);
             if (this.player != null) {
-                this.player.sendMessages(new ExoPlayerMessage(this, 0, Pair.create(Integer.valueOf(index), mediaSource)));
+                this.player.createMessage(this).setType(0).setPayload(new MessageData(index, mediaSource, actionOnCompletion)).send();
+            } else if (actionOnCompletion != null) {
+                actionOnCompletion.run();
             }
         }
     }
 
     public synchronized void addMediaSources(Collection<MediaSource> mediaSources) {
-        addMediaSources(this.mediaSourcesPublic.size(), mediaSources);
+        addMediaSources(this.mediaSourcesPublic.size(), mediaSources, null);
+    }
+
+    public synchronized void addMediaSources(Collection<MediaSource> mediaSources, Runnable actionOnCompletion) {
+        addMediaSources(this.mediaSourcesPublic.size(), mediaSources, actionOnCompletion);
     }
 
     public synchronized void addMediaSources(int index, Collection<MediaSource> mediaSources) {
+        addMediaSources(index, mediaSources, null);
+    }
+
+    public synchronized void addMediaSources(int index, Collection<MediaSource> mediaSources, Runnable actionOnCompletion) {
         for (MediaSource mediaSource : mediaSources) {
-            boolean z;
             Assertions.checkNotNull(mediaSource);
-            if (this.mediaSourcesPublic.contains(mediaSource)) {
-                z = false;
-            } else {
-                z = true;
-            }
-            Assertions.checkArgument(z);
+            Assertions.checkArgument(!this.mediaSourcesPublic.contains(mediaSource));
         }
         this.mediaSourcesPublic.addAll(index, mediaSources);
-        if (!(this.player == null || mediaSources.isEmpty())) {
-            this.player.sendMessages(new ExoPlayerMessage(this, 1, Pair.create(Integer.valueOf(index), mediaSources)));
+        if (this.player != null && !mediaSources.isEmpty()) {
+            this.player.createMessage(this).setType(1).setPayload(new MessageData(index, mediaSources, actionOnCompletion)).send();
+        } else if (actionOnCompletion != null) {
+            actionOnCompletion.run();
         }
     }
 
     public synchronized void removeMediaSource(int index) {
+        removeMediaSource(index, null);
+    }
+
+    public synchronized void removeMediaSource(int index, Runnable actionOnCompletion) {
         this.mediaSourcesPublic.remove(index);
         if (this.player != null) {
-            this.player.sendMessages(new ExoPlayerMessage(this, 2, Integer.valueOf(index)));
+            this.player.createMessage(this).setType(2).setPayload(new MessageData(index, null, actionOnCompletion)).send();
+        } else if (actionOnCompletion != null) {
+            actionOnCompletion.run();
         }
     }
 
     public synchronized void moveMediaSource(int currentIndex, int newIndex) {
+        moveMediaSource(currentIndex, newIndex, null);
+    }
+
+    public synchronized void moveMediaSource(int currentIndex, int newIndex, Runnable actionOnCompletion) {
         if (currentIndex != newIndex) {
             this.mediaSourcesPublic.add(newIndex, this.mediaSourcesPublic.remove(currentIndex));
             if (this.player != null) {
-                this.player.sendMessages(new ExoPlayerMessage(this, 3, Pair.create(Integer.valueOf(currentIndex), Integer.valueOf(newIndex))));
+                this.player.createMessage(this).setType(3).setPayload(new MessageData(currentIndex, Integer.valueOf(newIndex), actionOnCompletion)).send();
+            } else if (actionOnCompletion != null) {
+                actionOnCompletion.run();
             }
         }
     }
@@ -360,24 +348,32 @@ public final class DynamicConcatenatingMediaSource implements ExoPlayerComponent
     }
 
     public synchronized void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
-        this.player = player;
-        this.listener = listener;
-        this.preventListenerNotification = true;
-        addMediaSourcesInternal(0, this.mediaSourcesPublic);
-        this.preventListenerNotification = false;
-        maybeNotifyListener();
+        boolean z = true;
+        synchronized (this) {
+            if (this.listener != null) {
+                z = false;
+            }
+            Assertions.checkState(z, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+            this.player = player;
+            this.listener = listener;
+            this.preventListenerNotification = true;
+            this.shuffleOrder = this.shuffleOrder.cloneAndInsert(0, this.mediaSourcesPublic.size());
+            addMediaSourcesInternal(0, this.mediaSourcesPublic);
+            this.preventListenerNotification = false;
+            maybeNotifyListener(null);
+        }
     }
 
     public void maybeThrowSourceInfoRefreshError() throws IOException {
-        for (MediaSourceHolder mediaSourceHolder : this.mediaSourceHolders) {
-            mediaSourceHolder.mediaSource.maybeThrowSourceInfoRefreshError();
+        for (int i = 0; i < this.mediaSourceHolders.size(); i++) {
+            ((MediaSourceHolder) this.mediaSourceHolders.get(i)).mediaSource.maybeThrowSourceInfoRefreshError();
         }
     }
 
     public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
         MediaPeriod mediaPeriod;
         MediaSourceHolder holder = (MediaSourceHolder) this.mediaSourceHolders.get(findMediaSourceHolderByPeriodIndex(id.periodIndex));
-        MediaPeriodId idInSource = new MediaPeriodId(id.periodIndex - holder.firstPeriodIndexInChild);
+        MediaPeriodId idInSource = id.copyWithPeriodIndex(id.periodIndex - holder.firstPeriodIndexInChild);
         if (holder.isPrepared) {
             mediaPeriod = holder.mediaSource.createPeriod(idInSource, allocator);
         } else {
@@ -400,39 +396,57 @@ public final class DynamicConcatenatingMediaSource implements ExoPlayerComponent
     }
 
     public void releaseSource() {
-        for (MediaSourceHolder mediaSourceHolder : this.mediaSourceHolders) {
-            mediaSourceHolder.mediaSource.releaseSource();
+        for (int i = 0; i < this.mediaSourceHolders.size(); i++) {
+            ((MediaSourceHolder) this.mediaSourceHolders.get(i)).mediaSource.releaseSource();
         }
     }
 
     public void handleMessage(int messageType, Object message) throws ExoPlaybackException {
+        if (messageType == 4) {
+            ((EventDispatcher) message).dispatchEvent();
+            return;
+        }
+        EventDispatcher actionOnCompletion;
         this.preventListenerNotification = true;
         switch (messageType) {
             case 0:
-                Pair<Integer, MediaSource> messageData = (Pair) message;
-                addMediaSourceInternal(((Integer) messageData.first).intValue(), (MediaSource) messageData.second);
+                MessageData<MediaSource> messageData = (MessageData) message;
+                this.shuffleOrder = this.shuffleOrder.cloneAndInsert(messageData.index, 1);
+                addMediaSourceInternal(messageData.index, (MediaSource) messageData.customData);
+                actionOnCompletion = messageData.actionOnCompletion;
                 break;
             case 1:
-                Pair<Integer, Collection<MediaSource>> messageData2 = (Pair) message;
-                addMediaSourcesInternal(((Integer) messageData2.first).intValue(), (Collection) messageData2.second);
+                MessageData<Collection<MediaSource>> messageData2 = (MessageData) message;
+                this.shuffleOrder = this.shuffleOrder.cloneAndInsert(messageData2.index, ((Collection) messageData2.customData).size());
+                addMediaSourcesInternal(messageData2.index, (Collection) messageData2.customData);
+                actionOnCompletion = messageData2.actionOnCompletion;
                 break;
             case 2:
-                removeMediaSourceInternal(((Integer) message).intValue());
+                MessageData<Void> messageData3 = (MessageData) message;
+                this.shuffleOrder = this.shuffleOrder.cloneAndRemove(messageData3.index);
+                removeMediaSourceInternal(messageData3.index);
+                actionOnCompletion = messageData3.actionOnCompletion;
                 break;
             case 3:
-                Pair<Integer, Integer> messageData3 = (Pair) message;
-                moveMediaSourceInternal(((Integer) messageData3.first).intValue(), ((Integer) messageData3.second).intValue());
+                MessageData<Integer> messageData4 = (MessageData) message;
+                this.shuffleOrder = this.shuffleOrder.cloneAndRemove(messageData4.index);
+                this.shuffleOrder = this.shuffleOrder.cloneAndInsert(((Integer) messageData4.customData).intValue(), 1);
+                moveMediaSourceInternal(messageData4.index, ((Integer) messageData4.customData).intValue());
+                actionOnCompletion = messageData4.actionOnCompletion;
                 break;
             default:
                 throw new IllegalStateException();
         }
         this.preventListenerNotification = false;
-        maybeNotifyListener();
+        maybeNotifyListener(actionOnCompletion);
     }
 
-    private void maybeNotifyListener() {
+    private void maybeNotifyListener(EventDispatcher actionOnCompletion) {
         if (!this.preventListenerNotification) {
-            this.listener.onSourceInfoRefreshed(new ConcatenatedTimeline(this.mediaSourceHolders, this.windowCount, this.periodCount), null);
+            this.listener.onSourceInfoRefreshed(this, new ConcatenatedTimeline(this.mediaSourceHolders, this.windowCount, this.periodCount, this.shuffleOrder), null);
+            if (actionOnCompletion != null) {
+                this.player.createMessage(this).setType(4).setPayload(actionOnCompletion).send();
+            }
         }
     }
 
@@ -449,7 +463,7 @@ public final class DynamicConcatenatingMediaSource implements ExoPlayerComponent
         correctOffsets(newIndex, newTimeline.getWindowCount(), newTimeline.getPeriodCount());
         this.mediaSourceHolders.add(newIndex, newMediaSourceHolder);
         newMediaSourceHolder.mediaSource.prepareSource(this.player, false, new Listener() {
-            public void onSourceInfoRefreshed(Timeline newTimeline, Object manifest) {
+            public void onSourceInfoRefreshed(MediaSource source, Timeline newTimeline, Object manifest) {
                 DynamicConcatenatingMediaSource.this.updateMediaSourceInternal(newMediaSourceHolder, newTimeline);
             }
         });
@@ -484,7 +498,7 @@ public final class DynamicConcatenatingMediaSource implements ExoPlayerComponent
                 }
             }
             mediaSourceHolder.isPrepared = true;
-            maybeNotifyListener();
+            maybeNotifyListener(null);
         }
     }
 
@@ -525,6 +539,12 @@ public final class DynamicConcatenatingMediaSource implements ExoPlayerComponent
     private int findMediaSourceHolderByPeriodIndex(int periodIndex) {
         this.query.firstPeriodIndexInChild = periodIndex;
         int index = Collections.binarySearch(this.mediaSourceHolders, this.query);
-        return index >= 0 ? index : (-index) - 2;
+        if (index < 0) {
+            return (-index) - 2;
+        }
+        while (index < this.mediaSourceHolders.size() - 1 && ((MediaSourceHolder) this.mediaSourceHolders.get(index + 1)).firstPeriodIndexInChild == periodIndex) {
+            index++;
+        }
+        return index;
     }
 }

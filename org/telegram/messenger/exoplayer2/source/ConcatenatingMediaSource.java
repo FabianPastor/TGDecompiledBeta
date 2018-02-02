@@ -8,28 +8,30 @@ import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
 import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
+import org.telegram.messenger.exoplayer2.source.ShuffleOrder.DefaultShuffleOrder;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class ConcatenatingMediaSource implements MediaSource {
     private final boolean[] duplicateFlags;
-    private final boolean isRepeatOneAtomic;
+    private final boolean isAtomic;
     private Listener listener;
     private final Object[] manifests;
     private final MediaSource[] mediaSources;
+    private final ShuffleOrder shuffleOrder;
     private final Map<MediaPeriod, Integer> sourceIndexByMediaPeriod;
     private ConcatenatedTimeline timeline;
     private final Timeline[] timelines;
 
     private static final class ConcatenatedTimeline extends AbstractConcatenatedTimeline {
-        private final boolean isRepeatOneAtomic;
+        private final boolean isAtomic;
         private final int[] sourcePeriodOffsets;
         private final int[] sourceWindowOffsets;
         private final Timeline[] timelines;
 
-        public ConcatenatedTimeline(Timeline[] timelines, boolean isRepeatOneAtomic) {
-            super(timelines.length);
+        public ConcatenatedTimeline(Timeline[] timelines, boolean isAtomic, ShuffleOrder shuffleOrder) {
+            super(shuffleOrder);
             int[] sourcePeriodOffsets = new int[timelines.length];
             int[] sourceWindowOffsets = new int[timelines.length];
             long periodCount = 0;
@@ -45,7 +47,7 @@ public final class ConcatenatingMediaSource implements MediaSource {
             this.timelines = timelines;
             this.sourcePeriodOffsets = sourcePeriodOffsets;
             this.sourceWindowOffsets = sourceWindowOffsets;
-            this.isRepeatOneAtomic = isRepeatOneAtomic;
+            this.isAtomic = isAtomic;
         }
 
         public int getWindowCount() {
@@ -56,26 +58,44 @@ public final class ConcatenatingMediaSource implements MediaSource {
             return this.sourcePeriodOffsets[this.sourcePeriodOffsets.length - 1];
         }
 
-        public int getNextWindowIndex(int windowIndex, int repeatMode) {
-            if (this.isRepeatOneAtomic && repeatMode == 1) {
+        public int getNextWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+            boolean z = true;
+            if (this.isAtomic && repeatMode == 1) {
                 repeatMode = 2;
             }
-            return super.getNextWindowIndex(windowIndex, repeatMode);
+            if (this.isAtomic || !shuffleModeEnabled) {
+                z = false;
+            }
+            return super.getNextWindowIndex(windowIndex, repeatMode, z);
         }
 
-        public int getPreviousWindowIndex(int windowIndex, int repeatMode) {
-            if (this.isRepeatOneAtomic && repeatMode == 1) {
+        public int getPreviousWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
+            boolean z = true;
+            if (this.isAtomic && repeatMode == 1) {
                 repeatMode = 2;
             }
-            return super.getPreviousWindowIndex(windowIndex, repeatMode);
+            if (this.isAtomic || !shuffleModeEnabled) {
+                z = false;
+            }
+            return super.getPreviousWindowIndex(windowIndex, repeatMode, z);
+        }
+
+        public int getLastWindowIndex(boolean shuffleModeEnabled) {
+            boolean z = !this.isAtomic && shuffleModeEnabled;
+            return super.getLastWindowIndex(z);
+        }
+
+        public int getFirstWindowIndex(boolean shuffleModeEnabled) {
+            boolean z = !this.isAtomic && shuffleModeEnabled;
+            return super.getFirstWindowIndex(z);
         }
 
         protected int getChildIndexByPeriodIndex(int periodIndex) {
-            return Util.binarySearchFloor(this.sourcePeriodOffsets, periodIndex, true, false) + 1;
+            return Util.binarySearchFloor(this.sourcePeriodOffsets, periodIndex + 1, false, false) + 1;
         }
 
         protected int getChildIndexByWindowIndex(int windowIndex) {
-            return Util.binarySearchFloor(this.sourceWindowOffsets, windowIndex, true, false) + 1;
+            return Util.binarySearchFloor(this.sourceWindowOffsets, windowIndex + 1, false, false) + 1;
         }
 
         protected int getChildIndexByChildUid(Object childUid) {
@@ -106,12 +126,22 @@ public final class ConcatenatingMediaSource implements MediaSource {
         this(false, mediaSources);
     }
 
-    public ConcatenatingMediaSource(boolean isRepeatOneAtomic, MediaSource... mediaSources) {
+    public ConcatenatingMediaSource(boolean isAtomic, MediaSource... mediaSources) {
+        this(isAtomic, new DefaultShuffleOrder(mediaSources.length), mediaSources);
+    }
+
+    public ConcatenatingMediaSource(boolean isAtomic, ShuffleOrder shuffleOrder, MediaSource... mediaSources) {
+        boolean z = false;
         for (MediaSource mediaSource : mediaSources) {
             Assertions.checkNotNull(mediaSource);
         }
+        if (shuffleOrder.getLength() == mediaSources.length) {
+            z = true;
+        }
+        Assertions.checkArgument(z);
         this.mediaSources = mediaSources;
-        this.isRepeatOneAtomic = isRepeatOneAtomic;
+        this.isAtomic = isAtomic;
+        this.shuffleOrder = shuffleOrder;
         this.timelines = new Timeline[mediaSources.length];
         this.manifests = new Object[mediaSources.length];
         this.sourceIndexByMediaPeriod = new HashMap();
@@ -119,12 +149,17 @@ public final class ConcatenatingMediaSource implements MediaSource {
     }
 
     public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
+        Assertions.checkState(this.listener == null, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
         this.listener = listener;
+        if (this.mediaSources.length == 0) {
+            listener.onSourceInfoRefreshed(this, Timeline.EMPTY, null);
+            return;
+        }
         for (int i = 0; i < this.mediaSources.length; i++) {
             if (!this.duplicateFlags[i]) {
                 final int index = i;
                 this.mediaSources[i].prepareSource(player, false, new Listener() {
-                    public void onSourceInfoRefreshed(Timeline timeline, Object manifest) {
+                    public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
                         ConcatenatingMediaSource.this.handleSourceInfoRefreshed(index, timeline, manifest);
                     }
                 });
@@ -142,7 +177,7 @@ public final class ConcatenatingMediaSource implements MediaSource {
 
     public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
         int sourceIndex = this.timeline.getChildIndexByPeriodIndex(id.periodIndex);
-        MediaPeriod mediaPeriod = this.mediaSources[sourceIndex].createPeriod(new MediaPeriodId(id.periodIndex - this.timeline.getFirstPeriodIndexByChildIndex(sourceIndex)), allocator);
+        MediaPeriod mediaPeriod = this.mediaSources[sourceIndex].createPeriod(id.copyWithPeriodIndex(id.periodIndex - this.timeline.getFirstPeriodIndexByChildIndex(sourceIndex)), allocator);
         this.sourceIndexByMediaPeriod.put(mediaPeriod, Integer.valueOf(sourceIndex));
         return mediaPeriod;
     }
@@ -180,8 +215,8 @@ public final class ConcatenatingMediaSource implements MediaSource {
                 return;
             }
         }
-        this.timeline = new ConcatenatedTimeline((Timeline[]) this.timelines.clone(), this.isRepeatOneAtomic);
-        this.listener.onSourceInfoRefreshed(this.timeline, this.manifests.clone());
+        this.timeline = new ConcatenatedTimeline((Timeline[]) this.timelines.clone(), this.isAtomic, this.shuffleOrder);
+        this.listener.onSourceInfoRefreshed(this, this.timeline, this.manifests.clone());
     }
 
     private static boolean[] buildDuplicateFlags(MediaSource[] mediaSources) {

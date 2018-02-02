@@ -41,7 +41,7 @@ public final class FixedTrackSelection extends BaseTrackSelection {
         this.data = data;
     }
 
-    public void updateSelectedTrack(long bufferedDurationUs) {
+    public void updateSelectedTrack(long playbackPositionUs, long bufferedDurationUs, long availableDurationUs) {
     }
 
     public int getSelectedIndex() {

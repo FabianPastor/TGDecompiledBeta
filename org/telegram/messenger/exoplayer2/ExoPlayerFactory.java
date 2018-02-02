@@ -4,6 +4,7 @@ import android.content.Context;
 import org.telegram.messenger.exoplayer2.drm.DrmSessionManager;
 import org.telegram.messenger.exoplayer2.drm.FrameworkMediaCrypto;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelector;
+import org.telegram.messenger.exoplayer2.util.Clock;
 
 public final class ExoPlayerFactory {
     private ExoPlayerFactory() {
@@ -46,6 +47,6 @@ public final class ExoPlayerFactory {
     }
 
     public static ExoPlayer newInstance(Renderer[] renderers, TrackSelector trackSelector, LoadControl loadControl) {
-        return new ExoPlayerImpl(renderers, trackSelector, loadControl);
+        return new ExoPlayerImpl(renderers, trackSelector, loadControl, Clock.DEFAULT);
     }
 }

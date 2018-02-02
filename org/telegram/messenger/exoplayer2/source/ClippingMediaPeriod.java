@@ -2,7 +2,9 @@ package org.telegram.messenger.exoplayer2.source;
 
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
+import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.source.MediaPeriod.Callback;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
@@ -11,30 +13,18 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public final class ClippingMediaPeriod implements MediaPeriod, Callback {
     private Callback callback;
-    private long endUs = C.TIME_UNSET;
+    long endUs;
     public final MediaPeriod mediaPeriod;
-    private boolean pendingInitialDiscontinuity;
+    private long pendingInitialDiscontinuityPositionUs;
     private ClippingSampleStream[] sampleStreams = new ClippingSampleStream[0];
-    private long startUs = C.TIME_UNSET;
+    long startUs;
 
-    private static final class ClippingSampleStream implements SampleStream {
-        private final long endUs;
-        private final MediaPeriod mediaPeriod;
-        private boolean pendingDiscontinuity;
+    private final class ClippingSampleStream implements SampleStream {
+        public final SampleStream childStream;
         private boolean sentEos;
-        private final long startUs;
-        private final SampleStream stream;
 
-        public ClippingSampleStream(MediaPeriod mediaPeriod, SampleStream stream, long startUs, long endUs, boolean pendingDiscontinuity) {
-            this.mediaPeriod = mediaPeriod;
-            this.stream = stream;
-            this.startUs = startUs;
-            this.endUs = endUs;
-            this.pendingDiscontinuity = pendingDiscontinuity;
-        }
-
-        public void clearPendingDiscontinuity() {
-            this.pendingDiscontinuity = false;
+        public ClippingSampleStream(SampleStream childStream) {
+            this.childStream = childStream;
         }
 
         public void clearSentEos() {
@@ -42,23 +32,27 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
         }
 
         public boolean isReady() {
-            return this.stream.isReady();
+            return !ClippingMediaPeriod.this.isPendingInitialDiscontinuity() && this.childStream.isReady();
         }
 
         public void maybeThrowError() throws IOException {
-            this.stream.maybeThrowError();
+            this.childStream.maybeThrowError();
         }
 
         public int readData(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean requireFormat) {
-            if (this.pendingDiscontinuity) {
+            if (ClippingMediaPeriod.this.isPendingInitialDiscontinuity()) {
                 return -3;
             }
             if (this.sentEos) {
                 buffer.setFlags(4);
                 return -4;
             }
-            int result = this.stream.readData(formatHolder, buffer, requireFormat);
-            if (this.endUs != Long.MIN_VALUE && ((result == -4 && buffer.timeUs >= this.endUs) || (result == -3 && this.mediaPeriod.getBufferedPositionUs() == Long.MIN_VALUE))) {
+            int result = this.childStream.readData(formatHolder, buffer, requireFormat);
+            if (result == -5) {
+                Format format = formatHolder.format;
+                formatHolder.format = format.copyWithGaplessInfo(ClippingMediaPeriod.this.startUs != 0 ? 0 : format.encoderDelay, ClippingMediaPeriod.this.endUs != Long.MIN_VALUE ? 0 : format.encoderPadding);
+                return -5;
+            } else if (ClippingMediaPeriod.this.endUs != Long.MIN_VALUE && ((result == -4 && buffer.timeUs >= ClippingMediaPeriod.this.endUs) || (result == -3 && ClippingMediaPeriod.this.getBufferedPositionUs() == Long.MIN_VALUE))) {
                 buffer.clear();
                 buffer.setFlags(4);
                 this.sentEos = true;
@@ -66,19 +60,24 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
             } else if (result != -4 || buffer.isEndOfStream()) {
                 return result;
             } else {
-                buffer.timeUs -= this.startUs;
+                buffer.timeUs -= ClippingMediaPeriod.this.startUs;
                 return result;
             }
         }
 
-        public void skipData(long positionUs) {
-            this.stream.skipData(this.startUs + positionUs);
+        public int skipData(long positionUs) {
+            if (ClippingMediaPeriod.this.isPendingInitialDiscontinuity()) {
+                return -3;
+            }
+            return this.childStream.skipData(ClippingMediaPeriod.this.startUs + positionUs);
         }
     }
 
     public ClippingMediaPeriod(MediaPeriod mediaPeriod, boolean enableInitialDiscontinuity) {
         this.mediaPeriod = mediaPeriod;
-        this.pendingInitialDiscontinuity = enableInitialDiscontinuity;
+        this.pendingInitialDiscontinuityPositionUs = enableInitialDiscontinuity ? 0 : C.TIME_UNSET;
+        this.startUs = C.TIME_UNSET;
+        this.endUs = C.TIME_UNSET;
     }
 
     public void setClipping(long startUs, long endUs) {
@@ -101,51 +100,47 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
 
     public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
         int i;
-        boolean z;
         this.sampleStreams = new ClippingSampleStream[streams.length];
-        SampleStream[] internalStreams = new SampleStream[streams.length];
+        SampleStream[] childStreams = new SampleStream[streams.length];
         for (i = 0; i < streams.length; i++) {
             this.sampleStreams[i] = (ClippingSampleStream) streams[i];
-            internalStreams[i] = this.sampleStreams[i] != null ? this.sampleStreams[i].stream : null;
+            childStreams[i] = this.sampleStreams[i] != null ? this.sampleStreams[i].childStream : null;
         }
-        long enablePositionUs = this.mediaPeriod.selectTracks(selections, mayRetainStreamFlags, internalStreams, streamResetFlags, positionUs + this.startUs);
-        if (this.pendingInitialDiscontinuity) {
-            z = this.startUs != 0 && shouldKeepInitialDiscontinuity(selections);
-            this.pendingInitialDiscontinuity = z;
-        }
-        z = enablePositionUs == this.startUs + positionUs || (enablePositionUs >= this.startUs && (this.endUs == Long.MIN_VALUE || enablePositionUs <= this.endUs));
+        long enablePositionUs = this.mediaPeriod.selectTracks(selections, mayRetainStreamFlags, childStreams, streamResetFlags, positionUs + this.startUs) - this.startUs;
+        long j = (isPendingInitialDiscontinuity() && positionUs == 0 && shouldKeepInitialDiscontinuity(this.startUs, selections)) ? enablePositionUs : C.TIME_UNSET;
+        this.pendingInitialDiscontinuityPositionUs = j;
+        boolean z = enablePositionUs == positionUs || (enablePositionUs >= 0 && (this.endUs == Long.MIN_VALUE || this.startUs + enablePositionUs <= this.endUs));
         Assertions.checkState(z);
         i = 0;
         while (i < streams.length) {
-            if (internalStreams[i] == null) {
+            if (childStreams[i] == null) {
                 this.sampleStreams[i] = null;
-            } else if (streams[i] == null || this.sampleStreams[i].stream != internalStreams[i]) {
-                this.sampleStreams[i] = new ClippingSampleStream(this, internalStreams[i], this.startUs, this.endUs, this.pendingInitialDiscontinuity);
+            } else if (streams[i] == null || this.sampleStreams[i].childStream != childStreams[i]) {
+                this.sampleStreams[i] = new ClippingSampleStream(childStreams[i]);
             }
             streams[i] = this.sampleStreams[i];
             i++;
         }
-        return enablePositionUs - this.startUs;
+        return enablePositionUs;
     }
 
-    public void discardBuffer(long positionUs) {
-        this.mediaPeriod.discardBuffer(this.startUs + positionUs);
+    public void discardBuffer(long positionUs, boolean toKeyframe) {
+        this.mediaPeriod.discardBuffer(this.startUs + positionUs, toKeyframe);
+    }
+
+    public void reevaluateBuffer(long positionUs) {
+        this.mediaPeriod.reevaluateBuffer(this.startUs + positionUs);
     }
 
     public long readDiscontinuity() {
         boolean z = false;
-        long discontinuityUs;
-        if (this.pendingInitialDiscontinuity) {
-            for (ClippingSampleStream sampleStream : this.sampleStreams) {
-                if (sampleStream != null) {
-                    sampleStream.clearPendingDiscontinuity();
-                }
-            }
-            this.pendingInitialDiscontinuity = false;
-            discontinuityUs = readDiscontinuity();
-            return discontinuityUs != C.TIME_UNSET ? discontinuityUs : 0;
+        if (isPendingInitialDiscontinuity()) {
+            long initialDiscontinuityUs = this.pendingInitialDiscontinuityPositionUs;
+            this.pendingInitialDiscontinuityPositionUs = C.TIME_UNSET;
+            long childDiscontinuityUs = readDiscontinuity();
+            return childDiscontinuityUs != C.TIME_UNSET ? childDiscontinuityUs : initialDiscontinuityUs;
         } else {
-            discontinuityUs = this.mediaPeriod.readDiscontinuity();
+            long discontinuityUs = this.mediaPeriod.readDiscontinuity();
             if (discontinuityUs == C.TIME_UNSET) {
                 return C.TIME_UNSET;
             }
@@ -177,17 +172,27 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
 
     public long seekToUs(long positionUs) {
         boolean z = false;
+        this.pendingInitialDiscontinuityPositionUs = C.TIME_UNSET;
         for (ClippingSampleStream sampleStream : this.sampleStreams) {
             if (sampleStream != null) {
                 sampleStream.clearSentEos();
             }
         }
-        long seekUs = this.mediaPeriod.seekToUs(this.startUs + positionUs);
-        if (seekUs == this.startUs + positionUs || (seekUs >= this.startUs && (this.endUs == Long.MIN_VALUE || seekUs <= this.endUs))) {
+        long offsetPositionUs = positionUs + this.startUs;
+        long seekUs = this.mediaPeriod.seekToUs(offsetPositionUs);
+        if (seekUs == offsetPositionUs || (seekUs >= this.startUs && (this.endUs == Long.MIN_VALUE || seekUs <= this.endUs))) {
             z = true;
         }
         Assertions.checkState(z);
         return seekUs - this.startUs;
+    }
+
+    public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
+        if (positionUs == this.startUs) {
+            return 0;
+        }
+        long offsetPositionUs = positionUs + this.startUs;
+        return this.mediaPeriod.getAdjustedSeekPositionUs(offsetPositionUs, clipSeekParameters(offsetPositionUs, seekParameters)) - this.startUs;
     }
 
     public long getNextLoadPositionUs() {
@@ -215,7 +220,25 @@ public final class ClippingMediaPeriod implements MediaPeriod, Callback {
         this.callback.onContinueLoadingRequested(this);
     }
 
-    private static boolean shouldKeepInitialDiscontinuity(TrackSelection[] selections) {
+    boolean isPendingInitialDiscontinuity() {
+        return this.pendingInitialDiscontinuityPositionUs != C.TIME_UNSET;
+    }
+
+    private SeekParameters clipSeekParameters(long offsetPositionUs, SeekParameters seekParameters) {
+        long toleranceAfterMs;
+        long toleranceBeforeMs = Math.min(offsetPositionUs - this.startUs, seekParameters.toleranceBeforeUs);
+        if (this.endUs == Long.MIN_VALUE) {
+            toleranceAfterMs = seekParameters.toleranceAfterUs;
+        } else {
+            toleranceAfterMs = Math.min(this.endUs - offsetPositionUs, seekParameters.toleranceAfterUs);
+        }
+        return (toleranceBeforeMs == seekParameters.toleranceBeforeUs && toleranceAfterMs == seekParameters.toleranceAfterUs) ? seekParameters : new SeekParameters(toleranceBeforeMs, toleranceAfterMs);
+    }
+
+    private static boolean shouldKeepInitialDiscontinuity(long startUs, TrackSelection[] selections) {
+        if (startUs == 0) {
+            return false;
+        }
         for (TrackSelection trackSelection : selections) {
             if (trackSelection != null && !MimeTypes.isAudio(trackSelection.getSelectedFormat().sampleMimeType)) {
                 return true;

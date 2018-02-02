@@ -8,6 +8,7 @@ import java.util.Arrays;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
+import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
@@ -15,8 +16,9 @@ import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
+import org.telegram.messenger.exoplayer2.extractor.SeekMap.SeekPoints;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
-import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource.EventListener;
+import org.telegram.messenger.exoplayer2.source.MediaSourceEventListener.EventDispatcher;
 import org.telegram.messenger.exoplayer2.source.SampleQueue.UpstreamFormatChangedListener;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
@@ -33,6 +35,7 @@ import org.telegram.messenger.exoplayer2.util.Util;
 
 final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, UpstreamFormatChangedListener, Callback<ExtractingLoadable>, ReleaseCallback {
     private static final long DEFAULT_LAST_SAMPLE_DURATION_US = 10000;
+    private int actualMinLoadableRetryCount;
     private final Allocator allocator;
     private MediaPeriod.Callback callback;
     private final long continueLoadingCheckIntervalBytes;
@@ -40,8 +43,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     private final DataSource dataSource;
     private long durationUs;
     private int enabledTrackCount;
-    private final Handler eventHandler;
-    private final EventListener eventListener;
+    private final EventDispatcher eventDispatcher;
     private int extractedSamplesCountAtStartOfLoad;
     private final ExtractorHolder extractorHolder;
     private final Handler handler;
@@ -56,6 +58,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     private final int minLoadableRetryCount;
     private boolean notifyDiscontinuity;
     private final Runnable onContinueLoadingRequestedRunnable;
+    private boolean pendingDeferredRetry;
     private long pendingResetPositionUs;
     private boolean prepared;
     private boolean released;
@@ -65,6 +68,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     private SeekMap seekMap;
     private boolean seenFirstTrackSelection;
     private boolean[] trackEnabledStates;
+    private boolean[] trackFormatNotificationSent;
     private boolean[] trackIsAudioVideoFlags;
     private TrackGroupArray tracks;
     private final Uri uri;
@@ -122,7 +126,9 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     }
 
     final class ExtractingLoadable implements Loadable {
+        private long bytesLoaded;
         private final DataSource dataSource;
+        private DataSpec dataSpec;
         private final ExtractorHolder extractorHolder;
         private long length = -1;
         private volatile boolean loadCanceled;
@@ -160,7 +166,8 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
                 ExtractorInput input;
                 try {
                     long position = this.positionHolder.position;
-                    this.length = this.dataSource.open(new DataSpec(this.uri, position, -1, ExtractorMediaPeriod.this.customCacheKey));
+                    this.dataSpec = new DataSpec(this.uri, position, -1, ExtractorMediaPeriod.this.customCacheKey);
+                    this.length = this.dataSource.open(this.dataSpec);
                     if (this.length != -1) {
                         this.length += position;
                     }
@@ -184,6 +191,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
                             result = 0;
                         } else if (input != null) {
                             this.positionHolder.position = input.getPosition();
+                            this.bytesLoaded = this.positionHolder.position - this.dataSpec.absoluteStreamPosition;
                         }
                         Util.closeQuietly(this.dataSource);
                     } catch (Throwable th2) {
@@ -198,6 +206,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
             if (result != 1) {
                 if (input != null) {
                     this.positionHolder.position = input.getPosition();
+                    this.bytesLoaded = this.positionHolder.position - this.dataSpec.absoluteStreamPosition;
                 }
             }
             Util.closeQuietly(this.dataSource);
@@ -224,17 +233,16 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
             return ExtractorMediaPeriod.this.readData(this.track, formatHolder, buffer, formatRequired);
         }
 
-        public void skipData(long positionUs) {
-            ExtractorMediaPeriod.this.skipData(this.track, positionUs);
+        public int skipData(long positionUs) {
+            return ExtractorMediaPeriod.this.skipData(this.track, positionUs);
         }
     }
 
-    public ExtractorMediaPeriod(Uri uri, DataSource dataSource, Extractor[] extractors, int minLoadableRetryCount, Handler eventHandler, EventListener eventListener, Listener listener, Allocator allocator, String customCacheKey, int continueLoadingCheckIntervalBytes) {
+    public ExtractorMediaPeriod(Uri uri, DataSource dataSource, Extractor[] extractors, int minLoadableRetryCount, EventDispatcher eventDispatcher, Listener listener, Allocator allocator, String customCacheKey, int continueLoadingCheckIntervalBytes) {
         this.uri = uri;
         this.dataSource = dataSource;
         this.minLoadableRetryCount = minLoadableRetryCount;
-        this.eventHandler = eventHandler;
-        this.eventListener = eventListener;
+        this.eventDispatcher = eventDispatcher;
         this.listener = listener;
         this.allocator = allocator;
         this.customCacheKey = customCacheKey;
@@ -258,6 +266,11 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         this.sampleQueues = new SampleQueue[0];
         this.pendingResetPositionUs = C.TIME_UNSET;
         this.length = -1;
+        this.durationUs = C.TIME_UNSET;
+        if (minLoadableRetryCount == -1) {
+            minLoadableRetryCount = 3;
+        }
+        this.actualMinLoadableRetryCount = minLoadableRetryCount;
     }
 
     public void release() {
@@ -323,7 +336,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
                 if (!seekRequired) {
                     sampleQueue = this.sampleQueues[track];
                     sampleQueue.rewind();
-                    if (sampleQueue.advanceTo(positionUs, true, true) || sampleQueue.getReadIndex() == 0) {
+                    if (sampleQueue.advanceTo(positionUs, true, true) != -1 || sampleQueue.getReadIndex() == 0) {
                         seekRequired = false;
                     } else {
                         seekRequired = true;
@@ -333,6 +346,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
             i++;
         }
         if (this.enabledTrackCount == 0) {
+            this.pendingDeferredRetry = false;
             this.notifyDiscontinuity = false;
             if (this.loader.isLoading()) {
                 for (SampleQueue sampleQueue2 : this.sampleQueues) {
@@ -356,15 +370,18 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         return positionUs;
     }
 
-    public void discardBuffer(long positionUs) {
+    public void discardBuffer(long positionUs, boolean toKeyframe) {
         int trackCount = this.sampleQueues.length;
         for (int i = 0; i < trackCount; i++) {
-            this.sampleQueues[i].discardTo(positionUs, false, this.trackEnabledStates[i]);
+            this.sampleQueues[i].discardTo(positionUs, toKeyframe, this.trackEnabledStates[i]);
         }
     }
 
+    public void reevaluateBuffer(long positionUs) {
+    }
+
     public boolean continueLoading(long playbackPositionUs) {
-        if (this.loadingFinished || (this.prepared && this.enabledTrackCount == 0)) {
+        if (this.loadingFinished || this.pendingDeferredRetry || (this.prepared && this.enabledTrackCount == 0)) {
             return false;
         }
         boolean continuedLoading = this.loadCondition.open();
@@ -380,7 +397,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     }
 
     public long readDiscontinuity() {
-        if (!this.notifyDiscontinuity) {
+        if (!this.notifyDiscontinuity || (!this.loadingFinished && getExtractedSamplesCount() <= this.extractedSamplesCountAtStartOfLoad)) {
             return C.TIME_UNSET;
         }
         this.notifyDiscontinuity = false;
@@ -417,6 +434,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         this.lastSeekPositionUs = positionUs;
         this.notifyDiscontinuity = false;
         if (isPendingReset() || !seekInsideBufferUs(positionUs)) {
+            this.pendingDeferredRetry = false;
             this.pendingResetPositionUs = positionUs;
             this.loadingFinished = false;
             if (this.loader.isLoading()) {
@@ -433,42 +451,104 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         return positionUs;
     }
 
+    public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
+        if (!this.seekMap.isSeekable()) {
+            return 0;
+        }
+        SeekPoints seekPoints = this.seekMap.getSeekPoints(positionUs);
+        return Util.resolveSeekPositionUs(positionUs, seekParameters, seekPoints.first.timeUs, seekPoints.second.timeUs);
+    }
+
     boolean isReady(int track) {
-        return this.loadingFinished || (!isPendingReset() && this.sampleQueues[track].hasNextSample());
+        return !suppressRead() && (this.loadingFinished || this.sampleQueues[track].hasNextSample());
     }
 
     void maybeThrowError() throws IOException {
-        this.loader.maybeThrowError();
+        this.loader.maybeThrowError(this.actualMinLoadableRetryCount);
     }
 
     int readData(int track, FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired) {
-        if (this.notifyDiscontinuity || isPendingReset()) {
+        if (suppressRead()) {
             return -3;
         }
-        return this.sampleQueues[track].read(formatHolder, buffer, formatRequired, this.loadingFinished, this.lastSeekPositionUs);
+        int result = this.sampleQueues[track].read(formatHolder, buffer, formatRequired, this.loadingFinished, this.lastSeekPositionUs);
+        if (result == -4) {
+            maybeNotifyTrackFormat(track);
+            return result;
+        } else if (result != -3) {
+            return result;
+        } else {
+            maybeStartDeferredRetry(track);
+            return result;
+        }
     }
 
-    void skipData(int track, long positionUs) {
+    int skipData(int track, long positionUs) {
+        if (suppressRead()) {
+            return 0;
+        }
+        int skipCount;
         SampleQueue sampleQueue = this.sampleQueues[track];
         if (!this.loadingFinished || positionUs <= sampleQueue.getLargestQueuedTimestampUs()) {
-            sampleQueue.advanceTo(positionUs, true, true);
+            skipCount = sampleQueue.advanceTo(positionUs, true, true);
+            if (skipCount == -1) {
+                skipCount = 0;
+            }
         } else {
-            sampleQueue.advanceToEnd();
+            skipCount = sampleQueue.advanceToEnd();
         }
+        if (skipCount > 0) {
+            maybeNotifyTrackFormat(track);
+            return skipCount;
+        }
+        maybeStartDeferredRetry(track);
+        return skipCount;
+    }
+
+    private void maybeNotifyTrackFormat(int track) {
+        if (!this.trackFormatNotificationSent[track]) {
+            Format trackFormat = this.tracks.get(track).getFormat(0);
+            this.eventDispatcher.downstreamFormatChanged(MimeTypes.getTrackType(trackFormat.sampleMimeType), trackFormat, 0, null, this.lastSeekPositionUs);
+            this.trackFormatNotificationSent[track] = true;
+        }
+    }
+
+    private void maybeStartDeferredRetry(int track) {
+        int i = 0;
+        if (this.pendingDeferredRetry && this.trackIsAudioVideoFlags[track] && !this.sampleQueues[track].hasNextSample()) {
+            this.pendingResetPositionUs = 0;
+            this.pendingDeferredRetry = false;
+            this.notifyDiscontinuity = true;
+            this.lastSeekPositionUs = 0;
+            this.extractedSamplesCountAtStartOfLoad = 0;
+            SampleQueue[] sampleQueueArr = this.sampleQueues;
+            int length = sampleQueueArr.length;
+            while (i < length) {
+                sampleQueueArr[i].reset();
+                i++;
+            }
+            this.callback.onContinueLoadingRequested(this);
+        }
+    }
+
+    private boolean suppressRead() {
+        return this.notifyDiscontinuity || isPendingReset();
     }
 
     public void onLoadCompleted(ExtractingLoadable loadable, long elapsedRealtimeMs, long loadDurationMs) {
-        copyLengthFromLoader(loadable);
-        this.loadingFinished = true;
         if (this.durationUs == C.TIME_UNSET) {
             long largestQueuedTimestampUs = getLargestQueuedTimestampUs();
             this.durationUs = largestQueuedTimestampUs == Long.MIN_VALUE ? 0 : DEFAULT_LAST_SAMPLE_DURATION_US + largestQueuedTimestampUs;
             this.listener.onSourceInfoRefreshed(this.durationUs, this.seekMap.isSeekable());
         }
+        this.eventDispatcher.loadCompleted(loadable.dataSpec, 1, -1, null, 0, null, loadable.seekTimeUs, this.durationUs, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded);
+        copyLengthFromLoader(loadable);
+        this.loadingFinished = true;
         this.callback.onContinueLoadingRequested(this);
     }
 
     public void onLoadCanceled(ExtractingLoadable loadable, long elapsedRealtimeMs, long loadDurationMs, boolean released) {
+        this.eventDispatcher.loadCanceled(loadable.dataSpec, 1, -1, null, 0, null, loadable.seekTimeUs, this.durationUs, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded);
         if (!released) {
             copyLengthFromLoader(loadable);
             for (SampleQueue sampleQueue : this.sampleQueues) {
@@ -481,23 +561,19 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     }
 
     public int onLoadError(ExtractingLoadable loadable, long elapsedRealtimeMs, long loadDurationMs, IOException error) {
+        boolean isErrorFatal = isLoadableExceptionFatal(error);
+        this.eventDispatcher.loadError(loadable.dataSpec, 1, -1, null, 0, null, loadable.seekTimeUs, this.durationUs, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded, error, isErrorFatal);
         copyLengthFromLoader(loadable);
-        notifyLoadError(error);
-        if (isLoadableExceptionFatal(error)) {
+        if (isErrorFatal) {
             return 3;
         }
-        boolean madeProgress;
-        if (getExtractedSamplesCount() > this.extractedSamplesCountAtStartOfLoad) {
-            madeProgress = true;
+        int extractedSamplesCount = getExtractedSamplesCount();
+        boolean madeProgress = extractedSamplesCount > this.extractedSamplesCountAtStartOfLoad;
+        if (configureRetry(loadable, extractedSamplesCount)) {
+            return madeProgress ? 1 : 0;
         } else {
-            madeProgress = false;
+            return 2;
         }
-        configureRetry(loadable);
-        this.extractedSamplesCountAtStartOfLoad = getExtractedSamplesCount();
-        if (madeProgress) {
-            return 1;
-        }
-        return 0;
     }
 
     public TrackOutput track(int id, int type) {
@@ -547,6 +623,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
             TrackGroup[] trackArray = new TrackGroup[trackCount];
             this.trackIsAudioVideoFlags = new boolean[trackCount];
             this.trackEnabledStates = new boolean[trackCount];
+            this.trackFormatNotificationSent = new boolean[trackCount];
             this.durationUs = this.seekMap.getDurationUs();
             for (int i2 = 0; i2 < trackCount; i2++) {
                 boolean isAudioVideo;
@@ -561,6 +638,9 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
                 this.haveAudioVideoTracks |= isAudioVideo;
             }
             this.tracks = new TrackGroupArray(trackArray);
+            if (this.minLoadableRetryCount == -1 && this.length == -1 && this.seekMap.getDurationUs() == C.TIME_UNSET) {
+                this.actualMinLoadableRetryCount = 6;
+            }
             this.prepared = true;
             this.listener.onSourceInfoRefreshed(this.durationUs, this.seekMap.isSeekable());
             this.callback.onPrepared(this);
@@ -578,7 +658,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         if (this.prepared) {
             Assertions.checkState(isPendingReset());
             if (this.durationUs == C.TIME_UNSET || this.pendingResetPositionUs < this.durationUs) {
-                loadable.setLoadPosition(this.seekMap.getPosition(this.pendingResetPositionUs), this.pendingResetPositionUs);
+                loadable.setLoadPosition(this.seekMap.getSeekPoints(this.pendingResetPositionUs).first.position, this.pendingResetPositionUs);
                 this.pendingResetPositionUs = C.TIME_UNSET;
             } else {
                 this.loadingFinished = true;
@@ -587,24 +667,29 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
             }
         }
         this.extractedSamplesCountAtStartOfLoad = getExtractedSamplesCount();
-        int minRetryCount = this.minLoadableRetryCount;
-        if (minRetryCount == -1) {
-            minRetryCount = (this.prepared && this.length == -1 && (this.seekMap == null || this.seekMap.getDurationUs() == C.TIME_UNSET)) ? 6 : 3;
-        }
-        this.loader.startLoading(loadable, this, minRetryCount);
+        this.eventDispatcher.loadStarted(loadable.dataSpec, 1, -1, null, 0, null, loadable.seekTimeUs, this.durationUs, this.loader.startLoading(loadable, this, this.actualMinLoadableRetryCount));
     }
 
-    private void configureRetry(ExtractingLoadable loadable) {
-        if (this.length != -1) {
-            return;
-        }
-        if (this.seekMap == null || this.seekMap.getDurationUs() == C.TIME_UNSET) {
-            this.lastSeekPositionUs = 0;
+    private boolean configureRetry(ExtractingLoadable loadable, int currentExtractedSampleCount) {
+        int i = 0;
+        if (this.length != -1 || (this.seekMap != null && this.seekMap.getDurationUs() != C.TIME_UNSET)) {
+            this.extractedSamplesCountAtStartOfLoad = currentExtractedSampleCount;
+            return true;
+        } else if (!this.prepared || suppressRead()) {
             this.notifyDiscontinuity = this.prepared;
-            for (SampleQueue sampleQueue : this.sampleQueues) {
-                sampleQueue.reset();
+            this.lastSeekPositionUs = 0;
+            this.extractedSamplesCountAtStartOfLoad = 0;
+            SampleQueue[] sampleQueueArr = this.sampleQueues;
+            int length = sampleQueueArr.length;
+            while (i < length) {
+                sampleQueueArr[i].reset();
+                i++;
             }
             loadable.setLoadPosition(0, 0);
+            return true;
+        } else {
+            this.pendingDeferredRetry = true;
+            return false;
         }
     }
 
@@ -612,12 +697,17 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         int trackCount = this.sampleQueues.length;
         int i = 0;
         while (i < trackCount) {
+            boolean seekInsideQueue;
             SampleQueue sampleQueue = this.sampleQueues[i];
             sampleQueue.rewind();
-            if (!sampleQueue.advanceTo(positionUs, true, false) && (this.trackIsAudioVideoFlags[i] || !this.haveAudioVideoTracks)) {
+            if (sampleQueue.advanceTo(positionUs, true, false) != -1) {
+                seekInsideQueue = true;
+            } else {
+                seekInsideQueue = false;
+            }
+            if (!seekInsideQueue && (this.trackIsAudioVideoFlags[i] || !this.haveAudioVideoTracks)) {
                 return false;
             }
-            sampleQueue.discardToRead();
             i++;
         }
         return true;
@@ -643,17 +733,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         return this.pendingResetPositionUs != C.TIME_UNSET;
     }
 
-    private boolean isLoadableExceptionFatal(IOException e) {
+    private static boolean isLoadableExceptionFatal(IOException e) {
         return e instanceof UnrecognizedInputFormatException;
-    }
-
-    private void notifyLoadError(final IOException error) {
-        if (this.eventHandler != null && this.eventListener != null) {
-            this.eventHandler.post(new Runnable() {
-                public void run() {
-                    ExtractorMediaPeriod.this.eventListener.onLoadError(error);
-                }
-            });
-        }
     }
 }

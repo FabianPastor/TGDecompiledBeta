@@ -342,9 +342,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             } else {
                                 buffer.offset[a] = audioPresentationTimeUs;
                                 buffer.read[a] = readResult;
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.d("audio frame time " + audioPresentationTimeUs);
-                                }
                                 audioPresentationTimeUs += (long) (((1000000 * readResult) / 44100) / 2);
                                 a++;
                             }
@@ -614,9 +611,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             GLES20.glDisableVertexAttribArray(this.textureHandle);
             GLES20.glBindTexture(36197, 0);
             GLES20.glUseProgram(0);
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("video frame time " + this.currentTimestamp);
-            }
             EGLExt.eglPresentationTimeANDROID(this.eglDisplay, this.eglSurface, this.currentTimestamp);
             EGL14.eglSwapBuffers(this.eglDisplay, this.eglSurface);
             if (InstantCameraView.this.oldCameraTexture[0] != 0 && InstantCameraView.this.cameraTextureAlpha < 1.0f) {
@@ -900,20 +894,35 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         private void didWriteData(File file, boolean last) {
+            long j = 0;
             if (this.videoConvertFirstWrite) {
-                FileLoader.getInstance(InstantCameraView.this.currentAccount).uploadFile(file.toString(), false, false, 1, ConnectionsManager.FileTypeVideo);
+                FileLoader.getInstance(InstantCameraView.this.currentAccount).uploadFile(file.toString(), InstantCameraView.this.isSecretChat, false, 1, ConnectionsManager.FileTypeVideo);
                 this.videoConvertFirstWrite = false;
                 if (last) {
-                    FileLoader.getInstance(InstantCameraView.this.currentAccount).checkUploadNewDataAvailable(file.toString(), false, file.length(), last ? file.length() : 0);
+                    FileLoader instance = FileLoader.getInstance(InstantCameraView.this.currentAccount);
+                    String file2 = file.toString();
+                    boolean access$5500 = InstantCameraView.this.isSecretChat;
+                    long length = file.length();
+                    if (last) {
+                        j = file.length();
+                    }
+                    instance.checkUploadNewDataAvailable(file2, access$5500, length, j);
                     return;
                 }
                 return;
             }
-            FileLoader.getInstance(InstantCameraView.this.currentAccount).checkUploadNewDataAvailable(file.toString(), false, file.length(), last ? file.length() : 0);
+            instance = FileLoader.getInstance(InstantCameraView.this.currentAccount);
+            file2 = file.toString();
+            access$5500 = InstantCameraView.this.isSecretChat;
+            length = file.length();
+            if (last) {
+                j = file.length();
+            }
+            instance.checkUploadNewDataAvailable(file2, access$5500, length, j);
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
-            MediaFormat newFormat;
+            ByteBuffer encodedData;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
@@ -922,7 +931,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             }
             while (true) {
-                ByteBuffer encodedData;
+                MediaFormat newFormat;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
                     if (!endOfStream) {

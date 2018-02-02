@@ -5,6 +5,7 @@ import com.googlecode.mp4parser.RequiresParseDetailAspect;
 import java.nio.ByteBuffer;
 import org.aspectj.lang.JoinPoint.StaticPart;
 import org.aspectj.runtime.reflect.Factory;
+import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 
 public class ItemDataBox extends AbstractBox {
     public static final String TYPE = "idat";
@@ -19,7 +20,7 @@ public class ItemDataBox extends AbstractBox {
     private static /* synthetic */ void ajc$preClinit() {
         Factory factory = new Factory("ItemDataBox.java", ItemDataBox.class);
         ajc$tjp_0 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "getData", "com.coremedia.iso.boxes.ItemDataBox", TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, "java.nio.ByteBuffer"), 19);
-        ajc$tjp_1 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "setData", "com.coremedia.iso.boxes.ItemDataBox", "java.nio.ByteBuffer", "data", TtmlNode.ANONYMOUS_REGION_ID, "void"), 23);
+        ajc$tjp_1 = factory.makeSJP("method-execution", factory.makeMethodSig("1", "setData", "com.coremedia.iso.boxes.ItemDataBox", "java.nio.ByteBuffer", DataSchemeDataSource.SCHEME_DATA, TtmlNode.ANONYMOUS_REGION_ID, "void"), 23);
     }
 
     public ItemDataBox() {

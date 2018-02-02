@@ -375,41 +375,29 @@ public class FileLoader {
         if (TextUtils.isEmpty(fileName)) {
             return 0.0f;
         }
-        final CountDownLatch semaphore = new CountDownLatch(1);
-        final Float[] result = new Float[1];
-        final String str = fileName;
-        final float f = position;
-        Utilities.stageQueue.postRunnable(new Runnable() {
-            public void run() {
-                FileLoadOperation loadOperation = (FileLoadOperation) FileLoader.this.loadOperationPaths.get(str);
-                if (loadOperation != null) {
-                    result[0] = Float.valueOf(loadOperation.getDownloadedLengthFromOffset(f));
-                } else {
-                    result[0] = Float.valueOf(1.0f);
-                }
-                semaphore.countDown();
-            }
-        });
-        try {
-            semaphore.await();
-        } catch (Throwable e) {
-            FileLog.e(e);
+        FileLoadOperation loadOperation = (FileLoadOperation) this.loadOperationPaths.get(fileName);
+        if (loadOperation != null) {
+            return loadOperation.getDownloadedLengthFromOffset(position);
         }
-        return result[0].floatValue();
+        return 0.0f;
     }
 
     public void loadFile(PhotoSize photo, String ext, int cacheType) {
-        if (cacheType == 0 && ((photo != null && photo.size == 0) || photo.location.key != null)) {
-            cacheType = 1;
+        if (photo != null) {
+            if (cacheType == 0 && photo != null && (photo.size == 0 || photo.location.key != null)) {
+                cacheType = 1;
+            }
+            loadFile(null, null, photo.location, ext, photo.size, false, cacheType);
         }
-        loadFile(null, null, photo.location, ext, photo.size, false, cacheType);
     }
 
     public void loadFile(Document document, boolean force, int cacheType) {
-        if (!(cacheType != 0 || document == null || document.key == null)) {
-            cacheType = 1;
+        if (document != null) {
+            if (!(cacheType != 0 || document == null || document.key == null)) {
+                cacheType = 1;
+            }
+            loadFile(document, null, null, null, 0, force, cacheType);
         }
-        loadFile(document, null, null, null, 0, force, cacheType);
     }
 
     public void loadFile(TL_webDocument document, boolean force, int cacheType) {
@@ -417,10 +405,12 @@ public class FileLoader {
     }
 
     public void loadFile(FileLocation location, String ext, int size, int cacheType) {
-        if (cacheType == 0 && (size == 0 || !(location == null || location.key == null))) {
-            cacheType = 1;
+        if (location != null) {
+            if (cacheType == 0 && (size == 0 || !(location == null || location.key == null))) {
+                cacheType = 1;
+            }
+            loadFile(null, null, location, ext, size, true, cacheType);
         }
-        loadFile(null, null, location, ext, size, true, cacheType);
     }
 
     private FileLoadOperation loadFileInternal(Document document, TL_webDocument webDocument, FileLocation location, String locationExt, int locationSize, boolean force, FileStreamLoadOperation stream, int streamOffset, int cacheType) {
@@ -734,6 +724,9 @@ public class FileLoader {
                     }
                 }
             } else if (message.media instanceof TL_messageMediaWebPage) {
+                if (message.media.webpage.document != null) {
+                    return getAttachFileName(message.media.webpage.document);
+                }
                 if (message.media.webpage.photo != null) {
                     sizes = message.media.webpage.photo.sizes;
                     if (sizes.size() > 0) {
@@ -742,12 +735,8 @@ public class FileLoader {
                             return getAttachFileName(sizeFull);
                         }
                     }
-                } else if (message.media.webpage.document != null) {
-                    return getAttachFileName(message.media.webpage.document);
-                } else {
-                    if (message.media instanceof TL_messageMediaInvoice) {
-                        return getAttachFileName(((TL_messageMediaInvoice) message.media).photo);
-                    }
+                } else if (message.media instanceof TL_messageMediaInvoice) {
+                    return getAttachFileName(((TL_messageMediaInvoice) message.media).photo);
                 }
             } else if (message.media instanceof TL_messageMediaInvoice) {
                 TL_webDocument document = ((TL_messageMediaInvoice) message.media).photo;

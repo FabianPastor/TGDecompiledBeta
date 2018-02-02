@@ -14,9 +14,10 @@ import org.telegram.messenger.exoplayer2.audio.MediaCodecAudioRenderer;
 import org.telegram.messenger.exoplayer2.drm.DrmSessionManager;
 import org.telegram.messenger.exoplayer2.drm.FrameworkMediaCrypto;
 import org.telegram.messenger.exoplayer2.mediacodec.MediaCodecSelector;
+import org.telegram.messenger.exoplayer2.metadata.MetadataOutput;
 import org.telegram.messenger.exoplayer2.metadata.MetadataRenderer;
+import org.telegram.messenger.exoplayer2.text.TextOutput;
 import org.telegram.messenger.exoplayer2.text.TextRenderer;
-import org.telegram.messenger.exoplayer2.text.TextRenderer.Output;
 import org.telegram.messenger.exoplayer2.video.MediaCodecVideoRenderer;
 import org.telegram.messenger.exoplayer2.video.VideoRendererEventListener;
 
@@ -55,7 +56,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
         this.allowedVideoJoiningTimeMs = allowedVideoJoiningTimeMs;
     }
 
-    public Renderer[] createRenderers(Handler eventHandler, VideoRendererEventListener videoRendererEventListener, AudioRendererEventListener audioRendererEventListener, Output textRendererOutput, MetadataRenderer.Output metadataRendererOutput) {
+    public Renderer[] createRenderers(Handler eventHandler, VideoRendererEventListener videoRendererEventListener, AudioRendererEventListener audioRendererEventListener, TextOutput textRendererOutput, MetadataOutput metadataRendererOutput) {
         ArrayList<Renderer> renderersList = new ArrayList();
         buildVideoRenderers(this.context, this.drmSessionManager, this.allowedVideoJoiningTimeMs, eventHandler, videoRendererEventListener, this.extensionRendererMode, renderersList);
         buildAudioRenderers(this.context, this.drmSessionManager, buildAudioProcessors(), eventHandler, audioRendererEventListener, this.extensionRendererMode, renderersList);
@@ -190,11 +191,11 @@ public class DefaultRenderersFactory implements RenderersFactory {
         }
     }
 
-    protected void buildTextRenderers(Context context, Output output, Looper outputLooper, int extensionRendererMode, ArrayList<Renderer> out) {
+    protected void buildTextRenderers(Context context, TextOutput output, Looper outputLooper, int extensionRendererMode, ArrayList<Renderer> out) {
         out.add(new TextRenderer(output, outputLooper));
     }
 
-    protected void buildMetadataRenderers(Context context, MetadataRenderer.Output output, Looper outputLooper, int extensionRendererMode, ArrayList<Renderer> out) {
+    protected void buildMetadataRenderers(Context context, MetadataOutput output, Looper outputLooper, int extensionRendererMode, ArrayList<Renderer> out) {
         out.add(new MetadataRenderer(output, outputLooper));
     }
 

@@ -8,9 +8,9 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.text.Subtitle;
 import org.telegram.messenger.exoplayer2.text.SubtitleDecoderException;
@@ -54,7 +54,7 @@ public final class Cea608Decoder extends CeaDecoder {
     private int captionMode;
     private int captionRowCount;
     private final ParsableByteArray ccData = new ParsableByteArray();
-    private final LinkedList<CueBuilder> cueBuilders = new LinkedList();
+    private final ArrayList<CueBuilder> cueBuilders = new ArrayList();
     private List<Cue> cues;
     private CueBuilder currentCueBuilder = new CueBuilder(0, 4);
     private List<Cue> lastCues;
@@ -74,7 +74,7 @@ public final class Cea608Decoder extends CeaDecoder {
         private int indent;
         private final List<CueStyle> midrowStyles = new ArrayList();
         private final List<CharacterStyle> preambleStyles = new ArrayList();
-        private final List<SpannableString> rolledUpCaptions = new LinkedList();
+        private final List<SpannableString> rolledUpCaptions = new ArrayList();
         private int row;
         private int tabOffset;
         private int underlineStartPosition;
@@ -92,10 +92,12 @@ public final class Cea608Decoder extends CeaDecoder {
         }
 
         public CueBuilder(int captionMode, int captionRowCount) {
-            reset(captionMode, captionRowCount);
+            reset(captionMode);
+            setCaptionRowCount(captionRowCount);
         }
 
-        public void reset(int captionMode, int captionRowCount) {
+        public void reset(int captionMode) {
+            this.captionMode = captionMode;
             this.preambleStyles.clear();
             this.midrowStyles.clear();
             this.rolledUpCaptions.clear();
@@ -103,9 +105,11 @@ public final class Cea608Decoder extends CeaDecoder {
             this.row = 15;
             this.indent = 0;
             this.tabOffset = 0;
-            this.captionMode = captionMode;
-            this.captionRowCount = captionRowCount;
             this.underlineStartPosition = -1;
+        }
+
+        public void setCaptionRowCount(int captionRowCount) {
+            this.captionRowCount = captionRowCount;
         }
 
         public boolean isEmpty() {
@@ -207,7 +211,7 @@ public final class Cea608Decoder extends CeaDecoder {
             int startPadding = this.indent + this.tabOffset;
             int endPadding = (32 - startPadding) - cueString.length();
             int startEndPaddingDelta = startPadding - endPadding;
-            if (this.captionMode == 2 && Math.abs(startEndPaddingDelta) < 3) {
+            if (this.captionMode == 2 && (Math.abs(startEndPaddingDelta) < 3 || endPadding < 0)) {
                 position = 0.5f;
                 positionAnchor = 1;
             } else if (this.captionMode != 2 || startEndPaddingDelta <= 0) {
@@ -272,8 +276,8 @@ public final class Cea608Decoder extends CeaDecoder {
         this.cues = null;
         this.lastCues = null;
         setCaptionMode(0);
+        setCaptionRowCount(4);
         resetCueBuilders();
-        this.captionRowCount = 4;
         this.repeatableControlSet = false;
         this.repeatableControlCc1 = (byte) 0;
         this.repeatableControlCc2 = (byte) 0;
@@ -406,16 +410,16 @@ public final class Cea608Decoder extends CeaDecoder {
                 setCaptionMode(2);
                 return;
             case (byte) 37:
-                this.captionRowCount = 2;
                 setCaptionMode(1);
+                setCaptionRowCount(2);
                 return;
             case (byte) 38:
-                this.captionRowCount = 3;
                 setCaptionMode(1);
+                setCaptionRowCount(3);
                 return;
             case (byte) 39:
-                this.captionRowCount = 4;
                 setCaptionMode(1);
+                setCaptionRowCount(4);
                 return;
             case (byte) 41:
                 setCaptionMode(3);
@@ -425,6 +429,8 @@ public final class Cea608Decoder extends CeaDecoder {
                     switch (cc2) {
                         case (byte) 33:
                             this.currentCueBuilder.backspace();
+                            return;
+                        case TsExtractor.TS_STREAM_TYPE_H265 /*36*/:
                             return;
                         case (byte) 44:
                             this.cues = null;
@@ -476,8 +482,13 @@ public final class Cea608Decoder extends CeaDecoder {
         }
     }
 
+    private void setCaptionRowCount(int captionRowCount) {
+        this.captionRowCount = captionRowCount;
+        this.currentCueBuilder.setCaptionRowCount(captionRowCount);
+    }
+
     private void resetCueBuilders() {
-        this.currentCueBuilder.reset(this.captionMode, this.captionRowCount);
+        this.currentCueBuilder.reset(this.captionMode);
         this.cueBuilders.clear();
         this.cueBuilders.add(this.currentCueBuilder);
     }

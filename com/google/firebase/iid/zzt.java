@@ -1,6 +1,7 @@
 package com.google.firebase.iid;
 
 import android.os.Bundle;
+import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 
 final class zzt extends zzr<Bundle> {
     zzt(int i, int i2, Bundle bundle) {
@@ -8,7 +9,7 @@ final class zzt extends zzr<Bundle> {
     }
 
     final void zzac(Bundle bundle) {
-        Object bundle2 = bundle.getBundle("data");
+        Object bundle2 = bundle.getBundle(DataSchemeDataSource.SCHEME_DATA);
         if (bundle2 == null) {
             bundle2 = Bundle.EMPTY;
         }

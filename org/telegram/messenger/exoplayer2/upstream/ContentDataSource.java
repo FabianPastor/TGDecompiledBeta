@@ -8,12 +8,12 @@ import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.channels.FileChannel;
 
 public final class ContentDataSource implements DataSource {
     private AssetFileDescriptor assetFileDescriptor;
     private long bytesRemaining;
-    private InputStream inputStream;
+    private FileInputStream inputStream;
     private final TransferListener<? super ContentDataSource> listener;
     private boolean opened;
     private final ContentResolver resolver;
@@ -52,10 +52,9 @@ public final class ContentDataSource implements DataSource {
             } else {
                 long assetFileDescriptorLength = this.assetFileDescriptor.getLength();
                 if (assetFileDescriptorLength == -1) {
-                    this.bytesRemaining = (long) this.inputStream.available();
-                    if (this.bytesRemaining == 0) {
-                        this.bytesRemaining = -1;
-                    }
+                    FileChannel channel = this.inputStream.getChannel();
+                    long channelSize = channel.size();
+                    this.bytesRemaining = channelSize == 0 ? -1 : channelSize - channel.position();
                 } else {
                     this.bytesRemaining = assetFileDescriptorLength - skipped;
                 }

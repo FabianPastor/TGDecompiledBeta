@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.source;
 
-public final class CompositeSequenceableLoader implements SequenceableLoader {
-    private final SequenceableLoader[] loaders;
+public class CompositeSequenceableLoader implements SequenceableLoader {
+    protected final SequenceableLoader[] loaders;
 
     public CompositeSequenceableLoader(SequenceableLoader[] loaders) {
         this.loaders = loaders;
@@ -29,7 +29,13 @@ public final class CompositeSequenceableLoader implements SequenceableLoader {
         return nextLoadPositionUs == Long.MAX_VALUE ? Long.MIN_VALUE : nextLoadPositionUs;
     }
 
-    public final boolean continueLoading(long positionUs) {
+    public final void reevaluateBuffer(long positionUs) {
+        for (SequenceableLoader loader : this.loaders) {
+            loader.reevaluateBuffer(positionUs);
+        }
+    }
+
+    public boolean continueLoading(long positionUs) {
         boolean madeProgress = false;
         boolean madeProgressThisIteration;
         do {
@@ -39,7 +45,9 @@ public final class CompositeSequenceableLoader implements SequenceableLoader {
                 break;
             }
             for (SequenceableLoader loader : this.loaders) {
-                if (loader.getNextLoadPositionUs() == nextLoadPositionUs) {
+                long loaderNextLoadPositionUs = loader.getNextLoadPositionUs();
+                boolean isLoaderBehind = loaderNextLoadPositionUs != Long.MIN_VALUE && loaderNextLoadPositionUs <= positionUs;
+                if (loaderNextLoadPositionUs == nextLoadPositionUs || isLoaderBehind) {
                     madeProgressThisIteration |= loader.continueLoading(positionUs);
                 }
             }

@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2;
 
 import android.util.Pair;
-import org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.PlaybackInfo;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
 import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
@@ -9,6 +8,7 @@ import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 final class MediaPeriodInfoSequence {
     private final Period period = new Period();
     private int repeatMode;
+    private boolean shuffleModeEnabled;
     private Timeline timeline;
     private final Window window = new Window();
 
@@ -48,13 +48,17 @@ final class MediaPeriodInfoSequence {
         this.repeatMode = repeatMode;
     }
 
+    public void setShuffleModeEnabled(boolean shuffleModeEnabled) {
+        this.shuffleModeEnabled = shuffleModeEnabled;
+    }
+
     public MediaPeriodInfo getFirstMediaPeriodInfo(PlaybackInfo playbackInfo) {
         return getMediaPeriodInfo(playbackInfo.periodId, playbackInfo.contentPositionUs, playbackInfo.startPositionUs);
     }
 
     public MediaPeriodInfo getNextMediaPeriodInfo(MediaPeriodInfo currentMediaPeriodInfo, long rendererOffsetUs, long rendererPositionUs) {
         if (currentMediaPeriodInfo.isLastInTimelinePeriod) {
-            int nextPeriodIndex = this.timeline.getNextPeriodIndex(currentMediaPeriodInfo.id.periodIndex, this.period, this.window, this.repeatMode);
+            int nextPeriodIndex = this.timeline.getNextPeriodIndex(currentMediaPeriodInfo.id.periodIndex, this.period, this.window, this.repeatMode, this.shuffleModeEnabled);
             if (nextPeriodIndex == -1) {
                 return null;
             }
@@ -208,6 +212,6 @@ final class MediaPeriodInfoSequence {
     }
 
     private boolean isLastInTimeline(MediaPeriodId id, boolean isLastMediaPeriodInPeriod) {
-        return !this.timeline.getWindow(this.timeline.getPeriod(id.periodIndex, this.period).windowIndex, this.window).isDynamic && this.timeline.isLastPeriod(id.periodIndex, this.period, this.window, this.repeatMode) && isLastMediaPeriodInPeriod;
+        return !this.timeline.getWindow(this.timeline.getPeriod(id.periodIndex, this.period).windowIndex, this.window).isDynamic && this.timeline.isLastPeriod(id.periodIndex, this.period, this.window, this.repeatMode, this.shuffleModeEnabled) && isLastMediaPeriodInPeriod;
     }
 }

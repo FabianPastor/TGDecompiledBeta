@@ -16,9 +16,11 @@ public final class MimeTypes {
     public static final String APPLICATION_MP4 = "application/mp4";
     public static final String APPLICATION_MP4CEA608 = "application/x-mp4-cea-608";
     public static final String APPLICATION_MP4VTT = "application/x-mp4-vtt";
+    public static final String APPLICATION_MPD = "application/dash+xml";
     public static final String APPLICATION_PGS = "application/pgs";
     public static final String APPLICATION_RAWCC = "application/x-rawcc";
     public static final String APPLICATION_SCTE35 = "application/x-scte35";
+    public static final String APPLICATION_SS = "application/vnd.ms-sstr+xml";
     public static final String APPLICATION_SUBRIP = "application/x-subrip";
     public static final String APPLICATION_TTML = "application/ttml+xml";
     public static final String APPLICATION_TX3G = "application/x-quicktime-tx3g";
@@ -30,6 +32,7 @@ public final class MimeTypes {
     public static final String AUDIO_ALAW = "audio/g711-alaw";
     public static final String AUDIO_AMR_NB = "audio/3gpp";
     public static final String AUDIO_AMR_WB = "audio/amr-wb";
+    public static final String AUDIO_ATMOS = "audio/eac3-joc";
     public static final String AUDIO_DTS = "audio/vnd.dts";
     public static final String AUDIO_DTS_EXPRESS = "audio/vnd.dts.hd;profile=lbr";
     public static final String AUDIO_DTS_HD = "audio/vnd.dts.hd";
@@ -58,6 +61,7 @@ public final class MimeTypes {
     public static final String VIDEO_H265 = "video/hevc";
     public static final String VIDEO_MP4 = "video/mp4";
     public static final String VIDEO_MP4V = "video/mp4v-es";
+    public static final String VIDEO_MPEG = "video/mpeg";
     public static final String VIDEO_MPEG2 = "video/mpeg2";
     public static final String VIDEO_UNKNOWN = "video/x-unknown";
     public static final String VIDEO_VC1 = "video/wvc1";
@@ -136,6 +140,9 @@ public final class MimeTypes {
         if (codec.startsWith(AudioSampleEntry.TYPE9) || codec.startsWith("dec3")) {
             return AUDIO_E_AC3;
         }
+        if (codec.startsWith("ec+3")) {
+            return AUDIO_ATMOS;
+        }
         if (codec.startsWith("dtsc") || codec.startsWith(AudioSampleEntry.TYPE13)) {
             return AUDIO_DTS;
         }
@@ -168,6 +175,63 @@ public final class MimeTypes {
             return 4;
         }
         return -1;
+    }
+
+    public static int getEncoding(String mimeType) {
+        int i = -1;
+        switch (mimeType.hashCode()) {
+            case -2123537834:
+                if (mimeType.equals(AUDIO_ATMOS)) {
+                    i = 2;
+                    break;
+                }
+                break;
+            case -1095064472:
+                if (mimeType.equals(AUDIO_DTS)) {
+                    i = 3;
+                    break;
+                }
+                break;
+            case 187078296:
+                if (mimeType.equals(AUDIO_AC3)) {
+                    i = 0;
+                    break;
+                }
+                break;
+            case 1504578661:
+                if (mimeType.equals(AUDIO_E_AC3)) {
+                    i = 1;
+                    break;
+                }
+                break;
+            case 1505942594:
+                if (mimeType.equals(AUDIO_DTS_HD)) {
+                    i = 4;
+                    break;
+                }
+                break;
+            case 1556697186:
+                if (mimeType.equals(AUDIO_TRUEHD)) {
+                    i = 5;
+                    break;
+                }
+                break;
+        }
+        switch (i) {
+            case 0:
+                return 5;
+            case 1:
+            case 2:
+                return 6;
+            case 3:
+                return 7;
+            case 4:
+                return 8;
+            case 5:
+                return 14;
+            default:
+                return 0;
+        }
     }
 
     public static int getTrackTypeOfCodec(String codec) {

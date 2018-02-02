@@ -28,27 +28,27 @@ public final class TextRenderer extends BaseRenderer implements Callback {
     private SubtitleInputBuffer nextInputBuffer;
     private SubtitleOutputBuffer nextSubtitle;
     private int nextSubtitleEventIndex;
-    private final Output output;
+    private final TextOutput output;
     private final Handler outputHandler;
     private boolean outputStreamEnded;
     private Format streamFormat;
     private SubtitleOutputBuffer subtitle;
 
-    public interface Output {
-        void onCues(List<Cue> list);
-    }
-
     @Retention(RetentionPolicy.SOURCE)
     private @interface ReplacementState {
     }
 
-    public TextRenderer(Output output, Looper outputLooper) {
+    @Deprecated
+    public interface Output extends TextOutput {
+    }
+
+    public TextRenderer(TextOutput output, Looper outputLooper) {
         this(output, outputLooper, SubtitleDecoderFactory.DEFAULT);
     }
 
-    public TextRenderer(Output output, Looper outputLooper, SubtitleDecoderFactory decoderFactory) {
+    public TextRenderer(TextOutput output, Looper outputLooper, SubtitleDecoderFactory decoderFactory) {
         super(3);
-        this.output = (Output) Assertions.checkNotNull(output);
+        this.output = (TextOutput) Assertions.checkNotNull(output);
         this.outputHandler = outputLooper == null ? null : new Handler(outputLooper, this);
         this.decoderFactory = decoderFactory;
         this.formatHolder = new FormatHolder();
@@ -56,9 +56,13 @@ public final class TextRenderer extends BaseRenderer implements Callback {
 
     public int supportsFormat(Format format) {
         if (this.decoderFactory.supportsFormat(format)) {
-            return 4;
+            return BaseRenderer.supportsFormatDrm(null, format.drmInitData) ? 4 : 2;
+        } else {
+            if (MimeTypes.isText(format.sampleMimeType)) {
+                return 1;
+            }
+            return 0;
         }
-        return MimeTypes.isText(format.sampleMimeType) ? 1 : 0;
     }
 
     protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {

@@ -2,6 +2,8 @@ package org.telegram.messenger.exoplayer2;
 
 import java.io.IOException;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
+import org.telegram.messenger.exoplayer2.drm.DrmInitData;
+import org.telegram.messenger.exoplayer2.drm.DrmSessionManager;
 import org.telegram.messenger.exoplayer2.source.SampleStream;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.MediaClock;
@@ -164,11 +166,21 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
         return result;
     }
 
-    protected void skipSource(long positionUs) {
-        this.stream.skipData(positionUs - this.streamOffsetUs);
+    protected int skipSource(long positionUs) {
+        return this.stream.skipData(positionUs - this.streamOffsetUs);
     }
 
     protected final boolean isSourceReady() {
         return this.readEndOfStream ? this.streamIsFinal : this.stream.isReady();
+    }
+
+    protected static boolean supportsFormatDrm(DrmSessionManager<?> drmSessionManager, DrmInitData drmInitData) {
+        if (drmInitData == null) {
+            return true;
+        }
+        if (drmSessionManager == null) {
+            return false;
+        }
+        return drmSessionManager.canAcquireSession(drmInitData);
     }
 }

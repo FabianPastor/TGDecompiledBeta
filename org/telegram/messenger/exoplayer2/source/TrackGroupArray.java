@@ -26,6 +26,10 @@ public final class TrackGroupArray {
         return -1;
     }
 
+    public boolean isEmpty() {
+        return this.length == 0;
+    }
+
     public int hashCode() {
         if (this.hashCode == 0) {
             this.hashCode = Arrays.hashCode(this.trackGroups);

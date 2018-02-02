@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2;
 
 import android.os.Looper;
+import org.telegram.messenger.exoplayer2.PlayerMessage.Target;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
 
 public interface ExoPlayer extends Player {
@@ -19,16 +20,14 @@ public interface ExoPlayer extends Player {
     @Deprecated
     public static final int STATE_READY = 3;
 
-    public interface ExoPlayerComponent {
-        void handleMessage(int i, Object obj) throws ExoPlaybackException;
-    }
-
+    @Deprecated
     public static final class ExoPlayerMessage {
         public final Object message;
         public final int messageType;
-        public final ExoPlayerComponent target;
+        public final Target target;
 
-        public ExoPlayerMessage(ExoPlayerComponent target, int messageType, Object message) {
+        @Deprecated
+        public ExoPlayerMessage(Target target, int messageType, Object message) {
             this.target = target;
             this.messageType = messageType;
             this.message = message;
@@ -39,7 +38,14 @@ public interface ExoPlayer extends Player {
     public interface EventListener extends org.telegram.messenger.exoplayer2.Player.EventListener {
     }
 
+    @Deprecated
+    public interface ExoPlayerComponent extends Target {
+    }
+
+    @Deprecated
     void blockingSendMessages(ExoPlayerMessage... exoPlayerMessageArr);
+
+    PlayerMessage createMessage(Target target);
 
     Looper getPlaybackLooper();
 
@@ -47,5 +53,8 @@ public interface ExoPlayer extends Player {
 
     void prepare(MediaSource mediaSource, boolean z, boolean z2);
 
+    @Deprecated
     void sendMessages(ExoPlayerMessage... exoPlayerMessageArr);
+
+    void setSeekParameters(SeekParameters seekParameters);
 }

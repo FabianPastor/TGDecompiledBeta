@@ -27,7 +27,9 @@ import java.util.Formatter;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.TimeZone;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -37,6 +39,7 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
+import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 
 public final class Util {
@@ -113,6 +116,10 @@ public final class Util {
         return false;
     }
 
+    public static <T> void removeRange(List<T> list, int fromIndex, int toIndex) {
+        list.subList(fromIndex, toIndex).clear();
+    }
+
     public static ExecutorService newSingleThreadExecutor(final String threadName) {
         return Executors.newSingleThreadExecutor(new ThreadFactory() {
             public Thread newThread(Runnable r) {
@@ -140,7 +147,18 @@ public final class Util {
     }
 
     public static String normalizeLanguageCode(String language) {
-        return language == null ? null : new Locale(language).getLanguage();
+        if (language == null) {
+            return null;
+        }
+        try {
+            return new Locale(language).getISO3Language();
+        } catch (MissingResourceException e) {
+            return language.toLowerCase();
+        }
+    }
+
+    public static String fromUtf8Bytes(byte[] bytes) {
+        return new String(bytes, Charset.forName(C.UTF8_NAME));
     }
 
     public static byte[] getUtf8Bytes(String value) {
@@ -173,6 +191,16 @@ public final class Util {
 
     public static float constrainValue(float value, float min, float max) {
         return Math.max(min, Math.min(value, max));
+    }
+
+    public static long addWithOverflowDefault(long x, long y, long overflowResult) {
+        long result = x + y;
+        return ((x ^ result) & (y ^ result)) < 0 ? overflowResult : result;
+    }
+
+    public static long subtractWithOverflowDefault(long x, long y, long overflowResult) {
+        long result = x - y;
+        return ((x ^ y) & (x ^ result)) < 0 ? overflowResult : result;
     }
 
     public static int binarySearchFloor(int[] array, int value, boolean inclusive, boolean stayInBounds) {
@@ -211,24 +239,6 @@ public final class Util {
         return stayInBounds ? Math.max(0, index) : index;
     }
 
-    public static int binarySearchCeil(long[] array, long value, boolean inclusive, boolean stayInBounds) {
-        int index = Arrays.binarySearch(array, value);
-        if (index < 0) {
-            index ^= -1;
-        } else {
-            do {
-                index++;
-                if (index >= array.length) {
-                    break;
-                }
-            } while (array[index] == value);
-            if (inclusive) {
-                index--;
-            }
-        }
-        return stayInBounds ? Math.min(array.length - 1, index) : index;
-    }
-
     public static <T> int binarySearchFloor(List<? extends Comparable<? super T>> list, T value, boolean inclusive, boolean stayInBounds) {
         int index = Collections.binarySearch(list, value);
         if (index < 0) {
@@ -245,6 +255,24 @@ public final class Util {
             }
         }
         return stayInBounds ? Math.max(0, index) : index;
+    }
+
+    public static int binarySearchCeil(long[] array, long value, boolean inclusive, boolean stayInBounds) {
+        int index = Arrays.binarySearch(array, value);
+        if (index < 0) {
+            index ^= -1;
+        } else {
+            do {
+                index++;
+                if (index >= array.length) {
+                    break;
+                }
+            } while (array[index] == value);
+            if (inclusive) {
+                index--;
+            }
+        }
+        return stayInBounds ? Math.min(array.length - 1, index) : index;
     }
 
     public static <T> int binarySearchCeil(List<? extends Comparable<? super T>> list, T value, boolean inclusive, boolean stayInBounds) {
@@ -264,6 +292,13 @@ public final class Util {
             }
         }
         return stayInBounds ? Math.min(list.size() - 1, index) : index;
+    }
+
+    public static int compareLong(long left, long right) {
+        if (left < right) {
+            return -1;
+        }
+        return left == right ? 0 : 1;
     }
 
     public static long parseXsDuration(String value) {
@@ -371,6 +406,37 @@ public final class Util {
         }
     }
 
+    public static long getMediaDurationForPlayoutDuration(long playoutDuration, float speed) {
+        return speed == 1.0f ? playoutDuration : Math.round(((double) playoutDuration) * ((double) speed));
+    }
+
+    public static long getPlayoutDurationForMediaDuration(long mediaDuration, float speed) {
+        return speed == 1.0f ? mediaDuration : Math.round(((double) mediaDuration) / ((double) speed));
+    }
+
+    public static long resolveSeekPositionUs(long positionUs, SeekParameters seekParameters, long firstSyncUs, long secondSyncUs) {
+        if (SeekParameters.EXACT.equals(seekParameters)) {
+            return positionUs;
+        }
+        long minPositionUs = subtractWithOverflowDefault(positionUs, seekParameters.toleranceBeforeUs, Long.MIN_VALUE);
+        long maxPositionUs = addWithOverflowDefault(positionUs, seekParameters.toleranceAfterUs, Long.MAX_VALUE);
+        boolean firstSyncPositionValid = minPositionUs <= firstSyncUs && firstSyncUs <= maxPositionUs;
+        boolean secondSyncPositionValid = minPositionUs <= secondSyncUs && secondSyncUs <= maxPositionUs;
+        if (firstSyncPositionValid && secondSyncPositionValid) {
+            if (Math.abs(firstSyncUs - positionUs) > Math.abs(secondSyncUs - positionUs)) {
+                return secondSyncUs;
+            }
+            return firstSyncUs;
+        } else if (firstSyncPositionValid) {
+            return firstSyncUs;
+        } else {
+            if (secondSyncPositionValid) {
+                return secondSyncUs;
+            }
+            return minPositionUs;
+        }
+    }
+
     public static int[] toArray(List<Integer> list) {
         if (list == null) {
             return null;
@@ -423,6 +489,26 @@ public final class Util {
         return applicationName + "/" + versionName + " (Linux;Android " + VERSION.RELEASE + ") " + ExoPlayerLibraryInfo.VERSION_SLASHY;
     }
 
+    public static String getCodecsOfType(String codecs, int trackType) {
+        if (TextUtils.isEmpty(codecs)) {
+            return null;
+        }
+        String[] codecArray = codecs.trim().split("(\\s*,\\s*)");
+        StringBuilder builder = new StringBuilder();
+        for (String codec : codecArray) {
+            if (trackType == MimeTypes.getTrackTypeOfCodec(codec)) {
+                if (builder.length() > 0) {
+                    builder.append(",");
+                }
+                builder.append(codec);
+            }
+        }
+        if (builder.length() > 0) {
+            return builder.toString();
+        }
+        return null;
+    }
+
     public static int getPcmEncoding(int bitDepth) {
         switch (bitDepth) {
             case 8:
@@ -438,6 +524,10 @@ public final class Util {
         }
     }
 
+    public static boolean isEncodingHighResolutionIntegerPcm(int encoding) {
+        return encoding == Integer.MIN_VALUE || encoding == NUM;
+    }
+
     public static int getPcmFrameSize(int pcmEncoding, int channelCount) {
         switch (pcmEncoding) {
             case Integer.MIN_VALUE:
@@ -446,6 +536,7 @@ public final class Util {
                 return channelCount * 2;
             case 3:
                 return channelCount;
+            case 4:
             case 1073741824:
                 return channelCount * 4;
             default:
@@ -510,6 +601,45 @@ public final class Util {
         }
     }
 
+    public static UUID getDrmUuid(String drmScheme) {
+        String toLowerInvariant = toLowerInvariant(drmScheme);
+        Object obj = -1;
+        switch (toLowerInvariant.hashCode()) {
+            case -1860423953:
+                if (toLowerInvariant.equals("playready")) {
+                    obj = 1;
+                    break;
+                }
+                break;
+            case -1400551171:
+                if (toLowerInvariant.equals("widevine")) {
+                    obj = null;
+                    break;
+                }
+                break;
+            case 790309106:
+                if (toLowerInvariant.equals("clearkey")) {
+                    obj = 2;
+                    break;
+                }
+                break;
+        }
+        switch (obj) {
+            case null:
+                return C.WIDEVINE_UUID;
+            case 1:
+                return C.PLAYREADY_UUID;
+            case 2:
+                return C.CLEARKEY_UUID;
+            default:
+                try {
+                    return UUID.fromString(drmScheme);
+                } catch (RuntimeException e) {
+                    return null;
+                }
+        }
+    }
+
     public static int inferContentType(Uri uri) {
         String path = uri.getPath();
         return path == null ? 3 : inferContentType(path);
@@ -523,7 +653,7 @@ public final class Util {
         if (fileName.endsWith(".m3u8")) {
             return 2;
         }
-        if (fileName.endsWith(".ism") || fileName.endsWith(".isml") || fileName.endsWith(".ism/manifest") || fileName.endsWith(".isml/manifest")) {
+        if (fileName.matches(".*\\.ism(l)?(/manifest(\\(.+\\))?)?")) {
             return 1;
         }
         return 3;
@@ -657,10 +787,14 @@ public final class Util {
     }
 
     public static File createTempDirectory(Context context, String prefix) throws IOException {
-        File tempFile = File.createTempFile(prefix, null, context.getCacheDir());
+        File tempFile = createTempFile(context, prefix);
         tempFile.delete();
         tempFile.mkdir();
         return tempFile;
+    }
+
+    public static File createTempFile(Context context, String prefix) throws IOException {
+        return File.createTempFile(prefix, null, context.getCacheDir());
     }
 
     public static int crc(byte[] bytes, int start, int end, int initialValue) {

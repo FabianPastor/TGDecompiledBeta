@@ -203,54 +203,68 @@ public abstract class Timeline {
         return getWindowCount() == 0;
     }
 
-    public int getNextWindowIndex(int windowIndex, int repeatMode) {
+    public int getNextWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
         switch (repeatMode) {
             case 0:
-                return windowIndex == getWindowCount() + -1 ? -1 : windowIndex + 1;
+                return windowIndex == getLastWindowIndex(shuffleModeEnabled) ? -1 : windowIndex + 1;
             case 1:
                 return windowIndex;
             case 2:
-                return windowIndex == getWindowCount() + -1 ? 0 : windowIndex + 1;
+                if (windowIndex == getLastWindowIndex(shuffleModeEnabled)) {
+                    return getFirstWindowIndex(shuffleModeEnabled);
+                }
+                return windowIndex + 1;
             default:
                 throw new IllegalStateException();
         }
     }
 
-    public int getPreviousWindowIndex(int windowIndex, int repeatMode) {
+    public int getPreviousWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
         switch (repeatMode) {
             case 0:
-                return windowIndex == 0 ? -1 : windowIndex - 1;
+                return windowIndex == getFirstWindowIndex(shuffleModeEnabled) ? -1 : windowIndex - 1;
             case 1:
                 return windowIndex;
             case 2:
-                return windowIndex == 0 ? getWindowCount() - 1 : windowIndex - 1;
+                if (windowIndex == getFirstWindowIndex(shuffleModeEnabled)) {
+                    return getLastWindowIndex(shuffleModeEnabled);
+                }
+                return windowIndex - 1;
             default:
                 throw new IllegalStateException();
         }
+    }
+
+    public int getLastWindowIndex(boolean shuffleModeEnabled) {
+        return isEmpty() ? -1 : getWindowCount() - 1;
+    }
+
+    public int getFirstWindowIndex(boolean shuffleModeEnabled) {
+        return isEmpty() ? -1 : 0;
     }
 
     public final Window getWindow(int windowIndex, Window window) {
         return getWindow(windowIndex, window, false);
     }
 
-    public Window getWindow(int windowIndex, Window window, boolean setIds) {
+    public final Window getWindow(int windowIndex, Window window, boolean setIds) {
         return getWindow(windowIndex, window, setIds, 0);
     }
 
-    public final int getNextPeriodIndex(int periodIndex, Period period, Window window, int repeatMode) {
+    public final int getNextPeriodIndex(int periodIndex, Period period, Window window, int repeatMode, boolean shuffleModeEnabled) {
         int windowIndex = getPeriod(periodIndex, period).windowIndex;
         if (getWindow(windowIndex, window).lastPeriodIndex != periodIndex) {
             return periodIndex + 1;
         }
-        int nextWindowIndex = getNextWindowIndex(windowIndex, repeatMode);
+        int nextWindowIndex = getNextWindowIndex(windowIndex, repeatMode, shuffleModeEnabled);
         if (nextWindowIndex == -1) {
             return -1;
         }
         return getWindow(nextWindowIndex, window).firstPeriodIndex;
     }
 
-    public final boolean isLastPeriod(int periodIndex, Period period, Window window, int repeatMode) {
-        return getNextPeriodIndex(periodIndex, period, window, repeatMode) == -1;
+    public final boolean isLastPeriod(int periodIndex, Period period, Window window, int repeatMode, boolean shuffleModeEnabled) {
+        return getNextPeriodIndex(periodIndex, period, window, repeatMode, shuffleModeEnabled) == -1;
     }
 
     public final Period getPeriod(int periodIndex, Period period) {

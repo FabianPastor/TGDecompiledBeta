@@ -4,6 +4,7 @@ import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.text.cea.Cea608Decoder;
 import org.telegram.messenger.exoplayer2.text.cea.Cea708Decoder;
 import org.telegram.messenger.exoplayer2.text.dvb.DvbDecoder;
+import org.telegram.messenger.exoplayer2.text.pgs.PgsDecoder;
 import org.telegram.messenger.exoplayer2.text.ssa.SsaDecoder;
 import org.telegram.messenger.exoplayer2.text.subrip.SubripDecoder;
 import org.telegram.messenger.exoplayer2.text.ttml.TtmlDecoder;
@@ -16,7 +17,7 @@ public interface SubtitleDecoderFactory {
     public static final SubtitleDecoderFactory DEFAULT = new SubtitleDecoderFactory() {
         public boolean supportsFormat(Format format) {
             String mimeType = format.sampleMimeType;
-            if (MimeTypes.TEXT_VTT.equals(mimeType) || MimeTypes.TEXT_SSA.equals(mimeType) || MimeTypes.APPLICATION_TTML.equals(mimeType) || MimeTypes.APPLICATION_MP4VTT.equals(mimeType) || MimeTypes.APPLICATION_SUBRIP.equals(mimeType) || MimeTypes.APPLICATION_TX3G.equals(mimeType) || MimeTypes.APPLICATION_CEA608.equals(mimeType) || MimeTypes.APPLICATION_MP4CEA608.equals(mimeType) || MimeTypes.APPLICATION_CEA708.equals(mimeType) || MimeTypes.APPLICATION_DVBSUBS.equals(mimeType)) {
+            if (MimeTypes.TEXT_VTT.equals(mimeType) || MimeTypes.TEXT_SSA.equals(mimeType) || MimeTypes.APPLICATION_TTML.equals(mimeType) || MimeTypes.APPLICATION_MP4VTT.equals(mimeType) || MimeTypes.APPLICATION_SUBRIP.equals(mimeType) || MimeTypes.APPLICATION_TX3G.equals(mimeType) || MimeTypes.APPLICATION_CEA608.equals(mimeType) || MimeTypes.APPLICATION_MP4CEA608.equals(mimeType) || MimeTypes.APPLICATION_CEA708.equals(mimeType) || MimeTypes.APPLICATION_DVBSUBS.equals(mimeType) || MimeTypes.APPLICATION_PGS.equals(mimeType)) {
                 return true;
             }
             return false;
@@ -29,6 +30,12 @@ public interface SubtitleDecoderFactory {
                 case -1351681404:
                     if (str.equals(MimeTypes.APPLICATION_DVBSUBS)) {
                         obj = 9;
+                        break;
+                    }
+                    break;
+                case -1248334819:
+                    if (str.equals(MimeTypes.APPLICATION_PGS)) {
+                        obj = 10;
                         break;
                     }
                     break;
@@ -107,6 +114,8 @@ public interface SubtitleDecoderFactory {
                     return new Cea708Decoder(format.accessibilityChannel);
                 case 9:
                     return new DvbDecoder(format.initializationData);
+                case 10:
+                    return new PgsDecoder();
                 default:
                     throw new IllegalArgumentException("Attempted to create decoder for unsupported format");
             }

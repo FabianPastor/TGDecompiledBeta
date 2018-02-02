@@ -59,6 +59,11 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
                     return null;
                 }
                 return new PesReader(new AdtsReader(false, esInfo.language));
+            case 17:
+                if (isSet(2)) {
+                    return null;
+                }
+                return new PesReader(new LatmReader(esInfo.language));
             case 21:
                 return new PesReader(new Id3Reader());
             case 27:

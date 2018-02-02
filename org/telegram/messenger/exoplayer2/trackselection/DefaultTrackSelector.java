@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
@@ -55,27 +56,108 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         }
     }
 
+    private static final class AudioTrackScore implements Comparable<AudioTrackScore> {
+        private final int bitrate;
+        private final int channelCount;
+        private final int defaultSelectionFlagScore;
+        private final int matchLanguageScore;
+        private final Parameters parameters;
+        private final int sampleRate;
+        private final int withinRendererCapabilitiesScore;
+
+        public AudioTrackScore(Format format, Parameters parameters, int formatSupport) {
+            int i;
+            int i2 = 1;
+            this.parameters = parameters;
+            this.withinRendererCapabilitiesScore = DefaultTrackSelector.isSupported(formatSupport, false) ? 1 : 0;
+            if (DefaultTrackSelector.formatHasLanguage(format, parameters.preferredAudioLanguage)) {
+                i = 1;
+            } else {
+                i = 0;
+            }
+            this.matchLanguageScore = i;
+            if ((format.selectionFlags & 1) == 0) {
+                i2 = 0;
+            }
+            this.defaultSelectionFlagScore = i2;
+            this.channelCount = format.channelCount;
+            this.sampleRate = format.sampleRate;
+            this.bitrate = format.bitrate;
+        }
+
+        public int compareTo(AudioTrackScore other) {
+            int resultSign = 1;
+            if (this.withinRendererCapabilitiesScore != other.withinRendererCapabilitiesScore) {
+                return DefaultTrackSelector.compareInts(this.withinRendererCapabilitiesScore, other.withinRendererCapabilitiesScore);
+            }
+            if (this.matchLanguageScore != other.matchLanguageScore) {
+                return DefaultTrackSelector.compareInts(this.matchLanguageScore, other.matchLanguageScore);
+            }
+            if (this.defaultSelectionFlagScore != other.defaultSelectionFlagScore) {
+                return DefaultTrackSelector.compareInts(this.defaultSelectionFlagScore, other.defaultSelectionFlagScore);
+            }
+            if (this.parameters.forceLowestBitrate) {
+                return DefaultTrackSelector.compareInts(other.bitrate, this.bitrate);
+            }
+            if (this.withinRendererCapabilitiesScore != 1) {
+                resultSign = -1;
+            }
+            if (this.channelCount != other.channelCount) {
+                return DefaultTrackSelector.compareInts(this.channelCount, other.channelCount) * resultSign;
+            }
+            if (this.sampleRate != other.sampleRate) {
+                return DefaultTrackSelector.compareInts(this.sampleRate, other.sampleRate) * resultSign;
+            }
+            return DefaultTrackSelector.compareInts(this.bitrate, other.bitrate) * resultSign;
+        }
+
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            AudioTrackScore that = (AudioTrackScore) o;
+            if (this.withinRendererCapabilitiesScore == that.withinRendererCapabilitiesScore && this.matchLanguageScore == that.matchLanguageScore && this.defaultSelectionFlagScore == that.defaultSelectionFlagScore && this.channelCount == that.channelCount && this.sampleRate == that.sampleRate && this.bitrate == that.bitrate) {
+                return true;
+            }
+            return false;
+        }
+
+        public int hashCode() {
+            return (((((((((this.withinRendererCapabilitiesScore * 31) + this.matchLanguageScore) * 31) + this.defaultSelectionFlagScore) * 31) + this.channelCount) * 31) + this.sampleRate) * 31) + this.bitrate;
+        }
+    }
+
     public static final class Parameters {
+        public static final Parameters DEFAULT = new Parameters();
         public final boolean allowMixedMimeAdaptiveness;
         public final boolean allowNonSeamlessAdaptiveness;
+        public final int disabledTextTrackSelectionFlags;
         public final boolean exceedRendererCapabilitiesIfNecessary;
         public final boolean exceedVideoConstraintsIfNecessary;
+        public final boolean forceLowestBitrate;
         public final int maxVideoBitrate;
         public final int maxVideoHeight;
         public final int maxVideoWidth;
         public final String preferredAudioLanguage;
         public final String preferredTextLanguage;
+        public final boolean selectUndeterminedTextLanguage;
         public final int viewportHeight;
         public final boolean viewportOrientationMayChange;
         public final int viewportWidth;
 
-        public Parameters() {
-            this(null, null, false, true, ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID, true, true, ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID, true);
+        private Parameters() {
+            this(null, null, false, 0, false, false, true, ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID, true, true, ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID, true);
         }
 
-        public Parameters(String preferredAudioLanguage, String preferredTextLanguage, boolean allowMixedMimeAdaptiveness, boolean allowNonSeamlessAdaptiveness, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate, boolean exceedVideoConstraintsIfNecessary, boolean exceedRendererCapabilitiesIfNecessary, int viewportWidth, int viewportHeight, boolean viewportOrientationMayChange) {
-            this.preferredAudioLanguage = preferredAudioLanguage;
-            this.preferredTextLanguage = preferredTextLanguage;
+        private Parameters(String preferredAudioLanguage, String preferredTextLanguage, boolean selectUndeterminedTextLanguage, int disabledTextTrackSelectionFlags, boolean forceLowestBitrate, boolean allowMixedMimeAdaptiveness, boolean allowNonSeamlessAdaptiveness, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate, boolean exceedVideoConstraintsIfNecessary, boolean exceedRendererCapabilitiesIfNecessary, int viewportWidth, int viewportHeight, boolean viewportOrientationMayChange) {
+            this.preferredAudioLanguage = Util.normalizeLanguageCode(preferredAudioLanguage);
+            this.preferredTextLanguage = Util.normalizeLanguageCode(preferredTextLanguage);
+            this.selectUndeterminedTextLanguage = selectUndeterminedTextLanguage;
+            this.disabledTextTrackSelectionFlags = disabledTextTrackSelectionFlags;
+            this.forceLowestBitrate = forceLowestBitrate;
             this.allowMixedMimeAdaptiveness = allowMixedMimeAdaptiveness;
             this.allowNonSeamlessAdaptiveness = allowNonSeamlessAdaptiveness;
             this.maxVideoWidth = maxVideoWidth;
@@ -88,83 +170,8 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             this.viewportOrientationMayChange = viewportOrientationMayChange;
         }
 
-        public Parameters withPreferredAudioLanguage(String preferredAudioLanguage) {
-            preferredAudioLanguage = Util.normalizeLanguageCode(preferredAudioLanguage);
-            if (TextUtils.equals(preferredAudioLanguage, this.preferredAudioLanguage)) {
-                return this;
-            }
-            return new Parameters(preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
-        }
-
-        public Parameters withPreferredTextLanguage(String preferredTextLanguage) {
-            preferredTextLanguage = Util.normalizeLanguageCode(preferredTextLanguage);
-            if (TextUtils.equals(preferredTextLanguage, this.preferredTextLanguage)) {
-                return this;
-            }
-            return new Parameters(this.preferredAudioLanguage, preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
-        }
-
-        public Parameters withAllowMixedMimeAdaptiveness(boolean allowMixedMimeAdaptiveness) {
-            if (allowMixedMimeAdaptiveness == this.allowMixedMimeAdaptiveness) {
-                return this;
-            }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
-        }
-
-        public Parameters withAllowNonSeamlessAdaptiveness(boolean allowNonSeamlessAdaptiveness) {
-            if (allowNonSeamlessAdaptiveness == this.allowNonSeamlessAdaptiveness) {
-                return this;
-            }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
-        }
-
-        public Parameters withMaxVideoSize(int maxVideoWidth, int maxVideoHeight) {
-            if (maxVideoWidth == this.maxVideoWidth && maxVideoHeight == this.maxVideoHeight) {
-                return this;
-            }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, maxVideoWidth, maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
-        }
-
-        public Parameters withMaxVideoBitrate(int maxVideoBitrate) {
-            if (maxVideoBitrate == this.maxVideoBitrate) {
-                return this;
-            }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
-        }
-
-        public Parameters withMaxVideoSizeSd() {
-            return withMaxVideoSize(1279, 719);
-        }
-
-        public Parameters withoutVideoSizeConstraints() {
-            return withMaxVideoSize(ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID);
-        }
-
-        public Parameters withExceedVideoConstraintsIfNecessary(boolean exceedVideoConstraintsIfNecessary) {
-            if (exceedVideoConstraintsIfNecessary == this.exceedVideoConstraintsIfNecessary) {
-                return this;
-            }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
-        }
-
-        public Parameters withExceedRendererCapabilitiesIfNecessary(boolean exceedRendererCapabilitiesIfNecessary) {
-            if (exceedRendererCapabilitiesIfNecessary == this.exceedRendererCapabilitiesIfNecessary) {
-                return this;
-            }
-            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
-        }
-
-        public Parameters withViewportSize(int viewportWidth, int viewportHeight, boolean viewportOrientationMayChange) {
-            return (viewportWidth == this.viewportWidth && viewportHeight == this.viewportHeight && viewportOrientationMayChange == this.viewportOrientationMayChange) ? this : new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, viewportWidth, viewportHeight, viewportOrientationMayChange);
-        }
-
-        public Parameters withViewportSizeFromContext(Context context, boolean viewportOrientationMayChange) {
-            Point viewportSize = Util.getPhysicalDisplaySize(context);
-            return withViewportSize(viewportSize.x, viewportSize.y, viewportOrientationMayChange);
-        }
-
-        public Parameters withoutViewportSizeConstraints() {
-            return withViewportSize(ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID, true);
+        public ParametersBuilder buildUpon() {
+            return new ParametersBuilder();
         }
 
         public boolean equals(Object obj) {
@@ -175,38 +182,180 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                 return false;
             }
             Parameters other = (Parameters) obj;
-            if (this.allowMixedMimeAdaptiveness == other.allowMixedMimeAdaptiveness && this.allowNonSeamlessAdaptiveness == other.allowNonSeamlessAdaptiveness && this.maxVideoWidth == other.maxVideoWidth && this.maxVideoHeight == other.maxVideoHeight && this.exceedVideoConstraintsIfNecessary == other.exceedVideoConstraintsIfNecessary && this.exceedRendererCapabilitiesIfNecessary == other.exceedRendererCapabilitiesIfNecessary && this.viewportOrientationMayChange == other.viewportOrientationMayChange && this.viewportWidth == other.viewportWidth && this.viewportHeight == other.viewportHeight && this.maxVideoBitrate == other.maxVideoBitrate && TextUtils.equals(this.preferredAudioLanguage, other.preferredAudioLanguage) && TextUtils.equals(this.preferredTextLanguage, other.preferredTextLanguage)) {
+            if (this.selectUndeterminedTextLanguage == other.selectUndeterminedTextLanguage && this.disabledTextTrackSelectionFlags == other.disabledTextTrackSelectionFlags && this.forceLowestBitrate == other.forceLowestBitrate && this.allowMixedMimeAdaptiveness == other.allowMixedMimeAdaptiveness && this.allowNonSeamlessAdaptiveness == other.allowNonSeamlessAdaptiveness && this.maxVideoWidth == other.maxVideoWidth && this.maxVideoHeight == other.maxVideoHeight && this.exceedVideoConstraintsIfNecessary == other.exceedVideoConstraintsIfNecessary && this.exceedRendererCapabilitiesIfNecessary == other.exceedRendererCapabilitiesIfNecessary && this.viewportOrientationMayChange == other.viewportOrientationMayChange && this.viewportWidth == other.viewportWidth && this.viewportHeight == other.viewportHeight && this.maxVideoBitrate == other.maxVideoBitrate && TextUtils.equals(this.preferredAudioLanguage, other.preferredAudioLanguage) && TextUtils.equals(this.preferredTextLanguage, other.preferredTextLanguage)) {
                 return true;
             }
             return false;
         }
 
         public int hashCode() {
+            int result;
             int i;
             int i2 = 1;
-            int hashCode = ((((this.preferredAudioLanguage.hashCode() * 31) + this.preferredTextLanguage.hashCode()) * 31) + (this.allowMixedMimeAdaptiveness ? 1 : 0)) * 31;
+            if (this.selectUndeterminedTextLanguage) {
+                result = 1;
+            } else {
+                result = 0;
+            }
+            int i3 = ((result * 31) + this.disabledTextTrackSelectionFlags) * 31;
+            if (this.forceLowestBitrate) {
+                i = 1;
+            } else {
+                i = 0;
+            }
+            i3 = (i3 + i) * 31;
+            if (this.allowMixedMimeAdaptiveness) {
+                i = 1;
+            } else {
+                i = 0;
+            }
+            i3 = (i3 + i) * 31;
             if (this.allowNonSeamlessAdaptiveness) {
                 i = 1;
             } else {
                 i = 0;
             }
-            hashCode = (((((((hashCode + i) * 31) + this.maxVideoWidth) * 31) + this.maxVideoHeight) * 31) + this.maxVideoBitrate) * 31;
+            i3 = (((((i3 + i) * 31) + this.maxVideoWidth) * 31) + this.maxVideoHeight) * 31;
             if (this.exceedVideoConstraintsIfNecessary) {
                 i = 1;
             } else {
                 i = 0;
             }
-            hashCode = (hashCode + i) * 31;
+            i3 = (i3 + i) * 31;
             if (this.exceedRendererCapabilitiesIfNecessary) {
                 i = 1;
             } else {
                 i = 0;
             }
-            i = (hashCode + i) * 31;
+            i = (i3 + i) * 31;
             if (!this.viewportOrientationMayChange) {
                 i2 = 0;
             }
-            return ((((i + i2) * 31) + this.viewportWidth) * 31) + this.viewportHeight;
+            return ((((((((((i + i2) * 31) + this.viewportWidth) * 31) + this.viewportHeight) * 31) + this.maxVideoBitrate) * 31) + this.preferredAudioLanguage.hashCode()) * 31) + this.preferredTextLanguage.hashCode();
+        }
+    }
+
+    public static final class ParametersBuilder {
+        private boolean allowMixedMimeAdaptiveness;
+        private boolean allowNonSeamlessAdaptiveness;
+        private int disabledTextTrackSelectionFlags;
+        private boolean exceedRendererCapabilitiesIfNecessary;
+        private boolean exceedVideoConstraintsIfNecessary;
+        private boolean forceLowestBitrate;
+        private int maxVideoBitrate;
+        private int maxVideoHeight;
+        private int maxVideoWidth;
+        private String preferredAudioLanguage;
+        private String preferredTextLanguage;
+        private boolean selectUndeterminedTextLanguage;
+        private int viewportHeight;
+        private boolean viewportOrientationMayChange;
+        private int viewportWidth;
+
+        public ParametersBuilder() {
+            this(Parameters.DEFAULT);
+        }
+
+        private ParametersBuilder(Parameters initialValues) {
+            this.preferredAudioLanguage = initialValues.preferredAudioLanguage;
+            this.preferredTextLanguage = initialValues.preferredTextLanguage;
+            this.selectUndeterminedTextLanguage = initialValues.selectUndeterminedTextLanguage;
+            this.disabledTextTrackSelectionFlags = initialValues.disabledTextTrackSelectionFlags;
+            this.forceLowestBitrate = initialValues.forceLowestBitrate;
+            this.allowMixedMimeAdaptiveness = initialValues.allowMixedMimeAdaptiveness;
+            this.allowNonSeamlessAdaptiveness = initialValues.allowNonSeamlessAdaptiveness;
+            this.maxVideoWidth = initialValues.maxVideoWidth;
+            this.maxVideoHeight = initialValues.maxVideoHeight;
+            this.maxVideoBitrate = initialValues.maxVideoBitrate;
+            this.exceedVideoConstraintsIfNecessary = initialValues.exceedVideoConstraintsIfNecessary;
+            this.exceedRendererCapabilitiesIfNecessary = initialValues.exceedRendererCapabilitiesIfNecessary;
+            this.viewportWidth = initialValues.viewportWidth;
+            this.viewportHeight = initialValues.viewportHeight;
+            this.viewportOrientationMayChange = initialValues.viewportOrientationMayChange;
+        }
+
+        public ParametersBuilder setPreferredAudioLanguage(String preferredAudioLanguage) {
+            this.preferredAudioLanguage = preferredAudioLanguage;
+            return this;
+        }
+
+        public ParametersBuilder setPreferredTextLanguage(String preferredTextLanguage) {
+            this.preferredTextLanguage = preferredTextLanguage;
+            return this;
+        }
+
+        public ParametersBuilder setSelectUndeterminedTextLanguage(boolean selectUndeterminedTextLanguage) {
+            this.selectUndeterminedTextLanguage = selectUndeterminedTextLanguage;
+            return this;
+        }
+
+        public ParametersBuilder setDisabledTextTrackSelectionFlags(int disabledTextTrackSelectionFlags) {
+            this.disabledTextTrackSelectionFlags = disabledTextTrackSelectionFlags;
+            return this;
+        }
+
+        public ParametersBuilder setForceLowestBitrate(boolean forceLowestBitrate) {
+            this.forceLowestBitrate = forceLowestBitrate;
+            return this;
+        }
+
+        public ParametersBuilder setAllowMixedMimeAdaptiveness(boolean allowMixedMimeAdaptiveness) {
+            this.allowMixedMimeAdaptiveness = allowMixedMimeAdaptiveness;
+            return this;
+        }
+
+        public ParametersBuilder setAllowNonSeamlessAdaptiveness(boolean allowNonSeamlessAdaptiveness) {
+            this.allowNonSeamlessAdaptiveness = allowNonSeamlessAdaptiveness;
+            return this;
+        }
+
+        public ParametersBuilder setMaxVideoSizeSd() {
+            return setMaxVideoSize(1279, 719);
+        }
+
+        public ParametersBuilder clearVideoSizeConstraints() {
+            return setMaxVideoSize(ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID);
+        }
+
+        public ParametersBuilder setMaxVideoSize(int maxVideoWidth, int maxVideoHeight) {
+            this.maxVideoWidth = maxVideoWidth;
+            this.maxVideoHeight = maxVideoHeight;
+            return this;
+        }
+
+        public ParametersBuilder setMaxVideoBitrate(int maxVideoBitrate) {
+            this.maxVideoBitrate = maxVideoBitrate;
+            return this;
+        }
+
+        public ParametersBuilder setExceedVideoConstraintsIfNecessary(boolean exceedVideoConstraintsIfNecessary) {
+            this.exceedVideoConstraintsIfNecessary = exceedVideoConstraintsIfNecessary;
+            return this;
+        }
+
+        public ParametersBuilder setExceedRendererCapabilitiesIfNecessary(boolean exceedRendererCapabilitiesIfNecessary) {
+            this.exceedRendererCapabilitiesIfNecessary = exceedRendererCapabilitiesIfNecessary;
+            return this;
+        }
+
+        public ParametersBuilder setViewportSizeToPhysicalDisplaySize(Context context, boolean viewportOrientationMayChange) {
+            Point viewportSize = Util.getPhysicalDisplaySize(context);
+            return setViewportSize(viewportSize.x, viewportSize.y, viewportOrientationMayChange);
+        }
+
+        public ParametersBuilder clearViewportSizeConstraints() {
+            return setViewportSize(ConnectionsManager.DEFAULT_DATACENTER_ID, ConnectionsManager.DEFAULT_DATACENTER_ID, true);
+        }
+
+        public ParametersBuilder setViewportSize(int viewportWidth, int viewportHeight, boolean viewportOrientationMayChange) {
+            this.viewportWidth = viewportWidth;
+            this.viewportHeight = viewportHeight;
+            this.viewportOrientationMayChange = viewportOrientationMayChange;
+            return this;
+        }
+
+        public Parameters build() {
+            return new Parameters(this.preferredAudioLanguage, this.preferredTextLanguage, this.selectUndeterminedTextLanguage, this.disabledTextTrackSelectionFlags, this.forceLowestBitrate, this.allowMixedMimeAdaptiveness, this.allowNonSeamlessAdaptiveness, this.maxVideoWidth, this.maxVideoHeight, this.maxVideoBitrate, this.exceedVideoConstraintsIfNecessary, this.exceedRendererCapabilitiesIfNecessary, this.viewportWidth, this.viewportHeight, this.viewportOrientationMayChange);
         }
     }
 
@@ -220,7 +369,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
 
     public DefaultTrackSelector(Factory adaptiveTrackSelectionFactory) {
         this.adaptiveTrackSelectionFactory = adaptiveTrackSelectionFactory;
-        this.paramsReference = new AtomicReference(new Parameters());
+        this.paramsReference = new AtomicReference(Parameters.DEFAULT);
     }
 
     public void setParameters(Parameters params) {
@@ -286,7 +435,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
 
     protected TrackSelection selectVideoTrack(RendererCapabilities rendererCapabilities, TrackGroupArray groups, int[][] formatSupport, Parameters params, Factory adaptiveTrackSelectionFactory) throws ExoPlaybackException {
         TrackSelection selection = null;
-        if (adaptiveTrackSelectionFactory != null) {
+        if (!(params.forceLowestBitrate || adaptiveTrackSelectionFactory == null)) {
             selection = selectAdaptiveVideoTrack(rendererCapabilities, groups, formatSupport, params, adaptiveTrackSelectionFactory);
         }
         if (selection == null) {
@@ -396,13 +545,20 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                         }
                         boolean selectTrack = trackScore > selectedTrackScore;
                         if (trackScore == selectedTrackScore) {
-                            int comparisonResult;
-                            if (format.getPixelCount() != selectedPixelCount) {
-                                comparisonResult = compareFormatValues(format.getPixelCount(), selectedPixelCount);
+                            if (!params.forceLowestBitrate) {
+                                int comparisonResult;
+                                int formatPixelCount = format.getPixelCount();
+                                if (formatPixelCount != selectedPixelCount) {
+                                    comparisonResult = compareFormatValues(formatPixelCount, selectedPixelCount);
+                                } else {
+                                    comparisonResult = compareFormatValues(format.bitrate, selectedBitrate);
+                                }
+                                selectTrack = (isWithinCapabilities && isWithinConstraints) ? comparisonResult > 0 : comparisonResult < 0;
+                            } else if (compareFormatValues(format.bitrate, selectedBitrate) < 0) {
+                                selectTrack = true;
                             } else {
-                                comparisonResult = compareFormatValues(format.bitrate, selectedBitrate);
+                                selectTrack = false;
                             }
-                            selectTrack = (isWithinCapabilities && isWithinConstraints) ? comparisonResult > 0 : comparisonResult < 0;
                         }
                         if (selectTrack) {
                             selectedGroup = trackGroup;
@@ -423,16 +579,16 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     protected TrackSelection selectAudioTrack(TrackGroupArray groups, int[][] formatSupport, Parameters params, Factory adaptiveTrackSelectionFactory) throws ExoPlaybackException {
-        int selectedGroupIndex = -1;
         int selectedTrackIndex = -1;
-        int selectedTrackScore = 0;
+        int selectedGroupIndex = -1;
+        AudioTrackScore selectedTrackScore = null;
         for (int groupIndex = 0; groupIndex < groups.length; groupIndex++) {
             TrackGroup trackGroup = groups.get(groupIndex);
             int[] trackFormatSupport = formatSupport[groupIndex];
             for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
                 if (isSupported(trackFormatSupport[trackIndex], params.exceedRendererCapabilitiesIfNecessary)) {
-                    int trackScore = getAudioTrackScore(trackFormatSupport[trackIndex], params.preferredAudioLanguage, trackGroup.getFormat(trackIndex));
-                    if (trackScore > selectedTrackScore) {
+                    AudioTrackScore trackScore = new AudioTrackScore(trackGroup.getFormat(trackIndex), params, trackFormatSupport[trackIndex]);
+                    if (selectedTrackScore == null || trackScore.compareTo(selectedTrackScore) > 0) {
                         selectedGroupIndex = groupIndex;
                         selectedTrackIndex = trackIndex;
                         selectedTrackScore = trackScore;
@@ -444,38 +600,13 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             return null;
         }
         TrackGroup selectedGroup = groups.get(selectedGroupIndex);
-        if (adaptiveTrackSelectionFactory != null) {
+        if (!(params.forceLowestBitrate || adaptiveTrackSelectionFactory == null)) {
             int[] adaptiveTracks = getAdaptiveAudioTracks(selectedGroup, formatSupport[selectedGroupIndex], params.allowMixedMimeAdaptiveness);
             if (adaptiveTracks.length > 0) {
                 return adaptiveTrackSelectionFactory.createTrackSelection(selectedGroup, adaptiveTracks);
             }
         }
         return new FixedTrackSelection(selectedGroup, selectedTrackIndex);
-    }
-
-    private static int getAudioTrackScore(int formatSupport, String preferredLanguage, Format format) {
-        boolean isDefault;
-        int trackScore;
-        if ((format.selectionFlags & 1) != 0) {
-            isDefault = true;
-        } else {
-            isDefault = false;
-        }
-        if (formatHasLanguage(format, preferredLanguage)) {
-            if (isDefault) {
-                trackScore = 4;
-            } else {
-                trackScore = 3;
-            }
-        } else if (isDefault) {
-            trackScore = 2;
-        } else {
-            trackScore = 1;
-        }
-        if (isSupported(formatSupport, false)) {
-            return trackScore + WITHIN_RENDERER_CAPABILITIES_BONUS;
-        }
-        return trackScore;
     }
 
     private static int[] getAdaptiveAudioTracks(TrackGroup group, int[] formatSupport, boolean allowMixedMimeTypes) {
@@ -540,16 +671,25 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                 if (isSupported(trackFormatSupport[trackIndex], params.exceedRendererCapabilitiesIfNecessary)) {
                     int trackScore;
                     Format format = trackGroup.getFormat(trackIndex);
-                    boolean isDefault = (format.selectionFlags & 1) != 0;
-                    boolean isForced = (format.selectionFlags & 2) != 0;
-                    if (formatHasLanguage(format, params.preferredTextLanguage)) {
+                    int maskedSelectionFlags = format.selectionFlags & (params.disabledTextTrackSelectionFlags ^ -1);
+                    boolean isDefault = (maskedSelectionFlags & 1) != 0;
+                    boolean isForced = (maskedSelectionFlags & 2) != 0;
+                    boolean preferredLanguageFound = formatHasLanguage(format, params.preferredTextLanguage);
+                    if (preferredLanguageFound || (params.selectUndeterminedTextLanguage && formatHasNoLanguage(format))) {
+                        int i;
                         if (isDefault) {
-                            trackScore = 6;
+                            trackScore = 8;
                         } else if (isForced) {
                             trackScore = 4;
                         } else {
-                            trackScore = 5;
+                            trackScore = 6;
                         }
+                        if (preferredLanguageFound) {
+                            i = 1;
+                        } else {
+                            i = 0;
+                        }
+                        trackScore += i;
                     } else if (isDefault) {
                         trackScore = 3;
                     } else if (isForced) {
@@ -600,6 +740,10 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     protected static boolean isSupported(int formatSupport, boolean allowExceedsCapabilities) {
         int maskedSupport = formatSupport & 7;
         return maskedSupport == 4 || (allowExceedsCapabilities && maskedSupport == 3);
+    }
+
+    protected static boolean formatHasNoLanguage(Format format) {
+        return TextUtils.isEmpty(format.language) || formatHasLanguage(format, C.LANGUAGE_UNDETERMINED);
     }
 
     protected static boolean formatHasLanguage(Format format, String language) {
@@ -653,5 +797,12 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             return new Point(viewportWidth, Util.ceilDivide(viewportWidth * videoHeight, videoWidth));
         }
         return new Point(Util.ceilDivide(viewportHeight * videoWidth, videoHeight), viewportHeight);
+    }
+
+    private static int compareInts(int first, int second) {
+        if (first > second) {
+            return 1;
+        }
+        return second > first ? -1 : 0;
     }
 }

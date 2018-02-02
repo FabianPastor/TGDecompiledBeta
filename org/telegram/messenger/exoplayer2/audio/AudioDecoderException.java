@@ -1,11 +1,11 @@
 package org.telegram.messenger.exoplayer2.audio;
 
-public abstract class AudioDecoderException extends Exception {
-    public AudioDecoderException(String detailMessage) {
-        super(detailMessage);
+public class AudioDecoderException extends Exception {
+    public AudioDecoderException(String message) {
+        super(message);
     }
 
-    public AudioDecoderException(String detailMessage, Throwable cause) {
-        super(detailMessage, cause);
+    public AudioDecoderException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

@@ -20,20 +20,23 @@ public final class EventMessage implements Entry {
     private int hashCode;
     public final long id;
     public final byte[] messageData;
+    public final long presentationTimeUs;
     public final String schemeIdUri;
     public final String value;
 
-    public EventMessage(String schemeIdUri, String value, long durationMs, long id, byte[] messageData) {
+    public EventMessage(String schemeIdUri, String value, long durationMs, long id, byte[] messageData, long presentationTimeUs) {
         this.schemeIdUri = schemeIdUri;
         this.value = value;
         this.durationMs = durationMs;
         this.id = id;
         this.messageData = messageData;
+        this.presentationTimeUs = presentationTimeUs;
     }
 
     EventMessage(Parcel in) {
         this.schemeIdUri = in.readString();
         this.value = in.readString();
+        this.presentationTimeUs = in.readLong();
         this.durationMs = in.readLong();
         this.id = in.readLong();
         this.messageData = in.createByteArray();
@@ -52,7 +55,7 @@ public final class EventMessage implements Entry {
             if (this.value != null) {
                 i = this.value.hashCode();
             }
-            this.hashCode = ((((((hashCode + i) * 31) + ((int) (this.durationMs ^ (this.durationMs >>> 32)))) * 31) + ((int) (this.id ^ (this.id >>> 32)))) * 31) + Arrays.hashCode(this.messageData);
+            this.hashCode = ((((((((hashCode + i) * 31) + ((int) (this.presentationTimeUs ^ (this.presentationTimeUs >>> 32)))) * 31) + ((int) (this.durationMs ^ (this.durationMs >>> 32)))) * 31) + ((int) (this.id ^ (this.id >>> 32)))) * 31) + Arrays.hashCode(this.messageData);
         }
         return this.hashCode;
     }
@@ -65,7 +68,7 @@ public final class EventMessage implements Entry {
             return false;
         }
         EventMessage other = (EventMessage) obj;
-        if (this.durationMs == other.durationMs && this.id == other.id && Util.areEqual(this.schemeIdUri, other.schemeIdUri) && Util.areEqual(this.value, other.value) && Arrays.equals(this.messageData, other.messageData)) {
+        if (this.presentationTimeUs == other.presentationTimeUs && this.durationMs == other.durationMs && this.id == other.id && Util.areEqual(this.schemeIdUri, other.schemeIdUri) && Util.areEqual(this.value, other.value) && Arrays.equals(this.messageData, other.messageData)) {
             return true;
         }
         return false;
@@ -78,6 +81,7 @@ public final class EventMessage implements Entry {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.schemeIdUri);
         dest.writeString(this.value);
+        dest.writeLong(this.presentationTimeUs);
         dest.writeLong(this.durationMs);
         dest.writeLong(this.id);
         dest.writeByteArray(this.messageData);

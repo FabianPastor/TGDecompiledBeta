@@ -6,9 +6,9 @@ public final class ExoPlayerLibraryInfo {
     public static final boolean ASSERTIONS_ENABLED = true;
     public static final String TAG = "ExoPlayer";
     public static final boolean TRACE_ENABLED = true;
-    public static final String VERSION = "2.5.4";
-    public static final int VERSION_INT = 2005004;
-    public static final String VERSION_SLASHY = "ExoPlayerLib/2.5.4";
+    public static final String VERSION = "2.6.1";
+    public static final int VERSION_INT = 2006001;
+    public static final String VERSION_SLASHY = "ExoPlayerLib/2.6.1";
     private static final HashSet<String> registeredModules = new HashSet();
     private static String registeredModulesString = "goog.exo.core";
 

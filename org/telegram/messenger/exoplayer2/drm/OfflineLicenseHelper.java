@@ -4,8 +4,8 @@ import android.os.ConditionVariable;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Pair;
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.UUID;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.drm.DefaultDrmSessionManager.EventListener;
 import org.telegram.messenger.exoplayer2.drm.DrmSession.DrmSessionException;
@@ -26,10 +26,10 @@ public final class OfflineLicenseHelper<T extends ExoMediaCrypto> {
     }
 
     public static OfflineLicenseHelper<FrameworkMediaCrypto> newWidevineInstance(String defaultLicenseUrl, boolean forceDefaultLicenseUrl, Factory httpDataSourceFactory, HashMap<String, String> optionalKeyRequestParameters) throws UnsupportedDrmException {
-        return new OfflineLicenseHelper(FrameworkMediaDrm.newInstance(C.WIDEVINE_UUID), new HttpMediaDrmCallback(defaultLicenseUrl, forceDefaultLicenseUrl, httpDataSourceFactory), optionalKeyRequestParameters);
+        return new OfflineLicenseHelper(C.WIDEVINE_UUID, FrameworkMediaDrm.newInstance(C.WIDEVINE_UUID), new HttpMediaDrmCallback(defaultLicenseUrl, forceDefaultLicenseUrl, httpDataSourceFactory), optionalKeyRequestParameters);
     }
 
-    public OfflineLicenseHelper(ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters) {
+    public OfflineLicenseHelper(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters) {
         this.handlerThread.start();
         this.conditionVariable = new ConditionVariable();
         EventListener eventListener = new EventListener() {
@@ -49,7 +49,7 @@ public final class OfflineLicenseHelper<T extends ExoMediaCrypto> {
                 OfflineLicenseHelper.this.conditionVariable.open();
             }
         };
-        this.drmSessionManager = new DefaultDrmSessionManager(C.WIDEVINE_UUID, mediaDrm, callback, optionalKeyRequestParameters, new Handler(this.handlerThread.getLooper()), eventListener);
+        this.drmSessionManager = new DefaultDrmSessionManager(uuid, mediaDrm, callback, optionalKeyRequestParameters, new Handler(this.handlerThread.getLooper()), eventListener);
     }
 
     public synchronized byte[] getPropertyByteArray(String key) {
@@ -68,7 +68,7 @@ public final class OfflineLicenseHelper<T extends ExoMediaCrypto> {
         this.drmSessionManager.setPropertyString(key, value);
     }
 
-    public synchronized byte[] downloadLicense(DrmInitData drmInitData) throws IOException, InterruptedException, DrmSessionException {
+    public synchronized byte[] downloadLicense(DrmInitData drmInitData) throws DrmSessionException {
         Assertions.checkArgument(drmInitData != null);
         return blockingKeyRequest(2, null, drmInitData);
     }

@@ -32,7 +32,7 @@ public final class DvbSubtitleReader implements ElementaryStreamReader {
             DvbSubtitleInfo subtitleInfo = (DvbSubtitleInfo) this.subtitleInfos.get(i);
             idGenerator.generateNewId();
             TrackOutput output = extractorOutput.track(idGenerator.getTrackId(), 3);
-            output.format(Format.createImageSampleFormat(idGenerator.getFormatId(), MimeTypes.APPLICATION_DVBSUBS, null, -1, Collections.singletonList(subtitleInfo.initializationData), subtitleInfo.language, null));
+            output.format(Format.createImageSampleFormat(idGenerator.getFormatId(), MimeTypes.APPLICATION_DVBSUBS, null, -1, 0, Collections.singletonList(subtitleInfo.initializationData), subtitleInfo.language, null));
             this.outputs[i] = output;
         }
     }

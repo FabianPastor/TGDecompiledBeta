@@ -17,8 +17,8 @@ public final class SinglePeriodTimeline extends Timeline {
     private final long windowPositionInPeriodUs;
     private final long windowStartTimeMs;
 
-    public SinglePeriodTimeline(long durationUs, boolean isSeekable) {
-        this(durationUs, durationUs, 0, 0, isSeekable, false);
+    public SinglePeriodTimeline(long durationUs, boolean isSeekable, boolean isDynamic) {
+        this(durationUs, durationUs, 0, 0, isSeekable, isDynamic);
     }
 
     public SinglePeriodTimeline(long periodDurationUs, long windowDurationUs, long windowPositionInPeriodUs, long windowDefaultStartPositionUs, boolean isSeekable, boolean isDynamic) {
@@ -44,10 +44,14 @@ public final class SinglePeriodTimeline extends Timeline {
         Assertions.checkIndex(windowIndex, 0, 1);
         Object id = setIds ? ID : null;
         long windowDefaultStartPositionUs = this.windowDefaultStartPositionUs;
-        if (this.isDynamic) {
-            windowDefaultStartPositionUs += defaultPositionProjectionUs;
-            if (windowDefaultStartPositionUs > this.windowDurationUs) {
+        if (this.isDynamic && defaultPositionProjectionUs != 0) {
+            if (this.windowDurationUs == C.TIME_UNSET) {
                 windowDefaultStartPositionUs = C.TIME_UNSET;
+            } else {
+                windowDefaultStartPositionUs += defaultPositionProjectionUs;
+                if (windowDefaultStartPositionUs > this.windowDurationUs) {
+                    windowDefaultStartPositionUs = C.TIME_UNSET;
+                }
             }
         }
         return window.set(id, this.presentationStartTimeMs, this.windowStartTimeMs, this.isSeekable, this.isDynamic, windowDefaultStartPositionUs, this.windowDurationUs, 0, 0, this.windowPositionInPeriodUs);
