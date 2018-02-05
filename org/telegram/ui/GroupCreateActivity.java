@@ -1028,7 +1028,7 @@ public class GroupCreateActivity extends BaseFragment implements OnClickListener
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
-            public void didSetColor(int color) {
+            public void didSetColor() {
                 int count = GroupCreateActivity.this.listView.getChildCount();
                 for (int a = 0; a < count; a++) {
                     View child = GroupCreateActivity.this.listView.getChildAt(a);

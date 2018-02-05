@@ -889,7 +889,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } else if (position == SettingsActivity.this.languageRow) {
                     SettingsActivity.this.presentFragment(new LanguageSelectActivity());
                 } else if (position == SettingsActivity.this.themeRow) {
-                    SettingsActivity.this.presentFragment(new ThemeActivity());
+                    SettingsActivity.this.presentFragment(new ThemeActivity(0));
                 } else if (position == SettingsActivity.this.switchBackendButtonRow) {
                     if (SettingsActivity.this.getParentActivity() != null) {
                         builder = new Builder(SettingsActivity.this.getParentActivity());

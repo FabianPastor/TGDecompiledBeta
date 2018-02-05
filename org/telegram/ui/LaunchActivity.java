@@ -110,6 +110,7 @@ import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerUserCell;
@@ -456,6 +457,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.reloadInterface);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetNewTheme);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.needSetDayNightTheme);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.closeOtherAppActivities);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetPasscode);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetNewWallpapper);
@@ -2234,6 +2236,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.reloadInterface);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetNewTheme);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needSetDayNightTheme);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.closeOtherAppActivities);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetPasscode);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.notificationsCountUpdated);
@@ -2639,16 +2642,25 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 dialog.setCanceledOnTouchOutside(false);
             }
         } else if (id == NotificationCenter.didSetNewTheme) {
-            if (this.sideMenu != null) {
-                this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
-                this.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
-                this.sideMenu.getAdapter().notifyDataSetChanged();
-            }
-            if (VERSION.SDK_INT >= 21) {
-                try {
-                    setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
-                } catch (Exception e3) {
+            if (!args[0].booleanValue()) {
+                if (this.sideMenu != null) {
+                    this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
+                    this.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
+                    this.sideMenu.getAdapter().notifyDataSetChanged();
                 }
+                if (VERSION.SDK_INT >= 21) {
+                    try {
+                        setTaskDescription(new TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
+                    } catch (Exception e3) {
+                    }
+                }
+            }
+        } else if (id == NotificationCenter.needSetDayNightTheme) {
+            ThemeInfo theme = args[0];
+            this.actionBarLayout.animateThemedValues(theme);
+            if (AndroidUtilities.isTablet()) {
+                this.layersActionBarLayout.animateThemedValues(theme);
+                this.rightActionBarLayout.animateThemedValues(theme);
             }
         } else if (id == NotificationCenter.notificationsCountUpdated && this.sideMenu != null) {
             Integer accountNum = args[0];

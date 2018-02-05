@@ -499,7 +499,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
-            public void didSetColor(int color) {
+            public void didSetColor() {
                 String obj;
                 int count = GroupCreateFinalActivity.this.listView.getChildCount();
                 for (int a = 0; a < count; a++) {

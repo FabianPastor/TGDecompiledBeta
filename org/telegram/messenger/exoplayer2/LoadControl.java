@@ -19,7 +19,7 @@ public interface LoadControl {
 
     boolean retainBackBufferFromKeyframe();
 
-    boolean shouldContinueLoading(boolean z, long j, float f);
+    boolean shouldContinueLoading(long j, float f);
 
     boolean shouldStartPlayback(long j, float f, boolean z);
 }

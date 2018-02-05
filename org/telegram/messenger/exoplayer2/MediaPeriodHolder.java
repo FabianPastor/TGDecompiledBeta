@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2;
 
 import android.util.Log;
-import org.telegram.messenger.exoplayer2.MediaPeriodInfoSequence.MediaPeriodInfo;
 import org.telegram.messenger.exoplayer2.source.ClippingMediaPeriod;
 import org.telegram.messenger.exoplayer2.source.EmptySampleStream;
 import org.telegram.messenger.exoplayer2.source.MediaPeriod;
@@ -31,12 +30,12 @@ final class MediaPeriodHolder {
     public TrackSelectorResult trackSelectorResult;
     public final Object uid;
 
-    public MediaPeriodHolder(RendererCapabilities[] rendererCapabilities, long rendererPositionOffsetUs, TrackSelector trackSelector, Allocator allocator, MediaSource mediaSource, Object periodUid, MediaPeriodInfo info) {
+    public MediaPeriodHolder(RendererCapabilities[] rendererCapabilities, long rendererPositionOffsetUs, TrackSelector trackSelector, Allocator allocator, MediaSource mediaSource, Object uid, MediaPeriodInfo info) {
         this.rendererCapabilities = rendererCapabilities;
         this.rendererPositionOffsetUs = rendererPositionOffsetUs - info.startPositionUs;
         this.trackSelector = trackSelector;
         this.mediaSource = mediaSource;
-        this.uid = Assertions.checkNotNull(periodUid);
+        this.uid = Assertions.checkNotNull(uid);
         this.info = info;
         this.sampleStreams = new SampleStream[rendererCapabilities.length];
         this.mayRetainStreamFlags = new boolean[rendererCapabilities.length];
@@ -81,12 +80,13 @@ final class MediaPeriodHolder {
         return !this.prepared ? 0 : this.mediaPeriod.getNextLoadPositionUs();
     }
 
-    public void handlePrepared(float playbackSpeed) throws ExoPlaybackException {
+    public TrackSelectorResult handlePrepared(float playbackSpeed) throws ExoPlaybackException {
         this.prepared = true;
         selectTracks(playbackSpeed);
         long newStartPositionUs = applyTrackSelection(this.info.startPositionUs, false);
         this.rendererPositionOffsetUs += this.info.startPositionUs - newStartPositionUs;
         this.info = this.info.copyWithStartPositionUs(newStartPositionUs);
+        return this.trackSelectorResult;
     }
 
     public void reevaluateBuffer(long rendererPositionUs) {

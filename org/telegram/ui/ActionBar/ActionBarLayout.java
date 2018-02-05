@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -30,6 +31,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.ui.ActionBar.Theme.ThemeInfo;
+import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarLayout extends FrameLayout {
@@ -37,6 +40,10 @@ public class ActionBarLayout extends FrameLayout {
     private static Drawable layerShadowDrawable;
     private static Paint scrimPaint;
     private AccelerateDecelerateInterpolator accelerateDecelerateInterpolator = new AccelerateDecelerateInterpolator();
+    private int[] animateEndColors;
+    private ThemeInfo animateSetThemeAfterAnimation;
+    private int[] animateStartColors;
+    private boolean animateThemeAfterAnimation;
     protected boolean animationInProgress;
     private float animationProgress = 0.0f;
     private Runnable animationRunnable;
@@ -68,6 +75,10 @@ public class ActionBarLayout extends FrameLayout {
     private int startedTrackingX;
     private int startedTrackingY;
     private String subtitleOverlayText;
+    private float themeAnimationValue;
+    private ThemeDescriptionDelegate themeAnimatorDelegate;
+    private ThemeDescription[] themeAnimatorDescriptions;
+    private AnimatorSet themeAnimatorSet;
     private String titleOverlayText;
     private boolean transitionAnimationInProgress;
     private long transitionAnimationStartTime;
@@ -521,6 +532,13 @@ public class ActionBarLayout extends FrameLayout {
         this.containerViewBack.setAlpha(1.0f);
         this.containerViewBack.setScaleX(1.0f);
         this.containerViewBack.setScaleY(1.0f);
+    }
+
+    public BaseFragment getLastFragment() {
+        if (this.fragmentsStack.isEmpty()) {
+            return null;
+        }
+        return (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1);
     }
 
     public boolean checkTransitionAnimation() {
@@ -1022,6 +1040,91 @@ public class ActionBarLayout extends FrameLayout {
         }
     }
 
+    @Keep
+    public void setThemeAnimationValue(float value) {
+        this.themeAnimationValue = value;
+        if (this.themeAnimatorDescriptions != null) {
+            for (int i = 0; i < this.themeAnimatorDescriptions.length; i++) {
+                int rE = Color.red(this.animateEndColors[i]);
+                int gE = Color.green(this.animateEndColors[i]);
+                int bE = Color.blue(this.animateEndColors[i]);
+                int aE = Color.alpha(this.animateEndColors[i]);
+                int rS = Color.red(this.animateStartColors[i]);
+                int gS = Color.green(this.animateStartColors[i]);
+                int bS = Color.blue(this.animateStartColors[i]);
+                int aS = Color.alpha(this.animateStartColors[i]);
+                this.themeAnimatorDescriptions[i].setColor(Color.argb(Math.min(255, (int) (((float) aS) + (((float) (aE - aS)) * value))), Math.min(255, (int) (((float) rS) + (((float) (rE - rS)) * value))), Math.min(255, (int) (((float) gS) + (((float) (gE - gS)) * value))), Math.min(255, (int) (((float) bS) + (((float) (bE - bS)) * value)))), false, false);
+            }
+            if (this.themeAnimatorDelegate != null) {
+                this.themeAnimatorDelegate.didSetColor();
+            }
+        }
+    }
+
+    @Keep
+    public float getThemeAnimationValue() {
+        return this.themeAnimationValue;
+    }
+
+    public void animateThemedValues(ThemeInfo theme) {
+        if (this.transitionAnimationInProgress || this.startedTracking) {
+            this.animateThemeAfterAnimation = true;
+            this.animateSetThemeAfterAnimation = theme;
+            return;
+        }
+        if (this.themeAnimatorSet != null) {
+            this.themeAnimatorSet.cancel();
+            this.themeAnimatorSet = null;
+        }
+        BaseFragment fragment = getLastFragment();
+        if (fragment != null) {
+            int a;
+            this.themeAnimatorDescriptions = fragment.getThemeDescriptions();
+            this.animateStartColors = new int[this.themeAnimatorDescriptions.length];
+            for (a = 0; a < this.themeAnimatorDescriptions.length; a++) {
+                this.animateStartColors[a] = this.themeAnimatorDescriptions[a].getSetColor();
+                ThemeDescriptionDelegate delegate = this.themeAnimatorDescriptions[a].setDelegateDisabled();
+                if (this.themeAnimatorDelegate == null && delegate != null) {
+                    this.themeAnimatorDelegate = delegate;
+                }
+            }
+            Theme.applyTheme(theme, true);
+            this.animateEndColors = new int[this.themeAnimatorDescriptions.length];
+            for (a = 0; a < this.themeAnimatorDescriptions.length; a++) {
+                this.animateEndColors[a] = this.themeAnimatorDescriptions[a].getSetColor();
+            }
+            this.themeAnimatorSet = new AnimatorSet();
+            this.themeAnimatorSet.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    if (animation.equals(ActionBarLayout.this.themeAnimatorSet)) {
+                        ActionBarLayout.this.themeAnimatorDescriptions = null;
+                        ActionBarLayout.this.themeAnimatorDelegate = null;
+                        ActionBarLayout.this.themeAnimatorSet = null;
+                        ActionBarLayout.this.animateStartColors = null;
+                        ActionBarLayout.this.animateEndColors = null;
+                    }
+                }
+
+                public void onAnimationCancel(Animator animation) {
+                    if (animation.equals(ActionBarLayout.this.themeAnimatorSet)) {
+                        ActionBarLayout.this.themeAnimatorDescriptions = null;
+                        ActionBarLayout.this.themeAnimatorSet = null;
+                        ActionBarLayout.this.animateStartColors = null;
+                        ActionBarLayout.this.animateEndColors = null;
+                    }
+                }
+            });
+            this.themeAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "themeAnimationValue", new float[]{0.0f, 1.0f})});
+            this.themeAnimatorSet.setDuration(200);
+            this.themeAnimatorSet.start();
+            for (a = 0; a < this.fragmentsStack.size() - 1; a++) {
+                fragment = (BaseFragment) this.fragmentsStack.get(a);
+                fragment.clearViews();
+                fragment.setParentLayout(this);
+            }
+        }
+    }
+
     public void rebuildAllFragmentViews(boolean last, boolean showLastAfter) {
         if (this.transitionAnimationInProgress || this.startedTracking) {
             this.rebuildAfterAnimation = true;
@@ -1081,6 +1184,10 @@ public class ActionBarLayout extends FrameLayout {
         if (this.rebuildAfterAnimation) {
             rebuildAllFragmentViews(this.rebuildLastAfterAnimation, this.showLastAfterAnimation);
             this.rebuildAfterAnimation = false;
+        } else if (this.animateThemeAfterAnimation) {
+            animateThemedValues(this.animateSetThemeAfterAnimation);
+            this.animateSetThemeAfterAnimation = null;
+            this.animateThemeAfterAnimation = false;
         }
     }
 

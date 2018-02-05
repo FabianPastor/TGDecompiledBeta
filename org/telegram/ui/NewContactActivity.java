@@ -662,7 +662,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
-            public void didSetColor(int color) {
+            public void didSetColor() {
                 if (NewContactActivity.this.avatarImage != null) {
                     NewContactActivity.this.avatarDrawable.setInfo(5, NewContactActivity.this.firstNameField.getText().toString(), NewContactActivity.this.lastNameField.getText().toString(), false);
                     NewContactActivity.this.avatarImage.invalidate();

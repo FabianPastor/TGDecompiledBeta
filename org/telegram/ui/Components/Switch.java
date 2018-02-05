@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.Region.Op;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
+import android.support.annotation.Keep;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
@@ -323,6 +324,7 @@ public class Switch extends CompoundButton {
         return this.thumbPosition > 0.5f;
     }
 
+    @Keep
     private void setThumbPosition(float position) {
         this.thumbPosition = position;
         invalidate();

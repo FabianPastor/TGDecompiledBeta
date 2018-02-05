@@ -14,7 +14,7 @@ import org.telegram.messenger.exoplayer2.source.MediaSource.MediaPeriodId;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
-public final class ClippingMediaSource implements MediaSource, Listener {
+public final class ClippingMediaSource extends CompositeMediaSource<Void> {
     private IllegalClippingException clippingError;
     private final boolean enableInitialDiscontinuity;
     private final long endUs;
@@ -121,22 +121,16 @@ public final class ClippingMediaSource implements MediaSource, Listener {
     }
 
     public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
-        boolean z;
-        if (this.sourceListener == null) {
-            z = true;
-        } else {
-            z = false;
-        }
-        Assertions.checkState(z, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+        super.prepareSource(player, isTopLevelSource, listener);
         this.sourceListener = listener;
-        this.mediaSource.prepareSource(player, false, this);
+        prepareChildSource(null, this.mediaSource);
     }
 
     public void maybeThrowSourceInfoRefreshError() throws IOException {
         if (this.clippingError != null) {
             throw this.clippingError;
         }
-        this.mediaSource.maybeThrowSourceInfoRefreshError();
+        super.maybeThrowSourceInfoRefreshError();
     }
 
     public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
@@ -152,10 +146,12 @@ public final class ClippingMediaSource implements MediaSource, Listener {
     }
 
     public void releaseSource() {
-        this.mediaSource.releaseSource();
+        super.releaseSource();
+        this.clippingError = null;
+        this.sourceListener = null;
     }
 
-    public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
+    protected void onChildSourceInfoRefreshed(Void id, MediaSource mediaSource, Timeline timeline, Object manifest) {
         if (this.clippingError == null) {
             try {
                 this.sourceListener.onSourceInfoRefreshed(this, new ClippingTimeline(timeline, this.startUs, this.endUs), manifest);

@@ -16,6 +16,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Build.VERSION;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -138,6 +139,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private int[] location = new int[2];
     private TextView mediaBanTooltip;
     private int minusDy;
+    private TextView noRecentTextView;
     private int oldWidth;
     private Object outlineProvider;
     private ViewPager pager;
@@ -150,6 +152,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private ArrayList<Document> recentStickers = new ArrayList();
     private int recentTabBum = -2;
     private LongSparseArray<StickerSetCovered> removingStickerSets = new LongSparseArray();
+    private View shadowLine;
     private boolean showGifs;
     private StickerPreviewViewerDelegate stickerPreviewViewerDelegate = new StickerPreviewViewerDelegate() {
         public void sentSticker(Document sticker) {
@@ -163,6 +166,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
     };
     private ArrayList<TL_messages_stickerSet> stickerSets = new ArrayList();
+    private Drawable stickersDrawable;
     private TextView stickersEmptyView;
     private StickersGridAdapter stickersGridAdapter;
     private RecyclerListView stickersGridView;
@@ -1268,8 +1272,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     public EmojiView(boolean needStickers, boolean needGif, Context context, ChatFull chatFull) {
         FrameLayout frameLayout;
         super(context);
-        Drawable stickersDrawable = context.getResources().getDrawable(R.drawable.ic_smiles2_stickers);
-        Theme.setDrawableColorByKey(stickersDrawable, Theme.key_chat_emojiPanelIcon);
+        this.stickersDrawable = context.getResources().getDrawable(R.drawable.ic_smiles2_stickers);
+        Theme.setDrawableColorByKey(this.stickersDrawable, Theme.key_chat_emojiPanelIcon);
         Drawable[] drawableArr = new Drawable[7];
         drawableArr[0] = Theme.createEmojiIconSelectorDrawable(context, R.drawable.ic_smiles2_recent, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected));
         drawableArr[1] = Theme.createEmojiIconSelectorDrawable(context, R.drawable.ic_smiles2_smile, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected));
@@ -1277,7 +1281,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         drawableArr[3] = Theme.createEmojiIconSelectorDrawable(context, R.drawable.ic_smiles2_food, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected));
         drawableArr[4] = Theme.createEmojiIconSelectorDrawable(context, R.drawable.ic_smiles2_car, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected));
         drawableArr[5] = Theme.createEmojiIconSelectorDrawable(context, R.drawable.ic_smiles2_objects, Theme.getColor(Theme.key_chat_emojiPanelIcon), Theme.getColor(Theme.key_chat_emojiPanelIconSelected));
-        drawableArr[6] = stickersDrawable;
+        drawableArr[6] = this.stickersDrawable;
         this.icons = drawableArr;
         this.showGifs = needGif;
         this.info = chatFull;
@@ -1727,7 +1731,6 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 return super.onInterceptTouchEvent(ev);
             }
         };
-        EmojiView emojiView = this;
         this.pager.setAdapter(new EmojiPagesAdapter());
         this.emojiTab = new LinearLayout(context) {
             public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -1781,18 +1784,18 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         this.backspaceButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_emojiPanelBackspace), Mode.MULTIPLY));
         this.backspaceButton.setScaleType(ScaleType.CENTER);
         frameLayout.addView(this.backspaceButton, LayoutHelper.createFrame(52, 48.0f));
-        View view = new View(context);
-        view.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelShadowLine));
-        frameLayout.addView(view, LayoutHelper.createFrame(52, 1, 83));
-        TextView textView = new TextView(context);
-        textView.setText(LocaleController.getString("NoRecent", R.string.NoRecent));
-        textView.setTextSize(1, 18.0f);
-        textView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelEmptyText));
-        textView.setGravity(17);
-        textView.setClickable(false);
-        textView.setFocusable(false);
-        ((FrameLayout) this.views.get(0)).addView(textView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 48.0f, 0.0f, 0.0f));
-        ((GridView) this.emojiGrids.get(0)).setEmptyView(textView);
+        this.shadowLine = new View(context);
+        this.shadowLine.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelShadowLine));
+        frameLayout.addView(this.shadowLine, LayoutHelper.createFrame(52, 1, 83));
+        this.noRecentTextView = new TextView(context);
+        this.noRecentTextView.setText(LocaleController.getString("NoRecent", R.string.NoRecent));
+        this.noRecentTextView.setTextSize(1, 18.0f);
+        this.noRecentTextView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelEmptyText));
+        this.noRecentTextView.setGravity(17);
+        this.noRecentTextView.setClickable(false);
+        this.noRecentTextView.setFocusable(false);
+        ((FrameLayout) this.views.get(0)).addView(this.noRecentTextView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 48.0f, 0.0f, 0.0f));
+        ((GridView) this.emojiGrids.get(0)).setEmptyView(this.noRecentTextView);
         addView(this.pager, 0, LayoutHelper.createFrame(-1, -1, 51));
         this.mediaBanTooltip = new CorrectlyMeasuringTextView(context);
         this.mediaBanTooltip.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), Theme.getColor(Theme.key_chat_gifSaveHintBackground)));
@@ -1804,12 +1807,12 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         addView(this.mediaBanTooltip, LayoutHelper.createFrame(-2, -2.0f, 53, 30.0f, 53.0f, 5.0f, 0.0f));
         this.emojiSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
         this.pickerView = new EmojiColorPickerView(context);
-        View view2 = this.pickerView;
+        View view = this.pickerView;
         int dp = AndroidUtilities.dp((float) ((((AndroidUtilities.isTablet() ? 40 : 32) * 6) + 10) + 20));
         this.popupWidth = dp;
         int dp2 = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 64.0f : 56.0f);
         this.popupHeight = dp2;
-        this.pickerViewPopup = new EmojiPopupWindow(view2, dp, dp2);
+        this.pickerViewPopup = new EmojiPopupWindow(view, dp, dp2);
         this.pickerViewPopup.setOutsideTouchable(true);
         this.pickerViewPopup.setClippingEnabled(true);
         this.pickerViewPopup.setInputMethodMode(2);
@@ -2171,6 +2174,54 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     public void requestLayout() {
         if (!this.isLayout) {
             super.requestLayout();
+        }
+    }
+
+    public void updateUIColors() {
+        if (AndroidUtilities.isInMultiwindow) {
+            getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_emojiPanelBackground), Mode.MULTIPLY));
+        } else {
+            setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+            this.emojiTab.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+        }
+        if (this.dotPaint != null) {
+            this.dotPaint.setColor(Theme.getColor(Theme.key_chat_emojiPanelNewTrending));
+        }
+        if (this.stickersGridView != null) {
+            this.stickersGridView.setGlowColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+        }
+        if (this.trendingGridView != null) {
+            this.trendingGridView.setGlowColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+        }
+        if (this.stickersEmptyView != null) {
+            this.stickersEmptyView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelEmptyText));
+        }
+        if (this.stickersTab != null) {
+            this.stickersTab.setIndicatorColor(Theme.getColor(Theme.key_chat_emojiPanelStickerPackSelector));
+            this.stickersTab.setUnderlineColor(Theme.getColor(Theme.key_chat_emojiPanelStickerPackSelector));
+            this.stickersTab.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
+        }
+        if (this.pagerSlidingTabStrip != null) {
+            this.pagerSlidingTabStrip.setIndicatorColor(Theme.getColor(Theme.key_chat_emojiPanelIconSelector));
+            this.pagerSlidingTabStrip.setUnderlineColor(Theme.getColor(Theme.key_chat_emojiPanelShadowLine));
+        }
+        if (this.backspaceButton != null) {
+            this.backspaceButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_emojiPanelBackspace), Mode.MULTIPLY));
+        }
+        if (this.shadowLine != null) {
+            this.shadowLine.setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelShadowLine));
+        }
+        if (this.noRecentTextView != null) {
+            this.noRecentTextView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelEmptyText));
+        }
+        if (this.mediaBanTooltip != null) {
+            ((ShapeDrawable) this.mediaBanTooltip.getBackground()).getPaint().setColor(Theme.getColor(Theme.key_chat_gifSaveHintBackground));
+            this.mediaBanTooltip.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
+        }
+        Theme.setDrawableColorByKey(this.stickersDrawable, Theme.key_chat_emojiPanelIcon);
+        for (int a = 0; a < this.icons.length - 1; a++) {
+            Theme.setEmojiDrawableColor(this.icons[a], Theme.getColor(Theme.key_chat_emojiPanelIcon), false);
+            Theme.setEmojiDrawableColor(this.icons[a], Theme.getColor(Theme.key_chat_emojiPanelIconSelected), true);
         }
     }
 

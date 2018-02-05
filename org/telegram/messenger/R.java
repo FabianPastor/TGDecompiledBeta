@@ -209,6 +209,8 @@ public final class R {
         public static final int bot_music = NUM;
         public static final int bottom_shadow = NUM;
         public static final int boxshadow = NUM;
+        public static final int brightness_high = NUM;
+        public static final int brightness_low = NUM;
         public static final int broadcast3 = NUM;
         public static final int broadcast_w = NUM;
         public static final int btnshadow = NUM;
@@ -974,6 +976,19 @@ public final class R {
         public static final int AutoLockDisabled = NUM;
         public static final int AutoLockInTime = NUM;
         public static final int AutoLockInfo = NUM;
+        public static final int AutoNightAutomatic = NUM;
+        public static final int AutoNightBrightness = NUM;
+        public static final int AutoNightBrightnessInfo = NUM;
+        public static final int AutoNightDisabled = NUM;
+        public static final int AutoNightFrom = NUM;
+        public static final int AutoNightLocation = NUM;
+        public static final int AutoNightPreffered = NUM;
+        public static final int AutoNightSchedule = NUM;
+        public static final int AutoNightScheduled = NUM;
+        public static final int AutoNightTheme = NUM;
+        public static final int AutoNightTo = NUM;
+        public static final int AutoNightUpdateLocation = NUM;
+        public static final int AutoNightUpdateLocationInfo = NUM;
         public static final int AutodownloadChannels = NUM;
         public static final int AutodownloadContacts = NUM;
         public static final int AutodownloadGroupChats = NUM;
@@ -1327,6 +1342,8 @@ public final class R {
         public static final int EmojiBigSize = NUM;
         public static final int EmojiUseDefault = NUM;
         public static final int EmpryUsersPlaceholder = NUM;
+        public static final int EnableAllStreaming = NUM;
+        public static final int EnableAllStreamingInfo = NUM;
         public static final int EnableAnimations = NUM;
         public static final int EnableProxyAlert = NUM;
         public static final int EnableProxyAlert2 = NUM;
@@ -1895,6 +1912,7 @@ public final class R {
         public static final int NotificationsCustom = NUM;
         public static final int NotificationsCustomize = NUM;
         public static final int NotificationsEnableCustom = NUM;
+        public static final int NotificationsImportance = NUM;
         public static final int NotificationsLed = NUM;
         public static final int NotificationsLedColor = NUM;
         public static final int NotificationsLedInfo = NUM;
@@ -1904,8 +1922,11 @@ public final class R {
         public static final int NotificationsPriority = NUM;
         public static final int NotificationsPriorityDefault = NUM;
         public static final int NotificationsPriorityHigh = NUM;
+        public static final int NotificationsPriorityLow = NUM;
         public static final int NotificationsPriorityMax = NUM;
+        public static final int NotificationsPriorityMedium = NUM;
         public static final int NotificationsPrioritySettings = NUM;
+        public static final int NotificationsPriorityUrgent = NUM;
         public static final int NotificationsService = NUM;
         public static final int NotificationsServiceConnection = NUM;
         public static final int NotificationsServiceConnectionInfo = NUM;
@@ -2193,6 +2214,7 @@ public final class R {
         public static final int Seconds_zero = NUM;
         public static final int SecretChat = NUM;
         public static final int SecretChatContextBotAlert = NUM;
+        public static final int SecretChatName = NUM;
         public static final int SecretLinkPreviewAlert = NUM;
         public static final int SecretWebPage = NUM;
         public static final int SecurityTitle = NUM;

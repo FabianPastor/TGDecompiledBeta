@@ -1245,7 +1245,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
-            public void didSetColor(int color) {
+            public void didSetColor() {
             }
         };
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[50];

@@ -2050,7 +2050,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
-            public void didSetColor(int color) {
+            public void didSetColor() {
                 int count = MediaActivity.this.listView.getChildCount();
                 for (int a = 0; a < count; a++) {
                     View child = MediaActivity.this.listView.getChildAt(a);

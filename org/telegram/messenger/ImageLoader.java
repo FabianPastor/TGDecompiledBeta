@@ -33,7 +33,6 @@ import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -770,10 +769,7 @@ public class ImageLoader {
     }
 
     public ImageLoader() {
-        this.cacheOutQueue.setPriority(1);
-        this.cacheThumbOutQueue.setPriority(1);
         this.thumbGeneratingQueue.setPriority(1);
-        this.imageLoadQueue.setPriority(1);
         this.memCache = new LruCache((Math.min(15, ((ActivityManager) ApplicationLoader.applicationContext.getSystemService("activity")).getMemoryClass() / 7) * 1024) * 1024) {
             protected int sizeOf(String key, BitmapDrawable value) {
                 return value.getBitmap().getByteCount();
@@ -2057,13 +2053,14 @@ public class ImageLoader {
     }
 
     public static void saveMessageThumbs(Message message) {
+        int count;
+        int a;
         TLObject photoSize = null;
-        Iterator it;
         TLObject size;
         if (message.media instanceof TL_messageMediaPhoto) {
-            it = message.media.photo.sizes.iterator();
-            while (it.hasNext()) {
-                size = (PhotoSize) it.next();
+            count = message.media.photo.sizes.size();
+            for (a = 0; a < count; a++) {
+                size = (PhotoSize) message.media.photo.sizes.get(a);
                 if (size instanceof TL_photoCachedSize) {
                     photoSize = size;
                     break;
@@ -2074,9 +2071,9 @@ public class ImageLoader {
                 photoSize = message.media.document.thumb;
             }
         } else if ((message.media instanceof TL_messageMediaWebPage) && message.media.webpage.photo != null) {
-            it = message.media.webpage.photo.sizes.iterator();
-            while (it.hasNext()) {
-                size = (PhotoSize) it.next();
+            count = message.media.webpage.photo.sizes.size();
+            for (a = 0; a < count; a++) {
+                size = (PhotoSize) message.media.webpage.photo.sizes.get(a);
                 if (size instanceof TL_photoCachedSize) {
                     photoSize = size;
                     break;
@@ -2122,15 +2119,15 @@ public class ImageLoader {
                 randomAccessFile.write(photoSize.bytes);
                 randomAccessFile.close();
             }
-            TL_photoSize newPhotoSize = new TL_photoSize();
+            PhotoSize newPhotoSize = new TL_photoSize();
             newPhotoSize.w = photoSize.w;
             newPhotoSize.h = photoSize.h;
             newPhotoSize.location = photoSize.location;
             newPhotoSize.size = photoSize.size;
             newPhotoSize.type = photoSize.type;
-            int a;
             if (message.media instanceof TL_messageMediaPhoto) {
-                for (a = 0; a < message.media.photo.sizes.size(); a++) {
+                count = message.media.photo.sizes.size();
+                for (a = 0; a < count; a++) {
                     if (message.media.photo.sizes.get(a) instanceof TL_photoCachedSize) {
                         message.media.photo.sizes.set(a, newPhotoSize);
                         return;
@@ -2139,7 +2136,8 @@ public class ImageLoader {
             } else if (message.media instanceof TL_messageMediaDocument) {
                 message.media.document.thumb = newPhotoSize;
             } else if (message.media instanceof TL_messageMediaWebPage) {
-                for (a = 0; a < message.media.webpage.photo.sizes.size(); a++) {
+                count = message.media.webpage.photo.sizes.size();
+                for (a = 0; a < count; a++) {
                     if (message.media.webpage.photo.sizes.get(a) instanceof TL_photoCachedSize) {
                         message.media.webpage.photo.sizes.set(a, newPhotoSize);
                         return;

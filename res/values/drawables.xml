@@ -233,6 +233,14 @@
     <drawable name="boxshadow">res/drawable-hdpi-v4/boxshadow.9.png</drawable>
     <drawable name="boxshadow">res/drawable-xhdpi-v4/boxshadow.9.png</drawable>
     <drawable name="boxshadow">res/drawable-xxhdpi-v4/boxshadow.9.png</drawable>
+    <drawable name="brightness_high">res/drawable-mdpi-v4/brightness_high.png</drawable>
+    <drawable name="brightness_high">res/drawable-hdpi-v4/brightness_high.png</drawable>
+    <drawable name="brightness_high">res/drawable-xhdpi-v4/brightness_high.png</drawable>
+    <drawable name="brightness_high">res/drawable-xxhdpi-v4/brightness_high.png</drawable>
+    <drawable name="brightness_low">res/drawable-mdpi-v4/brightness_low.png</drawable>
+    <drawable name="brightness_low">res/drawable-hdpi-v4/brightness_low.png</drawable>
+    <drawable name="brightness_low">res/drawable-xhdpi-v4/brightness_low.png</drawable>
+    <drawable name="brightness_low">res/drawable-xxhdpi-v4/brightness_low.png</drawable>
     <drawable name="broadcast3">res/drawable-mdpi-v4/broadcast3.png</drawable>
     <drawable name="broadcast3">res/drawable-hdpi-v4/broadcast3.png</drawable>
     <drawable name="broadcast3">res/drawable-xhdpi-v4/broadcast3.png</drawable>

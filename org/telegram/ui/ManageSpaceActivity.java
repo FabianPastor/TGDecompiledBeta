@@ -46,6 +46,7 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         if (resourceId > 0) {
             AndroidUtilities.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
+        Theme.createDialogsResources(this);
         this.actionBarLayout = new ActionBarLayout(this);
         this.drawerLayoutContainer = new DrawerLayoutContainer(this);
         this.drawerLayoutContainer.setAllowOpenDrawer(false, false);

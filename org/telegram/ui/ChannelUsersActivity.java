@@ -1610,7 +1610,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
-            public void didSetColor(int color) {
+            public void didSetColor() {
                 int count = ChannelUsersActivity.this.listView.getChildCount();
                 for (int a = 0; a < count; a++) {
                     View child = ChannelUsersActivity.this.listView.getChildAt(a);

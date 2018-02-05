@@ -9,6 +9,7 @@ import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.upstream.TransferListener;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
+import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeFilename;
@@ -17,7 +18,9 @@ import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
 public class FileStreamLoadOperation implements DataSource {
     private long bytesRemaining;
     private CountDownLatch countDownLatch;
+    private int currentAccount;
     private int currentOffset;
+    private Document document;
     private RandomAccessFile file;
     private final TransferListener<? super FileStreamLoadOperation> listener;
     private FileLoadOperation loadOperation;
@@ -34,26 +37,27 @@ public class FileStreamLoadOperation implements DataSource {
 
     public long open(DataSpec dataSpec) throws IOException {
         this.uri = dataSpec.uri;
-        int currentAccount = Utilities.parseInt(this.uri.getQueryParameter("account")).intValue();
-        TL_document document = new TL_document();
-        document.access_hash = Utilities.parseLong(this.uri.getQueryParameter("hash")).longValue();
-        document.id = Utilities.parseLong(this.uri.getQueryParameter(TtmlNode.ATTR_ID)).longValue();
-        document.size = Utilities.parseInt(this.uri.getQueryParameter("size")).intValue();
-        document.dc_id = Utilities.parseInt(this.uri.getQueryParameter("dc")).intValue();
-        document.mime_type = this.uri.getQueryParameter("mime");
+        this.currentAccount = Utilities.parseInt(this.uri.getQueryParameter("account")).intValue();
+        this.document = new TL_document();
+        this.document.access_hash = Utilities.parseLong(this.uri.getQueryParameter("hash")).longValue();
+        this.document.id = Utilities.parseLong(this.uri.getQueryParameter(TtmlNode.ATTR_ID)).longValue();
+        this.document.size = Utilities.parseInt(this.uri.getQueryParameter("size")).intValue();
+        this.document.dc_id = Utilities.parseInt(this.uri.getQueryParameter("dc")).intValue();
+        this.document.mime_type = this.uri.getQueryParameter("mime");
         TL_documentAttributeFilename filename = new TL_documentAttributeFilename();
         filename.file_name = this.uri.getQueryParameter("name");
-        document.attributes.add(filename);
-        if (document.mime_type.startsWith(MimeTypes.BASE_TYPE_VIDEO)) {
-            document.attributes.add(new TL_documentAttributeVideo());
-        } else if (document.mime_type.startsWith(MimeTypes.BASE_TYPE_AUDIO)) {
-            document.attributes.add(new TL_documentAttributeAudio());
+        this.document.attributes.add(filename);
+        if (this.document.mime_type.startsWith(MimeTypes.BASE_TYPE_VIDEO)) {
+            this.document.attributes.add(new TL_documentAttributeVideo());
+        } else if (this.document.mime_type.startsWith(MimeTypes.BASE_TYPE_AUDIO)) {
+            this.document.attributes.add(new TL_documentAttributeAudio());
         }
-        FileLoader instance = FileLoader.getInstance(currentAccount);
+        FileLoader instance = FileLoader.getInstance(this.currentAccount);
+        Document document = this.document;
         int i = (int) dataSpec.position;
         this.currentOffset = i;
         this.loadOperation = instance.loadStreamFile(this, document, i);
-        this.bytesRemaining = dataSpec.length == -1 ? ((long) document.size) - dataSpec.position : dataSpec.length;
+        this.bytesRemaining = dataSpec.length == -1 ? ((long) this.document.size) - dataSpec.position : dataSpec.length;
         if (this.bytesRemaining < 0) {
             throw new EOFException();
         }
@@ -81,6 +85,9 @@ public class FileStreamLoadOperation implements DataSource {
             while (availableLength == 0) {
                 availableLength = this.loadOperation.getDownloadedLengthFromOffset(this.currentOffset, readLength);
                 if (availableLength == 0) {
+                    if (this.loadOperation.isPaused()) {
+                        FileLoader.getInstance(this.currentAccount).loadStreamFile(this, this.document, this.currentOffset);
+                    }
                     this.countDownLatch = new CountDownLatch(1);
                     this.countDownLatch.await();
                 }

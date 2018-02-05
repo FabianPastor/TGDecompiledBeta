@@ -552,9 +552,9 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
-            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
+                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -2027,7 +2027,11 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 String id;
                 if (originalUrl != null) {
                     try {
-                        String t = Uri.parse(originalUrl).getQueryParameter("t");
+                        Uri uri = Uri.parse(originalUrl);
+                        String t = uri.getQueryParameter("t");
+                        if (t == null) {
+                            t = uri.getQueryParameter("time_continue");
+                        }
                         if (t != null) {
                             if (t.contains("m")) {
                                 String[] args = t.split("m");

@@ -262,6 +262,8 @@ public class ProfileSearchCell extends BaseCell {
             } else if (this.user != null) {
                 if (this.user.bot) {
                     onlineString = LocaleController.getString("Bot", R.string.Bot);
+                } else if (this.user.id == 333000 || this.user.id == 777000) {
+                    onlineString = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
                 } else {
                     onlineString = LocaleController.formatUserStatus(this.currentAccount, this.user);
                     if (this.user != null && (this.user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || (this.user.status != null && this.user.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()))) {

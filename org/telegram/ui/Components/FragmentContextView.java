@@ -293,7 +293,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             this.currentStyle = style;
             if (style == 0 || style == 2) {
                 this.frameLayout.setBackgroundColor(Theme.getColor(Theme.key_inappPlayerBackground));
+                this.frameLayout.setTag(Theme.key_inappPlayerBackground);
                 this.titleTextView.setTextColor(Theme.getColor(Theme.key_inappPlayerTitle));
+                this.titleTextView.setTag(Theme.key_inappPlayerTitle);
                 this.closeButton.setVisibility(0);
                 this.playButton.setVisibility(0);
                 this.titleTextView.setTypeface(Typeface.DEFAULT);
@@ -309,7 +311,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             } else if (style == 1) {
                 this.titleTextView.setText(LocaleController.getString("ReturnToCall", R.string.ReturnToCall));
                 this.frameLayout.setBackgroundColor(Theme.getColor(Theme.key_returnToCallBackground));
+                this.frameLayout.setTag(Theme.key_returnToCallBackground);
                 this.titleTextView.setTextColor(Theme.getColor(Theme.key_returnToCallText));
+                this.titleTextView.setTag(Theme.key_returnToCallText);
                 this.closeButton.setVisibility(8);
                 this.playButton.setVisibility(8);
                 this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));

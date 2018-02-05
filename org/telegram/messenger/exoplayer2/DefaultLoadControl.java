@@ -77,28 +77,25 @@ public class DefaultLoadControl implements LoadControl {
         return false;
     }
 
-    public boolean shouldContinueLoading(boolean canStartPlayback, long bufferedDurationUs, float playbackSpeed) {
+    public boolean shouldContinueLoading(long bufferedDurationUs, float playbackSpeed) {
         boolean targetBufferSizeReached;
+        boolean z = true;
         if (this.allocator.getTotalBytesAllocated() >= this.targetBufferSize) {
             targetBufferSizeReached = true;
         } else {
             targetBufferSizeReached = false;
         }
         boolean wasBuffering = this.isBuffering;
-        boolean z;
         if (this.prioritizeTimeOverSizeThresholds) {
-            if (bufferedDurationUs < this.minBufferUs || (bufferedDurationUs <= this.maxBufferUs && this.isBuffering && !targetBufferSizeReached)) {
-                z = true;
-            } else {
+            if (bufferedDurationUs >= this.minBufferUs && (bufferedDurationUs > this.maxBufferUs || !this.isBuffering || targetBufferSizeReached)) {
                 z = false;
             }
             this.isBuffering = z;
         } else {
-            z = !targetBufferSizeReached && (bufferedDurationUs < this.minBufferUs || (bufferedDurationUs <= this.maxBufferUs && this.isBuffering));
+            if (targetBufferSizeReached || (bufferedDurationUs >= this.minBufferUs && (bufferedDurationUs > this.maxBufferUs || !this.isBuffering))) {
+                z = false;
+            }
             this.isBuffering = z;
-        }
-        if (!(this.isBuffering || canStartPlayback || targetBufferSizeReached)) {
-            this.isBuffering = true;
         }
         if (!(this.priorityTaskManager == null || this.isBuffering == wasBuffering)) {
             if (this.isBuffering) {

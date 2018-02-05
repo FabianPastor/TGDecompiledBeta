@@ -885,6 +885,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     FileLog.e(e);
                 }
             }
+            String fileName = currentPlayingMessageObject.getFileName();
             this.progressTimer = new Timer();
             this.progressTimer.schedule(new TimerTask() {
                 public void run() {
@@ -903,20 +904,29 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                         long progress;
                                         float bufferedValue;
                                         float value;
+                                        long duration;
                                         if (MediaController.this.videoPlayer != null) {
-                                            float duration = (float) MediaController.this.videoPlayer.getDuration();
+                                            duration = MediaController.this.videoPlayer.getDuration();
                                             progress = MediaController.this.videoPlayer.getCurrentPosition();
-                                            bufferedValue = ((float) MediaController.this.videoPlayer.getBufferedPosition()) / duration;
-                                            value = ((float) MediaController.this.lastProgress) / duration;
+                                            bufferedValue = ((float) MediaController.this.videoPlayer.getBufferedPosition()) / ((float) duration);
+                                            if (duration >= 0) {
+                                                value = ((float) progress) / ((float) duration);
+                                            } else {
+                                                value = 0.0f;
+                                            }
                                             if (progress < 0 || value >= MediaController.VOLUME_NORMAL) {
                                                 return;
                                             }
                                         } else if (MediaController.this.audioPlayer != null) {
-                                            long duration2 = MediaController.this.audioPlayer.getDuration();
+                                            duration = MediaController.this.audioPlayer.getDuration();
                                             progress = MediaController.this.audioPlayer.getCurrentPosition();
-                                            bufferedValue = ((float) MediaController.this.audioPlayer.getBufferedPosition()) / ((float) duration2);
-                                            value = ((float) MediaController.this.lastProgress) / ((float) duration2);
-                                            if (duration2 != C.TIME_UNSET && progress >= 0) {
+                                            if (duration == C.TIME_UNSET || duration < 0) {
+                                                value = 0.0f;
+                                            } else {
+                                                value = ((float) progress) / ((float) duration);
+                                            }
+                                            bufferedValue = ((float) MediaController.this.audioPlayer.getBufferedPosition()) / ((float) duration);
+                                            if (duration != C.TIME_UNSET && progress >= 0) {
                                                 if (MediaController.this.seekToProgressPending != 0.0f) {
                                                     return;
                                                 }
@@ -3427,7 +3437,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
-                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3456,7 +3465,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                } catch (Throwable e2) {
+                } catch (Throwable e) {
+                    Throwable e2;
                     FileLog.e(e2);
                 }
                 Integer num = null;

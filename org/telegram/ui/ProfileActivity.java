@@ -2993,7 +2993,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
-            public void didSetColor(int color) {
+            public void didSetColor() {
                 int count = ProfileActivity.this.listView.getChildCount();
                 for (int a = 0; a < count; a++) {
                     View child = ProfileActivity.this.listView.getChildAt(a);

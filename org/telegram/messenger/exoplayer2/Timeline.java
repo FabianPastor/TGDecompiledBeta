@@ -1,6 +1,8 @@
 package org.telegram.messenger.exoplayer2;
 
 import android.util.Pair;
+import org.telegram.messenger.exoplayer2.source.ads.AdPlaybackState;
+import org.telegram.messenger.exoplayer2.source.ads.AdPlaybackState.AdGroup;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 public abstract class Timeline {
@@ -27,12 +29,7 @@ public abstract class Timeline {
     };
 
     public static final class Period {
-        private int[] adCounts;
-        private long[][] adDurationsUs;
-        private long[] adGroupTimesUs;
-        private long adResumePositionUs;
-        private int[] adsLoadedCounts;
-        private int[] adsPlayedCounts;
+        private AdPlaybackState adPlaybackState;
         public long durationUs;
         public Object id;
         private long positionInWindowUs;
@@ -40,21 +37,16 @@ public abstract class Timeline {
         public int windowIndex;
 
         public Period set(Object id, Object uid, int windowIndex, long durationUs, long positionInWindowUs) {
-            return set(id, uid, windowIndex, durationUs, positionInWindowUs, null, null, null, null, (long[][]) null, C.TIME_UNSET);
+            return set(id, uid, windowIndex, durationUs, positionInWindowUs, AdPlaybackState.NONE);
         }
 
-        public Period set(Object id, Object uid, int windowIndex, long durationUs, long positionInWindowUs, long[] adGroupTimesUs, int[] adCounts, int[] adsLoadedCounts, int[] adsPlayedCounts, long[][] adDurationsUs, long adResumePositionUs) {
+        public Period set(Object id, Object uid, int windowIndex, long durationUs, long positionInWindowUs, AdPlaybackState adPlaybackState) {
             this.id = id;
             this.uid = uid;
             this.windowIndex = windowIndex;
             this.durationUs = durationUs;
             this.positionInWindowUs = positionInWindowUs;
-            this.adGroupTimesUs = adGroupTimesUs;
-            this.adCounts = adCounts;
-            this.adsLoadedCounts = adsLoadedCounts;
-            this.adsPlayedCounts = adsPlayedCounts;
-            this.adDurationsUs = adDurationsUs;
-            this.adResumePositionUs = adResumePositionUs;
+            this.adPlaybackState = adPlaybackState;
             return this;
         }
 
@@ -75,27 +67,29 @@ public abstract class Timeline {
         }
 
         public int getAdGroupCount() {
-            return this.adGroupTimesUs == null ? 0 : this.adGroupTimesUs.length;
+            return this.adPlaybackState.adGroupCount;
         }
 
         public long getAdGroupTimeUs(int adGroupIndex) {
-            return this.adGroupTimesUs[adGroupIndex];
+            return this.adPlaybackState.adGroupTimesUs[adGroupIndex];
         }
 
-        public int getPlayedAdCount(int adGroupIndex) {
-            return this.adsPlayedCounts[adGroupIndex];
+        public int getNextAdIndexToPlay(int adGroupIndex) {
+            return this.adPlaybackState.adGroups[adGroupIndex].nextAdIndexToPlay;
         }
 
         public boolean hasPlayedAdGroup(int adGroupIndex) {
-            return this.adCounts[adGroupIndex] != -1 && this.adsPlayedCounts[adGroupIndex] == this.adCounts[adGroupIndex];
+            AdGroup adGroup = this.adPlaybackState.adGroups[adGroupIndex];
+            return adGroup.nextAdIndexToPlay == adGroup.count;
         }
 
         public int getAdGroupIndexForPositionUs(long positionUs) {
-            if (this.adGroupTimesUs == null) {
+            long[] adGroupTimesUs = this.adPlaybackState.adGroupTimesUs;
+            if (adGroupTimesUs == null) {
                 return -1;
             }
-            int index = this.adGroupTimesUs.length - 1;
-            while (index >= 0 && (this.adGroupTimesUs[index] == Long.MIN_VALUE || this.adGroupTimesUs[index] > positionUs)) {
+            int index = adGroupTimesUs.length - 1;
+            while (index >= 0 && (adGroupTimesUs[index] == Long.MIN_VALUE || adGroupTimesUs[index] > positionUs)) {
                 index--;
             }
             if (index < 0 || hasPlayedAdGroup(index)) {
@@ -105,36 +99,35 @@ public abstract class Timeline {
         }
 
         public int getAdGroupIndexAfterPositionUs(long positionUs) {
-            if (this.adGroupTimesUs == null) {
+            long[] adGroupTimesUs = this.adPlaybackState.adGroupTimesUs;
+            if (adGroupTimesUs == null) {
                 return -1;
             }
             int index = 0;
-            while (index < this.adGroupTimesUs.length && this.adGroupTimesUs[index] != Long.MIN_VALUE && (positionUs >= this.adGroupTimesUs[index] || hasPlayedAdGroup(index))) {
+            while (index < adGroupTimesUs.length && adGroupTimesUs[index] != Long.MIN_VALUE && (positionUs >= adGroupTimesUs[index] || hasPlayedAdGroup(index))) {
                 index++;
             }
-            if (index >= this.adGroupTimesUs.length) {
+            if (index >= adGroupTimesUs.length) {
                 index = -1;
             }
             return index;
         }
 
         public int getAdCountInAdGroup(int adGroupIndex) {
-            return this.adCounts[adGroupIndex];
+            return this.adPlaybackState.adGroups[adGroupIndex].count;
         }
 
         public boolean isAdAvailable(int adGroupIndex, int adIndexInAdGroup) {
-            return adIndexInAdGroup < this.adsLoadedCounts[adGroupIndex];
+            AdGroup adGroup = this.adPlaybackState.adGroups[adGroupIndex];
+            return (adGroup.count == -1 || adGroup.states[adIndexInAdGroup] == 0) ? false : true;
         }
 
         public long getAdDurationUs(int adGroupIndex, int adIndexInAdGroup) {
-            if (adIndexInAdGroup >= this.adDurationsUs[adGroupIndex].length) {
-                return C.TIME_UNSET;
-            }
-            return this.adDurationsUs[adGroupIndex][adIndexInAdGroup];
+            return this.adPlaybackState.adGroups[adGroupIndex].durationsUs[adIndexInAdGroup];
         }
 
         public long getAdResumePositionUs() {
-            return this.adResumePositionUs;
+            return this.adPlaybackState.adResumePositionUs;
         }
     }
 
@@ -267,10 +260,6 @@ public abstract class Timeline {
         return getNextPeriodIndex(periodIndex, period, window, repeatMode, shuffleModeEnabled) == -1;
     }
 
-    public final Period getPeriod(int periodIndex, Period period) {
-        return getPeriod(periodIndex, period, false);
-    }
-
     public final Pair<Integer, Long> getPeriodPosition(Window window, Period period, int windowIndex, long windowPositionUs) {
         return getPeriodPosition(window, period, windowIndex, windowPositionUs, 0);
     }
@@ -293,5 +282,9 @@ public abstract class Timeline {
             periodDurationUs = getPeriod(periodIndex, period).getDurationUs();
         }
         return Pair.create(Integer.valueOf(periodIndex), Long.valueOf(periodPositionUs));
+    }
+
+    public final Period getPeriod(int periodIndex, Period period) {
+        return getPeriod(periodIndex, period, false);
     }
 }

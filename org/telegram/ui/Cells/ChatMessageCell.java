@@ -101,7 +101,7 @@ import org.telegram.tgnet.TLRPC.TL_pageFull;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.TL_photo;
-import org.telegram.tgnet.TLRPC.TL_photoSize;
+import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.TL_webDocument;
 import org.telegram.tgnet.TLRPC.TL_webPage;
@@ -1904,7 +1904,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             return 0;
         } else {
             int width;
-            boolean z = (this.documentAttach.mime_type != null && this.documentAttach.mime_type.toLowerCase().startsWith("image/")) || ((this.documentAttach.thumb instanceof TL_photoSize) && !(this.documentAttach.thumb.location instanceof TL_fileLocationUnavailable));
+            boolean z = (this.documentAttach.mime_type != null && this.documentAttach.mime_type.toLowerCase().startsWith("image/")) || !((this.documentAttach.thumb instanceof TL_photoSizeEmpty) || (this.documentAttach.thumb.location instanceof TL_fileLocationUnavailable));
             this.drawPhotoImage = z;
             if (!this.drawPhotoImage) {
                 maxWidth += AndroidUtilities.dp(30.0f);
@@ -2058,19 +2058,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
         int maxWidth;
-        int a;
         String str;
         int dp;
-        String description;
+        int linkPreviewMaxWidth;
         Photo photo;
-        TLObject document;
         int duration;
         boolean smallImage;
         TL_webDocument webDocument;
         TL_webDocument webDocument2;
+        int additinalWidth;
         int height;
+        int width;
         Throwable e;
-        int restLinesCount;
         int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
@@ -2082,7 +2081,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         PhotoSize photoSize2;
         int dp2;
         int durationWidth;
-        String fileName;
         int seconds;
         CharSequence str2;
         String price;
@@ -2106,9 +2104,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             groupChanged = newPosition != this.currentPosition;
         }
         if (messageChanged || dataChanged || groupChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
+            int a;
             int i;
-            int linkPreviewMaxWidth;
-            int width;
             float f;
             int timeWidthTotal;
             int widthForCaption;
@@ -2225,6 +2222,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.needNewVisiblePart = true;
             }
             int count;
+            String fileName;
             boolean autoDownload;
             float scale;
             boolean photoExist;
@@ -2365,9 +2363,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     String site_name;
                     String title;
                     String author;
+                    String description;
+                    TLObject document;
                     String type;
-                    int additinalWidth;
                     int restLines;
+                    int restLinesCount;
                     if (AndroidUtilities.isTablet()) {
                         if (this.isChat && messageObject.needDrawAvatar() && !this.currentMessageObject.isOut()) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(132.0f);
@@ -6554,7 +6554,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 this.photoImage.setImageCoords(x, this.photoImage.getImageY(), this.photoImage.getImageWidth(), this.photoImage.getImageHeight());
                 this.buttonX = (int) (((float) x) + (((float) (this.photoImage.getImageWidth() - AndroidUtilities.dp(48.0f))) / 2.0f));
-                this.buttonY = ((int) (((float) AndroidUtilities.dp(7.0f)) + (((float) (this.photoImage.getImageHeight() - AndroidUtilities.dp(48.0f))) / 2.0f))) + this.namesOffset;
+                this.buttonY = this.photoImage.getImageY() + ((this.photoImage.getImageHeight() - AndroidUtilities.dp(48.0f)) / 2);
                 this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + AndroidUtilities.dp(48.0f), this.buttonY + AndroidUtilities.dp(48.0f));
                 this.deleteProgressRect.set((float) (this.buttonX + AndroidUtilities.dp(3.0f)), (float) (this.buttonY + AndroidUtilities.dp(3.0f)), (float) (this.buttonX + AndroidUtilities.dp(45.0f)), (float) (this.buttonY + AndroidUtilities.dp(45.0f)));
             }
@@ -7626,7 +7626,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             fileName = FileLoader.getAttachFileName(this.currentPhotoObject);
             fileExists = this.currentMessageObject.mediaExists;
         }
-        if (SharedConfig.streamMedia && ((int) this.currentMessageObject.getDialogId()) != 0 && !this.currentMessageObject.isSecretMedia() && (this.documentAttachType == 5 || this.documentAttachType == 4)) {
+        if (SharedConfig.streamMedia && ((int) this.currentMessageObject.getDialogId()) != 0 && !this.currentMessageObject.isSecretMedia() && (this.documentAttachType == 5 || (this.documentAttachType == 4 && this.currentMessageObject.canStreamVideo()))) {
             this.hasMiniProgress = fileExists ? 1 : 2;
             fileExists = true;
         }
@@ -7892,69 +7892,76 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
     private void didPressedButton(boolean animated) {
         if (this.buttonState == 0) {
-            if (this.documentAttachType != 3 && this.documentAttachType != 5) {
-                this.cancelLoading = false;
-                this.radialProgress.setProgress(0.0f, false);
-                if (this.currentMessageObject.type == 1) {
-                    FileLocation fileLocation;
-                    int i;
-                    this.photoImage.setForceLoading(true);
-                    ImageReceiver imageReceiver = this.photoImage;
-                    TLObject tLObject = this.currentPhotoObject.location;
-                    String str = this.currentPhotoFilter;
-                    if (this.currentPhotoObjectThumb != null) {
-                        fileLocation = this.currentPhotoObjectThumb.location;
-                    } else {
-                        fileLocation = null;
-                    }
-                    String str2 = this.currentPhotoFilterThumb;
-                    int i2 = this.currentPhotoObject.size;
-                    if (this.currentMessageObject.shouldEncryptPhotoOrVideo()) {
-                        i = 2;
-                    } else {
-                        i = 0;
-                    }
-                    imageReceiver.setImage(tLObject, str, fileLocation, str2, i2, null, i);
-                } else if (this.currentMessageObject.type == 8) {
-                    this.currentMessageObject.gifState = 2.0f;
-                    this.photoImage.setForceLoading(true);
-                    this.photoImage.setImage(this.currentMessageObject.messageOwner.media.document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.document.size, null, 0);
-                } else if (this.currentMessageObject.isRoundVideo()) {
-                    if (this.currentMessageObject.isSecretMedia()) {
-                        FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 1);
-                    } else {
-                        this.currentMessageObject.gifState = 2.0f;
-                        Document document = this.currentMessageObject.getDocument();
-                        this.photoImage.setForceLoading(true);
-                        this.photoImage.setImage(document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, document.size, null, 0);
-                    }
-                } else if (this.currentMessageObject.type == 9) {
-                    FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.document, false, 0);
-                } else if (this.documentAttachType == 4) {
-                    FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
-                } else if (this.currentMessageObject.type != 0 || this.documentAttachType == 0) {
-                    this.photoImage.setForceLoading(true);
-                    this.photoImage.setImage(this.currentPhotoObject.location, this.currentPhotoFilter, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, this.currentPhotoFilterThumb, 0, null, 0);
-                } else if (this.documentAttachType == 2) {
-                    this.photoImage.setForceLoading(true);
-                    this.photoImage.setImage(this.currentMessageObject.messageOwner.media.webpage.document, null, this.currentPhotoObject.location, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.webpage.document.size, null, 0);
-                    this.currentMessageObject.gifState = 2.0f;
-                } else if (this.documentAttachType == 1) {
-                    FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.webpage.document, false, 0);
+            if (this.documentAttachType == 3 || this.documentAttachType == 5) {
+                if (this.miniButtonState == 0) {
+                    FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, 0);
                 }
-                this.buttonState = 1;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
-                invalidate();
-            } else if (this.delegate.needPlayMessage(this.currentMessageObject)) {
-                if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
-                    this.miniButtonState = 1;
-                    this.radialProgress.setProgress(0.0f, false);
-                    this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+                if (this.delegate.needPlayMessage(this.currentMessageObject)) {
+                    if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
+                        this.miniButtonState = 1;
+                        this.radialProgress.setProgress(0.0f, false);
+                        this.radialProgress.setMiniBackground(getMiniDrawableForCurrentState(), true, false);
+                    }
+                    updatePlayingMessageProgress();
+                    this.buttonState = 1;
+                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
+                    invalidate();
+                    return;
                 }
-                this.buttonState = 1;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
-                invalidate();
+                return;
             }
+            this.cancelLoading = false;
+            this.radialProgress.setProgress(0.0f, false);
+            if (this.currentMessageObject.type == 1) {
+                FileLocation fileLocation;
+                int i;
+                this.photoImage.setForceLoading(true);
+                ImageReceiver imageReceiver = this.photoImage;
+                TLObject tLObject = this.currentPhotoObject.location;
+                String str = this.currentPhotoFilter;
+                if (this.currentPhotoObjectThumb != null) {
+                    fileLocation = this.currentPhotoObjectThumb.location;
+                } else {
+                    fileLocation = null;
+                }
+                String str2 = this.currentPhotoFilterThumb;
+                int i2 = this.currentPhotoObject.size;
+                if (this.currentMessageObject.shouldEncryptPhotoOrVideo()) {
+                    i = 2;
+                } else {
+                    i = 0;
+                }
+                imageReceiver.setImage(tLObject, str, fileLocation, str2, i2, null, i);
+            } else if (this.currentMessageObject.type == 8) {
+                this.currentMessageObject.gifState = 2.0f;
+                this.photoImage.setForceLoading(true);
+                this.photoImage.setImage(this.currentMessageObject.messageOwner.media.document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.document.size, null, 0);
+            } else if (this.currentMessageObject.isRoundVideo()) {
+                if (this.currentMessageObject.isSecretMedia()) {
+                    FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 1);
+                } else {
+                    this.currentMessageObject.gifState = 2.0f;
+                    Document document = this.currentMessageObject.getDocument();
+                    this.photoImage.setForceLoading(true);
+                    this.photoImage.setImage(document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilterThumb, document.size, null, 0);
+                }
+            } else if (this.currentMessageObject.type == 9) {
+                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.document, false, 0);
+            } else if (this.documentAttachType == 4) {
+                FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, true, this.currentMessageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
+            } else if (this.currentMessageObject.type != 0 || this.documentAttachType == 0) {
+                this.photoImage.setForceLoading(true);
+                this.photoImage.setImage(this.currentPhotoObject.location, this.currentPhotoFilter, this.currentPhotoObjectThumb != null ? this.currentPhotoObjectThumb.location : null, this.currentPhotoFilterThumb, 0, null, 0);
+            } else if (this.documentAttachType == 2) {
+                this.photoImage.setForceLoading(true);
+                this.photoImage.setImage(this.currentMessageObject.messageOwner.media.webpage.document, null, this.currentPhotoObject.location, this.currentPhotoFilterThumb, this.currentMessageObject.messageOwner.media.webpage.document.size, null, 0);
+                this.currentMessageObject.gifState = 2.0f;
+            } else if (this.documentAttachType == 1) {
+                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.messageOwner.media.webpage.document, false, 0);
+            }
+            this.buttonState = 1;
+            this.radialProgress.setBackground(getDrawableForCurrentState(), true, animated);
+            invalidate();
         } else if (this.buttonState == 1) {
             if (this.documentAttachType == 3 || this.documentAttachType == 5) {
                 if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
@@ -8927,9 +8934,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.replyStartX = (this.backgroundDrawableLeft + this.backgroundDrawableRight) + AndroidUtilities.dp(17.0f);
                 }
                 this.replyStartY = AndroidUtilities.dp(12.0f);
-                if (this.nameLayout != null) {
-                    this.replyStartY -= AndroidUtilities.dp(31.0f);
-                }
                 backWidth = Math.max(this.replyNameWidth, this.replyTextWidth) + AndroidUtilities.dp(14.0f);
                 Theme.chat_systemDrawable.setColorFilter(Theme.colorFilter);
                 Theme.chat_systemDrawable.setBounds(this.replyStartX - AndroidUtilities.dp(7.0f), this.replyStartY - AndroidUtilities.dp(6.0f), (this.replyStartX - AndroidUtilities.dp(7.0f)) + backWidth, this.replyStartY + AndroidUtilities.dp(41.0f));

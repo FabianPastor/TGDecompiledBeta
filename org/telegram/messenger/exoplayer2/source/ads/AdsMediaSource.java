@@ -15,6 +15,7 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
+import org.telegram.messenger.exoplayer2.source.CompositeMediaSource;
 import org.telegram.messenger.exoplayer2.source.DeferredMediaPeriod;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.source.MediaPeriod;
@@ -26,7 +27,7 @@ import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
-public final class AdsMediaSource implements MediaSource {
+public final class AdsMediaSource extends CompositeMediaSource<MediaPeriodId> {
     private static final String TAG = "AdsMediaSource";
     private long[][] adDurationsUs;
     private MediaSource[][] adGroupMediaSources;
@@ -34,7 +35,7 @@ public final class AdsMediaSource implements MediaSource {
     private AdPlaybackState adPlaybackState;
     private final ViewGroup adUiViewGroup;
     private final AdsLoader adsLoader;
-    private final ComponentListener componentListener;
+    private ComponentListener componentListener;
     private Object contentManifest;
     private final MediaSource contentMediaSource;
     private Timeline contentTimeline;
@@ -44,9 +45,6 @@ public final class AdsMediaSource implements MediaSource {
     private Listener listener;
     private final Handler mainHandler;
     private final Period period;
-    private ExoPlayer player;
-    private Handler playerHandler;
-    private volatile boolean released;
 
     public interface MediaSourceFactory {
         MediaSource createMediaSource(Uri uri, Handler handler, MediaSourceEventListener mediaSourceEventListener);
@@ -55,14 +53,19 @@ public final class AdsMediaSource implements MediaSource {
     }
 
     private final class ComponentListener implements org.telegram.messenger.exoplayer2.source.ads.AdsLoader.EventListener {
-        private ComponentListener() {
+        private final Handler playerHandler = new Handler();
+        private volatile boolean released;
+
+        public void release() {
+            this.released = true;
+            this.playerHandler.removeCallbacksAndMessages(null);
         }
 
         public void onAdPlaybackState(final AdPlaybackState adPlaybackState) {
-            if (!AdsMediaSource.this.released) {
-                AdsMediaSource.this.playerHandler.post(new Runnable() {
+            if (!this.released) {
+                this.playerHandler.post(new Runnable() {
                     public void run() {
-                        if (!AdsMediaSource.this.released) {
+                        if (!ComponentListener.this.released) {
                             AdsMediaSource.this.onAdPlaybackState(adPlaybackState);
                         }
                     }
@@ -71,10 +74,10 @@ public final class AdsMediaSource implements MediaSource {
         }
 
         public void onAdClicked() {
-            if (AdsMediaSource.this.eventHandler != null && AdsMediaSource.this.eventListener != null) {
+            if (!this.released && AdsMediaSource.this.eventHandler != null && AdsMediaSource.this.eventListener != null) {
                 AdsMediaSource.this.eventHandler.post(new Runnable() {
                     public void run() {
-                        if (!AdsMediaSource.this.released) {
+                        if (!ComponentListener.this.released) {
                             AdsMediaSource.this.eventListener.onAdClicked();
                         }
                     }
@@ -83,10 +86,10 @@ public final class AdsMediaSource implements MediaSource {
         }
 
         public void onAdTapped() {
-            if (AdsMediaSource.this.eventHandler != null && AdsMediaSource.this.eventListener != null) {
+            if (!this.released && AdsMediaSource.this.eventHandler != null && AdsMediaSource.this.eventListener != null) {
                 AdsMediaSource.this.eventHandler.post(new Runnable() {
                     public void run() {
-                        if (!AdsMediaSource.this.released) {
+                        if (!ComponentListener.this.released) {
                             AdsMediaSource.this.eventListener.onAdTapped();
                         }
                     }
@@ -95,14 +98,17 @@ public final class AdsMediaSource implements MediaSource {
         }
 
         public void onLoadError(final IOException error) {
-            if (!AdsMediaSource.this.released) {
-                AdsMediaSource.this.playerHandler.post(new Runnable() {
-                    public void run() {
-                        if (!AdsMediaSource.this.released) {
-                            AdsMediaSource.this.onLoadError(error);
+            if (!this.released) {
+                Log.w(AdsMediaSource.TAG, "Ad load error", error);
+                if (AdsMediaSource.this.eventHandler != null && AdsMediaSource.this.eventListener != null) {
+                    AdsMediaSource.this.eventHandler.post(new Runnable() {
+                        public void run() {
+                            if (!ComponentListener.this.released) {
+                                AdsMediaSource.this.eventListener.onAdLoadError(error);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
     }
@@ -131,7 +137,6 @@ public final class AdsMediaSource implements MediaSource {
         this.eventHandler = eventHandler;
         this.eventListener = eventListener;
         this.mainHandler = new Handler(Looper.getMainLooper());
-        this.componentListener = new ComponentListener();
         this.deferredMediaPeriodByAdMediaSource = new HashMap();
         this.period = new Period();
         this.adGroupMediaSources = new MediaSource[0][];
@@ -140,32 +145,17 @@ public final class AdsMediaSource implements MediaSource {
     }
 
     public void prepareSource(final ExoPlayer player, boolean isTopLevelSource, Listener listener) {
+        super.prepareSource(player, isTopLevelSource, listener);
         Assertions.checkArgument(isTopLevelSource);
-        Assertions.checkState(this.listener == null, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+        final ComponentListener componentListener = new ComponentListener();
         this.listener = listener;
-        this.player = player;
-        this.playerHandler = new Handler();
-        this.contentMediaSource.prepareSource(player, false, new Listener() {
-            public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
-                AdsMediaSource.this.onContentSourceInfoRefreshed(timeline, manifest);
-            }
-        });
+        this.componentListener = componentListener;
+        prepareChildSource(new MediaPeriodId(0), this.contentMediaSource);
         this.mainHandler.post(new Runnable() {
             public void run() {
-                AdsMediaSource.this.adsLoader.attachPlayer(player, AdsMediaSource.this.componentListener, AdsMediaSource.this.adUiViewGroup);
+                AdsMediaSource.this.adsLoader.attachPlayer(player, componentListener, AdsMediaSource.this.adUiViewGroup);
             }
         });
-    }
-
-    public void maybeThrowSourceInfoRefreshError() throws IOException {
-        this.contentMediaSource.maybeThrowSourceInfoRefreshError();
-        for (MediaSource[] mediaSources : this.adGroupMediaSources) {
-            for (MediaSource mediaSource : r5[r4]) {
-                if (mediaSource != null) {
-                    mediaSource.maybeThrowSourceInfoRefreshError();
-                }
-            }
-        }
     }
 
     public MediaPeriod createPeriod(MediaPeriodId id, Allocator allocator) {
@@ -174,10 +164,10 @@ public final class AdsMediaSource implements MediaSource {
             mediaPeriod.createPeriod();
             return mediaPeriod;
         }
-        final int adGroupIndex = id.adGroupIndex;
-        final int adIndexInAdGroup = id.adIndexInAdGroup;
+        int adGroupIndex = id.adGroupIndex;
+        int adIndexInAdGroup = id.adIndexInAdGroup;
         if (this.adGroupMediaSources[adGroupIndex].length <= adIndexInAdGroup) {
-            final MediaSource adMediaSource = this.adMediaSourceFactory.createMediaSource(this.adPlaybackState.adUris[id.adGroupIndex][id.adIndexInAdGroup], this.eventHandler, this.eventListener);
+            MediaSource adMediaSource = this.adMediaSourceFactory.createMediaSource(this.adPlaybackState.adGroups[id.adGroupIndex].uris[id.adIndexInAdGroup], this.eventHandler, this.eventListener);
             int oldAdCount = this.adGroupMediaSources[id.adGroupIndex].length;
             if (adIndexInAdGroup >= oldAdCount) {
                 int adCount = adIndexInAdGroup + 1;
@@ -187,11 +177,7 @@ public final class AdsMediaSource implements MediaSource {
             }
             this.adGroupMediaSources[adGroupIndex][adIndexInAdGroup] = adMediaSource;
             this.deferredMediaPeriodByAdMediaSource.put(adMediaSource, new ArrayList());
-            adMediaSource.prepareSource(this.player, false, new Listener() {
-                public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {
-                    AdsMediaSource.this.onAdSourceInfoRefreshed(adMediaSource, adGroupIndex, adIndexInAdGroup, timeline);
-                }
-            });
+            prepareChildSource(id, adMediaSource);
         }
         MediaSource mediaSource = this.adGroupMediaSources[adGroupIndex][adIndexInAdGroup];
         DeferredMediaPeriod deferredMediaPeriod = new DeferredMediaPeriod(mediaSource, new MediaPeriodId(0), allocator);
@@ -205,24 +191,38 @@ public final class AdsMediaSource implements MediaSource {
     }
 
     public void releasePeriod(MediaPeriod mediaPeriod) {
-        ((DeferredMediaPeriod) mediaPeriod).releasePeriod();
+        DeferredMediaPeriod deferredMediaPeriod = (DeferredMediaPeriod) mediaPeriod;
+        List<DeferredMediaPeriod> mediaPeriods = (List) this.deferredMediaPeriodByAdMediaSource.get(deferredMediaPeriod.mediaSource);
+        if (mediaPeriods != null) {
+            mediaPeriods.remove(deferredMediaPeriod);
+        }
+        deferredMediaPeriod.releasePeriod();
     }
 
     public void releaseSource() {
-        this.released = true;
-        this.contentMediaSource.releaseSource();
-        for (MediaSource[] mediaSources : this.adGroupMediaSources) {
-            for (MediaSource mediaSource : r5[r4]) {
-                if (mediaSource != null) {
-                    mediaSource.releaseSource();
-                }
-            }
-        }
+        super.releaseSource();
+        this.componentListener.release();
+        this.componentListener = null;
+        this.deferredMediaPeriodByAdMediaSource.clear();
+        this.contentTimeline = null;
+        this.contentManifest = null;
+        this.adPlaybackState = null;
+        this.adGroupMediaSources = new MediaSource[0][];
+        this.adDurationsUs = new long[0][];
+        this.listener = null;
         this.mainHandler.post(new Runnable() {
             public void run() {
                 AdsMediaSource.this.adsLoader.detachPlayer();
             }
         });
+    }
+
+    protected void onChildSourceInfoRefreshed(MediaPeriodId mediaPeriodId, MediaSource mediaSource, Timeline timeline, Object manifest) {
+        if (mediaPeriodId.isAd()) {
+            onAdSourceInfoRefreshed(mediaSource, mediaPeriodId.adGroupIndex, mediaPeriodId.adIndexInAdGroup, timeline);
+        } else {
+            onContentSourceInfoRefreshed(timeline, manifest);
+        }
     }
 
     private void onAdPlaybackState(AdPlaybackState adPlaybackState) {
@@ -234,19 +234,6 @@ public final class AdsMediaSource implements MediaSource {
         }
         this.adPlaybackState = adPlaybackState;
         maybeUpdateSourceInfo();
-    }
-
-    private void onLoadError(final IOException error) {
-        Log.w(TAG, "Ad load error", error);
-        if (this.eventHandler != null && this.eventListener != null) {
-            this.eventHandler.post(new Runnable() {
-                public void run() {
-                    if (!AdsMediaSource.this.released) {
-                        AdsMediaSource.this.eventListener.onAdLoadError(error);
-                    }
-                }
-            });
-        }
     }
 
     private void onContentSourceInfoRefreshed(Timeline timeline, Object manifest) {
@@ -274,7 +261,8 @@ public final class AdsMediaSource implements MediaSource {
 
     private void maybeUpdateSourceInfo() {
         if (this.adPlaybackState != null && this.contentTimeline != null) {
-            this.listener.onSourceInfoRefreshed(this, this.adPlaybackState.adGroupCount == 0 ? this.contentTimeline : new SinglePeriodAdTimeline(this.contentTimeline, this.adPlaybackState.adGroupTimesUs, this.adPlaybackState.adCounts, this.adPlaybackState.adsLoadedCounts, this.adPlaybackState.adsPlayedCounts, this.adDurationsUs, this.adPlaybackState.adResumePositionUs, this.adPlaybackState.contentDurationUs), this.contentManifest);
+            this.adPlaybackState = this.adPlaybackState.withAdDurationsUs(this.adDurationsUs);
+            this.listener.onSourceInfoRefreshed(this, this.adPlaybackState.adGroupCount == 0 ? this.contentTimeline : new SinglePeriodAdTimeline(this.contentTimeline, this.adPlaybackState), this.contentManifest);
         }
     }
 }

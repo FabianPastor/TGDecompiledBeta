@@ -50,6 +50,7 @@ public class FileLoader {
     private int currentUploadSmallOperationsCount = 0;
     private FileLoaderDelegate delegate = null;
     private ConcurrentHashMap<String, FileLoadOperation> loadOperationPaths = new ConcurrentHashMap();
+    private ConcurrentHashMap<String, Boolean> loadOperationPathsUI = new ConcurrentHashMap(10, 1.0f, 2);
     private LinkedList<FileLoadOperation> loadOperationQueue = new LinkedList();
     private LinkedList<FileLoadOperation> photoLoadOperationQueue = new LinkedList();
     private ConcurrentHashMap<String, FileUploadOperation> uploadOperationPaths = new ConcurrentHashMap();
@@ -317,58 +318,48 @@ public class FileLoader {
     }
 
     private void cancelLoadFile(Document document, TL_webDocument webDocument, FileLocation location, String locationExt) {
-        if (location != null || document != null) {
-            final FileLocation fileLocation = location;
-            final String str = locationExt;
-            final Document document2 = document;
-            final TL_webDocument tL_webDocument = webDocument;
-            fileLoaderQueue.postRunnable(new Runnable() {
-                public void run() {
-                    String fileName = null;
-                    if (fileLocation != null) {
-                        fileName = FileLoader.getAttachFileName(fileLocation, str);
-                    } else if (document2 != null) {
-                        fileName = FileLoader.getAttachFileName(document2);
-                    } else if (tL_webDocument != null) {
-                        fileName = FileLoader.getAttachFileName(tL_webDocument);
-                    }
-                    if (fileName != null) {
+        if (location != null || document != null || webDocument != null) {
+            String fileName;
+            if (location != null) {
+                fileName = getAttachFileName(location, locationExt);
+            } else if (document != null) {
+                fileName = getAttachFileName(document);
+            } else if (webDocument != null) {
+                fileName = getAttachFileName(webDocument);
+            } else {
+                fileName = null;
+            }
+            if (fileName != null) {
+                this.loadOperationPathsUI.remove(fileName);
+                final Document document2 = document;
+                final TL_webDocument tL_webDocument = webDocument;
+                final FileLocation fileLocation = location;
+                fileLoaderQueue.postRunnable(new Runnable() {
+                    public void run() {
                         FileLoadOperation operation = (FileLoadOperation) FileLoader.this.loadOperationPaths.remove(fileName);
                         if (operation != null) {
                             if (MessageObject.isVoiceDocument(document2) || MessageObject.isVoiceWebDocument(tL_webDocument)) {
                                 if (!FileLoader.this.audioLoadOperationQueue.remove(operation)) {
                                     FileLoader.this.currentAudioLoadOperationsCount = FileLoader.this.currentAudioLoadOperationsCount - 1;
                                 }
-                            } else if (fileLocation != null) {
-                                if (!FileLoader.this.photoLoadOperationQueue.remove(operation) || MessageObject.isImageWebDocument(tL_webDocument)) {
-                                    FileLoader.this.currentPhotoLoadOperationsCount = FileLoader.this.currentPhotoLoadOperationsCount - 1;
+                            } else if (fileLocation == null) {
+                                if (!FileLoader.this.loadOperationQueue.remove(operation)) {
+                                    FileLoader.this.currentLoadOperationsCount = FileLoader.this.currentLoadOperationsCount - 1;
                                 }
-                            } else if (!FileLoader.this.loadOperationQueue.remove(operation)) {
-                                FileLoader.this.currentLoadOperationsCount = FileLoader.this.currentLoadOperationsCount - 1;
+                                FileLoader.this.activeFileLoadOperation.remove(operation);
+                            } else if (!FileLoader.this.photoLoadOperationQueue.remove(operation) || MessageObject.isImageWebDocument(tL_webDocument)) {
+                                FileLoader.this.currentPhotoLoadOperationsCount = FileLoader.this.currentPhotoLoadOperationsCount - 1;
                             }
                             operation.cancel();
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
-    public boolean isLoadingFile(final String fileName) {
-        final CountDownLatch semaphore = new CountDownLatch(1);
-        final Boolean[] result = new Boolean[1];
-        fileLoaderQueue.postRunnable(new Runnable() {
-            public void run() {
-                result[0] = Boolean.valueOf(FileLoader.this.loadOperationPaths.containsKey(fileName));
-                semaphore.countDown();
-            }
-        });
-        try {
-            semaphore.await();
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
-        return result[0].booleanValue();
+    public boolean isLoadingFile(String fileName) {
+        return this.loadOperationPathsUI.containsKey(fileName);
     }
 
     public float getBufferedProgressFromPosition(float position, String fileName) {
@@ -413,6 +404,23 @@ public class FileLoader {
         }
     }
 
+    private void pauseCurrentFileLoadOperations(FileLoadOperation newOperation) {
+        int a = 0;
+        while (a < this.activeFileLoadOperation.size()) {
+            FileLoadOperation operation = (FileLoadOperation) this.activeFileLoadOperation.get(a);
+            if (operation != newOperation) {
+                this.activeFileLoadOperation.remove(operation);
+                a--;
+                operation.pause();
+                this.loadOperationQueue.add(0, operation);
+                if (operation.wasStarted()) {
+                    this.currentLoadOperationsCount--;
+                }
+            }
+            a++;
+        }
+    }
+
     private FileLoadOperation loadFileInternal(Document document, TL_webDocument webDocument, FileLocation location, String locationExt, int locationSize, boolean force, FileStreamLoadOperation stream, int streamOffset, int cacheType) {
         String fileName = null;
         if (location != null) {
@@ -424,6 +432,9 @@ public class FileLoader {
         }
         if (fileName == null || fileName.contains("-2147483648")) {
             return null;
+        }
+        if (!(TextUtils.isEmpty(fileName) || fileName.contains("-2147483648"))) {
+            this.loadOperationPathsUI.put(fileName, Boolean.valueOf(true));
         }
         FileLoadOperation operation = (FileLoadOperation) this.loadOperationPaths.get(fileName);
         if (operation == null) {
@@ -467,6 +478,7 @@ public class FileLoader {
             final FileLocation fileLocation = location;
             operation.setDelegate(new FileLoadOperationDelegate() {
                 public void didFinishLoadingFile(FileLoadOperation operation, File finalFile) {
+                    FileLoader.this.loadOperationPathsUI.remove(finalFileName);
                     if (FileLoader.this.delegate != null) {
                         FileLoader.this.delegate.fileDidLoaded(finalFileName, finalFile, finalType);
                     }
@@ -474,6 +486,7 @@ public class FileLoader {
                 }
 
                 public void didFailedLoadingFile(FileLoadOperation operation, int reason) {
+                    FileLoader.this.loadOperationPathsUI.remove(finalFileName);
                     FileLoader.this.checkDownloadQueue(document2, tL_webDocument, fileLocation, finalFileName);
                     if (FileLoader.this.delegate != null) {
                         FileLoader.this.delegate.fileDidFailedLoad(finalFileName, reason);
@@ -517,10 +530,14 @@ public class FileLoader {
                     return operation;
                 }
             } else if (streamOffset != 0 || this.currentLoadOperationsCount < maxCount) {
-                if (!operation.start(stream, streamOffset)) {
+                if (operation.start(stream, streamOffset)) {
+                    this.currentLoadOperationsCount++;
+                    this.activeFileLoadOperation.add(operation);
+                }
+                if (!operation.wasStarted() || stream == null) {
                     return operation;
                 }
-                this.currentLoadOperationsCount++;
+                pauseCurrentFileLoadOperations(operation);
                 return operation;
             } else if (force) {
                 this.loadOperationQueue.add(0, operation);
@@ -556,25 +573,51 @@ public class FileLoader {
                     }
                     this.currentAudioLoadOperationsCount++;
                     return operation;
-                } else if (downloadQueue == this.photoLoadOperationQueue) {
-                    if (!operation.start(stream, streamOffset)) {
+                } else if (downloadQueue != this.photoLoadOperationQueue) {
+                    if (operation.start(stream, streamOffset)) {
+                        this.currentLoadOperationsCount++;
+                    }
+                    if (!operation.wasStarted() || this.activeFileLoadOperation.contains(operation)) {
                         return operation;
                     }
-                    this.currentPhotoLoadOperationsCount++;
+                    if (stream != null) {
+                        pauseCurrentFileLoadOperations(operation);
+                    }
+                    this.activeFileLoadOperation.add(operation);
                     return operation;
                 } else if (!operation.start(stream, streamOffset)) {
                     return operation;
                 } else {
-                    this.currentLoadOperationsCount++;
+                    this.currentPhotoLoadOperationsCount++;
                     return operation;
                 }
             }
+            if (stream != null) {
+                pauseCurrentFileLoadOperations(operation);
+            }
             operation.start(stream, streamOffset);
+            if (downloadQueue != this.loadOperationQueue || this.activeFileLoadOperation.contains(operation)) {
+                return operation;
+            }
+            this.activeFileLoadOperation.add(operation);
             return operation;
         }
     }
 
     private void loadFile(Document document, TL_webDocument webDocument, FileLocation location, String locationExt, int locationSize, boolean force, int cacheType) {
+        String fileName;
+        if (location != null) {
+            fileName = getAttachFileName(location, locationExt);
+        } else if (document != null) {
+            fileName = getAttachFileName(document);
+        } else if (webDocument != null) {
+            fileName = getAttachFileName(webDocument);
+        } else {
+            fileName = null;
+        }
+        if (!(TextUtils.isEmpty(fileName) || fileName.contains("-2147483648"))) {
+            this.loadOperationPathsUI.put(fileName, Boolean.valueOf(true));
+        }
         final Document document2 = document;
         final TL_webDocument tL_webDocument = webDocument;
         final FileLocation fileLocation = location;
@@ -671,6 +714,7 @@ public class FileLoader {
                         } else {
                             FileLoader.this.loadOperationQueue.remove(operation);
                         }
+                        FileLoader.this.activeFileLoadOperation.remove(operation);
                     }
                     while (!FileLoader.this.loadOperationQueue.isEmpty()) {
                         if (((FileLoadOperation) FileLoader.this.loadOperationQueue.get(0)).isForceRequest()) {
@@ -682,6 +726,9 @@ public class FileLoader {
                             operation = (FileLoadOperation) FileLoader.this.loadOperationQueue.poll();
                             if (operation != null && operation.start()) {
                                 FileLoader.this.currentLoadOperationsCount = FileLoader.this.currentLoadOperationsCount + 1;
+                                if (!FileLoader.this.activeFileLoadOperation.contains(operation)) {
+                                    FileLoader.this.activeFileLoadOperation.add(operation);
+                                }
                             }
                         } else {
                             return;

@@ -40,6 +40,14 @@ public class SeekBarView extends FrameLayout {
         this.outerPaint1.setColor(outer);
     }
 
+    public void setInnerColor(int inner) {
+        this.innerPaint1.setColor(inner);
+    }
+
+    public void setOuterColor(int outer) {
+        this.outerPaint1.setColor(outer);
+    }
+
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         return onTouch(ev);
     }

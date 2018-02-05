@@ -3000,6 +3000,23 @@ public class MessageObject {
         return getDialogId(this.messageOwner);
     }
 
+    public boolean canStreamVideo() {
+        Document document = getDocument();
+        if (document == null) {
+            return false;
+        }
+        if (SharedConfig.streamAllVideo) {
+            return true;
+        }
+        for (int a = 0; a < document.attributes.size(); a++) {
+            DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+            if (attribute instanceof TL_documentAttributeVideo) {
+                return attribute.supports_streaming;
+            }
+        }
+        return false;
+    }
+
     public static long getDialogId(Message message) {
         if (message.dialog_id == 0 && message.to_id != null) {
             if (message.to_id.chat_id != 0) {

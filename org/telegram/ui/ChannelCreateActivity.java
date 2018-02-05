@@ -912,7 +912,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
-            public void didSetColor(int color) {
+            public void didSetColor() {
                 if (ChannelCreateActivity.this.adminnedChannelsLayout != null) {
                     int count = ChannelCreateActivity.this.adminnedChannelsLayout.getChildCount();
                     for (int a = 0; a < count; a++) {

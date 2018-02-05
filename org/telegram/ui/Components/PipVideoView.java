@@ -69,7 +69,9 @@ public class PipVideoView {
                     VideoPlayer videoPlayer = PipVideoView.this.photoViewer.getVideoPlayer();
                     if (videoPlayer != null) {
                         MiniControlsView.this.setProgress(((float) videoPlayer.getCurrentPosition()) / ((float) videoPlayer.getDuration()));
-                        MiniControlsView.this.setBufferedProgress(((float) videoPlayer.getBufferedPosition()) / ((float) videoPlayer.getDuration()));
+                        if (PipVideoView.this.photoViewer == null) {
+                            MiniControlsView.this.setBufferedProgress(((float) videoPlayer.getBufferedPosition()) / ((float) videoPlayer.getDuration()));
+                        }
                         AndroidUtilities.runOnUIThread(MiniControlsView.this.progressRunnable, 1000);
                     }
                 }
@@ -144,6 +146,7 @@ public class PipVideoView {
 
         public void setBufferedProgress(float position) {
             this.bufferedPosition = position;
+            invalidate();
         }
 
         public void setProgress(float value) {
@@ -386,6 +389,12 @@ public class PipVideoView {
             miniControlsView.updatePlayButton();
             miniControlsView.invalidate();
             miniControlsView.show(true, true);
+        }
+    }
+
+    public void setBufferedProgress(float progress) {
+        if (this.controlsView instanceof MiniControlsView) {
+            ((MiniControlsView) this.controlsView).setBufferedProgress(progress);
         }
     }
 

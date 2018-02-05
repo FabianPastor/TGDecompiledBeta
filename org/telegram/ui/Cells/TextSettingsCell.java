@@ -31,7 +31,6 @@ public class TextSettingsCell extends FrameLayout {
         int i3 = 3;
         super(context);
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -46,7 +45,6 @@ public class TextSettingsCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
         this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
@@ -75,6 +73,12 @@ public class TextSettingsCell extends FrameLayout {
             i3 = 5;
         }
         addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 16, 17.0f, 0.0f, 17.0f, 0.0f));
+    }
+
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

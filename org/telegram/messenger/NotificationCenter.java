@@ -87,6 +87,7 @@ public class NotificationCenter {
     public static final int musicDidLoaded;
     public static final int needReloadArchivedStickers;
     public static final int needReloadRecentDialogsSearch;
+    public static final int needSetDayNightTheme;
     public static final int needShowAlert;
     public static final int newDraftReceived;
     public static final int newSessionReceived;
@@ -225,9 +226,6 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         notificationsSettingsUpdated = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        pushMessagesUpdated = i;
         i = totalEvents;
         totalEvents = i + 1;
         blockedUsersDidLoaded = i;
@@ -437,6 +435,9 @@ public class NotificationCenter {
         appDidLogout = i;
         i = totalEvents;
         totalEvents = i + 1;
+        pushMessagesUpdated = i;
+        i = totalEvents;
+        totalEvents = i + 1;
         stopEncodingService = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -465,6 +466,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         didSetNewTheme = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        needSetDayNightTheme = i;
         i = totalEvents;
         totalEvents = i + 1;
         locationPermissionGranted = i;

@@ -393,6 +393,10 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
         }
     }
 
+    public boolean isStreaming() {
+        return this.isStreaming;
+    }
+
     public boolean isPlaying() {
         return (this.mixedAudio && this.mixedPlayWhenReady) || (this.player != null && this.player.getPlayWhenReady());
     }

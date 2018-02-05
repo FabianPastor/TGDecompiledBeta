@@ -84,11 +84,11 @@ public final class HlsMediaPeriod implements MediaPeriod, Callback, PlaylistEven
 
     public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
         int i;
+        int j;
         int[] streamChildIndices = new int[selections.length];
         int[] selectionChildIndices = new int[selections.length];
         for (i = 0; i < selections.length; i++) {
             int i2;
-            int j;
             if (streams[i] == null) {
                 i2 = -1;
             } else {

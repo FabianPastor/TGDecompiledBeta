@@ -1425,6 +1425,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                         message.flags |= Integer.MIN_VALUE;
                                                     }
                                                 }
+                                                ImageLoader.saveMessageThumbs(message);
                                                 message.unread = value.intValue() < message.id;
                                                 if (z2) {
                                                     message.out = true;
@@ -3663,6 +3664,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     newMsgObj.media = res.media;
                                     message = newMsgObj;
                                     message.flags |= 512;
+                                    ImageLoader.saveMessageThumbs(newMsgObj);
                                 }
                                 if ((res.media instanceof TL_messageMediaGame) && !TextUtils.isEmpty(res.message)) {
                                     newMsgObj.message = res.message;
@@ -3715,6 +3717,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     }
                                 }
                                 if (message3 != null) {
+                                    ImageLoader.saveMessageThumbs(message3);
                                     Integer value = (Integer) MessagesController.getInstance(SendMessagesHelper.this.currentAccount).dialogs_read_outbox_max.get(Long.valueOf(message3.dialog_id));
                                     if (value == null) {
                                         value = Integer.valueOf(MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getDialogReadMax(message3.out, message3.dialog_id));
@@ -4524,6 +4527,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                 attributeVideo.w = botInlineResult.w;
                                                 attributeVideo.h = botInlineResult.h;
                                                 attributeVideo.duration = botInlineResult.duration;
+                                                attributeVideo.supports_streaming = true;
                                                 document.attributes.add(attributeVideo);
                                                 try {
                                                     bitmap = ImageLoader.loadBitmap(new File(FileLoader.getDirectory(4), Utilities.MD5(botInlineResult.thumb_url) + "." + ImageLoader.getHttpUrlExtension(botInlineResult.thumb_url, "jpg")).getAbsolutePath(), null, 90.0f, 90.0f, true);
@@ -5028,6 +5032,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     UserConfig.getInstance(currentAccount).saveConfig(false);
                                     if (!isEncrypted) {
                                         attributeVideo = new TL_documentAttributeVideo();
+                                        attributeVideo.supports_streaming = true;
                                     } else if (enryptedLayer >= 66) {
                                         attributeVideo = new TL_documentAttributeVideo();
                                     } else {
@@ -5647,6 +5652,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 }
                             }
                             attributeVideo = new TL_documentAttributeVideo();
+                            attributeVideo.supports_streaming = true;
                             attributeVideo.round_message = isRound;
                             tL_document.attributes.add(attributeVideo);
                             if (videoEditedInfo == null || !videoEditedInfo.needConvert()) {

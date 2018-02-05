@@ -957,17 +957,32 @@ public class AlertsCreator {
             selected[0] = preferences.getInt("priority_" + dialog_id, 3);
             if (selected[0] == 3) {
                 selected[0] = 0;
+            } else if (selected[0] == 4) {
+                selected[0] = 1;
+            } else if (selected[0] == 5) {
+                selected[0] = 2;
+            } else if (selected[0] == 0) {
+                selected[0] = 3;
             } else {
-                selected[0] = selected[0] + 1;
+                selected[0] = 4;
             }
-            descriptions = new String[]{LocaleController.getString("NotificationsPrioritySettings", R.string.NotificationsPrioritySettings), LocaleController.getString("NotificationsPriorityDefault", R.string.NotificationsPriorityDefault), LocaleController.getString("NotificationsPriorityHigh", R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityMax", R.string.NotificationsPriorityMax)};
+            descriptions = new String[]{LocaleController.getString("NotificationsPrioritySettings", R.string.NotificationsPrioritySettings), LocaleController.getString("NotificationsPriorityLow", R.string.NotificationsPriorityLow), LocaleController.getString("NotificationsPriorityMedium", R.string.NotificationsPriorityMedium), LocaleController.getString("NotificationsPriorityHigh", R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityUrgent", R.string.NotificationsPriorityUrgent)};
         } else {
             if (globalAll) {
                 selected[0] = preferences.getInt("priority_messages", 1);
             } else if (globalGroup) {
                 selected[0] = preferences.getInt("priority_group", 1);
             }
-            descriptions = new String[]{LocaleController.getString("NotificationsPriorityDefault", R.string.NotificationsPriorityDefault), LocaleController.getString("NotificationsPriorityHigh", R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityMax", R.string.NotificationsPriorityMax)};
+            if (selected[0] == 4) {
+                selected[0] = 0;
+            } else if (selected[0] == 5) {
+                selected[0] = 1;
+            } else if (selected[0] == 0) {
+                selected[0] = 2;
+            } else {
+                selected[0] = 3;
+            }
+            descriptions = new String[]{LocaleController.getString("NotificationsPriorityLow", R.string.NotificationsPriorityLow), LocaleController.getString("NotificationsPriorityMedium", R.string.NotificationsPriorityMedium), LocaleController.getString("NotificationsPriorityHigh", R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityUrgent", R.string.NotificationsPriorityUrgent)};
         }
         LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(1);
@@ -987,16 +1002,37 @@ public class AlertsCreator {
                 public void onClick(View v) {
                     selected[0] = ((Integer) v.getTag()).intValue();
                     Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
+                    int option;
                     if (j != 0) {
                         if (selected[0] == 0) {
-                            selected[0] = 3;
+                            option = 3;
+                        } else if (selected[0] == 1) {
+                            option = 4;
+                        } else if (selected[0] == 2) {
+                            option = 5;
+                        } else if (selected[0] == 3) {
+                            option = 0;
                         } else {
-                            int[] iArr = selected;
-                            iArr[0] = iArr[0] - 1;
+                            option = 1;
                         }
-                        editor.putInt("priority_" + j, selected[0]);
+                        editor.putInt("priority_" + j, option);
                     } else {
-                        editor.putInt(z ? "priority_group" : "priority_messages", selected[0]);
+                        String str;
+                        if (selected[0] == 0) {
+                            option = 4;
+                        } else if (selected[0] == 1) {
+                            option = 5;
+                        } else if (selected[0] == 2) {
+                            option = 0;
+                        } else {
+                            option = 1;
+                        }
+                        if (z) {
+                            str = "priority_group";
+                        } else {
+                            str = "priority_messages";
+                        }
+                        editor.putInt(str, option);
                     }
                     editor.commit();
                     if (baseFragment != null) {
@@ -1010,7 +1046,7 @@ public class AlertsCreator {
             a++;
         }
         Builder builder = new Builder(parentActivity);
-        builder.setTitle(LocaleController.getString("NotificationsPriority", R.string.NotificationsPriority));
+        builder.setTitle(LocaleController.getString("NotificationsImportance", R.string.NotificationsImportance));
         builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         return builder.create();

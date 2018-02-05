@@ -252,7 +252,7 @@ public class CommonGroupsActivity extends BaseFragment {
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
-            public void didSetColor(int color) {
+            public void didSetColor() {
                 int count = CommonGroupsActivity.this.listView.getChildCount();
                 for (int a = 0; a < count; a++) {
                     View child = CommonGroupsActivity.this.listView.getChildAt(a);

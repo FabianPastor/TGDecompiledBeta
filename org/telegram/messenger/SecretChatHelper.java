@@ -951,6 +951,7 @@ public class SecretChatHelper {
                     attributeVideo.w = decryptedMessage.media.w;
                     attributeVideo.h = decryptedMessage.media.h;
                     attributeVideo.duration = decryptedMessage.media.duration;
+                    attributeVideo.supports_streaming = false;
                     newMessage.media.document.attributes.add(attributeVideo);
                     if (newMessage.ttl == 0) {
                         return newMessage;

@@ -29,6 +29,10 @@ public class TypefaceSpan extends MetricAffectingSpan {
         return this.typeface;
     }
 
+    public void setColor(int value) {
+        this.color = value;
+    }
+
     public boolean isBold() {
         return this.typeface == AndroidUtilities.getTypeface("fonts/rmedium.ttf");
     }

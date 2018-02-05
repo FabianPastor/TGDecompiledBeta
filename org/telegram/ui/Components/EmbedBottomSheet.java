@@ -726,7 +726,11 @@ public class EmbedBottomSheet extends BottomSheet {
                         int seekToTime = 0;
                         if (EmbedBottomSheet.this.openUrl != null) {
                             try {
-                                String t = Uri.parse(EmbedBottomSheet.this.openUrl).getQueryParameter("t");
+                                Uri uri = Uri.parse(EmbedBottomSheet.this.openUrl);
+                                String t = uri.getQueryParameter("t");
+                                if (t == null) {
+                                    t = uri.getQueryParameter("time_continue");
+                                }
                                 if (t != null) {
                                     if (t.contains("m")) {
                                         String[] arg = t.split("m");

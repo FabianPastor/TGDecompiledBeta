@@ -22,8 +22,6 @@ public class TextInfoPrivacyCell extends FrameLayout {
         int i2 = 5;
         super(context);
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
-        this.textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
         this.textView.setTextSize(1, 14.0f);
         TextView textView = this.textView;
         if (LocaleController.isRTL) {
@@ -39,6 +37,12 @@ public class TextInfoPrivacyCell extends FrameLayout {
             i2 = 3;
         }
         addView(view, LayoutHelper.createFrame(-2, -2.0f, i2 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+    }
+
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
+        this.textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

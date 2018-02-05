@@ -37,6 +37,7 @@ public class SharedConfig {
     public static boolean saveStreamMedia = true;
     public static boolean saveToGallery;
     public static boolean shuffleMusic;
+    public static boolean streamAllVideo = false;
     public static boolean streamMedia = true;
     private static final Object sync = new Object();
     public static boolean useFingerprint = true;
@@ -123,6 +124,7 @@ public class SharedConfig {
             useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
             streamMedia = preferences.getBoolean("streamMedia", true);
             saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
+            streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
             configLoaded = true;
         }
     }
@@ -248,6 +250,13 @@ public class SharedConfig {
         streamMedia = !streamMedia;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("streamMedia", streamMedia);
+        editor.commit();
+    }
+
+    public static void toggleStreamAllVideo() {
+        streamAllVideo = !streamAllVideo;
+        Editor editor = MessagesController.getGlobalMainSettings().edit();
+        editor.putBoolean("streamAllVideo", streamAllVideo);
         editor.commit();
     }
 

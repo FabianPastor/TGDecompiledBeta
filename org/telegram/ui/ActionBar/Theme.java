@@ -1,5 +1,6 @@
 package org.telegram.ui.ActionBar;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -29,6 +30,10 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Build.VERSION;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -61,6 +66,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
+import org.telegram.messenger.time.SunDate;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.ThemeEditorView;
 
@@ -73,8 +79,59 @@ public class Theme {
     public static final int ACTION_BAR_VIDEO_EDIT_COLOR = -16777216;
     public static final int ACTION_BAR_WHITE_SELECTOR_COLOR = NUM;
     public static final int ARTICLE_VIEWER_MEDIA_PROGRESS_COLOR = -1;
+    public static final int AUTO_NIGHT_TYPE_AUTOMATIC = 2;
+    public static final int AUTO_NIGHT_TYPE_NONE = 0;
+    public static final int AUTO_NIGHT_TYPE_SCHEDULED = 1;
     private static Field BitmapDrawable_mColorFilter = null;
+    private static final int LIGHT_SENSOR_THEME_SWITCH_DELAY = 1800;
+    private static final float MAXIMUM_LUX_BREAKPOINT = 500.0f;
     private static Method StateListDrawable_getStateDrawableMethod = null;
+    private static SensorEventListener ambientSensorListener = new SensorEventListener() {
+        public void onSensorChanged(SensorEvent event) {
+            float lux = event.values[0];
+            if (lux <= 0.0f) {
+                lux = 0.1f;
+            }
+            if (lux > Theme.MAXIMUM_LUX_BREAKPOINT) {
+                Theme.lastBrightnessValue = 1.0f;
+            } else {
+                Theme.lastBrightnessValue = ((float) Math.ceil((9.932299613952637d * Math.log((double) lux)) + 27.05900001525879d)) / 100.0f;
+            }
+            if (Theme.lastBrightnessValue <= Theme.autoNightBrighnessThreshold) {
+                if (Theme.switchDayRunnableScheduled) {
+                    Theme.switchDayRunnableScheduled = false;
+                    AndroidUtilities.cancelRunOnUIThread(Theme.switchDayBrightnessRunnable);
+                }
+                if (!Theme.switchNightRunnableScheduled) {
+                    Theme.switchNightRunnableScheduled = true;
+                    AndroidUtilities.runOnUIThread(Theme.switchNightBrightnessRunnable, 1800);
+                    return;
+                }
+                return;
+            }
+            if (Theme.switchNightRunnableScheduled) {
+                Theme.switchNightRunnableScheduled = false;
+                AndroidUtilities.cancelRunOnUIThread(Theme.switchNightBrightnessRunnable);
+            }
+            if (!Theme.switchDayRunnableScheduled) {
+                Theme.switchDayRunnableScheduled = true;
+                AndroidUtilities.runOnUIThread(Theme.switchDayBrightnessRunnable, 1800);
+            }
+        }
+
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
+    public static float autoNightBrighnessThreshold = 0.0f;
+    public static String autoNightCityName = null;
+    public static int autoNightDayEndTime = 0;
+    public static int autoNightDayStartTime = 0;
+    public static int autoNightLastSunCheckDay = 0;
+    public static double autoNightLocationLatitude = 0.0d;
+    public static double autoNightLocationLongitude = 0.0d;
+    public static boolean autoNightScheduleByLocation = false;
+    public static int autoNightSunriseTime = 0;
+    public static int autoNightSunsetTime = 0;
     public static Paint avatar_backgroundPaint = null;
     public static Drawable avatar_broadcastDrawable = null;
     public static Drawable avatar_photoDrawable = null;
@@ -210,6 +267,8 @@ public class Theme {
     public static PorterDuffColorFilter colorPressedFilter = null;
     private static int currentColor = 0;
     private static HashMap<String, Integer> currentColors = new HashMap();
+    private static ThemeInfo currentDayTheme = null;
+    private static ThemeInfo currentNightTheme = null;
     private static int currentSelectedColor = 0;
     private static ThemeInfo currentTheme = null;
     private static HashMap<String, Integer> defaultColors = new HashMap();
@@ -774,7 +833,10 @@ public class Theme {
     public static String[] keys_avatar_backgroundInProfile = new String[]{key_avatar_backgroundInProfileRed, key_avatar_backgroundInProfileOrange, key_avatar_backgroundInProfileViolet, key_avatar_backgroundInProfileGreen, key_avatar_backgroundInProfileCyan, key_avatar_backgroundInProfileBlue, key_avatar_backgroundInProfilePink};
     public static String[] keys_avatar_nameInMessage = new String[]{key_avatar_nameInMessageRed, key_avatar_nameInMessageOrange, key_avatar_nameInMessageViolet, key_avatar_nameInMessageGreen, key_avatar_nameInMessageCyan, key_avatar_nameInMessageBlue, key_avatar_nameInMessagePink};
     public static String[] keys_avatar_subtitleInProfile = new String[]{key_avatar_subtitleInProfileRed, key_avatar_subtitleInProfileOrange, key_avatar_subtitleInProfileViolet, key_avatar_subtitleInProfileGreen, key_avatar_subtitleInProfileCyan, key_avatar_subtitleInProfileBlue, key_avatar_subtitleInProfilePink};
+    private static float lastBrightnessValue = 1.0f;
     private static long lastHolidayCheckTime;
+    private static Sensor lightSensor;
+    private static boolean lightSensorRegistered;
     public static Paint linkSelectionPaint;
     public static Drawable listSelector;
     private static Paint maskPaint = new Paint(1);
@@ -783,9 +845,25 @@ public class Theme {
     public static TextPaint profile_aboutTextPaint;
     public static Drawable profile_verifiedCheckDrawable;
     public static Drawable profile_verifiedDrawable;
+    public static int selectedAutoNightType;
     private static int selectedColor;
+    private static SensorManager sensorManager;
     private static int serviceMessageColor;
     private static int serviceSelectedMessageColor;
+    private static Runnable switchDayBrightnessRunnable = new Runnable() {
+        public void run() {
+            Theme.switchDayRunnableScheduled = false;
+            Theme.applyDayNightThemeMaybe(false);
+        }
+    };
+    private static boolean switchDayRunnableScheduled;
+    private static Runnable switchNightBrightnessRunnable = new Runnable() {
+        public void run() {
+            Theme.switchNightRunnableScheduled = false;
+            Theme.applyDayNightThemeMaybe(true);
+        }
+    };
+    private static boolean switchNightRunnableScheduled;
     private static final Object sync = new Object();
     private static Drawable themedWallpaper;
     private static int themedWallpaperFileOffset;
@@ -855,6 +933,16 @@ public class Theme {
     }
 
     static {
+        selectedAutoNightType = 0;
+        autoNightBrighnessThreshold = 0.25f;
+        autoNightDayStartTime = 1320;
+        autoNightDayEndTime = 480;
+        autoNightSunsetTime = 1320;
+        autoNightLastSunCheckDay = -1;
+        autoNightSunriseTime = 480;
+        autoNightCityName = TtmlNode.ANONYMOUS_REGION_ID;
+        autoNightLocationLatitude = 10000.0d;
+        autoNightLocationLongitude = 10000.0d;
         defaultColors.put(key_dialogBackground, Integer.valueOf(-1));
         defaultColors.put(key_dialogBackgroundGray, Integer.valueOf(-986896));
         defaultColors.put(key_dialogTextBlack, Integer.valueOf(-14606047));
@@ -1382,12 +1470,15 @@ public class Theme {
         ArrayList arrayList = themes;
         defaultTheme = themeInfo;
         currentTheme = themeInfo;
+        currentDayTheme = themeInfo;
         arrayList.add(themeInfo);
         themesDict.put("Default", defaultTheme);
         themeInfo = new ThemeInfo();
         themeInfo.name = "Dark";
         themeInfo.assetName = "dark.attheme";
-        themes.add(themeInfo);
+        arrayList = themes;
+        currentNightTheme = themeInfo;
+        arrayList.add(themeInfo);
         themesDict.put("Dark", themeInfo);
         themeInfo = new ThemeInfo();
         themeInfo.name = "Blue";
@@ -1430,19 +1521,67 @@ public class Theme {
         sortThemes();
         ThemeInfo applyingTheme = null;
         try {
-            String theme = MessagesController.getGlobalMainSettings().getString("theme", null);
+            preferences = MessagesController.getGlobalMainSettings();
+            String theme = preferences.getString("theme", null);
             if (theme != null) {
                 applyingTheme = (ThemeInfo) themesDict.get(theme);
             }
+            theme = preferences.getString("nighttheme", null);
+            if (theme != null) {
+                ThemeInfo t = (ThemeInfo) themesDict.get(theme);
+                if (t != null) {
+                    currentNightTheme = t;
+                }
+            }
+            selectedAutoNightType = preferences.getInt("selectedAutoNightType", 0);
+            autoNightScheduleByLocation = preferences.getBoolean("autoNightScheduleByLocation", false);
+            autoNightBrighnessThreshold = preferences.getFloat("autoNightBrighnessThreshold", 0.25f);
+            autoNightDayStartTime = preferences.getInt("autoNightDayStartTime", 1320);
+            autoNightDayEndTime = preferences.getInt("autoNightDayEndTime", 480);
+            autoNightSunsetTime = preferences.getInt("autoNightSunsetTime", 1320);
+            autoNightSunriseTime = preferences.getInt("autoNightSunriseTime", 480);
+            autoNightCityName = preferences.getString("autoNightCityName", TtmlNode.ANONYMOUS_REGION_ID);
+            autoNightLocationLatitude = (double) preferences.getLong("autoNightLocationLatitude", 10000);
+            autoNightLocationLongitude = (double) preferences.getLong("autoNightLocationLongitude", 10000);
+            autoNightLastSunCheckDay = preferences.getInt("autoNightLastSunCheckDay", -1);
         } catch (Throwable e2) {
             FileLog.e(e2);
         }
         if (applyingTheme == null) {
             applyingTheme = defaultTheme;
+        } else {
+            currentDayTheme = applyingTheme;
         }
-        applyTheme(applyingTheme, false, false);
+        applyTheme(applyingTheme, false, false, false);
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                Theme.checkAutoNightThemeConditions();
+            }
+        });
     }
 
+    public static void saveAutoNightThemeConfig() {
+        Editor editor = MessagesController.getGlobalMainSettings().edit();
+        editor.putInt("selectedAutoNightType", selectedAutoNightType);
+        editor.putBoolean("autoNightScheduleByLocation", autoNightScheduleByLocation);
+        editor.putFloat("autoNightBrighnessThreshold", autoNightBrighnessThreshold);
+        editor.putInt("autoNightDayStartTime", autoNightDayStartTime);
+        editor.putInt("autoNightDayEndTime", autoNightDayEndTime);
+        editor.putInt("autoNightSunriseTime", autoNightSunriseTime);
+        editor.putString("autoNightCityName", autoNightCityName);
+        editor.putInt("autoNightSunsetTime", autoNightSunsetTime);
+        editor.putLong("autoNightLocationLatitude", Long.MAX_VALUE);
+        editor.putLong("autoNightLocationLongitude", Long.MAX_VALUE);
+        editor.putInt("autoNightLastSunCheckDay", autoNightLastSunCheckDay);
+        if (currentNightTheme != null) {
+            editor.putString("nighttheme", currentNightTheme.name);
+        } else {
+            editor.remove("nighttheme");
+        }
+        editor.commit();
+    }
+
+    @SuppressLint({"PrivateApi"})
     private static Drawable getStateDrawable(Drawable drawable, int index) {
         if (StateListDrawable_getStateDrawableMethod == null) {
             try {
@@ -1769,7 +1908,7 @@ public class Theme {
 
     public static void applyPreviousTheme() {
         if (previousTheme != null) {
-            applyTheme(previousTheme, true, false);
+            applyTheme(previousTheme, true, false, false);
             previousTheme = null;
         }
     }
@@ -1818,7 +1957,7 @@ public class Theme {
             if (temporary) {
                 z = false;
             }
-            applyTheme(themeInfo, z, true);
+            applyTheme(themeInfo, z, true, false);
             return themeInfo;
         } catch (Throwable e) {
             FileLog.e(e);
@@ -1827,10 +1966,14 @@ public class Theme {
     }
 
     public static void applyTheme(ThemeInfo themeInfo) {
-        applyTheme(themeInfo, true, true);
+        applyTheme(themeInfo, true, true, false);
     }
 
-    public static void applyTheme(ThemeInfo themeInfo, boolean save, boolean removeWallpaperOverride) {
+    public static void applyTheme(ThemeInfo themeInfo, boolean animated) {
+        applyTheme(themeInfo, true, true, animated);
+    }
+
+    public static void applyTheme(ThemeInfo themeInfo, boolean save, boolean removeWallpaperOverride, final boolean nightTheme) {
         if (themeInfo != null) {
             ThemeEditorView editorView = ThemeEditorView.getInstance();
             if (editorView != null) {
@@ -1839,7 +1982,7 @@ public class Theme {
             try {
                 Editor editor;
                 if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
-                    if (save) {
+                    if (!nightTheme && save) {
                         editor = MessagesController.getGlobalMainSettings().edit();
                         editor.remove("theme");
                         if (removeWallpaperOverride) {
@@ -1851,7 +1994,7 @@ public class Theme {
                     wallpaper = null;
                     themedWallpaper = null;
                 } else {
-                    if (save) {
+                    if (!nightTheme && save) {
                         editor = MessagesController.getGlobalMainSettings().edit();
                         editor.putString("theme", themeInfo.name);
                         if (removeWallpaperOverride) {
@@ -1866,6 +2009,9 @@ public class Theme {
                     }
                 }
                 currentTheme = themeInfo;
+                if (!nightTheme) {
+                    currentDayTheme = currentTheme;
+                }
                 reloadWallpaper();
                 applyCommonTheme();
                 applyDialogsTheme();
@@ -1873,7 +2019,7 @@ public class Theme {
                 applyChatTheme(false);
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
-                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewTheme, new Object[0]);
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewTheme, Boolean.valueOf(nightTheme));
                     }
                 });
             } catch (Throwable e) {
@@ -1900,7 +2046,7 @@ public class Theme {
     }
 
     public static String getCurrentThemeName() {
-        String text = currentTheme.getName();
+        String text = currentDayTheme.getName();
         if (text.endsWith(".attheme")) {
             return text.substring(0, text.lastIndexOf(46));
         }
@@ -1908,7 +2054,101 @@ public class Theme {
     }
 
     public static ThemeInfo getCurrentTheme() {
-        return currentTheme != null ? currentTheme : defaultTheme;
+        return currentDayTheme != null ? currentDayTheme : defaultTheme;
+    }
+
+    public static ThemeInfo getCurrentNightTheme() {
+        return currentNightTheme;
+    }
+
+    public static void setCurrentNightTheme(ThemeInfo theme) {
+        currentNightTheme = theme;
+        checkAutoNightThemeConditions();
+    }
+
+    public static void checkAutoNightThemeConditions() {
+        if (selectedAutoNightType != 2) {
+            if (switchNightRunnableScheduled) {
+                switchNightRunnableScheduled = false;
+                AndroidUtilities.cancelRunOnUIThread(switchNightBrightnessRunnable);
+            }
+            if (switchDayRunnableScheduled) {
+                switchDayRunnableScheduled = false;
+                AndroidUtilities.cancelRunOnUIThread(switchDayBrightnessRunnable);
+            }
+            if (lightSensorRegistered) {
+                lastBrightnessValue = 1.0f;
+                sensorManager.unregisterListener(ambientSensorListener, lightSensor);
+                lightSensorRegistered = false;
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("light sensor unregistered");
+                }
+            }
+        }
+        int switchToTheme = 0;
+        if (selectedAutoNightType == 1) {
+            int timeStart;
+            int timeEnd;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            int time = (calendar.get(11) * 60) + calendar.get(12);
+            if (autoNightScheduleByLocation) {
+                int day = calendar.get(5);
+                if (!(autoNightLastSunCheckDay == day || autoNightLocationLatitude == 10000.0d || autoNightLocationLongitude == 10000.0d)) {
+                    int[] t = SunDate.calculateSunriseSunset(autoNightLocationLatitude, autoNightLocationLongitude);
+                    autoNightSunsetTime = t[0];
+                    autoNightSunriseTime = t[1];
+                    autoNightLastSunCheckDay = day;
+                    saveAutoNightThemeConfig();
+                }
+                timeStart = autoNightSunsetTime;
+                timeEnd = autoNightSunriseTime;
+            } else {
+                timeStart = autoNightDayStartTime;
+                timeEnd = autoNightDayEndTime;
+            }
+            switchToTheme = timeStart < timeEnd ? (timeStart > time || time > timeEnd) ? 1 : 2 : ((timeStart > time || time > 1440) && (time < 0 || time > timeEnd)) ? 1 : 2;
+        } else if (selectedAutoNightType == 2) {
+            if (lightSensor == null) {
+                sensorManager = (SensorManager) ApplicationLoader.applicationContext.getSystemService("sensor");
+                lightSensor = sensorManager.getDefaultSensor(5);
+            }
+            if (!lightSensorRegistered) {
+                sensorManager.registerListener(ambientSensorListener, lightSensor, 500000);
+                lightSensorRegistered = true;
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("light sensor registered");
+                }
+            }
+            if (lastBrightnessValue <= autoNightBrighnessThreshold) {
+                if (!switchNightRunnableScheduled) {
+                    switchToTheme = 2;
+                }
+            } else if (!switchDayRunnableScheduled) {
+                switchToTheme = 1;
+            }
+        } else if (selectedAutoNightType == 0) {
+            switchToTheme = 1;
+        }
+        if (switchToTheme != 0) {
+            boolean z;
+            if (switchToTheme == 2) {
+                z = true;
+            } else {
+                z = false;
+            }
+            applyDayNightThemeMaybe(z);
+        }
+    }
+
+    private static void applyDayNightThemeMaybe(boolean night) {
+        if (night) {
+            if (currentTheme != currentNightTheme) {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentNightTheme);
+            }
+        } else if (currentTheme != currentDayTheme) {
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentDayTheme);
+        }
     }
 
     public static boolean deleteTheme(ThemeInfo themeInfo) {
@@ -1917,7 +2157,7 @@ public class Theme {
         }
         boolean currentThemeDeleted = false;
         if (currentTheme == themeInfo) {
-            applyTheme(defaultTheme, true, false);
+            applyTheme(defaultTheme, true, false, false);
             currentThemeDeleted = true;
         }
         otherThemes.remove(themeInfo);
@@ -1965,8 +2205,11 @@ public class Theme {
                     sortThemes();
                 }
                 currentTheme = newTheme;
+                if (currentTheme != currentNightTheme) {
+                    currentDayTheme = currentTheme;
+                }
                 Editor editor = MessagesController.getGlobalMainSettings().edit();
-                editor.putString("theme", currentTheme.name);
+                editor.putString("theme", currentDayTheme.name);
                 editor.commit();
                 if (stream2 != null) {
                     try {
@@ -2849,6 +3092,33 @@ public class Theme {
         drawable.setColorFilter(new PorterDuffColorFilter(getColor(key), Mode.MULTIPLY));
     }
 
+    public static void setEmojiDrawableColor(Drawable drawable, int color, boolean selected) {
+        if (!(drawable instanceof StateListDrawable)) {
+            return;
+        }
+        Drawable state;
+        if (selected) {
+            try {
+                state = getStateDrawable(drawable, 0);
+                if (state instanceof ShapeDrawable) {
+                    ((ShapeDrawable) state).getPaint().setColor(color);
+                    return;
+                } else {
+                    state.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+                    return;
+                }
+            } catch (Throwable th) {
+                return;
+            }
+        }
+        state = getStateDrawable(drawable, 1);
+        if (state instanceof ShapeDrawable) {
+            ((ShapeDrawable) state).getPaint().setColor(color);
+        } else {
+            state.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+        }
+    }
+
     public static void setSelectorDrawableColor(Drawable drawable, int color, boolean selected) {
         if (drawable instanceof StateListDrawable) {
             Drawable state;
@@ -2931,10 +3201,10 @@ public class Theme {
                     Throwable e;
                     int i;
                     SharedPreferences preferences;
-                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
                         int selectedBackground;
+                        File toFile;
                         if (!MessagesController.getGlobalMainSettings().getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

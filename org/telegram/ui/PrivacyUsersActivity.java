@@ -250,7 +250,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
-            public void didSetColor(int color) {
+            public void didSetColor() {
                 int count = PrivacyUsersActivity.this.listView.getChildCount();
                 for (int a = 0; a < count; a++) {
                     View child = PrivacyUsersActivity.this.listView.getChildAt(a);

@@ -30,18 +30,19 @@ public class ThemeCell extends FrameLayout {
     private static byte[] bytes = new byte[1024];
     private ImageView checkImage;
     private ThemeInfo currentThemeInfo;
+    private boolean isNightTheme;
     private boolean needDivider;
     private ImageView optionsButton;
     private Paint paint = new Paint(1);
     private TextView textView;
 
-    public ThemeCell(Context context) {
+    public ThemeCell(Context context, boolean nightTheme) {
         int i;
         int i2 = 3;
         super(context);
         setWillNotDraw(false);
+        this.isNightTheme = nightTheme;
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -59,6 +60,14 @@ public class ThemeCell extends FrameLayout {
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
         this.checkImage.setImageResource(R.drawable.sticker_added);
+        if (this.isNightTheme) {
+            view = this.checkImage;
+            if (!LocaleController.isRTL) {
+                i2 = 5;
+            }
+            addView(view, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 17.0f, 0.0f, 17.0f, 0.0f));
+            return;
+        }
         view = this.checkImage;
         if (LocaleController.isRTL) {
             i = 3;
@@ -77,6 +86,12 @@ public class ThemeCell extends FrameLayout {
             i2 = 5;
         }
         addView(view2, LayoutHelper.createFrame(48, 48, i2 | 48));
+    }
+
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -109,7 +124,7 @@ public class ThemeCell extends FrameLayout {
         }
         this.textView.setText(text);
         this.needDivider = divider;
-        this.checkImage.setVisibility(themeInfo == Theme.getCurrentTheme() ? 0 : 4);
+        updateCurrentThemeCheck();
         boolean finished = false;
         if (!(themeInfo.pathToFile == null && themeInfo.assetName == null)) {
             FileInputStream fileInputStream = null;
@@ -205,6 +220,19 @@ public class ThemeCell extends FrameLayout {
         }
         if (!finished) {
             this.paint.setColor(Theme.getDefaultColor(Theme.key_actionBarDefault));
+        }
+    }
+
+    public void updateCurrentThemeCheck() {
+        ThemeInfo currentTheme;
+        if (this.isNightTheme) {
+            currentTheme = Theme.getCurrentNightTheme();
+        } else {
+            currentTheme = Theme.getCurrentTheme();
+        }
+        int newVisibility = this.currentThemeInfo == currentTheme ? 0 : 4;
+        if (this.checkImage.getVisibility() != newVisibility) {
+            this.checkImage.setVisibility(newVisibility);
         }
     }
 

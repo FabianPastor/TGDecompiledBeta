@@ -157,13 +157,13 @@ final class zzcgo extends zzcjl {
     }
 
     private static boolean zza(zzchm com_google_android_gms_internal_zzchm, SQLiteDatabase sQLiteDatabase, String str) {
-        Cursor query;
         Object e;
         Throwable th;
         Cursor cursor = null;
         if (com_google_android_gms_internal_zzchm == null) {
             throw new IllegalArgumentException("Monitor must not be null");
         }
+        Cursor query;
         try {
             SQLiteDatabase sQLiteDatabase2 = sQLiteDatabase;
             query = sQLiteDatabase2.query("SQLITE_MASTER", new String[]{"name"}, "name=?", new String[]{str}, null, null, null);
@@ -791,6 +791,7 @@ final class zzcgo extends zzcjl {
     }
 
     public final zzcgw zzae(String str, String str2) {
+        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
@@ -798,7 +799,6 @@ final class zzcgo extends zzcjl {
         zzbq.zzgm(str2);
         zzve();
         zzxf();
-        Cursor query;
         try {
             query = getWritableDatabase().query("events", new String[]{"lifetime_count", "current_bundle_count", "last_fire_timestamp", "last_bundled_timestamp", "last_sampled_complex_event_id", "last_sampling_rate", "last_exempt_from_sampling"}, "app_id=? and name=?", new String[]{str, str2}, null, null, null);
             try {
@@ -1375,12 +1375,12 @@ final class zzcgo extends zzcjl {
     }
 
     public final String zzba(long j) {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
         zzve();
         zzxf();
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from apps where app_id in (select distinct app_id from raw_events) and config_fetched_time < ? order by failed_config_fetch_time limit 1;", new String[]{String.valueOf(j)});
             try {

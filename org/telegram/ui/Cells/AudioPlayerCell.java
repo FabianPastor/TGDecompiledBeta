@@ -170,6 +170,9 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
 
     public void didPressedButton() {
         if (this.buttonState == 0) {
+            if (this.miniButtonState == 0) {
+                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), true, 0);
+            }
             if (MediaController.getInstance().findMessageInPlaylistAndPlay(this.currentMessageObject)) {
                 if (this.hasMiniProgress == 2 && this.miniButtonState != 1) {
                     this.miniButtonState = 1;
