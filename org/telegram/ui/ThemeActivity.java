@@ -288,9 +288,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                                         if (Theme.deleteTheme(themeInfo)) {
                                                             ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true, true);
                                                         }
-                                                        if (ThemeActivity.this.listAdapter != null) {
-                                                            ThemeActivity.this.listAdapter.notifyDataSetChanged();
-                                                        }
+                                                        ThemeActivity.this.updateRows();
                                                     }
                                                 });
                                                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -607,7 +605,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             }
         }
         if (this.listAdapter != null) {
-            if (this.previousUpdatedType == -1) {
+            if (this.currentType == 0 || this.previousUpdatedType == -1) {
                 this.listAdapter.notifyDataSetChanged();
             } else {
                 int start = this.nightTypeInfoRow + 1;
@@ -655,8 +653,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 }
             }
         }
-        this.previousByLocation = Theme.autoNightScheduleByLocation;
-        this.previousUpdatedType = Theme.selectedAutoNightType;
+        if (this.currentType == 1) {
+            this.previousByLocation = Theme.autoNightScheduleByLocation;
+            this.previousUpdatedType = Theme.selectedAutoNightType;
+        }
     }
 
     public boolean onFragmentCreate() {
@@ -771,7 +771,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                 String name = view2.getText().toString() + ".attheme";
                                 themeEditorView.show(ThemeActivity.this.getParentActivity(), name);
                                 Theme.saveCurrentTheme(name, true);
-                                ThemeActivity.this.listAdapter.notifyDataSetChanged();
+                                ThemeActivity.this.updateRows();
                                 alertDialog.dismiss();
                                 SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                                 if (!preferences.getBoolean("themehint", false)) {

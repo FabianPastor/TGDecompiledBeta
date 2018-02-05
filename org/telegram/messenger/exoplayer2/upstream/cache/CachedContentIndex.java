@@ -268,6 +268,7 @@ class CachedContentIndex {
 
     private void writeFile() throws CacheException {
         GeneralSecurityException e;
+        Object output;
         Throwable e2;
         Throwable th;
         int flags = 1;
@@ -279,21 +280,20 @@ class CachedContentIndex {
             } else {
                 this.bufferedOutputStream.reset(outputStream);
             }
-            DataOutputStream output = new DataOutputStream(this.bufferedOutputStream);
-            Object output2;
+            DataOutputStream output2 = new DataOutputStream(this.bufferedOutputStream);
             try {
-                output.writeInt(1);
+                output2.writeInt(1);
                 if (!this.encrypt) {
                     flags = 0;
                 }
-                output.writeInt(flags);
+                output2.writeInt(flags);
                 if (this.encrypt) {
                     byte[] initializationVector = new byte[16];
                     new Random().nextBytes(initializationVector);
-                    output.write(initializationVector);
+                    output2.write(initializationVector);
                     try {
                         this.cipher.init(1, this.secretKeySpec, new IvParameterSpec(initializationVector));
-                        output.flush();
+                        output2.flush();
                         closeable = new DataOutputStream(new CipherOutputStream(this.bufferedOutputStream, this.cipher));
                     } catch (GeneralSecurityException e3) {
                         e = e3;
@@ -303,7 +303,7 @@ class CachedContentIndex {
                         throw new IllegalStateException(e);
                     }
                 }
-                output2 = output;
+                output = output2;
                 closeable.writeInt(this.keyToContent.size());
                 int hashCode = 0;
                 for (CachedContent cachedContent : this.keyToContent.values()) {
@@ -315,7 +315,7 @@ class CachedContentIndex {
                 Util.closeQuietly((Closeable) null);
             } catch (IOException e4) {
                 e2 = e4;
-                output2 = output;
+                output = output2;
                 try {
                     throw new CacheException(e2);
                 } catch (Throwable th2) {
@@ -325,7 +325,7 @@ class CachedContentIndex {
                 }
             } catch (Throwable th3) {
                 th = th3;
-                output2 = output;
+                output = output2;
                 Util.closeQuietly(closeable);
                 throw th;
             }

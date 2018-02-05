@@ -359,6 +359,6 @@ public class BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        return null;
+        return new ThemeDescription[0];
     }
 }

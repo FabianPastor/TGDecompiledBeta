@@ -2883,7 +2883,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         if (PhotoViewer.this.pipItem.getAlpha() == 1.0f) {
                             PhotoViewer.this.switchToPip();
                         }
-                    } else if (id == 7) {
+                    } else if (id == 7 && PhotoViewer.this.currentMessageObject != null) {
                         FileLoader.getInstance(PhotoViewer.this.currentAccount).cancelLoadFile(PhotoViewer.this.currentMessageObject.getDocument());
                         PhotoViewer.this.releasePlayer();
                         PhotoViewer.this.bottomLayout.setTag(Integer.valueOf(1));

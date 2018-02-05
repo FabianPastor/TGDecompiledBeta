@@ -2369,9 +2369,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
-        long newTaskId;
         Throwable e;
-        final int i;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
             ArrayList<Integer> toSend = null;
             if (taskId == 0) {
@@ -2397,10 +2395,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance(this.currentAccount).updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
+            long newTaskId;
             NativeByteBuffer data;
             NativeByteBuffer data2;
             if (channelId != 0) {
                 TL_channels_deleteMessages req;
+                final int i;
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
                     newTaskId = taskId;
@@ -4039,7 +4039,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
-                Chat chat;
                 User user;
                 Integer value;
                 final LongSparseArray<TL_dialog> new_dialogs_dict = new LongSparseArray();
@@ -4059,6 +4058,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 Message lastMessage = null;
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     if (lastMessage == null || message.date < lastMessage.date) {
                         lastMessage = message;
@@ -4603,7 +4603,6 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
-                Chat chat;
                 final LongSparseArray<TL_dialog> new_dialogs_dict = new LongSparseArray();
                 final LongSparseArray<MessageObject> new_dialogMessage = new LongSparseArray();
                 SparseArray usersDict = new SparseArray(dialogsRes.users.size());
@@ -4618,6 +4617,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(c.id, c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {

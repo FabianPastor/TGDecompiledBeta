@@ -1910,6 +1910,7 @@ public class Theme {
         if (previousTheme != null) {
             applyTheme(previousTheme, true, false, false);
             previousTheme = null;
+            checkAutoNightThemeConditions();
         }
     }
 
@@ -1947,12 +1948,15 @@ public class Theme {
             }
             if (temporary) {
                 previousTheme = currentTheme;
-            } else if (newTheme) {
-                themes.add(themeInfo);
-                themesDict.put(themeInfo.name, themeInfo);
-                otherThemes.add(themeInfo);
-                sortThemes();
-                saveOtherThemes();
+            } else {
+                previousTheme = null;
+                if (newTheme) {
+                    themes.add(themeInfo);
+                    themesDict.put(themeInfo.name, themeInfo);
+                    otherThemes.add(themeInfo);
+                    sortThemes();
+                    saveOtherThemes();
+                }
             }
             if (temporary) {
                 z = false;
@@ -2067,77 +2071,79 @@ public class Theme {
     }
 
     public static void checkAutoNightThemeConditions() {
-        if (selectedAutoNightType != 2) {
-            if (switchNightRunnableScheduled) {
-                switchNightRunnableScheduled = false;
-                AndroidUtilities.cancelRunOnUIThread(switchNightBrightnessRunnable);
-            }
-            if (switchDayRunnableScheduled) {
-                switchDayRunnableScheduled = false;
-                AndroidUtilities.cancelRunOnUIThread(switchDayBrightnessRunnable);
-            }
-            if (lightSensorRegistered) {
-                lastBrightnessValue = 1.0f;
-                sensorManager.unregisterListener(ambientSensorListener, lightSensor);
-                lightSensorRegistered = false;
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("light sensor unregistered");
+        if (previousTheme == null) {
+            if (selectedAutoNightType != 2) {
+                if (switchNightRunnableScheduled) {
+                    switchNightRunnableScheduled = false;
+                    AndroidUtilities.cancelRunOnUIThread(switchNightBrightnessRunnable);
+                }
+                if (switchDayRunnableScheduled) {
+                    switchDayRunnableScheduled = false;
+                    AndroidUtilities.cancelRunOnUIThread(switchDayBrightnessRunnable);
+                }
+                if (lightSensorRegistered) {
+                    lastBrightnessValue = 1.0f;
+                    sensorManager.unregisterListener(ambientSensorListener, lightSensor);
+                    lightSensorRegistered = false;
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("light sensor unregistered");
+                    }
                 }
             }
-        }
-        int switchToTheme = 0;
-        if (selectedAutoNightType == 1) {
-            int timeStart;
-            int timeEnd;
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            int time = (calendar.get(11) * 60) + calendar.get(12);
-            if (autoNightScheduleByLocation) {
-                int day = calendar.get(5);
-                if (!(autoNightLastSunCheckDay == day || autoNightLocationLatitude == 10000.0d || autoNightLocationLongitude == 10000.0d)) {
-                    int[] t = SunDate.calculateSunriseSunset(autoNightLocationLatitude, autoNightLocationLongitude);
-                    autoNightSunsetTime = t[0];
-                    autoNightSunriseTime = t[1];
-                    autoNightLastSunCheckDay = day;
-                    saveAutoNightThemeConfig();
+            int switchToTheme = 0;
+            if (selectedAutoNightType == 1) {
+                int timeStart;
+                int timeEnd;
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                int time = (calendar.get(11) * 60) + calendar.get(12);
+                if (autoNightScheduleByLocation) {
+                    int day = calendar.get(5);
+                    if (!(autoNightLastSunCheckDay == day || autoNightLocationLatitude == 10000.0d || autoNightLocationLongitude == 10000.0d)) {
+                        int[] t = SunDate.calculateSunriseSunset(autoNightLocationLatitude, autoNightLocationLongitude);
+                        autoNightSunsetTime = t[0];
+                        autoNightSunriseTime = t[1];
+                        autoNightLastSunCheckDay = day;
+                        saveAutoNightThemeConfig();
+                    }
+                    timeStart = autoNightSunsetTime;
+                    timeEnd = autoNightSunriseTime;
+                } else {
+                    timeStart = autoNightDayStartTime;
+                    timeEnd = autoNightDayEndTime;
                 }
-                timeStart = autoNightSunsetTime;
-                timeEnd = autoNightSunriseTime;
-            } else {
-                timeStart = autoNightDayStartTime;
-                timeEnd = autoNightDayEndTime;
-            }
-            switchToTheme = timeStart < timeEnd ? (timeStart > time || time > timeEnd) ? 1 : 2 : ((timeStart > time || time > 1440) && (time < 0 || time > timeEnd)) ? 1 : 2;
-        } else if (selectedAutoNightType == 2) {
-            if (lightSensor == null) {
-                sensorManager = (SensorManager) ApplicationLoader.applicationContext.getSystemService("sensor");
-                lightSensor = sensorManager.getDefaultSensor(5);
-            }
-            if (!lightSensorRegistered) {
-                sensorManager.registerListener(ambientSensorListener, lightSensor, 500000);
-                lightSensorRegistered = true;
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("light sensor registered");
+                switchToTheme = timeStart < timeEnd ? (timeStart > time || time > timeEnd) ? 1 : 2 : ((timeStart > time || time > 1440) && (time < 0 || time > timeEnd)) ? 1 : 2;
+            } else if (selectedAutoNightType == 2) {
+                if (lightSensor == null) {
+                    sensorManager = (SensorManager) ApplicationLoader.applicationContext.getSystemService("sensor");
+                    lightSensor = sensorManager.getDefaultSensor(5);
                 }
-            }
-            if (lastBrightnessValue <= autoNightBrighnessThreshold) {
-                if (!switchNightRunnableScheduled) {
-                    switchToTheme = 2;
+                if (!(lightSensorRegistered || lightSensor == null)) {
+                    sensorManager.registerListener(ambientSensorListener, lightSensor, 500000);
+                    lightSensorRegistered = true;
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("light sensor registered");
+                    }
                 }
-            } else if (!switchDayRunnableScheduled) {
+                if (lastBrightnessValue <= autoNightBrighnessThreshold) {
+                    if (!switchNightRunnableScheduled) {
+                        switchToTheme = 2;
+                    }
+                } else if (!switchDayRunnableScheduled) {
+                    switchToTheme = 1;
+                }
+            } else if (selectedAutoNightType == 0) {
                 switchToTheme = 1;
             }
-        } else if (selectedAutoNightType == 0) {
-            switchToTheme = 1;
-        }
-        if (switchToTheme != 0) {
-            boolean z;
-            if (switchToTheme == 2) {
-                z = true;
-            } else {
-                z = false;
+            if (switchToTheme != 0) {
+                boolean z;
+                if (switchToTheme == 2) {
+                    z = true;
+                } else {
+                    z = false;
+                }
+                applyDayNightThemeMaybe(z);
             }
-            applyDayNightThemeMaybe(z);
         }
     }
 
@@ -2262,8 +2268,8 @@ public class Theme {
     }
 
     public static File getAssetFile(String assetName) {
-        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
         long size;
+        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
         try {
             InputStream stream = ApplicationLoader.applicationContext.getAssets().open(assetName);
             size = (long) stream.available();
@@ -3201,10 +3207,10 @@ public class Theme {
                     Throwable e;
                     int i;
                     SharedPreferences preferences;
+                    int selectedBackground;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int selectedBackground;
-                        File toFile;
                         if (!MessagesController.getGlobalMainSettings().getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

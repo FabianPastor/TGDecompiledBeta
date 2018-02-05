@@ -115,11 +115,11 @@ public class EventLogger implements EventListener, AudioRendererEventListener, D
             Log.d(TAG, "Tracks []");
             return;
         }
+        int groupIndex;
+        TrackGroup trackGroup;
+        int trackIndex;
         Log.d(TAG, "Tracks [");
         for (int rendererIndex = 0; rendererIndex < mappedTrackInfo.length; rendererIndex++) {
-            int groupIndex;
-            TrackGroup trackGroup;
-            int trackIndex;
             TrackGroupArray rendererTrackGroups = mappedTrackInfo.getTrackGroups(rendererIndex);
             TrackSelection trackSelection = trackSelections.get(rendererIndex);
             if (rendererTrackGroups.length > 0) {

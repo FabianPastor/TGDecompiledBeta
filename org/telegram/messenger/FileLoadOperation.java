@@ -85,7 +85,7 @@ public class FileLoadOperation {
     private InputFileLocation location;
     private ArrayList<Range> notCheckedCdnRanges;
     private ArrayList<Range> notLoadedBytesRanges;
-    private ArrayList<Range> notLoadedBytesRangesCopy;
+    private volatile ArrayList<Range> notLoadedBytesRangesCopy;
     private ArrayList<Range> notRequestedBytesRanges;
     private volatile boolean paused;
     private int renameRetryCount;
@@ -460,10 +460,11 @@ public class FileLoadOperation {
     }
 
     protected float getDownloadedLengthFromOffset(float progress) {
-        if (this.totalBytesCount == 0 || this.notLoadedBytesRangesCopy == null) {
+        ArrayList<Range> ranges = this.notLoadedBytesRangesCopy;
+        if (this.totalBytesCount == 0 || ranges == null) {
             return 0.0f;
         }
-        return (((float) getDownloadedLengthFromOffsetInternal(this.notLoadedBytesRangesCopy, (int) (((float) this.totalBytesCount) * progress), this.totalBytesCount)) / ((float) this.totalBytesCount)) + progress;
+        return (((float) getDownloadedLengthFromOffsetInternal(ranges, (int) (((float) this.totalBytesCount) * progress), this.totalBytesCount)) / ((float) this.totalBytesCount)) + progress;
     }
 
     protected int getDownloadedLengthFromOffset(int offset, int length) {
