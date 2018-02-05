@@ -160,10 +160,10 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         }
 
         public void load() throws IOException, InterruptedException {
-            ExtractorInput input;
             Throwable th;
             int result = 0;
             while (result == 0 && !this.loadCanceled) {
+                ExtractorInput input;
                 try {
                     long position = this.positionHolder.position;
                     this.dataSpec = new DataSpec(this.uri, position, -1, ExtractorMediaPeriod.this.customCacheKey);
@@ -306,6 +306,7 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
     }
 
     public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
+        SampleQueue sampleQueue;
         Assertions.checkState(this.prepared);
         int oldEnabledTrackCount = this.enabledTrackCount;
         int i = 0;
@@ -333,7 +334,6 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
                 streams[i] = new SampleStreamImpl(track);
                 streamResetFlags[i] = true;
                 if (!seekRequired) {
-                    SampleQueue sampleQueue;
                     sampleQueue = this.sampleQueues[track];
                     sampleQueue.rewind();
                     if (sampleQueue.advanceTo(positionUs, true, true) != -1 || sampleQueue.getReadIndex() == 0) {

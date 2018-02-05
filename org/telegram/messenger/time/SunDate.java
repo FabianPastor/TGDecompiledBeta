@@ -44,17 +44,17 @@ public class SunDate {
         return RADEG * Math.atan2(y, x);
     }
 
-    private static void sunposAtDay(double d, double[] lon, double[] r) {
-        double M = revolution(356.047d + (0.9856002585d * d));
-        double w = 282.9404d + (4.70935E-5d * d);
-        double e = 0.016709d - (1.151E-9d * d);
-        double E = M + (((RADEG * e) * sind(M)) * (1.0d + (cosd(M) * e)));
-        double x = cosd(E) - e;
-        double y = Math.sqrt(1.0d - (e * e)) * sind(E);
-        r[0] = Math.sqrt((x * x) + (y * y));
-        lon[0] = atan2d(y, x) + w;
-        if (lon[0] >= 360.0d) {
-            lon[0] = lon[0] - 360.0d;
+    private static void sunposAtDay(double p, double[] ot, double[] d) {
+        double S = revolution(356.047d + (0.9856002585d * p));
+        double l = 282.9404d + (4.70935E-5d * p);
+        double a = 0.016709d - (1.151E-9d * p);
+        double V = (((RADEG * a) * sind(S)) * (1.0d + (cosd(S) * a))) + S;
+        double k = cosd(V) - a;
+        double i = Math.sqrt(1.0d - (a * a)) * sind(V);
+        d[0] = Math.sqrt((k * k) + (i * i));
+        ot[0] = atan2d(i, k) + l;
+        if (ot[0] >= 360.0d) {
+            ot[0] = ot[0] - 360.0d;
         }
     }
 

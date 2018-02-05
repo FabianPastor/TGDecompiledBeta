@@ -166,9 +166,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                             File currentFile;
                                             Throwable e;
                                             File finalFile;
-                                            Intent intent;
                                             Throwable th;
                                             if (which == 0) {
+                                                Intent intent;
                                                 if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
                                                     StringBuilder result = new StringBuilder();
                                                     for (Entry<String, Integer> entry : Theme.getDefaultColors().entrySet()) {
@@ -371,7 +371,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                             cell.setText(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), true);
                             return;
                         } else {
-                            cell.setTextAndValue(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), Theme.getCurrentNightTheme().name, true);
+                            cell.setTextAndValue(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), Theme.getCurrentNightTheme().getName(), true);
                             return;
                         }
                     } else if (position == ThemeActivity.this.scheduleFromRow) {
