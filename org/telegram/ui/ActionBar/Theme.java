@@ -2089,7 +2089,21 @@ public class Theme {
     }
 
     public static void checkAutoNightThemeConditions() {
+        checkAutoNightThemeConditions(false);
+    }
+
+    public static void checkAutoNightThemeConditions(boolean force) {
         if (previousTheme == null) {
+            if (force) {
+                if (switchNightRunnableScheduled) {
+                    switchNightRunnableScheduled = false;
+                    AndroidUtilities.cancelRunOnUIThread(switchNightBrightnessRunnable);
+                }
+                if (switchDayRunnableScheduled) {
+                    switchDayRunnableScheduled = false;
+                    AndroidUtilities.cancelRunOnUIThread(switchDayBrightnessRunnable);
+                }
+            }
             if (selectedAutoNightType != 2) {
                 if (switchNightRunnableScheduled) {
                     switchNightRunnableScheduled = false;
@@ -2154,13 +2168,10 @@ public class Theme {
                 switchToTheme = 1;
             }
             if (switchToTheme != 0) {
-                boolean z;
-                if (switchToTheme == 2) {
-                    z = true;
-                } else {
-                    z = false;
-                }
-                applyDayNightThemeMaybe(z);
+                applyDayNightThemeMaybe(switchToTheme == 2);
+            }
+            if (force) {
+                lastThemeSwitchTime = 0;
             }
         }
     }

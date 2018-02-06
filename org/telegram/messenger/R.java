@@ -1349,7 +1349,6 @@ public final class R {
         public static final int EmojiBigSize = NUM;
         public static final int EmojiUseDefault = NUM;
         public static final int EmpryUsersPlaceholder = NUM;
-        public static final int EnableAllStreaming = NUM;
         public static final int EnableAllStreamingInfo = NUM;
         public static final int EnableAnimations = NUM;
         public static final int EnableProxyAlert = NUM;
@@ -1928,11 +1927,8 @@ public final class R {
         public static final int NotificationsOff = NUM;
         public static final int NotificationsOn = NUM;
         public static final int NotificationsOther = NUM;
-        public static final int NotificationsPriority = NUM;
-        public static final int NotificationsPriorityDefault = NUM;
         public static final int NotificationsPriorityHigh = NUM;
         public static final int NotificationsPriorityLow = NUM;
-        public static final int NotificationsPriorityMax = NUM;
         public static final int NotificationsPriorityMedium = NUM;
         public static final int NotificationsPrioritySettings = NUM;
         public static final int NotificationsPriorityUrgent = NUM;
@@ -2107,10 +2103,8 @@ public final class R {
         public static final int PrivacyClearShipping = NUM;
         public static final int PrivacyFloodControlError = NUM;
         public static final int PrivacyLastSeen = NUM;
-        public static final int PrivacyPayments = NUM;
         public static final int PrivacyPaymentsClear = NUM;
         public static final int PrivacyPaymentsClearAlert = NUM;
-        public static final int PrivacyPaymentsClearInfo = NUM;
         public static final int PrivacyPolicy = NUM;
         public static final int PrivacyPolicyUrl = NUM;
         public static final int PrivacySettings = NUM;

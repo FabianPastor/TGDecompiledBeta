@@ -2601,7 +2601,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 FileLog.e(e2);
             }
         } else if (id == NotificationCenter.reloadInterface) {
-            rebuildAllFragments(true);
+            rebuildAllFragments(false);
         } else if (id == NotificationCenter.suggestedLangpack) {
             showLanguageAlert(false);
         } else if (id == NotificationCenter.openArticle) {
@@ -3410,16 +3410,16 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
 
     public void rebuildAllFragments(boolean last) {
         if (this.layersActionBarLayout != null) {
-            this.layersActionBarLayout.rebuildAllFragmentViews(last, true);
+            this.layersActionBarLayout.rebuildAllFragmentViews(last, last);
         } else {
-            this.actionBarLayout.rebuildAllFragmentViews(last, true);
+            this.actionBarLayout.rebuildAllFragmentViews(last, last);
         }
     }
 
-    public void onRebuildAllFragments(ActionBarLayout layout) {
+    public void onRebuildAllFragments(ActionBarLayout layout, boolean last) {
         if (AndroidUtilities.isTablet() && layout == this.layersActionBarLayout) {
-            this.rightActionBarLayout.rebuildAllFragmentViews(true, true);
-            this.actionBarLayout.rebuildAllFragmentViews(true, true);
+            this.rightActionBarLayout.rebuildAllFragmentViews(last, last);
+            this.actionBarLayout.rebuildAllFragmentViews(last, last);
         }
         this.drawerLayoutAdapter.notifyDataSetChanged();
     }

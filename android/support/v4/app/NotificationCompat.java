@@ -220,6 +220,11 @@ public class NotificationCompat {
             return this;
         }
 
+        public Builder setShowWhen(boolean show) {
+            this.mShowWhen = show;
+            return this;
+        }
+
         public Builder setSmallIcon(int icon) {
             this.mNotification.icon = icon;
             return this;
@@ -744,10 +749,10 @@ public class NotificationCompat {
         }
 
         public void apply(NotificationBuilderWithBuilderAccessor builder) {
-            Message message;
             if (VERSION.SDK_INT >= 24) {
                 android.app.Notification.MessagingStyle style = new android.app.Notification.MessagingStyle(this.mUserDisplayName).setConversationTitle(this.mConversationTitle);
-                for (Message message2 : this.mMessages) {
+                for (Message message : this.mMessages) {
+                    Message message2;
                     android.app.Notification.MessagingStyle.Message frameworkMessage = new android.app.Notification.MessagingStyle.Message(message2.getText(), message2.getTimestamp(), message2.getSender());
                     if (message2.getDataMimeType() != null) {
                         frameworkMessage.setData(message2.getDataMimeType(), message2.getDataUri());

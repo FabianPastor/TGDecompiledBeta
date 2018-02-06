@@ -163,12 +163,12 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                     Builder builder = new Builder(ThemeActivity.this.getParentActivity());
                                     builder.setItems(themeInfo.pathToFile == null ? new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile)} : new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Edit", R.string.Edit), LocaleController.getString("Delete", R.string.Delete)}, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            File currentFile;
                                             Throwable e;
-                                            File finalFile;
-                                            Intent intent;
                                             Throwable th;
                                             if (which == 0) {
+                                                File currentFile;
+                                                File finalFile;
+                                                Intent intent;
                                                 if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
                                                     StringBuilder result = new StringBuilder();
                                                     for (Entry<String, Integer> entry : Theme.getDefaultColors().entrySet()) {
@@ -334,7 +334,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                 if (holder != null) {
                                     holder.itemView.setText(LocaleController.formatString("AutoNightBrightnessInfo", R.string.AutoNightBrightnessInfo, Integer.valueOf((int) (Theme.autoNightBrighnessThreshold * 100.0f))));
                                 }
-                                Theme.checkAutoNightThemeConditions();
+                                Theme.checkAutoNightThemeConditions(true);
                             }
                         }
                     };

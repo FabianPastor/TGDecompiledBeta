@@ -191,7 +191,7 @@ public class DataSettingsActivity extends BaseFragment {
                         checkCell.setTextAndCheck(string, z2, z);
                         return;
                     } else if (position != DataSettingsActivity.this.enableCacheStreamRow && position == DataSettingsActivity.this.enableAllStreamRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EnableAllStreaming", R.string.EnableAllStreaming), SharedConfig.streamAllVideo, false);
+                        checkCell.setTextAndCheck("Try to Stream All Videos", SharedConfig.streamAllVideo, false);
                         return;
                     } else {
                         return;

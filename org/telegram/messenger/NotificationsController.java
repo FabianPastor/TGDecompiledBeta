@@ -1949,7 +1949,7 @@ public class NotificationsController {
                             detailText = detailText + LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", this.total_unread_count), LocaleController.formatPluralString("FromChats", this.pushDialogs.size()));
                         }
                     }
-                    mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup(this.notificationGroup).setGroupSummary(true).setWhen(((long) lastMessageObject.messageOwner.date) * 1000).setColor(-13851168);
+                    mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup(this.notificationGroup).setGroupSummary(true).setShowWhen(true).setWhen(((long) lastMessageObject.messageOwner.date) * 1000).setColor(-13851168);
                     vibrationPattern = null;
                     importance = 0;
                     sound = null;
@@ -2303,7 +2303,7 @@ public class NotificationsController {
             } else {
                 detailText = detailText + LocaleController.formatPluralString("NewMessages", this.total_unread_count);
             }
-            mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup(this.notificationGroup).setGroupSummary(true).setWhen(((long) lastMessageObject.messageOwner.date) * 1000).setColor(-13851168);
+            mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(this.total_unread_count).setContentIntent(contentIntent).setGroup(this.notificationGroup).setGroupSummary(true).setShowWhen(true).setWhen(((long) lastMessageObject.messageOwner.date) * 1000).setColor(-13851168);
             vibrationPattern = null;
             importance = 0;
             sound = null;
@@ -2585,7 +2585,7 @@ public class NotificationsController {
                                 text.append(message);
                                 unreadConvBuilder.addMessage(message);
                                 messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, null);
-                                if (rows == null && dialog_id == 777000 && messageObject.messageOwner.reply_markup != null) {
+                                if (dialog_id == 777000 && messageObject.messageOwner.reply_markup != null) {
                                     rows = messageObject.messageOwner.reply_markup.rows;
                                     rowsMid = messageObject.getId();
                                 }
@@ -2619,7 +2619,7 @@ public class NotificationsController {
                         summaryExtender.setDismissalId("summary_" + dismissalID);
                         notificationBuilder.extend(summaryExtender);
                         date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
-                        builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
+                        builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShowWhen(true).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
                         if (this.pushDialogs.size() == 1 && !TextUtils.isEmpty(summary)) {
                             builder.setSubText(summary);
                         }
@@ -2780,7 +2780,7 @@ public class NotificationsController {
                         summaryExtender.setDismissalId("summary_" + dismissalID);
                         notificationBuilder.extend(summaryExtender);
                         date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
-                        builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
+                        builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShowWhen(true).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
                         builder.setSubText(summary);
                         if (lowerId == 0) {
                             builder.setLocalOnly(true);
@@ -2934,7 +2934,7 @@ public class NotificationsController {
                         summaryExtender.setDismissalId("summary_" + dismissalID);
                         notificationBuilder.extend(summaryExtender);
                         date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
-                        builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
+                        builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShowWhen(true).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
                         builder.setSubText(summary);
                         if (lowerId == 0) {
                             builder.setLocalOnly(true);

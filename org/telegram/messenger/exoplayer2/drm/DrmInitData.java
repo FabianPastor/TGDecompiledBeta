@@ -108,13 +108,13 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
     }
 
     public static DrmInitData createSessionCreationData(DrmInitData manifestData, DrmInitData mediaData) {
-        SchemeData data;
         int i = 0;
         List result = new ArrayList();
         String schemeType = null;
         if (manifestData != null) {
             schemeType = manifestData.schemeType;
-            for (SchemeData data2 : manifestData.schemeDatas) {
+            for (SchemeData data : manifestData.schemeDatas) {
+                SchemeData data2;
                 if (data2.hasData()) {
                     result.add(data2);
                 }
