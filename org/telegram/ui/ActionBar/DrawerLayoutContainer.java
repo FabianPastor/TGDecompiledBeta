@@ -26,6 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.beta.R;
 
@@ -360,14 +361,20 @@ public class DrawerLayoutContainer extends FrameLayout {
             View child = getChildAt(i);
             if (child.getVisibility() != 8) {
                 LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                try {
-                    if (this.drawerLayout != child) {
-                        child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
-                    } else {
-                        child.layout(-child.getMeasuredWidth(), lp.topMargin + getPaddingTop(), 0, (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
+                if (!BuildVars.DEBUG_VERSION) {
+                    try {
+                        if (this.drawerLayout != child) {
+                            child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
+                        } else {
+                            child.layout(-child.getMeasuredWidth(), lp.topMargin + getPaddingTop(), 0, (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
+                        }
+                    } catch (Throwable e) {
+                        FileLog.e(e);
                     }
-                } catch (Throwable e) {
-                    FileLog.e(e);
+                } else if (this.drawerLayout != child) {
+                    child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
+                } else {
+                    child.layout(-child.getMeasuredWidth(), lp.topMargin + getPaddingTop(), 0, (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
                 }
             }
         }

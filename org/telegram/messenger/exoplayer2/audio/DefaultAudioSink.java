@@ -467,9 +467,9 @@ public final class DefaultAudioSink implements AudioSink {
     }
 
     private void resetAudioProcessors() {
+        AudioProcessor audioProcessor;
         ArrayList<AudioProcessor> newAudioProcessors = new ArrayList();
-        for (AudioProcessor audioProcessor : getAvailableAudioProcessors()) {
-            AudioProcessor audioProcessor2;
+        for (AudioProcessor audioProcessor2 : getAvailableAudioProcessors()) {
             if (audioProcessor2.isActive()) {
                 newAudioProcessors.add(audioProcessor2);
             } else {

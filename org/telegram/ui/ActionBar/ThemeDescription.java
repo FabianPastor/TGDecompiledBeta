@@ -343,10 +343,17 @@ public class ThemeDescription {
             if (this.viewToInvalidate instanceof RecyclerListView) {
                 recyclerListView = (RecyclerListView) this.viewToInvalidate;
                 recyclerListView.getRecycledViewPool().clear();
-                recyclerListView.clearRecycler();
                 count = recyclerListView.getHiddenChildCount();
                 for (a = 0; a < count; a++) {
                     processViewColor(recyclerListView.getHiddenChildAt(a), color);
+                }
+                count = recyclerListView.getCachedChildCount();
+                for (a = 0; a < count; a++) {
+                    processViewColor(recyclerListView.getCachedChildAt(a), color);
+                }
+                count = recyclerListView.getAttachedScrapChildCount();
+                for (a = 0; a < count; a++) {
+                    processViewColor(recyclerListView.getAttachedScrapChildAt(a), color);
                 }
             }
             if (this.viewToInvalidate instanceof ViewGroup) {

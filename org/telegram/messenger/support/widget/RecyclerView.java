@@ -3702,8 +3702,26 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         this.glowColor = color;
     }
 
-    public void clearRecycler() {
-        this.mRecycler.clear();
+    public int getAttachedScrapChildCount() {
+        return this.mRecycler.getScrapCount();
+    }
+
+    public View getAttachedScrapChildAt(int index) {
+        if (index < 0 || index >= this.mRecycler.mAttachedScrap.size()) {
+            return null;
+        }
+        return this.mRecycler.getScrapViewAt(index);
+    }
+
+    public int getCachedChildCount() {
+        return this.mRecycler.mCachedViews.size();
+    }
+
+    public View getCachedChildAt(int index) {
+        if (index < 0 || index >= this.mRecycler.mCachedViews.size()) {
+            return null;
+        }
+        return ((ViewHolder) this.mRecycler.mCachedViews.get(index)).itemView;
     }
 
     public int getHiddenChildCount() {

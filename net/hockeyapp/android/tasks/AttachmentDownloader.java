@@ -155,11 +155,11 @@ public class AttachmentDownloader {
 
         private boolean downloadAttachment(String url, File file) {
             Throwable e;
+            boolean z;
             Throwable th;
             InputStream input = null;
             OutputStream output = null;
             HttpURLConnection connection = null;
-            boolean z;
             try {
                 connection = (HttpURLConnection) createConnection(new URL(url));
                 connection.connect();

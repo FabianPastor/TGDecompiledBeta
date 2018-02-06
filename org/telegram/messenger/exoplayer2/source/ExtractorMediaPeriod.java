@@ -160,10 +160,10 @@ final class ExtractorMediaPeriod implements ExtractorOutput, MediaPeriod, Upstre
         }
 
         public void load() throws IOException, InterruptedException {
+            ExtractorInput input;
             Throwable th;
             int result = 0;
             while (result == 0 && !this.loadCanceled) {
-                ExtractorInput input;
                 try {
                     long position = this.positionHolder.position;
                     this.dataSpec = new DataSpec(this.uri, position, -1, ExtractorMediaPeriod.this.customCacheKey);

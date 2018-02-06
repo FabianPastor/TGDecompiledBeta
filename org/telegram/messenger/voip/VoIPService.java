@@ -440,97 +440,101 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
     }
 
     public void acceptIncomingCall() {
-        stopRinging();
-        showNotification();
-        configureDeviceForCall();
-        startConnectingSound();
-        dispatchStateChanged(12);
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
-            }
-        });
-        final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
-        TL_messages_getDhConfig req = new TL_messages_getDhConfig();
-        req.random_length = 256;
-        req.version = messagesStorage.getLastSecretVersion();
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-            public void run(TLObject response, TL_error error) {
-                if (error == null) {
-                    messages_DhConfig res = (messages_DhConfig) response;
-                    if (response instanceof TL_messages_dhConfig) {
-                        if (Utilities.isGoodPrime(res.p, res.g)) {
-                            messagesStorage.setSecretPBytes(res.p);
-                            messagesStorage.setSecretG(res.g);
-                            messagesStorage.setLastSecretVersion(res.version);
-                            MessagesStorage.getInstance(VoIPService.this.currentAccount).saveSecretParams(messagesStorage.getLastSecretVersion(), messagesStorage.getSecretG(), messagesStorage.getSecretPBytes());
-                        } else {
+        if (this.currentState == 15) {
+            stopRinging();
+            showNotification();
+            configureDeviceForCall();
+            startConnectingSound();
+            dispatchStateChanged(12);
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
+                }
+            });
+            final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
+            TL_messages_getDhConfig req = new TL_messages_getDhConfig();
+            req.random_length = 256;
+            req.version = messagesStorage.getLastSecretVersion();
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
+                public void run(TLObject response, TL_error error) {
+                    if (error == null) {
+                        messages_DhConfig res = (messages_DhConfig) response;
+                        if (response instanceof TL_messages_dhConfig) {
+                            if (Utilities.isGoodPrime(res.p, res.g)) {
+                                messagesStorage.setSecretPBytes(res.p);
+                                messagesStorage.setSecretG(res.g);
+                                messagesStorage.setLastSecretVersion(res.version);
+                                MessagesStorage.getInstance(VoIPService.this.currentAccount).saveSecretParams(messagesStorage.getLastSecretVersion(), messagesStorage.getSecretG(), messagesStorage.getSecretPBytes());
+                            } else {
+                                if (BuildVars.LOGS_ENABLED) {
+                                    FileLog.e("stopping VoIP service, bad prime");
+                                }
+                                VoIPService.this.callFailed();
+                                return;
+                            }
+                        }
+                        byte[] salt = new byte[256];
+                        for (int a = 0; a < 256; a++) {
+                            salt[a] = (byte) (((byte) ((int) (Utilities.random.nextDouble() * 256.0d))) ^ res.random[a]);
+                        }
+                        if (VoIPService.this.call == null) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.e("stopping VoIP service, bad prime");
+                                FileLog.e("call is null");
                             }
                             VoIPService.this.callFailed();
                             return;
                         }
-                    }
-                    byte[] salt = new byte[256];
-                    for (int a = 0; a < 256; a++) {
-                        salt[a] = (byte) (((byte) ((int) (Utilities.random.nextDouble() * 256.0d))) ^ res.random[a]);
-                    }
-                    if (VoIPService.this.call == null) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.e("call is null");
+                        VoIPService.this.a_or_b = salt;
+                        BigInteger g_b = BigInteger.valueOf((long) messagesStorage.getSecretG()).modPow(new BigInteger(1, salt), new BigInteger(1, messagesStorage.getSecretPBytes()));
+                        VoIPService.this.g_a_hash = VoIPService.this.call.g_a_hash;
+                        byte[] g_b_bytes = g_b.toByteArray();
+                        if (g_b_bytes.length > 256) {
+                            byte[] correctedAuth = new byte[256];
+                            System.arraycopy(g_b_bytes, 1, correctedAuth, 0, 256);
+                            g_b_bytes = correctedAuth;
                         }
-                        VoIPService.this.callFailed();
-                        return;
-                    }
-                    VoIPService.this.a_or_b = salt;
-                    BigInteger g_b = BigInteger.valueOf((long) messagesStorage.getSecretG()).modPow(new BigInteger(1, salt), new BigInteger(1, messagesStorage.getSecretPBytes()));
-                    VoIPService.this.g_a_hash = VoIPService.this.call.g_a_hash;
-                    byte[] g_b_bytes = g_b.toByteArray();
-                    if (g_b_bytes.length > 256) {
-                        byte[] correctedAuth = new byte[256];
-                        System.arraycopy(g_b_bytes, 1, correctedAuth, 0, 256);
-                        g_b_bytes = correctedAuth;
-                    }
-                    TL_phone_acceptCall req = new TL_phone_acceptCall();
-                    req.g_b = g_b_bytes;
-                    req.peer = new TL_inputPhoneCall();
-                    req.peer.id = VoIPService.this.call.id;
-                    req.peer.access_hash = VoIPService.this.call.access_hash;
-                    req.protocol = new TL_phoneCallProtocol();
-                    TL_phoneCallProtocol tL_phoneCallProtocol = req.protocol;
-                    req.protocol.udp_reflector = true;
-                    tL_phoneCallProtocol.udp_p2p = true;
-                    req.protocol.min_layer = 65;
-                    req.protocol.max_layer = 65;
-                    ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new RequestDelegate() {
-                        public void run(final TLObject response, final TL_error error) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    if (error == null) {
-                                        if (BuildVars.LOGS_ENABLED) {
-                                            FileLog.w("accept call ok! " + response);
-                                        }
-                                        VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
-                                        if (VoIPService.this.call instanceof TL_phoneCallDiscarded) {
-                                            VoIPService.this.onCallUpdated(VoIPService.this.call);
+                        TL_phone_acceptCall req = new TL_phone_acceptCall();
+                        req.g_b = g_b_bytes;
+                        req.peer = new TL_inputPhoneCall();
+                        req.peer.id = VoIPService.this.call.id;
+                        req.peer.access_hash = VoIPService.this.call.access_hash;
+                        req.protocol = new TL_phoneCallProtocol();
+                        TL_phoneCallProtocol tL_phoneCallProtocol = req.protocol;
+                        req.protocol.udp_reflector = true;
+                        tL_phoneCallProtocol.udp_p2p = true;
+                        req.protocol.min_layer = 65;
+                        req.protocol.max_layer = 65;
+                        ConnectionsManager.getInstance(VoIPService.this.currentAccount).sendRequest(req, new RequestDelegate() {
+                            public void run(final TLObject response, final TL_error error) {
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                    public void run() {
+                                        if (error == null) {
+                                            if (BuildVars.LOGS_ENABLED) {
+                                                FileLog.w("accept call ok! " + response);
+                                            }
+                                            VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
+                                            if (VoIPService.this.call instanceof TL_phoneCallDiscarded) {
+                                                VoIPService.this.onCallUpdated(VoIPService.this.call);
+                                                return;
+                                            }
                                             return;
                                         }
-                                        return;
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.e("Error on phone.acceptCall: " + error);
+                                        }
+                                        VoIPService.this.callFailed();
                                     }
-                                    if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.e("Error on phone.acceptCall: " + error);
-                                    }
-                                    VoIPService.this.callFailed();
-                                }
-                            });
-                        }
-                    }, 2);
-                    return;
+                                });
+                            }
+                        }, 2);
+                        return;
+                    }
+                    VoIPService.this.callFailed();
                 }
-                VoIPService.this.callFailed();
-            }
-        });
+            });
+        } else if (BuildVars.LOGS_ENABLED) {
+            FileLog.w("Trying to accept incoming call in wrong state");
+        }
     }
 
     public void declineIncomingCall() {
@@ -1086,7 +1090,9 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
             return;
         }
         if (isForeground) {
-            stopForeground(true);
+            if (VERSION.SDK_INT < 26) {
+                stopForeground(true);
+            }
         } else if (((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
