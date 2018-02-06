@@ -204,6 +204,10 @@ public final class CustomTabsIntent {
         return intent;
     }
 
+    public void setUseNewTask() {
+        this.intent.addFlags(268435456);
+    }
+
     public static boolean shouldAlwaysUseBrowserUI(Intent intent) {
         if (!intent.getBooleanExtra(EXTRA_USER_OPT_OUT_FROM_CUSTOM_TABS, false) || (intent.getFlags() & 268435456) == 0) {
             return false;

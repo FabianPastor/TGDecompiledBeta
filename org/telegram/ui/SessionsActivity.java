@@ -25,6 +25,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -42,6 +43,7 @@ import org.telegram.tgnet.TLRPC.TL_authorization;
 import org.telegram.tgnet.TLRPC.TL_boolTrue;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_webAuthorization;
+import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -49,6 +51,7 @@ import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.SessionCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
@@ -196,20 +199,20 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     return;
                 default:
                     SessionCell sessionCell = holder.itemView;
-                    TLObject access$1200;
+                    TLObject access$1400;
                     if (position == SessionsActivity.this.currentSessionRow) {
-                        access$1200 = SessionsActivity.this.currentSession;
+                        access$1400 = SessionsActivity.this.currentSession;
                         if (!SessionsActivity.this.sessions.isEmpty()) {
                             z2 = true;
                         }
-                        sessionCell.setSession(access$1200, z2);
+                        sessionCell.setSession(access$1400, z2);
                         return;
                     }
-                    access$1200 = (TLObject) SessionsActivity.this.sessions.get(position - SessionsActivity.this.otherSessionsStartRow);
+                    access$1400 = (TLObject) SessionsActivity.this.sessions.get(position - SessionsActivity.this.otherSessionsStartRow);
                     if (position == SessionsActivity.this.otherSessionsEndRow - 1) {
                         z = false;
                     }
-                    sessionCell.setSession(access$1200, z);
+                    sessionCell.setSession(access$1400, z);
                     return;
             }
         }
@@ -276,7 +279,11 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         this.emptyLayout.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         this.emptyLayout.setLayoutParams(new AbsListView.LayoutParams(-1, AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()));
         this.imageView = new ImageView(context);
-        this.imageView.setImageResource(R.drawable.devices);
+        if (this.currentType == 0) {
+            this.imageView.setImageResource(R.drawable.devices);
+        } else {
+            this.imageView.setImageResource(R.drawable.no_apps);
+        }
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_sessions_devicesImage), Mode.MULTIPLY));
         this.emptyLayout.addView(this.imageView, LayoutHelper.createLinear(-2, -2));
         this.textView1 = new TextView(context);
@@ -311,7 +318,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(View view, final int position) {
+            public void onItemClick(View view, int position) {
                 Builder builder;
                 if (position == SessionsActivity.this.terminateAllSessionsRow) {
                     if (SessionsActivity.this.getParentActivity() != null) {
@@ -375,12 +382,45 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     }
                 } else if (position >= SessionsActivity.this.otherSessionsStartRow && position < SessionsActivity.this.otherSessionsEndRow && SessionsActivity.this.getParentActivity() != null) {
                     builder = new Builder(SessionsActivity.this.getParentActivity());
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    final boolean[] param = new boolean[1];
                     if (SessionsActivity.this.currentType == 0) {
                         builder.setMessage(LocaleController.getString("TerminateSessionQuestion", R.string.TerminateSessionQuestion));
                     } else {
-                        builder.setMessage(LocaleController.getString("TerminateWebSessionQuestion", R.string.TerminateWebSessionQuestion));
+                        String name;
+                        builder.setMessage(LocaleController.formatString("TerminateWebSessionQuestion", R.string.TerminateWebSessionQuestion, ((TL_webAuthorization) SessionsActivity.this.sessions.get(position - SessionsActivity.this.otherSessionsStartRow)).domain));
+                        FrameLayout frameLayout = new FrameLayout(SessionsActivity.this.getParentActivity());
+                        User user = MessagesController.getInstance(SessionsActivity.this.currentAccount).getUser(Integer.valueOf(authorization.bot_id));
+                        if (user != null) {
+                            name = UserObject.getFirstName(user);
+                        } else {
+                            name = TtmlNode.ANONYMOUS_REGION_ID;
+                        }
+                        CheckBoxCell cell = new CheckBoxCell(SessionsActivity.this.getParentActivity(), 1);
+                        cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                        cell.setText(LocaleController.formatString("TerminateWebSessionStop", R.string.TerminateWebSessionStop, name), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                        cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
+                        frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+                        cell.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                if (v.isEnabled()) {
+                                    boolean z;
+                                    CheckBoxCell cell = (CheckBoxCell) v;
+                                    boolean[] zArr = param;
+                                    if (param[0]) {
+                                        z = false;
+                                    } else {
+                                        z = true;
+                                    }
+                                    zArr[0] = z;
+                                    cell.setChecked(param[0], true);
+                                }
+                            }
+                        });
+                        builder.setCustomViewOffset(16);
+                        builder.setView(frameLayout);
                     }
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    final int i = position;
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int option) {
                             if (SessionsActivity.this.getParentActivity() != null) {
@@ -390,7 +430,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
                                 if (SessionsActivity.this.currentType == 0) {
-                                    final TL_authorization authorization = (TL_authorization) SessionsActivity.this.sessions.get(position - SessionsActivity.this.otherSessionsStartRow);
+                                    final TL_authorization authorization = (TL_authorization) SessionsActivity.this.sessions.get(i - SessionsActivity.this.otherSessionsStartRow);
                                     TL_account_resetAuthorization req = new TL_account_resetAuthorization();
                                     req.hash = authorization.hash;
                                     ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
@@ -415,7 +455,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                     });
                                     return;
                                 }
-                                final TL_webAuthorization authorization2 = (TL_webAuthorization) SessionsActivity.this.sessions.get(position - SessionsActivity.this.otherSessionsStartRow);
+                                final TL_webAuthorization authorization2 = (TL_webAuthorization) SessionsActivity.this.sessions.get(i - SessionsActivity.this.otherSessionsStartRow);
                                 TL_account_resetWebAuthorization req2 = new TL_account_resetWebAuthorization();
                                 req2.hash = authorization2.hash;
                                 ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(req2, new RequestDelegate() {
@@ -438,6 +478,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                         });
                                     }
                                 });
+                                if (param[0]) {
+                                    MessagesController.getInstance(SessionsActivity.this.currentAccount).blockUser(authorization2.bot_id);
+                                }
                             }
                         }
                     });

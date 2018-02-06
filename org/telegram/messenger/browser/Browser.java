@@ -27,6 +27,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.customtabs.CustomTabsCallback;
 import org.telegram.messenger.support.customtabs.CustomTabsClient;
+import org.telegram.messenger.support.customtabs.CustomTabsIntent;
 import org.telegram.messenger.support.customtabs.CustomTabsIntent.Builder;
 import org.telegram.messenger.support.customtabs.CustomTabsServiceConnection;
 import org.telegram.messenger.support.customtabs.CustomTabsSession;
@@ -281,7 +282,9 @@ public class Browser {
                             builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
                             builder.setShowTitle(true);
                             builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, intent, 0), false);
-                            builder.build().launchUrl(context, uri);
+                            CustomTabsIntent intent2 = builder.build();
+                            intent2.setUseNewTask();
+                            intent2.launchUrl(context, uri);
                             return;
                         }
                     }

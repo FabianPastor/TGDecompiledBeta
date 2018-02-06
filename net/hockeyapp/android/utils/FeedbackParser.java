@@ -29,6 +29,7 @@ public class FeedbackParser {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public FeedbackResponse parseFeedbackResponse(String feedbackResponseJson) {
+        Throwable e;
         FeedbackResponse feedbackResponse = null;
         if (feedbackResponseJson == null) {
             return null;
@@ -96,8 +97,7 @@ public class FeedbackParser {
         feedback.setMessages(messages);
         try {
             feedback.setName(feedbackObject.getString("name"));
-        } catch (Throwable e) {
-            Throwable e2;
+        } catch (Throwable e2) {
             HockeyLog.error("Failed to parse \"name\" in feedback response", e2);
         }
         try {

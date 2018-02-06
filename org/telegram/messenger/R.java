@@ -489,6 +489,7 @@ public final class R {
         public static final int navigate = NUM;
         public static final int newmsg_divider = NUM;
         public static final int newyear = NUM;
+        public static final int no_apps = NUM;
         public static final int nocover = NUM;
         public static final int nocover_big = NUM;
         public static final int nocover_small = NUM;
@@ -2098,6 +2099,8 @@ public final class R {
         public static final int PopupNotification = NUM;
         public static final int PreviewFeedback = NUM;
         public static final int PriorityInfo = NUM;
+        public static final int PrivacyBots = NUM;
+        public static final int PrivacyBotsInfo = NUM;
         public static final int PrivacyCallsP2PHelp = NUM;
         public static final int PrivacyCallsP2PTitle = NUM;
         public static final int PrivacyClearPayment = NUM;
@@ -2106,6 +2109,7 @@ public final class R {
         public static final int PrivacyLastSeen = NUM;
         public static final int PrivacyPayments = NUM;
         public static final int PrivacyPaymentsClear = NUM;
+        public static final int PrivacyPaymentsClearAlert = NUM;
         public static final int PrivacyPaymentsClearInfo = NUM;
         public static final int PrivacyPolicy = NUM;
         public static final int PrivacyPolicyUrl = NUM;
@@ -2375,6 +2379,7 @@ public final class R {
         public static final int TerminateSessionQuestion = NUM;
         public static final int TerminateWebSessionInfo = NUM;
         public static final int TerminateWebSessionQuestion = NUM;
+        public static final int TerminateWebSessionStop = NUM;
         public static final int TextCopied = NUM;
         public static final int TextSize = NUM;
         public static final int Theme = NUM;

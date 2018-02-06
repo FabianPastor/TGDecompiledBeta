@@ -195,7 +195,6 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
     }
 
     private static HlsMasterPlaylist parseMasterPlaylist(LineIterator iterator, String baseUri) throws IOException {
-        String codecs;
         HashSet<String> variantUrls = new HashSet();
         HashMap<String, String> audioGroupIdToCodecs = new HashMap();
         ArrayList<HlsUrl> variants = new ArrayList();
@@ -207,6 +206,7 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
         List<Format> muxedCaptionFormats = null;
         boolean noClosedCaptions = false;
         while (iterator.hasNext()) {
+            String codecs;
             String line = iterator.next();
             if (line.startsWith(TAG_PREFIX)) {
                 tags.add(line);

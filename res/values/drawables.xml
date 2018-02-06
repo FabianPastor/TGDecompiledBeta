@@ -1281,6 +1281,10 @@
     <drawable name="newyear">res/drawable-hdpi-v4/newyear.png</drawable>
     <drawable name="newyear">res/drawable-xhdpi-v4/newyear.png</drawable>
     <drawable name="newyear">res/drawable-xxhdpi-v4/newyear.png</drawable>
+    <drawable name="no_apps">res/drawable-mdpi-v4/no_apps.png</drawable>
+    <drawable name="no_apps">res/drawable-hdpi-v4/no_apps.png</drawable>
+    <drawable name="no_apps">res/drawable-xhdpi-v4/no_apps.png</drawable>
+    <drawable name="no_apps">res/drawable-xxhdpi-v4/no_apps.png</drawable>
     <drawable name="nocover">res/drawable-mdpi-v4/nocover.png</drawable>
     <drawable name="nocover">res/drawable-hdpi-v4/nocover.png</drawable>
     <drawable name="nocover">res/drawable-xhdpi-v4/nocover.png</drawable>

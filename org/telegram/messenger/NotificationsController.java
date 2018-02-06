@@ -7,6 +7,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -45,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.SparseLongArray;
@@ -107,6 +109,7 @@ public class NotificationsController {
     private ArrayList<MessageObject> delayedPushMessages = new ArrayList();
     private boolean inChatSoundEnabled = true;
     private int lastBadgeCount = -1;
+    private int lastButtonId = DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS;
     private boolean lastNotificationIsNoData;
     private int lastOnlineFromOtherDevice = 0;
     private long lastSoundOutPlay;
@@ -1735,6 +1738,9 @@ public class NotificationsController {
             int size2;
             int b;
             KeyboardButton button;
+            String str;
+            Context context;
+            int i3;
             long dialog_id = lastMessageObject.getDialogId();
             long override_dialog_id = dialog_id;
             if (lastMessageObject.messageOwner.mentioned) {
@@ -2090,7 +2096,7 @@ public class NotificationsController {
                         }
                     }
                     hasCallback = false;
-                    if (lastMessageObject.getDialogId() == 777000 && lastMessageObject.messageOwner.reply_markup != null) {
+                    if (!(AndroidUtilities.needShowPasscode(false) || SharedConfig.isWaitingForPasscodeEnter || lastMessageObject.getDialogId() != 777000 || lastMessageObject.messageOwner.reply_markup == null)) {
                         rows = lastMessageObject.messageOwner.reply_markup.rows;
                         size = rows.size();
                         for (a = 0; a < size; a++) {
@@ -2106,7 +2112,11 @@ public class NotificationsController {
                                         intent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
                                     }
                                     intent.putExtra("mid", lastMessageObject.getId());
-                                    mBuilder.addAction(0, button.text, PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
+                                    str = button.text;
+                                    context = ApplicationLoader.applicationContext;
+                                    i3 = this.lastButtonId;
+                                    this.lastButtonId = i3 + 1;
+                                    mBuilder.addAction(0, str, PendingIntent.getBroadcast(context, i3, intent, 134217728));
                                     hasCallback = true;
                                 }
                             }
@@ -2398,7 +2408,11 @@ public class NotificationsController {
                             intent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
                         }
                         intent.putExtra("mid", lastMessageObject.getId());
-                        mBuilder.addAction(0, button.text, PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
+                        str = button.text;
+                        context = ApplicationLoader.applicationContext;
+                        i3 = this.lastButtonId;
+                        this.lastButtonId = i3 + 1;
+                        mBuilder.addAction(0, str, PendingIntent.getBroadcast(context, i3, intent, 134217728));
                         hasCallback = true;
                     }
                 }
@@ -2498,6 +2512,9 @@ public class NotificationsController {
             int c;
             KeyboardButton button;
             Intent callbackIntent;
+            String str;
+            Context context;
+            int i2;
             if (lowerId != 0) {
                 canReply = true;
                 if (lowerId > 0) {
@@ -2634,7 +2651,7 @@ public class NotificationsController {
                                 }
                             }
                         }
-                        if (rows != null) {
+                        if (!(AndroidUtilities.needShowPasscode(false) || SharedConfig.isWaitingForPasscodeEnter || rows == null)) {
                             rc = rows.size();
                             for (r = 0; r < rc; r++) {
                                 row = (TL_keyboardButtonRow) rows.get(r);
@@ -2649,7 +2666,11 @@ public class NotificationsController {
                                             callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
                                         }
                                         callbackIntent.putExtra("mid", rowsMid);
-                                        builder.addAction(0, button.text, PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, callbackIntent, 134217728));
+                                        str = button.text;
+                                        context = ApplicationLoader.applicationContext;
+                                        i2 = this.lastButtonId;
+                                        this.lastButtonId = i2 + 1;
+                                        builder.addAction(0, str, PendingIntent.getBroadcast(context, i2, callbackIntent, 134217728));
                                     }
                                 }
                             }
@@ -2786,23 +2807,25 @@ public class NotificationsController {
                                 builder.setLargeIcon(img.getBitmap());
                             }
                         }
-                        if (rows != null) {
-                            rc = rows.size();
-                            for (r = 0; r < rc; r++) {
-                                row = (TL_keyboardButtonRow) rows.get(r);
-                                cc = row.buttons.size();
-                                for (c = 0; c < cc; c++) {
-                                    button = (KeyboardButton) row.buttons.get(c);
-                                    if (!(button instanceof TL_keyboardButtonCallback)) {
-                                        callbackIntent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
-                                        callbackIntent.putExtra("currentAccount", this.currentAccount);
-                                        callbackIntent.putExtra("did", dialog_id);
-                                        if (button.data != null) {
-                                            callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
-                                        }
-                                        callbackIntent.putExtra("mid", rowsMid);
-                                        builder.addAction(0, button.text, PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, callbackIntent, 134217728));
+                        rc = rows.size();
+                        for (r = 0; r < rc; r++) {
+                            row = (TL_keyboardButtonRow) rows.get(r);
+                            cc = row.buttons.size();
+                            for (c = 0; c < cc; c++) {
+                                button = (KeyboardButton) row.buttons.get(c);
+                                if (!(button instanceof TL_keyboardButtonCallback)) {
+                                    callbackIntent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
+                                    callbackIntent.putExtra("currentAccount", this.currentAccount);
+                                    callbackIntent.putExtra("did", dialog_id);
+                                    if (button.data != null) {
+                                        callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
                                     }
+                                    callbackIntent.putExtra("mid", rowsMid);
+                                    str = button.text;
+                                    context = ApplicationLoader.applicationContext;
+                                    i2 = this.lastButtonId;
+                                    this.lastButtonId = i2 + 1;
+                                    builder.addAction(0, str, PendingIntent.getBroadcast(context, i2, callbackIntent, 134217728));
                                 }
                             }
                         }
@@ -2938,23 +2961,25 @@ public class NotificationsController {
                                 }
                             }
                         }
-                        if (rows != null) {
-                            rc = rows.size();
-                            for (r = 0; r < rc; r++) {
-                                row = (TL_keyboardButtonRow) rows.get(r);
-                                cc = row.buttons.size();
-                                for (c = 0; c < cc; c++) {
-                                    button = (KeyboardButton) row.buttons.get(c);
-                                    if (!(button instanceof TL_keyboardButtonCallback)) {
-                                        callbackIntent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
-                                        callbackIntent.putExtra("currentAccount", this.currentAccount);
-                                        callbackIntent.putExtra("did", dialog_id);
-                                        if (button.data != null) {
-                                            callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
-                                        }
-                                        callbackIntent.putExtra("mid", rowsMid);
-                                        builder.addAction(0, button.text, PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, callbackIntent, 134217728));
+                        rc = rows.size();
+                        for (r = 0; r < rc; r++) {
+                            row = (TL_keyboardButtonRow) rows.get(r);
+                            cc = row.buttons.size();
+                            for (c = 0; c < cc; c++) {
+                                button = (KeyboardButton) row.buttons.get(c);
+                                if (!(button instanceof TL_keyboardButtonCallback)) {
+                                    callbackIntent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
+                                    callbackIntent.putExtra("currentAccount", this.currentAccount);
+                                    callbackIntent.putExtra("did", dialog_id);
+                                    if (button.data != null) {
+                                        callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
                                     }
+                                    callbackIntent.putExtra("mid", rowsMid);
+                                    str = button.text;
+                                    context = ApplicationLoader.applicationContext;
+                                    i2 = this.lastButtonId;
+                                    this.lastButtonId = i2 + 1;
+                                    builder.addAction(0, str, PendingIntent.getBroadcast(context, i2, callbackIntent, 134217728));
                                 }
                             }
                         }

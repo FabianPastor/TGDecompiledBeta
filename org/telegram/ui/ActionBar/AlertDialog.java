@@ -46,6 +46,7 @@ public class AlertDialog extends Dialog implements Callback {
     private ScrollView contentScrollView;
     private int currentProgress;
     private View customView;
+    private int customViewOffset = 20;
     private int[] itemIcons;
     private CharSequence[] items;
     private int lastScreenWidth;
@@ -212,6 +213,11 @@ public class AlertDialog extends Dialog implements Callback {
 
         public Builder setOnBackButtonListener(OnClickListener listener) {
             this.alertDialog.onBackButtonListener = listener;
+            return this;
+        }
+
+        public Builder setCustomViewOffset(int offset) {
+            this.alertDialog.customViewOffset = offset;
             return this;
         }
 
@@ -507,7 +513,7 @@ public class AlertDialog extends Dialog implements Callback {
             LinearLayout linearLayout = this.scrollContainer;
             view2 = this.messageTextView;
             i = (LocaleController.isRTL ? 5 : 3) | 48;
-            i2 = (this.customView == null && this.items == null) ? 0 : 20;
+            i2 = (this.customView == null && this.items == null) ? 0 : this.customViewOffset;
             linearLayout.addView(view2, LayoutHelper.createLinear(-2, -2, i, 24, 0, 24, i2));
         }
         if (TextUtils.isEmpty(this.message)) {
