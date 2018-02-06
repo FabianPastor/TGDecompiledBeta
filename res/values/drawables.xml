@@ -129,6 +129,10 @@
     <drawable name="audio_mini_arrow">res/drawable-hdpi-v4/audio_mini_arrow.png</drawable>
     <drawable name="audio_mini_arrow">res/drawable-xhdpi-v4/audio_mini_arrow.png</drawable>
     <drawable name="audio_mini_arrow">res/drawable-xxhdpi-v4/audio_mini_arrow.png</drawable>
+    <drawable name="audio_mini_cancel">res/drawable-mdpi-v4/audio_mini_cancel.png</drawable>
+    <drawable name="audio_mini_cancel">res/drawable-hdpi-v4/audio_mini_cancel.png</drawable>
+    <drawable name="audio_mini_cancel">res/drawable-xhdpi-v4/audio_mini_cancel.png</drawable>
+    <drawable name="audio_mini_cancel">res/drawable-xxhdpi-v4/audio_mini_cancel.png</drawable>
     <drawable name="audiosend_pause">res/drawable-mdpi-v4/audiosend_pause.png</drawable>
     <drawable name="audiosend_pause">res/drawable-hdpi-v4/audiosend_pause.png</drawable>
     <drawable name="audiosend_pause">res/drawable-xhdpi-v4/audiosend_pause.png</drawable>
@@ -995,6 +999,10 @@
     <drawable name="list_warning_sign">res/drawable-hdpi-v4/list_warning_sign.png</drawable>
     <drawable name="list_warning_sign">res/drawable-xhdpi-v4/list_warning_sign.png</drawable>
     <drawable name="list_warning_sign">res/drawable-xxhdpi-v4/list_warning_sign.png</drawable>
+    <drawable name="live_loc">res/drawable-mdpi-v4/live_loc.png</drawable>
+    <drawable name="live_loc">res/drawable-hdpi-v4/live_loc.png</drawable>
+    <drawable name="live_loc">res/drawable-xhdpi-v4/live_loc.png</drawable>
+    <drawable name="live_loc">res/drawable-xxhdpi-v4/live_loc.png</drawable>
     <drawable name="livelocationpin">res/drawable-mdpi-v4/livelocationpin.png</drawable>
     <drawable name="livelocationpin">res/drawable-hdpi-v4/livelocationpin.png</drawable>
     <drawable name="livelocationpin">res/drawable-xhdpi-v4/livelocationpin.png</drawable>
@@ -1805,6 +1813,14 @@
     <drawable name="video_cropright">res/drawable-hdpi-v4/video_cropright.png</drawable>
     <drawable name="video_cropright">res/drawable-xhdpi-v4/video_cropright.png</drawable>
     <drawable name="video_cropright">res/drawable-xxhdpi-v4/video_cropright.png</drawable>
+    <drawable name="video_mini_arrow">res/drawable-mdpi-v4/video_mini_arrow.png</drawable>
+    <drawable name="video_mini_arrow">res/drawable-hdpi-v4/video_mini_arrow.png</drawable>
+    <drawable name="video_mini_arrow">res/drawable-xhdpi-v4/video_mini_arrow.png</drawable>
+    <drawable name="video_mini_arrow">res/drawable-xxhdpi-v4/video_mini_arrow.png</drawable>
+    <drawable name="video_mini_cancel">res/drawable-mdpi-v4/video_mini_cancel.png</drawable>
+    <drawable name="video_mini_cancel">res/drawable-hdpi-v4/video_mini_cancel.png</drawable>
+    <drawable name="video_mini_cancel">res/drawable-xhdpi-v4/video_mini_cancel.png</drawable>
+    <drawable name="video_mini_cancel">res/drawable-xxhdpi-v4/video_mini_cancel.png</drawable>
     <drawable name="video_mute">res/drawable-mdpi-v4/video_mute.png</drawable>
     <drawable name="video_mute">res/drawable-hdpi-v4/video_mute.png</drawable>
     <drawable name="video_mute">res/drawable-xhdpi-v4/video_mute.png</drawable>

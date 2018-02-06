@@ -181,6 +181,7 @@ public final class R {
         public static final int attach_video_pressed = NUM;
         public static final int attach_video_states = NUM;
         public static final int audio_mini_arrow = NUM;
+        public static final int audio_mini_cancel = NUM;
         public static final int audiosend_pause = NUM;
         public static final int audiosend_play = NUM;
         public static final int background_hd = NUM;
@@ -416,6 +417,7 @@ public final class R {
         public static final int list_secret = NUM;
         public static final int list_selector_ex = NUM;
         public static final int list_warning_sign = NUM;
+        public static final int live_loc = NUM;
         public static final int livelocationpin = NUM;
         public static final int livepin = NUM;
         public static final int load_big = NUM;
@@ -636,6 +638,8 @@ public final class R {
         public static final int video_copy = NUM;
         public static final int video_cropleft = NUM;
         public static final int video_cropright = NUM;
+        public static final int video_mini_arrow = NUM;
+        public static final int video_mini_cancel = NUM;
         public static final int video_mute = NUM;
         public static final int video_pip = NUM;
         public static final int video_png = NUM;
@@ -940,6 +944,7 @@ public final class R {
         public static final int AreYouSureShareMyContactInfoBot = NUM;
         public static final int AreYouSureShareMyContactInfoUser = NUM;
         public static final int AreYouSureUnblockContact = NUM;
+        public static final int AreYouSureWebSessions = NUM;
         public static final int ArticleByAuthor = NUM;
         public static final int ArticleDateByAuthor = NUM;
         public static final int AskAQuestion = NUM;
@@ -982,7 +987,7 @@ public final class R {
         public static final int AutoNightDisabled = NUM;
         public static final int AutoNightFrom = NUM;
         public static final int AutoNightLocation = NUM;
-        public static final int AutoNightPreffered = NUM;
+        public static final int AutoNightPreferred = NUM;
         public static final int AutoNightSchedule = NUM;
         public static final int AutoNightScheduled = NUM;
         public static final int AutoNightTheme = NUM;
@@ -1183,6 +1188,7 @@ public final class R {
         public static final int ClearHistoryCache = NUM;
         public static final int ClearMediaCache = NUM;
         public static final int ClearOtherSessionsHelp = NUM;
+        public static final int ClearOtherWebSessionsHelp = NUM;
         public static final int ClearRecentEmoji = NUM;
         public static final int ClearSearch = NUM;
         public static final int Close = NUM;
@@ -1812,6 +1818,8 @@ public final class R {
         public static final int NoMessages = NUM;
         public static final int NoOtherSessions = NUM;
         public static final int NoOtherSessionsInfo = NUM;
+        public static final int NoOtherWebSessions = NUM;
+        public static final int NoOtherWebSessionsInfo = NUM;
         public static final int NoPhotos = NUM;
         public static final int NoPlayerInstalled = NUM;
         public static final int NoPopup = NUM;
@@ -1954,6 +1962,7 @@ public final class R {
         public static final int OpenMessage = NUM;
         public static final int OpenUrlAlert = NUM;
         public static final int OtherSessions = NUM;
+        public static final int OtherWebSessions = NUM;
         public static final int OutgoingCalls = NUM;
         public static final int Page1Message = NUM;
         public static final int Page1Title = NUM;
@@ -2361,8 +2370,11 @@ public final class R {
         public static final int TelegramFaqUrl = NUM;
         public static final int TelegramVersion = NUM;
         public static final int TerminateAllSessions = NUM;
+        public static final int TerminateAllWebSessions = NUM;
         public static final int TerminateSessionInfo = NUM;
         public static final int TerminateSessionQuestion = NUM;
+        public static final int TerminateWebSessionInfo = NUM;
+        public static final int TerminateWebSessionQuestion = NUM;
         public static final int TextCopied = NUM;
         public static final int TextSize = NUM;
         public static final int Theme = NUM;
@@ -2501,6 +2513,7 @@ public final class R {
         public static final int VoipWaiting = NUM;
         public static final int WaitingForNetwork = NUM;
         public static final int Warmth = NUM;
+        public static final int WebSessionsTitle = NUM;
         public static final int Weeks_few = NUM;
         public static final int Weeks_many = NUM;
         public static final int Weeks_one = NUM;

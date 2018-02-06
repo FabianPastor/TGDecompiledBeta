@@ -199,6 +199,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private boolean raiseToEarRecord;
     private int raisedToBack;
     private int raisedToTop;
+    private int raisedToTopSign;
     private int recordBufferSize;
     private ArrayList<ByteBuffer> recordBuffers = new ArrayList();
     private long recordDialogId;
@@ -1288,6 +1289,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         return value < 5.0f && value != this.proximitySensor.getMaximumRange();
     }
 
+    public boolean isRecordingOrListeningByProximity() {
+        return this.proximityTouched && (isRecordingAudio() || (this.playingMessageObject != null && (this.playingMessageObject.isVoice() || this.playingMessageObject.isRoundVideo())));
+    }
+
     public void onSensorChanged(SensorEvent event) {
         if (this.sensorsStarted && VoIPService.getSharedInstance() == null) {
             if (event.sensor == this.proximitySensor) {
@@ -1342,43 +1347,54 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             }
             if (event.sensor == this.linearSensor || event.sensor == this.gravitySensor || event.sensor == this.accelerometerSensor) {
                 float val = ((this.gravity[0] * this.linearAcceleration[0]) + (this.gravity[1] * this.linearAcceleration[1])) + (this.gravity[2] * this.linearAcceleration[2]);
-                if (this.raisedToBack != 6) {
-                    if (val <= 0.0f || this.previousAccValue <= 0.0f) {
-                        if (val < 0.0f && this.previousAccValue < 0.0f) {
-                            if (this.raisedToTop != 6 || val >= -15.0f) {
-                                if (val > -15.0f) {
-                                    this.countLess++;
-                                }
-                                if (!(this.countLess != 10 && this.raisedToTop == 6 && this.raisedToBack == 0)) {
-                                    this.raisedToTop = 0;
-                                    this.raisedToBack = 0;
-                                    this.countLess = 0;
-                                }
-                            } else if (this.raisedToBack < 6) {
-                                this.raisedToBack++;
-                                if (this.raisedToBack == 6) {
-                                    this.raisedToTop = 0;
-                                    this.countLess = 0;
-                                    this.timeSinceRaise = System.currentTimeMillis();
-                                    if (BuildVars.LOGS_ENABLED && BuildVars.DEBUG_PRIVATE_VERSION) {
-                                        FileLog.e("motion detected");
-                                    }
-                                }
+                if (this.raisedToBack != 6 && ((val > 0.0f && this.previousAccValue > 0.0f) || (val < 0.0f && this.previousAccValue < 0.0f))) {
+                    boolean goodValue;
+                    int sign;
+                    if (val > 0.0f) {
+                        goodValue = val > 15.0f;
+                        sign = 1;
+                    } else {
+                        goodValue = val < -15.0f;
+                        sign = 2;
+                    }
+                    if (this.raisedToTopSign == 0 || this.raisedToTopSign == sign) {
+                        if (!goodValue || this.raisedToBack != 0 || (this.raisedToTopSign != 0 && this.raisedToTopSign != sign)) {
+                            if (!goodValue) {
+                                this.countLess++;
+                            }
+                            if (!(this.raisedToTopSign == sign && this.countLess != 10 && this.raisedToTop == 6 && this.raisedToBack == 0)) {
+                                this.raisedToBack = 0;
+                                this.raisedToTop = 0;
+                                this.raisedToTopSign = 0;
+                                this.countLess = 0;
+                            }
+                        } else if (this.raisedToTop < 6 && !this.proximityTouched) {
+                            this.raisedToTopSign = sign;
+                            this.raisedToTop++;
+                            if (this.raisedToTop == 6) {
+                                this.countLess = 0;
                             }
                         }
-                    } else if (val <= 15.0f || this.raisedToBack != 0) {
-                        if (val < 15.0f) {
+                    } else if (this.raisedToTop != 6 || !goodValue) {
+                        if (!goodValue) {
                             this.countLess++;
                         }
                         if (!(this.countLess != 10 && this.raisedToTop == 6 && this.raisedToBack == 0)) {
-                            this.raisedToBack = 0;
                             this.raisedToTop = 0;
+                            this.raisedToTopSign = 0;
+                            this.raisedToBack = 0;
                             this.countLess = 0;
                         }
-                    } else if (this.raisedToTop < 6 && !this.proximityTouched) {
-                        this.raisedToTop++;
-                        if (this.raisedToTop == 6) {
+                    } else if (this.raisedToBack < 6) {
+                        this.raisedToBack++;
+                        if (this.raisedToBack == 6) {
+                            this.raisedToTop = 0;
+                            this.raisedToTopSign = 0;
                             this.countLess = 0;
+                            this.timeSinceRaise = System.currentTimeMillis();
+                            if (BuildVars.LOGS_ENABLED && BuildVars.DEBUG_PRIVATE_VERSION) {
+                                FileLog.d("motion detected");
+                            }
                         }
                     }
                 }
@@ -1422,6 +1438,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 }
                 this.raisedToBack = 0;
                 this.raisedToTop = 0;
+                this.raisedToTopSign = 0;
                 this.countLess = 0;
             } else if (this.proximityTouched) {
                 if (this.playingMessageObject != null && ((this.playingMessageObject.isVoice() || this.playingMessageObject.isRoundVideo()) && !this.useFrontSpeaker)) {
@@ -1461,6 +1478,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             if (this.timeSinceRaise != 0 && this.raisedToBack == 6 && Math.abs(System.currentTimeMillis() - this.timeSinceRaise) > 1000) {
                 this.raisedToBack = 0;
                 this.raisedToTop = 0;
+                this.raisedToTopSign = 0;
                 this.countLess = 0;
                 this.timeSinceRaise = 0;
             }
@@ -1574,6 +1592,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 this.lastTimestamp = 0;
                 this.previousAccValue = 0.0f;
                 this.raisedToTop = 0;
+                this.raisedToTopSign = 0;
                 this.countLess = 0;
                 this.raisedToBack = 0;
                 Utilities.globalQueue.postRunnable(new Runnable() {
@@ -1969,7 +1988,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
     public void playPreviousMessage() {
         ArrayList<MessageObject> currentPlayList = SharedConfig.shuffleMusic ? this.shuffledPlaylist : this.playlist;
-        if (!currentPlayList.isEmpty()) {
+        if (!currentPlayList.isEmpty() && this.currentPlaylistNum >= 0 && this.currentPlaylistNum < currentPlayList.size()) {
             MessageObject currentSong = (MessageObject) currentPlayList.get(this.currentPlaylistNum);
             if (currentSong.audioProgressSec > 10) {
                 seekToProgress(currentSong, 0.0f);
@@ -2988,6 +3007,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
         Throwable e;
+        final AlertDialog finalProgress;
+        final int i;
+        final String str;
+        final String str2;
         if (fullPath != null) {
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
@@ -3000,10 +3023,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 final File sourceFile = file;
                 final boolean[] cancelled = new boolean[]{false};
                 if (sourceFile.exists()) {
-                    final AlertDialog finalProgress;
-                    final int i;
-                    final String str;
-                    final String str2;
                     AlertDialog progressDialog = null;
                     if (!(context == null || type == 0)) {
                         try {
@@ -3437,6 +3456,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
+                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3465,8 +3485,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                } catch (Throwable e) {
-                    Throwable e2;
+                } catch (Throwable e2) {
                     FileLog.e(e2);
                 }
                 Integer num = null;

@@ -500,22 +500,24 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
-                String obj;
-                int count = GroupCreateFinalActivity.this.listView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = GroupCreateFinalActivity.this.listView.getChildAt(a);
-                    if (child instanceof GroupCreateUserCell) {
-                        ((GroupCreateUserCell) child).update(0);
+                if (GroupCreateFinalActivity.this.listView != null) {
+                    String obj;
+                    int count = GroupCreateFinalActivity.this.listView.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = GroupCreateFinalActivity.this.listView.getChildAt(a);
+                        if (child instanceof GroupCreateUserCell) {
+                            ((GroupCreateUserCell) child).update(0);
+                        }
                     }
+                    AvatarDrawable access$1500 = GroupCreateFinalActivity.this.avatarDrawable;
+                    if (GroupCreateFinalActivity.this.editText.length() > 0) {
+                        obj = GroupCreateFinalActivity.this.editText.getText().toString();
+                    } else {
+                        obj = null;
+                    }
+                    access$1500.setInfo(5, obj, null, false);
+                    GroupCreateFinalActivity.this.avatarImage.invalidate();
                 }
-                AvatarDrawable access$1500 = GroupCreateFinalActivity.this.avatarDrawable;
-                if (GroupCreateFinalActivity.this.editText.length() > 0) {
-                    obj = GroupCreateFinalActivity.this.editText.getText().toString();
-                } else {
-                    obj = null;
-                }
-                access$1500.setInfo(5, obj, null, false);
-                GroupCreateFinalActivity.this.avatarImage.invalidate();
             }
         };
         r10 = new ThemeDescription[34];

@@ -34,8 +34,8 @@ public final class InitializationChunk extends Chunk {
     }
 
     public void load() throws IOException, InterruptedException {
-        DataSpec loadDataSpec = this.dataSpec.subrange((long) this.bytesLoaded);
         ExtractorInput input;
+        DataSpec loadDataSpec = this.dataSpec.subrange((long) this.bytesLoaded);
         try {
             input = new DefaultExtractorInput(this.dataSource, loadDataSpec.absoluteStreamPosition, this.dataSource.open(loadDataSpec));
             if (this.bytesLoaded == 0) {

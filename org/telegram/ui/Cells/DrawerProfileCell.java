@@ -171,8 +171,4 @@ public class DrawerProfileCell extends FrameLayout {
             this.avatarImageView.setImage(photo, "50_50", avatarDrawable);
         }
     }
-
-    public void invalidate() {
-        super.invalidate();
-    }
 }

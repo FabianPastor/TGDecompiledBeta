@@ -795,11 +795,13 @@ public class ChannelRightsEditActivity extends BaseFragment {
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
-                int count = ChannelRightsEditActivity.this.listView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = ChannelRightsEditActivity.this.listView.getChildAt(a);
-                    if (child instanceof UserCell) {
-                        ((UserCell) child).update(0);
+                if (ChannelRightsEditActivity.this.listView != null) {
+                    int count = ChannelRightsEditActivity.this.listView.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = ChannelRightsEditActivity.this.listView.getChildAt(a);
+                        if (child instanceof UserCell) {
+                            ((UserCell) child).update(0);
+                        }
                     }
                 }
             }

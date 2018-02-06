@@ -10,24 +10,44 @@ import android.widget.TextView;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_authorization;
+import org.telegram.tgnet.TLRPC.TL_webAuthorization;
+import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class SessionCell extends FrameLayout {
+    private AvatarDrawable avatarDrawable;
+    private int currentAccount = UserConfig.selectedAccount;
     private TextView detailExTextView;
     private TextView detailTextView;
+    private BackupImageView imageView;
     private TextView nameTextView;
-    boolean needDivider;
+    private boolean needDivider;
     private TextView onlineTextView;
 
-    public SessionCell(Context context) {
+    public SessionCell(Context context, int type) {
         super(context);
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(0);
         linearLayout.setWeightSum(1.0f);
-        addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 11.0f, 11.0f, 0.0f));
+        if (type == 1) {
+            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 11 : 45), 11.0f, (float) (LocaleController.isRTL ? 45 : 11), 0.0f));
+            this.avatarDrawable = new AvatarDrawable();
+            this.avatarDrawable.setTextSize(AndroidUtilities.dp(10.0f));
+            this.imageView = new BackupImageView(context);
+            this.imageView.setRoundRadius(AndroidUtilities.dp(10.0f));
+            addView(this.imageView, LayoutHelper.createFrame(20, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 17), 12.0f, (float) (LocaleController.isRTL ? 17 : 0), 0.0f));
+        } else {
+            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 11 : 17), 11.0f, (float) (LocaleController.isRTL ? 17 : 11), 0.0f));
+        }
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(1, 16.0f);
@@ -71,58 +91,110 @@ public class SessionCell extends FrameLayout {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(90.0f), NUM));
     }
 
-    public void setSession(TL_authorization session, boolean divider) {
+    public void setSession(TLObject object, boolean divider) {
         this.needDivider = divider;
-        this.nameTextView.setText(String.format(Locale.US, "%s %s", new Object[]{session.app_name, session.app_version}));
-        if ((session.flags & 1) != 0) {
-            setTag(Theme.key_windowBackgroundWhiteValueText);
-            this.onlineTextView.setText(LocaleController.getString("Online", R.string.Online));
-            this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
-        } else {
-            setTag(Theme.key_windowBackgroundWhiteGrayText3);
-            this.onlineTextView.setText(LocaleController.stringForMessageListDate((long) session.date_active));
-            this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        if (session.ip.length() != 0) {
-            stringBuilder.append(session.ip);
-        }
-        if (session.country.length() != 0) {
-            if (stringBuilder.length() != 0) {
-                stringBuilder.append(" ");
+        StringBuilder stringBuilder;
+        if (object instanceof TL_authorization) {
+            TL_authorization session = (TL_authorization) object;
+            this.nameTextView.setText(String.format(Locale.US, "%s %s", new Object[]{session.app_name, session.app_version}));
+            if ((session.flags & 1) != 0) {
+                setTag(Theme.key_windowBackgroundWhiteValueText);
+                this.onlineTextView.setText(LocaleController.getString("Online", R.string.Online));
+                this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
+            } else {
+                setTag(Theme.key_windowBackgroundWhiteGrayText3);
+                this.onlineTextView.setText(LocaleController.stringForMessageListDate((long) session.date_active));
+                this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
             }
-            stringBuilder.append("— ");
-            stringBuilder.append(session.country);
-        }
-        this.detailExTextView.setText(stringBuilder);
-        stringBuilder = new StringBuilder();
-        if (session.device_model.length() != 0) {
-            stringBuilder.append(session.device_model);
-        }
-        if (!(session.system_version.length() == 0 && session.platform.length() == 0)) {
-            if (stringBuilder.length() != 0) {
-                stringBuilder.append(", ");
+            stringBuilder = new StringBuilder();
+            if (session.ip.length() != 0) {
+                stringBuilder.append(session.ip);
             }
-            if (session.platform.length() != 0) {
-                stringBuilder.append(session.platform);
-            }
-            if (session.system_version.length() != 0) {
-                if (session.platform.length() != 0) {
+            if (session.country.length() != 0) {
+                if (stringBuilder.length() != 0) {
                     stringBuilder.append(" ");
                 }
-                stringBuilder.append(session.system_version);
+                stringBuilder.append("— ");
+                stringBuilder.append(session.country);
             }
-        }
-        if ((session.flags & 2) == 0) {
-            if (stringBuilder.length() != 0) {
-                stringBuilder.append(", ");
+            this.detailExTextView.setText(stringBuilder);
+            stringBuilder = new StringBuilder();
+            if (session.device_model.length() != 0) {
+                stringBuilder.append(session.device_model);
             }
-            stringBuilder.append(LocaleController.getString("UnofficialApp", R.string.UnofficialApp));
-            stringBuilder.append(" (ID: ");
-            stringBuilder.append(session.api_id);
-            stringBuilder.append(")");
+            if (!(session.system_version.length() == 0 && session.platform.length() == 0)) {
+                if (stringBuilder.length() != 0) {
+                    stringBuilder.append(", ");
+                }
+                if (session.platform.length() != 0) {
+                    stringBuilder.append(session.platform);
+                }
+                if (session.system_version.length() != 0) {
+                    if (session.platform.length() != 0) {
+                        stringBuilder.append(" ");
+                    }
+                    stringBuilder.append(session.system_version);
+                }
+            }
+            if ((session.flags & 2) == 0) {
+                if (stringBuilder.length() != 0) {
+                    stringBuilder.append(", ");
+                }
+                stringBuilder.append(LocaleController.getString("UnofficialApp", R.string.UnofficialApp));
+                stringBuilder.append(" (ID: ");
+                stringBuilder.append(session.api_id);
+                stringBuilder.append(")");
+            }
+            this.detailTextView.setText(stringBuilder);
+        } else if (object instanceof TL_webAuthorization) {
+            TL_webAuthorization session2 = (TL_webAuthorization) object;
+            User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(session2.bot_id));
+            if (user != null) {
+                TLObject currentPhoto;
+                this.avatarDrawable.setInfo(user);
+                this.nameTextView.setText(UserObject.getFirstName(user));
+                if (user.photo != null) {
+                    currentPhoto = user.photo.photo_small;
+                } else {
+                    currentPhoto = null;
+                }
+                this.imageView.setImage(currentPhoto, "50_50", this.avatarDrawable);
+            } else {
+                this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
+            }
+            setTag(Theme.key_windowBackgroundWhiteGrayText3);
+            this.onlineTextView.setText(LocaleController.stringForMessageListDate((long) session2.date_active));
+            this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+            stringBuilder = new StringBuilder();
+            if (session2.ip.length() != 0) {
+                stringBuilder.append(session2.ip);
+            }
+            if (session2.region.length() != 0) {
+                if (stringBuilder.length() != 0) {
+                    stringBuilder.append(" ");
+                }
+                stringBuilder.append("— ");
+                stringBuilder.append(session2.region);
+            }
+            this.detailExTextView.setText(stringBuilder);
+            stringBuilder = new StringBuilder();
+            if (session2.domain.length() != 0) {
+                stringBuilder.append(session2.domain);
+            }
+            if (session2.browser.length() != 0) {
+                if (stringBuilder.length() != 0) {
+                    stringBuilder.append(", ");
+                }
+                stringBuilder.append(session2.browser);
+            }
+            if (session2.platform.length() != 0) {
+                if (stringBuilder.length() != 0) {
+                    stringBuilder.append(", ");
+                }
+                stringBuilder.append(session2.platform);
+            }
+            this.detailTextView.setText(stringBuilder);
         }
-        this.detailTextView.setText(stringBuilder);
     }
 
     protected void onDraw(Canvas canvas) {

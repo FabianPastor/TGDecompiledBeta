@@ -231,7 +231,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     });
     private SparseArray<Message> sendingMessages = new SparseArray();
     private SparseArray<MessageObject> unsentMessages = new SparseArray();
-    private HashMap<String, MessageObject> waitingForCallback = new HashMap();
+    private HashMap<String, Boolean> waitingForCallback = new HashMap();
     private HashMap<String, MessageObject> waitingForLocation = new HashMap();
 
     protected class DelayedMessage {
@@ -1581,6 +1581,50 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         return this.waitingForLocation.containsKey(messageObject.getDialogId() + "_" + messageObject.getId() + "_" + Utilities.bytesToHex(button.data) + "_" + (button instanceof TL_keyboardButtonGame ? "1" : "0"));
     }
 
+    public void sendNotificationCallback(long dialogId, int msgId, byte[] data) {
+        final long j = dialogId;
+        final int i = msgId;
+        final byte[] bArr = data;
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                int lowerId = (int) j;
+                final String key = j + "_" + i + "_" + Utilities.bytesToHex(bArr) + "_" + 0;
+                SendMessagesHelper.this.waitingForCallback.put(key, Boolean.valueOf(true));
+                if (lowerId > 0) {
+                    if (MessagesController.getInstance(SendMessagesHelper.this.currentAccount).getUser(Integer.valueOf(lowerId)) == null) {
+                        User user = MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getUserSync(lowerId);
+                        if (user != null) {
+                            MessagesController.getInstance(SendMessagesHelper.this.currentAccount).putUser(user, true);
+                        }
+                    }
+                } else if (MessagesController.getInstance(SendMessagesHelper.this.currentAccount).getChat(Integer.valueOf(-lowerId)) == null) {
+                    Chat chat = MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getChatSync(-lowerId);
+                    if (chat != null) {
+                        MessagesController.getInstance(SendMessagesHelper.this.currentAccount).putChat(chat, true);
+                    }
+                }
+                TL_messages_getBotCallbackAnswer req = new TL_messages_getBotCallbackAnswer();
+                req.peer = MessagesController.getInstance(SendMessagesHelper.this.currentAccount).getInputPeer(lowerId);
+                req.msg_id = i;
+                req.game = false;
+                if (bArr != null) {
+                    req.flags |= 1;
+                    req.data = bArr;
+                }
+                ConnectionsManager.getInstance(SendMessagesHelper.this.currentAccount).sendRequest(req, new RequestDelegate() {
+                    public void run(TLObject response, TL_error error) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                SendMessagesHelper.this.waitingForCallback.remove(key);
+                            }
+                        });
+                    }
+                }, 2);
+                MessagesController.getInstance(SendMessagesHelper.this.currentAccount).markDialogAsRead(j, i, i, 0, false, false);
+            }
+        });
+    }
+
     public void sendCallback(boolean cache, MessageObject messageObject, KeyboardButton button, ChatActivity parentFragment) {
         if (messageObject != null && button != null && parentFragment != null) {
             boolean cacheFinal;
@@ -1597,7 +1641,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
             }
             final String key = messageObject.getDialogId() + "_" + messageObject.getId() + "_" + Utilities.bytesToHex(button.data) + "_" + type;
-            this.waitingForCallback.put(key, messageObject);
+            this.waitingForCallback.put(key, Boolean.valueOf(true));
             final MessageObject messageObject2 = messageObject;
             final KeyboardButton keyboardButton = button;
             final ChatActivity chatActivity = parentFragment;
@@ -1725,8 +1769,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
+        long newTaskId;
         if (peer != null && game != null) {
-            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -3638,7 +3682,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         final TLObject tLObject = req;
         final MessageObject messageObject = msgObj;
         final String str = originalPath;
-        RequestDelegate anonymousClass11 = new RequestDelegate() {
+        RequestDelegate anonymousClass12 = new RequestDelegate() {
             public void run(final TLObject response, final TL_error error) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
@@ -3818,7 +3862,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 });
             }
         };
-        QuickAckDelegate anonymousClass12 = new QuickAckDelegate() {
+        QuickAckDelegate anonymousClass13 = new QuickAckDelegate() {
             public void run() {
                 final int msg_id = newMsgObj.id;
                 AndroidUtilities.runOnUIThread(new Runnable() {
@@ -3834,7 +3878,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         } else {
             i = 0;
         }
-        instance.sendRequest(req, anonymousClass11, anonymousClass12, i | 68);
+        instance.sendRequest(req, anonymousClass12, anonymousClass13, i | 68);
         if (parentMessage != null) {
             parentMessage.sendDelayedRequests();
         }

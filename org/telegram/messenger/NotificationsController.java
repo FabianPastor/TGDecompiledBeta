@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
@@ -52,12 +53,15 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
+import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.PhoneCallDiscardReason;
 import org.telegram.tgnet.TLRPC.TL_account_updateNotifySettings;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputNotifyPeer;
 import org.telegram.tgnet.TLRPC.TL_inputPeerNotifySettings;
+import org.telegram.tgnet.TLRPC.TL_keyboardButtonCallback;
+import org.telegram.tgnet.TLRPC.TL_keyboardButtonRow;
 import org.telegram.tgnet.TLRPC.TL_messageActionChannelCreate;
 import org.telegram.tgnet.TLRPC.TL_messageActionChannelMigrateFrom;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatAddUser;
@@ -1723,6 +1727,14 @@ public class NotificationsController {
             Options options;
             int i2;
             Bitmap bitmap;
+            boolean hasCallback;
+            ArrayList<TL_keyboardButtonRow> rows;
+            int size;
+            int a;
+            TL_keyboardButtonRow row;
+            int size2;
+            int b;
+            KeyboardButton button;
             long dialog_id = lastMessageObject.getDialogId();
             long override_dialog_id = dialog_id;
             if (lastMessageObject.messageOwner.mentioned) {
@@ -2077,7 +2089,30 @@ public class NotificationsController {
                             mBuilder.setVibrate(vibrationPattern);
                         }
                     }
-                    if (VERSION.SDK_INT < 24 && SharedConfig.passcodeHash.length() == 0 && hasMessagesToReply()) {
+                    hasCallback = false;
+                    if (lastMessageObject.getDialogId() == 777000 && lastMessageObject.messageOwner.reply_markup != null) {
+                        rows = lastMessageObject.messageOwner.reply_markup.rows;
+                        size = rows.size();
+                        for (a = 0; a < size; a++) {
+                            row = (TL_keyboardButtonRow) rows.get(a);
+                            size2 = row.buttons.size();
+                            for (b = 0; b < size2; b++) {
+                                button = (KeyboardButton) row.buttons.get(b);
+                                if (button instanceof TL_keyboardButtonCallback) {
+                                    intent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
+                                    intent.putExtra("currentAccount", this.currentAccount);
+                                    intent.putExtra("did", dialog_id);
+                                    if (button.data != null) {
+                                        intent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
+                                    }
+                                    intent.putExtra("mid", lastMessageObject.getId());
+                                    mBuilder.addAction(0, button.text, PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
+                                    hasCallback = true;
+                                }
+                            }
+                        }
+                    }
+                    if (!hasCallback && VERSION.SDK_INT < 24 && SharedConfig.passcodeHash.length() == 0 && hasMessagesToReply()) {
                         intent = new Intent(ApplicationLoader.applicationContext, PopupReplyReceiver.class);
                         intent.putExtra("currentAccount", this.currentAccount);
                         if (VERSION.SDK_INT > 19) {
@@ -2347,6 +2382,27 @@ public class NotificationsController {
             }
             vibrationPattern = new long[]{0, 0};
             mBuilder.setVibrate(vibrationPattern);
+            hasCallback = false;
+            rows = lastMessageObject.messageOwner.reply_markup.rows;
+            size = rows.size();
+            for (a = 0; a < size; a++) {
+                row = (TL_keyboardButtonRow) rows.get(a);
+                size2 = row.buttons.size();
+                for (b = 0; b < size2; b++) {
+                    button = (KeyboardButton) row.buttons.get(b);
+                    if (button instanceof TL_keyboardButtonCallback) {
+                        intent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
+                        intent.putExtra("currentAccount", this.currentAccount);
+                        intent.putExtra("did", dialog_id);
+                        if (button.data != null) {
+                            intent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
+                        }
+                        intent.putExtra("mid", lastMessageObject.getId());
+                        mBuilder.addAction(0, button.text, PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
+                        hasCallback = true;
+                    }
+                }
+            }
             intent = new Intent(ApplicationLoader.applicationContext, PopupReplyReceiver.class);
             intent.putExtra("currentAccount", this.currentAccount);
             if (VERSION.SDK_INT > 19) {
@@ -2420,6 +2476,8 @@ public class NotificationsController {
             Style messagingStyle;
             StringBuilder text;
             boolean[] isText;
+            ArrayList<TL_keyboardButtonRow> rows;
+            int rowsMid;
             String message;
             PendingIntent contentIntent;
             WearableExtender wearableExtender;
@@ -2433,6 +2491,13 @@ public class NotificationsController {
             Options options;
             int i;
             Bitmap bitmap;
+            int rc;
+            int r;
+            TL_keyboardButtonRow row;
+            int cc;
+            int c;
+            KeyboardButton button;
+            Intent callbackIntent;
             if (lowerId != 0) {
                 canReply = true;
                 if (lowerId > 0) {
@@ -2484,6 +2549,8 @@ public class NotificationsController {
                         messagingStyle = new MessagingStyle(TtmlNode.ANONYMOUS_REGION_ID).setConversationTitle(String.format("%1$s (%2$s)", new Object[]{name, LocaleController.formatPluralString("NewMessages", Math.max(count.intValue(), messageObjects.size()))}));
                         text = new StringBuilder();
                         isText = new boolean[1];
+                        rows = null;
+                        rowsMid = 0;
                         for (a = messageObjects.size() - 1; a >= 0; a--) {
                             messageObject = (MessageObject) messageObjects.get(a);
                             message = getStringForMessage(messageObject, false, isText);
@@ -2501,6 +2568,10 @@ public class NotificationsController {
                                 text.append(message);
                                 unreadConvBuilder.addMessage(message);
                                 messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, null);
+                                if (rows == null && dialog_id == 777000 && messageObject.messageOwner.reply_markup != null) {
+                                    rows = messageObject.messageOwner.reply_markup.rows;
+                                    rowsMid = messageObject.getId();
+                                }
                             }
                         }
                         intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
@@ -2563,6 +2634,26 @@ public class NotificationsController {
                                 }
                             }
                         }
+                        if (rows != null) {
+                            rc = rows.size();
+                            for (r = 0; r < rc; r++) {
+                                row = (TL_keyboardButtonRow) rows.get(r);
+                                cc = row.buttons.size();
+                                for (c = 0; c < cc; c++) {
+                                    button = (KeyboardButton) row.buttons.get(c);
+                                    if (!(button instanceof TL_keyboardButtonCallback)) {
+                                        callbackIntent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
+                                        callbackIntent.putExtra("currentAccount", this.currentAccount);
+                                        callbackIntent.putExtra("did", dialog_id);
+                                        if (button.data != null) {
+                                            callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
+                                        }
+                                        callbackIntent.putExtra("mid", rowsMid);
+                                        builder.addAction(0, button.text, PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, callbackIntent, 134217728));
+                                    }
+                                }
+                            }
+                        }
                         if (chat == null && user != null && user.phone != null && user.phone.length() > 0) {
                             builder.addPerson("tel:+" + user.phone);
                         }
@@ -2617,6 +2708,8 @@ public class NotificationsController {
                         messagingStyle = new MessagingStyle(TtmlNode.ANONYMOUS_REGION_ID).setConversationTitle(String.format("%1$s (%2$s)", new Object[]{name, LocaleController.formatPluralString("NewMessages", Math.max(count.intValue(), messageObjects.size()))}));
                         text = new StringBuilder();
                         isText = new boolean[1];
+                        rows = null;
+                        rowsMid = 0;
                         for (a = messageObjects.size() - 1; a >= 0; a--) {
                             messageObject = (MessageObject) messageObjects.get(a);
                             message = getStringForMessage(messageObject, false, isText);
@@ -2634,6 +2727,8 @@ public class NotificationsController {
                                 text.append(message);
                                 unreadConvBuilder.addMessage(message);
                                 messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, null);
+                                rows = messageObject.messageOwner.reply_markup.rows;
+                                rowsMid = messageObject.getId();
                             }
                         }
                         intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
@@ -2689,6 +2784,26 @@ public class NotificationsController {
                                 }
                             } else {
                                 builder.setLargeIcon(img.getBitmap());
+                            }
+                        }
+                        if (rows != null) {
+                            rc = rows.size();
+                            for (r = 0; r < rc; r++) {
+                                row = (TL_keyboardButtonRow) rows.get(r);
+                                cc = row.buttons.size();
+                                for (c = 0; c < cc; c++) {
+                                    button = (KeyboardButton) row.buttons.get(c);
+                                    if (!(button instanceof TL_keyboardButtonCallback)) {
+                                        callbackIntent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
+                                        callbackIntent.putExtra("currentAccount", this.currentAccount);
+                                        callbackIntent.putExtra("did", dialog_id);
+                                        if (button.data != null) {
+                                            callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
+                                        }
+                                        callbackIntent.putExtra("mid", rowsMid);
+                                        builder.addAction(0, button.text, PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, callbackIntent, 134217728));
+                                    }
+                                }
                             }
                         }
                         builder.addPerson("tel:+" + user.phone);
@@ -2745,6 +2860,8 @@ public class NotificationsController {
                         messagingStyle = new MessagingStyle(TtmlNode.ANONYMOUS_REGION_ID).setConversationTitle(String.format("%1$s (%2$s)", new Object[]{name, LocaleController.formatPluralString("NewMessages", Math.max(count.intValue(), messageObjects.size()))}));
                         text = new StringBuilder();
                         isText = new boolean[1];
+                        rows = null;
+                        rowsMid = 0;
                         for (a = messageObjects.size() - 1; a >= 0; a--) {
                             messageObject = (MessageObject) messageObjects.get(a);
                             message = getStringForMessage(messageObject, false, isText);
@@ -2762,6 +2879,8 @@ public class NotificationsController {
                                 text.append(message);
                                 unreadConvBuilder.addMessage(message);
                                 messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, null);
+                                rows = messageObject.messageOwner.reply_markup.rows;
+                                rowsMid = messageObject.getId();
                             }
                         }
                         intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
@@ -2815,6 +2934,26 @@ public class NotificationsController {
                                     bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
                                     if (bitmap != null) {
                                         builder.setLargeIcon(bitmap);
+                                    }
+                                }
+                            }
+                        }
+                        if (rows != null) {
+                            rc = rows.size();
+                            for (r = 0; r < rc; r++) {
+                                row = (TL_keyboardButtonRow) rows.get(r);
+                                cc = row.buttons.size();
+                                for (c = 0; c < cc; c++) {
+                                    button = (KeyboardButton) row.buttons.get(c);
+                                    if (!(button instanceof TL_keyboardButtonCallback)) {
+                                        callbackIntent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
+                                        callbackIntent.putExtra("currentAccount", this.currentAccount);
+                                        callbackIntent.putExtra("did", dialog_id);
+                                        if (button.data != null) {
+                                            callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
+                                        }
+                                        callbackIntent.putExtra("mid", rowsMid);
+                                        builder.addAction(0, button.text, PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, callbackIntent, 134217728));
                                     }
                                 }
                             }

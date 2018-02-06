@@ -162,7 +162,7 @@ public class ProfileSearchCell extends BaseCell {
                 }
                 this.nameLeft = intrinsicWidth + dp;
             }
-        } else {
+        } else if (this.user != null) {
             this.dialog_id = (long) this.user.id;
             if (LocaleController.isRTL) {
                 this.nameLeft = AndroidUtilities.dp(11.0f);

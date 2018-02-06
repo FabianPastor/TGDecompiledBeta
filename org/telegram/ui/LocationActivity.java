@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -751,7 +752,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     liveLocation.id = did;
                 } else {
                     liveLocation.chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-did));
-                    liveLocation.id = -did;
+                    liveLocation.id = did;
                 }
             }
             try {
@@ -1095,6 +1096,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             messages = null;
         } else {
             fetchRecentLocations(messages);
+        }
+        int lower_id = (int) this.dialogId;
+        if (lower_id < 0) {
+            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_id));
+            if (ChatObject.isChannel(chat) && !chat.megagroup) {
+                return false;
+            }
         }
         TL_messages_getRecentLocations req = new TL_messages_getRecentLocations();
         final long dialog_id = this.messageObject.getDialogId();

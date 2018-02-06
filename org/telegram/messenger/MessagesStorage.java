@@ -16,12 +16,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
+import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.AbstractSerializedData;
@@ -3123,319 +3125,220 @@ Error: java.util.NoSuchElementException
     }
 
     public void putCachedPhoneBook(final HashMap<String, Contact> contactHashMap, final boolean migrate) {
-        this.storageQueue.postRunnable(new Runnable() {
-            public void run() {
-                try {
-                    MessagesStorage.this.database.beginTransaction();
-                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO user_contacts_v7 VALUES(?, ?, ?, ?, ?)");
-                    SQLitePreparedStatement state2 = MessagesStorage.this.database.executeFast("REPLACE INTO user_phones_v7 VALUES(?, ?, ?, ?)");
-                    for (Entry<String, Contact> entry : contactHashMap.entrySet()) {
-                        Contact contact = (Contact) entry.getValue();
-                        if (!(contact.phones.isEmpty() || contact.shortPhones.isEmpty())) {
-                            state.requery();
-                            state.bindString(1, contact.key);
-                            state.bindInteger(2, contact.contact_id);
-                            state.bindString(3, contact.first_name);
-                            state.bindString(4, contact.last_name);
-                            state.bindInteger(5, contact.imported);
-                            state.step();
-                            for (int a = 0; a < contact.phones.size(); a++) {
-                                state2.requery();
-                                state2.bindString(1, contact.key);
-                                state2.bindString(2, (String) contact.phones.get(a));
-                                state2.bindString(3, (String) contact.shortPhones.get(a));
-                                state2.bindInteger(4, ((Integer) contact.phoneDeleted.get(a)).intValue());
-                                state2.step();
+        if (contactHashMap != null && !contactHashMap.isEmpty()) {
+            this.storageQueue.postRunnable(new Runnable() {
+                public void run() {
+                    try {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d(MessagesStorage.this.currentAccount + " save contacts to db " + contactHashMap.size());
+                        }
+                        MessagesStorage.this.database.executeFast("DELETE FROM user_contacts_v7 WHERE 1").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("DELETE FROM user_phones_v7 WHERE 1").stepThis().dispose();
+                        MessagesStorage.this.database.beginTransaction();
+                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO user_contacts_v7 VALUES(?, ?, ?, ?, ?)");
+                        SQLitePreparedStatement state2 = MessagesStorage.this.database.executeFast("REPLACE INTO user_phones_v7 VALUES(?, ?, ?, ?)");
+                        for (Entry<String, Contact> entry : contactHashMap.entrySet()) {
+                            Contact contact = (Contact) entry.getValue();
+                            if (!(contact.phones.isEmpty() || contact.shortPhones.isEmpty())) {
+                                state.requery();
+                                state.bindString(1, contact.key);
+                                state.bindInteger(2, contact.contact_id);
+                                state.bindString(3, contact.first_name);
+                                state.bindString(4, contact.last_name);
+                                state.bindInteger(5, contact.imported);
+                                state.step();
+                                for (int a = 0; a < contact.phones.size(); a++) {
+                                    state2.requery();
+                                    state2.bindString(1, contact.key);
+                                    state2.bindString(2, (String) contact.phones.get(a));
+                                    state2.bindString(3, (String) contact.shortPhones.get(a));
+                                    state2.bindInteger(4, ((Integer) contact.phoneDeleted.get(a)).intValue());
+                                    state2.step();
+                                }
                             }
                         }
+                        state.dispose();
+                        state2.dispose();
+                        MessagesStorage.this.database.commitTransaction();
+                        if (migrate) {
+                            MessagesStorage.this.database.executeFast("DROP TABLE IF EXISTS user_contacts_v6;").stepThis().dispose();
+                            MessagesStorage.this.database.executeFast("DROP TABLE IF EXISTS user_phones_v6;").stepThis().dispose();
+                            MessagesStorage.this.getCachedPhoneBook(false);
+                        }
+                    } catch (Throwable e) {
+                        FileLog.e(e);
                     }
-                    state.dispose();
-                    state2.dispose();
-                    MessagesStorage.this.database.commitTransaction();
-                    if (migrate) {
-                        MessagesStorage.this.database.executeFast("DROP TABLE IF EXISTS user_contacts_v6;").stepThis().dispose();
-                        MessagesStorage.this.database.executeFast("DROP TABLE IF EXISTS user_phones_v6;").stepThis().dispose();
-                        MessagesStorage.this.getCachedPhoneBook(false);
-                    }
-                } catch (Throwable e) {
-                    FileLog.e(e);
                 }
-            }
-        });
+            });
+        }
     }
 
     public void getCachedPhoneBook(final boolean byError) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
-                /* JADX: method processing error */
-/*
-Error: java.util.NoSuchElementException
-	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1444)
-	at java.util.HashMap$KeyIterator.next(HashMap.java:1466)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.applyRemove(BlockFinallyExtract.java:535)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.extractFinally(BlockFinallyExtract.java:175)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.processExceptionHandler(BlockFinallyExtract.java:80)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.visit(BlockFinallyExtract.java:51)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:59)
-	at jadx.core.ProcessClass.process(ProcessClass.java:42)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:306)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler$1.run(JadxDecompiler.java:199)
-*/
-                /*
-                r18 = this;
-                r11 = 0;
-                r0 = r18;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = r1.database;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r3 = "SELECT name FROM sqlite_master WHERE type='table' AND name='user_contacts_v6'";	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r4 = 0;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r4 = new java.lang.Object[r4];	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r11 = r1.queryFinalized(r3, r4);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r14 = r11.next();	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r11.dispose();	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r11 = 0;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                if (r14 == 0) goto L_0x01b4;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x001d:
-                r10 = new android.util.SparseArray;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r10.<init>();	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r0 = r18;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = r1.database;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r3 = "SELECT us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v6 as us LEFT JOIN user_phones_v6 as up ON us.uid = up.uid WHERE 1";	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r4 = 0;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r4 = new java.lang.Object[r4];	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r11 = r1.queryFinalized(r3, r4);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x0034:
-                r1 = r11.next();	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                if (r1 == 0) goto L_0x019b;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x003a:
-                r1 = 0;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r17 = r11.intValue(r1);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r0 = r17;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r9 = r10.get(r0);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r9 = (org.telegram.messenger.ContactsController.Contact) r9;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                if (r9 != 0) goto L_0x007e;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x0049:
-                r9 = new org.telegram.messenger.ContactsController$Contact;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r9.<init>();	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = 1;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = r11.stringValue(r1);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r9.first_name = r1;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = 2;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = r11.stringValue(r1);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r9.last_name = r1;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = 6;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = r11.intValue(r1);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r9.imported = r1;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = r9.first_name;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                if (r1 != 0) goto L_0x006c;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x0067:
-                r1 = "";	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r9.first_name = r1;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x006c:
-                r1 = r9.last_name;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                if (r1 != 0) goto L_0x0075;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x0070:
-                r1 = "";	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r9.last_name = r1;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x0075:
-                r0 = r17;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r9.contact_id = r0;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r0 = r17;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r10.put(r0, r9);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x007e:
-                r1 = 3;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r15 = r11.stringValue(r1);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                if (r15 == 0) goto L_0x0034;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x0085:
-                r1 = r9.phones;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1.add(r15);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = 4;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r16 = r11.stringValue(r1);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                if (r16 == 0) goto L_0x0034;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x0091:
-                r1 = r16.length();	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r3 = 8;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                if (r1 != r3) goto L_0x00a5;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x0099:
-                r1 = r15.length();	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r3 = 8;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                if (r1 == r3) goto L_0x00a5;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x00a1:
-                r16 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r15);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-            L_0x00a5:
-                r1 = r9.shortPhones;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r0 = r16;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1.add(r0);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = r9.phoneDeleted;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r3 = 5;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r3 = r11.intValue(r3);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1.add(r3);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = r9.phoneTypes;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r3 = "";	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1.add(r3);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                goto L_0x0034;
-            L_0x00c4:
-                r12 = move-exception;
-                org.telegram.messenger.FileLog.e(r12);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                if (r11 == 0) goto L_0x00cd;
-            L_0x00ca:
-                r11.dispose();
-            L_0x00cd:
-                r2 = new java.util.HashMap;
-                r2.<init>();
-                r0 = r18;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = r1.database;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r3 = "SELECT us.key, us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v7 as us LEFT JOIN user_phones_v7 as up ON us.key = up.key WHERE 1";	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r4 = 0;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r4 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r11 = r1.queryFinalized(r3, r4);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x00e4:
-                r1 = r11.next();	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                if (r1 == 0) goto L_0x01c2;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x00ea:
-                r1 = 0;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r13 = r11.stringValue(r1);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r9 = r2.get(r13);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r9 = (org.telegram.messenger.ContactsController.Contact) r9;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                if (r9 != 0) goto L_0x012d;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x00f7:
-                r9 = new org.telegram.messenger.ContactsController$Contact;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r9.<init>();	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = 1;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = r11.intValue(r1);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r9.contact_id = r1;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = 2;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = r11.stringValue(r1);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r9.first_name = r1;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = 3;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = r11.stringValue(r1);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r9.last_name = r1;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = 7;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = r11.intValue(r1);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r9.imported = r1;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = r9.first_name;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                if (r1 != 0) goto L_0x0121;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x011c:
-                r1 = "";	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r9.first_name = r1;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x0121:
-                r1 = r9.last_name;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                if (r1 != 0) goto L_0x012a;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x0125:
-                r1 = "";	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r9.last_name = r1;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x012a:
-                r2.put(r13, r9);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x012d:
-                r1 = 4;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r15 = r11.stringValue(r1);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                if (r15 == 0) goto L_0x00e4;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x0134:
-                r1 = r9.phones;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1.add(r15);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = 5;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r16 = r11.stringValue(r1);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                if (r16 == 0) goto L_0x00e4;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x0140:
-                r1 = r16.length();	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r3 = 8;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                if (r1 != r3) goto L_0x0154;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x0148:
-                r1 = r15.length();	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r3 = 8;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                if (r1 == r3) goto L_0x0154;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x0150:
-                r16 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r15);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-            L_0x0154:
-                r1 = r9.shortPhones;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r0 = r16;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1.add(r0);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = r9.phoneDeleted;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r3 = 6;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r3 = r11.intValue(r3);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1.add(r3);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1 = r9.phoneTypes;	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r3 = "";	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r1.add(r3);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                goto L_0x00e4;
-            L_0x0173:
-                r12 = move-exception;
-                r2.clear();	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                org.telegram.messenger.FileLog.e(r12);	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                if (r11 == 0) goto L_0x017f;
-            L_0x017c:
-                r11.dispose();
-            L_0x017f:
-                r0 = r18;
-                r1 = org.telegram.messenger.MessagesStorage.this;
-                r1 = r1.currentAccount;
-                r1 = org.telegram.messenger.ContactsController.getInstance(r1);
-                r3 = 1;
-                r4 = 1;
-                r5 = 0;
-                r6 = 0;
-                r0 = r18;
-                r7 = r3;
-                if (r7 != 0) goto L_0x01d3;
-            L_0x0195:
-                r7 = 1;
-            L_0x0196:
-                r8 = 0;
-                r1.performSyncPhoneBook(r2, r3, r4, r5, r6, r7, r8);
-            L_0x019a:
-                return;
-            L_0x019b:
-                r11.dispose();	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r11 = 0;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r0 = r18;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = r1.currentAccount;	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1 = org.telegram.messenger.ContactsController.getInstance(r1);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                r1.migratePhoneBookToV7(r10);	 Catch:{ Throwable -> 0x00c4, all -> 0x01bb }
-                if (r11 == 0) goto L_0x019a;
-            L_0x01b0:
-                r11.dispose();
-                goto L_0x019a;
-            L_0x01b4:
-                if (r11 == 0) goto L_0x00cd;
-            L_0x01b6:
-                r11.dispose();
-                goto L_0x00cd;
-            L_0x01bb:
-                r1 = move-exception;
-                if (r11 == 0) goto L_0x01c1;
-            L_0x01be:
-                r11.dispose();
-            L_0x01c1:
-                throw r1;
-            L_0x01c2:
-                r11.dispose();	 Catch:{ Exception -> 0x0173, all -> 0x01cc }
-                r11 = 0;
-                if (r11 == 0) goto L_0x017f;
-            L_0x01c8:
-                r11.dispose();
-                goto L_0x017f;
-            L_0x01cc:
-                r1 = move-exception;
-                if (r11 == 0) goto L_0x01d2;
-            L_0x01cf:
-                r11.dispose();
-            L_0x01d2:
-                throw r1;
-            L_0x01d3:
-                r7 = 0;
-                goto L_0x0196;
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.53.run():void");
+                SQLiteCursor cursor = null;
+                try {
+                    cursor = MessagesStorage.this.database.queryFinalized("SELECT name FROM sqlite_master WHERE type='table' AND name='user_contacts_v6'", new Object[0]);
+                    boolean migrate = cursor.next();
+                    cursor.dispose();
+                    cursor = null;
+                    int count;
+                    Contact contact;
+                    String phone;
+                    String sphone;
+                    if (migrate) {
+                        count = 16;
+                        cursor = MessagesStorage.this.database.queryFinalized("SELECT COUNT(uid) FROM user_contacts_v6 WHERE 1", new Object[0]);
+                        if (cursor.next()) {
+                            count = Math.min(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS, cursor.intValue(0));
+                        }
+                        cursor.dispose();
+                        SparseArray<Contact> contactHashMap = new SparseArray(count);
+                        cursor = MessagesStorage.this.database.queryFinalized("SELECT us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v6 as us LEFT JOIN user_phones_v6 as up ON us.uid = up.uid WHERE 1", new Object[0]);
+                        while (cursor.next()) {
+                            int uid = cursor.intValue(0);
+                            contact = (Contact) contactHashMap.get(uid);
+                            if (contact == null) {
+                                contact = new Contact();
+                                contact.first_name = cursor.stringValue(1);
+                                contact.last_name = cursor.stringValue(2);
+                                contact.imported = cursor.intValue(6);
+                                if (contact.first_name == null) {
+                                    contact.first_name = TtmlNode.ANONYMOUS_REGION_ID;
+                                }
+                                if (contact.last_name == null) {
+                                    contact.last_name = TtmlNode.ANONYMOUS_REGION_ID;
+                                }
+                                contact.contact_id = uid;
+                                contactHashMap.put(uid, contact);
+                            }
+                            phone = cursor.stringValue(3);
+                            if (phone != null) {
+                                contact.phones.add(phone);
+                                sphone = cursor.stringValue(4);
+                                if (sphone == null) {
+                                    continue;
+                                } else {
+                                    if (sphone.length() == 8 && phone.length() != 8) {
+                                        sphone = PhoneFormat.stripExceptNumbers(phone);
+                                    }
+                                    contact.shortPhones.add(sphone);
+                                    contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(5)));
+                                    contact.phoneTypes.add(TtmlNode.ANONYMOUS_REGION_ID);
+                                    if (contactHashMap.size() == DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        cursor.dispose();
+                        cursor = null;
+                        ContactsController.getInstance(MessagesStorage.this.currentAccount).migratePhoneBookToV7(contactHashMap);
+                        if (cursor != null) {
+                            cursor.dispose();
+                            return;
+                        }
+                        return;
+                    }
+                    boolean z;
+                    if (cursor != null) {
+                        cursor.dispose();
+                    }
+                    count = 16;
+                    int currentContactsCount = 0;
+                    int start = 0;
+                    try {
+                        cursor = MessagesStorage.this.database.queryFinalized("SELECT COUNT(key) FROM user_contacts_v7 WHERE 1", new Object[0]);
+                        if (cursor.next()) {
+                            currentContactsCount = cursor.intValue(0);
+                            count = Math.min(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS, currentContactsCount);
+                            if (currentContactsCount > DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS) {
+                                start = currentContactsCount - 5000;
+                            }
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d(MessagesStorage.this.currentAccount + " current cached contacts count = " + currentContactsCount);
+                            }
+                        }
+                        cursor.dispose();
+                        if (cursor != null) {
+                            cursor.dispose();
+                        }
+                    } catch (Throwable th) {
+                        if (cursor != null) {
+                            cursor.dispose();
+                        }
+                    }
+                    HashMap<String, Contact> contactHashMap2 = new HashMap(count);
+                    if (start != 0) {
+                        try {
+                            cursor = MessagesStorage.this.database.queryFinalized("SELECT us.key, us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v7 as us LEFT JOIN user_phones_v7 as up ON us.key = up.key WHERE 1 LIMIT 0," + currentContactsCount, new Object[0]);
+                        } catch (Throwable e) {
+                            contactHashMap2.clear();
+                            FileLog.e(e);
+                            if (cursor != null) {
+                                cursor.dispose();
+                            }
+                        } catch (Throwable th2) {
+                            if (cursor != null) {
+                                cursor.dispose();
+                            }
+                        }
+                    } else {
+                        cursor = MessagesStorage.this.database.queryFinalized("SELECT us.key, us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v7 as us LEFT JOIN user_phones_v7 as up ON us.key = up.key WHERE 1", new Object[0]);
+                    }
+                    while (cursor.next()) {
+                        String key = cursor.stringValue(0);
+                        contact = (Contact) contactHashMap2.get(key);
+                        if (contact == null) {
+                            contact = new Contact();
+                            contact.contact_id = cursor.intValue(1);
+                            contact.first_name = cursor.stringValue(2);
+                            contact.last_name = cursor.stringValue(3);
+                            contact.imported = cursor.intValue(7);
+                            if (contact.first_name == null) {
+                                contact.first_name = TtmlNode.ANONYMOUS_REGION_ID;
+                            }
+                            if (contact.last_name == null) {
+                                contact.last_name = TtmlNode.ANONYMOUS_REGION_ID;
+                            }
+                            contactHashMap2.put(key, contact);
+                        }
+                        phone = cursor.stringValue(4);
+                        if (phone != null) {
+                            contact.phones.add(phone);
+                            sphone = cursor.stringValue(5);
+                            if (sphone == null) {
+                                continue;
+                            } else {
+                                if (sphone.length() == 8 && phone.length() != 8) {
+                                    sphone = PhoneFormat.stripExceptNumbers(phone);
+                                }
+                                contact.shortPhones.add(sphone);
+                                contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(6)));
+                                contact.phoneTypes.add(TtmlNode.ANONYMOUS_REGION_ID);
+                                if (contactHashMap2.size() == DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    cursor.dispose();
+                    cursor = null;
+                    if (cursor != null) {
+                        cursor.dispose();
+                    }
+                    ContactsController instance = ContactsController.getInstance(MessagesStorage.this.currentAccount);
+                    if (byError) {
+                        z = false;
+                    } else {
+                        z = true;
+                    }
+                    instance.performSyncPhoneBook(contactHashMap2, true, true, false, false, z, false);
+                } catch (Throwable th3) {
+                    if (cursor != null) {
+                        cursor.dispose();
+                    }
+                }
             }
         });
     }
@@ -5611,6 +5514,7 @@ Error: java.util.NoSuchElementException
         SQLiteCursor cursor;
         int a;
         Integer count;
+        int type;
         if (ifNoLastMessage) {
             try {
                 lastMessage = (Message) messages.get(0);
@@ -5728,12 +5632,12 @@ Error: java.util.NoSuchElementException
             for (a = 0; a < messagesMediaIdsMap.size(); a++) {
                 long key = messagesMediaIdsMap.keyAt(a);
                 long value = ((Long) messagesMediaIdsMap.valueAt(a)).longValue();
-                Integer type = (Integer) mediaTypes.get(key);
-                LongSparseArray<Integer> counts = (LongSparseArray) mediaCounts.get(type.intValue());
+                Integer type2 = (Integer) mediaTypes.get(key);
+                LongSparseArray<Integer> counts = (LongSparseArray) mediaCounts.get(type2.intValue());
                 if (counts == null) {
                     counts = new LongSparseArray();
                     count = Integer.valueOf(0);
-                    mediaCounts.put(type.intValue(), counts);
+                    mediaCounts.put(type2.intValue(), counts);
                 } else {
                     count = (Integer) counts.get(value);
                 }
@@ -5771,7 +5675,6 @@ Error: java.util.NoSuchElementException
         }
         int downloadMediaMask = 0;
         for (a = 0; a < messages.size(); a++) {
-            int type2;
             message = (Message) messages.get(a);
             fixUnsupportedMedia(message);
             state.requery();
@@ -5836,38 +5739,38 @@ Error: java.util.NoSuchElementException
             }
             data.reuse();
             if (downloadMask != 0 && ((message.to_id.channel_id == 0 || message.post) && message.date >= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - 3600 && DownloadController.getInstance(this.currentAccount).canDownloadMedia(message) && ((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)))) {
-                type2 = 0;
+                type = 0;
                 long id = 0;
                 MessageMedia object = null;
                 if (MessageObject.isVoiceMessage(message)) {
                     id = message.media.document.id;
-                    type2 = 2;
+                    type = 2;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (MessageObject.isRoundVideoMessage(message)) {
                     id = message.media.document.id;
-                    type2 = 64;
+                    type = 64;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (message.media instanceof TL_messageMediaPhoto) {
                     if (FileLoader.getClosestPhotoSizeWithSize(message.media.photo.sizes, AndroidUtilities.getPhotoSize()) != null) {
                         id = message.media.photo.id;
-                        type2 = 1;
+                        type = 1;
                         object = new TL_messageMediaPhoto();
                         object.photo = message.media.photo;
                         object.flags |= 1;
                     }
                 } else if (MessageObject.isVideoMessage(message)) {
                     id = message.media.document.id;
-                    type2 = 4;
+                    type = 4;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (!(!(message.media instanceof TL_messageMediaDocument) || MessageObject.isMusicMessage(message) || MessageObject.isGifDocument(message.media.document))) {
                     id = message.media.document.id;
-                    type2 = 8;
+                    type = 8;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
@@ -5877,12 +5780,12 @@ Error: java.util.NoSuchElementException
                         object.ttl_seconds = message.media.ttl_seconds;
                         object.flags |= 4;
                     }
-                    downloadMediaMask |= type2;
+                    downloadMediaMask |= type;
                     state4.requery();
                     data = new NativeByteBuffer(object.getObjectSize());
                     object.serializeToStream(data);
                     state4.bindLong(1, id);
-                    state4.bindInteger(2, type2);
+                    state4.bindInteger(2, type);
                     state4.bindInteger(3, message.date);
                     state4.bindByteBuffer(4, data);
                     state4.step();
@@ -5974,13 +5877,13 @@ Error: java.util.NoSuchElementException
         if (mediaCounts != null) {
             state3 = this.database.executeFast("REPLACE INTO media_counts_v2 VALUES(?, ?, ?)");
             for (a = 0; a < mediaCounts.size(); a++) {
-                type2 = mediaCounts.keyAt(a);
+                type = mediaCounts.keyAt(a);
                 LongSparseArray<Integer> value2 = (LongSparseArray) mediaCounts.valueAt(a);
                 for (int b = 0; b < value2.size(); b++) {
                     long uid = value2.keyAt(b);
                     int lower_part = (int) uid;
                     int count2 = -1;
-                    cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT count FROM media_counts_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(uid), Integer.valueOf(type2)}), new Object[0]);
+                    cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT count FROM media_counts_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(uid), Integer.valueOf(type)}), new Object[0]);
                     if (cursor.next()) {
                         count2 = cursor.intValue(0);
                     }
@@ -5989,7 +5892,7 @@ Error: java.util.NoSuchElementException
                         state3.requery();
                         count2 += ((Integer) value2.valueAt(b)).intValue();
                         state3.bindLong(1, uid);
-                        state3.bindInteger(2, type2);
+                        state3.bindInteger(2, type);
                         state3.bindInteger(3, count2);
                         state3.step();
                     }
@@ -7250,6 +7153,7 @@ Error: java.util.NoSuchElementException
     public void getDialogs(final int offset, final int count) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
+                Message message;
                 messages_Dialogs dialogs = new TL_messages_dialogs();
                 ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                 ArrayList<Integer> usersToLoad = new ArrayList();
@@ -7260,7 +7164,6 @@ Error: java.util.NoSuchElementException
                 LongSparseArray<Message> replyMessageOwners = new LongSparseArray();
                 SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
-                    Message message;
                     TL_dialog dialog = new TL_dialog();
                     dialog.id = cursor.longValue(0);
                     dialog.top_message = cursor.intValue(1);

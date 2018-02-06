@@ -438,7 +438,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                         headerCell.setText(LocaleController.getString("AutoNightBrightness", R.string.AutoNightBrightness));
                         return;
                     } else if (position == ThemeActivity.this.preferedHeaderRow) {
-                        headerCell.setText(LocaleController.getString("AutoNightPreffered", R.string.AutoNightPreffered));
+                        headerCell.setText(LocaleController.getString("AutoNightPreferred", R.string.AutoNightPreferred));
                         return;
                     } else {
                         return;

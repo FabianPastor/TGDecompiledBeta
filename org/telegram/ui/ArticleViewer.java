@@ -4945,6 +4945,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.captionTextView != null) {
                 this.captionTextView.invalidate();
             }
+        } else if (id == NotificationCenter.needSetDayNightTheme) {
+            if (this.nightModeEnabled && this.selectedColor != 2 && this.adapter != null) {
+                updatePaintColors();
+                this.adapter.notifyDataSetChanged();
+            }
         } else if (id == NotificationCenter.messagePlayingDidStarted) {
             MessageObject messageObject = args[0];
             if (this.listView != null) {
@@ -5064,11 +5069,17 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (!this.nightModeEnabled || currentColor == 2) {
             return currentColor;
         }
-        int hour = Calendar.getInstance().get(11);
-        if ((hour < 22 || hour > 24) && (hour < 0 || hour > 6)) {
+        if (Theme.selectedAutoNightType == 0) {
+            int hour = Calendar.getInstance().get(11);
+            if ((hour < 22 || hour > 24) && (hour < 0 || hour > 6)) {
+                return currentColor;
+            }
+            return 2;
+        } else if (Theme.isCurrentThemeNight()) {
+            return 2;
+        } else {
             return currentColor;
         }
-        return 2;
     }
 
     private void updatePaintColors() {
@@ -5206,6 +5217,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStarted);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.needSetDayNightTheme);
         if (this.parentActivity == activity) {
             updatePaintColors();
             return;
@@ -6295,6 +6307,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStarted);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needSetDayNightTheme);
             if (this.fullscreenVideoContainer.getVisibility() == 0) {
                 if (this.customView != null) {
                     this.fullscreenVideoContainer.setVisibility(4);
@@ -7442,6 +7455,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailedLoad);
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidLoaded);
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needSetDayNightTheme);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
             this.isActionBarVisible = false;
             if (this.velocityTracker != null) {

@@ -3627,6 +3627,18 @@ public class TLRPC {
         }
     }
 
+    public static class TL_account_getWebAuthorizations extends TLObject {
+        public static int constructor = 405695855;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return TL_account_webAuthorizations.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+        }
+    }
+
     public static class TL_account_passwordInputSettings extends TLObject {
         public static int constructor = -NUM;
         public String email;
@@ -3832,6 +3844,32 @@ public class TLRPC {
 
     public static class TL_account_resetNotifySettings extends TLObject {
         public static int constructor = -612493497;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return Bool.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_account_resetWebAuthorization extends TLObject {
+        public static int constructor = 755087855;
+        public long hash;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return Bool.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeInt64(this.hash);
+        }
+    }
+
+    public static class TL_account_resetWebAuthorizations extends TLObject {
+        public static int constructor = NUM;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return Bool.TLdeserialize(stream, constructor, exception);
@@ -4070,6 +4108,74 @@ public class TLRPC {
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
             stream.writeString(this.username);
+        }
+    }
+
+    public static class TL_account_webAuthorizations extends TLObject {
+        public static int constructor = -313079300;
+        public ArrayList<TL_webAuthorization> authorizations = new ArrayList();
+        public ArrayList<User> users = new ArrayList();
+
+        public static TL_account_webAuthorizations TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            if (constructor == constructor) {
+                TL_account_webAuthorizations result = new TL_account_webAuthorizations();
+                result.readParams(stream, exception);
+                return result;
+            } else if (!exception) {
+                return null;
+            } else {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_account_webAuthorizations", new Object[]{Integer.valueOf(constructor)}));
+            }
+        }
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            if (stream.readInt32(exception) == 481674261) {
+                int count = stream.readInt32(exception);
+                int a = 0;
+                while (a < count) {
+                    TL_webAuthorization object = TL_webAuthorization.TLdeserialize(stream, stream.readInt32(exception), exception);
+                    if (object != null) {
+                        this.authorizations.add(object);
+                        a++;
+                    } else {
+                        return;
+                    }
+                }
+                if (stream.readInt32(exception) == 481674261) {
+                    count = stream.readInt32(exception);
+                    a = 0;
+                    while (a < count) {
+                        User object2 = User.TLdeserialize(stream, stream.readInt32(exception), exception);
+                        if (object2 != null) {
+                            this.users.add(object2);
+                            a++;
+                        } else {
+                            return;
+                        }
+                    }
+                } else if (exception) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(magic)}));
+                }
+            } else if (exception) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(magic)}));
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            int a;
+            stream.writeInt32(constructor);
+            stream.writeInt32(481674261);
+            int count = this.authorizations.size();
+            stream.writeInt32(count);
+            for (a = 0; a < count; a++) {
+                ((TL_webAuthorization) this.authorizations.get(a)).serializeToStream(stream);
+            }
+            stream.writeInt32(481674261);
+            count = this.users.size();
+            stream.writeInt32(count);
+            for (a = 0; a < count; a++) {
+                ((User) this.users.get(a)).serializeToStream(stream);
+            }
         }
     }
 
@@ -12580,6 +12686,56 @@ public class TLRPC {
             for (int a = 0; a < count; a++) {
                 ((InputUser) this.id.get(a)).serializeToStream(stream);
             }
+        }
+    }
+
+    public static class TL_webAuthorization extends TLObject {
+        public static int constructor = -892779534;
+        public int bot_id;
+        public String browser;
+        public int date_active;
+        public int date_created;
+        public String domain;
+        public long hash;
+        public String ip;
+        public String platform;
+        public String region;
+
+        public static TL_webAuthorization TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            if (constructor == constructor) {
+                TL_webAuthorization result = new TL_webAuthorization();
+                result.readParams(stream, exception);
+                return result;
+            } else if (!exception) {
+                return null;
+            } else {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_webAuthorization", new Object[]{Integer.valueOf(constructor)}));
+            }
+        }
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.hash = stream.readInt64(exception);
+            this.bot_id = stream.readInt32(exception);
+            this.domain = stream.readString(exception);
+            this.browser = stream.readString(exception);
+            this.platform = stream.readString(exception);
+            this.date_created = stream.readInt32(exception);
+            this.date_active = stream.readInt32(exception);
+            this.ip = stream.readString(exception);
+            this.region = stream.readString(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeInt64(this.hash);
+            stream.writeInt32(this.bot_id);
+            stream.writeString(this.domain);
+            stream.writeString(this.browser);
+            stream.writeString(this.platform);
+            stream.writeInt32(this.date_created);
+            stream.writeInt32(this.date_active);
+            stream.writeString(this.ip);
+            stream.writeString(this.region);
         }
     }
 

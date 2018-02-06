@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -85,6 +86,7 @@ public class DataSettingsActivity extends BaseFragment {
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
+            boolean z = true;
             switch (holder.getItemViewType()) {
                 case 0:
                     if (position == DataSettingsActivity.this.proxySection2Row) {
@@ -181,7 +183,12 @@ public class DataSettingsActivity extends BaseFragment {
                         checkCell.setTextAndCheck(LocaleController.getString("AutoDownloadMedia", R.string.AutoDownloadMedia), DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled, true);
                         return;
                     } else if (position == DataSettingsActivity.this.enableStreamRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EnableStreaming", R.string.EnableStreaming), SharedConfig.streamMedia, true);
+                        String string = LocaleController.getString("EnableStreaming", R.string.EnableStreaming);
+                        boolean z2 = SharedConfig.streamMedia;
+                        if (DataSettingsActivity.this.enableAllStreamRow == -1) {
+                            z = false;
+                        }
+                        checkCell.setTextAndCheck(string, z2, z);
                         return;
                     } else if (position != DataSettingsActivity.this.enableCacheStreamRow && position == DataSettingsActivity.this.enableAllStreamRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("EnableAllStreaming", R.string.EnableAllStreaming), SharedConfig.streamAllVideo, false);
@@ -339,9 +346,13 @@ public class DataSettingsActivity extends BaseFragment {
         i = this.rowCount;
         this.rowCount = i + 1;
         this.enableStreamRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.enableAllStreamRow = i;
+        if (BuildVars.DEBUG_VERSION) {
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.enableAllStreamRow = i;
+        } else {
+            this.enableAllStreamRow = -1;
+        }
         i = this.rowCount;
         this.rowCount = i + 1;
         this.enableAllStreamInfoRow = i;

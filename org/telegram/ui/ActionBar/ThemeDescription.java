@@ -149,6 +149,7 @@ public class ThemeDescription {
     public void setColor(int color, boolean useDefault, boolean save) {
         int a;
         Drawable drawable;
+        RecyclerListView recyclerListView;
         if (save) {
             Theme.setColor(this.currentKey, color, useDefault);
         }
@@ -302,7 +303,7 @@ public class ThemeDescription {
             AndroidUtilities.setScrollViewEdgeEffectColor((ScrollView) this.viewToInvalidate, color);
         }
         if (this.viewToInvalidate instanceof RecyclerListView) {
-            RecyclerListView recyclerListView = this.viewToInvalidate;
+            recyclerListView = this.viewToInvalidate;
             if ((this.changeFlags & FLAG_SELECTOR) != 0 && this.currentKey.equals(Theme.key_listSelector)) {
                 recyclerListView.setListSelectorColor(color);
             }
@@ -338,9 +339,19 @@ public class ThemeDescription {
             }
         }
         if (this.listClasses != null) {
+            int count;
+            if (this.viewToInvalidate instanceof RecyclerListView) {
+                recyclerListView = (RecyclerListView) this.viewToInvalidate;
+                recyclerListView.getRecycledViewPool().clear();
+                recyclerListView.clearRecycler();
+                count = recyclerListView.getHiddenChildCount();
+                for (a = 0; a < count; a++) {
+                    processViewColor(recyclerListView.getHiddenChildAt(a), color);
+                }
+            }
             if (this.viewToInvalidate instanceof ViewGroup) {
                 ViewGroup viewGroup = this.viewToInvalidate;
-                int count = viewGroup.getChildCount();
+                count = viewGroup.getChildCount();
                 for (a = 0; a < count; a++) {
                     processViewColor(viewGroup.getChildAt(a), color);
                 }

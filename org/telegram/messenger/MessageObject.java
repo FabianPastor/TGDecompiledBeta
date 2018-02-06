@@ -2302,7 +2302,7 @@ public class MessageObject {
     }
 
     public void generateCaption() {
-        if (this.caption == null && !isRoundVideo() && !isMediaEmpty() && !TextUtils.isEmpty(this.messageOwner.message)) {
+        if (this.caption == null && !isRoundVideo() && !isMediaEmpty() && !(this.messageOwner.media instanceof TL_messageMediaGame) && !TextUtils.isEmpty(this.messageOwner.message)) {
             boolean hasEntities;
             boolean useManualParse;
             this.caption = Emoji.replaceEmoji(this.messageOwner.message, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);

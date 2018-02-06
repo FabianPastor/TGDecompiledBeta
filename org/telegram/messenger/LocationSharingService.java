@@ -118,7 +118,7 @@ public class LocationSharingService extends Service implements NotificationCente
             PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, 0);
             this.builder = new Builder(ApplicationLoader.applicationContext);
             this.builder.setWhen(System.currentTimeMillis());
-            this.builder.setSmallIcon(R.drawable.notification);
+            this.builder.setSmallIcon(R.drawable.live_loc);
             this.builder.setContentIntent(contentIntent);
             this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
             this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));

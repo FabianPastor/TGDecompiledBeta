@@ -935,12 +935,12 @@ public class LocaleController {
     }
 
     private HashMap<String, String> getLocaleFileStrings(File file, boolean preserveEscapes) {
+        HashMap<String, String> stringMap;
         Throwable e;
         Throwable th;
         FileInputStream fileInputStream = null;
         this.reloadLastFile = false;
         try {
-            HashMap<String, String> stringMap;
             if (file.exists()) {
                 stringMap = new HashMap();
                 XmlPullParser parser = Xml.newPullParser();
@@ -2078,7 +2078,7 @@ public class LocaleController {
     }
 
     private String escapeString(String str) {
-        return str.contains("[CDATA") ? str : str.replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
+        return str.contains("[CDATA") ? str : str.replace("<", "&lt;").replace(">", "&gt;").replace("& ", "&amp; ");
     }
 
     public void saveRemoteLocaleStrings(final TL_langPackDifference difference, int currentAccount) {

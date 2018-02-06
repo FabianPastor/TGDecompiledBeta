@@ -604,11 +604,13 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
-                int count = CallLogActivity.this.listView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = CallLogActivity.this.listView.getChildAt(a);
-                    if (child instanceof ProfileSearchCell) {
-                        ((ProfileSearchCell) child).update(0);
+                if (CallLogActivity.this.listView != null) {
+                    int count = CallLogActivity.this.listView.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = CallLogActivity.this.listView.getChildAt(a);
+                        if (child instanceof ProfileSearchCell) {
+                            ((ProfileSearchCell) child).update(0);
+                        }
                     }
                 }
             }

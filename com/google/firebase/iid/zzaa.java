@@ -87,12 +87,12 @@ final class zzaa implements Runnable {
     }
 
     private final boolean zzrp(String str) {
+        String str2;
+        String valueOf;
         String[] split = str.split("!");
         if (split.length != 2) {
             return true;
         }
-        String str2;
-        String valueOf;
         String str3 = split[0];
         String str4 = split[1];
         int i = -1;

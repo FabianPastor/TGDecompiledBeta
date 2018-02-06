@@ -35,6 +35,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build.VERSION;
+import android.os.SystemClock;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.StateSet;
@@ -58,6 +59,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
@@ -84,6 +86,8 @@ public class Theme {
     public static final int AUTO_NIGHT_TYPE_SCHEDULED = 1;
     private static Field BitmapDrawable_mColorFilter = null;
     private static final int LIGHT_SENSOR_THEME_SWITCH_DELAY = 1800;
+    private static final int LIGHT_SENSOR_THEME_SWITCH_NEAR_DELAY = 12000;
+    private static final int LIGHT_SENSOR_THEME_SWITCH_NEAR_THRESHOLD = 12000;
     private static final float MAXIMUM_LUX_BREAKPOINT = 500.0f;
     private static Method StateListDrawable_getStateDrawableMethod = null;
     private static SensorEventListener ambientSensorListener = new SensorEventListener() {
@@ -97,25 +101,24 @@ public class Theme {
             } else {
                 Theme.lastBrightnessValue = ((float) Math.ceil((9.932299613952637d * Math.log((double) lux)) + 27.05900001525879d)) / 100.0f;
             }
-            if (Theme.lastBrightnessValue <= Theme.autoNightBrighnessThreshold) {
+            if (Theme.lastBrightnessValue > Theme.autoNightBrighnessThreshold) {
+                if (Theme.switchNightRunnableScheduled) {
+                    Theme.switchNightRunnableScheduled = false;
+                    AndroidUtilities.cancelRunOnUIThread(Theme.switchNightBrightnessRunnable);
+                }
+                if (!Theme.switchDayRunnableScheduled) {
+                    Theme.switchDayRunnableScheduled = true;
+                    AndroidUtilities.runOnUIThread(Theme.switchDayBrightnessRunnable, Theme.getAutoNightSwitchThemeDelay());
+                }
+            } else if (!MediaController.getInstance().isRecordingOrListeningByProximity()) {
                 if (Theme.switchDayRunnableScheduled) {
                     Theme.switchDayRunnableScheduled = false;
                     AndroidUtilities.cancelRunOnUIThread(Theme.switchDayBrightnessRunnable);
                 }
                 if (!Theme.switchNightRunnableScheduled) {
                     Theme.switchNightRunnableScheduled = true;
-                    AndroidUtilities.runOnUIThread(Theme.switchNightBrightnessRunnable, 1800);
-                    return;
+                    AndroidUtilities.runOnUIThread(Theme.switchNightBrightnessRunnable, Theme.getAutoNightSwitchThemeDelay());
                 }
-                return;
-            }
-            if (Theme.switchNightRunnableScheduled) {
-                Theme.switchNightRunnableScheduled = false;
-                AndroidUtilities.cancelRunOnUIThread(Theme.switchNightBrightnessRunnable);
-            }
-            if (!Theme.switchDayRunnableScheduled) {
-                Theme.switchDayRunnableScheduled = true;
-                AndroidUtilities.runOnUIThread(Theme.switchDayBrightnessRunnable, 1800);
             }
         }
 
@@ -162,7 +165,7 @@ public class Theme {
     public static Paint chat_docBackPaint = null;
     public static TextPaint chat_docNamePaint = null;
     public static TextPaint chat_durationPaint = null;
-    public static Drawable[][] chat_fileMiniStatesDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{6, 2}));
+    public static CombinedDrawable[][] chat_fileMiniStatesDrawable = ((CombinedDrawable[][]) Array.newInstance(CombinedDrawable.class, new int[]{6, 2}));
     public static Drawable[][] chat_fileStatesDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{10, 2}));
     public static TextPaint chat_forwardNamePaint = null;
     public static TextPaint chat_gamePaint = null;
@@ -835,6 +838,7 @@ public class Theme {
     public static String[] keys_avatar_subtitleInProfile = new String[]{key_avatar_subtitleInProfileRed, key_avatar_subtitleInProfileOrange, key_avatar_subtitleInProfileViolet, key_avatar_subtitleInProfileGreen, key_avatar_subtitleInProfileCyan, key_avatar_subtitleInProfileBlue, key_avatar_subtitleInProfilePink};
     private static float lastBrightnessValue = 1.0f;
     private static long lastHolidayCheckTime;
+    private static long lastThemeSwitchTime;
     private static Sensor lightSensor;
     private static boolean lightSensorRegistered;
     public static Paint linkSelectionPaint;
@@ -1758,11 +1762,11 @@ public class Theme {
         return defaultDrawable;
     }
 
-    public static Drawable createCircleDrawableWithIcon(int size, int iconRes) {
+    public static CombinedDrawable createCircleDrawableWithIcon(int size, int iconRes) {
         return createCircleDrawableWithIcon(size, iconRes, 0);
     }
 
-    public static Drawable createCircleDrawableWithIcon(int size, int iconRes, int stroke) {
+    public static CombinedDrawable createCircleDrawableWithIcon(int size, int iconRes, int stroke) {
         Drawable drawable;
         if (iconRes != 0) {
             drawable = ApplicationLoader.applicationContext.getResources().getDrawable(iconRes).mutate();
@@ -1772,7 +1776,7 @@ public class Theme {
         return createCircleDrawableWithIcon(size, drawable, stroke);
     }
 
-    public static Drawable createCircleDrawableWithIcon(int size, Drawable drawable, int stroke) {
+    public static CombinedDrawable createCircleDrawableWithIcon(int size, Drawable drawable, int stroke) {
         OvalShape ovalShape = new OvalShape();
         ovalShape.resize((float) size, (float) size);
         ShapeDrawable defaultDrawable = new ShapeDrawable(ovalShape);
@@ -2065,6 +2069,17 @@ public class Theme {
         return currentNightTheme;
     }
 
+    public static boolean isCurrentThemeNight() {
+        return currentTheme == currentNightTheme;
+    }
+
+    private static long getAutoNightSwitchThemeDelay() {
+        if (Math.abs(lastThemeSwitchTime - SystemClock.uptimeMillis()) >= 12000) {
+            return 1800;
+        }
+        return 12000;
+    }
+
     public static void setCurrentNightTheme(ThemeInfo theme) {
         currentNightTheme = theme;
         checkAutoNightThemeConditions();
@@ -2150,9 +2165,11 @@ public class Theme {
     private static void applyDayNightThemeMaybe(boolean night) {
         if (night) {
             if (currentTheme != currentNightTheme) {
+                lastThemeSwitchTime = SystemClock.uptimeMillis();
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentNightTheme);
             }
         } else if (currentTheme != currentDayTheme) {
+            lastThemeSwitchTime = SystemClock.uptimeMillis();
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, currentDayTheme);
         }
     }
@@ -2686,18 +2703,18 @@ public class Theme {
             chat_ivStatesDrawable[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_load_m, 1);
             chat_ivStatesDrawable[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_cancel_m, 2);
             chat_ivStatesDrawable[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), (int) R.drawable.msg_round_cancel_m, 2);
-            chat_fileMiniStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.audio_mini_arrow);
-            chat_fileMiniStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.audio_mini_arrow);
-            chat_fileMiniStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.transparent);
-            chat_fileMiniStatesDrawable[1][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.transparent);
-            chat_fileMiniStatesDrawable[2][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.audio_mini_arrow);
-            chat_fileMiniStatesDrawable[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.audio_mini_arrow);
-            chat_fileMiniStatesDrawable[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.transparent);
-            chat_fileMiniStatesDrawable[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.transparent);
-            chat_fileMiniStatesDrawable[4][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.audio_mini_arrow);
-            chat_fileMiniStatesDrawable[4][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.audio_mini_arrow);
-            chat_fileMiniStatesDrawable[5][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.transparent);
-            chat_fileMiniStatesDrawable[5][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(15.0f), R.drawable.transparent);
+            chat_fileMiniStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.audio_mini_arrow);
+            chat_fileMiniStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.audio_mini_arrow);
+            chat_fileMiniStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.audio_mini_cancel);
+            chat_fileMiniStatesDrawable[1][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.audio_mini_cancel);
+            chat_fileMiniStatesDrawable[2][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.audio_mini_arrow);
+            chat_fileMiniStatesDrawable[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.audio_mini_arrow);
+            chat_fileMiniStatesDrawable[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.audio_mini_cancel);
+            chat_fileMiniStatesDrawable[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.audio_mini_cancel);
+            chat_fileMiniStatesDrawable[4][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.video_mini_arrow);
+            chat_fileMiniStatesDrawable[4][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.video_mini_arrow);
+            chat_fileMiniStatesDrawable[5][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.video_mini_cancel);
+            chat_fileMiniStatesDrawable[5][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22.0f), R.drawable.video_mini_cancel);
             chat_fileStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_play_m);
             chat_fileStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_play_m);
             chat_fileStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44.0f), R.drawable.msg_round_pause_m);

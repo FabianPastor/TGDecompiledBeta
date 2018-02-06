@@ -3702,6 +3702,18 @@ public class RecyclerView extends ViewGroup implements NestedScrollingChild2 {
         this.glowColor = color;
     }
 
+    public void clearRecycler() {
+        this.mRecycler.clear();
+    }
+
+    public int getHiddenChildCount() {
+        return this.mChildHelper.getHiddenChildCount();
+    }
+
+    public View getHiddenChildAt(int index) {
+        return this.mChildHelper.getHiddenChildAt(index);
+    }
+
     public RecyclerView(Context context) {
         this(context, null);
     }

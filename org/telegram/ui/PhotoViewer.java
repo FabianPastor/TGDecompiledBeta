@@ -8010,7 +8010,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.photoProgressViews[0].onDraw(canvas);
                 canvas.restore();
             }
-            if (this.miniProgressView.getVisibility() == 0 || this.miniProgressAnimator != null) {
+            if (!this.pipAnimationInProgress && (this.miniProgressView.getVisibility() == 0 || this.miniProgressAnimator != null)) {
                 canvas.save();
                 canvas.translate(((float) this.miniProgressView.getLeft()) + translateX, ((float) this.miniProgressView.getTop()) + (currentTranslationY / currentScale));
                 this.miniProgressView.draw(canvas);

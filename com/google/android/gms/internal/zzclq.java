@@ -307,12 +307,12 @@ public final class zzclq extends zzcjl {
     }
 
     public static Object zzag(Object obj) {
-        ObjectOutputStream objectOutputStream;
         ObjectInputStream objectInputStream;
         Throwable th;
         if (obj == null) {
             return null;
         }
+        ObjectOutputStream objectOutputStream;
         try {
             OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);

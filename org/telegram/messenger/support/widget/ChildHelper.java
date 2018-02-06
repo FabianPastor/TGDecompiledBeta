@@ -163,6 +163,17 @@ class ChildHelper {
         return true;
     }
 
+    protected int getHiddenChildCount() {
+        return this.mHiddenViews.size();
+    }
+
+    public View getHiddenChildAt(int index) {
+        if (index < 0 || index >= this.mHiddenViews.size()) {
+            return null;
+        }
+        return (View) this.mHiddenViews.get(index);
+    }
+
     void addView(View child, boolean hidden) {
         addView(child, -1, hidden);
     }

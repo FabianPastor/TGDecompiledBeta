@@ -233,10 +233,12 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
-                User user = MessagesController.getInstance(ContactAddActivity.this.currentAccount).getUser(Integer.valueOf(ContactAddActivity.this.user_id));
-                if (user != null) {
-                    ContactAddActivity.this.avatarDrawable.setInfo(user);
-                    ContactAddActivity.this.avatarImage.invalidate();
+                if (ContactAddActivity.this.avatarImage != null) {
+                    User user = MessagesController.getInstance(ContactAddActivity.this.currentAccount).getUser(Integer.valueOf(ContactAddActivity.this.user_id));
+                    if (user != null) {
+                        ContactAddActivity.this.avatarDrawable.setInfo(user);
+                        ContactAddActivity.this.avatarImage.invalidate();
+                    }
                 }
             }
         };

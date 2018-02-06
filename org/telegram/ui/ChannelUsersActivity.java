@@ -1611,11 +1611,13 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
-                int count = ChannelUsersActivity.this.listView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = ChannelUsersActivity.this.listView.getChildAt(a);
-                    if (child instanceof ManageChatUserCell) {
-                        ((ManageChatUserCell) child).update(0);
+                if (ChannelUsersActivity.this.listView != null) {
+                    int count = ChannelUsersActivity.this.listView.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = ChannelUsersActivity.this.listView.getChildAt(a);
+                        if (child instanceof ManageChatUserCell) {
+                            ((ManageChatUserCell) child).update(0);
+                        }
                     }
                 }
             }

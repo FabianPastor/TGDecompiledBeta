@@ -25,7 +25,6 @@ public class DecoderConfigDescriptor extends BaseDescriptor {
     int upStream;
 
     public void parseDetail(ByteBuffer bb) throws IOException {
-        BaseDescriptor descriptor;
         Object valueOf;
         this.objectTypeIndication = IsoTypeReader.readUInt8(bb);
         int data = IsoTypeReader.readUInt8(bb);
@@ -35,6 +34,7 @@ public class DecoderConfigDescriptor extends BaseDescriptor {
         this.maxBitRate = IsoTypeReader.readUInt32(bb);
         this.avgBitRate = IsoTypeReader.readUInt32(bb);
         if (bb.remaining() > 2) {
+            BaseDescriptor descriptor;
             int begin = bb.position();
             descriptor = ObjectDescriptorFactory.createFrom(this.objectTypeIndication, bb);
             int read = bb.position() - begin;

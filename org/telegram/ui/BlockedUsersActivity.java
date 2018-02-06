@@ -229,11 +229,13 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
-                int count = BlockedUsersActivity.this.listView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = BlockedUsersActivity.this.listView.getChildAt(a);
-                    if (child instanceof UserCell) {
-                        ((UserCell) child).update(0);
+                if (BlockedUsersActivity.this.listView != null) {
+                    int count = BlockedUsersActivity.this.listView.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = BlockedUsersActivity.this.listView.getChildAt(a);
+                        if (child instanceof UserCell) {
+                            ((UserCell) child).update(0);
+                        }
                     }
                 }
             }

@@ -15,6 +15,8 @@ public class CombinedDrawable extends Drawable implements Callback {
     private int iconHeight;
     private int iconWidth;
     private int left;
+    private int offsetX;
+    private int offsetY;
     private int top;
 
     public CombinedDrawable(Drawable backgroundDrawable, Drawable iconDrawable, int leftOffset, int topOffset) {
@@ -43,6 +45,11 @@ public class CombinedDrawable extends Drawable implements Callback {
     public void setCustomSize(int width, int height) {
         this.backWidth = width;
         this.backHeight = height;
+    }
+
+    public void setIconOffset(int x, int y) {
+        this.offsetX = x;
+        this.offsetY = y;
     }
 
     public Drawable getIcon() {
@@ -93,8 +100,8 @@ public class CombinedDrawable extends Drawable implements Callback {
             if (this.fullSize) {
                 this.icon.setBounds(getBounds());
             } else if (this.iconWidth != 0) {
-                x = (getBounds().centerX() - (this.iconWidth / 2)) + this.left;
-                y = (getBounds().centerY() - (this.iconHeight / 2)) + this.top;
+                x = ((getBounds().centerX() - (this.iconWidth / 2)) + this.left) + this.offsetX;
+                y = ((getBounds().centerY() - (this.iconHeight / 2)) + this.top) + this.offsetY;
                 this.icon.setBounds(x, y, this.iconWidth + x, this.iconHeight + y);
             } else {
                 x = (getBounds().centerX() - (this.icon.getIntrinsicWidth() / 2)) + this.left;

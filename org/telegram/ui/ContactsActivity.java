@@ -566,13 +566,15 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
             public void didSetColor() {
-                int count = ContactsActivity.this.listView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = ContactsActivity.this.listView.getChildAt(a);
-                    if (child instanceof UserCell) {
-                        ((UserCell) child).update(0);
-                    } else if (child instanceof ProfileSearchCell) {
-                        ((ProfileSearchCell) child).update(0);
+                if (ContactsActivity.this.listView != null) {
+                    int count = ContactsActivity.this.listView.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        View child = ContactsActivity.this.listView.getChildAt(a);
+                        if (child instanceof UserCell) {
+                            ((UserCell) child).update(0);
+                        } else if (child instanceof ProfileSearchCell) {
+                            ((ProfileSearchCell) child).update(0);
+                        }
                     }
                 }
             }
