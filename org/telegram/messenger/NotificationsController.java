@@ -47,6 +47,7 @@ import java.util.Calendar;
 import java.util.List;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
+import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.SparseLongArray;
@@ -101,6 +102,7 @@ public class NotificationsController {
     private static volatile NotificationsController[] Instance = new NotificationsController[3];
     public static final String OTHER_NOTIFICATIONS_CHANNEL = "Other3";
     protected static AudioManager audioManager = ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO));
+    public static long lastNoDataNotificationTime;
     private static NotificationManagerCompat notificationManager;
     private static DispatchQueue notificationsQueue = new DispatchQueue("notificationsQueue");
     private static NotificationManager systemNotificationManager;
@@ -335,119 +337,126 @@ public class NotificationsController {
             public void run() {
                 try {
                     if (ApplicationLoader.mainInterfacePaused) {
-                        SharedPreferences preferences = MessagesController.getNotificationsSettings(NotificationsController.this.currentAccount);
-                        boolean notifyDisabled = false;
-                        int needVibrate = 0;
-                        String choosenSoundPath = null;
-                        int ledColor = -16776961;
-                        int priority = 0;
-                        if (!preferences.getBoolean("EnableAll", true)) {
-                            notifyDisabled = true;
-                        }
-                        String defaultPath = System.DEFAULT_NOTIFICATION_URI.getPath();
-                        if (!notifyDisabled) {
-                            choosenSoundPath = null;
-                            boolean vibrateOnlyIfSilent = false;
-                            if (choosenSoundPath != null && choosenSoundPath.equals(defaultPath)) {
+                        long newTime = SystemClock.uptimeMillis();
+                        if (Math.abs(NotificationsController.lastNoDataNotificationTime - newTime) >= ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS) {
+                            NotificationsController.lastNoDataNotificationTime = newTime;
+                            SharedPreferences preferences = MessagesController.getNotificationsSettings(NotificationsController.this.currentAccount);
+                            boolean notifyDisabled = false;
+                            int needVibrate = 0;
+                            String choosenSoundPath = null;
+                            int ledColor = -16776961;
+                            int priority = 0;
+                            if (!preferences.getBoolean("EnableAll", true)) {
+                                notifyDisabled = true;
+                            }
+                            String defaultPath = System.DEFAULT_NOTIFICATION_URI.getPath();
+                            if (!notifyDisabled) {
                                 choosenSoundPath = null;
-                            } else if (choosenSoundPath == null) {
-                                choosenSoundPath = preferences.getString("GlobalSoundPath", defaultPath);
-                            }
-                            needVibrate = preferences.getInt("vibrate_messages", 0);
-                            priority = preferences.getInt("priority_group", 1);
-                            ledColor = preferences.getInt("MessagesLed", -16776961);
-                            if (needVibrate == 4) {
-                                vibrateOnlyIfSilent = true;
-                                needVibrate = 0;
-                            }
-                            if ((needVibrate == 2 && (0 == 1 || 0 == 3)) || ((needVibrate != 2 && 0 == 2) || !(null == null || 0 == 4))) {
-                                needVibrate = 0;
-                            }
-                            if (vibrateOnlyIfSilent && needVibrate != 2) {
-                                try {
-                                    int mode = NotificationsController.audioManager.getRingerMode();
-                                    if (!(mode == 0 || mode == 1)) {
-                                        needVibrate = 2;
+                                boolean vibrateOnlyIfSilent = false;
+                                if (choosenSoundPath != null && choosenSoundPath.equals(defaultPath)) {
+                                    choosenSoundPath = null;
+                                } else if (choosenSoundPath == null) {
+                                    choosenSoundPath = preferences.getString("GlobalSoundPath", defaultPath);
+                                }
+                                needVibrate = preferences.getInt("vibrate_messages", 0);
+                                priority = preferences.getInt("priority_group", 1);
+                                ledColor = preferences.getInt("MessagesLed", -16776961);
+                                if (needVibrate == 4) {
+                                    vibrateOnlyIfSilent = true;
+                                    needVibrate = 0;
+                                }
+                                if ((needVibrate == 2 && (0 == 1 || 0 == 3)) || ((needVibrate != 2 && 0 == 2) || !(null == null || 0 == 4))) {
+                                    needVibrate = 0;
+                                }
+                                if (vibrateOnlyIfSilent && needVibrate != 2) {
+                                    try {
+                                        int mode = NotificationsController.audioManager.getRingerMode();
+                                        if (!(mode == 0 || mode == 1)) {
+                                            needVibrate = 2;
+                                        }
+                                    } catch (Throwable e) {
+                                        FileLog.e(e);
                                     }
-                                } catch (Throwable e) {
-                                    FileLog.e(e);
                                 }
                             }
-                        }
-                        Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-                        intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-                        intent.setFlags(32768);
-                        PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
-                        String name = LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
-                        Builder mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(NotificationsController.this.total_unread_count).setContentIntent(contentIntent).setGroup(NotificationsController.this.notificationGroup).setGroupSummary(true).setColor(-13851168);
-                        long[] vibrationPattern = null;
-                        int importance = 0;
-                        Uri sound = null;
-                        mBuilder.setCategory("msg");
-                        String lastMessage = LocaleController.getString("BackgroundRestricted", R.string.BackgroundRestricted);
-                        mBuilder.setContentText(lastMessage);
-                        mBuilder.setStyle(new BigTextStyle().bigText(lastMessage));
-                        if (priority == 0) {
-                            mBuilder.setPriority(0);
-                            if (VERSION.SDK_INT >= 26) {
-                                importance = 3;
-                            }
-                        } else if (priority == 1 || priority == 2) {
-                            mBuilder.setPriority(1);
-                            if (VERSION.SDK_INT >= 26) {
-                                importance = 4;
-                            }
-                        } else if (priority == 4) {
-                            mBuilder.setPriority(-2);
-                            if (VERSION.SDK_INT >= 26) {
-                                importance = 1;
-                            }
-                        } else if (priority == 5) {
-                            mBuilder.setPriority(-1);
-                            if (VERSION.SDK_INT >= 26) {
-                                importance = 2;
-                            }
-                        }
-                        if (notifyDisabled) {
-                            vibrationPattern = new long[]{0, 0};
-                            mBuilder.setVibrate(vibrationPattern);
-                        } else {
-                            if (lastMessage.length() > 100) {
-                                lastMessage = lastMessage.substring(0, 100).replace('\n', ' ').trim() + "...";
-                            }
-                            mBuilder.setTicker(lastMessage);
-                            if (!(choosenSoundPath == null || choosenSoundPath.equals("NoSound"))) {
+                            Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+                            intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
+                            intent.setFlags(32768);
+                            PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
+                            String name = LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
+                            Builder mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(NotificationsController.this.total_unread_count).setContentIntent(contentIntent).setGroup(NotificationsController.this.notificationGroup).setGroupSummary(true).setColor(-13851168);
+                            long[] vibrationPattern = null;
+                            int importance = 0;
+                            Uri sound = null;
+                            mBuilder.setCategory("msg");
+                            String lastMessage = LocaleController.getString("BackgroundRestricted", R.string.BackgroundRestricted);
+                            mBuilder.setContentText(lastMessage);
+                            mBuilder.setStyle(new BigTextStyle().bigText(lastMessage));
+                            if (priority == 0) {
+                                mBuilder.setPriority(0);
                                 if (VERSION.SDK_INT >= 26) {
-                                    sound = choosenSoundPath.equals(defaultPath) ? System.DEFAULT_NOTIFICATION_URI : Uri.parse(choosenSoundPath);
-                                } else if (choosenSoundPath.equals(defaultPath)) {
-                                    mBuilder.setSound(System.DEFAULT_NOTIFICATION_URI, 5);
-                                } else {
-                                    mBuilder.setSound(Uri.parse(choosenSoundPath), 5);
+                                    importance = 3;
+                                }
+                            } else if (priority == 1 || priority == 2) {
+                                mBuilder.setPriority(1);
+                                if (VERSION.SDK_INT >= 26) {
+                                    importance = 4;
+                                }
+                            } else if (priority == 4) {
+                                mBuilder.setPriority(-2);
+                                if (VERSION.SDK_INT >= 26) {
+                                    importance = 1;
+                                }
+                            } else if (priority == 5) {
+                                mBuilder.setPriority(-1);
+                                if (VERSION.SDK_INT >= 26) {
+                                    importance = 2;
                                 }
                             }
-                            if (ledColor != 0) {
-                                mBuilder.setLights(ledColor, 1000, 1000);
-                            }
-                            if (needVibrate == 2 || MediaController.getInstance().isRecordingAudio()) {
+                            if (notifyDisabled) {
                                 vibrationPattern = new long[]{0, 0};
                                 mBuilder.setVibrate(vibrationPattern);
-                            } else if (needVibrate == 1) {
-                                vibrationPattern = new long[]{0, 100, 0, 100};
-                                mBuilder.setVibrate(vibrationPattern);
-                            } else if (needVibrate == 0 || needVibrate == 4) {
-                                mBuilder.setDefaults(2);
-                                vibrationPattern = new long[0];
-                            } else if (needVibrate == 3) {
-                                vibrationPattern = new long[]{0, 1000};
-                                mBuilder.setVibrate(vibrationPattern);
+                            } else {
+                                if (lastMessage.length() > 100) {
+                                    lastMessage = lastMessage.substring(0, 100).replace('\n', ' ').trim() + "...";
+                                }
+                                mBuilder.setTicker(lastMessage);
+                                if (!(choosenSoundPath == null || choosenSoundPath.equals("NoSound"))) {
+                                    if (VERSION.SDK_INT >= 26) {
+                                        sound = choosenSoundPath.equals(defaultPath) ? System.DEFAULT_NOTIFICATION_URI : Uri.parse(choosenSoundPath);
+                                    } else if (choosenSoundPath.equals(defaultPath)) {
+                                        mBuilder.setSound(System.DEFAULT_NOTIFICATION_URI, 5);
+                                    } else {
+                                        mBuilder.setSound(Uri.parse(choosenSoundPath), 5);
+                                    }
+                                }
+                                if (ledColor != 0) {
+                                    mBuilder.setLights(ledColor, 1000, 1000);
+                                }
+                                if (needVibrate == 2 || MediaController.getInstance().isRecordingAudio()) {
+                                    vibrationPattern = new long[]{0, 0};
+                                    mBuilder.setVibrate(vibrationPattern);
+                                } else if (needVibrate == 1) {
+                                    vibrationPattern = new long[]{0, 100, 0, 100};
+                                    mBuilder.setVibrate(vibrationPattern);
+                                } else if (needVibrate == 0 || needVibrate == 4) {
+                                    mBuilder.setDefaults(2);
+                                    vibrationPattern = new long[0];
+                                } else if (needVibrate == 3) {
+                                    vibrationPattern = new long[]{0, 1000};
+                                    mBuilder.setVibrate(vibrationPattern);
+                                }
                             }
+                            if (VERSION.SDK_INT >= 26) {
+                                mBuilder.setChannelId(NotificationsController.this.validateChannelId(0, name, vibrationPattern, ledColor, sound, importance, vibrationPattern, sound, importance));
+                            }
+                            NotificationsController.this.lastNotificationIsNoData = true;
+                            NotificationsController.notificationManager.notify(NotificationsController.this.notificationId, mBuilder.build());
+                            return;
                         }
-                        if (VERSION.SDK_INT >= 26) {
-                            mBuilder.setChannelId(NotificationsController.this.validateChannelId(0, name, vibrationPattern, ledColor, sound, importance, vibrationPattern, sound, importance));
-                        }
-                        NotificationsController.this.lastNotificationIsNoData = true;
-                        NotificationsController.notificationManager.notify(NotificationsController.this.notificationId, mBuilder.build());
+                        return;
                     }
+                    NotificationsController.lastNoDataNotificationTime = 0;
                 } catch (Throwable e2) {
                     FileLog.e(e2);
                 }
@@ -1015,18 +1024,18 @@ public class NotificationsController {
 
     public void setBadgeEnabled(boolean enabled) {
         this.showBadgeNumber = enabled;
-        setBadge(getTotalAllUnreadCount());
-    }
-
-    private void setBadge(final int count) {
         notificationsQueue.postRunnable(new Runnable() {
             public void run() {
-                if (NotificationsController.this.lastBadgeCount != count) {
-                    NotificationsController.this.lastBadgeCount = count;
-                    NotificationBadge.applyCount(count);
-                }
+                NotificationsController.this.setBadge(NotificationsController.this.getTotalAllUnreadCount());
             }
         });
+    }
+
+    private void setBadge(int count) {
+        if (this.lastBadgeCount != count) {
+            this.lastBadgeCount = count;
+            NotificationBadge.applyCount(count);
+        }
     }
 
     private String getStringForMessage(MessageObject messageObject, boolean shortMessage, boolean[] text) {

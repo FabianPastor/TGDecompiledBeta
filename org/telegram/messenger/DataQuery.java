@@ -256,7 +256,7 @@ public class DataQuery {
                 SerializedData serializedData = new SerializedData(Utilities.hexToBytes((String) entry.getValue()));
                 if (key.startsWith("r_")) {
                     Message message = Message.TLdeserialize(serializedData, serializedData.readInt32(true), true);
-                    message.readAttachPath(serializedData);
+                    message.readAttachPath(serializedData, UserConfig.getInstance(this.currentAccount).clientUserId);
                     if (message != null) {
                         this.draftMessages.put(did, message);
                     }
@@ -2242,7 +2242,7 @@ public class DataQuery {
                         AbstractSerializedData data = cursor.byteBufferValue(0);
                         if (data != null) {
                             Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data);
+                            message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
                             data.reuse();
                             message.id = cursor.intValue(1);
                             message.dialog_id = j;
@@ -2361,7 +2361,7 @@ public class DataQuery {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
                         if (data != null) {
                             Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data);
+                            message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
                             data.reuse();
                             if (MessageObject.isMusicMessage(message)) {
                                 message.id = cursor.intValue(1);
@@ -3094,7 +3094,7 @@ public class DataQuery {
                 data = cursor.byteBufferValue(0);
                 if (data != null) {
                     result = Message.TLdeserialize(data, data.readInt32(false), false);
-                    result.readAttachPath(data);
+                    result.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                     data.reuse();
                     if (result.action instanceof TL_messageActionHistoryClear) {
                         result = null;
@@ -3113,7 +3113,7 @@ public class DataQuery {
                     data = cursor.byteBufferValue(0);
                     if (data != null) {
                         result = Message.TLdeserialize(data, data.readInt32(false), false);
-                        result.readAttachPath(data);
+                        result.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                         data.reuse();
                         if (result.id != mid || (result.action instanceof TL_messageActionHistoryClear)) {
                             result = null;
@@ -3266,7 +3266,7 @@ public class DataQuery {
                                 NativeByteBuffer data = cursor.byteBufferValue(0);
                                 if (data != null) {
                                     Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                    message.readAttachPath(data);
+                                    message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
                                     data.reuse();
                                     message.id = cursor.intValue(1);
                                     message.date = cursor.intValue(2);
@@ -3355,7 +3355,7 @@ public class DataQuery {
                             NativeByteBuffer data = cursor.byteBufferValue(0);
                             if (data != null) {
                                 Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                message.readAttachPath(data);
+                                message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
                                 data.reuse();
                                 message.id = cursor.intValue(1);
                                 message.date = cursor.intValue(2);
@@ -3856,7 +3856,7 @@ public class DataQuery {
                                     NativeByteBuffer data = cursor.byteBufferValue(0);
                                     if (data != null) {
                                         message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                        message.readAttachPath(data);
+                                        message.readAttachPath(data, UserConfig.getInstance(DataQuery.this.currentAccount).clientUserId);
                                         data.reuse();
                                     }
                                 }

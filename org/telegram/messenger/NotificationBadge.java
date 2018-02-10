@@ -468,13 +468,15 @@ public class NotificationBadge {
         if (launchIntent == null) {
             return false;
         }
+        Badger shortcutBadger;
         componentName = launchIntent.getComponent();
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.HOME");
-        for (ResolveInfo resolveInfo : context.getPackageManager().queryIntentActivities(intent, C.DEFAULT_BUFFER_SEGMENT_SIZE)) {
+        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, C.DEFAULT_BUFFER_SEGMENT_SIZE);
+        if (resolveInfo != null) {
             String currentHomePackage = resolveInfo.activityInfo.packageName;
             for (Class<? extends Badger> b : BADGERS) {
-                Badger shortcutBadger = null;
+                shortcutBadger = null;
                 try {
                     shortcutBadger = (Badger) b.newInstance();
                 } catch (Exception e) {
@@ -485,7 +487,27 @@ public class NotificationBadge {
                 }
             }
             if (badger != null) {
-                break;
+                return true;
+            }
+        }
+        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, C.DEFAULT_BUFFER_SEGMENT_SIZE);
+        if (resolveInfos != null) {
+            for (int a = 0; a < resolveInfos.size(); a++) {
+                currentHomePackage = ((ResolveInfo) resolveInfos.get(a)).activityInfo.packageName;
+                for (Class<? extends Badger> b2 : BADGERS) {
+                    shortcutBadger = null;
+                    try {
+                        shortcutBadger = (Badger) b2.newInstance();
+                    } catch (Exception e2) {
+                    }
+                    if (shortcutBadger != null && shortcutBadger.getSupportLaunchers().contains(currentHomePackage)) {
+                        badger = shortcutBadger;
+                        break;
+                    }
+                }
+                if (badger != null) {
+                    break;
+                }
             }
         }
         if (badger == null) {

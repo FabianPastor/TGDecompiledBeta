@@ -503,15 +503,19 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public SendMessagesHelper(int instance) {
         this.currentAccount = instance;
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidUpload);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailUpload);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FilePreparingStarted);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileNewChunkAvailable);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FilePreparingFailed);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidFailedLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidLoaded);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidFailedLoad);
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FileDidUpload);
+                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FileDidFailUpload);
+                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FilePreparingStarted);
+                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FileNewChunkAvailable);
+                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FilePreparingFailed);
+                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.httpFileDidFailedLoad);
+                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.httpFileDidLoaded);
+                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FileDidLoaded);
+                NotificationCenter.getInstance(SendMessagesHelper.this.currentAccount).addObserver(SendMessagesHelper.this, NotificationCenter.FileDidFailedLoad);
+            }
+        });
     }
 
     public void cleanup() {
@@ -792,7 +796,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         cacheFile = new File(FileLoader.getDirectory(4), Utilities.MD5(path) + "." + ImageLoader.getHttpUrlExtension(path, "file"));
                         Utilities.globalQueue.postRunnable(new Runnable() {
                             public void run() {
-                                final TL_photo photo = SendMessagesHelper.getInstance(SendMessagesHelper.this.currentAccount).generatePhotoSizes(cacheFile.toString(), null);
+                                final TL_photo photo = SendMessagesHelper.this.generatePhotoSizes(cacheFile.toString(), null);
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
                                         if (photo != null) {
@@ -1158,7 +1162,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     return;
                 }
             }
-            getInstance(this.currentAccount).sendMessage((TL_document) document, null, null, peer, replyingMessageObject, null, null, null, null, 0);
+            if (document instanceof TL_document) {
+                sendMessage((TL_document) document, null, null, peer, replyingMessageObject, null, null, null, null, 0);
+            }
         }
     }
 
@@ -1563,7 +1569,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         mediaGeo.geo._long = location.getLongitude();
         for (Entry<String, MessageObject> entry : this.waitingForLocation.entrySet()) {
             MessageObject messageObject = (MessageObject) entry.getValue();
-            getInstance(this.currentAccount).sendMessage(mediaGeo, messageObject.getDialogId(), messageObject, null, null);
+            sendMessage(mediaGeo, messageObject.getDialogId(), messageObject, null, null);
         }
     }
 
@@ -3682,7 +3688,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         final TLObject tLObject = req;
         final MessageObject messageObject = msgObj;
         final String str = originalPath;
-        RequestDelegate anonymousClass12 = new RequestDelegate() {
+        RequestDelegate anonymousClass13 = new RequestDelegate() {
             public void run(final TLObject response, final TL_error error) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
@@ -3862,7 +3868,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 });
             }
         };
-        QuickAckDelegate anonymousClass13 = new QuickAckDelegate() {
+        QuickAckDelegate anonymousClass14 = new QuickAckDelegate() {
             public void run() {
                 final int msg_id = newMsgObj.id;
                 AndroidUtilities.runOnUIThread(new Runnable() {
@@ -3878,7 +3884,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         } else {
             i = 0;
         }
-        instance.sendRequest(req, anonymousClass12, anonymousClass13, i | 68);
+        instance.sendRequest(req, anonymousClass13, anonymousClass14, i | 68);
         if (parentMessage != null) {
             parentMessage.sendDelayedRequests();
         }

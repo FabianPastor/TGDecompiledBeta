@@ -14,6 +14,7 @@ public class UserConfig {
     public static int selectedAccount;
     public boolean blockedUsersLoaded;
     public int botRatingLoadTime;
+    public int clientUserId;
     private boolean configLoaded;
     public boolean contactsReimported;
     public int contactsSavedCount;
@@ -196,6 +197,7 @@ public class UserConfig {
     public void setCurrentUser(User user) {
         synchronized (this.sync) {
             this.currentUser = user;
+            this.clientUserId = user.id;
         }
     }
 
@@ -259,12 +261,16 @@ public class UserConfig {
                     data.cleanup();
                 }
             }
+            if (this.currentUser != null) {
+                this.clientUserId = this.currentUser.id;
+            }
             this.configLoaded = true;
         }
     }
 
     public void clearConfig() {
         this.currentUser = null;
+        this.clientUserId = 0;
         this.registeredForPush = false;
         this.contactsSavedCount = 0;
         this.lastSendMessageId = -210000;

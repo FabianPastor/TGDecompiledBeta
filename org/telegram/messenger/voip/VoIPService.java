@@ -114,46 +114,48 @@ public class VoIPService extends VoIPBaseService implements NotificationCenterDe
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (sharedInstance == null) {
-            this.currentAccount = intent.getIntExtra("account", -1);
-            if (this.currentAccount == -1) {
-                throw new IllegalStateException("No account specified when starting VoIP service");
-            }
-            int userID = intent.getIntExtra("user_id", 0);
-            this.isOutgoing = intent.getBooleanExtra("is_outgoing", false);
-            this.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(userID));
-            if (this.user == null) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.w("VoIPService: user==null");
+        if (intent != null) {
+            if (sharedInstance == null) {
+                this.currentAccount = intent.getIntExtra("account", -1);
+                if (this.currentAccount == -1) {
+                    throw new IllegalStateException("No account specified when starting VoIP service");
                 }
-                stopSelf();
-            } else {
-                if (this.isOutgoing) {
-                    dispatchStateChanged(14);
-                    this.delayedStartOutgoingCall = new Runnable() {
-                        public void run() {
-                            VoIPService.this.delayedStartOutgoingCall = null;
-                            VoIPService.this.startOutgoingCall();
-                        }
-                    };
-                    AndroidUtilities.runOnUIThread(this.delayedStartOutgoingCall, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
-                    if (intent.getBooleanExtra("start_incall_activity", false)) {
-                        startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
+                int userID = intent.getIntExtra("user_id", 0);
+                this.isOutgoing = intent.getBooleanExtra("is_outgoing", false);
+                this.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(userID));
+                if (this.user == null) {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.w("VoIPService: user==null");
                     }
+                    stopSelf();
                 } else {
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeInCallActivity, new Object[0]);
-                    this.call = callIShouldHavePutIntoIntent;
-                    callIShouldHavePutIntoIntent = null;
-                    acknowledgeCallAndStartRinging();
-                    if (VERSION.SDK_INT >= 26) {
-                        showNotification();
+                    if (this.isOutgoing) {
+                        dispatchStateChanged(14);
+                        this.delayedStartOutgoingCall = new Runnable() {
+                            public void run() {
+                                VoIPService.this.delayedStartOutgoingCall = null;
+                                VoIPService.this.startOutgoingCall();
+                            }
+                        };
+                        AndroidUtilities.runOnUIThread(this.delayedStartOutgoingCall, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+                        if (intent.getBooleanExtra("start_incall_activity", false)) {
+                            startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
+                        }
+                    } else {
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeInCallActivity, new Object[0]);
+                        this.call = callIShouldHavePutIntoIntent;
+                        callIShouldHavePutIntoIntent = null;
+                        acknowledgeCallAndStartRinging();
+                        if (VERSION.SDK_INT >= 26) {
+                            showNotification();
+                        }
                     }
+                    sharedInstance = this;
+                    initializeAccountRelatedThings();
                 }
-                sharedInstance = this;
-                initializeAccountRelatedThings();
+            } else if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Tried to start the VoIP service when it's already started");
             }
-        } else if (BuildVars.LOGS_ENABLED) {
-            FileLog.e("Tried to start the VoIP service when it's already started");
         }
         return 2;
     }

@@ -240,6 +240,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private ArrayBlockingQueue<AudioBufferInfo> buffers;
         private ArrayList<AudioBufferInfo> buffersToWrite;
         private long currentTimestamp;
+        private long desyncTime;
         private int drawProgram;
         private EGLConfig eglConfig;
         private EGLContext eglContext;
@@ -432,8 +433,28 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     if (this.videoFirst != -1) {
                         while (true) {
                             boolean ok = false;
-                            for (a = 0; a < input.results; a++) {
-                                if (input.offset[a] >= this.videoFirst) {
+                            a = 0;
+                            while (a < input.results) {
+                                if (a == 0 && Math.abs(this.videoFirst - input.offset[a]) > 100000000) {
+                                    this.desyncTime = this.videoFirst - input.offset[a];
+                                    this.audioFirst = input.offset[a];
+                                    ok = true;
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        FileLog.d("detected desync between audio and video " + this.desyncTime);
+                                    }
+                                    if (!ok) {
+                                        break;
+                                    }
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        FileLog.d("first audio frame not found, removing buffers " + input.results);
+                                    }
+                                    this.buffersToWrite.remove(input);
+                                    if (this.buffersToWrite.isEmpty()) {
+                                        input = (AudioBufferInfo) this.buffersToWrite.get(0);
+                                    } else {
+                                        return;
+                                    }
+                                } else if (input.offset[a] >= this.videoFirst) {
                                     input.lastWroteBuffer = a;
                                     this.audioFirst = input.offset[a];
                                     ok = true;
@@ -447,11 +468,16 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                         FileLog.d("first audio frame not found, removing buffers " + input.results);
                                     }
                                     this.buffersToWrite.remove(input);
-                                    if (!this.buffersToWrite.isEmpty()) {
+                                    if (this.buffersToWrite.isEmpty()) {
                                         input = (AudioBufferInfo) this.buffersToWrite.get(0);
                                     } else {
                                         return;
                                     }
+                                } else {
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        FileLog.d("ignore first audio frame at " + a + " timestamp = " + input.offset[a]);
+                                    }
+                                    a++;
                                 }
                             }
                             if (!ok) {
@@ -461,7 +487,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                 FileLog.d("first audio frame not found, removing buffers " + input.results);
                             }
                             this.buffersToWrite.remove(input);
-                            if (!this.buffersToWrite.isEmpty()) {
+                            if (this.buffersToWrite.isEmpty()) {
                                 input = (AudioBufferInfo) this.buffersToWrite.get(0);
                             } else {
                                 return;
@@ -487,55 +513,55 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
                 boolean isLast = false;
                 while (input != null) {
-                    int inputBufferIndex = this.audioEncoder.dequeueInputBuffer(0);
-                    if (inputBufferIndex >= 0) {
-                        ByteBuffer inputBuffer;
-                        if (VERSION.SDK_INT >= 21) {
-                            inputBuffer = this.audioEncoder.getInputBuffer(inputBufferIndex);
-                        } else {
-                            try {
+                    try {
+                        int inputBufferIndex = this.audioEncoder.dequeueInputBuffer(0);
+                        if (inputBufferIndex >= 0) {
+                            ByteBuffer inputBuffer;
+                            if (VERSION.SDK_INT >= 21) {
+                                inputBuffer = this.audioEncoder.getInputBuffer(inputBufferIndex);
+                            } else {
                                 inputBuffer = this.audioEncoder.getInputBuffers()[inputBufferIndex];
                                 inputBuffer.clear();
-                            } catch (Throwable e2) {
-                                FileLog.e(e2);
-                                return;
                             }
-                        }
-                        long startWriteTime = input.offset[input.lastWroteBuffer];
-                        a = input.lastWroteBuffer;
-                        while (a <= input.results) {
-                            if (a < input.results) {
-                                if (!this.running && input.offset[a] >= this.videoLast) {
-                                    if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.d("stop audio encoding because of stoped video recording at " + input.offset[a] + " last video " + this.videoLast);
+                            long startWriteTime = input.offset[input.lastWroteBuffer];
+                            a = input.lastWroteBuffer;
+                            while (a <= input.results) {
+                                if (a < input.results) {
+                                    if (!this.running && input.offset[a] >= this.videoLast - this.desyncTime) {
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.d("stop audio encoding because of stoped video recording at " + input.offset[a] + " last video " + this.videoLast);
+                                        }
+                                        this.audioStopedByTime = true;
+                                        isLast = true;
+                                        input = null;
+                                        this.buffersToWrite.clear();
+                                    } else if (inputBuffer.remaining() < input.read[a]) {
+                                        input.lastWroteBuffer = a;
+                                        input = null;
+                                        break;
+                                    } else {
+                                        inputBuffer.put(input.buffer, a * 2048, input.read[a]);
                                     }
-                                    this.audioStopedByTime = true;
-                                    isLast = true;
-                                    input = null;
-                                    this.buffersToWrite.clear();
-                                } else if (inputBuffer.remaining() < input.read[a]) {
-                                    input.lastWroteBuffer = a;
-                                    input = null;
-                                    break;
-                                } else {
-                                    inputBuffer.put(input.buffer, a * 2048, input.read[a]);
                                 }
+                                if (a >= input.results - 1) {
+                                    this.buffersToWrite.remove(input);
+                                    if (this.running) {
+                                        this.buffers.put(input);
+                                    }
+                                    if (this.buffersToWrite.isEmpty()) {
+                                        isLast = input.last;
+                                        input = null;
+                                        break;
+                                    }
+                                    input = (AudioBufferInfo) this.buffersToWrite.get(0);
+                                }
+                                a++;
                             }
-                            if (a >= input.results - 1) {
-                                this.buffersToWrite.remove(input);
-                                if (this.running) {
-                                    this.buffers.put(input);
-                                }
-                                if (this.buffersToWrite.isEmpty()) {
-                                    isLast = input.last;
-                                    input = null;
-                                    break;
-                                }
-                                input = (AudioBufferInfo) this.buffersToWrite.get(0);
-                            }
-                            a++;
+                            this.audioEncoder.queueInputBuffer(inputBufferIndex, 0, inputBuffer.position(), startWriteTime == 0 ? 0 : startWriteTime - this.audioStartTime, isLast ? 4 : 0);
                         }
-                        this.audioEncoder.queueInputBuffer(inputBufferIndex, 0, inputBuffer.position(), startWriteTime == 0 ? 0 : startWriteTime - this.audioStartTime, isLast ? 4 : 0);
+                    } catch (Throwable e2) {
+                        FileLog.e(e2);
+                        return;
                     }
                 }
             }
@@ -922,8 +948,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
-            MediaFormat newFormat;
-            ByteBuffer encodedData;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
@@ -932,6 +956,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             }
             while (true) {
+                MediaFormat newFormat;
+                ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
                     if (!endOfStream) {
@@ -1985,8 +2011,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         ArrayList<Size> previewSizes = this.selectedCamera.getPreviewSizes();
         ArrayList<Size> pictureSizes = this.selectedCamera.getPictureSizes();
-        this.previewSize = CameraController.chooseOptimalSize(previewSizes, 480, 270, this.aspectRatio);
-        this.pictureSize = CameraController.chooseOptimalSize(pictureSizes, 480, 270, this.aspectRatio);
+        this.previewSize = CameraController.chooseOptimalSize(previewSizes, 1920, 1080, this.aspectRatio);
+        this.pictureSize = CameraController.chooseOptimalSize(pictureSizes, 1920, 1080, this.aspectRatio);
         if (this.previewSize.mWidth != this.pictureSize.mWidth) {
             Size preview;
             int b;

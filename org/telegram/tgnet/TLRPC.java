@@ -2101,7 +2101,7 @@ public class TLRPC {
             return result;
         }
 
-        public void readAttachPath(AbstractSerializedData stream) {
+        public void readAttachPath(AbstractSerializedData stream, int currentUserId) {
             if ((this instanceof TL_message_secret) || (this instanceof TL_message_secret_layer72)) {
                 if (this.id < 0 || !(this.media == null || (this.media instanceof TL_messageMediaEmpty) || (this.media instanceof TL_messageMediaWebPage) || this.message == null || this.message.length() == 0 || !this.message.startsWith("-1"))) {
                     this.attachPath = stream.readString(false);
@@ -2126,7 +2126,7 @@ public class TLRPC {
                 } else {
                     fixCaption = true;
                 }
-                if (this.out && (this.id < 0 || hasMedia)) {
+                if ((this.out || (this.to_id != null && this.to_id.user_id != 0 && this.to_id.user_id == this.from_id && this.from_id == currentUserId)) && (this.id < 0 || hasMedia)) {
                     if (hasMedia && fixCaption) {
                         if (this.message.length() > 6 && this.message.charAt(2) == '_') {
                             this.params = new HashMap();

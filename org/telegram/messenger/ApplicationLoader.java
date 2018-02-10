@@ -98,7 +98,11 @@ public class ApplicationLoader extends Application {
         ConnectionsManager.native_setJava(false);
         ForegroundDetector foregroundDetector = new ForegroundDetector(this);
         applicationHandler = new Handler(applicationContext.getMainLooper());
-        startPushService();
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                ApplicationLoader.startPushService();
+            }
+        });
     }
 
     public static void startPushService() {

@@ -202,7 +202,11 @@ public class DialogCell extends BaseCell {
                 this.checkBox.layout(x, y, this.checkBox.getMeasuredWidth() + x, this.checkBox.getMeasuredHeight() + y);
             }
             if (changed) {
-                buildLayout();
+                try {
+                    buildLayout();
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
             }
         }
     }

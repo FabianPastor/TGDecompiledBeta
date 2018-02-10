@@ -1905,7 +1905,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             return 0;
         } else {
             int width;
-            boolean z = (this.documentAttach.mime_type != null && this.documentAttach.mime_type.toLowerCase().startsWith("image/")) || !((this.documentAttach.thumb instanceof TL_photoSizeEmpty) || (this.documentAttach.thumb.location instanceof TL_fileLocationUnavailable));
+            boolean z = (this.documentAttach.mime_type != null && this.documentAttach.mime_type.toLowerCase().startsWith("image/")) || !(this.documentAttach.thumb == null || (this.documentAttach.thumb instanceof TL_photoSizeEmpty) || (this.documentAttach.thumb.location instanceof TL_fileLocationUnavailable));
             this.drawPhotoImage = z;
             if (!this.drawPhotoImage) {
                 maxWidth += AndroidUtilities.dp(30.0f);
@@ -2060,21 +2060,25 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
         int maxWidth;
         int a;
-        int dp;
         int linkPreviewMaxWidth;
-        String author;
+        String description;
         Photo photo;
+        TLObject document;
         String type;
         int duration;
+        boolean smallImage;
         TL_webDocument webDocument;
-        TL_webDocument webDocument2;
+        int additinalWidth;
+        int height;
+        int width;
         Throwable e;
+        int restLinesCount;
         int lineLeft;
-        boolean hasRTL;
-        ArrayList arrayList;
-        PhotoSize photoSize;
-        PhotoSize photoSize2;
-        int dp2;
+        boolean authorIsRTL;
+        int textWidth;
+        int maxPhotoWidth;
+        DocumentAttribute attribute;
+        int durationWidth;
         String fileName;
         boolean autoDownload;
         int seconds;
@@ -2101,8 +2105,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
         if (messageChanged || dataChanged || groupChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int i;
-            int height;
-            int width;
+            int dp;
             float f;
             int timeWidthTotal;
             int widthForCaption;
@@ -2220,8 +2223,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
             int count;
             String str2;
-            int maxPhotoWidth;
-            DocumentAttribute attribute;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -2360,15 +2361,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
                     String site_name;
                     String title;
-                    String description;
-                    TLObject document;
-                    boolean smallImage;
-                    int additinalWidth;
+                    String author;
+                    TL_webDocument webDocument2;
                     int restLines;
-                    int restLinesCount;
-                    boolean authorIsRTL;
-                    int textWidth;
-                    int durationWidth;
+                    boolean hasRTL;
+                    ArrayList arrayList;
+                    PhotoSize photoSize;
+                    PhotoSize photoSize2;
+                    int dp2;
                     if (AndroidUtilities.isTablet()) {
                         if (this.isChat && messageObject.needDrawAvatar() && !this.currentMessageObject.isOut()) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(132.0f);
@@ -6602,6 +6602,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         int linkPreviewY;
         int x;
         int y;
+        float progress;
         int x1;
         int y1;
         RadialProgress radialProgress;
@@ -6960,7 +6961,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             Theme.chat_photoStatesDrawables[drawable][this.buttonPressed].draw(canvas);
             if (this.currentMessageObject.messageOwner.destroyTime != 0) {
                 if (!this.currentMessageObject.isOutOwner()) {
-                    float progress;
                     progress = ((float) Math.max(0, (((long) this.currentMessageObject.messageOwner.destroyTime) * 1000) - (System.currentTimeMillis() + ((long) (ConnectionsManager.getInstance(this.currentAccount).getTimeDifference() * 1000))))) / (((float) this.currentMessageObject.messageOwner.ttl) * 1000.0f);
                     Theme.chat_deleteProgressPaint.setAlpha((int) (255.0f * this.controlsAlpha));
                     canvas.drawArc(this.deleteProgressRect, -90.0f, -360.0f * progress, true, Theme.chat_deleteProgressPaint);
@@ -8156,7 +8156,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (this.currentMessageObject.isFromUser()) {
             author = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.messageOwner.from_id));
         }
-        if (messageObject.isLiveLocation() || messageObject.messageOwner.via_bot_id != 0 || messageObject.messageOwner.via_bot_name != null || ((author != null && author.bot) || (messageObject.messageOwner.flags & 32768) == 0 || this.currentPosition != null)) {
+        if (messageObject.isLiveLocation() || messageObject.getDialogId() == 777000 || messageObject.messageOwner.via_bot_id != 0 || messageObject.messageOwner.via_bot_name != null || ((author != null && author.bot) || (messageObject.messageOwner.flags & 32768) == 0 || this.currentPosition != null)) {
             timeString = LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000);
         } else {
             timeString = LocaleController.getString("EditedMessage", R.string.EditedMessage) + " " + LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000);
@@ -8435,6 +8435,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.currentForwardUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.messageOwner.fwd_from.from_id));
             }
             if (!(this.currentForwardUser == null && this.currentForwardChannel == null)) {
+                String fromString;
                 if (this.currentForwardChannel != null) {
                     if (this.currentForwardUser != null) {
                         this.currentForwardNameString = String.format("%s (%s)", new Object[]{this.currentForwardChannel.title, UserObject.getUserName(this.currentForwardUser)});
@@ -8448,7 +8449,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 String from = LocaleController.getString("From", R.string.From);
                 String fromFormattedString = LocaleController.getString("FromFormatted", R.string.FromFormatted);
                 int idx = fromFormattedString.indexOf("%1$s");
-                String fromString = String.format(fromFormattedString, new Object[]{TextUtils.ellipsize(this.currentForwardNameString.replace('\n', ' '), Theme.chat_replyNamePaint, (float) ((this.forwardedNameWidth - ((int) Math.ceil((double) Theme.chat_forwardNamePaint.measureText(from + " ")))) - this.viaWidth), TruncateAt.END)});
+                name = TextUtils.ellipsize(this.currentForwardNameString.replace('\n', ' '), Theme.chat_replyNamePaint, (float) ((this.forwardedNameWidth - ((int) Math.ceil((double) Theme.chat_forwardNamePaint.measureText(from + " ")))) - this.viaWidth), TruncateAt.END);
+                try {
+                    fromString = String.format(fromFormattedString, new Object[]{name});
+                } catch (Exception e2) {
+                    fromString = name.toString();
+                }
                 if (viaString != null) {
                     spannableStringBuilder = new SpannableStringBuilder(String.format("%s via %s", new Object[]{fromString, viaUsername}));
                     this.viaNameWidth = (int) Math.ceil((double) Theme.chat_forwardNamePaint.measureText(fromString));
@@ -8468,8 +8474,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (messageObject.type != 5) {
                         this.namesOffset += AndroidUtilities.dp(36.0f);
                     }
-                } catch (Throwable e2) {
-                    FileLog.e(e2);
+                } catch (Throwable e3) {
+                    FileLog.e(e3);
                 }
             }
         }
@@ -8546,8 +8552,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         this.replyNameOffset = this.replyNameLayout.getLineLeft(0);
                     }
                 }
-            } catch (Throwable e22) {
-                FileLog.e(e22);
+            } catch (Throwable e32) {
+                FileLog.e(e32);
             }
             try {
                 this.replyTextWidth = AndroidUtilities.dp((float) ((this.needReplyImage ? 44 : 0) + 4));
@@ -8558,8 +8564,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         this.replyTextOffset = this.replyTextLayout.getLineLeft(0);
                     }
                 }
-            } catch (Throwable e222) {
-                FileLog.e(e222);
+            } catch (Throwable e322) {
+                FileLog.e(e322);
             }
         }
         requestLayout();

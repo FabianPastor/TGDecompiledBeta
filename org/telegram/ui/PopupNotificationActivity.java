@@ -1,5 +1,9 @@
 package org.telegram.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -19,10 +23,10 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.ViewTreeObserver.OnPreDrawListener;
-import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
@@ -45,6 +49,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.NotificationsController;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -53,7 +58,11 @@ import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
+import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.PhotoSize;
+import org.telegram.tgnet.TLRPC.ReplyMarkup;
+import org.telegram.tgnet.TLRPC.TL_keyboardButtonCallback;
+import org.telegram.tgnet.TLRPC.TL_keyboardButtonRow;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -75,12 +84,14 @@ import org.telegram.ui.Components.StatusDrawable;
 import org.telegram.ui.Components.TypingDotsDrawable;
 
 public class PopupNotificationActivity extends Activity implements NotificationCenterDelegate {
+    private static final int id_chat_compose_panel = 1000;
     private ActionBar actionBar;
     private boolean animationInProgress = false;
     private long animationStartTime = 0;
     private ArrayList<ViewGroup> audioViews = new ArrayList();
     private FrameLayout avatarContainer;
     private BackupImageView avatarImageView;
+    private ViewGroup centerButtonsView;
     private ViewGroup centerView;
     private ChatActivityEnterView chatActivityEnterView;
     private int classGuid;
@@ -94,6 +105,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private boolean isReply;
     private CharSequence lastPrintString;
     private int lastResumedAccount = -1;
+    private ViewGroup leftButtonsView;
     private ViewGroup leftView;
     private ViewGroup messageContainer;
     private float moveStartX = -1.0f;
@@ -102,34 +114,13 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private TextView onlineTextView;
     private RelativeLayout popupContainer;
     private ArrayList<MessageObject> popupMessages = new ArrayList();
+    private ViewGroup rightButtonsView;
     private ViewGroup rightView;
     private boolean startedMoving = false;
     private StatusDrawable[] statusDrawables = new StatusDrawable[5];
     private ArrayList<ViewGroup> textViews = new ArrayList();
     private VelocityTracker velocityTracker = null;
     private WakeLock wakeLock = null;
-
-    public class FrameLayoutAnimationListener extends FrameLayout {
-        public FrameLayoutAnimationListener(Context context) {
-            super(context);
-        }
-
-        public FrameLayoutAnimationListener(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        public FrameLayoutAnimationListener(Context context, AttributeSet attrs, int defStyle) {
-            super(context, attrs, defStyle);
-        }
-
-        protected void onAnimationEnd() {
-            super.onAnimationEnd();
-            if (PopupNotificationActivity.this.onAnimationEndRunnable != null) {
-                PopupNotificationActivity.this.onAnimationEndRunnable.run();
-                PopupNotificationActivity.this.onAnimationEndRunnable = null;
-            }
-        }
-    }
 
     private class FrameLayoutTouch extends FrameLayout {
         public FrameLayoutTouch(Context context) {
@@ -262,13 +253,36 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         contentView.setBackgroundColor(-NUM);
         RelativeLayout relativeLayout = new RelativeLayout(this);
         contentView.addView(relativeLayout, LayoutHelper.createFrame(-1, -1.0f));
-        this.popupContainer = new RelativeLayout(this);
+        this.popupContainer = new RelativeLayout(this) {
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                int w = PopupNotificationActivity.this.chatActivityEnterView.getMeasuredWidth();
+                int h = PopupNotificationActivity.this.chatActivityEnterView.getMeasuredHeight();
+                for (int a = 0; a < getChildCount(); a++) {
+                    View v = getChildAt(a);
+                    if (v.getTag() instanceof String) {
+                        v.measure(MeasureSpec.makeMeasureSpec(w, NUM), MeasureSpec.makeMeasureSpec(h - AndroidUtilities.dp(3.0f), NUM));
+                    }
+                }
+            }
+
+            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+                super.onLayout(changed, l, t, r, b);
+                for (int a = 0; a < getChildCount(); a++) {
+                    View v = getChildAt(a);
+                    if (v.getTag() instanceof String) {
+                        v.layout(v.getLeft(), PopupNotificationActivity.this.chatActivityEnterView.getTop() + AndroidUtilities.dp(3.0f), v.getRight(), PopupNotificationActivity.this.chatActivityEnterView.getBottom());
+                    }
+                }
+            }
+        };
         this.popupContainer.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         relativeLayout.addView(this.popupContainer, LayoutHelper.createRelative(-1, PsExtractor.VIDEO_STREAM_MASK, 12, 0, 12, 0, 13));
         if (this.chatActivityEnterView != null) {
             this.chatActivityEnterView.onDestroy();
         }
         this.chatActivityEnterView = new ChatActivityEnterView(this, contentView, null, false);
+        this.chatActivityEnterView.setId(id_chat_compose_panel);
         this.popupContainer.addView(this.chatActivityEnterView, LayoutHelper.createRelative(-1, -2, 12));
         this.chatActivityEnterView.setDelegate(new ChatActivityEnterViewDelegate() {
             public void onMessageSend(CharSequence message) {
@@ -519,14 +533,14 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             if (motionEvent == null || !this.startedMoving) {
                 applyViewsLayoutParams(0);
             } else {
-                LayoutParams layoutParams = (LayoutParams) this.centerView.getLayoutParams();
                 diff = (int) (motionEvent.getX() - this.moveStartX);
                 int width = AndroidUtilities.displaySize.x - AndroidUtilities.dp(24.0f);
-                int moveDiff = 0;
+                float moveDiff = 0.0f;
                 int forceMove = 0;
                 View otherView = null;
+                View otherButtonsView = null;
                 if (this.velocityTracker != null) {
-                    this.velocityTracker.computeCurrentVelocity(1000);
+                    this.velocityTracker.computeCurrentVelocity(id_chat_compose_panel);
                     if (this.velocityTracker.getXVelocity() >= 3500.0f) {
                         forceMove = 1;
                     } else if (this.velocityTracker.getXVelocity() <= -3500.0f) {
@@ -534,8 +548,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     }
                 }
                 if ((forceMove == 1 || diff > width / 3) && this.leftView != null) {
-                    moveDiff = width - layoutParams.leftMargin;
+                    moveDiff = ((float) width) - this.centerView.getTranslationX();
                     otherView = this.leftView;
+                    otherButtonsView = this.leftButtonsView;
                     this.onAnimationEndRunnable = new Runnable() {
                         public void run() {
                             PopupNotificationActivity.this.animationInProgress = false;
@@ -544,8 +559,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                         }
                     };
                 } else if ((forceMove == 2 || diff < (-width) / 3) && this.rightView != null) {
-                    moveDiff = (-width) - layoutParams.leftMargin;
+                    moveDiff = ((float) (-width)) - this.centerView.getTranslationX();
                     otherView = this.rightView;
+                    otherButtonsView = this.rightButtonsView;
                     this.onAnimationEndRunnable = new Runnable() {
                         public void run() {
                             PopupNotificationActivity.this.animationInProgress = false;
@@ -553,9 +569,14 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                             AndroidUtilities.unlockOrientation(PopupNotificationActivity.this);
                         }
                     };
-                } else if (layoutParams.leftMargin != 0) {
-                    moveDiff = -layoutParams.leftMargin;
+                } else if (this.centerView.getTranslationX() != 0.0f) {
+                    moveDiff = -this.centerView.getTranslationX();
                     otherView = diff > 0 ? this.leftView : this.rightView;
+                    if (diff > 0) {
+                        otherButtonsView = this.leftButtonsView;
+                    } else {
+                        otherButtonsView = this.rightButtonsView;
+                    }
                     this.onAnimationEndRunnable = new Runnable() {
                         public void run() {
                             PopupNotificationActivity.this.animationInProgress = false;
@@ -564,16 +585,31 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                         }
                     };
                 }
-                if (moveDiff != 0) {
-                    int time = (int) (Math.abs(((float) moveDiff) / ((float) width)) * 200.0f);
-                    TranslateAnimation animation = new TranslateAnimation(0.0f, (float) moveDiff, 0.0f, 0.0f);
-                    animation.setDuration((long) time);
-                    this.centerView.startAnimation(animation);
-                    if (otherView != null) {
-                        animation = new TranslateAnimation(0.0f, (float) moveDiff, 0.0f, 0.0f);
-                        animation.setDuration((long) time);
-                        otherView.startAnimation(animation);
+                if (moveDiff != 0.0f) {
+                    int time = (int) (Math.abs(moveDiff / ((float) width)) * 200.0f);
+                    ArrayList<Animator> animators = new ArrayList();
+                    animators.add(ObjectAnimator.ofFloat(this.centerView, "translationX", new float[]{this.centerView.getTranslationX() + moveDiff}));
+                    if (this.centerButtonsView != null) {
+                        animators.add(ObjectAnimator.ofFloat(this.centerButtonsView, "translationX", new float[]{this.centerButtonsView.getTranslationX() + moveDiff}));
                     }
+                    if (otherView != null) {
+                        animators.add(ObjectAnimator.ofFloat(otherView, "translationX", new float[]{otherView.getTranslationX() + moveDiff}));
+                    }
+                    if (otherButtonsView != null) {
+                        animators.add(ObjectAnimator.ofFloat(otherButtonsView, "translationX", new float[]{otherButtonsView.getTranslationX() + moveDiff}));
+                    }
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(animators);
+                    animatorSet.setDuration((long) time);
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animation) {
+                            if (PopupNotificationActivity.this.onAnimationEndRunnable != null) {
+                                PopupNotificationActivity.this.onAnimationEndRunnable.run();
+                                PopupNotificationActivity.this.onAnimationEndRunnable = null;
+                            }
+                        }
+                    });
+                    animatorSet.start();
                     this.animationInProgress = true;
                     this.animationStartTime = System.currentTimeMillis();
                 }
@@ -589,32 +625,136 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     private void applyViewsLayoutParams(int xOffset) {
+        LayoutParams layoutParams;
         int widht = AndroidUtilities.displaySize.x - AndroidUtilities.dp(24.0f);
         if (this.leftView != null) {
-            LayoutParams layoutParams = (LayoutParams) this.leftView.getLayoutParams();
-            layoutParams.gravity = 51;
-            layoutParams.height = -1;
-            layoutParams.width = widht;
-            layoutParams.leftMargin = (-widht) + xOffset;
-            this.leftView.setLayoutParams(layoutParams);
+            layoutParams = (LayoutParams) this.leftView.getLayoutParams();
+            if (layoutParams.width != widht) {
+                layoutParams.width = widht;
+                this.leftView.setLayoutParams(layoutParams);
+            }
+            this.leftView.setTranslationX((float) ((-widht) + xOffset));
+        }
+        if (this.leftButtonsView != null) {
+            this.leftButtonsView.setTranslationX((float) ((-widht) + xOffset));
         }
         if (this.centerView != null) {
             layoutParams = (LayoutParams) this.centerView.getLayoutParams();
-            layoutParams.gravity = 51;
-            layoutParams.height = -1;
-            layoutParams.width = widht;
-            layoutParams.leftMargin = xOffset;
-            this.centerView.setLayoutParams(layoutParams);
+            if (layoutParams.width != widht) {
+                layoutParams.width = widht;
+                this.centerView.setLayoutParams(layoutParams);
+            }
+            this.centerView.setTranslationX((float) xOffset);
+        }
+        if (this.centerButtonsView != null) {
+            this.centerButtonsView.setTranslationX((float) xOffset);
         }
         if (this.rightView != null) {
             layoutParams = (LayoutParams) this.rightView.getLayoutParams();
-            layoutParams.gravity = 51;
-            layoutParams.height = -1;
-            layoutParams.width = widht;
-            layoutParams.leftMargin = widht + xOffset;
-            this.rightView.setLayoutParams(layoutParams);
+            if (layoutParams.width != widht) {
+                layoutParams.width = widht;
+                this.rightView.setLayoutParams(layoutParams);
+            }
+            this.rightView.setTranslationX((float) (widht + xOffset));
+        }
+        if (this.rightButtonsView != null) {
+            this.rightButtonsView.setTranslationX((float) (widht + xOffset));
         }
         this.messageContainer.invalidate();
+    }
+
+    private LinearLayout getButtonsViewForMessage(int num, boolean applyOffset) {
+        if (this.popupMessages.size() == 1 && (num < 0 || num >= this.popupMessages.size())) {
+            return null;
+        }
+        ArrayList<TL_keyboardButtonRow> rows;
+        int size;
+        int a;
+        TL_keyboardButtonRow row;
+        int size2;
+        int b;
+        if (num == -1) {
+            num = this.popupMessages.size() - 1;
+        } else if (num == this.popupMessages.size()) {
+            num = 0;
+        }
+        LinearLayout view = null;
+        final MessageObject messageObject = (MessageObject) this.popupMessages.get(num);
+        int buttonsCount = 0;
+        ReplyMarkup markup = messageObject.messageOwner.reply_markup;
+        if (messageObject.getDialogId() == 777000 && markup != null) {
+            rows = markup.rows;
+            size = rows.size();
+            for (a = 0; a < size; a++) {
+                row = (TL_keyboardButtonRow) rows.get(a);
+                size2 = row.buttons.size();
+                for (b = 0; b < size2; b++) {
+                    if (((KeyboardButton) row.buttons.get(b)) instanceof TL_keyboardButtonCallback) {
+                        buttonsCount++;
+                    }
+                }
+            }
+        }
+        final int account = messageObject.currentAccount;
+        if (buttonsCount > 0) {
+            rows = markup.rows;
+            size = rows.size();
+            for (a = 0; a < size; a++) {
+                row = (TL_keyboardButtonRow) rows.get(a);
+                size2 = row.buttons.size();
+                for (b = 0; b < size2; b++) {
+                    KeyboardButton button = (KeyboardButton) row.buttons.get(b);
+                    if (button instanceof TL_keyboardButtonCallback) {
+                        if (view == null) {
+                            view = new LinearLayout(this);
+                            view.setOrientation(0);
+                            view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                            view.setWeightSum(100.0f);
+                            view.setTag("b");
+                            view.setOnTouchListener(new OnTouchListener() {
+                                public boolean onTouch(View v, MotionEvent event) {
+                                    return true;
+                                }
+                            });
+                        }
+                        TextView textView = new TextView(this);
+                        textView.setTextSize(1, 16.0f);
+                        textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
+                        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                        textView.setText(button.text.toUpperCase());
+                        textView.setTag(button);
+                        textView.setGravity(17);
+                        textView.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+                        view.addView(textView, LayoutHelper.createLinear(-1, -1, 100.0f / ((float) buttonsCount)));
+                        textView.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                KeyboardButton button = (KeyboardButton) v.getTag();
+                                if (button != null) {
+                                    SendMessagesHelper.getInstance(account).sendNotificationCallback(messageObject.getDialogId(), messageObject.getId(), button.data);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }
+        if (view == null) {
+            return view;
+        }
+        int widht = AndroidUtilities.displaySize.x - AndroidUtilities.dp(24.0f);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(-1, -2);
+        layoutParams.addRule(12);
+        if (applyOffset) {
+            if (num == this.currentMessageNum) {
+                view.setTranslationX(0.0f);
+            } else if (num == this.currentMessageNum - 1) {
+                view.setTranslationX((float) (-widht));
+            } else if (num == this.currentMessageNum + 1) {
+                view.setTranslationX((float) widht);
+            }
+        }
+        this.popupContainer.addView(view, layoutParams);
+        return view;
     }
 
     private ViewGroup getViewForMessage(int num, boolean applyOffset) {
@@ -628,29 +768,30 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             num = 0;
         }
         MessageObject messageObject = (MessageObject) this.popupMessages.get(num);
-        View frameLayoutAnimationListener;
+        View frameLayout;
+        FrameLayout frameLayout2;
         TextView messageText;
         if (messageObject.type == 1 || messageObject.type == 4) {
             if (this.imageViews.size() > 0) {
                 view = (ViewGroup) this.imageViews.get(0);
                 this.imageViews.remove(0);
             } else {
-                frameLayoutAnimationListener = new FrameLayoutAnimationListener(this);
-                frameLayoutAnimationListener = new FrameLayout(this);
-                frameLayoutAnimationListener.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
-                frameLayoutAnimationListener.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createFrame(-1, -1.0f));
+                frameLayout = new FrameLayout(this);
+                frameLayout2 = new FrameLayout(this);
+                frameLayout2.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
+                frameLayout2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                frameLayout.addView(frameLayout2, LayoutHelper.createFrame(-1, -1.0f));
                 BackupImageView backupImageView = new BackupImageView(this);
                 backupImageView.setTag(Integer.valueOf(311));
-                frameLayoutAnimationListener.addView(backupImageView, LayoutHelper.createFrame(-1, -1.0f));
-                frameLayoutAnimationListener = new TextView(this);
-                frameLayoutAnimationListener.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                frameLayoutAnimationListener.setTextSize(1, 16.0f);
-                frameLayoutAnimationListener.setGravity(17);
-                frameLayoutAnimationListener.setTag(Integer.valueOf(312));
-                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createFrame(-1, -2, 17));
-                frameLayoutAnimationListener.setTag(Integer.valueOf(2));
-                frameLayoutAnimationListener.setOnClickListener(new View.OnClickListener() {
+                frameLayout2.addView(backupImageView, LayoutHelper.createFrame(-1, -1.0f));
+                frameLayout = new TextView(this);
+                frameLayout.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                frameLayout.setTextSize(1, 16.0f);
+                frameLayout.setGravity(17);
+                frameLayout.setTag(Integer.valueOf(312));
+                frameLayout2.addView(frameLayout, LayoutHelper.createFrame(-1, -2, 17));
+                frameLayout.setTag(Integer.valueOf(2));
+                frameLayout.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         PopupNotificationActivity.this.openCurrentMessage();
                     }
@@ -701,18 +842,18 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 this.audioViews.remove(0);
                 cell = (PopupAudioView) view.findViewWithTag(Integer.valueOf(300));
             } else {
-                frameLayoutAnimationListener = new FrameLayoutAnimationListener(this);
-                frameLayoutAnimationListener = new FrameLayout(this);
-                frameLayoutAnimationListener.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
-                frameLayoutAnimationListener.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createFrame(-1, -1.0f));
-                frameLayoutAnimationListener = new FrameLayout(this);
-                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createFrame(-1, -2.0f, 17, 20.0f, 0.0f, 20.0f, 0.0f));
+                frameLayout = new FrameLayout(this);
+                frameLayout2 = new FrameLayout(this);
+                frameLayout2.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
+                frameLayout2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                frameLayout.addView(frameLayout2, LayoutHelper.createFrame(-1, -1.0f));
+                FrameLayout frameLayout1 = new FrameLayout(this);
+                frameLayout2.addView(frameLayout1, LayoutHelper.createFrame(-1, -2.0f, 17, 20.0f, 0.0f, 20.0f, 0.0f));
                 cell = new PopupAudioView(this);
                 cell.setTag(Integer.valueOf(300));
-                frameLayoutAnimationListener.addView(cell);
-                frameLayoutAnimationListener.setTag(Integer.valueOf(3));
-                frameLayoutAnimationListener.setOnClickListener(new View.OnClickListener() {
+                frameLayout1.addView(cell);
+                frameLayout.setTag(Integer.valueOf(3));
+                frameLayout.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         PopupNotificationActivity.this.openCurrentMessage();
                     }
@@ -727,28 +868,28 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 view = (ViewGroup) this.textViews.get(0);
                 this.textViews.remove(0);
             } else {
-                frameLayoutAnimationListener = new FrameLayoutAnimationListener(this);
-                frameLayoutAnimationListener = new ScrollView(this);
-                frameLayoutAnimationListener.setFillViewport(true);
-                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createFrame(-1, -1.0f));
-                frameLayoutAnimationListener = new LinearLayout(this);
-                frameLayoutAnimationListener.setOrientation(0);
-                frameLayoutAnimationListener.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createScroll(-1, -2, 1));
-                frameLayoutAnimationListener.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
-                frameLayoutAnimationListener.setOnClickListener(new View.OnClickListener() {
+                frameLayout = new FrameLayout(this);
+                frameLayout = new ScrollView(this);
+                frameLayout.setFillViewport(true);
+                frameLayout.addView(frameLayout, LayoutHelper.createFrame(-1, -1.0f));
+                frameLayout = new LinearLayout(this);
+                frameLayout.setOrientation(0);
+                frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                frameLayout.addView(frameLayout, LayoutHelper.createScroll(-1, -2, 1));
+                frameLayout.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
+                frameLayout.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         PopupNotificationActivity.this.openCurrentMessage();
                     }
                 });
-                frameLayoutAnimationListener = new TextView(this);
-                frameLayoutAnimationListener.setTextSize(1, 16.0f);
-                frameLayoutAnimationListener.setTag(Integer.valueOf(301));
-                frameLayoutAnimationListener.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                frameLayoutAnimationListener.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                frameLayoutAnimationListener.setGravity(17);
-                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createLinear(-1, -2, 17));
-                frameLayoutAnimationListener.setTag(Integer.valueOf(1));
+                frameLayout = new TextView(this);
+                frameLayout.setTextSize(1, 16.0f);
+                frameLayout.setTag(Integer.valueOf(301));
+                frameLayout.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                frameLayout.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                frameLayout.setGravity(17);
+                frameLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 17));
+                frameLayout.setTag(Integer.valueOf(1));
             }
             messageText = (TextView) view.findViewWithTag(Integer.valueOf(301));
             messageText.setTextSize(2, (float) SharedConfig.fontSize);
@@ -767,15 +908,21 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams.height = -1;
         layoutParams.width = widht;
         if (num == this.currentMessageNum) {
-            layoutParams.leftMargin = 0;
+            view.setTranslationX(0.0f);
         } else if (num == this.currentMessageNum - 1) {
-            layoutParams.leftMargin = -widht;
+            view.setTranslationX((float) (-widht));
         } else if (num == this.currentMessageNum + 1) {
-            layoutParams.leftMargin = widht;
+            view.setTranslationX((float) widht);
         }
         view.setLayoutParams(layoutParams);
         view.invalidate();
         return view;
+    }
+
+    private void reuseButtonsView(ViewGroup view) {
+        if (view != null) {
+            this.popupContainer.removeView(view);
+        }
     }
 
     private void reuseView(ViewGroup view) {
@@ -793,60 +940,89 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     }
 
     private void prepareLayouts(int move) {
+        int widht = AndroidUtilities.displaySize.x - AndroidUtilities.dp(24.0f);
         if (move == 0) {
             reuseView(this.centerView);
             reuseView(this.leftView);
             reuseView(this.rightView);
+            reuseButtonsView(this.centerButtonsView);
+            reuseButtonsView(this.leftButtonsView);
+            reuseButtonsView(this.rightButtonsView);
             for (int a = this.currentMessageNum - 1; a < this.currentMessageNum + 2; a++) {
                 if (a == this.currentMessageNum - 1) {
                     this.leftView = getViewForMessage(a, true);
+                    this.leftButtonsView = getButtonsViewForMessage(a, true);
                 } else if (a == this.currentMessageNum) {
                     this.centerView = getViewForMessage(a, true);
+                    this.centerButtonsView = getButtonsViewForMessage(a, true);
                 } else if (a == this.currentMessageNum + 1) {
                     this.rightView = getViewForMessage(a, true);
+                    this.rightButtonsView = getButtonsViewForMessage(a, true);
                 }
             }
         } else if (move == 1) {
             reuseView(this.rightView);
+            reuseButtonsView(this.rightButtonsView);
             this.rightView = this.centerView;
             this.centerView = this.leftView;
             this.leftView = getViewForMessage(this.currentMessageNum - 1, true);
+            this.rightButtonsView = this.centerButtonsView;
+            this.centerButtonsView = this.leftButtonsView;
+            this.leftButtonsView = getButtonsViewForMessage(this.currentMessageNum - 1, true);
         } else if (move == 2) {
             reuseView(this.leftView);
+            reuseButtonsView(this.leftButtonsView);
             this.leftView = this.centerView;
             this.centerView = this.rightView;
             this.rightView = getViewForMessage(this.currentMessageNum + 1, true);
+            this.leftButtonsView = this.centerButtonsView;
+            this.centerButtonsView = this.rightButtonsView;
+            this.rightButtonsView = getButtonsViewForMessage(this.currentMessageNum + 1, true);
         } else if (move == 3) {
             if (this.rightView != null) {
-                offset = ((LayoutParams) this.rightView.getLayoutParams()).leftMargin;
+                offset = this.rightView.getTranslationX();
                 reuseView(this.rightView);
                 r4 = getViewForMessage(this.currentMessageNum + 1, false);
                 this.rightView = r4;
                 if (r4 != null) {
-                    widht = AndroidUtilities.displaySize.x - AndroidUtilities.dp(24.0f);
                     layoutParams = (LayoutParams) this.rightView.getLayoutParams();
-                    layoutParams.gravity = 51;
-                    layoutParams.height = -1;
                     layoutParams.width = widht;
-                    layoutParams.leftMargin = offset;
                     this.rightView.setLayoutParams(layoutParams);
+                    this.rightView.setTranslationX(offset);
                     this.rightView.invalidate();
                 }
             }
-        } else if (move == 4 && this.leftView != null) {
-            offset = ((LayoutParams) this.leftView.getLayoutParams()).leftMargin;
-            reuseView(this.leftView);
-            r4 = getViewForMessage(0, false);
-            this.leftView = r4;
-            if (r4 != null) {
-                widht = AndroidUtilities.displaySize.x - AndroidUtilities.dp(24.0f);
-                layoutParams = (LayoutParams) this.leftView.getLayoutParams();
-                layoutParams.gravity = 51;
-                layoutParams.height = -1;
-                layoutParams.width = widht;
-                layoutParams.leftMargin = offset;
-                this.leftView.setLayoutParams(layoutParams);
-                this.leftView.invalidate();
+            if (this.rightButtonsView != null) {
+                offset = this.rightButtonsView.getTranslationX();
+                reuseButtonsView(this.rightButtonsView);
+                r4 = getButtonsViewForMessage(this.currentMessageNum + 1, false);
+                this.rightButtonsView = r4;
+                if (r4 != null) {
+                    this.rightButtonsView.setTranslationX(offset);
+                }
+            }
+        } else if (move == 4) {
+            if (this.leftView != null) {
+                offset = this.leftView.getTranslationX();
+                reuseView(this.leftView);
+                r4 = getViewForMessage(0, false);
+                this.leftView = r4;
+                if (r4 != null) {
+                    layoutParams = (LayoutParams) this.leftView.getLayoutParams();
+                    layoutParams.width = widht;
+                    this.leftView.setLayoutParams(layoutParams);
+                    this.leftView.setTranslationX(offset);
+                    this.leftView.invalidate();
+                }
+            }
+            if (this.leftButtonsView != null) {
+                offset = this.leftButtonsView.getTranslationX();
+                reuseButtonsView(this.leftButtonsView);
+                r4 = getButtonsViewForMessage(0, false);
+                this.leftButtonsView = r4;
+                if (r4 != null) {
+                    this.leftButtonsView.setTranslationX(offset);
+                }
             }
         }
     }
@@ -1016,27 +1192,31 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
     private void updateSubtitle() {
         if (this.actionBar != null && this.currentMessageObject != null && this.currentChat == null && this.currentUser != null) {
-            if (this.currentUser.id / 1000 == 777 || this.currentUser.id / 1000 == 333 || ContactsController.getInstance(this.currentMessageObject.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.id)) != null || (ContactsController.getInstance(this.currentMessageObject.currentAccount).contactsDict.size() == 0 && ContactsController.getInstance(this.currentMessageObject.currentAccount).isLoadingContacts())) {
+            if (this.currentUser.id / id_chat_compose_panel == 777 || this.currentUser.id / id_chat_compose_panel == 333 || ContactsController.getInstance(this.currentMessageObject.currentAccount).contactsDict.get(Integer.valueOf(this.currentUser.id)) != null || (ContactsController.getInstance(this.currentMessageObject.currentAccount).contactsDict.size() == 0 && ContactsController.getInstance(this.currentMessageObject.currentAccount).isLoadingContacts())) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
             } else if (this.currentUser.phone == null || this.currentUser.phone.length() == 0) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
             } else {
                 this.nameTextView.setText(PhoneFormat.getInstance().format("+" + this.currentUser.phone));
             }
-            CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentMessageObject.currentAccount).printingStrings.get(this.currentMessageObject.getDialogId());
-            if (printString == null || printString.length() == 0) {
-                this.lastPrintString = null;
-                setTypingAnimation(false);
-                User user = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(this.currentUser.id));
-                if (user != null) {
-                    this.currentUser = user;
+            if (this.currentUser == null || this.currentUser.id != 777000) {
+                CharSequence printString = (CharSequence) MessagesController.getInstance(this.currentMessageObject.currentAccount).printingStrings.get(this.currentMessageObject.getDialogId());
+                if (printString == null || printString.length() == 0) {
+                    this.lastPrintString = null;
+                    setTypingAnimation(false);
+                    User user = MessagesController.getInstance(this.currentMessageObject.currentAccount).getUser(Integer.valueOf(this.currentUser.id));
+                    if (user != null) {
+                        this.currentUser = user;
+                    }
+                    this.onlineTextView.setText(LocaleController.formatUserStatus(this.currentMessageObject.currentAccount, this.currentUser));
+                    return;
                 }
-                this.onlineTextView.setText(LocaleController.formatUserStatus(this.currentMessageObject.currentAccount, this.currentUser));
+                this.lastPrintString = printString;
+                this.onlineTextView.setText(printString);
+                setTypingAnimation(true);
                 return;
             }
-            this.lastPrintString = printString;
-            this.onlineTextView.setText(printString);
-            setTypingAnimation(true);
+            this.onlineTextView.setText(LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications));
         }
     }
 

@@ -43,6 +43,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.DefaultItemAnimator;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -163,10 +164,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                     Builder builder = new Builder(ThemeActivity.this.getParentActivity());
                                     builder.setItems(themeInfo.pathToFile == null ? new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile)} : new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Edit", R.string.Edit), LocaleController.getString("Delete", R.string.Delete)}, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
+                                            File currentFile;
                                             Throwable e;
                                             Throwable th;
                                             if (which == 0) {
-                                                File currentFile;
                                                 File finalFile;
                                                 Intent intent;
                                                 if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
@@ -371,7 +372,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                             cell.setText(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), true);
                             return;
                         } else {
-                            cell.setTextAndValue(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), Theme.getCurrentNightTheme().getName(), true);
+                            cell.setTextAndValue(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), Theme.getCurrentNightThemeName(), true);
                             return;
                         }
                     } else if (position == ThemeActivity.this.scheduleFromRow) {
@@ -881,6 +882,35 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 return;
             }
         }
+        if (getParentActivity() != null) {
+            if (getParentActivity().getPackageManager().hasSystemFeature("android.hardware.location.gps")) {
+                try {
+                    if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isProviderEnabled("gps")) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                        builder.setMessage(LocaleController.getString("GpsDisabledAlert", R.string.GpsDisabledAlert));
+                        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if (ThemeActivity.this.getParentActivity() != null) {
+                                    try {
+                                        ThemeActivity.this.getParentActivity().startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
+                                    } catch (Exception e) {
+                                    }
+                                }
+                            }
+                        });
+                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                        showDialog(builder.create());
+                        return;
+                    }
+                    return;
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            } else {
+                return;
+            }
+        }
         try {
             lastKnownLocation = locationManager.getLastKnownLocation("gps");
             if (lastKnownLocation == null) {
@@ -888,8 +918,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             } else if (lastKnownLocation == null) {
                 lastKnownLocation = locationManager.getLastKnownLocation("passive");
             }
-        } catch (Throwable e) {
-            FileLog.e(e);
+        } catch (Throwable e2) {
+            FileLog.e(e2);
         }
         if (lastKnownLocation == null || forceUpdate) {
             startLocationUpdate();
@@ -906,23 +936,40 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         Theme.autoNightLastSunCheckDay = calendar.get(5);
-        try {
-            List<Address> addresses = new Geocoder(ApplicationLoader.applicationContext, Locale.getDefault()).getFromLocation(Theme.autoNightLocationLatitude, Theme.autoNightLocationLongitude, 1);
-            if (addresses.size() > 0) {
-                Theme.autoNightCityName = ((Address) addresses.get(0)).getLocality();
+        Utilities.globalQueue.postRunnable(new Runnable() {
+            public void run() {
+                String name;
+                try {
+                    List<Address> addresses = new Geocoder(ApplicationLoader.applicationContext, Locale.getDefault()).getFromLocation(Theme.autoNightLocationLatitude, Theme.autoNightLocationLongitude, 1);
+                    if (addresses.size() > 0) {
+                        name = ((Address) addresses.get(0)).getLocality();
+                    } else {
+                        name = null;
+                    }
+                } catch (Exception e) {
+                    name = null;
+                }
+                final String nameFinal = name;
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        Theme.autoNightCityName = nameFinal;
+                        if (Theme.autoNightCityName == null) {
+                            Theme.autoNightCityName = String.format("(%.06f, %.06f)", new Object[]{Double.valueOf(Theme.autoNightLocationLatitude), Double.valueOf(Theme.autoNightLocationLongitude)});
+                        }
+                        Theme.saveAutoNightThemeConfig();
+                        if (ThemeActivity.this.listView != null) {
+                            Holder holder = (Holder) ThemeActivity.this.listView.findViewHolderForAdapterPosition(ThemeActivity.this.scheduleUpdateLocationRow);
+                            if (holder != null && (holder.itemView instanceof TextSettingsCell)) {
+                                ((TextSettingsCell) holder.itemView).setTextAndValue(LocaleController.getString("AutoNightUpdateLocation", R.string.AutoNightUpdateLocation), Theme.autoNightCityName, false);
+                            }
+                        }
+                    }
+                });
             }
-        } catch (Exception e2) {
-        }
-        if (Theme.autoNightCityName == null) {
-            Theme.autoNightCityName = String.format("(%.06f, %.06f)", new Object[]{Double.valueOf(Theme.autoNightLocationLatitude), Double.valueOf(Theme.autoNightLocationLongitude)});
-        }
+        });
         Holder holder = (Holder) this.listView.findViewHolderForAdapterPosition(this.scheduleLocationInfoRow);
-        if (holder != null) {
+        if (holder != null && (holder.itemView instanceof TextInfoPrivacyCell)) {
             ((TextInfoPrivacyCell) holder.itemView).setText(getLocationSunString());
-        }
-        holder = (Holder) this.listView.findViewHolderForAdapterPosition(this.scheduleUpdateLocationRow);
-        if (holder != null) {
-            ((TextSettingsCell) holder.itemView).setTextAndValue(LocaleController.getString("AutoNightUpdateLocation", R.string.AutoNightUpdateLocation), Theme.autoNightCityName, false);
         }
         if (Theme.autoNightScheduleByLocation && Theme.selectedAutoNightType == 1) {
             Theme.checkAutoNightThemeConditions();

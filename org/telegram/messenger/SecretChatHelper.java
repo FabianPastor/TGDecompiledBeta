@@ -1344,7 +1344,7 @@ public class SecretChatHelper {
                                 AbstractSerializedData data = cursor.byteBufferValue(0);
                                 if (data != null) {
                                     message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                    message.readAttachPath(data);
+                                    message.readAttachPath(data, UserConfig.getInstance(SecretChatHelper.this.currentAccount).clientUserId);
                                     data.reuse();
                                     message.random_id = random_id;
                                     message.dialog_id = dialog_id;

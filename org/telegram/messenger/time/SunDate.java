@@ -106,8 +106,21 @@ public class SunDate {
     public static int[] calculateSunriseSunset(double lat, double lon) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        sunRiseSetForYear(calendar.get(1), calendar.get(2), calendar.get(5), lon, lat, new double[2]);
+        double[] sun = new double[2];
+        sunRiseSetForYear(calendar.get(1), calendar.get(2), calendar.get(5), lon, lat, sun);
         int timeZoneOffset = (TimeZone.getDefault().getRawOffset() / 1000) / 60;
-        return new int[]{((int) (sun[0] * 60.0d)) + timeZoneOffset, ((int) (sun[1] * 60.0d)) + timeZoneOffset};
+        int sunrise = ((int) (sun[0] * 60.0d)) + timeZoneOffset;
+        int sunset = ((int) (sun[1] * 60.0d)) + timeZoneOffset;
+        if (sunrise < 0) {
+            sunrise += 1440;
+        } else if (sunrise > 1440) {
+            sunrise -= 1440;
+        }
+        if (sunset < 0) {
+            sunset += 1440;
+        } else if (sunset > 1440) {
+            sunset += 1440;
+        }
+        return new int[]{sunrise, sunset};
     }
 }

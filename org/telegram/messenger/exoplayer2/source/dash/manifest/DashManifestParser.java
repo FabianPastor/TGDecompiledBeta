@@ -980,7 +980,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         for (int i = 0; i < supplementalProperties.size(); i++) {
             Descriptor descriptor = (Descriptor) supplementalProperties.get(i);
             if ("tag:dolby.com,2014:dash:DolbyDigitalPlusExtensionType:2014".equals(descriptor.schemeIdUri) && "ec+3".equals(descriptor.value)) {
-                return MimeTypes.AUDIO_ATMOS;
+                return MimeTypes.AUDIO_E_AC3_JOC;
             }
         }
         return MimeTypes.AUDIO_E_AC3;

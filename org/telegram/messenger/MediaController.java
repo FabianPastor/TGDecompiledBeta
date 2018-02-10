@@ -182,7 +182,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private PipRoundVideoView pipRoundVideoView;
     private int pipSwitchingState;
     private boolean playMusicAgain;
-    private int playerBufferSize = 0;
+    private int playerBufferSize = 3840;
     private final Object playerObjectSync = new Object();
     private DispatchQueue playerQueue;
     private final Object playerSync = new Object();
@@ -200,10 +200,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private int raisedToBack;
     private int raisedToTop;
     private int raisedToTopSign;
-    private int recordBufferSize;
+    private int recordBufferSize = 1280;
     private ArrayList<ByteBuffer> recordBuffers = new ArrayList();
     private long recordDialogId;
-    private DispatchQueue recordQueue;
+    private DispatchQueue recordQueue = new DispatchQueue("recordQueue");
     private MessageObject recordReplyingMessageObject;
     private Runnable recordRunnable = new Runnable() {
         public void run() {
@@ -711,51 +711,95 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     public MediaController() {
-        try {
-            int a;
-            this.recordBufferSize = AudioRecord.getMinBufferSize(16000, 16, 2);
-            if (this.recordBufferSize <= 0) {
-                this.recordBufferSize = 1280;
-            }
-            this.playerBufferSize = AudioTrack.getMinBufferSize(48000, 4, 2);
-            if (this.playerBufferSize <= 0) {
-                this.playerBufferSize = 3840;
-            }
-            for (a = 0; a < 5; a++) {
-                ByteBuffer buffer = ByteBuffer.allocateDirect(4096);
-                buffer.order(ByteOrder.nativeOrder());
-                this.recordBuffers.add(buffer);
-            }
-            for (a = 0; a < 3; a++) {
-                this.freePlayerBuffers.add(new AudioBuffer(this.playerBufferSize));
-            }
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
-        try {
-            this.sensorManager = (SensorManager) ApplicationLoader.applicationContext.getSystemService("sensor");
-            this.linearSensor = this.sensorManager.getDefaultSensor(10);
-            this.gravitySensor = this.sensorManager.getDefaultSensor(9);
-            if (this.linearSensor == null || this.gravitySensor == null) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("gravity or linear sensor not found");
-                }
-                this.accelerometerSensor = this.sensorManager.getDefaultSensor(1);
-                this.linearSensor = null;
-                this.gravitySensor = null;
-            }
-            this.proximitySensor = this.sensorManager.getDefaultSensor(8);
-            this.proximityWakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(32, "proximity");
-        } catch (Throwable e2) {
-            FileLog.e(e2);
-        }
-        this.fileBuffer = ByteBuffer.allocateDirect(1920);
-        this.recordQueue = new DispatchQueue("recordQueue");
         this.recordQueue.setPriority(10);
         this.fileEncodingQueue = new DispatchQueue("fileEncodingQueue");
         this.fileEncodingQueue.setPriority(10);
         this.playerQueue = new DispatchQueue("playerQueue");
         this.fileDecodingQueue = new DispatchQueue("fileDecodingQueue");
+        this.recordQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    int a;
+                    MediaController.this.recordBufferSize = AudioRecord.getMinBufferSize(16000, 16, 2);
+                    if (MediaController.this.recordBufferSize <= 0) {
+                        MediaController.this.recordBufferSize = 1280;
+                    }
+                    MediaController.this.playerBufferSize = AudioTrack.getMinBufferSize(48000, 4, 2);
+                    if (MediaController.this.playerBufferSize <= 0) {
+                        MediaController.this.playerBufferSize = 3840;
+                    }
+                    for (a = 0; a < 5; a++) {
+                        ByteBuffer buffer = ByteBuffer.allocateDirect(4096);
+                        buffer.order(ByteOrder.nativeOrder());
+                        MediaController.this.recordBuffers.add(buffer);
+                    }
+                    for (a = 0; a < 3; a++) {
+                        MediaController.this.freePlayerBuffers.add(new AudioBuffer(MediaController.this.playerBufferSize));
+                    }
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+        });
+        Utilities.globalQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    MediaController.this.sensorManager = (SensorManager) ApplicationLoader.applicationContext.getSystemService("sensor");
+                    MediaController.this.linearSensor = MediaController.this.sensorManager.getDefaultSensor(10);
+                    MediaController.this.gravitySensor = MediaController.this.sensorManager.getDefaultSensor(9);
+                    if (MediaController.this.linearSensor == null || MediaController.this.gravitySensor == null) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("gravity or linear sensor not found");
+                        }
+                        MediaController.this.accelerometerSensor = MediaController.this.sensorManager.getDefaultSensor(1);
+                        MediaController.this.linearSensor = null;
+                        MediaController.this.gravitySensor = null;
+                    }
+                    MediaController.this.proximitySensor = MediaController.this.sensorManager.getDefaultSensor(8);
+                    MediaController.this.proximityWakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(32, "proximity");
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+                try {
+                    PhoneStateListener phoneStateListener = new PhoneStateListener() {
+                        public void onCallStateChanged(final int state, String incomingNumber) {
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    EmbedBottomSheet embedBottomSheet;
+                                    if (state == 1) {
+                                        if (MediaController.this.isPlayingMessage(MediaController.this.playingMessageObject) && !MediaController.this.isMessagePaused()) {
+                                            MediaController.this.pauseMessage(MediaController.this.playingMessageObject);
+                                        } else if (!(MediaController.this.recordStartRunnable == null && MediaController.this.recordingAudio == null)) {
+                                            MediaController.this.stopRecording(2);
+                                        }
+                                        embedBottomSheet = EmbedBottomSheet.getInstance();
+                                        if (embedBottomSheet != null) {
+                                            embedBottomSheet.pause();
+                                        }
+                                        MediaController.this.callInProgress = true;
+                                    } else if (state == 0) {
+                                        MediaController.this.callInProgress = false;
+                                    } else if (state == 2) {
+                                        embedBottomSheet = EmbedBottomSheet.getInstance();
+                                        if (embedBottomSheet != null) {
+                                            embedBottomSheet.pause();
+                                        }
+                                        MediaController.this.callInProgress = true;
+                                    }
+                                }
+                            });
+                        }
+                    };
+                    TelephonyManager mgr = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+                    if (mgr != null) {
+                        mgr.listen(phoneStateListener, 32);
+                    }
+                } catch (Throwable e2) {
+                    FileLog.e(e2);
+                }
+            }
+        });
+        this.fileBuffer = ByteBuffer.allocateDirect(1920);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 for (int a = 0; a < 3; a++) {
@@ -770,62 +814,26 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             }
         });
         this.mediaProjections = new String[]{"_data", "_display_name", "bucket_display_name", "datetaken", "title", "width", "height"};
+        ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
         try {
-            ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Media.EXTERNAL_CONTENT_URI, true, new GalleryObserverExternal());
+            contentResolver.registerContentObserver(Media.EXTERNAL_CONTENT_URI, true, new GalleryObserverExternal());
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
+        try {
+            contentResolver.registerContentObserver(Media.INTERNAL_CONTENT_URI, true, new GalleryObserverInternal());
+        } catch (Throwable e2) {
+            FileLog.e(e2);
+        }
+        try {
+            contentResolver.registerContentObserver(Video.Media.EXTERNAL_CONTENT_URI, true, new GalleryObserverExternal());
         } catch (Throwable e22) {
             FileLog.e(e22);
         }
         try {
-            ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Media.INTERNAL_CONTENT_URI, true, new GalleryObserverInternal());
+            contentResolver.registerContentObserver(Video.Media.INTERNAL_CONTENT_URI, true, new GalleryObserverInternal());
         } catch (Throwable e222) {
             FileLog.e(e222);
-        }
-        try {
-            ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Video.Media.EXTERNAL_CONTENT_URI, true, new GalleryObserverExternal());
-        } catch (Throwable e2222) {
-            FileLog.e(e2222);
-        }
-        try {
-            ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Video.Media.INTERNAL_CONTENT_URI, true, new GalleryObserverInternal());
-        } catch (Throwable e22222) {
-            FileLog.e(e22222);
-        }
-        try {
-            PhoneStateListener phoneStateListener = new PhoneStateListener() {
-                public void onCallStateChanged(final int state, String incomingNumber) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            EmbedBottomSheet embedBottomSheet;
-                            if (state == 1) {
-                                if (MediaController.this.isPlayingMessage(MediaController.this.playingMessageObject) && !MediaController.this.isMessagePaused()) {
-                                    MediaController.this.pauseMessage(MediaController.this.playingMessageObject);
-                                } else if (!(MediaController.this.recordStartRunnable == null && MediaController.this.recordingAudio == null)) {
-                                    MediaController.this.stopRecording(2);
-                                }
-                                embedBottomSheet = EmbedBottomSheet.getInstance();
-                                if (embedBottomSheet != null) {
-                                    embedBottomSheet.pause();
-                                }
-                                MediaController.this.callInProgress = true;
-                            } else if (state == 0) {
-                                MediaController.this.callInProgress = false;
-                            } else if (state == 2) {
-                                embedBottomSheet = EmbedBottomSheet.getInstance();
-                                if (embedBottomSheet != null) {
-                                    embedBottomSheet.pause();
-                                }
-                                MediaController.this.callInProgress = true;
-                            }
-                        }
-                    });
-                }
-            };
-            TelephonyManager mgr = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
-            if (mgr != null) {
-                mgr.listen(phoneStateListener, 32);
-            }
-        } catch (Throwable e222222) {
-            FileLog.e(e222222);
         }
     }
 
@@ -2804,7 +2812,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         final int i = currentAccount;
         final long j2 = dialog_id;
         final MessageObject messageObject = reply_to_msg;
-        Runnable anonymousClass22 = new Runnable() {
+        Runnable anonymousClass23 = new Runnable() {
             public void run() {
                 if (MediaController.this.audioRecorder != null) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -2871,13 +2879,13 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 }
             }
         };
-        this.recordStartRunnable = anonymousClass22;
+        this.recordStartRunnable = anonymousClass23;
         if (paused) {
             j = 500;
         } else {
             j = 50;
         }
-        dispatchQueue.postRunnable(anonymousClass22, j);
+        dispatchQueue.postRunnable(anonymousClass23, j);
     }
 
     public void generateWaveform(MessageObject messageObject) {
@@ -3456,7 +3464,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
-                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3485,7 +3492,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                } catch (Throwable e2) {
+                } catch (Throwable e) {
+                    Throwable e2;
                     FileLog.e(e2);
                 }
                 Integer num = null;
@@ -3854,7 +3862,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         final Integer num = cameraAlbumIdFinal;
         final AlbumEntry albumEntry = allMediaAlbumFinal;
         final AlbumEntry albumEntry2 = allPhotosAlbumFinal;
-        Runnable anonymousClass29 = new Runnable() {
+        Runnable anonymousClass30 = new Runnable() {
             public void run() {
                 if (PhotoViewer.getInstance().isVisible()) {
                     MediaController.broadcastNewPhotos(i, arrayList, arrayList2, num, albumEntry, albumEntry2, 1000);
@@ -3868,8 +3876,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 }
             }
         };
-        broadcastPhotosRunnable = anonymousClass29;
-        AndroidUtilities.runOnUIThread(anonymousClass29, (long) delay);
+        broadcastPhotosRunnable = anonymousClass30;
+        AndroidUtilities.runOnUIThread(anonymousClass30, (long) delay);
     }
 
     public void scheduleVideoConvert(MessageObject messageObject) {
@@ -3955,11 +3963,15 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 for (String type : codecInfo.getSupportedTypes()) {
                     if (type.equalsIgnoreCase(mimeType)) {
                         lastCodecInfo = codecInfo;
-                        if (!lastCodecInfo.getName().equals("OMX.SEC.avc.enc")) {
+                        String name = lastCodecInfo.getName();
+                        if (name == null) {
+                            continue;
+                        } else if (!name.equals("OMX.SEC.avc.enc")) {
                             return lastCodecInfo;
-                        }
-                        if (lastCodecInfo.getName().equals("OMX.SEC.AVC.Encoder")) {
-                            return lastCodecInfo;
+                        } else {
+                            if (name.equals("OMX.SEC.AVC.Encoder")) {
+                                return lastCodecInfo;
+                            }
                         }
                     }
                 }

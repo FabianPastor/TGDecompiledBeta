@@ -821,26 +821,28 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             positionMarker(lastLocation);
             if (this.checkGpsEnabled && getParentActivity() != null) {
                 this.checkGpsEnabled = false;
-                try {
-                    if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isProviderEnabled("gps")) {
-                        Builder builder = new Builder(getParentActivity());
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setMessage(LocaleController.getString("GpsDisabledAlert", R.string.GpsDisabledAlert));
-                        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                if (LocationActivity.this.getParentActivity() != null) {
-                                    try {
-                                        LocationActivity.this.getParentActivity().startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
-                                    } catch (Exception e) {
+                if (getParentActivity().getPackageManager().hasSystemFeature("android.hardware.location.gps")) {
+                    try {
+                        if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isProviderEnabled("gps")) {
+                            Builder builder = new Builder(getParentActivity());
+                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                            builder.setMessage(LocaleController.getString("GpsDisabledAlert", R.string.GpsDisabledAlert));
+                            builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    if (LocationActivity.this.getParentActivity() != null) {
+                                        try {
+                                            LocationActivity.this.getParentActivity().startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
+                                        } catch (Exception e) {
+                                        }
                                     }
                                 }
-                            }
-                        });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                        showDialog(builder.create());
+                            });
+                            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                            showDialog(builder.create());
+                        }
+                    } catch (Throwable e22) {
+                        FileLog.e(e22);
                     }
-                } catch (Throwable e22) {
-                    FileLog.e(e22);
                 }
             }
         }

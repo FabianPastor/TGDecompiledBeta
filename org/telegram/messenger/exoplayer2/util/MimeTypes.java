@@ -32,11 +32,11 @@ public final class MimeTypes {
     public static final String AUDIO_ALAW = "audio/g711-alaw";
     public static final String AUDIO_AMR_NB = "audio/3gpp";
     public static final String AUDIO_AMR_WB = "audio/amr-wb";
-    public static final String AUDIO_ATMOS = "audio/eac3-joc";
     public static final String AUDIO_DTS = "audio/vnd.dts";
     public static final String AUDIO_DTS_EXPRESS = "audio/vnd.dts.hd;profile=lbr";
     public static final String AUDIO_DTS_HD = "audio/vnd.dts.hd";
     public static final String AUDIO_E_AC3 = "audio/eac3";
+    public static final String AUDIO_E_AC3_JOC = "audio/eac3-joc";
     public static final String AUDIO_FLAC = "audio/flac";
     public static final String AUDIO_MLAW = "audio/g711-mlaw";
     public static final String AUDIO_MP4 = "audio/mp4";
@@ -141,7 +141,7 @@ public final class MimeTypes {
             return AUDIO_E_AC3;
         }
         if (codec.startsWith("ec+3")) {
-            return AUDIO_ATMOS;
+            return AUDIO_E_AC3_JOC;
         }
         if (codec.startsWith("dtsc") || codec.startsWith(AudioSampleEntry.TYPE13)) {
             return AUDIO_DTS;
@@ -181,7 +181,7 @@ public final class MimeTypes {
         int i = -1;
         switch (mimeType.hashCode()) {
             case -2123537834:
-                if (mimeType.equals(AUDIO_ATMOS)) {
+                if (mimeType.equals(AUDIO_E_AC3_JOC)) {
                     i = 2;
                     break;
                 }

@@ -225,7 +225,10 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     if (a < newStart || a >= newStart + count) {
                         imageView.setImageDrawable(null);
                     } else {
-                        imageView.setImage(object.thumb.location, null, "webp", null);
+                        Document sticker = object;
+                        if (sticker.thumb != null) {
+                            imageView.setImage(sticker.thumb.location, null, "webp", null);
+                        }
                     }
                 }
             }

@@ -10,12 +10,13 @@ import org.telegram.messenger.exoplayer2.util.Util;
 public final class DefaultExtractorInput implements ExtractorInput {
     private static final int PEEK_MAX_FREE_SPACE = 524288;
     private static final int PEEK_MIN_FREE_SPACE_AFTER_RESIZE = 65536;
-    private static final byte[] SCRATCH_SPACE = new byte[4096];
+    private static final int SCRATCH_SPACE_SIZE = 4096;
     private final DataSource dataSource;
     private byte[] peekBuffer = new byte[65536];
     private int peekBufferLength;
     private int peekBufferPosition;
     private long position;
+    private final byte[] scratchSpace = new byte[4096];
     private final long streamLength;
 
     public DefaultExtractorInput(DataSource dataSource, long position, long length) {
@@ -49,7 +50,7 @@ public final class DefaultExtractorInput implements ExtractorInput {
     public int skip(int length) throws IOException, InterruptedException {
         int bytesSkipped = skipFromPeekBuffer(length);
         if (bytesSkipped == 0) {
-            bytesSkipped = readFromDataSource(SCRATCH_SPACE, 0, Math.min(length, SCRATCH_SPACE.length), 0, true);
+            bytesSkipped = readFromDataSource(this.scratchSpace, 0, Math.min(length, this.scratchSpace.length), 0, true);
         }
         commitBytesRead(bytesSkipped);
         return bytesSkipped;
@@ -58,7 +59,7 @@ public final class DefaultExtractorInput implements ExtractorInput {
     public boolean skipFully(int length, boolean allowEndOfInput) throws IOException, InterruptedException {
         int bytesSkipped = skipFromPeekBuffer(length);
         while (bytesSkipped < length && bytesSkipped != -1) {
-            bytesSkipped = readFromDataSource(SCRATCH_SPACE, -bytesSkipped, Math.min(length, SCRATCH_SPACE.length + bytesSkipped), bytesSkipped, allowEndOfInput);
+            bytesSkipped = readFromDataSource(this.scratchSpace, -bytesSkipped, Math.min(length, this.scratchSpace.length + bytesSkipped), bytesSkipped, allowEndOfInput);
         }
         commitBytesRead(bytesSkipped);
         return bytesSkipped != -1;

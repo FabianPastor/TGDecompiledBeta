@@ -431,7 +431,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
 
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            if (!PhotoViewer.this.changingTextureView) {
+            if (PhotoViewer.this.videoTextureView == null || !PhotoViewer.this.changingTextureView) {
                 return true;
             }
             if (PhotoViewer.this.switchingInlineMode) {
@@ -5213,14 +5213,20 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     layoutParams = this.windowLayoutParams;
                     layoutParams.flags &= -1025;
                     if (this.windowView != null) {
-                        ((WindowManager) this.parentActivity.getSystemService("window")).updateViewLayout(this.windowView, this.windowLayoutParams);
+                        try {
+                            ((WindowManager) this.parentActivity.getSystemService("window")).updateViewLayout(this.windowView, this.windowLayoutParams);
+                        } catch (Exception e) {
+                        }
                     }
                 }
             } else if ((this.windowLayoutParams.flags & 1024) == 0) {
                 layoutParams = this.windowLayoutParams;
                 layoutParams.flags |= 1024;
                 if (this.windowView != null) {
-                    ((WindowManager) this.parentActivity.getSystemService("window")).updateViewLayout(this.windowView, this.windowLayoutParams);
+                    try {
+                        ((WindowManager) this.parentActivity.getSystemService("window")).updateViewLayout(this.windowView, this.windowLayoutParams);
+                    } catch (Exception e2) {
+                    }
                 }
             }
         }

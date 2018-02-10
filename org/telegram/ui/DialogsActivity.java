@@ -326,7 +326,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 this.actionBar.setBackButtonDrawable(new MenuDrawable());
             }
             if (BuildVars.DEBUG_VERSION) {
-                this.actionBar.setTitle(LocaleController.getString("AppNameBeta", R.string.AppNameBeta));
+                this.actionBar.setTitle("Telegram Beta");
             } else {
                 this.actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
             }

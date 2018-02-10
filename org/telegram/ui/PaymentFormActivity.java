@@ -2081,7 +2081,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     private void initAndroidPay(Context context) {
-        if (VERSION.SDK_INT >= 19) {
+        if (VERSION.SDK_INT < 0) {
             this.googleApiClient = new GoogleApiClient.Builder(context).addConnectionCallbacks(new ConnectionCallbacks() {
                 public void onConnected(Bundle bundle) {
                 }

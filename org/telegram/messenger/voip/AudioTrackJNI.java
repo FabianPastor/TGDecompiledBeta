@@ -54,7 +54,10 @@ public class AudioTrackJNI {
 
     public void stop() {
         if (this.audioTrack != null) {
-            this.audioTrack.stop();
+            try {
+                this.audioTrack.stop();
+            } catch (Exception e) {
+            }
         }
     }
 

@@ -263,7 +263,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                                 NativeByteBuffer data = cursor.byteBufferValue(1);
                                 if (data != null) {
                                     TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                                    message.readAttachPath(data);
+                                    message.readAttachPath(data, UserConfig.getInstance(MusicBrowserService.this.currentAccount).clientUserId);
                                     data.reuse();
                                     if (MessageObject.isMusicMessage(message)) {
                                         int did = cursor.intValue(0);

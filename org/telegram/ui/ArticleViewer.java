@@ -4734,7 +4734,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         if (canvas != null && this.pressedLinkOwnerLayout == layout) {
             if (this.pressedLink != null) {
                 canvas.drawPath(this.urlPath, urlPaint);
-            } else if (this.drawBlockSelection) {
+            } else if (this.drawBlockSelection && layout != null) {
                 float width;
                 float x;
                 if (layout.getLineCount() == 1) {

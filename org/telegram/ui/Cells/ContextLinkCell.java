@@ -186,11 +186,11 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             if (url == null && this.inlineResult.thumb_url != null) {
                 url = this.inlineResult.thumb_url;
             }
-        }
-        if (url == null && this.currentPhotoObject == null && currentPhotoObjectThumb == null && ((this.inlineResult.send_message instanceof TL_botInlineMessageMediaVenue) || (this.inlineResult.send_message instanceof TL_botInlineMessageMediaGeo))) {
-            double lat = this.inlineResult.send_message.geo.lat;
-            double lon = this.inlineResult.send_message.geo._long;
-            url = String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=15&size=72x72&maptype=roadmap&scale=%d&markers=color:red|size:small|%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(Math.min(2, (int) Math.ceil((double) AndroidUtilities.density))), Double.valueOf(lat), Double.valueOf(lon)});
+            if (url == null && this.currentPhotoObject == null && currentPhotoObjectThumb == null && ((this.inlineResult.send_message instanceof TL_botInlineMessageMediaVenue) || (this.inlineResult.send_message instanceof TL_botInlineMessageMediaGeo))) {
+                double lat = this.inlineResult.send_message.geo.lat;
+                double lon = this.inlineResult.send_message.geo._long;
+                url = String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=15&size=72x72&maptype=roadmap&scale=%d&markers=color:red|size:small|%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(Math.min(2, (int) Math.ceil((double) AndroidUtilities.density))), Double.valueOf(lat), Double.valueOf(lon)});
+            }
         }
         int w = 0;
         int h = 0;

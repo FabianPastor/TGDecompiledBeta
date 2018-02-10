@@ -36,6 +36,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
+import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputStickerSet;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
@@ -455,7 +456,9 @@ public class StickerPreviewViewer {
                 AndroidUtilities.runOnUIThread(this.showSheetRunnable, 1300);
             }
             this.currentSet = newSet;
-            this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", 1);
+            ImageReceiver imageReceiver = this.centerImage;
+            FileLocation fileLocation = (sticker == null || sticker.thumb == null) ? null : sticker.thumb.location;
+            imageReceiver.setImage((TLObject) sticker, null, fileLocation, null, "webp", 1);
             this.stickerEmojiLayout = null;
             for (a = 0; a < sticker.attributes.size(); a++) {
                 attribute = (DocumentAttribute) sticker.attributes.get(a);

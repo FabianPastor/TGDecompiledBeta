@@ -230,7 +230,7 @@ public final class MediaCodecUtil {
                         Log.w(TAG, "MediaCodecList API didn't list secure decoder for: " + mimeType + ". Assuming: " + ((MediaCodecInfo) decoderInfos.get(0)).name);
                     }
                 }
-                if (MimeTypes.AUDIO_ATMOS.equals(mimeType)) {
+                if (MimeTypes.AUDIO_E_AC3_JOC.equals(mimeType)) {
                     decoderInfos.addAll(getDecoderInfosInternal(new CodecKey(MimeTypes.AUDIO_E_AC3, key.secure), mediaCodecList, mimeType));
                 }
                 applyWorkarounds(decoderInfos);
@@ -383,7 +383,7 @@ public final class MediaCodecUtil {
         if (Util.SDK_INT <= 19 && Util.DEVICE.startsWith("jflte") && "OMX.qcom.video.decoder.vp8".equals(name)) {
             return false;
         }
-        if (MimeTypes.AUDIO_ATMOS.equals(requestedMimeType) && "OMX.MTK.AUDIO.DECODER.DSPAC3".equals(name)) {
+        if (MimeTypes.AUDIO_E_AC3_JOC.equals(requestedMimeType) && "OMX.MTK.AUDIO.DECODER.DSPAC3".equals(name)) {
             return false;
         }
         return true;

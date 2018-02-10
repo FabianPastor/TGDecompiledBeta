@@ -254,7 +254,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.valueTextView.setText(LocaleController.formatPluralString("Stickers", set.set.count));
         if (set.cover != null && set.cover.thumb != null && set.cover.thumb.location != null) {
             this.imageView.setImage(set.cover.thumb.location, null, "webp", null);
-        } else if (!set.covers.isEmpty()) {
+        } else if (!(set.covers.isEmpty() || ((Document) set.covers.get(0)).thumb == null)) {
             this.imageView.setImage(((Document) set.covers.get(0)).thumb.location, null, "webp", null);
         }
         if (sameSet) {

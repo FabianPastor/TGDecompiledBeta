@@ -1133,7 +1133,7 @@ public class MessagesStorage {
                             data = cursor.byteBufferValue(1);
                             if (data != null) {
                                 message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                message.readAttachPath(data);
+                                message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                 data.reuse();
                                 MessageObject.setUnreadFlags(message, cursor.intValue(0));
                                 message.id = cursor.intValue(3);
@@ -1155,7 +1155,7 @@ public class MessagesStorage {
                                             data = cursor.byteBufferValue(6);
                                             if (data != null) {
                                                 message.replyMessage = Message.TLdeserialize(data, data.readInt32(false), false);
-                                                message.replyMessage.readAttachPath(data);
+                                                message.replyMessage.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                                 data.reuse();
                                                 if (message.replyMessage != null) {
                                                     if (MessageObject.isMegagroup(message)) {
@@ -1194,7 +1194,7 @@ public class MessagesStorage {
                                 data = cursor.byteBufferValue(0);
                                 if (data != null) {
                                     message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                    message.readAttachPath(data);
+                                    message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                     data.reuse();
                                     message.id = cursor.intValue(1);
                                     message.date = cursor.intValue(2);
@@ -1527,7 +1527,7 @@ public class MessagesStorage {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
                         if (data != null) {
                             Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data);
+                            message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                             data.reuse();
                             if (!(message == null || message.from_id != uid || message.id == 1)) {
                                 mids.add(Integer.valueOf(message.id));
@@ -1608,7 +1608,7 @@ public class MessagesStorage {
                                 data = cursor.byteBufferValue(0);
                                 if (data != null) {
                                     message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                    message.readAttachPath(data);
+                                    message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                     data.reuse();
                                     if (!(message == null || message.media == null)) {
                                         File file;
@@ -1665,7 +1665,7 @@ public class MessagesStorage {
                                     data = cursor2.byteBufferValue(0);
                                     if (data != null) {
                                         message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                        message.readAttachPath(data);
+                                        message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                         data.reuse();
                                         if (message != null) {
                                             messageId = message.id;
@@ -1957,7 +1957,7 @@ public class MessagesStorage {
                         data = cursor.byteBufferValue(0);
                         if (data != null) {
                             message = Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data);
+                            message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                             data.reuse();
                             if (message.media == null) {
                                 continue;
@@ -3400,7 +3400,7 @@ Error: java.util.NoSuchElementException
                         NativeByteBuffer data = cursor.byteBufferValue(1);
                         if (data != null) {
                             Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data);
+                            message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                             data.reuse();
                             if (messageHashMap.indexOfKey(message.id) < 0) {
                                 MessageObject.setUnreadFlags(message, cursor.intValue(0));
@@ -3933,7 +3933,7 @@ Error: java.util.NoSuchElementException
                             data = cursor.byteBufferValue(1);
                             if (data != null) {
                                 message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                message.readAttachPath(data);
+                                message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                 data.reuse();
                                 MessageObject.setUnreadFlags(message, cursor.intValue(0));
                                 message.id = cursor.intValue(3);
@@ -3955,7 +3955,7 @@ Error: java.util.NoSuchElementException
                                         data = cursor.byteBufferValue(6);
                                         if (data != null) {
                                             message.replyMessage = Message.TLdeserialize(data, data.readInt32(false), false);
-                                            message.replyMessage.readAttachPath(data);
+                                            message.replyMessage.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                             data.reuse();
                                             if (message.replyMessage != null) {
                                                 if (MessageObject.isMegagroup(message)) {
@@ -4073,7 +4073,7 @@ Error: java.util.NoSuchElementException
                             data = cursor.byteBufferValue(0);
                             if (data != null) {
                                 message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                message.readAttachPath(data);
+                                message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                 data.reuse();
                                 message.id = cursor.intValue(1);
                                 message.date = cursor.intValue(2);
@@ -5355,7 +5355,7 @@ Error: java.util.NoSuchElementException
                                     data = cursor.byteBufferValue(1);
                                     if (data != null) {
                                         message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                        message.readAttachPath(data);
+                                        message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                         data.reuse();
                                         if (message.media instanceof TL_messageMediaWebPage) {
                                             message.id = mid;
@@ -5511,11 +5511,12 @@ Error: java.util.NoSuchElementException
 
     private void putMessagesInternal(ArrayList<Message> messages, boolean withTransaction, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
         Message lastMessage;
+        SQLiteCursor cursor;
         int a;
         Integer count;
+        int type;
         if (ifNoLastMessage) {
             try {
-                SQLiteCursor cursor;
                 lastMessage = (Message) messages.get(0);
                 if (lastMessage.dialog_id == 0) {
                     if (lastMessage.to_id.user_id != 0) {
@@ -5631,12 +5632,12 @@ Error: java.util.NoSuchElementException
             for (a = 0; a < messagesMediaIdsMap.size(); a++) {
                 long key = messagesMediaIdsMap.keyAt(a);
                 long value = ((Long) messagesMediaIdsMap.valueAt(a)).longValue();
-                Integer type = (Integer) mediaTypes.get(key);
-                LongSparseArray<Integer> counts = (LongSparseArray) mediaCounts.get(type.intValue());
+                Integer type2 = (Integer) mediaTypes.get(key);
+                LongSparseArray<Integer> counts = (LongSparseArray) mediaCounts.get(type2.intValue());
                 if (counts == null) {
                     counts = new LongSparseArray();
                     count = Integer.valueOf(0);
-                    mediaCounts.put(type.intValue(), counts);
+                    mediaCounts.put(type2.intValue(), counts);
                 } else {
                     count = (Integer) counts.get(value);
                 }
@@ -5674,7 +5675,6 @@ Error: java.util.NoSuchElementException
         }
         int downloadMediaMask = 0;
         for (a = 0; a < messages.size(); a++) {
-            int type2;
             message = (Message) messages.get(a);
             fixUnsupportedMedia(message);
             state.requery();
@@ -5739,38 +5739,38 @@ Error: java.util.NoSuchElementException
             }
             data.reuse();
             if (downloadMask != 0 && ((message.to_id.channel_id == 0 || message.post) && message.date >= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - 3600 && DownloadController.getInstance(this.currentAccount).canDownloadMedia(message) && ((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)))) {
-                type2 = 0;
+                type = 0;
                 long id = 0;
                 MessageMedia object = null;
                 if (MessageObject.isVoiceMessage(message)) {
                     id = message.media.document.id;
-                    type2 = 2;
+                    type = 2;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (MessageObject.isRoundVideoMessage(message)) {
                     id = message.media.document.id;
-                    type2 = 64;
+                    type = 64;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (message.media instanceof TL_messageMediaPhoto) {
                     if (FileLoader.getClosestPhotoSizeWithSize(message.media.photo.sizes, AndroidUtilities.getPhotoSize()) != null) {
                         id = message.media.photo.id;
-                        type2 = 1;
+                        type = 1;
                         object = new TL_messageMediaPhoto();
                         object.photo = message.media.photo;
                         object.flags |= 1;
                     }
                 } else if (MessageObject.isVideoMessage(message)) {
                     id = message.media.document.id;
-                    type2 = 4;
+                    type = 4;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (!(!(message.media instanceof TL_messageMediaDocument) || MessageObject.isMusicMessage(message) || MessageObject.isGifDocument(message.media.document))) {
                     id = message.media.document.id;
-                    type2 = 8;
+                    type = 8;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
@@ -5780,12 +5780,12 @@ Error: java.util.NoSuchElementException
                         object.ttl_seconds = message.media.ttl_seconds;
                         object.flags |= 4;
                     }
-                    downloadMediaMask |= type2;
+                    downloadMediaMask |= type;
                     state4.requery();
                     data = new NativeByteBuffer(object.getObjectSize());
                     object.serializeToStream(data);
                     state4.bindLong(1, id);
-                    state4.bindInteger(2, type2);
+                    state4.bindInteger(2, type);
                     state4.bindInteger(3, message.date);
                     state4.bindByteBuffer(4, data);
                     state4.step();
@@ -5877,13 +5877,13 @@ Error: java.util.NoSuchElementException
         if (mediaCounts != null) {
             state3 = this.database.executeFast("REPLACE INTO media_counts_v2 VALUES(?, ?, ?)");
             for (a = 0; a < mediaCounts.size(); a++) {
-                type2 = mediaCounts.keyAt(a);
+                type = mediaCounts.keyAt(a);
                 LongSparseArray<Integer> value2 = (LongSparseArray) mediaCounts.valueAt(a);
                 for (int b = 0; b < value2.size(); b++) {
                     long uid = value2.keyAt(b);
                     int lower_part = (int) uid;
                     int count2 = -1;
-                    cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT count FROM media_counts_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(uid), Integer.valueOf(type2)}), new Object[0]);
+                    cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT count FROM media_counts_v2 WHERE uid = %d AND type = %d LIMIT 1", new Object[]{Long.valueOf(uid), Integer.valueOf(type)}), new Object[0]);
                     if (cursor.next()) {
                         count2 = cursor.intValue(0);
                     }
@@ -5892,7 +5892,7 @@ Error: java.util.NoSuchElementException
                         state3.requery();
                         count2 += ((Integer) value2.valueAt(b)).intValue();
                         state3.bindLong(1, uid);
-                        state3.bindInteger(2, type2);
+                        state3.bindInteger(2, type);
                         state3.bindInteger(3, count2);
                         state3.step();
                     }
@@ -6373,7 +6373,7 @@ Error: java.util.NoSuchElementException
                         NativeByteBuffer data = cursor.byteBufferValue(1);
                         if (data != null) {
                             Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data);
+                            message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                             data.reuse();
                             if (message == null) {
                                 continue;
@@ -6513,7 +6513,7 @@ Error: java.util.NoSuchElementException
                 NativeByteBuffer data = cursor.byteBufferValue(4);
                 if (data != null) {
                     Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                    message.readAttachPath(data);
+                    message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                     data.reuse();
                     MessageObject.setUnreadFlags(message, cursor.intValue(5));
                     message.id = cursor.intValue(6);
@@ -6625,7 +6625,7 @@ Error: java.util.NoSuchElementException
                             NativeByteBuffer data = cursor.byteBufferValue(1);
                             if (data != null) {
                                 Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                message.readAttachPath(data);
+                                message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                                 data.reuse();
                                 if (message == null) {
                                     continue;
@@ -6950,7 +6950,7 @@ Error: java.util.NoSuchElementException
                                     AbstractSerializedData data = cursor.byteBufferValue(1);
                                     if (data != null) {
                                         Message oldMessage = Message.TLdeserialize(data, data.readInt32(false), false);
-                                        oldMessage.readAttachPath(data);
+                                        oldMessage.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                         data.reuse();
                                         if (oldMessage != null) {
                                             message.attachPath = oldMessage.attachPath;
@@ -7190,7 +7190,7 @@ Error: java.util.NoSuchElementException
                     NativeByteBuffer data = cursor.byteBufferValue(4);
                     if (data != null) {
                         message = Message.TLdeserialize(data, data.readInt32(false), false);
-                        message.readAttachPath(data);
+                        message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                         data.reuse();
                         if (message != null) {
                             MessageObject.setUnreadFlags(message, cursor.intValue(5));
@@ -7209,7 +7209,7 @@ Error: java.util.NoSuchElementException
                                         data = cursor.byteBufferValue(13);
                                         if (data != null) {
                                             message.replyMessage = Message.TLdeserialize(data, data.readInt32(false), false);
-                                            message.replyMessage.readAttachPath(data);
+                                            message.replyMessage.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                                             data.reuse();
                                             if (message.replyMessage != null) {
                                                 if (MessageObject.isMegagroup(message)) {
@@ -7271,7 +7271,7 @@ Error: java.util.NoSuchElementException
                         data = cursor.byteBufferValue(0);
                         if (data != null) {
                             message = Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data);
+                            message.readAttachPath(data, UserConfig.getInstance(MessagesStorage.this.currentAccount).clientUserId);
                             data.reuse();
                             message.id = cursor.intValue(1);
                             message.date = cursor.intValue(2);

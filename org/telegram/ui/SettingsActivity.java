@@ -443,7 +443,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         String abi = TtmlNode.ANONYMOUS_REGION_ID;
                         switch (pInfo.versionCode % 10) {
                             case 0:
-                                abi = "arm";
+                            case 9:
+                                abi = "universal " + Build.CPU_ABI + " " + Build.CPU_ABI2;
                                 break;
                             case 1:
                             case 3:
@@ -460,9 +461,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             case 6:
                             case 8:
                                 abi = "x86_64";
-                                break;
-                            case 9:
-                                abi = "universal " + Build.CPU_ABI + " " + Build.CPU_ABI2;
                                 break;
                         }
                         TextInfoCell textInfoCell = (TextInfoCell) view;
@@ -1068,6 +1066,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 SharedConfig.toggleInappCamera();
                             } else if (which == 6) {
                                 MessagesStorage.getInstance(SettingsActivity.this.currentAccount).clearSentMedia();
+                            } else if (which == 7) {
+                                SharedConfig.toggleRoundCamera16to9();
                             }
                         }
                     });

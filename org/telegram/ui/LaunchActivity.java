@@ -65,6 +65,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SendMessagesHelper.SendingMediaInfo;
 import org.telegram.messenger.SharedConfig;
@@ -958,6 +959,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.wasUnableToFindCurrentLocation);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.openArticle);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.hasNewContactsToImport);
+        updateCurrentConnectionState(this.currentAccount);
     }
 
     private void checkLayout() {
@@ -2442,6 +2444,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         MediaController.getInstance().setFeedbackView(this.actionBarLayout, true);
         showLanguageAlert(false);
         ApplicationLoader.mainInterfacePaused = false;
+        NotificationsController.lastNoDataNotificationTime = 0;
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 ApplicationLoader.mainInterfacePausedStageQueue = false;
@@ -2957,56 +2960,58 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     private void updateCurrentConnectionState(int account) {
-        String title = null;
-        String subtitle = null;
-        Runnable action = null;
-        if (this.currentConnectionState == 2) {
-            title = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
-        } else if (this.currentConnectionState == 1) {
-            title = LocaleController.getString("Connecting", R.string.Connecting);
-            action = new Runnable() {
-                public void run() {
-                    if (AndroidUtilities.isTablet()) {
-                        if (!LaunchActivity.layerFragmentsStack.isEmpty() && (LaunchActivity.layerFragmentsStack.get(LaunchActivity.layerFragmentsStack.size() - 1) instanceof ProxySettingsActivity)) {
+        if (this.actionBarLayout != null) {
+            String title = null;
+            String subtitle = null;
+            Runnable action = null;
+            if (this.currentConnectionState == 2) {
+                title = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
+            } else if (this.currentConnectionState == 1) {
+                title = LocaleController.getString("Connecting", R.string.Connecting);
+                action = new Runnable() {
+                    public void run() {
+                        if (AndroidUtilities.isTablet()) {
+                            if (!LaunchActivity.layerFragmentsStack.isEmpty() && (LaunchActivity.layerFragmentsStack.get(LaunchActivity.layerFragmentsStack.size() - 1) instanceof ProxySettingsActivity)) {
+                                return;
+                            }
+                        } else if (!LaunchActivity.mainFragmentsStack.isEmpty() && (LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1) instanceof ProxySettingsActivity)) {
                             return;
                         }
-                    } else if (!LaunchActivity.mainFragmentsStack.isEmpty() && (LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1) instanceof ProxySettingsActivity)) {
-                        return;
+                        LaunchActivity.this.presentFragment(new ProxySettingsActivity());
                     }
-                    LaunchActivity.this.presentFragment(new ProxySettingsActivity());
-                }
-            };
-        } else if (this.currentConnectionState == 5) {
-            title = LocaleController.getString("Updating", R.string.Updating);
-        } else if (this.currentConnectionState == 4) {
-            title = LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
-            subtitle = LocaleController.getString("ConnectingToProxyTapToDisable", R.string.ConnectingToProxyTapToDisable);
-            action = new Runnable() {
-                public void run() {
-                    if (LaunchActivity.this.actionBarLayout != null && !LaunchActivity.this.actionBarLayout.fragmentsStack.isEmpty()) {
-                        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                        BaseFragment fragment = (BaseFragment) LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1);
-                        Builder builder = new Builder(LaunchActivity.this);
-                        builder.setTitle(LocaleController.getString("Proxy", R.string.Proxy));
-                        builder.setMessage(LocaleController.formatString("ConnectingToProxyDisableAlert", R.string.ConnectingToProxyDisableAlert, preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID)));
-                        builder.setPositiveButton(LocaleController.getString("ConnectingToProxyDisable", R.string.ConnectingToProxyDisable), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Editor editor = MessagesController.getGlobalMainSettings().edit();
-                                editor.putBoolean("proxy_enabled", false);
-                                editor.commit();
-                                for (int a = 0; a < 3; a++) {
-                                    ConnectionsManager.native_setProxySettings(a, TtmlNode.ANONYMOUS_REGION_ID, 0, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID);
+                };
+            } else if (this.currentConnectionState == 5) {
+                title = LocaleController.getString("Updating", R.string.Updating);
+            } else if (this.currentConnectionState == 4) {
+                title = LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
+                subtitle = LocaleController.getString("ConnectingToProxyTapToDisable", R.string.ConnectingToProxyTapToDisable);
+                action = new Runnable() {
+                    public void run() {
+                        if (LaunchActivity.this.actionBarLayout != null && !LaunchActivity.this.actionBarLayout.fragmentsStack.isEmpty()) {
+                            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                            BaseFragment fragment = (BaseFragment) LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1);
+                            Builder builder = new Builder(LaunchActivity.this);
+                            builder.setTitle(LocaleController.getString("Proxy", R.string.Proxy));
+                            builder.setMessage(LocaleController.formatString("ConnectingToProxyDisableAlert", R.string.ConnectingToProxyDisableAlert, preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID)));
+                            builder.setPositiveButton(LocaleController.getString("ConnectingToProxyDisable", R.string.ConnectingToProxyDisable), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Editor editor = MessagesController.getGlobalMainSettings().edit();
+                                    editor.putBoolean("proxy_enabled", false);
+                                    editor.commit();
+                                    for (int a = 0; a < 3; a++) {
+                                        ConnectionsManager.native_setProxySettings(a, TtmlNode.ANONYMOUS_REGION_ID, 0, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID);
+                                    }
+                                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
                                 }
-                                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
-                            }
-                        });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                        fragment.showDialog(builder.create());
+                            });
+                            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                            fragment.showDialog(builder.create());
+                        }
                     }
-                }
-            };
+                };
+            }
+            this.actionBarLayout.setTitleOverlayText(title, subtitle, action);
         }
-        this.actionBarLayout.setTitleOverlayText(title, subtitle, action);
     }
 
     protected void onSaveInstanceState(Bundle outState) {

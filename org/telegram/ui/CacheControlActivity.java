@@ -26,6 +26,7 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -409,7 +410,7 @@ public class CacheControlActivity extends BaseFragment {
                                                                 NativeByteBuffer data = cursor2.byteBufferValue(0);
                                                                 if (data != null) {
                                                                     Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                                                    message.readAttachPath(data);
+                                                                    message.readAttachPath(data, UserConfig.getInstance(CacheControlActivity.this.currentAccount).clientUserId);
                                                                     data.reuse();
                                                                     if (message != null) {
                                                                         messageId = message.id;

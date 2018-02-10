@@ -32,7 +32,7 @@ public class SharedConfig {
     public static String pushString = TtmlNode.ANONYMOUS_REGION_ID;
     public static boolean raiseToSpeak = true;
     public static int repeatMode;
-    public static boolean roundCamera16to9 = false;
+    public static boolean roundCamera16to9 = true;
     public static boolean saveIncomingPhotos;
     public static boolean saveStreamMedia = true;
     public static boolean saveToGallery;
@@ -116,7 +116,7 @@ public class SharedConfig {
             shuffleMusic = preferences.getBoolean("shuffleMusic", false);
             playOrderReversed = preferences.getBoolean("playOrderReversed", false);
             inappCamera = preferences.getBoolean("inappCamera", true);
-            roundCamera16to9 = preferences.getBoolean("roundCamera16to9", false);
+            roundCamera16to9 = true;
             groupPhotosEnabled = preferences.getBoolean("groupPhotosEnabled", true);
             repeatMode = preferences.getInt("repeatMode", 0);
             fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
