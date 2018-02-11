@@ -166,10 +166,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                         public void onClick(DialogInterface dialog, int which) {
                                             File currentFile;
                                             Throwable e;
+                                            File finalFile;
+                                            Intent intent;
                                             Throwable th;
                                             if (which == 0) {
-                                                File finalFile;
-                                                Intent intent;
                                                 if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
                                                     StringBuilder result = new StringBuilder();
                                                     for (Entry<String, Integer> entry : Theme.getDefaultColors().entrySet()) {

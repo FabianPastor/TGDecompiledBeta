@@ -1427,7 +1427,7 @@
     <string name="Seconds_zero">%1$d segundos</string>
     <string name="SecretChat">Chats secretos</string>
     <string name="SecretChatContextBotAlert">Ten en cuenta que los bots integrados son hechos por terceros. Para que funcione, los símbolos escritos después del alias del bot, son enviados al desarrollador respectivo.</string>
-    <string name="SecretChatName">Chat secreto</string>
+    <string name="SecretChatName">Telegram</string>
     <string name="SecretLinkPreviewAlert">¿Quieres permitir las vistas previas ampliadas en chats secretos? Ten en cuenta que son generadas en los servidores de Telegram.</string>
     <string name="SecretWebPage">Vistas previas de enlaces</string>
     <string name="SecurityTitle">Seguridad</string>

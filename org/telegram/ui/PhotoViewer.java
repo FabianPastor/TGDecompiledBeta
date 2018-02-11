@@ -4039,7 +4039,6 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     private void closeCaptionEnter(boolean apply) {
-        CharSequence charSequence = null;
         if (this.currentIndex >= 0 && this.currentIndex < this.imagesArrLocals.size()) {
             PhotoEntry object = this.imagesArrLocals.get(this.currentIndex);
             CharSequence[] result = new CharSequence[]{this.captionEditText.getFieldCharSequence()};
@@ -4064,14 +4063,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.lastTitle = null;
             }
             if (this.isCurrentVideo) {
-                ActionBar actionBar = this.actionBar;
-                if (!this.muteVideo) {
-                    charSequence = this.currentSubtitle;
-                }
-                actionBar.setSubtitle(charSequence);
+                this.actionBar.setSubtitle(this.muteVideo ? null : this.currentSubtitle);
             }
             updateCaptionTextForCurrentPhoto(object);
-            setCurrentCaption(result[0], false);
+            setCurrentCaption(null, result[0], false);
             if (this.captionEditText.isPopupShowing()) {
                 this.captionEditText.hidePopup();
             }
@@ -5822,6 +5817,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             boolean isVideo = false;
             CharSequence caption = null;
             String newFileName = getFileName(index);
+            MessageObject newMessageObject = null;
             Chat chat;
             User user;
             if (this.imagesArr.isEmpty()) {
@@ -5980,7 +5976,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     return;
                 }
             } else if (this.switchingToIndex >= 0 && this.switchingToIndex < this.imagesArr.size()) {
-                MessageObject newMessageObject = (MessageObject) this.imagesArr.get(this.switchingToIndex);
+                newMessageObject = (MessageObject) this.imagesArr.get(this.switchingToIndex);
                 isVideo = newMessageObject.isVideo();
                 boolean isInvoice = newMessageObject.isInvoice();
                 if (isInvoice) {
@@ -6123,7 +6119,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             } else {
                 z = true;
             }
-            setCurrentCaption(caption, z);
+            setCurrentCaption(newMessageObject, caption, z);
         }
     }
 
@@ -6286,7 +6282,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
     }
 
-    private void setCurrentCaption(CharSequence caption, boolean animated) {
+    private void setCurrentCaption(MessageObject messageObject, CharSequence caption, boolean animated) {
         if (this.needCaptionLayout) {
             if (this.captionTextView.getParent() != this.pickerView) {
                 this.captionTextView.setBackgroundDrawable(null);
@@ -6311,7 +6307,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         if (!TextUtils.isEmpty(caption)) {
             CharSequence str;
             Theme.createChatResources(null, true);
-            if (this.currentMessageObject == null || this.currentMessageObject.messageOwner.entities.isEmpty()) {
+            if (messageObject == null || messageObject.messageOwner.entities.isEmpty()) {
                 str = Emoji.replaceEmoji(new SpannableStringBuilder(caption), this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             } else {
                 Spannable spannableString = SpannableString.valueOf(caption);

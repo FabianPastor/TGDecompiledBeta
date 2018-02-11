@@ -1427,7 +1427,7 @@
     <string name="Seconds_zero">%1$d초</string>
     <string name="SecretChat">비밀 대화</string>
     <string name="SecretChatContextBotAlert">인라인 봇은 제3자 개발자로 부터 제공이 됩니다. 봇이 작동을 하려면 봇의 아이디 및 뒤의 메시지가 담당 개발자에게 전송이 됩니다.</string>
-    <string name="SecretChatName">비밀 대화</string>
+    <string name="SecretChatName">텔레그램</string>
     <string name="SecretLinkPreviewAlert">비밀 대화에서 링크 미리보기를 활성화하시겠습니까? 링크 미리보기는 텔레그램 서버에서 만들어지는 점을 유의하시기 바랍니다.</string>
     <string name="SecretWebPage">링크 미리보기</string>
     <string name="SecurityTitle">보안</string>

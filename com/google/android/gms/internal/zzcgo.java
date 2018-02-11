@@ -952,7 +952,6 @@ final class zzcgo extends zzcjl {
     }
 
     public final zzcgl zzah(String str, String str2) {
-        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
@@ -960,6 +959,7 @@ final class zzcgo extends zzcjl {
         zzbq.zzgm(str2);
         zzve();
         zzxf();
+        Cursor query;
         try {
             query = getWritableDatabase().query("conditional_properties", new String[]{TtmlNode.ATTR_TTS_ORIGIN, "value", "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"}, "app_id=? and name=?", new String[]{str, str2}, null, null, null);
             try {
@@ -1062,7 +1062,6 @@ final class zzcgo extends zzcjl {
     }
 
     final Map<Integer, List<zzcls>> zzaj(String str, String str2) {
-        Cursor query;
         Object e;
         Throwable th;
         zzxf();
@@ -1070,6 +1069,7 @@ final class zzcgo extends zzcjl {
         zzbq.zzgm(str);
         zzbq.zzgm(str2);
         Map<Integer, List<zzcls>> arrayMap = new ArrayMap();
+        Cursor query;
         try {
             query = getWritableDatabase().query("event_filters", new String[]{"audience_id", DataSchemeDataSource.SCHEME_DATA}, "app_id=? AND event_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -1132,7 +1132,6 @@ final class zzcgo extends zzcjl {
     }
 
     final Map<Integer, List<zzclv>> zzak(String str, String str2) {
-        Cursor query;
         Object e;
         Throwable th;
         zzxf();
@@ -1140,6 +1139,7 @@ final class zzcgo extends zzcjl {
         zzbq.zzgm(str);
         zzbq.zzgm(str2);
         Map<Integer, List<zzclv>> arrayMap = new ArrayMap();
+        Cursor query;
         try {
             query = getWritableDatabase().query("property_filters", new String[]{"audience_id", DataSchemeDataSource.SCHEME_DATA}, "app_id=? AND property_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -1687,12 +1687,12 @@ final class zzcgo extends zzcjl {
     }
 
     public final zzcgh zzjb(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzbq.zzgm(str);
         zzve();
         zzxf();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"app_instance_id", "gmp_app_id", "resettable_device_id_hash", "last_bundle_index", "last_bundle_start_timestamp", "last_bundle_end_timestamp", "app_version", "app_store", "gmp_version", "dev_cert_hash", "measurement_enabled", "day", "daily_public_events_count", "daily_events_count", "daily_conversions_count", "config_fetched_time", "failed_config_fetch_time", "app_version_int", "firebase_instance_id", "daily_error_events_count", "daily_realtime_events_count", "health_monitor_sample", "android_id", "adid_reporting_enabled"}, "app_id=?", new String[]{str}, null, null, null);
             try {
@@ -1787,12 +1787,12 @@ final class zzcgo extends zzcjl {
     }
 
     public final byte[] zzjd(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzbq.zzgm(str);
         zzve();
         zzxf();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {
@@ -1914,6 +1914,7 @@ final class zzcgo extends zzcjl {
     }
 
     public final List<Pair<zzcme, Long>> zzl(String str, int i, int i2) {
+        Cursor query;
         List<Pair<zzcme, Long>> arrayList;
         Object e;
         Cursor cursor;
@@ -1927,7 +1928,6 @@ final class zzcgo extends zzcjl {
         }
         zzbq.checkArgument(z);
         zzbq.zzgm(str);
-        Cursor query;
         try {
             query = getWritableDatabase().query("queue", new String[]{"rowid", DataSchemeDataSource.SCHEME_DATA}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(i));
             try {

@@ -1445,17 +1445,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             }
             if (this.durationTextView != null) {
                 CharSequence format;
-                int duration = 0;
-                Document document = messageObject.getDocument();
-                if (document != null) {
-                    for (int a = 0; a < document.attributes.size(); a++) {
-                        DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
-                        if (attribute instanceof TL_documentAttributeAudio) {
-                            duration = attribute.duration;
-                            break;
-                        }
-                    }
-                }
+                int duration = messageObject.getDuration();
                 TextView textView = this.durationTextView;
                 if (duration != 0) {
                     format = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(duration % 60)});

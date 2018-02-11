@@ -4988,6 +4988,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             if (player != null) {
                                 playing.audioProgress = player.audioProgress;
                                 playing.audioProgressSec = player.audioProgressSec;
+                                playing.audioPlayerDuration = player.audioPlayerDuration;
                                 cell.updatePlayingMessageProgress();
                                 return;
                             }

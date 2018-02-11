@@ -830,11 +830,11 @@ public final class zzclq extends zzcjl {
     }
 
     final <T extends Parcelable> T zzb(byte[] bArr, Creator<T> creator) {
+        T t;
         if (bArr == null) {
             return null;
         }
         Parcel obtain = Parcel.obtain();
-        T t;
         try {
             obtain.unmarshall(bArr, 0, bArr.length);
             obtain.setDataPosition(0);

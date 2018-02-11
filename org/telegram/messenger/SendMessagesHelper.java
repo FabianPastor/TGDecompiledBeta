@@ -1855,9 +1855,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     private void sendMessage(String message, String caption, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params, int ttl) {
         Throwable e;
-        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
+            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             if (message == null && caption == null) {
@@ -4100,7 +4100,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         return photo;
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private static boolean prepareSendingDocumentInternal(int currentAccount, String path, String originalPath, Uri uri, String mime, long dialog_id, MessageObject reply_to_msg, CharSequence caption, ArrayList<MessageEntity> entities) {
+        Throwable e;
+        TL_document tL_document;
+        RandomAccessFile randomAccessFile;
+        ByteBuffer buffer;
+        TL_documentAttributeSticker attributeSticker;
+        TL_documentAttributeImageSize attributeImageSize;
+        final HashMap<String, String> params;
+        Throwable th;
         if ((path == null || path.length() == 0) && uri == null) {
             return false;
         }
@@ -4135,6 +4145,19 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (!file.exists() || file.length() == 0) {
             return false;
         }
+        boolean sendNew;
+        TL_documentAttributeFilename fileName;
+        Object obj;
+        String mimeType;
+        Bitmap bitmap;
+        Options bmOptions;
+        final String captionFinal;
+        final TL_document documentFinal;
+        final String pathFinal;
+        final int i;
+        final long j;
+        final MessageObject messageObject;
+        final ArrayList<MessageEntity> arrayList;
         boolean isEncrypted = ((int) dialog_id) == 0;
         boolean allowSticker = !isEncrypted;
         String name = file.getName();
@@ -4147,45 +4170,525 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 ext = path.substring(idx + 1);
             }
         }
-        if (ext.toLowerCase().equals("mp3") || ext.toLowerCase().equals("m4a")) {
-            AudioInfo audioInfo = AudioInfo.getAudioInfo(file);
-            if (!(audioInfo == null || audioInfo.getDuration() == 0)) {
-                attributeAudio = new TL_documentAttributeAudio();
-                attributeAudio.duration = (int) (audioInfo.getDuration() / 1000);
-                attributeAudio.title = audioInfo.getTitle();
-                attributeAudio.performer = audioInfo.getArtist();
-                if (attributeAudio.title == null) {
-                    attributeAudio.title = TtmlNode.ANONYMOUS_REGION_ID;
+        String extL = ext.toLowerCase();
+        String permormer = null;
+        String title = null;
+        boolean isVoice = false;
+        int duration = 0;
+        if (!extL.equals("mp3")) {
+            if (!extL.equals("m4a")) {
+                if (!extL.equals("opus")) {
                 }
-                attributeAudio.flags |= 1;
-                if (attributeAudio.performer == null) {
-                    attributeAudio.performer = TtmlNode.ANONYMOUS_REGION_ID;
+                MediaMetadataRetriever mediaMetadataRetriever = null;
+                try {
+                    MediaMetadataRetriever mediaMetadataRetriever2 = new MediaMetadataRetriever();
+                    try {
+                        mediaMetadataRetriever2.setDataSource(file.getAbsolutePath());
+                        String d = mediaMetadataRetriever2.extractMetadata(9);
+                        if (d != null) {
+                            duration = (int) Math.ceil((double) (((float) Long.parseLong(d)) / 1000.0f));
+                            title = mediaMetadataRetriever2.extractMetadata(7);
+                            permormer = mediaMetadataRetriever2.extractMetadata(2);
+                        }
+                        if (extL.equals("ogg") && MediaController.isOpusFile(file.getAbsolutePath()) == 1) {
+                            isVoice = true;
+                        }
+                        if (mediaMetadataRetriever2 != null) {
+                            try {
+                                mediaMetadataRetriever2.release();
+                            } catch (Throwable e2) {
+                                FileLog.e(e2);
+                            }
+                        }
+                    } catch (Exception e3) {
+                        e2 = e3;
+                        mediaMetadataRetriever = mediaMetadataRetriever2;
+                        try {
+                            FileLog.e(e2);
+                            if (mediaMetadataRetriever != null) {
+                                try {
+                                    mediaMetadataRetriever.release();
+                                } catch (Throwable e22) {
+                                    FileLog.e(e22);
+                                }
+                            }
+                            if (duration != 0) {
+                                attributeAudio = new TL_documentAttributeAudio();
+                                attributeAudio.duration = duration;
+                                attributeAudio.title = title;
+                                attributeAudio.performer = permormer;
+                                if (attributeAudio.title == null) {
+                                    attributeAudio.title = TtmlNode.ANONYMOUS_REGION_ID;
+                                }
+                                attributeAudio.flags |= 1;
+                                if (attributeAudio.performer == null) {
+                                    attributeAudio.performer = TtmlNode.ANONYMOUS_REGION_ID;
+                                }
+                                attributeAudio.flags |= 2;
+                                if (isVoice) {
+                                    attributeAudio.voice = true;
+                                }
+                            }
+                            sendNew = false;
+                            if (originalPath != null) {
+                                if (!originalPath.endsWith("attheme")) {
+                                    sendNew = true;
+                                } else if (attributeAudio == null) {
+                                    originalPath = originalPath + TtmlNode.ANONYMOUS_REGION_ID + file.length();
+                                } else {
+                                    originalPath = originalPath + MimeTypes.BASE_TYPE_AUDIO + file.length();
+                                }
+                            }
+                            tL_document = null;
+                            tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 4 : 1);
+                            tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 4 : 1);
+                            if (tL_document == null) {
+                                tL_document = new TL_document();
+                                tL_document.id = 0;
+                                tL_document.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
+                                fileName = new TL_documentAttributeFilename();
+                                fileName.file_name = name;
+                                tL_document.attributes.add(fileName);
+                                tL_document.size = (int) file.length();
+                                tL_document.dc_id = 0;
+                                if (attributeAudio != null) {
+                                    tL_document.attributes.add(attributeAudio);
+                                }
+                                if (ext.length() == 0) {
+                                    obj = -1;
+                                    switch (extL.hashCode()) {
+                                        case 109967:
+                                            if (extL.equals("ogg")) {
+                                                obj = 2;
+                                                break;
+                                            }
+                                            break;
+                                        case 3418175:
+                                            if (extL.equals("opus")) {
+                                                obj = 1;
+                                                break;
+                                            }
+                                            break;
+                                        case 3645340:
+                                            if (extL.equals("webp")) {
+                                                obj = null;
+                                                break;
+                                            }
+                                            break;
+                                    }
+                                    switch (obj) {
+                                        case null:
+                                            tL_document.mime_type = "image/webp";
+                                            break;
+                                        case 1:
+                                            tL_document.mime_type = MimeTypes.AUDIO_OPUS;
+                                            break;
+                                        case 2:
+                                            tL_document.mime_type = "audio/ogg";
+                                            break;
+                                        default:
+                                            mimeType = myMime.getMimeTypeFromExtension(extL);
+                                            if (mimeType == null) {
+                                                tL_document.mime_type = mimeType;
+                                                break;
+                                            }
+                                            tL_document.mime_type = "application/octet-stream";
+                                            break;
+                                    }
+                                }
+                                tL_document.mime_type = "application/octet-stream";
+                                if (tL_document.mime_type.equals("image/gif")) {
+                                    try {
+                                        bitmap = ImageLoader.loadBitmap(file.getAbsolutePath(), null, 90.0f, 90.0f, true);
+                                        if (bitmap != null) {
+                                            fileName.file_name = "animation.gif";
+                                            tL_document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, isEncrypted);
+                                            bitmap.recycle();
+                                        }
+                                    } catch (Throwable e222) {
+                                        FileLog.e(e222);
+                                    }
+                                }
+                                bmOptions = new Options();
+                                try {
+                                    bmOptions.inJustDecodeBounds = true;
+                                    randomAccessFile = new RandomAccessFile(path, "r");
+                                    buffer = randomAccessFile.getChannel().map(MapMode.READ_ONLY, 0, (long) path.length());
+                                    Utilities.loadWebpImage(null, buffer, buffer.limit(), bmOptions, true);
+                                    randomAccessFile.close();
+                                } catch (Throwable e2222) {
+                                    FileLog.e(e2222);
+                                }
+                                attributeSticker = new TL_documentAttributeSticker();
+                                attributeSticker.alt = TtmlNode.ANONYMOUS_REGION_ID;
+                                attributeSticker.stickerset = new TL_inputStickerSetEmpty();
+                                tL_document.attributes.add(attributeSticker);
+                                attributeImageSize = new TL_documentAttributeImageSize();
+                                attributeImageSize.w = bmOptions.outWidth;
+                                attributeImageSize.h = bmOptions.outHeight;
+                                tL_document.attributes.add(attributeImageSize);
+                                if (tL_document.thumb == null) {
+                                    tL_document.thumb = new TL_photoSizeEmpty();
+                                    tL_document.thumb.type = "s";
+                                }
+                            }
+                            captionFinal = caption == null ? TtmlNode.ANONYMOUS_REGION_ID : caption.toString();
+                            params = new HashMap();
+                            if (originalPath != null) {
+                                params.put("originalPath", originalPath);
+                            }
+                            documentFinal = tL_document;
+                            pathFinal = path;
+                            i = currentAccount;
+                            j = dialog_id;
+                            messageObject = reply_to_msg;
+                            arrayList = entities;
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    SendMessagesHelper.getInstance(i).sendMessage(documentFinal, null, pathFinal, j, messageObject, captionFinal, arrayList, null, params, 0);
+                                }
+                            });
+                            return true;
+                        } catch (Throwable th2) {
+                            th = th2;
+                            if (mediaMetadataRetriever != null) {
+                                try {
+                                    mediaMetadataRetriever.release();
+                                } catch (Throwable e22222) {
+                                    FileLog.e(e22222);
+                                }
+                            }
+                            throw th;
+                        }
+                    } catch (Throwable th3) {
+                        th = th3;
+                        mediaMetadataRetriever = mediaMetadataRetriever2;
+                        if (mediaMetadataRetriever != null) {
+                            mediaMetadataRetriever.release();
+                        }
+                        throw th;
+                    }
+                } catch (Exception e4) {
+                    e22222 = e4;
+                    FileLog.e(e22222);
+                    if (mediaMetadataRetriever != null) {
+                        mediaMetadataRetriever.release();
+                    }
+                    if (duration != 0) {
+                        attributeAudio = new TL_documentAttributeAudio();
+                        attributeAudio.duration = duration;
+                        attributeAudio.title = title;
+                        attributeAudio.performer = permormer;
+                        if (attributeAudio.title == null) {
+                            attributeAudio.title = TtmlNode.ANONYMOUS_REGION_ID;
+                        }
+                        attributeAudio.flags |= 1;
+                        if (attributeAudio.performer == null) {
+                            attributeAudio.performer = TtmlNode.ANONYMOUS_REGION_ID;
+                        }
+                        attributeAudio.flags |= 2;
+                        if (isVoice) {
+                            attributeAudio.voice = true;
+                        }
+                    }
+                    sendNew = false;
+                    if (originalPath != null) {
+                        if (!originalPath.endsWith("attheme")) {
+                            sendNew = true;
+                        } else if (attributeAudio == null) {
+                            originalPath = originalPath + MimeTypes.BASE_TYPE_AUDIO + file.length();
+                        } else {
+                            originalPath = originalPath + TtmlNode.ANONYMOUS_REGION_ID + file.length();
+                        }
+                    }
+                    tL_document = null;
+                    if (isEncrypted) {
+                    }
+                    tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 4 : 1);
+                    if (isEncrypted) {
+                    }
+                    tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 4 : 1);
+                    if (tL_document == null) {
+                        tL_document = new TL_document();
+                        tL_document.id = 0;
+                        tL_document.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
+                        fileName = new TL_documentAttributeFilename();
+                        fileName.file_name = name;
+                        tL_document.attributes.add(fileName);
+                        tL_document.size = (int) file.length();
+                        tL_document.dc_id = 0;
+                        if (attributeAudio != null) {
+                            tL_document.attributes.add(attributeAudio);
+                        }
+                        if (ext.length() == 0) {
+                            obj = -1;
+                            switch (extL.hashCode()) {
+                                case 109967:
+                                    if (extL.equals("ogg")) {
+                                        obj = 2;
+                                        break;
+                                    }
+                                    break;
+                                case 3418175:
+                                    if (extL.equals("opus")) {
+                                        obj = 1;
+                                        break;
+                                    }
+                                    break;
+                                case 3645340:
+                                    if (extL.equals("webp")) {
+                                        obj = null;
+                                        break;
+                                    }
+                                    break;
+                            }
+                            switch (obj) {
+                                case null:
+                                    tL_document.mime_type = "image/webp";
+                                    break;
+                                case 1:
+                                    tL_document.mime_type = MimeTypes.AUDIO_OPUS;
+                                    break;
+                                case 2:
+                                    tL_document.mime_type = "audio/ogg";
+                                    break;
+                                default:
+                                    mimeType = myMime.getMimeTypeFromExtension(extL);
+                                    if (mimeType == null) {
+                                        tL_document.mime_type = "application/octet-stream";
+                                        break;
+                                    }
+                                    tL_document.mime_type = mimeType;
+                                    break;
+                            }
+                        }
+                        tL_document.mime_type = "application/octet-stream";
+                        if (tL_document.mime_type.equals("image/gif")) {
+                            bitmap = ImageLoader.loadBitmap(file.getAbsolutePath(), null, 90.0f, 90.0f, true);
+                            if (bitmap != null) {
+                                fileName.file_name = "animation.gif";
+                                tL_document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, isEncrypted);
+                                bitmap.recycle();
+                            }
+                        }
+                        bmOptions = new Options();
+                        bmOptions.inJustDecodeBounds = true;
+                        randomAccessFile = new RandomAccessFile(path, "r");
+                        buffer = randomAccessFile.getChannel().map(MapMode.READ_ONLY, 0, (long) path.length());
+                        Utilities.loadWebpImage(null, buffer, buffer.limit(), bmOptions, true);
+                        randomAccessFile.close();
+                        attributeSticker = new TL_documentAttributeSticker();
+                        attributeSticker.alt = TtmlNode.ANONYMOUS_REGION_ID;
+                        attributeSticker.stickerset = new TL_inputStickerSetEmpty();
+                        tL_document.attributes.add(attributeSticker);
+                        attributeImageSize = new TL_documentAttributeImageSize();
+                        attributeImageSize.w = bmOptions.outWidth;
+                        attributeImageSize.h = bmOptions.outHeight;
+                        tL_document.attributes.add(attributeImageSize);
+                        if (tL_document.thumb == null) {
+                            tL_document.thumb = new TL_photoSizeEmpty();
+                            tL_document.thumb.type = "s";
+                        }
+                    }
+                    if (caption == null) {
+                    }
+                    params = new HashMap();
+                    if (originalPath != null) {
+                        params.put("originalPath", originalPath);
+                    }
+                    documentFinal = tL_document;
+                    pathFinal = path;
+                    i = currentAccount;
+                    j = dialog_id;
+                    messageObject = reply_to_msg;
+                    arrayList = entities;
+                    AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+                    return true;
                 }
-                attributeAudio.flags |= 2;
+                if (duration != 0) {
+                    attributeAudio = new TL_documentAttributeAudio();
+                    attributeAudio.duration = duration;
+                    attributeAudio.title = title;
+                    attributeAudio.performer = permormer;
+                    if (attributeAudio.title == null) {
+                        attributeAudio.title = TtmlNode.ANONYMOUS_REGION_ID;
+                    }
+                    attributeAudio.flags |= 1;
+                    if (attributeAudio.performer == null) {
+                        attributeAudio.performer = TtmlNode.ANONYMOUS_REGION_ID;
+                    }
+                    attributeAudio.flags |= 2;
+                    if (isVoice) {
+                        attributeAudio.voice = true;
+                    }
+                }
+                sendNew = false;
+                if (originalPath != null) {
+                    if (!originalPath.endsWith("attheme")) {
+                        sendNew = true;
+                    } else if (attributeAudio == null) {
+                        originalPath = originalPath + MimeTypes.BASE_TYPE_AUDIO + file.length();
+                    } else {
+                        originalPath = originalPath + TtmlNode.ANONYMOUS_REGION_ID + file.length();
+                    }
+                }
+                tL_document = null;
+                if (!(sendNew || isEncrypted)) {
+                    if (isEncrypted) {
+                    }
+                    tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 4 : 1);
+                    if (!(tL_document != null || path.equals(originalPath) || isEncrypted)) {
+                        if (isEncrypted) {
+                        }
+                        tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 4 : 1);
+                    }
+                }
+                if (tL_document == null) {
+                    tL_document = new TL_document();
+                    tL_document.id = 0;
+                    tL_document.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
+                    fileName = new TL_documentAttributeFilename();
+                    fileName.file_name = name;
+                    tL_document.attributes.add(fileName);
+                    tL_document.size = (int) file.length();
+                    tL_document.dc_id = 0;
+                    if (attributeAudio != null) {
+                        tL_document.attributes.add(attributeAudio);
+                    }
+                    if (ext.length() == 0) {
+                        obj = -1;
+                        switch (extL.hashCode()) {
+                            case 109967:
+                                if (extL.equals("ogg")) {
+                                    obj = 2;
+                                    break;
+                                }
+                                break;
+                            case 3418175:
+                                if (extL.equals("opus")) {
+                                    obj = 1;
+                                    break;
+                                }
+                                break;
+                            case 3645340:
+                                if (extL.equals("webp")) {
+                                    obj = null;
+                                    break;
+                                }
+                                break;
+                        }
+                        switch (obj) {
+                            case null:
+                                tL_document.mime_type = "image/webp";
+                                break;
+                            case 1:
+                                tL_document.mime_type = MimeTypes.AUDIO_OPUS;
+                                break;
+                            case 2:
+                                tL_document.mime_type = "audio/ogg";
+                                break;
+                            default:
+                                mimeType = myMime.getMimeTypeFromExtension(extL);
+                                if (mimeType == null) {
+                                    tL_document.mime_type = "application/octet-stream";
+                                    break;
+                                }
+                                tL_document.mime_type = mimeType;
+                                break;
+                        }
+                    }
+                    tL_document.mime_type = "application/octet-stream";
+                    if (tL_document.mime_type.equals("image/gif")) {
+                        bitmap = ImageLoader.loadBitmap(file.getAbsolutePath(), null, 90.0f, 90.0f, true);
+                        if (bitmap != null) {
+                            fileName.file_name = "animation.gif";
+                            tL_document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, isEncrypted);
+                            bitmap.recycle();
+                        }
+                    }
+                    if (tL_document.mime_type.equals("image/webp") && allowSticker) {
+                        bmOptions = new Options();
+                        bmOptions.inJustDecodeBounds = true;
+                        randomAccessFile = new RandomAccessFile(path, "r");
+                        buffer = randomAccessFile.getChannel().map(MapMode.READ_ONLY, 0, (long) path.length());
+                        Utilities.loadWebpImage(null, buffer, buffer.limit(), bmOptions, true);
+                        randomAccessFile.close();
+                        if (bmOptions.outWidth != 0 && bmOptions.outHeight != 0 && bmOptions.outWidth <= 800 && bmOptions.outHeight <= 800) {
+                            attributeSticker = new TL_documentAttributeSticker();
+                            attributeSticker.alt = TtmlNode.ANONYMOUS_REGION_ID;
+                            attributeSticker.stickerset = new TL_inputStickerSetEmpty();
+                            tL_document.attributes.add(attributeSticker);
+                            attributeImageSize = new TL_documentAttributeImageSize();
+                            attributeImageSize.w = bmOptions.outWidth;
+                            attributeImageSize.h = bmOptions.outHeight;
+                            tL_document.attributes.add(attributeImageSize);
+                        }
+                    }
+                    if (tL_document.thumb == null) {
+                        tL_document.thumb = new TL_photoSizeEmpty();
+                        tL_document.thumb.type = "s";
+                    }
+                }
+                if (caption == null) {
+                }
+                params = new HashMap();
+                if (originalPath != null) {
+                    params.put("originalPath", originalPath);
+                }
+                documentFinal = tL_document;
+                pathFinal = path;
+                i = currentAccount;
+                j = dialog_id;
+                messageObject = reply_to_msg;
+                arrayList = entities;
+                AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+                return true;
             }
         }
-        boolean sendNew = false;
+        AudioInfo audioInfo = AudioInfo.getAudioInfo(file);
+        if (!(audioInfo == null || audioInfo.getDuration() == 0)) {
+            permormer = audioInfo.getArtist();
+            title = audioInfo.getTitle();
+        }
+        if (duration != 0) {
+            attributeAudio = new TL_documentAttributeAudio();
+            attributeAudio.duration = duration;
+            attributeAudio.title = title;
+            attributeAudio.performer = permormer;
+            if (attributeAudio.title == null) {
+                attributeAudio.title = TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            attributeAudio.flags |= 1;
+            if (attributeAudio.performer == null) {
+                attributeAudio.performer = TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            attributeAudio.flags |= 2;
+            if (isVoice) {
+                attributeAudio.voice = true;
+            }
+        }
+        sendNew = false;
         if (originalPath != null) {
-            if (originalPath.endsWith("attheme")) {
+            if (!originalPath.endsWith("attheme")) {
                 sendNew = true;
-            } else if (attributeAudio != null) {
-                originalPath = originalPath + MimeTypes.BASE_TYPE_AUDIO + file.length();
-            } else {
+            } else if (attributeAudio == null) {
                 originalPath = originalPath + TtmlNode.ANONYMOUS_REGION_ID + file.length();
+            } else {
+                originalPath = originalPath + MimeTypes.BASE_TYPE_AUDIO + file.length();
             }
         }
-        TL_document tL_document = null;
-        if (!(sendNew || isEncrypted)) {
-            tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, !isEncrypted ? 1 : 4);
-            if (!(tL_document != null || path.equals(originalPath) || isEncrypted)) {
-                tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), !isEncrypted ? 1 : 4);
-            }
+        tL_document = null;
+        if (isEncrypted) {
         }
+        tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 4 : 1);
+        if (isEncrypted) {
+        }
+        tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 4 : 1);
         if (tL_document == null) {
             tL_document = new TL_document();
             tL_document.id = 0;
             tL_document.date = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
-            TL_documentAttributeFilename fileName = new TL_documentAttributeFilename();
+            fileName = new TL_documentAttributeFilename();
             fileName.file_name = name;
             tL_document.attributes.add(fileName);
             tL_document.size = (int) file.length();
@@ -4194,72 +4697,88 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 tL_document.attributes.add(attributeAudio);
             }
             if (ext.length() == 0) {
-                tL_document.mime_type = "application/octet-stream";
-            } else if (ext.toLowerCase().equals("webp")) {
-                tL_document.mime_type = "image/webp";
-            } else {
-                String mimeType = myMime.getMimeTypeFromExtension(ext.toLowerCase());
-                if (mimeType != null) {
-                    tL_document.mime_type = mimeType;
-                } else {
-                    tL_document.mime_type = "application/octet-stream";
+                obj = -1;
+                switch (extL.hashCode()) {
+                    case 109967:
+                        if (extL.equals("ogg")) {
+                            obj = 2;
+                            break;
+                        }
+                        break;
+                    case 3418175:
+                        if (extL.equals("opus")) {
+                            obj = 1;
+                            break;
+                        }
+                        break;
+                    case 3645340:
+                        if (extL.equals("webp")) {
+                            obj = null;
+                            break;
+                        }
+                        break;
+                }
+                switch (obj) {
+                    case null:
+                        tL_document.mime_type = "image/webp";
+                        break;
+                    case 1:
+                        tL_document.mime_type = MimeTypes.AUDIO_OPUS;
+                        break;
+                    case 2:
+                        tL_document.mime_type = "audio/ogg";
+                        break;
+                    default:
+                        mimeType = myMime.getMimeTypeFromExtension(extL);
+                        if (mimeType == null) {
+                            tL_document.mime_type = mimeType;
+                            break;
+                        }
+                        tL_document.mime_type = "application/octet-stream";
+                        break;
                 }
             }
+            tL_document.mime_type = "application/octet-stream";
             if (tL_document.mime_type.equals("image/gif")) {
-                try {
-                    Bitmap bitmap = ImageLoader.loadBitmap(file.getAbsolutePath(), null, 90.0f, 90.0f, true);
-                    if (bitmap != null) {
-                        fileName.file_name = "animation.gif";
-                        tL_document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, isEncrypted);
-                        bitmap.recycle();
-                    }
-                } catch (Throwable e) {
-                    FileLog.e(e);
+                bitmap = ImageLoader.loadBitmap(file.getAbsolutePath(), null, 90.0f, 90.0f, true);
+                if (bitmap != null) {
+                    fileName.file_name = "animation.gif";
+                    tL_document.thumb = ImageLoader.scaleAndSaveImage(bitmap, 90.0f, 90.0f, 55, isEncrypted);
+                    bitmap.recycle();
                 }
             }
-            if (tL_document.mime_type.equals("image/webp") && allowSticker) {
-                Options bmOptions = new Options();
-                try {
-                    bmOptions.inJustDecodeBounds = true;
-                    RandomAccessFile randomAccessFile = new RandomAccessFile(path, "r");
-                    ByteBuffer buffer = randomAccessFile.getChannel().map(MapMode.READ_ONLY, 0, (long) path.length());
-                    Utilities.loadWebpImage(null, buffer, buffer.limit(), bmOptions, true);
-                    randomAccessFile.close();
-                } catch (Throwable e2) {
-                    FileLog.e(e2);
-                }
-                if (bmOptions.outWidth != 0 && bmOptions.outHeight != 0 && bmOptions.outWidth <= 800 && bmOptions.outHeight <= 800) {
-                    TL_documentAttributeSticker attributeSticker = new TL_documentAttributeSticker();
-                    attributeSticker.alt = TtmlNode.ANONYMOUS_REGION_ID;
-                    attributeSticker.stickerset = new TL_inputStickerSetEmpty();
-                    tL_document.attributes.add(attributeSticker);
-                    TL_documentAttributeImageSize attributeImageSize = new TL_documentAttributeImageSize();
-                    attributeImageSize.w = bmOptions.outWidth;
-                    attributeImageSize.h = bmOptions.outHeight;
-                    tL_document.attributes.add(attributeImageSize);
-                }
-            }
+            bmOptions = new Options();
+            bmOptions.inJustDecodeBounds = true;
+            randomAccessFile = new RandomAccessFile(path, "r");
+            buffer = randomAccessFile.getChannel().map(MapMode.READ_ONLY, 0, (long) path.length());
+            Utilities.loadWebpImage(null, buffer, buffer.limit(), bmOptions, true);
+            randomAccessFile.close();
+            attributeSticker = new TL_documentAttributeSticker();
+            attributeSticker.alt = TtmlNode.ANONYMOUS_REGION_ID;
+            attributeSticker.stickerset = new TL_inputStickerSetEmpty();
+            tL_document.attributes.add(attributeSticker);
+            attributeImageSize = new TL_documentAttributeImageSize();
+            attributeImageSize.w = bmOptions.outWidth;
+            attributeImageSize.h = bmOptions.outHeight;
+            tL_document.attributes.add(attributeImageSize);
             if (tL_document.thumb == null) {
                 tL_document.thumb = new TL_photoSizeEmpty();
                 tL_document.thumb.type = "s";
             }
         }
-        final String captionFinal = caption != null ? caption.toString() : TtmlNode.ANONYMOUS_REGION_ID;
-        final HashMap<String, String> params = new HashMap();
+        if (caption == null) {
+        }
+        params = new HashMap();
         if (originalPath != null) {
             params.put("originalPath", originalPath);
         }
-        final TL_document documentFinal = tL_document;
-        final String pathFinal = path;
-        final int i = currentAccount;
-        final long j = dialog_id;
-        final MessageObject messageObject = reply_to_msg;
-        final ArrayList<MessageEntity> arrayList = entities;
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                SendMessagesHelper.getInstance(i).sendMessage(documentFinal, null, pathFinal, j, messageObject, captionFinal, arrayList, null, params, 0);
-            }
-        });
+        documentFinal = tL_document;
+        pathFinal = path;
+        i = currentAccount;
+        j = dialog_id;
+        messageObject = reply_to_msg;
+        arrayList = entities;
+        AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
         return true;
     }
 

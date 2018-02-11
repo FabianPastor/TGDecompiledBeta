@@ -173,6 +173,7 @@ public class MessageObject {
     public static final int POSITION_FLAG_TOP = 4;
     public static Pattern urlPattern;
     public boolean attachPathExists;
+    public int audioPlayerDuration;
     public float audioProgress;
     public int audioProgressSec;
     public StringBuilder botButtonsLayout;
@@ -2424,9 +2425,9 @@ public class MessageObject {
         }
         for (int a = 0; a < count; a++) {
             MessageEntity entity = (MessageEntity) this.messageOwner.entities.get(a);
-            if (entity.length > 0 && entity.offset >= 0 && entity.offset < this.messageOwner.message.length()) {
-                if (entity.offset + entity.length > this.messageOwner.message.length()) {
-                    entity.length = this.messageOwner.message.length() - entity.offset;
+            if (entity.length > 0 && entity.offset >= 0 && entity.offset < text.length()) {
+                if (entity.offset + entity.length > text.length()) {
+                    entity.length = text.length() - entity.offset;
                 }
                 if ((!useManualParse || (entity instanceof TL_messageEntityBold) || (entity instanceof TL_messageEntityItalic) || (entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityPre) || (entity instanceof TL_messageEntityMentionName) || (entity instanceof TL_inputMessageEntityMentionName)) && spans != null && spans.length > 0) {
                     for (int b = 0; b < spans.length; b++) {
@@ -2459,7 +2460,7 @@ public class MessageObject {
                 } else if (entity instanceof TL_inputMessageEntityMentionName) {
                     spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
                 } else if (!useManualParse) {
-                    String url = this.messageOwner.message.substring(entity.offset, entity.offset + entity.length);
+                    String url = TextUtils.substring(text, entity.offset, entity.offset + entity.length);
                     if (entity instanceof TL_messageEntityBotCommand) {
                         spannable.setSpan(new URLSpanBotCommand(url, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
                     } else if ((entity instanceof TL_messageEntityHashtag) || (entity instanceof TL_messageEntityMention)) {
@@ -3138,18 +3139,26 @@ public class MessageObject {
     }
 
     public static boolean isMusicDocument(Document document) {
-        if (document == null) {
-            return false;
-        }
-        int a = 0;
-        while (a < document.attributes.size()) {
-            DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
-            if (!(attribute instanceof TL_documentAttributeAudio)) {
-                a++;
-            } else if (attribute.voice) {
-                return false;
-            } else {
-                return true;
+        if (document != null) {
+            int a = 0;
+            while (a < document.attributes.size()) {
+                DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+                if (!(attribute instanceof TL_documentAttributeAudio)) {
+                    a++;
+                } else if (attribute.voice) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            if (!TextUtils.isEmpty(document.mime_type)) {
+                String mime = document.mime_type.toLowerCase();
+                if (mime.equals("audio/ogg") || mime.equals(MimeTypes.AUDIO_OPUS) || mime.equals("audio/x-opus+ogg")) {
+                    return true;
+                }
+                if (mime.equals("application/octet-stream") && FileLoader.getDocumentFileName(document).endsWith(".opus")) {
+                    return true;
+                }
             }
         }
         return false;
@@ -3502,7 +3511,11 @@ public class MessageObject {
                 a++;
             }
         }
-        return TtmlNode.ANONYMOUS_REGION_ID;
+        String fileName = FileLoader.getDocumentFileName(document);
+        if (TextUtils.isEmpty(fileName)) {
+            fileName = LocaleController.getString("AudioUnknownTitle", R.string.AudioUnknownTitle);
+        }
+        return fileName;
     }
 
     public int getDuration() {
@@ -3521,7 +3534,7 @@ public class MessageObject {
                 return attribute.duration;
             }
         }
-        return 0;
+        return this.audioPlayerDuration;
     }
 
     public String getMusicAuthor() {
@@ -3577,7 +3590,7 @@ public class MessageObject {
                 }
             }
         }
-        return TtmlNode.ANONYMOUS_REGION_ID;
+        return LocaleController.getString("AudioUnknownArtist", R.string.AudioUnknownArtist);
     }
 
     public InputStickerSet getInputStickerSet() {

@@ -1427,7 +1427,7 @@
     <string name="Seconds_zero">%1$d seconden</string>
     <string name="SecretChat">Geheime chats</string>
     <string name="SecretChatContextBotAlert">Let op: inline-bots worden aangeboden door externe ontwikkelaars. Voor de werking van de bot worden de karakters die je na de botnaam typt naar deze ontwikkelaar verstuurd.</string>
-    <string name="SecretChatName">Geheime chat</string>
+    <string name="SecretChatName">Telegram</string>
     <string name="SecretLinkPreviewAlert">Wil je uitgebreide link-voorbeelden inschakelen voor geheime chats? Let op: deze worden gegenereerd op onze servers.</string>
     <string name="SecretWebPage">Link-voorbeelden</string>
     <string name="SecurityTitle">Veiligheid</string>

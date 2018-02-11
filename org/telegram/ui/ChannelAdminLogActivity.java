@@ -963,6 +963,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             if (player != null) {
                                 playing.audioProgress = player.audioProgress;
                                 playing.audioProgressSec = player.audioProgressSec;
+                                playing.audioPlayerDuration = player.audioPlayerDuration;
                                 cell.updatePlayingMessageProgress();
                                 return;
                             }

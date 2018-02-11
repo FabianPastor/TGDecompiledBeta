@@ -626,6 +626,15 @@ public class LocaleController {
         applyRemoteLanguage(this.currentLocaleInfo, null, true, currentAccount);
     }
 
+    public void checkUpdateForCurrentRemoteLocale(int currentAccount, int version) {
+        if (this.currentLocaleInfo == null) {
+            return;
+        }
+        if ((this.currentLocaleInfo == null || this.currentLocaleInfo.isRemote()) && this.currentLocaleInfo.version < version) {
+            applyRemoteLanguage(this.currentLocaleInfo, null, false, currentAccount);
+        }
+    }
+
     private String getLocaleString(Locale locale) {
         if (locale == null) {
             return "en";

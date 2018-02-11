@@ -1427,7 +1427,7 @@
     <string name="Seconds_zero">%1$d secondi</string>
     <string name="SecretChat">Chat segrete</string>
     <string name="SecretChatContextBotAlert">Per favore nota che i bot inline sono forniti da sviluppatori di terze parti. Per far funzionare il bot, i simboli che digiti dopo l\'username del bot sono inviati al rispettivo sviluppatore.</string>
-    <string name="SecretChatName">Chat segreta</string>
+    <string name="SecretChatName">Telegram</string>
     <string name="SecretLinkPreviewAlert">Vuoi attivare le anteprime estese per i link nelle Chat Segrete? Nota che le anteprime dei link sono generate sui server di Telegram.</string>
     <string name="SecretWebPage">Anteprime link</string>
     <string name="SecurityTitle">Sicurezza</string>

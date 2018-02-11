@@ -7773,6 +7773,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 player = mediaController.getPlayingMessageObject();
                                 obj.audioProgress = player.audioProgress;
                                 obj.audioProgressSec = player.audioProgressSec;
+                                obj.audioPlayerDuration = player.audioPlayerDuration;
                             }
                             if (loadIndex == 1) {
                                 obj.setIsRead();
@@ -9421,6 +9422,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             if (player != null) {
                                 playing.audioProgress = player.audioProgress;
                                 playing.audioProgressSec = player.audioProgressSec;
+                                playing.audioPlayerDuration = player.audioPlayerDuration;
                                 cell.updatePlayingMessageProgress();
                                 if (this.drawLaterRoundProgressCell == cell) {
                                     this.fragmentView.invalidate();

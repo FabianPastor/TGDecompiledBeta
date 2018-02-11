@@ -613,7 +613,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
     private native long getTotalPcmDuration();
 
-    private native int isOpusFile(String str);
+    public static native int isOpusFile(String str);
 
     private native int openOpusFile(String str);
 
@@ -910,10 +910,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                             MediaController.this.ignoreFirstProgress = MediaController.this.ignoreFirstProgress - 1;
                                             return;
                                         }
+                                        long duration;
                                         long progress;
                                         float bufferedValue;
                                         float value;
-                                        long duration;
                                         if (MediaController.this.videoPlayer != null) {
                                             duration = MediaController.this.videoPlayer.getDuration();
                                             progress = MediaController.this.videoPlayer.getCurrentPosition();
@@ -942,6 +942,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                             }
                                             return;
                                         } else {
+                                            duration = 0;
                                             progress = (long) ((int) (((float) MediaController.this.lastPlayPcm) / 48.0f));
                                             value = ((float) MediaController.this.lastPlayPcm) / ((float) MediaController.this.currentTotalPcmDuration);
                                             bufferedValue = 0.0f;
@@ -950,6 +951,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                             }
                                         }
                                         MediaController.this.lastProgress = progress;
+                                        currentPlayingMessageObject.audioPlayerDuration = (int) (duration / 1000);
                                         currentPlayingMessageObject.audioProgress = value;
                                         currentPlayingMessageObject.audioProgressSec = (int) (MediaController.this.lastProgress / 1000);
                                         currentPlayingMessageObject.bufferedProgress = bufferedValue;
@@ -3015,6 +3017,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
         Throwable e;
+        final AlertDialog finalProgress;
+        final int i;
+        final String str;
+        final String str2;
         if (fullPath != null) {
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
@@ -3027,10 +3033,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 final File sourceFile = file;
                 final boolean[] cancelled = new boolean[]{false};
                 if (sourceFile.exists()) {
-                    final AlertDialog finalProgress;
-                    final int i;
-                    final String str;
-                    final String str2;
                     AlertDialog progressDialog = null;
                     if (!(context == null || type == 0)) {
                         try {
@@ -3464,7 +3466,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
-                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3493,7 +3494,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                } catch (Throwable e2) {
+                } catch (Throwable e) {
+                    Throwable e2;
                     FileLog.e(e2);
                 }
                 Integer num = null;

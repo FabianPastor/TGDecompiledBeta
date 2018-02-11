@@ -552,9 +552,9 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
-            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
+                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -1217,13 +1217,13 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     protected String downloadUrlContent(AsyncTask parentTask, String url, HashMap<String, String> headers, boolean tryGzip) {
+        URL downloadUrl;
         Throwable e;
         boolean canRetry = true;
         InputStream httpConnectionStream = null;
         boolean done = false;
         StringBuilder result = null;
         URLConnection httpConnection = null;
-        URL downloadUrl;
         try {
             downloadUrl = new URL(url);
             httpConnection = downloadUrl.openConnection();

@@ -1427,7 +1427,7 @@
     <string name="Seconds_zero">%1$d ثانية</string>
     <string name="SecretChat">المحادثات السرية</string>
     <string name="SecretChatContextBotAlert">يرجى ملاحظة أن البوتات أثناء الكتابة يتم تطويرها من مطورين مستقلين. لكي تعمل هذه البوتات، ما تكتبه بعد معرف البوت يذهب لمطور البوت.</string>
-    <string name="SecretChatName">محادثة سرية</string>
+    <string name="SecretChatName">تيليجرام</string>
     <string name="SecretLinkPreviewAlert">هل ترغب في تفعيل معاينة الروابط المطولة في المحادثات السرية؟ تذكر أن هذه المعاينات يتم إنشاؤها في خوادم تيليجرام.</string>
     <string name="SecretWebPage">معاينة الرابط</string>
     <string name="SecurityTitle">الأمان</string>
