@@ -1071,6 +1071,9 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         if (AndroidUtilities.handleProxyIntent(this, intent)) {
             return true;
         }
+        if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
+            PhotoViewer.getInstance().closePhoto(false, true);
+        }
         int flags = intent.getFlags();
         int[] intentAccount = new int[1];
         intentAccount[0] = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);

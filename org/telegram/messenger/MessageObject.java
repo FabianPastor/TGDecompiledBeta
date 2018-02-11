@@ -2360,7 +2360,14 @@ public class MessageObject {
                 if (charSequence.charAt(start) != '/') {
                     url = new URLSpanNoUnderline(charSequence.subSequence(start, end).toString());
                 } else if (botCommands) {
-                    url = new URLSpanBotCommand(charSequence.subSequence(start, end).toString(), isOut);
+                    int i;
+                    String charSequence2 = charSequence.subSequence(start, end).toString();
+                    if (isOut) {
+                        i = 1;
+                    } else {
+                        i = 0;
+                    }
+                    url = new URLSpanBotCommand(charSequence2, i);
                 }
                 if (url != null) {
                     ((Spannable) charSequence).setSpan(url, start, end, 0);
@@ -2456,13 +2463,13 @@ public class MessageObject {
                     }
                     spannable.setSpan(new URLSpanMono(spannable, entity.offset, entity.offset + entity.length, type), entity.offset, entity.offset + entity.length, 33);
                 } else if (entity instanceof TL_messageEntityMentionName) {
-                    spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
+                    spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, this.type), entity.offset, entity.offset + entity.length, 33);
                 } else if (entity instanceof TL_inputMessageEntityMentionName) {
-                    spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
+                    spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, this.type), entity.offset, entity.offset + entity.length, 33);
                 } else if (!useManualParse) {
                     String url = TextUtils.substring(text, entity.offset, entity.offset + entity.length);
                     if (entity instanceof TL_messageEntityBotCommand) {
-                        spannable.setSpan(new URLSpanBotCommand(url, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
+                        spannable.setSpan(new URLSpanBotCommand(url, this.type), entity.offset, entity.offset + entity.length, 33);
                     } else if ((entity instanceof TL_messageEntityHashtag) || (entity instanceof TL_messageEntityMention)) {
                         spannable.setSpan(new URLSpanNoUnderline(url), entity.offset, entity.offset + entity.length, 33);
                     } else if (entity instanceof TL_messageEntityEmail) {

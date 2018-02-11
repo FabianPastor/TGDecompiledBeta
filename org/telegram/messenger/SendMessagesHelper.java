@@ -4104,12 +4104,14 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private static boolean prepareSendingDocumentInternal(int currentAccount, String path, String originalPath, Uri uri, String mime, long dialog_id, MessageObject reply_to_msg, CharSequence caption, ArrayList<MessageEntity> entities) {
         Throwable e;
-        TL_document tL_document;
-        RandomAccessFile randomAccessFile;
-        ByteBuffer buffer;
-        TL_documentAttributeSticker attributeSticker;
-        TL_documentAttributeImageSize attributeImageSize;
-        final HashMap<String, String> params;
+        Bitmap bitmap;
+        final String captionFinal;
+        final TL_document documentFinal;
+        final String pathFinal;
+        final int i;
+        final long j;
+        final MessageObject messageObject;
+        final ArrayList<MessageEntity> arrayList;
         Throwable th;
         if ((path == null || path.length() == 0) && uri == null) {
             return false;
@@ -4146,18 +4148,16 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             return false;
         }
         boolean sendNew;
+        TL_document tL_document;
         TL_documentAttributeFilename fileName;
         Object obj;
         String mimeType;
-        Bitmap bitmap;
         Options bmOptions;
-        final String captionFinal;
-        final TL_document documentFinal;
-        final String pathFinal;
-        final int i;
-        final long j;
-        final MessageObject messageObject;
-        final ArrayList<MessageEntity> arrayList;
+        RandomAccessFile randomAccessFile;
+        ByteBuffer buffer;
+        TL_documentAttributeSticker attributeSticker;
+        TL_documentAttributeImageSize attributeImageSize;
+        final HashMap<String, String> params;
         boolean isEncrypted = ((int) dialog_id) == 0;
         boolean allowSticker = !isEncrypted;
         String name = file.getName();

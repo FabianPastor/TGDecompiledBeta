@@ -4,7 +4,7 @@ import android.text.TextPaint;
 
 public class URLSpanUserMentionPhotoViewer extends URLSpanUserMention {
     public URLSpanUserMentionPhotoViewer(String url, boolean isOutOwner) {
-        super(url, isOutOwner);
+        super(url, 2);
     }
 
     public void updateDrawState(TextPaint ds) {

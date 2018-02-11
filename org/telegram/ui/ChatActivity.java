@@ -4016,7 +4016,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 return;
                             }
                             spannableString = new SpannableString(UserObject.getFirstName(user) + " ");
-                            spannableString.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + user.id, true), 0, spannableString.length(), 33);
+                            spannableString.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + user.id, 1), 0, spannableString.length(), 33);
                             ChatActivity.this.chatActivityEnterView.replaceWithText(start, len, spannableString, false);
                         } else if (object instanceof String) {
                             if (ChatActivity.this.mentionsAdapter.isBotCommands()) {
@@ -10629,7 +10629,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 if ((entity.offset + addToOffset) + entity.length < stringBuilder.length() && stringBuilder.charAt((entity.offset + addToOffset) + entity.length) == ' ') {
                                     entity.length++;
                                 }
-                                stringBuilder.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + user_id, true), entity.offset + addToOffset, (entity.offset + addToOffset) + entity.length, 33);
+                                stringBuilder.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + user_id, 1), entity.offset + addToOffset, (entity.offset + addToOffset) + entity.length, 33);
                             } else if (entity instanceof TL_messageEntityCode) {
                                 stringBuilder.insert((entity.offset + entity.length) + addToOffset, "`");
                                 stringBuilder.insert(entity.offset + addToOffset, "`");

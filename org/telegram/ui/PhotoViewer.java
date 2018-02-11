@@ -6311,7 +6311,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 str = Emoji.replaceEmoji(new SpannableStringBuilder(caption), this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             } else {
                 Spannable spannableString = SpannableString.valueOf(caption);
-                this.currentMessageObject.addEntitiesToText(spannableString, true, false);
+                messageObject.addEntitiesToText(spannableString, true, false);
                 str = Emoji.replaceEmoji(spannableString, this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             }
             this.captionTextView.setTag(str);

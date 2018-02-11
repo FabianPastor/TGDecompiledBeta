@@ -2725,12 +2725,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                         if ((entity.offset + entity.length) + addToOffset < stringBuilder.length() && stringBuilder.charAt((entity.offset + entity.length) + addToOffset) == ' ') {
                                             entity.length++;
                                         }
-                                        stringBuilder.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, true), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
+                                        stringBuilder.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, 1), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
                                     } else if (entity instanceof TL_messageEntityMentionName) {
                                         if ((entity.offset + entity.length) + addToOffset < stringBuilder.length() && stringBuilder.charAt((entity.offset + entity.length) + addToOffset) == ' ') {
                                             entity.length++;
                                         }
-                                        stringBuilder.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, true), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
+                                        stringBuilder.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, 1), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
                                     } else if (entity instanceof TL_messageEntityCode) {
                                         stringBuilder.insert((entity.offset + entity.length) + addToOffset, "`");
                                         stringBuilder.insert(entity.offset + addToOffset, "`");

@@ -5,16 +5,18 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class URLSpanBotCommand extends URLSpanNoUnderline {
     public static boolean enabled = true;
-    public boolean isOut;
+    public int currentType;
 
-    public URLSpanBotCommand(String url, boolean isOutOwner) {
+    public URLSpanBotCommand(String url, int type) {
         super(url);
-        this.isOut = isOutOwner;
+        this.currentType = type;
     }
 
     public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);
-        if (this.isOut) {
+        if (this.currentType == 2) {
+            ds.setColor(-1);
+        } else if (this.currentType == 1) {
             ds.setColor(Theme.getColor(enabled ? Theme.key_chat_messageLinkOut : Theme.key_chat_messageTextOut));
         } else {
             ds.setColor(Theme.getColor(enabled ? Theme.key_chat_messageLinkIn : Theme.key_chat_messageTextIn));
