@@ -155,6 +155,7 @@ import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanBotCommand;
+import org.telegram.ui.Components.URLSpanBrowser;
 import org.telegram.ui.Components.URLSpanMono;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.URLSpanNoUnderlineBold;
@@ -2407,6 +2408,10 @@ public class MessageObject {
     }
 
     private boolean addEntitiesToText(CharSequence text, boolean useManualParse) {
+        return addEntitiesToText(text, false, useManualParse);
+    }
+
+    public boolean addEntitiesToText(CharSequence text, boolean photoViewer, boolean useManualParse) {
         boolean hasUrls = false;
         if (!(text instanceof Spannable)) {
             return false;
@@ -2440,7 +2445,15 @@ public class MessageObject {
                 } else if (entity instanceof TL_messageEntityItalic) {
                     spannable.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), entity.offset, entity.offset + entity.length, 33);
                 } else if ((entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityPre)) {
-                    spannable.setSpan(new URLSpanMono(spannable, entity.offset, entity.offset + entity.length, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
+                    byte type;
+                    if (photoViewer) {
+                        type = (byte) 2;
+                    } else if (isOutOwner()) {
+                        type = (byte) 1;
+                    } else {
+                        type = (byte) 0;
+                    }
+                    spannable.setSpan(new URLSpanMono(spannable, entity.offset, entity.offset + entity.length, type), entity.offset, entity.offset + entity.length, 33);
                 } else if (entity instanceof TL_messageEntityMentionName) {
                     spannable.setSpan(new URLSpanUserMention(TtmlNode.ANONYMOUS_REGION_ID + ((TL_messageEntityMentionName) entity).user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
                 } else if (entity instanceof TL_inputMessageEntityMentionName) {
@@ -2456,9 +2469,9 @@ public class MessageObject {
                     } else if (entity instanceof TL_messageEntityUrl) {
                         hasUrls = true;
                         if (url.toLowerCase().startsWith("http") || url.toLowerCase().startsWith("tg://")) {
-                            spannable.setSpan(new URLSpan(url), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanBrowser(url), entity.offset, entity.offset + entity.length, 33);
                         } else {
-                            spannable.setSpan(new URLSpan("http://" + url), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanBrowser("http://" + url), entity.offset, entity.offset + entity.length, 33);
                         }
                     } else if (entity instanceof TL_messageEntityTextUrl) {
                         spannable.setSpan(new URLSpanReplacement(entity.url), entity.offset, entity.offset + entity.length, 33);

@@ -11,13 +11,13 @@ public class URLSpanMono extends MetricAffectingSpan {
     private int currentEnd;
     private CharSequence currentMessage;
     private int currentStart;
-    private boolean isOut;
+    private byte currentType;
 
-    public URLSpanMono(CharSequence message, int start, int end, boolean out) {
+    public URLSpanMono(CharSequence message, int start, int end, byte type) {
         this.currentMessage = message;
         this.currentStart = start;
         this.currentEnd = end;
-        this.isOut = out;
+        this.currentType = type;
     }
 
     public void copyToClipboard() {
@@ -34,7 +34,9 @@ public class URLSpanMono extends MetricAffectingSpan {
         ds.setTextSize((float) AndroidUtilities.dp((float) (SharedConfig.fontSize - 1)));
         ds.setTypeface(Typeface.MONOSPACE);
         ds.setUnderlineText(false);
-        if (this.isOut) {
+        if (this.currentType == (byte) 2) {
+            ds.setColor(-1);
+        } else if (this.currentType == (byte) 1) {
             ds.setColor(Theme.getColor(Theme.key_chat_messageTextOut));
         } else {
             ds.setColor(Theme.getColor(Theme.key_chat_messageTextIn));

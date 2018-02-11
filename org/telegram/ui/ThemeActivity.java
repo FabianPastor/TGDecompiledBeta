@@ -903,7 +903,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                         showDialog(builder.create());
                         return;
                     }
-                    return;
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }

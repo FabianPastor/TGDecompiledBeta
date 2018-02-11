@@ -413,9 +413,9 @@ public class DiffUtil {
         int d = 0;
         while (d <= dLimit) {
             int x;
-            boolean removal;
             int k = -d;
             while (k <= d) {
+                boolean removal;
                 if (k == (-d) || (k != d && forward[(kOffset + k) - 1] < forward[(kOffset + k) + 1])) {
                     x = forward[(kOffset + k) + 1];
                     removal = false;

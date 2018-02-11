@@ -438,7 +438,9 @@ public class CacheControlActivity extends BaseFragment {
                                             state5.dispose();
                                             state6.dispose();
                                             database.commitTransaction();
+                                            database.executeFast("PRAGMA journal_size_limit = 0").stepThis().dispose();
                                             database.executeFast("VACUUM").stepThis().dispose();
+                                            database.executeFast("PRAGMA journal_size_limit = -1").stepThis().dispose();
                                         } catch (Throwable e2) {
                                             FileLog.e(e2);
                                         } finally {

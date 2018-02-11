@@ -39,6 +39,7 @@ import android.provider.Settings;
 import android.support.annotation.Keep;
 import android.support.v4.content.FileProvider;
 import android.text.Layout.Alignment;
+import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -46,6 +47,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
+import android.text.method.LinkMovementMethod;
 import android.util.SparseArray;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
@@ -1331,6 +1333,25 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         stopScrolling();
                     }
                 }
+            }
+        }
+    }
+
+    private static class LinkMovementMethodMy extends LinkMovementMethod {
+        private LinkMovementMethodMy() {
+        }
+
+        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+            try {
+                boolean result = super.onTouchEvent(widget, buffer, event);
+                if (event.getAction() != 1 && event.getAction() != 3) {
+                    return result;
+                }
+                Selection.removeSelection(buffer);
+                return result;
+            } catch (Throwable e) {
+                FileLog.e(e);
+                return false;
             }
         }
     }
@@ -3710,9 +3731,11 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 return PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(event);
             }
         };
+        textView.setMovementMethod(new LinkMovementMethodMy());
         textView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
         textView.setLinkTextColor(-1);
         textView.setTextColor(-1);
+        textView.setHighlightColor(872415231);
         textView.setEllipsize(TruncateAt.END);
         textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         textView.setTextSize(1, 16.0f);
@@ -4301,10 +4324,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             PhotoViewer.this.switchingInlineMode = false;
                             if (VERSION.SDK_INT >= 21) {
                                 PhotoViewer.this.aspectRatioFrameLayout.getLocationInWindow(PhotoViewer.this.pipPosition);
-                                int[] access$13400 = PhotoViewer.this.pipPosition;
-                                access$13400[0] = access$13400[0] - PhotoViewer.this.getLeftInset();
-                                access$13400 = PhotoViewer.this.pipPosition;
-                                access$13400[1] = (int) (((float) access$13400[1]) - PhotoViewer.this.containerView.getTranslationY());
+                                int[] access$13500 = PhotoViewer.this.pipPosition;
+                                access$13500[0] = access$13500[0] - PhotoViewer.this.getLeftInset();
+                                access$13500 = PhotoViewer.this.pipPosition;
+                                access$13500[1] = (int) (((float) access$13500[1]) - PhotoViewer.this.containerView.getTranslationY());
                                 AnimatorSet animatorSet = new AnimatorSet();
                                 Animator[] animatorArr = new Animator[13];
                                 animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.textureImageView, "scaleX", new float[]{1.0f});
@@ -4794,14 +4817,14 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$14100 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$14200 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[3];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this.editorDoneLayout, "translationY", new float[]{(float) AndroidUtilities.dp(48.0f), 0.0f});
                     float[] fArr = new float[2];
                     r13[1] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     fArr = new float[2];
                     r13[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoCropView, "alpha", new float[]{0.0f, 1.0f});
-                    access$14100.playTogether(r13);
+                    access$14200.playTogether(r13);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -4938,12 +4961,12 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$14100 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$14200 = PhotoViewer.this.imageMoveAnimation;
                     r12 = new Animator[2];
                     float[] fArr = new float[2];
                     r12[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     r12[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoFilterView.getToolsView(), "translationY", new float[]{(float) AndroidUtilities.dp(186.0f), 0.0f});
-                    access$14100.playTogether(r12);
+                    access$14200.playTogether(r12);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -5047,13 +5070,13 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$14100 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$14200 = PhotoViewer.this.imageMoveAnimation;
                     Animator[] animatorArr = new Animator[3];
                     float[] fArr = new float[2];
                     animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoPaintView.getColorPicker(), "translationY", new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
                     animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoPaintView.getToolsView(), "translationY", new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
-                    access$14100.playTogether(animatorArr);
+                    access$14200.playTogether(animatorArr);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -6286,8 +6309,15 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         AnimatorSet animatorSet;
         Animator[] animatorArr;
         if (!TextUtils.isEmpty(caption)) {
+            CharSequence str;
             Theme.createChatResources(null, true);
-            CharSequence str = Emoji.replaceEmoji(new SpannableStringBuilder(caption), this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            if (this.currentMessageObject == null || this.currentMessageObject.messageOwner.entities.isEmpty()) {
+                str = Emoji.replaceEmoji(new SpannableStringBuilder(caption), this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            } else {
+                Spannable spannableString = SpannableString.valueOf(caption);
+                this.currentMessageObject.addEntitiesToText(spannableString, true, false);
+                str = Emoji.replaceEmoji(spannableString, this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            }
             this.captionTextView.setTag(str);
             if (this.currentCaptionAnimation != null) {
                 this.currentCaptionAnimation.cancel();
@@ -8537,25 +8567,25 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             public void onAnimationEnd(Animator animation) {
                 if (animation.equals(PhotoViewer.this.qualityChooseViewAnimation)) {
                     PhotoViewer.this.qualityChooseViewAnimation = new AnimatorSet();
-                    AnimatorSet access$17200;
+                    AnimatorSet access$17300;
                     Animator[] animatorArr;
                     if (show) {
                         PhotoViewer.this.qualityChooseView.setVisibility(0);
                         PhotoViewer.this.qualityPicker.setVisibility(0);
-                        access$17200 = PhotoViewer.this.qualityChooseViewAnimation;
+                        access$17300 = PhotoViewer.this.qualityChooseViewAnimation;
                         animatorArr = new Animator[3];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityChooseView, "translationY", new float[]{0.0f});
                         animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityPicker, "translationY", new float[]{0.0f});
                         animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, "translationY", new float[]{(float) (-AndroidUtilities.dp(48.0f))});
-                        access$17200.playTogether(animatorArr);
+                        access$17300.playTogether(animatorArr);
                     } else {
                         PhotoViewer.this.qualityChooseView.setVisibility(4);
                         PhotoViewer.this.qualityPicker.setVisibility(4);
-                        access$17200 = PhotoViewer.this.qualityChooseViewAnimation;
+                        access$17300 = PhotoViewer.this.qualityChooseViewAnimation;
                         animatorArr = new Animator[2];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.pickerView, "translationY", new float[]{0.0f});
                         animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, "translationY", new float[]{(float) (-AndroidUtilities.dp(48.0f))});
-                        access$17200.playTogether(animatorArr);
+                        access$17300.playTogether(animatorArr);
                     }
                     PhotoViewer.this.qualityChooseViewAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animation) {

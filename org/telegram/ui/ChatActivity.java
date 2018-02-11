@@ -3121,13 +3121,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         if (chatMessageCell.isPinnedTop()) {
                             holder = ChatActivity.this.chatListView.getChildViewHolder(child);
                             if (holder != null) {
-                                do {
+                                int tries = 0;
+                                while (tries < 20) {
                                     int prevPosition;
+                                    tries++;
                                     p = holder.getAdapterPosition();
-                                    if (groupedMessages == null || position == null) {
-                                        prevPosition = p + 1;
-                                    } else {
+                                    if (groupedMessages != null && position != null) {
                                         idx = groupedMessages.posArray.indexOf(position);
+                                        if (idx < 0) {
+                                            break;
+                                        }
                                         size = groupedMessages.posArray.size();
                                         if ((position.flags & 4) != 0) {
                                             prevPosition = (p + idx) + 1;
@@ -3139,6 +3142,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                                 a--;
                                             }
                                         }
+                                    } else {
+                                        prevPosition = p + 1;
                                     }
                                     holder = ChatActivity.this.chatListView.findViewHolderForAdapterPosition(prevPosition);
                                     if (holder == null) {
@@ -3148,10 +3153,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     if (y - AndroidUtilities.dp(48.0f) < holder.itemView.getBottom()) {
                                         tx = Math.min(holder.itemView.getTranslationX(), tx);
                                     }
-                                    if (!(holder.itemView instanceof ChatMessageCell)) {
-                                        break;
+                                    if (holder.itemView instanceof ChatMessageCell) {
+                                        if (!((ChatMessageCell) holder.itemView).isPinnedTop()) {
+                                            break;
+                                        }
                                     }
-                                } while (((ChatMessageCell) holder.itemView).isPinnedTop());
+                                    break;
+                                }
                             }
                         }
                         if (y - AndroidUtilities.dp(48.0f) < top) {

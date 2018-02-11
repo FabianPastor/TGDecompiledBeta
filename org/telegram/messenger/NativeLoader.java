@@ -160,73 +160,69 @@ public class NativeLoader {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     @SuppressLint({"UnsafeDynamicallyLoadedCode"})
     public static synchronized void initNativeLibs(Context context) {
+        String folder;
         synchronized (NativeLoader.class) {
             if (!nativeLoaded) {
-                String folder;
                 Constants.loadFromContext(context);
                 try {
-                    String str = Build.CPU_ABI;
-                    if (Build.CPU_ABI.equalsIgnoreCase("x86_64")) {
-                        folder = "x86_64";
-                    } else if (Build.CPU_ABI.equalsIgnoreCase("arm64-v8a")) {
-                        folder = "arm64-v8a";
-                    } else if (Build.CPU_ABI.equalsIgnoreCase("armeabi-v7a")) {
-                        folder = "armeabi-v7a";
-                    } else if (Build.CPU_ABI.equalsIgnoreCase("armeabi")) {
-                        folder = "armeabi";
-                    } else if (Build.CPU_ABI.equalsIgnoreCase("x86")) {
-                        folder = "x86";
-                    } else if (Build.CPU_ABI.equalsIgnoreCase("mips")) {
-                        folder = "mips";
-                    } else {
-                        folder = "armeabi";
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.e("Unsupported arch: " + Build.CPU_ABI);
-                        }
+                    System.loadLibrary(LIB_NAME);
+                    nativeLoaded = true;
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("loaded normal lib");
                     }
+                } catch (Throwable e) {
+                    FileLog.e(e);
                     try {
-                        String javaArch = System.getProperty("os.arch");
-                        if (javaArch != null && javaArch.contains("686")) {
+                        String str = Build.CPU_ABI;
+                        if (Build.CPU_ABI.equalsIgnoreCase("x86_64")) {
+                            folder = "x86_64";
+                        } else if (Build.CPU_ABI.equalsIgnoreCase("arm64-v8a")) {
+                            folder = "arm64-v8a";
+                        } else if (Build.CPU_ABI.equalsIgnoreCase("armeabi-v7a")) {
+                            folder = "armeabi-v7a";
+                        } else if (Build.CPU_ABI.equalsIgnoreCase("armeabi")) {
+                            folder = "armeabi";
+                        } else if (Build.CPU_ABI.equalsIgnoreCase("x86")) {
                             folder = "x86";
-                        }
-                        File destFile = getNativeLibraryDir(context);
-                        if (destFile != null) {
-                            File destFile2 = new File(destFile, LIB_SO_NAME);
-                            if (destFile2.exists()) {
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.d("load normal lib");
-                                }
-                                System.loadLibrary(LIB_NAME);
-                                nativeLoaded = true;
+                        } else if (Build.CPU_ABI.equalsIgnoreCase("mips")) {
+                            folder = "mips";
+                        } else {
+                            folder = "armeabi";
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.e("Unsupported arch: " + Build.CPU_ABI);
                             }
-                            destFile = destFile2;
                         }
-                    } catch (Throwable e) {
-                        FileLog.e(e);
                     } catch (Throwable e2) {
-                        e2.printStackTrace();
+                        FileLog.e(e2);
+                        folder = "armeabi";
                     }
-                } catch (Throwable e22) {
-                    FileLog.e(e22);
-                    folder = "armeabi";
-                }
-                File destDir = new File(context.getFilesDir(), "lib");
-                destDir.mkdirs();
-                File destLocalFile = new File(destDir, LOCALE_LIB_SO_NAME);
-                if (destLocalFile.exists()) {
-                    try {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("Load local lib");
+                    String javaArch = System.getProperty("os.arch");
+                    if (javaArch != null && javaArch.contains("686")) {
+                        folder = "x86";
+                    }
+                    File destDir = new File(context.getFilesDir(), "lib");
+                    destDir.mkdirs();
+                    File destLocalFile = new File(destDir, LOCALE_LIB_SO_NAME);
+                    if (destLocalFile.exists()) {
+                        try {
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("Load local lib");
+                            }
+                            System.load(destLocalFile.getAbsolutePath());
+                            nativeLoaded = true;
+                        } catch (Throwable e22) {
+                            FileLog.e(e22);
+                            destLocalFile.delete();
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.e("Library not found, arch = " + folder);
+                            }
                         }
-                        System.load(destLocalFile.getAbsolutePath());
-                        nativeLoaded = true;
-                    } catch (Throwable e222) {
-                        FileLog.e(e222);
-                        destLocalFile.delete();
                     }
-                }
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("Library not found, arch = " + folder);
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.e("Library not found, arch = " + folder);
+                    }
+                } catch (Throwable e222) {
+                    e222.printStackTrace();
                 }
             }
         }

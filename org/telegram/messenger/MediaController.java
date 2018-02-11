@@ -2420,62 +2420,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             this.videoPlayer.preparePlayer(Uri.fromFile(cacheFile), "other");
             this.videoPlayer.setStreamType(this.useFrontSpeaker ? 0 : 3);
             this.videoPlayer.play();
-        } else if (isOpusFile(cacheFile.getAbsolutePath()) == 1) {
-            if (this.pipRoundVideoView != null) {
-                this.pipRoundVideoView.close(true);
-                this.pipRoundVideoView = null;
-            }
-            this.playlist.clear();
-            this.shuffledPlaylist.clear();
-            synchronized (this.playerObjectSync) {
-                try {
-                    this.ignoreFirstProgress = 3;
-                    final CountDownLatch countDownLatch = new CountDownLatch(1);
-                    Boolean[] result = new Boolean[1];
-                    final Boolean[] boolArr = result;
-                    this.fileDecodingQueue.postRunnable(new Runnable() {
-                        public void run() {
-                            boolean z;
-                            Boolean[] boolArr = boolArr;
-                            if (MediaController.this.openOpusFile(cacheFile.getAbsolutePath()) != 0) {
-                                z = true;
-                            } else {
-                                z = false;
-                            }
-                            boolArr[0] = Boolean.valueOf(z);
-                            countDownLatch.countDown();
-                        }
-                    });
-                    countDownLatch.await();
-                    if (result[0].booleanValue()) {
-                        this.currentTotalPcmDuration = getTotalPcmDuration();
-                        this.audioTrackPlayer = new AudioTrack(this.useFrontSpeaker ? 0 : 3, 48000, 4, 2, this.playerBufferSize, 1);
-                        this.audioTrackPlayer.setStereoVolume(VOLUME_NORMAL, VOLUME_NORMAL);
-                        this.audioTrackPlayer.setPlaybackPositionUpdateListener(new OnPlaybackPositionUpdateListener() {
-                            public void onMarkerReached(AudioTrack audioTrack) {
-                                MediaController.this.cleanupPlayer(true, true, true);
-                            }
-
-                            public void onPeriodicNotification(AudioTrack audioTrack) {
-                            }
-                        });
-                        this.audioTrackPlayer.play();
-                    } else {
-                        return false;
-                    }
-                } catch (Throwable e3) {
-                    FileLog.e(e3);
-                    if (this.audioTrackPlayer != null) {
-                        this.audioTrackPlayer.release();
-                        this.audioTrackPlayer = null;
-                        this.isPaused = false;
-                        this.playingMessageObject = null;
-                        this.downloadingCurrentMessage = false;
-                    }
-                    return false;
-                }
-            }
-        } else {
+        } else if (messageObject.isMusic() || isOpusFile(cacheFile.getAbsolutePath()) != 1) {
             if (this.pipRoundVideoView != null) {
                 this.pipRoundVideoView.close(true);
                 this.pipRoundVideoView = null;
@@ -2543,12 +2488,12 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 } else {
                     try {
                         this.audioInfo = AudioInfo.getAudioInfo(cacheFile);
-                    } catch (Throwable e32) {
-                        FileLog.e(e32);
+                    } catch (Throwable e3) {
+                        FileLog.e(e3);
                     }
                 }
-            } catch (Throwable e322) {
-                FileLog.e(e322);
+            } catch (Throwable e32) {
+                FileLog.e(e32);
                 NotificationCenter instance = NotificationCenter.getInstance(messageObject.currentAccount);
                 int i = NotificationCenter.messagePlayingPlayStateChanged;
                 Object[] objArr = new Object[1];
@@ -2562,6 +2507,61 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     this.downloadingCurrentMessage = false;
                 }
                 return false;
+            }
+        } else {
+            if (this.pipRoundVideoView != null) {
+                this.pipRoundVideoView.close(true);
+                this.pipRoundVideoView = null;
+            }
+            this.playlist.clear();
+            this.shuffledPlaylist.clear();
+            synchronized (this.playerObjectSync) {
+                try {
+                    this.ignoreFirstProgress = 3;
+                    final CountDownLatch countDownLatch = new CountDownLatch(1);
+                    Boolean[] result = new Boolean[1];
+                    final Boolean[] boolArr = result;
+                    this.fileDecodingQueue.postRunnable(new Runnable() {
+                        public void run() {
+                            boolean z;
+                            Boolean[] boolArr = boolArr;
+                            if (MediaController.this.openOpusFile(cacheFile.getAbsolutePath()) != 0) {
+                                z = true;
+                            } else {
+                                z = false;
+                            }
+                            boolArr[0] = Boolean.valueOf(z);
+                            countDownLatch.countDown();
+                        }
+                    });
+                    countDownLatch.await();
+                    if (result[0].booleanValue()) {
+                        this.currentTotalPcmDuration = getTotalPcmDuration();
+                        this.audioTrackPlayer = new AudioTrack(this.useFrontSpeaker ? 0 : 3, 48000, 4, 2, this.playerBufferSize, 1);
+                        this.audioTrackPlayer.setStereoVolume(VOLUME_NORMAL, VOLUME_NORMAL);
+                        this.audioTrackPlayer.setPlaybackPositionUpdateListener(new OnPlaybackPositionUpdateListener() {
+                            public void onMarkerReached(AudioTrack audioTrack) {
+                                MediaController.this.cleanupPlayer(true, true, true);
+                            }
+
+                            public void onPeriodicNotification(AudioTrack audioTrack) {
+                            }
+                        });
+                        this.audioTrackPlayer.play();
+                    } else {
+                        return false;
+                    }
+                } catch (Throwable e322) {
+                    FileLog.e(e322);
+                    if (this.audioTrackPlayer != null) {
+                        this.audioTrackPlayer.release();
+                        this.audioTrackPlayer = null;
+                        this.isPaused = false;
+                        this.playingMessageObject = null;
+                        this.downloadingCurrentMessage = false;
+                    }
+                    return false;
+                }
             }
         }
         checkAudioFocus(messageObject);
@@ -3015,10 +3015,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
         Throwable e;
-        final AlertDialog finalProgress;
-        final int i;
-        final String str;
-        final String str2;
         if (fullPath != null) {
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
@@ -3031,6 +3027,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 final File sourceFile = file;
                 final boolean[] cancelled = new boolean[]{false};
                 if (sourceFile.exists()) {
+                    final AlertDialog finalProgress;
+                    final int i;
+                    final String str;
+                    final String str2;
                     AlertDialog progressDialog = null;
                     if (!(context == null || type == 0)) {
                         try {
@@ -3464,6 +3464,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
+                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3492,8 +3493,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                } catch (Throwable e) {
-                    Throwable e2;
+                } catch (Throwable e2) {
                     FileLog.e(e2);
                 }
                 Integer num = null;
@@ -3885,6 +3885,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     public boolean scheduleVideoConvert(MessageObject messageObject, boolean isEmpty) {
+        if (messageObject == null || messageObject.videoEditedInfo == null) {
+            return false;
+        }
         if (isEmpty && !this.videoConvertQueue.isEmpty()) {
             return false;
         }
@@ -3892,10 +3895,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             new File(messageObject.messageOwner.attachPath).delete();
         }
         this.videoConvertQueue.add(messageObject);
-        if (this.videoConvertQueue.size() != 1) {
-            return true;
+        if (this.videoConvertQueue.size() == 1) {
+            startVideoConvertFromQueue();
         }
-        startVideoConvertFromQueue();
         return true;
     }
 

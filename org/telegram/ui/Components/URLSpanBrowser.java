@@ -5,8 +5,8 @@ import android.text.style.URLSpan;
 import android.view.View;
 import org.telegram.messenger.browser.Browser;
 
-public class URLSpanReplacement extends URLSpan {
-    public URLSpanReplacement(String url) {
+public class URLSpanBrowser extends URLSpan {
+    public URLSpanBrowser(String url) {
         super(url);
     }
 

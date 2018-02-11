@@ -1646,8 +1646,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     private void processSelectedOption(int option) {
-        String path;
         if (this.selectedObject != null) {
+            String path;
             Intent intent;
             switch (option) {
                 case 3:
