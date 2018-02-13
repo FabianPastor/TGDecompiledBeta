@@ -4104,8 +4104,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private static boolean prepareSendingDocumentInternal(int currentAccount, String path, String originalPath, Uri uri, String mime, long dialog_id, MessageObject reply_to_msg, CharSequence caption, ArrayList<MessageEntity> entities) {
         Throwable e;
+        TL_documentAttributeFilename fileName;
+        Object obj;
+        String mimeType;
         Bitmap bitmap;
+        Options bmOptions;
+        RandomAccessFile randomAccessFile;
+        ByteBuffer buffer;
+        TL_documentAttributeSticker attributeSticker;
+        TL_documentAttributeImageSize attributeImageSize;
         final String captionFinal;
+        final HashMap<String, String> params;
         final TL_document documentFinal;
         final String pathFinal;
         final int i;
@@ -4149,15 +4158,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
         boolean sendNew;
         TL_document tL_document;
-        TL_documentAttributeFilename fileName;
-        Object obj;
-        String mimeType;
-        Options bmOptions;
-        RandomAccessFile randomAccessFile;
-        ByteBuffer buffer;
-        TL_documentAttributeSticker attributeSticker;
-        TL_documentAttributeImageSize attributeImageSize;
-        final HashMap<String, String> params;
         boolean isEncrypted = ((int) dialog_id) == 0;
         boolean allowSticker = !isEncrypted;
         String name = file.getName();
@@ -4178,6 +4178,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (!extL.equals("mp3")) {
             if (!extL.equals("m4a")) {
                 if (!extL.equals("opus")) {
+                    if (!extL.equals("ogg")) {
+                    }
                 }
                 MediaMetadataRetriever mediaMetadataRetriever = null;
                 try {
@@ -4234,14 +4236,14 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 if (!originalPath.endsWith("attheme")) {
                                     sendNew = true;
                                 } else if (attributeAudio == null) {
-                                    originalPath = originalPath + TtmlNode.ANONYMOUS_REGION_ID + file.length();
-                                } else {
                                     originalPath = originalPath + MimeTypes.BASE_TYPE_AUDIO + file.length();
+                                } else {
+                                    originalPath = originalPath + TtmlNode.ANONYMOUS_REGION_ID + file.length();
                                 }
                             }
                             tL_document = null;
-                            tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 4 : 1);
-                            tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 4 : 1);
+                            tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 1 : 4);
+                            tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 1 : 4);
                             if (tL_document == null) {
                                 tL_document = new TL_document();
                                 tL_document.id = 0;
@@ -4260,6 +4262,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         case 109967:
                                             if (extL.equals("ogg")) {
                                                 obj = 2;
+                                                break;
+                                            }
+                                            break;
+                                        case 3145576:
+                                            if (extL.equals("flac")) {
+                                                obj = 3;
                                                 break;
                                             }
                                             break;
@@ -4286,13 +4294,16 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         case 2:
                                             tL_document.mime_type = "audio/ogg";
                                             break;
+                                        case 3:
+                                            tL_document.mime_type = MimeTypes.AUDIO_FLAC;
+                                            break;
                                         default:
                                             mimeType = myMime.getMimeTypeFromExtension(extL);
                                             if (mimeType == null) {
-                                                tL_document.mime_type = mimeType;
+                                                tL_document.mime_type = "application/octet-stream";
                                                 break;
                                             }
-                                            tL_document.mime_type = "application/octet-stream";
+                                            tL_document.mime_type = mimeType;
                                             break;
                                     }
                                 }
@@ -4332,7 +4343,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     tL_document.thumb.type = "s";
                                 }
                             }
-                            captionFinal = caption == null ? TtmlNode.ANONYMOUS_REGION_ID : caption.toString();
+                            captionFinal = caption == null ? caption.toString() : TtmlNode.ANONYMOUS_REGION_ID;
                             params = new HashMap();
                             if (originalPath != null) {
                                 params.put("originalPath", originalPath);
@@ -4396,18 +4407,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         if (!originalPath.endsWith("attheme")) {
                             sendNew = true;
                         } else if (attributeAudio == null) {
-                            originalPath = originalPath + MimeTypes.BASE_TYPE_AUDIO + file.length();
-                        } else {
                             originalPath = originalPath + TtmlNode.ANONYMOUS_REGION_ID + file.length();
+                        } else {
+                            originalPath = originalPath + MimeTypes.BASE_TYPE_AUDIO + file.length();
                         }
                     }
                     tL_document = null;
                     if (isEncrypted) {
                     }
-                    tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 4 : 1);
+                    tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 1 : 4);
                     if (isEncrypted) {
                     }
-                    tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 4 : 1);
+                    tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 1 : 4);
                     if (tL_document == null) {
                         tL_document = new TL_document();
                         tL_document.id = 0;
@@ -4426,6 +4437,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 case 109967:
                                     if (extL.equals("ogg")) {
                                         obj = 2;
+                                        break;
+                                    }
+                                    break;
+                                case 3145576:
+                                    if (extL.equals("flac")) {
+                                        obj = 3;
                                         break;
                                     }
                                     break;
@@ -4452,13 +4469,16 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 case 2:
                                     tL_document.mime_type = "audio/ogg";
                                     break;
+                                case 3:
+                                    tL_document.mime_type = MimeTypes.AUDIO_FLAC;
+                                    break;
                                 default:
                                     mimeType = myMime.getMimeTypeFromExtension(extL);
                                     if (mimeType == null) {
-                                        tL_document.mime_type = "application/octet-stream";
+                                        tL_document.mime_type = mimeType;
                                         break;
                                     }
-                                    tL_document.mime_type = mimeType;
+                                    tL_document.mime_type = "application/octet-stream";
                                     break;
                             }
                         }
@@ -4536,11 +4556,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 if (!(sendNew || isEncrypted)) {
                     if (isEncrypted) {
                     }
-                    tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 4 : 1);
+                    tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 1 : 4);
                     if (!(tL_document != null || path.equals(originalPath) || isEncrypted)) {
                         if (isEncrypted) {
                         }
-                        tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 4 : 1);
+                        tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 1 : 4);
                     }
                 }
                 if (tL_document == null) {
@@ -4561,6 +4581,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             case 109967:
                                 if (extL.equals("ogg")) {
                                     obj = 2;
+                                    break;
+                                }
+                                break;
+                            case 3145576:
+                                if (extL.equals("flac")) {
+                                    obj = 3;
                                     break;
                                 }
                                 break;
@@ -4586,6 +4612,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 break;
                             case 2:
                                 tL_document.mime_type = "audio/ogg";
+                                break;
+                            case 3:
+                                tL_document.mime_type = MimeTypes.AUDIO_FLAC;
                                 break;
                             default:
                                 mimeType = myMime.getMimeTypeFromExtension(extL);
@@ -4680,10 +4709,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         tL_document = null;
         if (isEncrypted) {
         }
-        tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 4 : 1);
+        tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(originalPath, isEncrypted ? 1 : 4);
         if (isEncrypted) {
         }
-        tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 4 : 1);
+        tL_document = (TL_document) MessagesStorage.getInstance(currentAccount).getSentFile(path + file.length(), isEncrypted ? 1 : 4);
         if (tL_document == null) {
             tL_document = new TL_document();
             tL_document.id = 0;
@@ -4702,6 +4731,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     case 109967:
                         if (extL.equals("ogg")) {
                             obj = 2;
+                            break;
+                        }
+                        break;
+                    case 3145576:
+                        if (extL.equals("flac")) {
+                            obj = 3;
                             break;
                         }
                         break;
@@ -4727,6 +4762,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         break;
                     case 2:
                         tL_document.mime_type = "audio/ogg";
+                        break;
+                    case 3:
+                        tL_document.mime_type = MimeTypes.AUDIO_FLAC;
                         break;
                     default:
                         mimeType = myMime.getMimeTypeFromExtension(extL);

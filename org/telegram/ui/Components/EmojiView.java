@@ -1261,12 +1261,14 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     }
 
     public void addEmojiToRecent(String code) {
-        Emoji.addRecentEmoji(code);
-        if (!(getVisibility() == 0 && this.pager.getCurrentItem() == 0)) {
-            Emoji.sortEmoji();
+        if (Emoji.isValidEmoji(code)) {
+            Emoji.addRecentEmoji(code);
+            if (!(getVisibility() == 0 && this.pager.getCurrentItem() == 0)) {
+                Emoji.sortEmoji();
+            }
+            Emoji.saveRecentEmoji();
+            ((EmojiGridAdapter) this.adapters.get(0)).notifyDataSetChanged();
         }
-        Emoji.saveRecentEmoji();
-        ((EmojiGridAdapter) this.adapters.get(0)).notifyDataSetChanged();
     }
 
     public EmojiView(boolean needStickers, boolean needGif, Context context, ChatFull chatFull) {

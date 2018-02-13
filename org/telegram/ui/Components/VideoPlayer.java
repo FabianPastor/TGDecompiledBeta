@@ -90,14 +90,14 @@ public class VideoPlayer implements NotificationCenterDelegate, EventListener, V
 
     private void ensurePleyaerCreated() {
         if (this.player == null) {
-            this.player = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 0);
+            this.player = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 1);
             this.player.addListener(this);
             this.player.setVideoListener(this);
             this.player.setVideoTextureView(this.textureView);
             this.player.setPlayWhenReady(this.autoplay);
         }
         if (this.mixedAudio && this.audioPlayer == null) {
-            this.audioPlayer = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 0);
+            this.audioPlayer = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 1);
             this.audioPlayer.addListener(new Player.EventListener() {
                 public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
                 }

@@ -1287,6 +1287,12 @@ public class LocaleController {
                     break;
                 }
                 break;
+            case 72777:
+                if (type.equals("IRR")) {
+                    i = 20;
+                    break;
+                }
+                break;
             case 72801:
                 if (type.equals("ISK")) {
                     i = 14;
@@ -1337,7 +1343,7 @@ public class LocaleController {
                 break;
             case 76618:
                 if (type.equals("MRO")) {
-                    i = 28;
+                    i = 29;
                     break;
                 }
                 break;
@@ -1355,7 +1361,7 @@ public class LocaleController {
                 break;
             case 81569:
                 if (type.equals("RWF")) {
-                    i = 20;
+                    i = 21;
                     break;
                 }
                 break;
@@ -1367,43 +1373,43 @@ public class LocaleController {
                 break;
             case 83974:
                 if (type.equals("UGX")) {
-                    i = 21;
+                    i = 22;
                     break;
                 }
                 break;
             case 84517:
                 if (type.equals("UYI")) {
-                    i = 22;
+                    i = 23;
                     break;
                 }
                 break;
             case 85132:
                 if (type.equals("VND")) {
-                    i = 23;
+                    i = 24;
                     break;
                 }
                 break;
             case 85367:
                 if (type.equals("VUV")) {
-                    i = 24;
+                    i = 25;
                     break;
                 }
                 break;
             case 86653:
                 if (type.equals("XAF")) {
-                    i = 25;
+                    i = 26;
                     break;
                 }
                 break;
             case 87087:
                 if (type.equals("XOF")) {
-                    i = 26;
+                    i = 27;
                     break;
                 }
                 break;
             case 87118:
                 if (type.equals("XPF")) {
-                    i = 27;
+                    i = 28;
                     break;
                 }
                 break;
@@ -1443,10 +1449,11 @@ public class LocaleController {
             case 25:
             case 26:
             case 27:
+            case 28:
                 customFormat = " %.0f";
                 doubleAmount = (double) amount;
                 break;
-            case 28:
+            case 29:
                 customFormat = " %.1f";
                 doubleAmount = ((double) amount) / 10.0d;
                 break;
@@ -1525,6 +1532,12 @@ public class LocaleController {
                     break;
                 }
                 break;
+            case 72777:
+                if (type.equals("IRR")) {
+                    i = 20;
+                    break;
+                }
+                break;
             case 72801:
                 if (type.equals("ISK")) {
                     i = 14;
@@ -1575,7 +1588,7 @@ public class LocaleController {
                 break;
             case 76618:
                 if (type.equals("MRO")) {
-                    i = 28;
+                    i = 29;
                     break;
                 }
                 break;
@@ -1593,7 +1606,7 @@ public class LocaleController {
                 break;
             case 81569:
                 if (type.equals("RWF")) {
-                    i = 20;
+                    i = 21;
                     break;
                 }
                 break;
@@ -1605,43 +1618,43 @@ public class LocaleController {
                 break;
             case 83974:
                 if (type.equals("UGX")) {
-                    i = 21;
+                    i = 22;
                     break;
                 }
                 break;
             case 84517:
                 if (type.equals("UYI")) {
-                    i = 22;
+                    i = 23;
                     break;
                 }
                 break;
             case 85132:
                 if (type.equals("VND")) {
-                    i = 23;
+                    i = 24;
                     break;
                 }
                 break;
             case 85367:
                 if (type.equals("VUV")) {
-                    i = 24;
+                    i = 25;
                     break;
                 }
                 break;
             case 86653:
                 if (type.equals("XAF")) {
-                    i = 25;
+                    i = 26;
                     break;
                 }
                 break;
             case 87087:
                 if (type.equals("XOF")) {
-                    i = 26;
+                    i = 27;
                     break;
                 }
                 break;
             case 87118:
                 if (type.equals("XPF")) {
-                    i = 27;
+                    i = 28;
                     break;
                 }
                 break;
@@ -1681,10 +1694,11 @@ public class LocaleController {
             case 25:
             case 26:
             case 27:
+            case 28:
                 customFormat = " %.0f";
                 doubleAmount = (double) amount;
                 break;
-            case 28:
+            case 29:
                 customFormat = " %.1f";
                 doubleAmount = ((double) amount) / 10.0d;
                 break;

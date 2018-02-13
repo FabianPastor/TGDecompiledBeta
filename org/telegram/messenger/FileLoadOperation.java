@@ -696,9 +696,15 @@ public class FileLoadOperation {
                 if (newKeyGenerated) {
                     this.cacheFileTemp.delete();
                 } else {
-                    int length = (((int) this.cacheFileTemp.length()) / this.currentDownloadChunkSize) * this.currentDownloadChunkSize;
-                    this.downloadedBytes = length;
-                    this.requestedBytesCount = length;
+                    long totalDownloadedLen = this.cacheFileTemp.length();
+                    if (fileNameIv == null || totalDownloadedLen % ((long) this.currentDownloadChunkSize) == 0) {
+                        int length = (((int) this.cacheFileTemp.length()) / this.currentDownloadChunkSize) * this.currentDownloadChunkSize;
+                        this.downloadedBytes = length;
+                        this.requestedBytesCount = length;
+                    } else {
+                        this.downloadedBytes = 0;
+                        this.requestedBytesCount = 0;
+                    }
                     if (this.notLoadedBytesRanges != null && this.notLoadedBytesRanges.isEmpty()) {
                         this.notLoadedBytesRanges.add(new Range(this.downloadedBytes, this.totalBytesCount));
                         this.notRequestedBytesRanges.add(new Range(this.downloadedBytes, this.totalBytesCount));
@@ -723,7 +729,7 @@ public class FileLoadOperation {
                 this.cacheIvTemp = new File(this.tempPath, fileNameIv);
                 try {
                     this.fiv = new RandomAccessFile(this.cacheIvTemp, "rws");
-                    if (!newKeyGenerated) {
+                    if (!(this.downloadedBytes == 0 || newKeyGenerated)) {
                         len = this.cacheIvTemp.length();
                         if (len <= 0 || len % 32 != 0) {
                             this.downloadedBytes = 0;
@@ -1018,7 +1024,7 @@ public class FileLoadOperation {
                         Utilities.aesCtrDecryption(bytes.buffer, this.cdnKey, this.cdnIv, 0, bytes.limit());
                     }
                     this.downloadedBytes += currentBytesSize;
-                    boolean finishedDownloading = this.totalBytesCount > 0 ? this.totalBytesCount == this.downloadedBytes : currentBytesSize != this.currentDownloadChunkSize || ((this.totalBytesCount == this.downloadedBytes || this.downloadedBytes % this.currentDownloadChunkSize != 0) && (this.totalBytesCount <= 0 || this.totalBytesCount <= this.downloadedBytes));
+                    boolean finishedDownloading = this.totalBytesCount > 0 ? this.downloadedBytes >= this.totalBytesCount : currentBytesSize != this.currentDownloadChunkSize || ((this.totalBytesCount == this.downloadedBytes || this.downloadedBytes % this.currentDownloadChunkSize != 0) && (this.totalBytesCount <= 0 || this.totalBytesCount <= this.downloadedBytes));
                     if (this.key != null) {
                         Utilities.aesIgeEncryption(bytes.buffer, this.key, this.iv, false, true, 0, bytes.limit());
                         if (finishedDownloading && this.bytesCountPadding != 0) {

@@ -948,7 +948,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         public void drainEncoder(boolean endOfStream) throws Exception {
-            MediaFormat newFormat;
             if (endOfStream) {
                 this.videoEncoder.signalEndOfInputStream();
             }
@@ -957,6 +956,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 encoderOutputBuffers = this.videoEncoder.getOutputBuffers();
             }
             while (true) {
+                MediaFormat newFormat;
                 ByteBuffer encodedData;
                 int encoderStatus = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
                 if (encoderStatus == -1) {
@@ -2011,8 +2011,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         ArrayList<Size> previewSizes = this.selectedCamera.getPreviewSizes();
         ArrayList<Size> pictureSizes = this.selectedCamera.getPictureSizes();
-        this.previewSize = CameraController.chooseOptimalSize(previewSizes, 1920, 1080, this.aspectRatio);
-        this.pictureSize = CameraController.chooseOptimalSize(pictureSizes, 1920, 1080, this.aspectRatio);
+        this.previewSize = CameraController.chooseOptimalSize(previewSizes, 480, 270, this.aspectRatio);
+        this.pictureSize = CameraController.chooseOptimalSize(pictureSizes, 480, 270, this.aspectRatio);
         if (this.previewSize.mWidth != this.pictureSize.mWidth) {
             Size preview;
             int b;

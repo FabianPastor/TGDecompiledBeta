@@ -3160,7 +3160,7 @@ public class MessageObject {
             }
             if (!TextUtils.isEmpty(document.mime_type)) {
                 String mime = document.mime_type.toLowerCase();
-                if (mime.equals("audio/ogg") || mime.equals(MimeTypes.AUDIO_OPUS) || mime.equals("audio/x-opus+ogg")) {
+                if (mime.equals(MimeTypes.AUDIO_FLAC) || mime.equals("audio/ogg") || mime.equals(MimeTypes.AUDIO_OPUS) || mime.equals("audio/x-opus+ogg")) {
                     return true;
                 }
                 if (mime.equals("application/octet-stream") && FileLoader.getDocumentFileName(document).endsWith(".opus")) {

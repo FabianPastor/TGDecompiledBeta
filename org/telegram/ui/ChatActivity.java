@@ -3261,11 +3261,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         if (position != null && position.siblingHeights != null) {
                             int a;
                             float maxHeight = ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.5f;
-                            int h = 0;
+                            int h = cell.getCaptionHeight();
                             for (float f : position.siblingHeights) {
                                 h += (int) Math.ceil((double) (f * maxHeight));
                             }
-                            h += (position.maxY - position.minY) * AndroidUtilities.dp(11.0f);
+                            h += (position.maxY - position.minY) * AndroidUtilities.dp2(11.0f);
                             int count = group.posArray.size();
                             for (a = 0; a < count; a++) {
                                 GroupedMessagePosition pos = (GroupedMessagePosition) group.posArray.get(a);
@@ -11689,9 +11689,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             ActionBarMenu actionMode = this.actionBar.createActionMode();
             actionMode.getItem(19).setVisibility(8);
             actionMode.getItem(10).setVisibility(8);
-            actionMode.getItem(11).setVisibility(8);
+            if (actionMode.getItem(11) != null) {
+                actionMode.getItem(11).setVisibility(8);
+            }
             actionMode.getItem(12).setVisibility(8);
             actionMode.getItem(edit).setVisibility(8);
+            actionMode.getItem(22).setVisibility(8);
             this.actionBar.showActionMode();
             updatePinnedMessageView(true);
             updateVisibleRows();

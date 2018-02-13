@@ -107,7 +107,7 @@ public class SunDate {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         double[] sun = new double[2];
-        sunRiseSetForYear(calendar.get(1), calendar.get(2), calendar.get(5), lon, lat, sun);
+        sunRiseSetForYear(calendar.get(1), calendar.get(2) + 1, calendar.get(5), lon, lat, sun);
         int timeZoneOffset = (TimeZone.getDefault().getRawOffset() / 1000) / 60;
         int sunrise = ((int) (sun[0] * 60.0d)) + timeZoneOffset;
         int sunset = ((int) (sun[1] * 60.0d)) + timeZoneOffset;

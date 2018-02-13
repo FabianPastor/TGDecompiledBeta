@@ -6310,7 +6310,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             if (messageObject == null || messageObject.messageOwner.entities.isEmpty()) {
                 str = Emoji.replaceEmoji(new SpannableStringBuilder(caption), this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             } else {
-                Spannable spannableString = SpannableString.valueOf(caption);
+                Spannable spannableString = SpannableString.valueOf(caption.toString());
                 messageObject.addEntitiesToText(spannableString, true, false);
                 str = Emoji.replaceEmoji(spannableString, this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             }

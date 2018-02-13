@@ -2102,62 +2102,49 @@ public class TLRPC {
         }
 
         public void readAttachPath(AbstractSerializedData stream, int currentUserId) {
-            if ((this instanceof TL_message_secret) || (this instanceof TL_message_secret_layer72)) {
-                if (this.id < 0 || !(this.media == null || (this.media instanceof TL_messageMediaEmpty) || (this.media instanceof TL_messageMediaWebPage) || this.message == null || this.message.length() == 0 || !this.message.startsWith("-1"))) {
-                    this.attachPath = stream.readString(false);
-                }
-            } else if (this instanceof TL_messageForwarded_old2) {
-                if (this.id < 0) {
-                    this.fwd_msg_id = stream.readInt32(false);
-                }
-                if (this.id < 0 || !(this.media == null || (this.media instanceof TL_messageMediaEmpty) || this.message == null || this.message.length() == 0 || !this.message.startsWith("-1"))) {
-                    this.attachPath = stream.readString(false);
-                }
+            boolean hasMedia;
+            if (this.media == null || (this.media instanceof TL_messageMediaEmpty) || (this.media instanceof TL_messageMediaWebPage)) {
+                hasMedia = false;
             } else {
-                boolean hasMedia;
-                if (this.media == null || (this.media instanceof TL_messageMediaEmpty) || (this.media instanceof TL_messageMediaWebPage)) {
-                    hasMedia = false;
-                } else {
-                    hasMedia = true;
-                }
-                boolean fixCaption;
-                if (TextUtils.isEmpty(this.message) || !(((this.media instanceof TL_messageMediaPhoto_old) || (this.media instanceof TL_messageMediaPhoto_layer68) || (this.media instanceof TL_messageMediaPhoto_layer74) || (this.media instanceof TL_messageMediaDocument_old) || (this.media instanceof TL_messageMediaDocument_layer68) || (this.media instanceof TL_messageMediaDocument_layer74)) && this.message.startsWith("-1"))) {
-                    fixCaption = false;
-                } else {
-                    fixCaption = true;
-                }
-                if ((this.out || (this.to_id != null && this.to_id.user_id != 0 && this.to_id.user_id == this.from_id && this.from_id == currentUserId)) && (this.id < 0 || hasMedia)) {
-                    if (hasMedia && fixCaption) {
-                        if (this.message.length() > 6 && this.message.charAt(2) == '_') {
-                            this.params = new HashMap();
-                            this.params.put("ve", this.message);
-                        }
-                        if (this.params != null || this.message.length() == 2) {
-                            this.message = TtmlNode.ANONYMOUS_REGION_ID;
-                        }
+                hasMedia = true;
+            }
+            boolean fixCaption;
+            if (TextUtils.isEmpty(this.message) || !(((this.media instanceof TL_messageMediaPhoto_old) || (this.media instanceof TL_messageMediaPhoto_layer68) || (this.media instanceof TL_messageMediaPhoto_layer74) || (this.media instanceof TL_messageMediaDocument_old) || (this.media instanceof TL_messageMediaDocument_layer68) || (this.media instanceof TL_messageMediaDocument_layer74)) && this.message.startsWith("-1"))) {
+                fixCaption = false;
+            } else {
+                fixCaption = true;
+            }
+            if ((this.out || (this.to_id != null && this.to_id.user_id != 0 && this.to_id.user_id == this.from_id && this.from_id == currentUserId)) && (this.id < 0 || hasMedia)) {
+                if (hasMedia && fixCaption) {
+                    if (this.message.length() > 6 && this.message.charAt(2) == '_') {
+                        this.params = new HashMap();
+                        this.params.put("ve", this.message);
                     }
-                    if (stream.remaining() > 0) {
-                        this.attachPath = stream.readString(false);
-                        if (this.id < 0 && this.attachPath.startsWith("||")) {
-                            String[] args = this.attachPath.split("\\|\\|");
-                            if (args.length > 0) {
-                                if (this.params == null) {
-                                    this.params = new HashMap();
-                                }
-                                for (int a = 1; a < args.length - 1; a++) {
-                                    String[] args2 = args[a].split("\\|=\\|");
-                                    if (args2.length == 2) {
-                                        this.params.put(args2[0], args2[1]);
-                                    }
-                                }
-                                this.attachPath = args[args.length - 1];
+                    if (this.params != null || this.message.length() == 2) {
+                        this.message = TtmlNode.ANONYMOUS_REGION_ID;
+                    }
+                }
+                if (stream.remaining() > 0) {
+                    this.attachPath = stream.readString(false);
+                    if (this.id < 0 && this.attachPath.startsWith("||")) {
+                        String[] args = this.attachPath.split("\\|\\|");
+                        if (args.length > 0) {
+                            if (this.params == null) {
+                                this.params = new HashMap();
                             }
+                            for (int a = 1; a < args.length - 1; a++) {
+                                String[] args2 = args[a].split("\\|=\\|");
+                                if (args2.length == 2) {
+                                    this.params.put(args2[0], args2[1]);
+                                }
+                            }
+                            this.attachPath = args[args.length - 1];
                         }
                     }
                 }
-                if ((this.flags & 4) != 0 && this.id < 0) {
-                    this.fwd_msg_id = stream.readInt32(false);
-                }
+            }
+            if ((this.flags & 4) != 0 && this.id < 0) {
+                this.fwd_msg_id = stream.readInt32(false);
             }
         }
 

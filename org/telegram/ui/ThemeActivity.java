@@ -104,6 +104,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     private int themeEndRow;
     private int themeInfoRow;
     private int themeStartRow;
+    private boolean updatingLocation;
 
     private class GpsLocationListener implements LocationListener {
         private GpsLocationListener() {
@@ -164,12 +165,12 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                     Builder builder = new Builder(ThemeActivity.this.getParentActivity());
                                     builder.setItems(themeInfo.pathToFile == null ? new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile)} : new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Edit", R.string.Edit), LocaleController.getString("Delete", R.string.Delete)}, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            File currentFile;
                                             Throwable e;
                                             File finalFile;
                                             Intent intent;
                                             Throwable th;
                                             if (which == 0) {
+                                                File currentFile;
                                                 if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
                                                     StringBuilder result = new StringBuilder();
                                                     for (Entry<String, Integer> entry : Theme.getDefaultColors().entrySet()) {
@@ -976,20 +977,24 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     }
 
     private void startLocationUpdate() {
-        LocationManager locationManager = (LocationManager) ApplicationLoader.applicationContext.getSystemService("location");
-        try {
-            locationManager.requestLocationUpdates("gps", 1, 0.0f, this.gpsLocationListener);
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
-        try {
-            locationManager.requestLocationUpdates("network", 1, 0.0f, this.networkLocationListener);
-        } catch (Throwable e2) {
-            FileLog.e(e2);
+        if (!this.updatingLocation) {
+            this.updatingLocation = true;
+            LocationManager locationManager = (LocationManager) ApplicationLoader.applicationContext.getSystemService("location");
+            try {
+                locationManager.requestLocationUpdates("gps", 1, 0.0f, this.gpsLocationListener);
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
+            try {
+                locationManager.requestLocationUpdates("network", 1, 0.0f, this.networkLocationListener);
+            } catch (Throwable e2) {
+                FileLog.e(e2);
+            }
         }
     }
 
     private void stopLocationUpdate() {
+        this.updatingLocation = false;
         LocationManager locationManager = (LocationManager) ApplicationLoader.applicationContext.getSystemService("location");
         locationManager.removeUpdates(this.gpsLocationListener);
         locationManager.removeUpdates(this.networkLocationListener);

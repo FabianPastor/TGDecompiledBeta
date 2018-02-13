@@ -314,6 +314,17 @@ public class Emoji {
         return ed;
     }
 
+    public static boolean isValidEmoji(String code) {
+        DrawableInfo info = (DrawableInfo) rects.get(code);
+        if (info == null) {
+            CharSequence newCode = (CharSequence) EmojiData.emojiAliasMap.get(code);
+            if (newCode != null) {
+                info = (DrawableInfo) rects.get(newCode);
+            }
+        }
+        return info != null;
+    }
+
     public static Drawable getEmojiBigDrawable(String code) {
         EmojiDrawable ed = getEmojiDrawable(code);
         if (ed == null) {
