@@ -30,6 +30,7 @@ public final class Factory {
     }
 
     static Class makeClass(String s, ClassLoader loader) {
+        Class class$;
         if (s.equals("*")) {
             return null;
         }
@@ -43,7 +44,6 @@ public final class Factory {
         try {
             return Class.forName(s);
         } catch (ClassNotFoundException e) {
-            Class class$;
             if (class$java$lang$ClassNotFoundException == null) {
                 class$ = class$("java.lang.ClassNotFoundException");
                 class$java$lang$ClassNotFoundException = class$;

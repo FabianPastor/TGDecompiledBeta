@@ -224,7 +224,7 @@ public class CameraSession {
                     }
                 } catch (Exception e3) {
                 }
-                params.setFlashMode(this.currentFlashMode);
+                params.setFlashMode("off");
                 try {
                     camera.setParameters(params);
                 } catch (Exception e4) {

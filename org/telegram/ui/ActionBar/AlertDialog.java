@@ -136,6 +136,10 @@ public class AlertDialog extends Dialog implements Callback {
     public static class Builder {
         private AlertDialog alertDialog;
 
+        protected Builder(AlertDialog alert) {
+            this.alertDialog = alert;
+        }
+
         public Builder(Context context) {
             this.alertDialog = new AlertDialog(context, 0);
         }
@@ -239,7 +243,7 @@ public class AlertDialog extends Dialog implements Callback {
     public AlertDialog(Context context, int progressStyle) {
         super(context, R.style.TransparentDialog);
         this.shadowDrawable = context.getResources().getDrawable(R.drawable.popup_fixed_alert).mutate();
-        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
+        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemeColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.shadowDrawable.getPadding(this.backgroundPaddings);
         this.progressViewStyle = progressStyle;
     }
@@ -407,7 +411,7 @@ public class AlertDialog extends Dialog implements Callback {
         if (this.title != null) {
             this.titleTextView = new TextView(getContext());
             this.titleTextView.setText(this.title);
-            this.titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+            this.titleTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
             this.titleTextView.setTextSize(1, 20.0f);
             this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
@@ -419,7 +423,7 @@ public class AlertDialog extends Dialog implements Callback {
         if (this.subtitle != null) {
             this.subtitleTextView = new TextView(getContext());
             this.subtitleTextView.setText(this.subtitle);
-            this.subtitleTextView.setTextColor(Theme.getColor(Theme.key_dialogIcon));
+            this.subtitleTextView.setTextColor(getThemeColor(Theme.key_dialogIcon));
             this.subtitleTextView.setTextSize(1, 14.0f);
             this.subtitleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             view = this.subtitleTextView;
@@ -453,14 +457,14 @@ public class AlertDialog extends Dialog implements Callback {
                 }
             };
             this.contentScrollView.setVerticalScrollBarEnabled(false);
-            AndroidUtilities.setScrollViewEdgeEffectColor(this.contentScrollView, Theme.getColor(Theme.key_dialogScrollGlow));
+            AndroidUtilities.setScrollViewEdgeEffectColor(this.contentScrollView, getThemeColor(Theme.key_dialogScrollGlow));
             containerView.addView(this.contentScrollView, LayoutHelper.createLinear(-1, -2, 0.0f, 0.0f, 0.0f, 0.0f));
             this.scrollContainer = new LinearLayout(getContext());
             this.scrollContainer.setOrientation(1);
             this.contentScrollView.addView(this.scrollContainer, new FrameLayout.LayoutParams(-1, -2));
         }
         this.messageTextView = new TextView(getContext());
-        this.messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        this.messageTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
         this.messageTextView.setTextSize(1, 16.0f);
         this.messageTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         View view2;
@@ -470,7 +474,7 @@ public class AlertDialog extends Dialog implements Callback {
             this.progressViewContainer = new FrameLayout(getContext());
             containerView.addView(this.progressViewContainer, LayoutHelper.createLinear(-1, 44, 51, 23, this.title == null ? 24 : 0, 23, 24));
             View radialProgressView = new RadialProgressView(getContext());
-            radialProgressView.setProgressColor(Theme.getColor(Theme.key_dialogProgressCircle));
+            radialProgressView.setProgressColor(getThemeColor(Theme.key_dialogProgressCircle));
             this.progressViewContainer.addView(radialProgressView, LayoutHelper.createFrame(44, 44, (LocaleController.isRTL ? 5 : 3) | 48));
             this.messageTextView.setLines(1);
             this.messageTextView.setSingleLine(true);
@@ -499,13 +503,13 @@ public class AlertDialog extends Dialog implements Callback {
             containerView.addView(this.messageTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, this.title == null ? 19 : 0, 24, 20));
             this.lineProgressView = new LineProgressView(getContext());
             this.lineProgressView.setProgress(((float) this.currentProgress) / 100.0f, false);
-            this.lineProgressView.setProgressColor(Theme.getColor(Theme.key_dialogLineProgress));
-            this.lineProgressView.setBackColor(Theme.getColor(Theme.key_dialogLineProgressBackground));
+            this.lineProgressView.setProgressColor(getThemeColor(Theme.key_dialogLineProgress));
+            this.lineProgressView.setBackColor(getThemeColor(Theme.key_dialogLineProgressBackground));
             containerView.addView(this.lineProgressView, LayoutHelper.createLinear(-1, 4, 19, 24, 0, 24, 0));
             this.lineProgressViewPercent = new TextView(getContext());
             this.lineProgressViewPercent.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.lineProgressViewPercent.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            this.lineProgressViewPercent.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
+            this.lineProgressViewPercent.setTextColor(getThemeColor(Theme.key_dialogTextGray2));
             this.lineProgressViewPercent.setTextSize(1, 14.0f);
             containerView.addView(this.lineProgressViewPercent, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 23, 4, 23, 24));
             updateLineProgressTextView();
@@ -598,7 +602,7 @@ public class AlertDialog extends Dialog implements Callback {
                 radialProgressView.setMinWidth(AndroidUtilities.dp(64.0f));
                 radialProgressView.setTag(Integer.valueOf(-1));
                 radialProgressView.setTextSize(1, 14.0f);
-                radialProgressView.setTextColor(Theme.getColor(Theme.key_dialogButton));
+                radialProgressView.setTextColor(getThemeColor(Theme.key_dialogButton));
                 radialProgressView.setGravity(17);
                 radialProgressView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 radialProgressView.setText(this.positiveButtonText.toString().toUpperCase());
@@ -624,7 +628,7 @@ public class AlertDialog extends Dialog implements Callback {
                 radialProgressView.setMinWidth(AndroidUtilities.dp(64.0f));
                 radialProgressView.setTag(Integer.valueOf(-2));
                 radialProgressView.setTextSize(1, 14.0f);
-                radialProgressView.setTextColor(Theme.getColor(Theme.key_dialogButton));
+                radialProgressView.setTextColor(getThemeColor(Theme.key_dialogButton));
                 radialProgressView.setGravity(17);
                 radialProgressView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 radialProgressView.setText(this.negativeButtonText.toString().toUpperCase());
@@ -650,7 +654,7 @@ public class AlertDialog extends Dialog implements Callback {
                 radialProgressView.setMinWidth(AndroidUtilities.dp(64.0f));
                 radialProgressView.setTag(Integer.valueOf(-3));
                 radialProgressView.setTextSize(1, 14.0f);
-                radialProgressView.setTextColor(Theme.getColor(Theme.key_dialogButton));
+                radialProgressView.setTextColor(getThemeColor(Theme.key_dialogButton));
                 radialProgressView.setGravity(17);
                 radialProgressView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 radialProgressView.setText(this.neutralButtonText.toString().toUpperCase());
@@ -827,5 +831,9 @@ public class AlertDialog extends Dialog implements Callback {
         if (this.contentScrollView != null) {
             this.contentScrollView.removeCallbacks(what);
         }
+    }
+
+    protected int getThemeColor(String key) {
+        return Theme.getColor(key);
     }
 }

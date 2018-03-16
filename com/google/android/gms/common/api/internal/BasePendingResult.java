@@ -18,6 +18,7 @@ import com.google.android.gms.common.internal.zzbq;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 @KeepName
@@ -177,6 +178,27 @@ public abstract class BasePendingResult<R extends Result> extends PendingResult<
         zzbq.zza(z, "Cannot await if then() has been called.");
         try {
             this.zzapd.await();
+        } catch (InterruptedException e) {
+            zzv(Status.zzfnj);
+        }
+        zzbq.zza(isReady(), "Result is not ready.");
+        return get();
+    }
+
+    public final R await(long j, TimeUnit timeUnit) {
+        boolean z = true;
+        if (j > 0) {
+            zzbq.zzgn("await must not be called on the UI thread when time is greater than zero.");
+        }
+        zzbq.zza(!this.zzfpa, "Result has already been consumed.");
+        if (this.zzfpd != null) {
+            z = false;
+        }
+        zzbq.zza(z, "Cannot await if then() has been called.");
+        try {
+            if (!this.zzapd.await(j, timeUnit)) {
+                zzv(Status.zzfnl);
+            }
         } catch (InterruptedException e) {
             zzv(Status.zzfnj);
         }

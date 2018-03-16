@@ -15,7 +15,9 @@ public class URLSpanNoUnderline extends URLSpan {
         String url = getURL();
         if (url.startsWith("@")) {
             Browser.openUrl(widget.getContext(), Uri.parse("https://t.me/" + url.substring(1)));
+            return;
         }
+        Browser.openUrl(widget.getContext(), url);
     }
 
     public void updateDrawState(TextPaint ds) {

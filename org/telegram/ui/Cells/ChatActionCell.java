@@ -18,6 +18,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_documentEmpty;
@@ -203,6 +204,8 @@ public class ChatActionCell extends BaseCell {
                             String url = link[0].getURL();
                             if (url.startsWith("game")) {
                                 this.delegate.didPressedReplyMessage(this, this.currentMessageObject.messageOwner.reply_to_msg_id);
+                            } else if (url.startsWith("http")) {
+                                Browser.openUrl(getContext(), url);
                             } else {
                                 this.delegate.needOpenUserProfile(Integer.parseInt(url));
                             }

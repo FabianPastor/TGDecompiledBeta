@@ -59,6 +59,7 @@ public class WallpaperCell extends FrameLayout {
             int i2 = (selectedBackground == -1 || selectedBackground == 1000001) ? NUM : NUM;
             imageView.setBackgroundColor(i2);
             this.imageView2.setScaleType(ScaleType.CENTER);
+            this.imageView2.setImageResource(R.drawable.ic_gallery_background);
             return;
         }
         this.imageView.setVisibility(0);

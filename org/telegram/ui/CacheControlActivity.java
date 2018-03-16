@@ -350,7 +350,7 @@ public class CacheControlActivity extends BaseFragment {
                                 if (CacheControlActivity.this.listAdapter != null) {
                                     CacheControlActivity.this.listAdapter.notifyDataSetChanged();
                                 }
-                                PendingIntent pintent = PendingIntent.getService(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, ClearCacheService.class), 0);
+                                PendingIntent pintent = PendingIntent.getService(ApplicationLoader.applicationContext, 1, new Intent(ApplicationLoader.applicationContext, ClearCacheService.class), 0);
                                 AlarmManager alarmManager = (AlarmManager) ApplicationLoader.applicationContext.getSystemService("alarm");
                                 if (which == 2) {
                                     alarmManager.cancel(pintent);

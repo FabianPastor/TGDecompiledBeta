@@ -71,6 +71,7 @@ public class BottomSheet extends Dialog {
     private CharSequence[] items;
     private WindowInsets lastInsets;
     private int layoutCount;
+    protected View nestedScrollChild;
     private OnClickListener onClickListener;
     private Drawable shadowDrawable;
     private boolean showWithoutAnimation;
@@ -250,7 +251,7 @@ public class BottomSheet extends Dialog {
         }
 
         public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
-            return !BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll && nestedScrollAxes == 2 && !BottomSheet.this.canDismissWithSwipe();
+            return (BottomSheet.this.nestedScrollChild == null || child == BottomSheet.this.nestedScrollChild) && !BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll && nestedScrollAxes == 2 && !BottomSheet.this.canDismissWithSwipe();
         }
 
         public void onNestedScrollAccepted(View child, View target, int nestedScrollAxes) {
@@ -290,7 +291,6 @@ public class BottomSheet extends Dialog {
                     consumed[1] = dy;
                     if (currentTranslation < 0.0f) {
                         currentTranslation = 0.0f;
-                        consumed[1] = (int) (((float) consumed[1]) + 0.0f);
                     }
                     BottomSheet.this.containerView.setTranslationY(currentTranslation);
                 }

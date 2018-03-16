@@ -31,7 +31,6 @@ public class RadialProgress {
     private long currentProgressTime = 0;
     private boolean currentWithRound;
     private int diff = AndroidUtilities.dp(4.0f);
-    private boolean drawCheckDrawable;
     private boolean drawMiniProgress;
     private boolean hideCurrentDrawable;
     private long lastUpdateTime = 0;
@@ -274,6 +273,10 @@ public class RadialProgress {
         }
     }
 
+    public boolean isDrawCheckDrawable() {
+        return this.currentDrawable == this.checkBackgroundDrawable;
+    }
+
     public void setBackground(Drawable drawable, boolean withRound, boolean animated) {
         this.lastUpdateTime = System.currentTimeMillis();
         if (!animated || this.currentDrawable == drawable) {
@@ -405,7 +408,7 @@ public class RadialProgress {
             this.currentDrawable.setBounds((int) this.progressRect.left, (int) this.progressRect.top, (int) this.progressRect.right, (int) this.progressRect.bottom);
             this.currentDrawable.draw(canvas);
         }
-        if (this.progressRect.width() == ((float) AndroidUtilities.dp(44.0f))) {
+        if (Math.abs(this.progressRect.width() - ((float) AndroidUtilities.dp(44.0f))) < AndroidUtilities.density) {
             offset = 0;
             size = 20;
             cx = this.progressRect.centerX() + ((float) AndroidUtilities.dp((float) 16));

@@ -12,6 +12,7 @@
     <string name="ActionAddUserSelfMega">un1 joined the group</string>
     <string name="ActionAddUserSelfYou">You returned to the group</string>
     <string name="ActionAddUserYou">un1 added you</string>
+    <string name="ActionBotAllowed">You allowed this bot to message you when you logged in on %1$s.</string>
     <string name="ActionChangedPhoto">un1 changed the group photo</string>
     <string name="ActionChangedTitle">un1 changed the group name to un2</string>
     <string name="ActionChannelChangedPhoto">Channel photo changed</string>
@@ -86,6 +87,7 @@
     <string name="Alert">Alert</string>
     <string name="AllMedia">All media</string>
     <string name="AllPhotos">All photos</string>
+    <string name="AllowCustomQuickReply">Allow Custom</string>
     <string name="AllowFillNumber">Please allow Telegram to receive calls and SMS so that we can fill in your phone number, send you a code, and enter it for you.</string>
     <string name="AllowReadCall">Please allow Telegram to receive calls so that we can automatically enter your code for you.</string>
     <string name="AllowReadCallAndSms">Please allow Telegram to receive calls and SMS so that we can automatically enter your code for you.</string>
@@ -316,6 +318,7 @@
     <string name="ChannelMessageAudio">%1$s posted a voice message</string>
     <string name="ChannelMessageContact">%1$s posted a contact</string>
     <string name="ChannelMessageDocument">%1$s posted a file</string>
+    <string name="ChannelMessageFew">%1$s posted %2$s</string>
     <string name="ChannelMessageGIF">%1$s posted a GIF</string>
     <string name="ChannelMessageLiveLocation">%1$s posted a live location</string>
     <string name="ChannelMessageMap">%1$s posted a location</string>
@@ -924,6 +927,12 @@
     <string name="Masks">Masks</string>
     <string name="MasksInfo">You can add masks to photos you send. To do this, open the photo editor before sending a photo.</string>
     <string name="MasksRemoved">Masks removed</string>
+    <string name="Media_few">%1$d media</string>
+    <string name="Media_many">%1$d media</string>
+    <string name="Media_one">%1$d media</string>
+    <string name="Media_other">%1$d media</string>
+    <string name="Media_two">%1$d media</string>
+    <string name="Media_zero">%1$d media</string>
     <string name="MegaAddedBy">un1 added you to this group</string>
     <string name="MegaAdminsInfo">You can add administrators to help you manage your group. Tap and hold to remove them.</string>
     <string name="MegaDeleteAlert">Wait! Deleting this group will remove all members and all messages will be lost. Delete the group anyway?</string>
@@ -1041,6 +1050,7 @@
     <string name="NoSharedLinksSecret">Shared links from this chat will be shown here.</string>
     <string name="NoSound">No sound</string>
     <string name="NoStickers">No stickers yet</string>
+    <string name="NoStickersFound">No stickers found</string>
     <string name="NoUsernameFound">There is no Telegram account with this username.</string>
     <string name="NobodyLikesSpam1">Sorry, you can only send messages to mutual contacts at the moment.</string>
     <string name="NobodyLikesSpam2">Sorry, you can only add mutual contacts to groups at the moment.</string>
@@ -1057,6 +1067,8 @@
     <string name="NotificationActionPinnedGeoLiveChannel">%1$s pinned a live location</string>
     <string name="NotificationActionPinnedGif">%1$s pinned a GIF in the group %2$s</string>
     <string name="NotificationActionPinnedGifChannel">%1$s pinned a GIF</string>
+    <string name="NotificationActionPinnedInvoice">%1$s pinned an invoice in the group %2$s</string>
+    <string name="NotificationActionPinnedInvoiceChannel">%1$s pinned an invoice</string>
     <string name="NotificationActionPinnedMusic">%1$s pinned a track in the group %2$s</string>
     <string name="NotificationActionPinnedMusicChannel">%1$s pinned a track</string>
     <string name="NotificationActionPinnedNoText">%1$s pinned a message in the group %2$s</string>
@@ -1082,6 +1094,8 @@
     <string name="NotificationGroupAddMember">%1$s invited %3$s to the group %2$s</string>
     <string name="NotificationGroupAddSelf">%1$s returned to the group %2$s</string>
     <string name="NotificationGroupAddSelfMega">%1$s joined the group %2$s</string>
+    <string name="NotificationGroupFew">%1$s sent %3$s to the group %2$s</string>
+    <string name="NotificationGroupForwardedFew">%1$s forwarded %3$s to the group %2$s</string>
     <string name="NotificationGroupKickMember">%1$s removed %3$s from the group %2$s</string>
     <string name="NotificationGroupKickYou">%1$s removed you from the group %2$s</string>
     <string name="NotificationGroupLeftMember">%1$s has left the group %2$s</string>
@@ -1090,6 +1104,8 @@
     <string name="NotificationMessageAudio">%1$s sent you a voice message</string>
     <string name="NotificationMessageContact">%1$s shared a contact with you</string>
     <string name="NotificationMessageDocument">%1$s sent you a file</string>
+    <string name="NotificationMessageFew">%1$s sent you %2$s</string>
+    <string name="NotificationMessageForwardFew">%1$s forwarded you %2$s</string>
     <string name="NotificationMessageGame">%1$s invited you to play %2$s</string>
     <string name="NotificationMessageGif">%1$s sent you a GIF</string>
     <string name="NotificationMessageGroupAudio">%1$s sent a voice message to the group %2$s</string>
@@ -1097,6 +1113,7 @@
     <string name="NotificationMessageGroupDocument">%1$s sent a file to the group %2$s</string>
     <string name="NotificationMessageGroupGame">%1$s invited the group %2$s to play %3$s</string>
     <string name="NotificationMessageGroupGif">%1$s sent a GIF to the group %2$s</string>
+    <string name="NotificationMessageGroupInvoice">%1$s sent an invoice to the group %2$s for %3$s</string>
     <string name="NotificationMessageGroupLiveLocation">%1$s sent a live location to the group %2$s</string>
     <string name="NotificationMessageGroupMap">%1$s sent a location to the group %2$s</string>
     <string name="NotificationMessageGroupMusic">%1$s sent a track to the group %2$s</string>
@@ -1107,6 +1124,7 @@
     <string name="NotificationMessageGroupStickerEmoji">%1$s sent a %3$s sticker to the group %2$s</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
     <string name="NotificationMessageGroupVideo">%1$s sent a video to the group %2$s</string>
+    <string name="NotificationMessageInvoice">%1$s sent you an invoice for %2$s</string>
     <string name="NotificationMessageLiveLocation">%1$s sent you a live location</string>
     <string name="NotificationMessageMap">%1$s sent you a location</string>
     <string name="NotificationMessageMusic">%1$s sent you a track</string>
@@ -1277,6 +1295,12 @@
     <string name="PhoneOther">Other</string>
     <string name="PhoneWork">Work</string>
     <string name="PhotoCaption">Photo Caption</string>
+    <string name="Photos_few">%1$d photos</string>
+    <string name="Photos_many">%1$d photos</string>
+    <string name="Photos_one">%1$d photo</string>
+    <string name="Photos_other">%1$d photos</string>
+    <string name="Photos_two">%1$d photos</string>
+    <string name="Photos_zero">%1$d photos</string>
     <string name="PinMessage">Pin</string>
     <string name="PinMessageAlert">Do you want to pin this message in this group?</string>
     <string name="PinMessageAlertChannel">Do you want to pin this message in this channel?</string>
@@ -1319,6 +1343,11 @@
     <string name="ProfilePopupNotificationInfo">New messages from this contact will appear on your screen when you are not using Telegram.</string>
     <string name="Proxy">Proxy</string>
     <string name="ProxySettings">Proxy Settings</string>
+    <string name="QuickReplyCustom">Custom Message...</string>
+    <string name="QuickReplyDefault1">Can\'t talk now. What\'s up?</string>
+    <string name="QuickReplyDefault2">I\'ll call you right back.</string>
+    <string name="QuickReplyDefault3">I\'ll call you later.</string>
+    <string name="QuickReplyDefault4">Can\'t talk now. Call me later?</string>
     <string name="RaiseToSpeak">Raise to Speak</string>
     <string name="ReEnterYourPasscode">Re-enter your new passcode</string>
     <string name="Recent">RECENT</string>
@@ -1348,6 +1377,7 @@
     <string name="ReportChatDescription">Description</string>
     <string name="ReportChatOther">Other</string>
     <string name="ReportChatPornography">Pornography</string>
+    <string name="ReportChatSent">Report sent</string>
     <string name="ReportChatSpam">Spam</string>
     <string name="ReportChatViolence">Violence</string>
     <string name="ReportSpam">REPORT SPAM</string>
@@ -1413,6 +1443,7 @@
     <string name="SearchImagesTitle">Search web</string>
     <string name="SearchMembers">Search members</string>
     <string name="SearchMessages">MESSAGES</string>
+    <string name="SearchStickersHint">Search sticker sets</string>
     <string name="SecondsBold_few">**%1$d** seconds</string>
     <string name="SecondsBold_many">**%1$d** seconds</string>
     <string name="SecondsBold_one">**%1$d** second</string>
@@ -1616,6 +1647,7 @@
     <string name="UnpinFromTop">Unpin from top</string>
     <string name="UnpinMessage">Unpin</string>
     <string name="UnpinMessageAlert">Do you want to unpin this message?</string>
+    <string name="UnreadMessages">Unread Messages</string>
     <string name="UnsupportedAttachment">Unsupported attachment</string>
     <string name="UnsupportedMedia">This message is not supported on your version of Telegram. Update the app to view: https://telegram.org/update</string>
     <string name="UpdateContactsMessage">Telegram has detected many unsynced contacts, would you like to sync them now? Choose \'OK\' if you\'re using your own device, SIM card and Google account.</string>
@@ -1691,11 +1723,13 @@
     <string name="VoipConnecting">Connecting</string>
     <string name="VoipDeclineCall">Decline</string>
     <string name="VoipEndCall">End call</string>
+    <string name="VoipErrorUnknown">Can\'t place a Telegram call at the moment.</string>
     <string name="VoipExchangingKeys">Exchanging encryption keys</string>
     <string name="VoipFailed">Failed to connect</string>
     <string name="VoipFeedbackCommentHint">Add an optional comment</string>
     <string name="VoipHangingUp">Hanging up</string>
     <string name="VoipInCallBranding">Telegram Call</string>
+    <string name="VoipInCallBrandingWithName">Telegram Call to %s</string>
     <string name="VoipIncoming">Incoming call</string>
     <string name="VoipNeedMicPermission">Telegram needs access to your microphone so that you can make calls.</string>
     <string name="VoipNotificationSettings">Voice calls</string>
@@ -1709,6 +1743,7 @@
     <string name="VoipOutgoingCall">Ongoing Telegram call</string>
     <string name="VoipPeerIncompatible">**%1$s**\'s app is using an incompatible protocol. They need to update their app before you can call them.</string>
     <string name="VoipPeerOutdated">**%1$s**\'s app does not support calls. They need to update their app before you can call them.</string>
+    <string name="VoipQuickReplies">Quick Replies</string>
     <string name="VoipRateCallAlert">Please rate the quality of your Telegram call</string>
     <string name="VoipRequesting">Requesting</string>
     <string name="VoipRinging">Ringing</string>

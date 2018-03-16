@@ -6,15 +6,15 @@ import com.google.android.gms.wearable.CapabilityInfo;
 
 public final class zzy implements GetCapabilityResult {
     private final Status mStatus;
-    private final CapabilityInfo zzbSc;
+    private final CapabilityInfo zzliq;
 
     public zzy(Status status, CapabilityInfo capabilityInfo) {
         this.mStatus = status;
-        this.zzbSc = capabilityInfo;
+        this.zzliq = capabilityInfo;
     }
 
     public final CapabilityInfo getCapability() {
-        return this.zzbSc;
+        return this.zzliq;
     }
 
     public final Status getStatus() {

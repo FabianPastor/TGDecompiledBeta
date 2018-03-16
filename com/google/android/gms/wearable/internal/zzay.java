@@ -10,6 +10,7 @@ import com.google.android.gms.common.internal.zzbq;
 import com.google.android.gms.internal.zzbfm;
 import com.google.android.gms.internal.zzbfp;
 import com.google.android.gms.wearable.Channel;
+import com.google.android.gms.wearable.Channel.GetInputStreamResult;
 import com.google.android.gms.wearable.Channel.GetOutputStreamResult;
 import com.google.android.gms.wearable.ChannelClient;
 
@@ -38,6 +39,10 @@ public final class zzay extends zzbfm implements Channel, ChannelClient.Channel 
         }
         zzay com_google_android_gms_wearable_internal_zzay = (zzay) obj;
         return this.zzecl.equals(com_google_android_gms_wearable_internal_zzay.zzecl) && zzbg.equal(com_google_android_gms_wearable_internal_zzay.zzlgr, this.zzlgr) && zzbg.equal(com_google_android_gms_wearable_internal_zzay.mPath, this.mPath);
+    }
+
+    public final PendingResult<GetInputStreamResult> getInputStream(GoogleApiClient googleApiClient) {
+        return googleApiClient.zzd(new zzbb(this, googleApiClient));
     }
 
     public final String getNodeId() {

@@ -11,11 +11,13 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class StickerSetNameCell extends FrameLayout {
     private ImageView buttonView;
+    private boolean empty;
     private TextView textView;
 
     public StickerSetNameCell(Context context) {
@@ -33,8 +35,14 @@ public class StickerSetNameCell extends FrameLayout {
         addView(this.buttonView, LayoutHelper.createFrame(24, 24.0f, 53, 0.0f, 0.0f, 16.0f, 0.0f));
     }
 
-    public void setText(String text, int resId) {
-        this.textView.setText(text);
+    public void setText(CharSequence text, int resId) {
+        if (text == null) {
+            this.empty = true;
+            this.textView.setText(TtmlNode.ANONYMOUS_REGION_ID);
+            this.buttonView.setVisibility(4);
+            return;
+        }
+        this.textView.setText(Emoji.replaceEmoji(text, this.textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
         if (resId != 0) {
             this.buttonView.setImageResource(resId);
             this.buttonView.setVisibility(0);
@@ -47,7 +55,16 @@ public class StickerSetNameCell extends FrameLayout {
         this.buttonView.setOnClickListener(onIconClickListener);
     }
 
+    public void invalidate() {
+        this.textView.invalidate();
+        super.invalidate();
+    }
+
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
+        if (this.empty) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(1, NUM));
+        } else {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
+        }
     }
 }

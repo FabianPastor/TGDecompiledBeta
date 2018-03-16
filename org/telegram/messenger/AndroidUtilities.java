@@ -1534,7 +1534,7 @@ Error: java.util.NoSuchElementException
                 activity.startActivityForResult(intent, 500);
                 return;
             }
-            Builder builder = new Builder(activity);
+            Builder builder = new Builder((Context) activity);
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             builder.setMessage(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
             builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new OnClickListener() {
@@ -1692,7 +1692,7 @@ Error: java.util.NoSuchElementException
     }
 
     public static void showProxyAlert(Activity activity, final String address, final String port, final String user, final String password) {
-        Builder builder = new Builder(activity);
+        Builder builder = new Builder((Context) activity);
         builder.setTitle(LocaleController.getString("Proxy", R.string.Proxy));
         StringBuilder stringBuilder = new StringBuilder(LocaleController.getString("EnableProxyAlert", R.string.EnableProxyAlert));
         stringBuilder.append("\n\n");

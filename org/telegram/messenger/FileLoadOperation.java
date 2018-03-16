@@ -15,11 +15,11 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputFileLocation;
-import org.telegram.tgnet.TLRPC.TL_cdnFileHash;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentEncrypted;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_fileEncryptedLocation;
+import org.telegram.tgnet.TLRPC.TL_fileHash;
 import org.telegram.tgnet.TLRPC.TL_fileLocation;
 import org.telegram.tgnet.TLRPC.TL_inputDocumentFileLocation;
 import org.telegram.tgnet.TLRPC.TL_inputEncryptedFileLocation;
@@ -58,7 +58,7 @@ public class FileLoadOperation {
     private File cacheIvTemp;
     private byte[] cdnCheckBytes;
     private int cdnDatacenterId;
-    private SparseArray<TL_cdnFileHash> cdnHashes;
+    private SparseArray<TL_fileHash> cdnHashes;
     private byte[] cdnIv;
     private byte[] cdnKey;
     private byte[] cdnToken;
@@ -948,7 +948,7 @@ public class FileLoadOperation {
                             FileLoadOperation.this.cdnHashes = new SparseArray();
                         }
                         for (a = 0; a < vector.objects.size(); a++) {
-                            TL_cdnFileHash hash = (TL_cdnFileHash) vector.objects.get(a);
+                            TL_fileHash hash = (TL_fileHash) vector.objects.get(a);
                             FileLoadOperation.this.cdnHashes.put(hash.offset, hash);
                         }
                     }
@@ -1009,7 +1009,7 @@ public class FileLoadOperation {
                     int currentBytesSize = bytes.limit();
                     if (this.isCdn) {
                         fileOffset = (requestInfo.offset / 131072) * 131072;
-                        if ((this.cdnHashes != null ? (TL_cdnFileHash) this.cdnHashes.get(fileOffset) : null) == null) {
+                        if ((this.cdnHashes != null ? (TL_fileHash) this.cdnHashes.get(fileOffset) : null) == null) {
                             delayRequestInfo(requestInfo);
                             requestFileOffsets(fileOffset);
                             return true;
@@ -1059,7 +1059,7 @@ public class FileLoadOperation {
                             fileOffset = cdnCheckPart * 131072;
                             int availableSize = getDownloadedLengthFromOffsetInternal(this.notLoadedBytesRanges, fileOffset, 131072);
                             if (availableSize != 0 && (availableSize == 131072 || ((this.totalBytesCount > 0 && availableSize == this.totalBytesCount - fileOffset) || (this.totalBytesCount <= 0 && finishedDownloading)))) {
-                                TL_cdnFileHash hash = (TL_cdnFileHash) this.cdnHashes.get(fileOffset);
+                                TL_fileHash hash = (TL_fileHash) this.cdnHashes.get(fileOffset);
                                 if (this.fileReadStream == null) {
                                     this.cdnCheckBytes = new byte[131072];
                                     this.fileReadStream = new RandomAccessFile(this.cacheFileTemp, "r");
@@ -1305,12 +1305,12 @@ public class FileLoadOperation {
                                 FileLoadOperation.this.startDownloadRequest();
                             } else if (response instanceof TL_upload_fileCdnRedirect) {
                                 TL_upload_fileCdnRedirect res = (TL_upload_fileCdnRedirect) response;
-                                if (!res.cdn_file_hashes.isEmpty()) {
+                                if (!res.file_hashes.isEmpty()) {
                                     if (FileLoadOperation.this.cdnHashes == null) {
                                         FileLoadOperation.this.cdnHashes = new SparseArray();
                                     }
-                                    for (int a = 0; a < res.cdn_file_hashes.size(); a++) {
-                                        TL_cdnFileHash hash = (TL_cdnFileHash) res.cdn_file_hashes.get(a);
+                                    for (int a = 0; a < res.file_hashes.size(); a++) {
+                                        TL_fileHash hash = (TL_fileHash) res.file_hashes.get(a);
                                         FileLoadOperation.this.cdnHashes.put(hash.offset, hash);
                                     }
                                 }
@@ -1337,6 +1337,9 @@ public class FileLoadOperation {
                                     requestInfo2.response = (TL_upload_file) response;
                                 } else if (response instanceof TL_upload_webFile) {
                                     requestInfo2.responseWeb = (TL_upload_webFile) response;
+                                    if (FileLoadOperation.this.totalBytesCount == 0 && requestInfo2.responseWeb.size != 0) {
+                                        FileLoadOperation.this.totalBytesCount = requestInfo2.responseWeb.size;
+                                    }
                                 } else {
                                     requestInfo2.responseCdn = (TL_upload_cdnFile) response;
                                 }
@@ -1369,7 +1372,7 @@ public class FileLoadOperation {
                                                     FileLoadOperation.this.cdnHashes = new SparseArray();
                                                 }
                                                 for (int a = 0; a < vector.objects.size(); a++) {
-                                                    TL_cdnFileHash hash = (TL_cdnFileHash) vector.objects.get(a);
+                                                    TL_fileHash hash = (TL_fileHash) vector.objects.get(a);
                                                     FileLoadOperation.this.cdnHashes.put(hash.offset, hash);
                                                 }
                                             }

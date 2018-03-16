@@ -13,8 +13,6 @@ import android.net.NetworkInfo.State;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.text.TextUtils;
 import android.util.Base64;
 import java.io.ByteArrayOutputStream;
@@ -41,6 +39,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.KeepAliveJob;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -91,7 +90,73 @@ public class ConnectionsManager {
     private boolean isUpdating;
     private long lastPauseTime = System.currentTimeMillis();
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
-    private WakeLock wakeLock;
+
+    private static class AzureLoadTask extends AsyncTask<Void, Void, NativeByteBuffer> {
+        private int currentAccount;
+
+        public AzureLoadTask(int instance) {
+            this.currentAccount = instance;
+        }
+
+        protected NativeByteBuffer doInBackground(Void... voids) {
+            ByteArrayOutputStream outbuf;
+            byte[] bytes;
+            NativeByteBuffer buffer;
+            try {
+                URL downloadUrl;
+                if (ConnectionsManager.native_isTestBackend(this.currentAccount) != 0) {
+                    downloadUrl = new URL("https://software-download.microsoft.com/test/config.txt");
+                } else {
+                    downloadUrl = new URL("https://software-download.microsoft.com/prod/config.txt");
+                }
+                URLConnection httpConnection = downloadUrl.openConnection();
+                httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
+                httpConnection.addRequestProperty("Host", "tcdnb.azureedge.net");
+                httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                httpConnection.connect();
+                InputStream httpConnectionStream = httpConnection.getInputStream();
+                outbuf = new ByteArrayOutputStream();
+                byte[] data = new byte[32768];
+                while (!isCancelled()) {
+                    int read = httpConnectionStream.read(data);
+                    if (read > 0) {
+                        outbuf.write(data, 0, read);
+                    } else {
+                        if (read == -1) {
+                        }
+                        if (httpConnectionStream != null) {
+                            httpConnectionStream.close();
+                        }
+                        bytes = Base64.decode(outbuf.toByteArray(), 0);
+                        buffer = new NativeByteBuffer(bytes.length);
+                        buffer.writeBytes(bytes);
+                        return buffer;
+                    }
+                }
+                if (httpConnectionStream != null) {
+                    httpConnectionStream.close();
+                }
+            } catch (Throwable th) {
+                return null;
+            }
+            bytes = Base64.decode(outbuf.toByteArray(), 0);
+            buffer = new NativeByteBuffer(bytes.length);
+            buffer.writeBytes(bytes);
+            return buffer;
+        }
+
+        protected void onPostExecute(NativeByteBuffer result) {
+            if (result != null) {
+                ConnectionsManager.currentTask = null;
+                ConnectionsManager.native_applyDnsConfig(this.currentAccount, result.address);
+                return;
+            }
+            DnsTxtLoadTask task = new DnsTxtLoadTask(this.currentAccount);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+            ConnectionsManager.currentTask = task;
+        }
+    }
 
     private static class DnsLoadTask extends AsyncTask<Void, Void, NativeByteBuffer> {
         private int currentAccount;
@@ -139,8 +204,7 @@ public class ConnectionsManager {
                 if (httpConnectionStream != null) {
                     httpConnectionStream.close();
                 }
-            } catch (Throwable e) {
-                FileLog.e(e);
+            } catch (Throwable th) {
                 return null;
             }
             bytes = Base64.decode(outbuf.toByteArray(), 0);
@@ -229,8 +293,7 @@ public class ConnectionsManager {
                 if (httpConnectionStream != null) {
                     httpConnectionStream.close();
                 }
-            } catch (Throwable e) {
-                FileLog.e(e);
+            } catch (Throwable th) {
                 return null;
             }
             array = new JSONObject(new String(outbuf.toByteArray(), C.UTF8_NAME)).getJSONArray("Answer");
@@ -339,6 +402,9 @@ public class ConnectionsManager {
         String deviceModel;
         String appVersion;
         String systemVersion;
+        if (instance == 0) {
+            new AzureLoadTask(this.currentAccount).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+        }
         this.currentAccount = instance;
         this.connectionState = native_getConnectionState(this.currentAccount);
         File config = ApplicationLoader.getFilesDirFixed();
@@ -350,8 +416,8 @@ public class ConnectionsManager {
         String configPath = config.toString();
         boolean enablePushConnection = MessagesController.getGlobalNotificationsSettings().getBoolean("pushConnection", true);
         try {
-            systemLangCode = LocaleController.getSystemLocaleStringIso639();
-            langCode = LocaleController.getLocaleStringIso639();
+            systemLangCode = LocaleController.getSystemLocaleStringIso639().toLowerCase();
+            langCode = LocaleController.getLocaleStringIso639().toLowerCase();
             deviceModel = Build.MANUFACTURER + Build.MODEL;
             PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
             appVersion = pInfo.versionName + " (" + pInfo.versionCode + ")";
@@ -376,13 +442,7 @@ public class ConnectionsManager {
             systemVersion = "SDK Unknown";
         }
         UserConfig.getInstance(this.currentAccount).loadConfig();
-        init(BuildVars.BUILD_VERSION, 75, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getInstance(this.currentAccount).getClientUserId(), enablePushConnection);
-        try {
-            this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(1, "lock");
-            this.wakeLock.setReferenceCounted(false);
-        } catch (Throwable e2) {
-            FileLog.e(e2);
-        }
+        init(BuildVars.BUILD_VERSION, 76, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getInstance(this.currentAccount).getClientUserId(), enablePushConnection);
     }
 
     public long getCurrentTimeMillis() {
@@ -434,6 +494,7 @@ public class ConnectionsManager {
                     tLObject.freeResources();
                     ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new RequestDelegateInternal() {
                         public void run(long response, int errorCode, String errorText, int networkType) {
+                            Throwable e;
                             TLObject resp = null;
                             TL_error error = null;
                             if (response != 0) {
@@ -441,8 +502,8 @@ public class ConnectionsManager {
                                     NativeByteBuffer buff = NativeByteBuffer.wrap(response);
                                     buff.reused = true;
                                     resp = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
-                                } catch (Exception e) {
-                                    e = e;
+                                } catch (Exception e2) {
+                                    e = e2;
                                     FileLog.e(e);
                                     return;
                                 }
@@ -455,11 +516,10 @@ public class ConnectionsManager {
                                         FileLog.e(tLObject + " got error " + error2.code + " " + error2.text);
                                     }
                                     error = error2;
-                                } catch (Exception e2) {
-                                    Throwable e3;
-                                    e3 = e2;
+                                } catch (Exception e3) {
+                                    e = e3;
                                     error = error2;
-                                    FileLog.e(e3);
+                                    FileLog.e(e);
                                     return;
                                 }
                             }
@@ -548,6 +608,7 @@ public class ConnectionsManager {
     }
 
     public static void setLangCode(String langCode) {
+        langCode = langCode.replace('_', '-').toLowerCase();
         for (int a = 0; a < 3; a++) {
             native_setLangCode(a, langCode);
         }
@@ -614,16 +675,7 @@ public class ConnectionsManager {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("java received " + message);
                 }
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        if (ConnectionsManager.getInstance(currentAccount).wakeLock.isHeld()) {
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("release wakelock");
-                            }
-                            ConnectionsManager.getInstance(currentAccount).wakeLock.release();
-                        }
-                    }
-                });
+                KeepAliveJob.finishJob();
                 Utilities.stageQueue.postRunnable(new Runnable() {
                     public void run() {
                         MessagesController.getInstance(currentAccount).processUpdates((Updates) message, false);
@@ -699,11 +751,15 @@ public class ConnectionsManager {
                 DnsTxtLoadTask task = new DnsTxtLoadTask(currentAccount);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
                 currentTask = task;
-                return;
+            } else if (BuildVars.DEBUG_VERSION) {
+                AzureLoadTask task2 = new AzureLoadTask(currentAccount);
+                task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                currentTask = task2;
+            } else {
+                DnsLoadTask task3 = new DnsLoadTask(currentAccount);
+                task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                currentTask = task3;
             }
-            DnsLoadTask task2 = new DnsLoadTask(currentAccount);
-            task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-            currentTask = task2;
         }
     }
 
@@ -732,21 +788,8 @@ public class ConnectionsManager {
         }
     }
 
-    public static void onInternalPushReceived(final int currentAccount) {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                try {
-                    if (!ConnectionsManager.getInstance(currentAccount).wakeLock.isHeld()) {
-                        ConnectionsManager.getInstance(currentAccount).wakeLock.acquire(10000);
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("acquire wakelock");
-                        }
-                    }
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                }
-            }
-        });
+    public static void onInternalPushReceived(int currentAccount) {
+        KeepAliveJob.startJob();
     }
 
     public static int generateClassGuid() {

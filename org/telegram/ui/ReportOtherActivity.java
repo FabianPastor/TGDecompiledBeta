@@ -10,16 +10,20 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.InputPeer;
 import org.telegram.tgnet.TLRPC.TL_account_reportPeer;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonOther;
+import org.telegram.tgnet.TLRPC.TL_messages_report;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -33,6 +37,7 @@ public class ReportOtherActivity extends BaseFragment {
     private View doneButton;
     private EditTextBoldCursor firstNameField;
     private View headerLabelView;
+    private int message_id = getArguments().getInt("message_id", 0);
 
     public ReportOtherActivity(Bundle args) {
         super(args);
@@ -48,14 +53,30 @@ public class ReportOtherActivity extends BaseFragment {
                 if (id == -1) {
                     ReportOtherActivity.this.finishFragment();
                 } else if (id == 1 && ReportOtherActivity.this.firstNameField.getText().length() != 0) {
-                    TL_account_reportPeer req = new TL_account_reportPeer();
-                    req.peer = MessagesController.getInstance(ReportOtherActivity.this.currentAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
-                    req.reason = new TL_inputReportReasonOther();
-                    req.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
+                    TLObject req;
+                    InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
+                    TLObject request;
+                    if (ReportOtherActivity.this.message_id != 0) {
+                        request = new TL_messages_report();
+                        request.peer = peer;
+                        request.id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
+                        request.reason = new TL_inputReportReasonOther();
+                        request.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
+                        req = request;
+                    } else {
+                        request = new TL_account_reportPeer();
+                        request.peer = MessagesController.getInstance(ReportOtherActivity.this.currentAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
+                        request.reason = new TL_inputReportReasonOther();
+                        request.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
+                        req = request;
+                    }
                     ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(req, new RequestDelegate() {
                         public void run(TLObject response, TL_error error) {
                         }
                     });
+                    if (ReportOtherActivity.this.getParentActivity() != null) {
+                        Toast.makeText(ReportOtherActivity.this.getParentActivity(), LocaleController.getString("ReportChatSent", R.string.ReportChatSent), 0).show();
+                    }
                     ReportOtherActivity.this.finishFragment();
                 }
             }

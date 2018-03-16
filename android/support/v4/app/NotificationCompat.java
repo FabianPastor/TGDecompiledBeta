@@ -985,6 +985,11 @@ public class NotificationCompat {
             this.mDismissalId = dismissalId;
             return this;
         }
+
+        public WearableExtender setBridgeTag(String bridgeTag) {
+            this.mBridgeTag = bridgeTag;
+            return this;
+        }
     }
 
     public static Bundle getExtras(Notification notification) {

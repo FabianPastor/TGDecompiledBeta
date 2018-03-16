@@ -1,28 +1,20 @@
 package com.google.android.gms.wearable.internal;
 
-import android.content.IntentFilter;
-import android.net.Uri;
-import com.google.android.gms.wearable.PutDataRequest;
+import android.content.Context;
+import com.google.android.gms.common.api.GoogleApi.zza;
+import com.google.android.gms.common.internal.zzbj;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageClient;
 
-public final class zzez {
-    public static IntentFilter zza(String str, Uri uri, int i) {
-        IntentFilter intentFilter = new IntentFilter(str);
-        if (uri.getScheme() != null) {
-            intentFilter.addDataScheme(uri.getScheme());
-        }
-        if (uri.getAuthority() != null) {
-            intentFilter.addDataAuthority(uri.getAuthority(), Integer.toString(uri.getPort()));
-        }
-        if (uri.getPath() != null) {
-            intentFilter.addDataPath(uri.getPath(), i);
-        }
-        return intentFilter;
+public final class zzez extends MessageClient {
+    private MessageApi zzlku = new zzeu();
+
+    public zzez(Context context, zza com_google_android_gms_common_api_GoogleApi_zza) {
+        super(context, com_google_android_gms_common_api_GoogleApi_zza);
     }
 
-    public static IntentFilter zzgl(String str) {
-        IntentFilter intentFilter = new IntentFilter(str);
-        intentFilter.addDataScheme(PutDataRequest.WEAR_URI_SCHEME);
-        intentFilter.addDataAuthority("*", null);
-        return intentFilter;
+    public final Task<Integer> sendMessage(String str, String str2, byte[] bArr) {
+        return zzbj.zza(this.zzlku.sendMessage(zzago(), str, str2, bArr), zzfa.zzgnw);
     }
 }

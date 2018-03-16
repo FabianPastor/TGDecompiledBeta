@@ -406,6 +406,7 @@ public class Theme {
     public static final String key_chat_emojiPanelStickerSetNameIcon = "chat_emojiPanelStickerSetNameIcon";
     public static final String key_chat_emojiPanelTrendingDescription = "chat_emojiPanelTrendingDescription";
     public static final String key_chat_emojiPanelTrendingTitle = "chat_emojiPanelTrendingTitle";
+    public static final String key_chat_emojiSearchBackground = "chat_emojiSearchBackground";
     public static final String key_chat_fieldOverlayText = "chat_fieldOverlayText";
     public static final String key_chat_gifSaveHintBackground = "chat_gifSaveHintBackground";
     public static final String key_chat_gifSaveHintText = "chat_gifSaveHintText";
@@ -1281,8 +1282,9 @@ public class Theme {
         defaultColors.put(key_chat_linkSelectBackground, Integer.valueOf(862104035));
         defaultColors.put(key_chat_textSelectBackground, Integer.valueOf(NUM));
         defaultColors.put(key_chat_emojiPanelBackground, Integer.valueOf(-657673));
+        defaultColors.put(key_chat_emojiSearchBackground, Integer.valueOf(-1578003));
         defaultColors.put(key_chat_emojiPanelShadowLine, Integer.valueOf(-1907225));
-        defaultColors.put(key_chat_emojiPanelEmptyText, Integer.valueOf(-7829368));
+        defaultColors.put(key_chat_emojiPanelEmptyText, Integer.valueOf(-5723992));
         defaultColors.put(key_chat_emojiPanelIcon, Integer.valueOf(-5723992));
         defaultColors.put(key_chat_emojiPanelIconSelected, Integer.valueOf(-13920542));
         defaultColors.put(key_chat_emojiPanelStickerPackSelector, Integer.valueOf(-1907225));
@@ -1471,6 +1473,7 @@ public class Theme {
         fallbackKeys.put(key_player_progressCachedBackground, key_player_progressBackground);
         fallbackKeys.put(key_chat_inAudioCacheSeekbar, key_chat_inAudioSeekbar);
         fallbackKeys.put(key_chat_outAudioCacheSeekbar, key_chat_outAudioSeekbar);
+        fallbackKeys.put(key_chat_emojiSearchBackground, key_chat_emojiPanelStickerPackSelector);
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Default";
         ArrayList arrayList = themes;
@@ -2322,8 +2325,8 @@ public class Theme {
     }
 
     public static File getAssetFile(String assetName) {
-        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
         long size;
+        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
         try {
             InputStream stream = ApplicationLoader.applicationContext.getAssets().open(assetName);
             size = (long) stream.available();
@@ -3092,8 +3095,9 @@ public class Theme {
     public static int getColor(String key, boolean[] isDefault) {
         Integer color = (Integer) currentColors.get(key);
         if (color == null) {
-            if (((String) fallbackKeys.get(key)) != null) {
-                color = (Integer) currentColors.get(key);
+            String fallbackKey = (String) fallbackKeys.get(key);
+            if (fallbackKey != null) {
+                color = (Integer) currentColors.get(fallbackKey);
             }
             if (color == null) {
                 if (isDefault != null) {
@@ -3145,11 +3149,19 @@ public class Theme {
     }
 
     public static void setDrawableColor(Drawable drawable, int color) {
-        drawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+        if (drawable != null) {
+            if (drawable instanceof ShapeDrawable) {
+                ((ShapeDrawable) drawable).getPaint().setColor(color);
+            } else {
+                drawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+            }
+        }
     }
 
     public static void setDrawableColorByKey(Drawable drawable, String key) {
-        drawable.setColorFilter(new PorterDuffColorFilter(getColor(key), Mode.MULTIPLY));
+        if (key != null) {
+            setDrawableColor(drawable, getColor(key));
+        }
     }
 
     public static void setEmojiDrawableColor(Drawable drawable, int color, boolean selected) {
@@ -3259,12 +3271,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
+                    int i;
                     SharedPreferences preferences;
                     int selectedBackground;
                     File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int i;
                         if (!MessagesController.getGlobalMainSettings().getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

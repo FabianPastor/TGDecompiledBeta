@@ -154,31 +154,31 @@ public class AttachmentDownloader {
         }
 
         private boolean downloadAttachment(String url, File file) {
-            OutputStream output;
             Throwable e;
-            boolean z;
             Throwable th;
             InputStream input = null;
-            OutputStream output2 = null;
+            OutputStream output = null;
             HttpURLConnection connection = null;
+            boolean z;
             try {
                 connection = (HttpURLConnection) createConnection(new URL(url));
                 connection.connect();
                 int lengthOfFile = connection.getContentLength();
                 String status = connection.getHeaderField("Status");
                 if (status == null || status.startsWith("200")) {
+                    OutputStream output2;
                     InputStream input2 = new BufferedInputStream(connection.getInputStream());
                     try {
-                        output = new FileOutputStream(file);
+                        output2 = new FileOutputStream(file);
                     } catch (IOException e2) {
                         e = e2;
                         input = input2;
                         try {
                             HockeyLog.error("Failed to download attachment to " + file, e);
                             z = false;
-                            if (output2 != null) {
+                            if (output != null) {
                                 try {
-                                    output2.close();
+                                    output.close();
                                 } catch (IOException e3) {
                                     if (connection != null) {
                                         connection.disconnect();
@@ -195,9 +195,9 @@ public class AttachmentDownloader {
                             return z;
                         } catch (Throwable th2) {
                             th = th2;
-                            if (output2 != null) {
+                            if (output != null) {
                                 try {
-                                    output2.close();
+                                    output.close();
                                 } catch (IOException e4) {
                                     if (connection != null) {
                                         connection.disconnect();
@@ -216,8 +216,8 @@ public class AttachmentDownloader {
                     } catch (Throwable th3) {
                         th = th3;
                         input = input2;
-                        if (output2 != null) {
-                            output2.close();
+                        if (output != null) {
+                            output.close();
                         }
                         if (input != null) {
                             input.close();
@@ -237,13 +237,13 @@ public class AttachmentDownloader {
                             }
                             total += (long) count;
                             publishProgress(new Integer[]{Integer.valueOf((int) ((100 * total) / ((long) lengthOfFile)))});
-                            output.write(data, 0, count);
+                            output2.write(data, 0, count);
                         }
-                        output.flush();
+                        output2.flush();
                         z = total > 0;
-                        if (output != null) {
+                        if (output2 != null) {
                             try {
-                                output.close();
+                                output2.close();
                             } catch (IOException e5) {
                             }
                         }
@@ -253,16 +253,16 @@ public class AttachmentDownloader {
                         if (connection != null) {
                             connection.disconnect();
                         }
-                        output2 = output;
+                        output = output2;
                         input = input2;
                     } catch (IOException e6) {
                         e = e6;
-                        output2 = output;
+                        output = output2;
                         input = input2;
                         HockeyLog.error("Failed to download attachment to " + file, e);
                         z = false;
-                        if (output2 != null) {
-                            output2.close();
+                        if (output != null) {
+                            output.close();
                         }
                         if (input != null) {
                             input.close();
@@ -273,10 +273,10 @@ public class AttachmentDownloader {
                         return z;
                     } catch (Throwable th4) {
                         th = th4;
-                        output2 = output;
+                        output = output2;
                         input = input2;
-                        if (output2 != null) {
-                            output2.close();
+                        if (output != null) {
+                            output.close();
                         }
                         if (input != null) {
                             input.close();
@@ -289,9 +289,9 @@ public class AttachmentDownloader {
                     return z;
                 }
                 z = false;
-                if (output2 != null) {
+                if (output != null) {
                     try {
-                        output2.close();
+                        output.close();
                     } catch (IOException e7) {
                     }
                 }
@@ -306,8 +306,8 @@ public class AttachmentDownloader {
                 e = e8;
                 HockeyLog.error("Failed to download attachment to " + file, e);
                 z = false;
-                if (output2 != null) {
-                    output2.close();
+                if (output != null) {
+                    output.close();
                 }
                 if (input != null) {
                     input.close();

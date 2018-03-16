@@ -405,6 +405,17 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
                 public void onStickersGroupClick(int chatId) {
                 }
+
+                public void onSearchOpenClose(boolean open) {
+                }
+
+                public boolean isSearchOpened() {
+                    return false;
+                }
+
+                public boolean isExpanded() {
+                    return false;
+                }
             });
             this.sizeNotifierLayout.addView(this.emojiView);
         }

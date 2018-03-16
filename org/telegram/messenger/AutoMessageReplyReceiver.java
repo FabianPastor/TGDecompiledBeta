@@ -18,7 +18,7 @@ public class AutoMessageReplyReceiver extends BroadcastReceiver {
                 int currentAccount = intent.getIntExtra("currentAccount", 0);
                 if (dialog_id != 0 && max_id != 0) {
                     SendMessagesHelper.getInstance(currentAccount).sendMessage(text.toString(), dialog_id, null, null, true, null, null, null);
-                    MessagesController.getInstance(currentAccount).markDialogAsRead(dialog_id, max_id, max_id, 0, true, false);
+                    MessagesController.getInstance(currentAccount).markDialogAsRead(dialog_id, max_id, max_id, 0, false, 0, true);
                 }
             }
         }

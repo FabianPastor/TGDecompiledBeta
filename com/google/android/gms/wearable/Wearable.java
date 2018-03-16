@@ -1,14 +1,18 @@
 package com.google.android.gms.wearable;
 
+import android.content.Context;
 import android.os.Looper;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.Api.ApiOptions.Optional;
 import com.google.android.gms.common.api.Api.zza;
 import com.google.android.gms.common.api.Api.zzf;
+import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.wearable.internal.zzaa;
 import com.google.android.gms.wearable.internal.zzaj;
 import com.google.android.gms.wearable.internal.zzbv;
 import com.google.android.gms.wearable.internal.zzbw;
 import com.google.android.gms.wearable.internal.zzeu;
+import com.google.android.gms.wearable.internal.zzez;
 import com.google.android.gms.wearable.internal.zzfg;
 import com.google.android.gms.wearable.internal.zzgi;
 import com.google.android.gms.wearable.internal.zzh;
@@ -53,5 +57,13 @@ public class Wearable {
         private WearableOptions(Builder builder) {
             this.zzfml = builder.zzfml;
         }
+    }
+
+    public static CapabilityClient getCapabilityClient(Context context) {
+        return new zzaa(context, GoogleApi.zza.zzfmj);
+    }
+
+    public static MessageClient getMessageClient(Context context) {
+        return new zzez(context, GoogleApi.zza.zzfmj);
     }
 }

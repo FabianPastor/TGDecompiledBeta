@@ -1606,7 +1606,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 updated = false;
                 for (a = 0; a < arr.size(); a++) {
                     MessageObject obj = (MessageObject) arr.get(a);
-                    if (!(obj.messageOwner.media == null || obj.isSecretPhoto())) {
+                    if (!(obj.messageOwner.media == null || obj.needDrawBluredPreview())) {
                         type = DataQuery.getMediaType(obj.messageOwner);
                         if (type == -1) {
                             return;

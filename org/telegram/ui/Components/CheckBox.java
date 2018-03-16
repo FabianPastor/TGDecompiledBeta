@@ -13,6 +13,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Keep;
 import android.text.TextPaint;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
@@ -24,7 +25,6 @@ public class CheckBox extends View {
     private static Paint eraser2 = null;
     private static Paint paint = null;
     private static final float progressBounceDiff = 0.2f;
-    private static TextPaint textPaint;
     private boolean attachedToWindow;
     private Canvas bitmapCanvas;
     private ObjectAnimator checkAnimator;
@@ -41,6 +41,7 @@ public class CheckBox extends View {
     private boolean isChecked;
     private float progress;
     private int size = 22;
+    private TextPaint textPaint;
 
     public CheckBox(Context context, int resId) {
         super(context);
@@ -52,16 +53,16 @@ public class CheckBox extends View {
             eraser2 = new Paint(1);
             eraser2.setColor(0);
             eraser2.setStyle(Style.STROKE);
-            eraser2.setStrokeWidth((float) AndroidUtilities.dp(28.0f));
             eraser2.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
             backgroundPaint = new Paint(1);
             backgroundPaint.setColor(-1);
             backgroundPaint.setStyle(Style.STROKE);
-            backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-            textPaint = new TextPaint(1);
-            textPaint.setTextSize((float) AndroidUtilities.dp(18.0f));
-            textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         }
+        eraser2.setStrokeWidth((float) AndroidUtilities.dp(28.0f));
+        backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.textPaint = new TextPaint(1);
+        this.textPaint.setTextSize((float) AndroidUtilities.dp(18.0f));
+        this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.checkDrawable = context.getResources().getDrawable(resId).mutate();
     }
 
@@ -75,6 +76,7 @@ public class CheckBox extends View {
         }
     }
 
+    @Keep
     public void setProgress(float value) {
         if (this.progress != value) {
             this.progress = value;
@@ -96,6 +98,9 @@ public class CheckBox extends View {
 
     public void setSize(int size) {
         this.size = size;
+        if (size == 40) {
+            this.textPaint.setTextSize((float) AndroidUtilities.dp(24.0f));
+        }
     }
 
     public float getProgress() {
@@ -105,7 +110,7 @@ public class CheckBox extends View {
     public void setColor(int backgroundColor, int checkColor) {
         this.color = backgroundColor;
         this.checkDrawable.setColorFilter(new PorterDuffColorFilter(checkColor, Mode.MULTIPLY));
-        textPaint.setColor(checkColor);
+        this.textPaint.setColor(checkColor);
         invalidate();
     }
 
@@ -116,7 +121,7 @@ public class CheckBox extends View {
 
     public void setCheckColor(int checkColor) {
         this.checkDrawable.setColorFilter(new PorterDuffColorFilter(checkColor, Mode.MULTIPLY));
-        textPaint.setColor(checkColor);
+        this.textPaint.setColor(checkColor);
         invalidate();
     }
 
@@ -177,6 +182,7 @@ public class CheckBox extends View {
     public void setChecked(int num, boolean checked, boolean animated) {
         if (num >= 0) {
             this.checkedText = TtmlNode.ANONYMOUS_REGION_ID + (num + 1);
+            invalidate();
         }
         if (checked != this.isChecked) {
             this.isChecked = checked;
@@ -221,7 +227,7 @@ public class CheckBox extends View {
                 canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);
                 this.checkBitmap.eraseColor(0);
                 if (this.checkedText != null) {
-                    this.checkCanvas.drawText(this.checkedText, (float) ((getMeasuredWidth() - ((int) Math.ceil((double) textPaint.measureText(this.checkedText)))) / 2), (float) AndroidUtilities.dp(21.0f), textPaint);
+                    this.checkCanvas.drawText(this.checkedText, (float) ((getMeasuredWidth() - ((int) Math.ceil((double) this.textPaint.measureText(this.checkedText)))) / 2), (float) AndroidUtilities.dp(this.size == 40 ? 28.0f : 21.0f), this.textPaint);
                 } else {
                     int w = this.checkDrawable.getIntrinsicWidth();
                     int h = this.checkDrawable.getIntrinsicHeight();

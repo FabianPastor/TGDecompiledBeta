@@ -30,6 +30,10 @@ final class zzn<TResult> extends Task<TResult> {
         }
     }
 
+    public final Task<TResult> addOnCompleteListener(OnCompleteListener<TResult> onCompleteListener) {
+        return addOnCompleteListener(TaskExecutors.MAIN_THREAD, onCompleteListener);
+    }
+
     public final Task<TResult> addOnCompleteListener(Executor executor, OnCompleteListener<TResult> onCompleteListener) {
         this.zzkun.zza(new zze(executor, onCompleteListener));
         zzbjm();

@@ -333,7 +333,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 this.stickerSet = DataQuery.getInstance(this.currentAccount).getStickerSetByName(this.inputStickerSet.short_name);
             }
             if (this.stickerSet == null) {
-                this.stickerSet = DataQuery.getInstance(this.currentAccount).getStickerSetById(Long.valueOf(this.inputStickerSet.id));
+                this.stickerSet = DataQuery.getInstance(this.currentAccount).getStickerSetById(this.inputStickerSet.id);
             }
             if (this.stickerSet == null) {
                 TL_messages_getStickerSet req = new TL_messages_getStickerSet();

@@ -417,7 +417,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         } else if (!hasChanges()) {
             okRunnable.run();
         } else if (parentActivity != null) {
-            Builder builder = new Builder(parentActivity);
+            Builder builder = new Builder((Context) parentActivity);
             builder.setMessage(LocaleController.getString("DiscardChanges", R.string.DiscardChanges));
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {

@@ -3,7 +3,6 @@ package org.telegram.messenger.exoplayer2.source;
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
@@ -186,10 +185,10 @@ public final class SampleQueue implements TrackOutput {
 
     public int read(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired, boolean loadingFinished, long decodeOnlyUntilUs) {
         switch (this.metadataQueue.read(formatHolder, buffer, formatRequired, loadingFinished, this.downstreamFormat, this.extrasHolder)) {
-            case C.RESULT_FORMAT_READ /*-5*/:
+            case -5:
                 this.downstreamFormat = formatHolder.format;
                 return -5;
-            case C.RESULT_BUFFER_READ /*-4*/:
+            case -4:
                 if (!buffer.isEndOfStream()) {
                     if (buffer.timeUs < decodeOnlyUntilUs) {
                         buffer.addFlag(Integer.MIN_VALUE);

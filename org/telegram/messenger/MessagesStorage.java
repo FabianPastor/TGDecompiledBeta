@@ -365,7 +365,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE sharing_locations(uid INTEGER PRIMARY KEY, mid INTEGER, date INTEGER, period INTEGER, message BLOB);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 46").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 47").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 if (BuildVars.LOGS_ENABLED) {
@@ -402,7 +402,7 @@ public class MessagesStorage {
                         FileLog.e(e2);
                     }
                 }
-                if (version < 46) {
+                if (version < 47) {
                     updateDbToLastVersion(version);
                 }
             }
@@ -729,6 +729,11 @@ public class MessagesStorage {
                     if (version == 45) {
                         MessagesStorage.this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN mtproto_seq INTEGER default 0").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 46").stepThis().dispose();
+                        version = 46;
+                    }
+                    if (version == 46) {
+                        MessagesStorage.this.database.executeFast("DELETE FROM botcache WHERE 1").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("PRAGMA user_version = 47").stepThis().dispose();
                     }
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -2627,34 +2632,27 @@ public class MessagesStorage {
                     data.reuse();
                     if (info instanceof TL_channelFull) {
                         cursor = MessagesStorage.this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i FROM dialogs WHERE did = " + (-info.id), new Object[0]);
-                        if (cursor.next()) {
-                            int inbox_max = cursor.intValue(3);
-                            if (inbox_max <= info.read_inbox_max_id) {
-                                int inbox_diff = info.read_inbox_max_id - inbox_max;
-                                if (inbox_diff < info.unread_count) {
-                                    info.unread_count = inbox_diff;
-                                }
-                                int dialog_date = cursor.intValue(0);
-                                int pts = cursor.intValue(1);
-                                long last_mid = cursor.longValue(2);
-                                int outbox_max = cursor.intValue(4);
-                                int pinned = cursor.intValue(5);
-                                int mentions = cursor.intValue(6);
-                                state = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                                state.bindLong(1, (long) (-info.id));
-                                state.bindInteger(2, dialog_date);
-                                state.bindInteger(3, info.unread_count);
-                                state.bindLong(4, last_mid);
-                                state.bindInteger(5, info.read_inbox_max_id);
-                                state.bindInteger(6, Math.max(outbox_max, info.read_outbox_max_id));
-                                state.bindLong(7, 0);
-                                state.bindInteger(8, mentions);
-                                state.bindInteger(9, pts);
-                                state.bindInteger(10, 0);
-                                state.bindInteger(11, pinned);
-                                state.step();
-                                state.dispose();
-                            }
+                        if (cursor.next() && cursor.intValue(3) < info.read_inbox_max_id) {
+                            int dialog_date = cursor.intValue(0);
+                            int pts = cursor.intValue(1);
+                            long last_mid = cursor.longValue(2);
+                            int outbox_max = cursor.intValue(4);
+                            int pinned = cursor.intValue(5);
+                            int mentions = cursor.intValue(6);
+                            state = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            state.bindLong(1, (long) (-info.id));
+                            state.bindInteger(2, dialog_date);
+                            state.bindInteger(3, info.unread_count);
+                            state.bindLong(4, last_mid);
+                            state.bindInteger(5, info.read_inbox_max_id);
+                            state.bindInteger(6, Math.max(outbox_max, info.read_outbox_max_id));
+                            state.bindLong(7, 0);
+                            state.bindInteger(8, mentions);
+                            state.bindInteger(9, pts);
+                            state.bindInteger(10, 0);
+                            state.bindInteger(11, pinned);
+                            state.step();
+                            state.dispose();
                         }
                         cursor.dispose();
                     }
@@ -3018,41 +3016,75 @@ Error: java.util.NoSuchElementException
         });
     }
 
-    public void processPendingRead(long dialog_id, long max_id, int max_date) {
+    public void processPendingRead(long dialog_id, long maxPositiveId, long maxNegativeId, int max_date, boolean isChannel) {
         final long j = dialog_id;
-        final long j2 = max_id;
-        final int i = max_date;
+        final long j2 = maxPositiveId;
+        final boolean z = isChannel;
+        final long j3 = maxNegativeId;
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
+                long currentMaxId = 0;
+                int unreadCount = 0;
+                long last_mid = 0;
                 try {
                     SQLitePreparedStatement state;
+                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT unread_count, inbox_max, last_mid FROM dialogs WHERE did = " + j, new Object[0]);
+                    if (cursor.next()) {
+                        unreadCount = cursor.intValue(0);
+                        currentMaxId = (long) cursor.intValue(1);
+                        last_mid = cursor.longValue(2);
+                    }
+                    cursor.dispose();
                     MessagesStorage.this.database.beginTransaction();
-                    if (((int) j) != 0) {
+                    int lower_id = (int) j;
+                    int updatedCount;
+                    if (lower_id != 0) {
+                        currentMaxId = Math.max(currentMaxId, (long) ((int) j2));
+                        if (z) {
+                            currentMaxId |= ((long) (-lower_id)) << 32;
+                        }
                         state = MessagesStorage.this.database.executeFast("UPDATE messages SET read_state = read_state | 1 WHERE uid = ? AND mid <= ? AND read_state IN(0,2) AND out = 0");
                         state.requery();
                         state.bindLong(1, j);
-                        state.bindLong(2, j2);
+                        state.bindLong(2, currentMaxId);
                         state.step();
                         state.dispose();
+                        if (currentMaxId >= last_mid) {
+                            unreadCount = 0;
+                        } else {
+                            updatedCount = 0;
+                            cursor = MessagesStorage.this.database.queryFinalized("SELECT changes()", new Object[0]);
+                            if (cursor.next()) {
+                                updatedCount = cursor.intValue(0);
+                            }
+                            cursor.dispose();
+                            unreadCount = Math.max(0, unreadCount - updatedCount);
+                        }
                     } else {
-                        state = MessagesStorage.this.database.executeFast("UPDATE messages SET read_state = read_state | 1 WHERE uid = ? AND date <= ? AND read_state IN(0,2) AND out = 0");
+                        currentMaxId = (long) ((int) j3);
+                        state = MessagesStorage.this.database.executeFast("UPDATE messages SET read_state = read_state | 1 WHERE uid = ? AND mid >= ? AND read_state IN(0,2) AND out = 0");
                         state.requery();
                         state.bindLong(1, j);
-                        state.bindInteger(2, i);
+                        state.bindLong(2, currentMaxId);
                         state.step();
                         state.dispose();
+                        if (currentMaxId <= last_mid) {
+                            unreadCount = 0;
+                        } else {
+                            updatedCount = 0;
+                            cursor = MessagesStorage.this.database.queryFinalized("SELECT changes()", new Object[0]);
+                            if (cursor.next()) {
+                                updatedCount = cursor.intValue(0);
+                            }
+                            cursor.dispose();
+                            unreadCount = Math.max(0, unreadCount - updatedCount);
+                        }
                     }
-                    int currentMaxId = 0;
-                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT inbox_max FROM dialogs WHERE did = " + j, new Object[0]);
-                    if (cursor.next()) {
-                        currentMaxId = cursor.intValue(0);
-                    }
-                    cursor.dispose();
-                    currentMaxId = Math.max(currentMaxId, (int) j2);
-                    state = MessagesStorage.this.database.executeFast("UPDATE dialogs SET unread_count = 0, inbox_max = ? WHERE did = ?");
+                    state = MessagesStorage.this.database.executeFast("UPDATE dialogs SET unread_count = ?, inbox_max = ? WHERE did = ?");
                     state.requery();
-                    state.bindInteger(1, currentMaxId);
-                    state.bindLong(2, j);
+                    state.bindInteger(1, unreadCount);
+                    state.bindInteger(2, (int) currentMaxId);
+                    state.bindLong(3, j);
                     state.step();
                     state.dispose();
                     MessagesStorage.this.database.commitTransaction();
@@ -3125,7 +3157,10 @@ Error: java.util.NoSuchElementException
     }
 
     public void putCachedPhoneBook(final HashMap<String, Contact> contactHashMap, final boolean migrate) {
-        if (contactHashMap != null && !contactHashMap.isEmpty()) {
+        if (contactHashMap == null) {
+            return;
+        }
+        if (!contactHashMap.isEmpty() || migrate) {
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
                     try {
@@ -3259,7 +3294,6 @@ Error: java.util.NoSuchElementException
                                 FileLog.d(MessagesStorage.this.currentAccount + " current cached contacts count = " + currentContactsCount);
                             }
                         }
-                        cursor.dispose();
                         if (cursor != null) {
                             cursor.dispose();
                         }
@@ -6707,12 +6741,12 @@ Error: java.util.NoSuchElementException
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 75;
+                    message.media.bytes[0] = (byte) 76;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 75;
+                message.media.bytes[0] = (byte) 76;
                 message.flags |= 512;
             }
         }

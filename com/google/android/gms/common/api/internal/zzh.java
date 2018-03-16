@@ -3,6 +3,7 @@ package com.google.android.gms.common.api.internal;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.Api.ApiOptions;
 import com.google.android.gms.common.internal.zzbg;
+import java.util.Arrays;
 
 public final class zzh<O extends ApiOptions> {
     private final Api<O> zzfin;
@@ -14,6 +15,16 @@ public final class zzh<O extends ApiOptions> {
         this.zzfin = api;
         this.zzfme = null;
         this.zzfnw = System.identityHashCode(this);
+    }
+
+    private zzh(Api<O> api, O o) {
+        this.zzfin = api;
+        this.zzfme = o;
+        this.zzfnw = Arrays.hashCode(new Object[]{this.zzfin, this.zzfme});
+    }
+
+    public static <O extends ApiOptions> zzh<O> zza(Api<O> api, O o) {
+        return new zzh(api, o);
     }
 
     public static <O extends ApiOptions> zzh<O> zzb(Api<O> api) {

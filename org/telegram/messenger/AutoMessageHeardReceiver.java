@@ -11,7 +11,7 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
         int max_id = intent.getIntExtra("max_id", 0);
         int currentAccount = intent.getIntExtra("currentAccount", 0);
         if (dialog_id != 0 && max_id != 0) {
-            MessagesController.getInstance(currentAccount).markDialogAsRead(dialog_id, max_id, max_id, 0, true, false);
+            MessagesController.getInstance(currentAccount).markDialogAsRead(dialog_id, max_id, max_id, 0, false, 0, true);
         }
     }
 }

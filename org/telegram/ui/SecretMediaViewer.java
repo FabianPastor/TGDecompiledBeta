@@ -665,7 +665,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     public void openMedia(MessageObject messageObject, PhotoViewerProvider provider) {
-        if (this.parentActivity != null && messageObject != null && messageObject.isSecretPhoto() && provider != null) {
+        if (this.parentActivity != null && messageObject != null && messageObject.needDrawBluredPreview() && provider != null) {
             PlaceProviderObject object = provider.getPlaceForPhoto(messageObject, null, 0);
             if (object != null) {
                 this.currentProvider = provider;

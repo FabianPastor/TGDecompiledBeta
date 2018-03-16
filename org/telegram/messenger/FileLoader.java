@@ -30,6 +30,7 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_messageService;
 import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
 import org.telegram.tgnet.TLRPC.TL_webDocument;
+import org.telegram.tgnet.TLRPC.WebDocument;
 
 public class FileLoader {
     private static volatile FileLoader[] Instance = new FileLoader[3];
@@ -342,12 +343,12 @@ public class FileLoader {
                                 if (!FileLoader.this.audioLoadOperationQueue.remove(operation)) {
                                     FileLoader.this.currentAudioLoadOperationsCount = FileLoader.this.currentAudioLoadOperationsCount - 1;
                                 }
-                            } else if (fileLocation == null) {
+                            } else if (fileLocation == null && !MessageObject.isImageWebDocument(tL_webDocument)) {
                                 if (!FileLoader.this.loadOperationQueue.remove(operation)) {
                                     FileLoader.this.currentLoadOperationsCount = FileLoader.this.currentLoadOperationsCount - 1;
                                 }
                                 FileLoader.this.activeFileLoadOperation.remove(operation);
-                            } else if (!FileLoader.this.photoLoadOperationQueue.remove(operation) || MessageObject.isImageWebDocument(tL_webDocument)) {
+                            } else if (!FileLoader.this.photoLoadOperationQueue.remove(operation)) {
                                 FileLoader.this.currentPhotoLoadOperationsCount = FileLoader.this.currentPhotoLoadOperationsCount - 1;
                             }
                             operation.cancel();
@@ -515,7 +516,7 @@ public class FileLoader {
                     this.audioLoadOperationQueue.add(operation);
                     return operation;
                 }
-            } else if (location != null) {
+            } else if (location != null || MessageObject.isImageWebDocument(webDocument)) {
                 if (streamOffset != 0 || this.currentPhotoLoadOperationsCount < maxCount) {
                     if (!operation.start(stream, streamOffset)) {
                         return operation;
@@ -786,7 +787,7 @@ public class FileLoader {
                     return getAttachFileName(((TL_messageMediaInvoice) message.media).photo);
                 }
             } else if (message.media instanceof TL_messageMediaInvoice) {
-                TL_webDocument document = ((TL_messageMediaInvoice) message.media).photo;
+                WebDocument document = ((TL_messageMediaInvoice) message.media).photo;
                 if (document != null) {
                     return Utilities.MD5(document.url) + "." + ImageLoader.getHttpUrlExtension(document.url, getExtensionByMime(document.mime_type));
                 }

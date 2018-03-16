@@ -30,6 +30,7 @@ import org.telegram.tgnet.TLRPC.EncryptedFile;
 import org.telegram.tgnet.TLRPC.EncryptedMessage;
 import org.telegram.tgnet.TLRPC.InputEncryptedFile;
 import org.telegram.tgnet.TLRPC.Message;
+import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessage;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionAbortKey;
@@ -823,6 +824,7 @@ public class SecretChatHelper {
             int newMessageId;
             if (object instanceof TL_decryptedMessage) {
                 TL_message newMessage;
+                MessageMedia messageMedia;
                 TL_decryptedMessage decryptedMessage = (TL_decryptedMessage) object;
                 if (AndroidUtilities.getPeerLayerVersion(chat.layer) >= 17) {
                     newMessage = new TL_message_secret();
@@ -859,32 +861,28 @@ public class SecretChatHelper {
                 }
                 if (decryptedMessage.media == null || (decryptedMessage.media instanceof TL_decryptedMessageMediaEmpty)) {
                     newMessage.media = new TL_messageMediaEmpty();
-                    return newMessage;
                 } else if (decryptedMessage.media instanceof TL_decryptedMessageMediaWebPage) {
                     newMessage.media = new TL_messageMediaWebPage();
                     newMessage.media.webpage = new TL_webPageUrlPending();
                     newMessage.media.webpage.url = decryptedMessage.media.url;
-                    return newMessage;
                 } else if (decryptedMessage.media instanceof TL_decryptedMessageMediaContact) {
                     newMessage.media = new TL_messageMediaContact();
                     newMessage.media.last_name = decryptedMessage.media.last_name;
                     newMessage.media.first_name = decryptedMessage.media.first_name;
                     newMessage.media.phone_number = decryptedMessage.media.phone_number;
                     newMessage.media.user_id = decryptedMessage.media.user_id;
-                    return newMessage;
                 } else if (decryptedMessage.media instanceof TL_decryptedMessageMediaGeoPoint) {
                     newMessage.media = new TL_messageMediaGeo();
                     newMessage.media.geo = new TL_geoPoint();
                     newMessage.media.geo.lat = decryptedMessage.media.lat;
                     newMessage.media.geo._long = decryptedMessage.media._long;
-                    return newMessage;
                 } else if (decryptedMessage.media instanceof TL_decryptedMessageMediaPhoto) {
                     if (decryptedMessage.media.key == null || decryptedMessage.media.key.length != 32 || decryptedMessage.media.iv == null || decryptedMessage.media.iv.length != 32) {
                         return null;
                     }
                     newMessage.media = new TL_messageMediaPhoto();
-                    r4 = newMessage.media;
-                    r4.flags |= 3;
+                    messageMedia = newMessage.media;
+                    messageMedia.flags |= 3;
                     newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : TtmlNode.ANONYMOUS_REGION_ID;
                     newMessage.media.photo = new TL_photo();
                     newMessage.media.photo.date = newMessage.date;
@@ -900,6 +898,8 @@ public class SecretChatHelper {
                     }
                     if (newMessage.ttl != 0) {
                         newMessage.media.ttl_seconds = newMessage.ttl;
+                        messageMedia = newMessage.media;
+                        messageMedia.flags |= 4;
                     }
                     TL_photoSize big = new TL_photoSize();
                     big.w = decryptedMessage.media.w;
@@ -914,14 +914,13 @@ public class SecretChatHelper {
                     big.location.secret = file.access_hash;
                     big.location.local_id = file.key_fingerprint;
                     newMessage.media.photo.sizes.add(big);
-                    return newMessage;
                 } else if (decryptedMessage.media instanceof TL_decryptedMessageMediaVideo) {
                     if (decryptedMessage.media.key == null || decryptedMessage.media.key.length != 32 || decryptedMessage.media.iv == null || decryptedMessage.media.iv.length != 32) {
                         return null;
                     }
                     newMessage.media = new TL_messageMediaDocument();
-                    r4 = newMessage.media;
-                    r4.flags |= 3;
+                    messageMedia = newMessage.media;
+                    messageMedia.flags |= 3;
                     newMessage.media.document = new TL_documentEncrypted();
                     newMessage.media.document.key = decryptedMessage.media.key;
                     newMessage.media.document.iv = decryptedMessage.media.iv;
@@ -953,19 +952,21 @@ public class SecretChatHelper {
                     attributeVideo.duration = decryptedMessage.media.duration;
                     attributeVideo.supports_streaming = false;
                     newMessage.media.document.attributes.add(attributeVideo);
-                    if (newMessage.ttl == 0) {
-                        return newMessage;
+                    if (newMessage.ttl != 0) {
+                        newMessage.media.ttl_seconds = newMessage.ttl;
+                        messageMedia = newMessage.media;
+                        messageMedia.flags |= 4;
                     }
-                    newMessage.ttl = Math.max(decryptedMessage.media.duration + 2, newMessage.ttl);
-                    newMessage.media.ttl_seconds = newMessage.ttl;
-                    return newMessage;
+                    if (newMessage.ttl != 0) {
+                        newMessage.ttl = Math.max(decryptedMessage.media.duration + 1, newMessage.ttl);
+                    }
                 } else if (decryptedMessage.media instanceof TL_decryptedMessageMediaDocument) {
                     if (decryptedMessage.media.key == null || decryptedMessage.media.key.length != 32 || decryptedMessage.media.iv == null || decryptedMessage.media.iv.length != 32) {
                         return null;
                     }
                     newMessage.media = new TL_messageMediaDocument();
-                    r4 = newMessage.media;
-                    r4.flags |= 3;
+                    messageMedia = newMessage.media;
+                    messageMedia.flags |= 3;
                     newMessage.message = decryptedMessage.media.caption != null ? decryptedMessage.media.caption : TtmlNode.ANONYMOUS_REGION_ID;
                     newMessage.media.document = new TL_documentEncrypted();
                     newMessage.media.document.id = file.id;
@@ -1004,15 +1005,13 @@ public class SecretChatHelper {
                         newMessage.media.document.thumb.location = new TL_fileLocationUnavailable();
                     }
                     newMessage.media.document.dc_id = file.dc_id;
-                    if (!MessageObject.isVoiceMessage(newMessage) && !MessageObject.isRoundVideoMessage(newMessage)) {
-                        return newMessage;
+                    if (MessageObject.isVoiceMessage(newMessage) || MessageObject.isRoundVideoMessage(newMessage)) {
+                        newMessage.media_unread = true;
                     }
-                    newMessage.media_unread = true;
-                    return newMessage;
                 } else if (decryptedMessage.media instanceof TL_decryptedMessageMediaExternalDocument) {
                     newMessage.media = new TL_messageMediaDocument();
-                    r4 = newMessage.media;
-                    r4.flags |= 3;
+                    messageMedia = newMessage.media;
+                    messageMedia.flags |= 3;
                     newMessage.message = TtmlNode.ANONYMOUS_REGION_ID;
                     newMessage.media.document = new TL_document();
                     newMessage.media.document.id = decryptedMessage.media.id;
@@ -1023,18 +1022,16 @@ public class SecretChatHelper {
                     newMessage.media.document.dc_id = decryptedMessage.media.dc_id;
                     newMessage.media.document.size = decryptedMessage.media.size;
                     newMessage.media.document.thumb = ((TL_decryptedMessageMediaExternalDocument) decryptedMessage.media).thumb;
-                    if (newMessage.media.document.mime_type != null) {
-                        return newMessage;
+                    if (newMessage.media.document.mime_type == null) {
+                        newMessage.media.document.mime_type = TtmlNode.ANONYMOUS_REGION_ID;
                     }
-                    newMessage.media.document.mime_type = TtmlNode.ANONYMOUS_REGION_ID;
-                    return newMessage;
                 } else if (decryptedMessage.media instanceof TL_decryptedMessageMediaAudio) {
                     if (decryptedMessage.media.key == null || decryptedMessage.media.key.length != 32 || decryptedMessage.media.iv == null || decryptedMessage.media.iv.length != 32) {
                         return null;
                     }
                     newMessage.media = new TL_messageMediaDocument();
-                    r4 = newMessage.media;
-                    r4.flags |= 3;
+                    messageMedia = newMessage.media;
+                    messageMedia.flags |= 3;
                     newMessage.media.document = new TL_documentEncrypted();
                     newMessage.media.document.key = decryptedMessage.media.key;
                     newMessage.media.document.iv = decryptedMessage.media.iv;
@@ -1054,11 +1051,9 @@ public class SecretChatHelper {
                     attributeAudio.duration = decryptedMessage.media.duration;
                     attributeAudio.voice = true;
                     newMessage.media.document.attributes.add(attributeAudio);
-                    if (newMessage.ttl == 0) {
-                        return newMessage;
+                    if (newMessage.ttl != 0) {
+                        newMessage.ttl = Math.max(decryptedMessage.media.duration + 1, newMessage.ttl);
                     }
-                    newMessage.ttl = Math.max(decryptedMessage.media.duration + 1, newMessage.ttl);
-                    return newMessage;
                 } else if (!(decryptedMessage.media instanceof TL_decryptedMessageMediaVenue)) {
                     return null;
                 } else {
@@ -1071,8 +1066,14 @@ public class SecretChatHelper {
                     newMessage.media.provider = decryptedMessage.media.provider;
                     newMessage.media.venue_id = decryptedMessage.media.venue_id;
                     newMessage.media.venue_type = TtmlNode.ANONYMOUS_REGION_ID;
+                }
+                if (newMessage.ttl == 0 || newMessage.media.ttl_seconds != 0) {
                     return newMessage;
                 }
+                newMessage.media.ttl_seconds = newMessage.ttl;
+                messageMedia = newMessage.media;
+                messageMedia.flags |= 4;
+                return newMessage;
             } else if (object instanceof TL_decryptedMessageService) {
                 TL_decryptedMessageService serviceMessage = (TL_decryptedMessageService) object;
                 if ((serviceMessage.action instanceof TL_decryptedMessageActionSetMessageTTL) || (serviceMessage.action instanceof TL_decryptedMessageActionScreenshotMessages)) {

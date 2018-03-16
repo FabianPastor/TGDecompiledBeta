@@ -1,17 +1,13 @@
 package com.google.android.gms.common.internal;
 
-import com.google.android.gms.common.api.Response;
-import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Status;
 
-final class zzbk implements zzbm<R, T> {
-    private /* synthetic */ Response zzaIn;
-
-    zzbk(Response response) {
-        this.zzaIn = response;
+final class zzbk implements zzbp {
+    zzbk() {
     }
 
-    public final /* synthetic */ Object zzd(Result result) {
-        this.zzaIn.setResult(result);
-        return this.zzaIn;
+    public final ApiException zzz(Status status) {
+        return zzb.zzy(status);
     }
 }

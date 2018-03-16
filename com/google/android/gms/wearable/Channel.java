@@ -6,10 +6,16 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Releasable;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 @Deprecated
 public interface Channel extends Parcelable {
+
+    @Deprecated
+    public interface GetInputStreamResult extends Releasable, Result {
+        InputStream getInputStream();
+    }
 
     @Deprecated
     public interface GetOutputStreamResult extends Releasable, Result {
@@ -17,6 +23,8 @@ public interface Channel extends Parcelable {
     }
 
     PendingResult<Status> close(GoogleApiClient googleApiClient);
+
+    PendingResult<GetInputStreamResult> getInputStream(GoogleApiClient googleApiClient);
 
     PendingResult<GetOutputStreamResult> getOutputStream(GoogleApiClient googleApiClient);
 

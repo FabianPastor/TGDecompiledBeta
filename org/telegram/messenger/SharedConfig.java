@@ -3,6 +3,7 @@ package org.telegram.messenger;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Base64;
 import java.io.File;
 import org.telegram.messenger.exoplayer2.C;
@@ -29,6 +30,8 @@ public class SharedConfig {
     public static byte[] passcodeSalt = new byte[0];
     public static int passcodeType;
     public static boolean playOrderReversed;
+    public static byte[] pushAuthKey;
+    public static byte[] pushAuthKeyId;
     public static String pushString = TtmlNode.ANONYMOUS_REGION_ID;
     public static boolean raiseToSpeak = true;
     public static int repeatMode;
@@ -63,6 +66,7 @@ public class SharedConfig {
                 editor.putBoolean("useFingerprint", useFingerprint);
                 editor.putBoolean("allowScreenCapture", allowScreenCapture);
                 editor.putString("pushString2", pushString);
+                editor.putString("pushAuthKey", pushAuthKey != null ? Base64.encodeToString(pushAuthKey, 0) : TtmlNode.ANONYMOUS_REGION_ID);
                 editor.putInt("lastLocalId", lastLocalId);
                 editor.commit();
             } catch (Throwable e) {
@@ -98,6 +102,10 @@ public class SharedConfig {
             allowScreenCapture = preferences.getBoolean("allowScreenCapture", false);
             lastLocalId = preferences.getInt("lastLocalId", -210000);
             pushString = preferences.getString("pushString2", TtmlNode.ANONYMOUS_REGION_ID);
+            String authKeyString = preferences.getString("pushAuthKey", null);
+            if (!TextUtils.isEmpty(authKeyString)) {
+                pushAuthKey = Base64.decode(authKeyString, 0);
+            }
             if (passcodeHash.length() > 0 && lastPauseTime == 0) {
                 lastPauseTime = (int) ((System.currentTimeMillis() / 1000) - 600);
             }

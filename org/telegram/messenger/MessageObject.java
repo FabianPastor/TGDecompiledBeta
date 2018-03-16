@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.Emoji.EmojiSpan;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSink;
@@ -30,6 +31,7 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -75,6 +77,7 @@ import org.telegram.tgnet.TLRPC.TL_inputStickerSetEmpty;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonBuy;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonRow;
 import org.telegram.tgnet.TLRPC.TL_message;
+import org.telegram.tgnet.TLRPC.TL_messageActionBotAllowed;
 import org.telegram.tgnet.TLRPC.TL_messageActionChannelCreate;
 import org.telegram.tgnet.TLRPC.TL_messageActionChannelMigrateFrom;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatAddUser;
@@ -102,12 +105,14 @@ import org.telegram.tgnet.TLRPC.TL_messageEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
 import org.telegram.tgnet.TLRPC.TL_messageEntityBold;
 import org.telegram.tgnet.TLRPC.TL_messageEntityBotCommand;
+import org.telegram.tgnet.TLRPC.TL_messageEntityCashtag;
 import org.telegram.tgnet.TLRPC.TL_messageEntityCode;
 import org.telegram.tgnet.TLRPC.TL_messageEntityEmail;
 import org.telegram.tgnet.TLRPC.TL_messageEntityHashtag;
 import org.telegram.tgnet.TLRPC.TL_messageEntityItalic;
 import org.telegram.tgnet.TLRPC.TL_messageEntityMention;
 import org.telegram.tgnet.TLRPC.TL_messageEntityMentionName;
+import org.telegram.tgnet.TLRPC.TL_messageEntityPhone;
 import org.telegram.tgnet.TLRPC.TL_messageEntityPre;
 import org.telegram.tgnet.TLRPC.TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC.TL_messageEntityUrl;
@@ -151,6 +156,7 @@ import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.TL_webDocument;
 import org.telegram.tgnet.TLRPC.TL_webPage;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC.WebDocument;
 import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TypefaceSpan;
@@ -197,6 +203,8 @@ public class MessageObject {
     public int linesCount;
     public CharSequence linkDescription;
     public long localGroupId;
+    public String localName;
+    public int localType;
     public boolean mediaExists;
     public Message messageOwner;
     public CharSequence messageText;
@@ -597,6 +605,15 @@ public class MessageObject {
         }
     }
 
+    public MessageObject(int accountNum, Message message, String formattedMessage, String name, boolean localMessage) {
+        this.type = 1000;
+        this.localType = localMessage ? 2 : 1;
+        this.currentAccount = accountNum;
+        this.localName = name;
+        this.messageText = formattedMessage;
+        this.messageOwner = message;
+    }
+
     public MessageObject(int accountNum, Message message, AbstractMap<Integer, User> users, boolean generateLayout) {
         this(accountNum, message, (AbstractMap) users, null, generateLayout);
     }
@@ -864,9 +881,9 @@ public class MessageObject {
                         String duration = LocaleController.formatCallDuration(call.duration);
                         this.messageText = LocaleController.formatString("CallMessageWithDuration", R.string.CallMessageWithDuration, this.messageText, duration);
                         String _messageText = this.messageText.toString();
-                        int start = _messageText.indexOf(duration);
+                        start = _messageText.indexOf(duration);
                         if (start != -1) {
-                            CharSequence spannableString = new SpannableString(this.messageText);
+                            r0 = new SpannableString(this.messageText);
                             int end = start + duration.length();
                             if (start > 0 && _messageText.charAt(start - 1) == '(') {
                                 start--;
@@ -874,8 +891,8 @@ public class MessageObject {
                             if (end < _messageText.length() && _messageText.charAt(end) == ')') {
                                 end++;
                             }
-                            spannableString.setSpan(new TypefaceSpan(Typeface.DEFAULT), start, end, 0);
-                            this.messageText = spannableString;
+                            r0.setSpan(new TypefaceSpan(Typeface.DEFAULT), start, end, 0);
+                            this.messageText = r0;
                         }
                     }
                 } else if (message.action instanceof TL_messageActionPaymentSent) {
@@ -889,6 +906,15 @@ public class MessageObject {
                         fromUser = MessagesController.getInstance(accountNum).getUser(Integer.valueOf(uid));
                     }
                     generatePaymentSentMessageText(null);
+                } else if (message.action instanceof TL_messageActionBotAllowed) {
+                    String domain = ((TL_messageActionBotAllowed) message.action).domain;
+                    String text = LocaleController.getString("ActionBotAllowed", R.string.ActionBotAllowed);
+                    start = text.indexOf("%1$s");
+                    r0 = new SpannableString(String.format(text, new Object[]{domain}));
+                    if (start >= 0) {
+                        r0.setSpan(new URLSpanNoUnderlineBold("http://" + domain), start, domain.length() + start, 33);
+                    }
+                    this.messageText = r0;
                 }
             }
         } else if (isMediaEmpty()) {
@@ -1834,6 +1860,10 @@ public class MessageObject {
         }
     }
 
+    public boolean isFcmMessage() {
+        return this.localType != 0;
+    }
+
     public void setType() {
         int oldType = this.type;
         this.isRoundVideoCached = 0;
@@ -1945,7 +1975,7 @@ public class MessageObject {
             return this.messageOwner.media.document.mime_type;
         }
         if (this.messageOwner.media instanceof TL_messageMediaInvoice) {
-            TL_webDocument photo = ((TL_messageMediaInvoice) this.messageOwner.media).photo;
+            WebDocument photo = ((TL_messageMediaInvoice) this.messageOwner.media).photo;
             if (photo != null) {
                 return photo.mime_type;
             }
@@ -1962,6 +1992,10 @@ public class MessageObject {
             }
         }
         return TtmlNode.ANONYMOUS_REGION_ID;
+    }
+
+    public static boolean isGifDocument(TL_webDocument document) {
+        return document != null && (document.mime_type.equals("image/gif") || isNewGifDocument(document));
     }
 
     public static boolean isGifDocument(Document document) {
@@ -1982,6 +2016,26 @@ public class MessageObject {
                 }
             }
             if (round && width <= 1280 && height <= 1280) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isNewGifDocument(TL_webDocument document) {
+        if (!(document == null || document.mime_type == null || !document.mime_type.equals(MimeTypes.VIDEO_MP4))) {
+            int width = 0;
+            int height = 0;
+            for (int a = 0; a < document.attributes.size(); a++) {
+                DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+                if (!(attribute instanceof TL_documentAttributeAnimated)) {
+                    if (attribute instanceof TL_documentAttributeVideo) {
+                        width = attribute.w;
+                        height = attribute.w;
+                    }
+                }
+            }
+            if (width <= 1280 && height <= 1280) {
                 return true;
             }
         }
@@ -2378,6 +2432,62 @@ public class MessageObject {
         }
     }
 
+    public static int[] getWebDocumentWidthAndHeight(WebDocument document) {
+        if (document == null) {
+            return null;
+        }
+        int a = 0;
+        int size = document.attributes.size();
+        while (a < size) {
+            DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+            if (attribute instanceof TL_documentAttributeImageSize) {
+                return new int[]{attribute.w, attribute.h};
+            } else if (attribute instanceof TL_documentAttributeVideo) {
+                return new int[]{attribute.w, attribute.h};
+            } else {
+                a++;
+            }
+        }
+        return null;
+    }
+
+    public static int getWebDocumentDuration(WebDocument document) {
+        if (document == null) {
+            return 0;
+        }
+        int size = document.attributes.size();
+        for (int a = 0; a < size; a++) {
+            DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+            if (attribute instanceof TL_documentAttributeVideo) {
+                return attribute.duration;
+            }
+            if (attribute instanceof TL_documentAttributeAudio) {
+                return attribute.duration;
+            }
+        }
+        return 0;
+    }
+
+    public static int[] getInlineResultWidthAndHeight(BotInlineResult inlineResult) {
+        int[] result = getWebDocumentWidthAndHeight(inlineResult.content);
+        if (result != null) {
+            return result;
+        }
+        result = getWebDocumentWidthAndHeight(inlineResult.thumb);
+        if (result == null) {
+            return new int[]{0, 0};
+        }
+        return result;
+    }
+
+    public static int getInlineResultDuration(BotInlineResult inlineResult) {
+        int result = getWebDocumentDuration(inlineResult.content);
+        if (result == 0) {
+            return getWebDocumentDuration(inlineResult.thumb);
+        }
+        return result;
+    }
+
     public boolean hasValidGroupId() {
         return (getGroupId() == 0 || this.photoThumbs == null || this.photoThumbs.isEmpty()) ? false : true;
     }
@@ -2470,7 +2580,7 @@ public class MessageObject {
                     String url = TextUtils.substring(text, entity.offset, entity.offset + entity.length);
                     if (entity instanceof TL_messageEntityBotCommand) {
                         spannable.setSpan(new URLSpanBotCommand(url, this.type), entity.offset, entity.offset + entity.length, 33);
-                    } else if ((entity instanceof TL_messageEntityHashtag) || (entity instanceof TL_messageEntityMention)) {
+                    } else if ((entity instanceof TL_messageEntityHashtag) || (entity instanceof TL_messageEntityMention) || (entity instanceof TL_messageEntityCashtag)) {
                         spannable.setSpan(new URLSpanNoUnderline(url), entity.offset, entity.offset + entity.length, 33);
                     } else if (entity instanceof TL_messageEntityEmail) {
                         spannable.setSpan(new URLSpanReplacement("mailto:" + url), entity.offset, entity.offset + entity.length, 33);
@@ -2481,6 +2591,13 @@ public class MessageObject {
                         } else {
                             spannable.setSpan(new URLSpanBrowser("http://" + url), entity.offset, entity.offset + entity.length, 33);
                         }
+                    } else if (entity instanceof TL_messageEntityPhone) {
+                        hasUrls = true;
+                        String tel = PhoneFormat.stripExceptNumbers(url);
+                        if (url.startsWith("+")) {
+                            tel = "+" + tel;
+                        }
+                        spannable.setSpan(new URLSpanBrowser("tel://" + tel), entity.offset, entity.offset + entity.length, 33);
                     } else if (entity instanceof TL_messageEntityTextUrl) {
                         spannable.setSpan(new URLSpanReplacement(entity.url), entity.offset, entity.offset + entity.length, 33);
                     }
@@ -2491,9 +2608,9 @@ public class MessageObject {
     }
 
     public void generateLayout(User fromUser) {
+        int a;
         if (this.type == 0 && this.messageOwner.to_id != null && !TextUtils.isEmpty(this.messageText)) {
             boolean hasEntities;
-            int a;
             TextPaint paint;
             StaticLayout textLayout;
             int blocksCount;
@@ -2558,7 +2675,7 @@ public class MessageObject {
             if (hasUrls) {
                 try {
                     if (VERSION.SDK_INT >= 24) {
-                        textLayout = Builder.obtain(this.messageText, 0, this.messageText.length(), paint, maxWidth).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
+                        textLayout = Builder.obtain(this.messageText, 0, this.messageText.length(), paint, maxWidth - AndroidUtilities.dp(10.0f)).setBreakStrategy(1).setHyphenationFrequency(0).setAlignment(Alignment.ALIGN_NORMAL).build();
                         this.textHeight = textLayout.getHeight();
                         this.linesCount = textLayout.getLineCount();
                         blocksCount = (int) Math.ceil((double) (((float) this.linesCount) / 10.0f));
@@ -2692,6 +2809,9 @@ public class MessageObject {
                             } else {
                                 if (lastLeft <= 0.0f) {
                                     this.textXOffset = Math.min(this.textXOffset, lastLeft);
+                                    if (this.textXOffset == 0.0f) {
+                                        linesMaxWidth = (int) (((float) linesMaxWidth) + lastLeft);
+                                    }
                                     this.hasRtl = blocksCount == 1;
                                     block.directionFlags = (byte) (block.directionFlags | 1);
                                 } else {
@@ -2770,6 +2890,9 @@ public class MessageObject {
                         block.directionFlags = (byte) (block.directionFlags | 2);
                     } else {
                         this.textXOffset = Math.min(this.textXOffset, lastLeft);
+                        if (this.textXOffset == 0.0f) {
+                            linesMaxWidth = (int) (((float) linesMaxWidth) + lastLeft);
+                        }
                         if (blocksCount == 1) {
                         }
                         this.hasRtl = blocksCount == 1;
@@ -2942,9 +3065,9 @@ public class MessageObject {
         }
     }
 
-    public boolean isSecretPhoto() {
+    public boolean needDrawBluredPreview() {
         if (this.messageOwner instanceof TL_message_secret) {
-            if (this.messageOwner.ttl <= 0 || (((!(this.messageOwner.media instanceof TL_messageMediaPhoto) && !isVideo()) || this.messageOwner.ttl > 60) && !isRoundVideo())) {
+            if (this.messageOwner.ttl <= 0 || (((!(this.messageOwner.media instanceof TL_messageMediaPhoto) && !isVideo()) || this.messageOwner.media.ttl_seconds > 60) && !isRoundVideo())) {
                 return false;
             }
             return true;
@@ -3138,7 +3261,7 @@ public class MessageObject {
     }
 
     public static boolean isImageWebDocument(TL_webDocument webDocument) {
-        return webDocument != null && webDocument.mime_type.startsWith("image/");
+        return (webDocument == null || isGifDocument(webDocument) || !webDocument.mime_type.startsWith("image/")) ? false : true;
     }
 
     public static boolean isVideoWebDocument(TL_webDocument webDocument) {
@@ -3291,6 +3414,24 @@ public class MessageObject {
         return null;
     }
 
+    public static long getStickerSetId(Document document) {
+        if (document == null) {
+            return -1;
+        }
+        int a = 0;
+        while (a < document.attributes.size()) {
+            DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+            if (!(attribute instanceof TL_documentAttributeSticker)) {
+                a++;
+            } else if (attribute.stickerset instanceof TL_inputStickerSetEmpty) {
+                return -1;
+            } else {
+                return attribute.stickerset.id;
+            }
+        }
+        return -1;
+    }
+
     public String getStrickerChar() {
         if (!(this.messageOwner.media == null || this.messageOwner.media.document == null)) {
             Iterator it = this.messageOwner.media.document.attributes.iterator();
@@ -3391,7 +3532,7 @@ public class MessageObject {
                 } else if (h < AndroidUtilities.dp(120.0f)) {
                     h = AndroidUtilities.dp(120.0f);
                 }
-                if (isSecretPhoto()) {
+                if (needDrawBluredPreview()) {
                     if (AndroidUtilities.isTablet()) {
                         h = (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.5f);
                     } else {
@@ -3476,6 +3617,10 @@ public class MessageObject {
 
     public boolean isWebpageDocument() {
         return (!(this.messageOwner.media instanceof TL_messageMediaWebPage) || this.messageOwner.media.webpage.document == null || isGifDocument(this.messageOwner.media.webpage.document)) ? false : true;
+    }
+
+    public boolean isWebpage() {
+        return this.messageOwner.media instanceof TL_messageMediaWebPage;
     }
 
     public boolean isNewGif() {
@@ -3780,13 +3925,19 @@ public class MessageObject {
             }
             return this.messageOwner.fwd_from.saved_from_peer.user_id;
         } else if (this.messageOwner.fwd_from.saved_from_peer.channel_id != 0) {
-            if (!isSavedFromMegagroup() || this.messageOwner.fwd_from.from_id == 0) {
-                return -this.messageOwner.fwd_from.saved_from_peer.channel_id;
+            if (isSavedFromMegagroup() && this.messageOwner.fwd_from.from_id != 0) {
+                return this.messageOwner.fwd_from.from_id;
             }
-            return this.messageOwner.fwd_from.from_id;
+            if (this.messageOwner.fwd_from.channel_id != 0) {
+                return -this.messageOwner.fwd_from.channel_id;
+            }
+            return -this.messageOwner.fwd_from.saved_from_peer.channel_id;
         } else if (this.messageOwner.fwd_from.saved_from_peer.chat_id != 0) {
             if (this.messageOwner.fwd_from.from_id != 0) {
                 return this.messageOwner.fwd_from.from_id;
+            }
+            if (this.messageOwner.fwd_from.channel_id != 0) {
+                return -this.messageOwner.fwd_from.channel_id;
             }
             return -this.messageOwner.fwd_from.saved_from_peer.chat_id;
         }
@@ -3800,7 +3951,7 @@ public class MessageObject {
         if (this.type == 1) {
             if (FileLoader.getClosestPhotoSizeWithSize(this.photoThumbs, AndroidUtilities.getPhotoSize()) != null) {
                 file = FileLoader.getPathToMessage(this.messageOwner);
-                if (isSecretPhoto()) {
+                if (needDrawBluredPreview()) {
                     this.mediaExists = new File(file.getAbsolutePath() + ".enc").exists();
                 }
                 if (!this.mediaExists) {
@@ -3813,7 +3964,7 @@ public class MessageObject {
             }
             if (!this.attachPathExists) {
                 file = FileLoader.getPathToMessage(this.messageOwner);
-                if (this.type == 3 && isSecretPhoto()) {
+                if (this.type == 3 && needDrawBluredPreview()) {
                     this.mediaExists = new File(file.getAbsolutePath() + ".enc").exists();
                 }
                 if (!this.mediaExists) {

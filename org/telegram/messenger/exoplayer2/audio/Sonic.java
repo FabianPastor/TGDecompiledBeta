@@ -39,7 +39,7 @@ final class Sonic {
         this.inputSampleRateHz = inputSampleRateHz;
         this.numChannels = numChannels;
         this.minPeriod = inputSampleRateHz / MAXIMUM_PITCH;
-        this.maxPeriod = inputSampleRateHz / MINIMUM_PITCH;
+        this.maxPeriod = inputSampleRateHz / 65;
         this.inputBuffer = new short[(this.maxRequired * numChannels)];
         this.outputBufferSize = this.maxRequired;
         this.outputBuffer = new short[(this.maxRequired * numChannels)];

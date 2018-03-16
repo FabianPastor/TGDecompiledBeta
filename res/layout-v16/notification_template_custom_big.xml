@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/notification_background" android:layout_width="match_parent" android:layout_height="wrap_content">
-    <ImageView android:id="@+id/icon" android:layout_width="UNKNOWN_DATA_0x7f06000a" android:layout_height="UNKNOWN_DATA_0x7f060009" android:scaleType="center" />
+    <ImageView android:id="@+id/icon" android:layout_width="UNKNOWN_DATA_0x7f06000b" android:layout_height="UNKNOWN_DATA_0x7f06000a" android:scaleType="center" />
     <LinearLayout android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content"
         <LinearLayout android:orientation="horizontal" android:id="@+id/notification_main_column_container" android:paddingTop="@dimen/notification_main_column_padding_top" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/notification_large_icon_width" android:minHeight="@dimen/notification_large_icon_height">
             <FrameLayout android:id="@+id/notification_main_column" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/notification_content_margin_start" android:layout_marginRight="8dp" android:layout_marginBottom="8dp" android:layout_weight="1.0" />

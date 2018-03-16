@@ -504,7 +504,7 @@ public class MentionsAdapter extends SelectionAdapter {
                                         int a = 0;
                                         while (a < res.results.size()) {
                                             BotInlineResult result = (BotInlineResult) res.results.get(a);
-                                            if (MentionsAdapter.this.searchResultBotContextById.containsKey(result.id) || (!(result.document instanceof TL_document) && !(result.photo instanceof TL_photo) && result.content_url == null && (result.send_message instanceof TL_botInlineMessageMediaAuto))) {
+                                            if (MentionsAdapter.this.searchResultBotContextById.containsKey(result.id) || (!(result.document instanceof TL_document) && !(result.photo instanceof TL_photo) && result.content == null && (result.send_message instanceof TL_botInlineMessageMediaAuto))) {
                                                 res.results.remove(a);
                                                 a--;
                                             }

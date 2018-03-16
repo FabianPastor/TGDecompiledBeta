@@ -1,35 +1,16 @@
 package com.google.android.gms.wearable.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import android.support.v4.internal.view.SupportMenu;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import java.util.List;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.internal.zzbo;
+import com.google.android.gms.wearable.CapabilityApi.GetCapabilityResult;
 
-public final class zzab implements Creator<zzaa> {
-    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
-        List list = null;
-        int zzd = zzb.zzd(parcel);
-        String str = null;
-        while (parcel.dataPosition() < zzd) {
-            int readInt = parcel.readInt();
-            switch (SupportMenu.USER_MASK & readInt) {
-                case 2:
-                    str = zzb.zzq(parcel, readInt);
-                    break;
-                case 3:
-                    list = zzb.zzc(parcel, readInt, zzeg.CREATOR);
-                    break;
-                default:
-                    zzb.zzb(parcel, readInt);
-                    break;
-            }
-        }
-        zzb.zzF(parcel, zzd);
-        return new zzaa(str, list);
+final /* synthetic */ class zzab implements zzbo {
+    static final zzbo zzgnw = new zzab();
+
+    private zzab() {
     }
 
-    public final /* synthetic */ Object[] newArray(int i) {
-        return new zzaa[i];
+    public final Object zzb(Result result) {
+        return ((GetCapabilityResult) result).getCapability();
     }
 }

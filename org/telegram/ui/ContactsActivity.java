@@ -311,9 +311,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                             ContactsActivity.this.presentFragment(new GroupInviteActivity(ContactsActivity.this.chat_id));
                         }
                     } else if (row == 0) {
-                        if (MessagesController.isFeatureEnabled("chat_create", ContactsActivity.this)) {
-                            ContactsActivity.this.presentFragment(new GroupCreateActivity(), false);
-                        }
+                        ContactsActivity.this.presentFragment(new GroupCreateActivity(), false);
                     } else if (row == 1) {
                         args = new Bundle();
                         args.putBoolean("onlyUsers", true);
@@ -321,7 +319,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         args.putBoolean("createSecretChat", true);
                         args.putBoolean("allowBots", false);
                         ContactsActivity.this.presentFragment(new ContactsActivity(args), false);
-                    } else if (row == 2 && MessagesController.isFeatureEnabled("broadcast_create", ContactsActivity.this)) {
+                    } else if (row == 2) {
                         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                         if (BuildVars.DEBUG_VERSION || !preferences.getBoolean("channel_intro", false)) {
                             ContactsActivity.this.presentFragment(new ChannelIntroActivity());
@@ -445,7 +443,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             this.listViewAdapter.notifyDataSetChanged();
         }
         if (this.checkPermission && VERSION.SDK_INT >= 23) {
-            Activity activity = getParentActivity();
+            Context activity = getParentActivity();
             if (activity != null) {
                 this.checkPermission = false;
                 if (activity.checkSelfPermission("android.permission.READ_CONTACTS") == 0) {

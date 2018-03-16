@@ -6,6 +6,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build.VERSION;
 import android.text.SpannedString;
@@ -197,6 +198,8 @@ public class ThemeDescription {
                 if (drawable != null) {
                     if ((drawable instanceof StateListDrawable) || (VERSION.SDK_INT >= 21 && (drawable instanceof RippleDrawable))) {
                         Theme.setSelectorDrawableColor(drawable, color, (this.changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
+                    } else if (drawable instanceof ShapeDrawable) {
+                        ((ShapeDrawable) drawable).getPaint().setColor(color);
                     } else {
                         drawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
                     }

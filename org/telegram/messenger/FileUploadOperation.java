@@ -2,6 +2,7 @@ package org.telegram.messenger;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import java.io.File;
@@ -200,6 +201,9 @@ public class FileUploadOperation {
                 this.started = true;
                 if (this.stream == null) {
                     File file = new File(this.uploadingFilePath);
+                    if (AndroidUtilities.isInternalUri(Uri.fromFile(file))) {
+                        throw new Exception("trying to upload internal file");
+                    }
                     this.stream = new RandomAccessFile(file, "r");
                     if (this.estimatedSize != 0) {
                         this.totalFileSize = (long) this.estimatedSize;

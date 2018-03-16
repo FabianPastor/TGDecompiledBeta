@@ -1069,6 +1069,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 public void onSwitchRecordMode(boolean video) {
                 }
 
+                public void onStickersExpandedChange() {
+                }
+
                 public void onPreAudioVideoRecord() {
                 }
 
@@ -1124,7 +1127,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             this.dialogsSearchAdapter.notifyDataSetChanged();
         }
         if (this.checkPermission && !this.onlySelect && VERSION.SDK_INT >= 23) {
-            Activity activity = getParentActivity();
+            Context activity = getParentActivity();
             if (activity != null) {
                 this.checkPermission = false;
                 if (activity.checkSelfPermission("android.permission.READ_CONTACTS") != 0 || activity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") != 0) {

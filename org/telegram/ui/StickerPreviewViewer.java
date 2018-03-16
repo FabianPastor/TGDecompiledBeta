@@ -73,9 +73,11 @@ public class StickerPreviewViewer {
                 final ArrayList<Integer> actions = new ArrayList();
                 ArrayList<Integer> icons = new ArrayList();
                 if (StickerPreviewViewer.this.delegate != null) {
-                    items.add(LocaleController.getString("SendStickerPreview", R.string.SendStickerPreview));
-                    icons.add(Integer.valueOf(R.drawable.stickers_send));
-                    actions.add(Integer.valueOf(0));
+                    if (StickerPreviewViewer.this.delegate.needSend()) {
+                        items.add(LocaleController.getString("SendStickerPreview", R.string.SendStickerPreview));
+                        icons.add(Integer.valueOf(R.drawable.stickers_send));
+                        actions.add(Integer.valueOf(0));
+                    }
                     items.add(LocaleController.formatString("ViewPackPreview", R.string.ViewPackPreview, new Object[0]));
                     icons.add(Integer.valueOf(R.drawable.stickers_pack));
                     actions.add(Integer.valueOf(1));
@@ -95,7 +97,7 @@ public class StickerPreviewViewer {
                             if (StickerPreviewViewer.this.parentActivity != null) {
                                 if (((Integer) actions.get(which)).intValue() == 0) {
                                     if (StickerPreviewViewer.this.delegate != null) {
-                                        StickerPreviewViewer.this.delegate.sentSticker(StickerPreviewViewer.this.currentSticker);
+                                        StickerPreviewViewer.this.delegate.sendSticker(StickerPreviewViewer.this.currentSticker);
                                     }
                                 } else if (((Integer) actions.get(which)).intValue() == 1) {
                                     if (StickerPreviewViewer.this.delegate != null) {
@@ -139,9 +141,11 @@ public class StickerPreviewViewer {
     }
 
     public interface StickerPreviewViewerDelegate {
+        boolean needSend();
+
         void openSet(InputStickerSet inputStickerSet);
 
-        void sentSticker(Document document);
+        void sendSticker(Document document);
     }
 
     public static StickerPreviewViewer getInstance() {

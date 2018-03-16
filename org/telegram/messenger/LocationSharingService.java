@@ -61,7 +61,7 @@ public class LocationSharingService extends Service implements NotificationCente
                     if (LocationSharingService.this.getInfos().isEmpty()) {
                         LocationSharingService.this.stopSelf();
                     } else {
-                        LocationSharingService.this.updateNotification();
+                        LocationSharingService.this.updateNotification(true);
                     }
                 }
             });
@@ -79,7 +79,7 @@ public class LocationSharingService extends Service implements NotificationCente
         return infos;
     }
 
-    private void updateNotification() {
+    private void updateNotification(boolean post) {
         if (this.builder != null) {
             String param;
             ArrayList<SharingLocationInfo> infos = getInfos();
@@ -103,7 +103,9 @@ public class LocationSharingService extends Service implements NotificationCente
             String str = String.format(LocaleController.getString("AttachLiveLocationIsSharing", R.string.AttachLiveLocationIsSharing), new Object[]{LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation), param});
             this.builder.setTicker(str);
             this.builder.setContentText(str);
-            NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(6, this.builder.build());
+            if (post) {
+                NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(6, this.builder.build());
+            }
         }
     }
 
@@ -124,8 +126,8 @@ public class LocationSharingService extends Service implements NotificationCente
             this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
             this.builder.addAction(0, LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, new Intent(ApplicationLoader.applicationContext, StopLiveLocationReceiver.class), 134217728));
         }
+        updateNotification(false);
         startForeground(6, this.builder.build());
-        updateNotification();
         return 2;
     }
 }

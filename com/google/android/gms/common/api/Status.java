@@ -62,6 +62,10 @@ public final class Status extends zzbfm implements Result, ReflectedParcelable {
         return this.zzfks;
     }
 
+    public final boolean hasResolution() {
+        return this.zzeeo != null;
+    }
+
     public final int hashCode() {
         return Arrays.hashCode(new Object[]{Integer.valueOf(this.zzeck), Integer.valueOf(this.zzcd), this.zzfks, this.zzeeo});
     }

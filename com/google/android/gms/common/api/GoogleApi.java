@@ -28,11 +28,22 @@ public class GoogleApi<O extends ApiOptions> {
     private final int mId;
     private final Looper zzall;
     private final Api<O> zzfin;
-    private final O zzfme = null;
+    private final O zzfme;
     private final zzh<O> zzfmf;
     private final GoogleApiClient zzfmg;
     private final zzcz zzfmh;
     protected final zzbm zzfmi;
+
+    public static class zza {
+        public static final zza zzfmj = new zzd().zzagq();
+        public final zzcz zzfmk;
+        public final Looper zzfml;
+
+        private zza(zzcz com_google_android_gms_common_api_internal_zzcz, Account account, Looper looper) {
+            this.zzfmk = com_google_android_gms_common_api_internal_zzcz;
+            this.zzfml = looper;
+        }
+    }
 
     protected GoogleApi(Context context, Api<O> api, Looper looper) {
         zzbq.checkNotNull(context, "Null context is not permitted.");
@@ -40,12 +51,29 @@ public class GoogleApi<O extends ApiOptions> {
         zzbq.checkNotNull(looper, "Looper must not be null.");
         this.mContext = context.getApplicationContext();
         this.zzfin = api;
+        this.zzfme = null;
         this.zzall = looper;
         this.zzfmf = zzh.zzb(api);
         this.zzfmg = new zzbw(this);
         this.zzfmi = zzbm.zzcj(this.mContext);
         this.mId = this.zzfmi.zzais();
         this.zzfmh = new zzg();
+    }
+
+    public GoogleApi(Context context, Api<O> api, O o, zza com_google_android_gms_common_api_GoogleApi_zza) {
+        zzbq.checkNotNull(context, "Null context is not permitted.");
+        zzbq.checkNotNull(api, "Api must not be null.");
+        zzbq.checkNotNull(com_google_android_gms_common_api_GoogleApi_zza, "Settings must not be null; use Settings.DEFAULT_SETTINGS instead.");
+        this.mContext = context.getApplicationContext();
+        this.zzfin = api;
+        this.zzfme = o;
+        this.zzall = com_google_android_gms_common_api_GoogleApi_zza.zzfml;
+        this.zzfmf = zzh.zza(this.zzfin, this.zzfme);
+        this.zzfmg = new zzbw(this);
+        this.zzfmi = zzbm.zzcj(this.mContext);
+        this.mId = this.zzfmi.zzais();
+        this.zzfmh = com_google_android_gms_common_api_GoogleApi_zza.zzfmk;
+        this.zzfmi.zza(this);
     }
 
     private final <A extends zzb, T extends zzm<? extends Result, A>> T zza(int i, T t) {
@@ -114,6 +142,10 @@ public class GoogleApi<O extends ApiOptions> {
 
     public final zzh<O> zzagn() {
         return this.zzfmf;
+    }
+
+    public final GoogleApiClient zzago() {
+        return this.zzfmg;
     }
 
     public final <A extends zzb, T extends zzm<? extends Result, A>> T zzb(T t) {

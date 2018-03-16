@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.tgnet.TLRPC;
 
 public class FastDateParser implements Serializable, DateParser {
     private static final Strategy ABBREVIATED_YEAR_STRATEGY = new NumberStrategy(1) {
@@ -477,7 +476,7 @@ public class FastDateParser implements Serializable, DateParser {
                 return getLocaleSpecificStrategy(0, definingCalendar);
             case 'H':
                 return MODULO_HOUR_OF_DAY_STRATEGY;
-            case TLRPC.LAYER /*75*/:
+            case 'K':
                 return HOUR_STRATEGY;
             case 'M':
                 return formatField.length() >= 3 ? getLocaleSpecificStrategy(2, definingCalendar) : NUMBER_MONTH_STRATEGY;

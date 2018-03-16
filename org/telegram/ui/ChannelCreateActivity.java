@@ -635,6 +635,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     } catch (Throwable e) {
                         FileLog.e(e);
                     }
+                    ChannelCreateActivity.this.donePressed = false;
                     ChannelCreateActivity.this.doneButton.performClick();
                 }
             }

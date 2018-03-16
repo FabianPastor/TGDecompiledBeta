@@ -149,6 +149,7 @@ public class DataQuery {
     public static final int MEDIA_TYPES_COUNT = 5;
     public static final int MEDIA_URL = 3;
     public static final int TYPE_FAVE = 2;
+    public static final int TYPE_FEATURED = 3;
     public static final int TYPE_IMAGE = 0;
     public static final int TYPE_MASK = 1;
     private static RectF bitmapRect;
@@ -167,6 +168,7 @@ public class DataQuery {
     private static Paint roundPaint;
     private static Path roundPath;
     private HashMap<String, ArrayList<Document>> allStickers = new HashMap();
+    private HashMap<String, ArrayList<Document>> allStickersFeatured = new HashMap();
     private int[] archivedStickersCount = new int[2];
     private SparseArray<BotInfo> botInfos = new SparseArray();
     private LongSparseArray<Message> botKeyboards = new LongSparseArray();
@@ -181,21 +183,22 @@ public class DataQuery {
     public ArrayList<TL_topPeer> hints = new ArrayList();
     private boolean inTransaction;
     public ArrayList<TL_topPeer> inlineBots = new ArrayList();
+    private LongSparseArray<TL_messages_stickerSet> installedStickerSetsById = new LongSparseArray();
     private long lastMergeDialogId;
     private int lastReqId;
     private int lastReturnedNum;
     private String lastSearchQuery;
-    private int[] loadDate = new int[2];
+    private int[] loadDate = new int[4];
     private int loadFeaturedDate;
     private int loadFeaturedHash;
-    private int[] loadHash = new int[2];
+    private int[] loadHash = new int[4];
     boolean loaded;
     boolean loading;
     private boolean loadingDrafts;
     private boolean loadingFeaturedStickers;
     private boolean loadingRecentGifs;
     private boolean[] loadingRecentStickers = new boolean[3];
-    private boolean[] loadingStickers = new boolean[2];
+    private boolean[] loadingStickers = new boolean[4];
     private int mergeReqId;
     private int[] messagesSearchCount = new int[]{0, 0};
     private boolean[] messagesSearchEndReached = new boolean[]{false, false};
@@ -208,11 +211,11 @@ public class DataQuery {
     private int reqId;
     private ArrayList<MessageObject> searchResultMessages = new ArrayList();
     private SparseArray<MessageObject>[] searchResultMessagesMap = new SparseArray[]{new SparseArray(), new SparseArray()};
-    private ArrayList<TL_messages_stickerSet>[] stickerSets = new ArrayList[]{new ArrayList(), new ArrayList()};
+    private ArrayList<TL_messages_stickerSet>[] stickerSets = new ArrayList[]{new ArrayList(), new ArrayList(), new ArrayList(0), new ArrayList()};
     private LongSparseArray<TL_messages_stickerSet> stickerSetsById = new LongSparseArray();
     private HashMap<String, TL_messages_stickerSet> stickerSetsByName = new HashMap();
     private LongSparseArray<String> stickersByEmoji = new LongSparseArray();
-    private boolean[] stickersLoaded = new boolean[2];
+    private boolean[] stickersLoaded = new boolean[4];
     private ArrayList<Long> unreadStickerSets = new ArrayList();
 
     public static DataQuery getInstance(int num) {
@@ -278,22 +281,25 @@ public class DataQuery {
             this.loadingRecentStickers[a] = false;
             this.recentStickersLoaded[a] = false;
         }
-        for (a = 0; a < 2; a++) {
+        for (a = 0; a < 4; a++) {
             this.loadHash[a] = 0;
             this.loadDate[a] = 0;
             this.stickerSets[a].clear();
             this.loadingStickers[a] = false;
             this.stickersLoaded[a] = false;
         }
+        this.featuredStickerSets.clear();
         this.loadFeaturedDate = 0;
         this.loadFeaturedHash = 0;
         this.allStickers.clear();
+        this.allStickersFeatured.clear();
         this.stickersByEmoji.clear();
         this.featuredStickerSetsById.clear();
         this.featuredStickerSets.clear();
         this.unreadStickerSets.clear();
         this.recentGifs.clear();
         this.stickerSetsById.clear();
+        this.installedStickerSetsById.clear();
         this.stickerSetsByName.clear();
         this.loadingFeaturedStickers = false;
         this.featuredStickersLoaded = false;
@@ -324,13 +330,14 @@ public class DataQuery {
     public void checkFeaturedStickers() {
         if (!this.loadingFeaturedStickers) {
             if (!this.featuredStickersLoaded || Math.abs((System.currentTimeMillis() / 1000) - ((long) this.loadFeaturedDate)) >= 3600) {
-                loadFeaturesStickers(true, false);
+                loadFeaturedStickers(true, false);
             }
         }
     }
 
     public ArrayList<Document> getRecentStickers(int type) {
-        return new ArrayList(this.recentStickers[type]);
+        ArrayList<Document> arrayList = this.recentStickers[type];
+        return new ArrayList(arrayList.subList(0, Math.min(arrayList.size(), 20)));
     }
 
     public ArrayList<Document> getRecentStickersNoCopy(int type) {
@@ -476,8 +483,8 @@ public class DataQuery {
         return (TL_messages_stickerSet) this.stickerSetsByName.get(name);
     }
 
-    public TL_messages_stickerSet getStickerSetById(Long id) {
-        return (TL_messages_stickerSet) this.stickerSetsById.get(id.longValue());
+    public TL_messages_stickerSet getStickerSetById(long id) {
+        return (TL_messages_stickerSet) this.stickerSetsById.get(id);
     }
 
     public TL_messages_stickerSet getGroupStickerSetById(StickerSet stickerSet) {
@@ -582,11 +589,18 @@ public class DataQuery {
         return this.allStickers;
     }
 
+    public HashMap<String, ArrayList<Document>> getAllStickersFeatured() {
+        return this.allStickersFeatured;
+    }
+
     public boolean canAddStickerToFavorites() {
         return (this.stickersLoaded[0] && this.stickerSets[0].size() < 5 && this.recentStickers[2].isEmpty()) ? false : true;
     }
 
     public ArrayList<TL_messages_stickerSet> getStickerSets(int type) {
+        if (type == 3) {
+            return this.stickerSets[2];
+        }
         return this.stickerSets[type];
     }
 
@@ -599,7 +613,7 @@ public class DataQuery {
     }
 
     public boolean isStickerPackInstalled(long id) {
-        return this.stickerSetsById.indexOfKey(id) >= 0;
+        return this.installedStickerSetsById.indexOfKey(id) >= 0;
     }
 
     public boolean isStickerPackUnread(long id) {
@@ -890,6 +904,7 @@ public class DataQuery {
             int type = set.set.masks ? 1 : 0;
             this.stickerSets[type].add(0, set);
             this.stickerSetsById.put(set.set.id, set);
+            this.installedStickerSetsById.put(set.set.id, set);
             this.stickerSetsByName.put(set.set.short_name, set);
             LongSparseArray<Document> stickersById = new LongSparseArray();
             for (a = 0; a < set.documents.size(); a++) {
@@ -921,7 +936,7 @@ public class DataQuery {
         }
     }
 
-    public void loadFeaturesStickers(boolean cache, boolean force) {
+    public void loadFeaturedStickers(boolean cache, boolean force) {
         if (!this.loadingFeaturedStickers) {
             this.loadingFeaturedStickers = true;
             if (cache) {
@@ -1025,7 +1040,7 @@ public class DataQuery {
                             if (!(arrayList == null || i2 == 0)) {
                                 DataQuery.this.loadFeaturedHash = i2;
                             }
-                            DataQuery.this.loadFeaturesStickers(false, false);
+                            DataQuery.this.loadFeaturedStickers(false, false);
                         }
                     };
                     if (arrayList != null || z) {
@@ -1055,6 +1070,7 @@ public class DataQuery {
                                 DataQuery.this.featuredStickerSets = stickerSetsNew;
                                 DataQuery.this.loadFeaturedHash = i2;
                                 DataQuery.this.loadFeaturedDate = i;
+                                DataQuery.this.loadStickers(3, true, false);
                                 NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.featuredStickersDidLoaded, new Object[0]);
                             }
                         });
@@ -1222,10 +1238,66 @@ public class DataQuery {
         });
     }
 
+    private void processLoadStickersResponse(int type, TL_messages_allStickers res) {
+        final ArrayList<TL_messages_stickerSet> newStickerArray = new ArrayList();
+        if (res.sets.isEmpty()) {
+            processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
+            return;
+        }
+        LongSparseArray<TL_messages_stickerSet> newStickerSets = new LongSparseArray();
+        for (int a = 0; a < res.sets.size(); a++) {
+            final StickerSet stickerSet = (StickerSet) res.sets.get(a);
+            TL_messages_stickerSet oldSet = (TL_messages_stickerSet) this.stickerSetsById.get(stickerSet.id);
+            if (oldSet == null || oldSet.set.hash != stickerSet.hash) {
+                newStickerArray.add(null);
+                final int index = a;
+                TL_messages_getStickerSet req = new TL_messages_getStickerSet();
+                req.stickerset = new TL_inputStickerSetID();
+                req.stickerset.id = stickerSet.id;
+                req.stickerset.access_hash = stickerSet.access_hash;
+                final LongSparseArray<TL_messages_stickerSet> longSparseArray = newStickerSets;
+                final TL_messages_allStickers tL_messages_allStickers = res;
+                final int i = type;
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
+                    public void run(final TLObject response, TL_error error) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                TL_messages_stickerSet res1 = response;
+                                newStickerArray.set(index, res1);
+                                longSparseArray.put(stickerSet.id, res1);
+                                if (longSparseArray.size() == tL_messages_allStickers.sets.size()) {
+                                    for (int a = 0; a < newStickerArray.size(); a++) {
+                                        if (newStickerArray.get(a) == null) {
+                                            newStickerArray.remove(a);
+                                        }
+                                    }
+                                    DataQuery.this.processLoadedStickers(i, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), tL_messages_allStickers.hash);
+                                }
+                            }
+                        });
+                    }
+                });
+            } else {
+                oldSet.set.archived = stickerSet.archived;
+                oldSet.set.installed = stickerSet.installed;
+                oldSet.set.official = stickerSet.official;
+                newStickerSets.put(oldSet.set.id, oldSet);
+                newStickerArray.add(oldSet);
+                if (newStickerSets.size() == res.sets.size()) {
+                    processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
+                }
+            }
+        }
+    }
+
     public void loadStickers(final int type, boolean cache, boolean force) {
         int hash = 0;
         if (!this.loadingStickers[type]) {
-            loadArchivedStickersCount(type, cache);
+            if (type != 3) {
+                loadArchivedStickersCount(type, cache);
+            } else if (this.featuredStickerSets.isEmpty() || !MessagesController.getInstance(this.currentAccount).preloadFeaturedStickers) {
+                return;
+            }
             this.loadingStickers[type] = true;
             if (cache) {
                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
@@ -1275,84 +1347,45 @@ public class DataQuery {
                         DataQuery.this.processLoadedStickers(type, newStickerArray, true, date, hash);
                     }
                 });
-                return;
-            }
-            TLObject req;
-            if (type == 0) {
-                req = new TL_messages_getAllStickers();
-                TL_messages_getAllStickers tL_messages_getAllStickers = (TL_messages_getAllStickers) req;
-                if (!force) {
-                    hash = this.loadHash[type];
+            } else if (type == 3) {
+                TL_messages_allStickers response = new TL_messages_allStickers();
+                response.hash = this.loadFeaturedHash;
+                int size = this.featuredStickerSets.size();
+                for (int a = 0; a < size; a++) {
+                    response.sets.add(((StickerSetCovered) this.featuredStickerSets.get(a)).set);
                 }
-                tL_messages_getAllStickers.hash = hash;
+                processLoadStickersResponse(type, response);
             } else {
-                req = new TL_messages_getMaskStickers();
-                TL_messages_getMaskStickers tL_messages_getMaskStickers = (TL_messages_getMaskStickers) req;
-                if (!force) {
-                    hash = this.loadHash[type];
+                TLObject req;
+                if (type == 0) {
+                    req = new TL_messages_getAllStickers();
+                    TL_messages_getAllStickers tL_messages_getAllStickers = (TL_messages_getAllStickers) req;
+                    if (!force) {
+                        hash = this.loadHash[type];
+                    }
+                    tL_messages_getAllStickers.hash = hash;
+                } else {
+                    req = new TL_messages_getMaskStickers();
+                    TL_messages_getMaskStickers tL_messages_getMaskStickers = (TL_messages_getMaskStickers) req;
+                    if (!force) {
+                        hash = this.loadHash[type];
+                    }
+                    tL_messages_getMaskStickers.hash = hash;
                 }
-                tL_messages_getMaskStickers.hash = hash;
-            }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                public void run(final TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (response instanceof TL_messages_allStickers) {
-                                final TL_messages_allStickers res = response;
-                                final ArrayList<TL_messages_stickerSet> newStickerArray = new ArrayList();
-                                if (res.sets.isEmpty()) {
-                                    DataQuery.this.processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
-                                    return;
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
+                    public void run(final TLObject response, TL_error error) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                if (response instanceof TL_messages_allStickers) {
+                                    DataQuery.this.processLoadStickersResponse(type, (TL_messages_allStickers) response);
+                                } else {
+                                    DataQuery.this.processLoadedStickers(type, null, false, (int) (System.currentTimeMillis() / 1000), hash);
                                 }
-                                LongSparseArray<TL_messages_stickerSet> newStickerSets = new LongSparseArray();
-                                for (int a = 0; a < res.sets.size(); a++) {
-                                    final StickerSet stickerSet = (StickerSet) res.sets.get(a);
-                                    TL_messages_stickerSet oldSet = (TL_messages_stickerSet) DataQuery.this.stickerSetsById.get(stickerSet.id);
-                                    if (oldSet == null || oldSet.set.hash != stickerSet.hash) {
-                                        newStickerArray.add(null);
-                                        final int index = a;
-                                        TLObject req = new TL_messages_getStickerSet();
-                                        req.stickerset = new TL_inputStickerSetID();
-                                        req.stickerset.id = stickerSet.id;
-                                        req.stickerset.access_hash = stickerSet.access_hash;
-                                        final LongSparseArray<TL_messages_stickerSet> longSparseArray = newStickerSets;
-                                        ConnectionsManager.getInstance(DataQuery.this.currentAccount).sendRequest(req, new RequestDelegate() {
-                                            public void run(final TLObject response, TL_error error) {
-                                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                                    public void run() {
-                                                        TL_messages_stickerSet res1 = response;
-                                                        newStickerArray.set(index, res1);
-                                                        longSparseArray.put(stickerSet.id, res1);
-                                                        if (longSparseArray.size() == res.sets.size()) {
-                                                            for (int a = 0; a < newStickerArray.size(); a++) {
-                                                                if (newStickerArray.get(a) == null) {
-                                                                    newStickerArray.remove(a);
-                                                                }
-                                                            }
-                                                            DataQuery.this.processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        oldSet.set.archived = stickerSet.archived;
-                                        oldSet.set.installed = stickerSet.installed;
-                                        oldSet.set.official = stickerSet.official;
-                                        newStickerSets.put(oldSet.set.id, oldSet);
-                                        newStickerArray.add(oldSet);
-                                        if (newStickerSets.size() == res.sets.size()) {
-                                            DataQuery.this.processLoadedStickers(type, newStickerArray, false, (int) (System.currentTimeMillis() / 1000), res.hash);
-                                        }
-                                    }
-                                }
-                                return;
                             }
-                            DataQuery.this.processLoadedStickers(type, null, false, (int) (System.currentTimeMillis() / 1000), hash);
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
+            }
         }
     }
 
@@ -1367,7 +1400,6 @@ public class DataQuery {
                     SQLitePreparedStatement state;
                     if (stickersFinal != null) {
                         int a;
-                        int i;
                         state = MessagesStorage.getInstance(DataQuery.this.currentAccount).getDatabase().executeFast("REPLACE INTO stickers_v2 VALUES(?, ?, ?, ?)");
                         state.requery();
                         int size = 4;
@@ -1379,12 +1411,7 @@ public class DataQuery {
                         for (a = 0; a < stickersFinal.size(); a++) {
                             ((TL_messages_stickerSet) stickersFinal.get(a)).serializeToStream(data);
                         }
-                        if (i == 0) {
-                            i = 1;
-                        } else {
-                            i = 2;
-                        }
-                        state.bindInteger(1, i);
+                        state.bindInteger(1, i + 1);
                         state.bindByteBuffer(2, data);
                         state.bindInteger(3, i2);
                         state.bindInteger(4, i3);
@@ -1525,10 +1552,14 @@ public class DataQuery {
                                 for (a = 0; a < DataQuery.this.stickerSets[i3].size(); a++) {
                                     StickerSet set = ((TL_messages_stickerSet) DataQuery.this.stickerSets[i3].get(a)).set;
                                     DataQuery.this.stickerSetsById.remove(set.id);
+                                    DataQuery.this.installedStickerSetsById.remove(set.id);
                                     DataQuery.this.stickerSetsByName.remove(set.short_name);
                                 }
                                 for (a = 0; a < stickerSetsByIdNew.size(); a++) {
                                     DataQuery.this.stickerSetsById.put(stickerSetsByIdNew.keyAt(a), stickerSetsByIdNew.valueAt(a));
+                                    if (i3 != 3) {
+                                        DataQuery.this.installedStickerSetsById.put(stickerSetsByIdNew.keyAt(a), stickerSetsByIdNew.valueAt(a));
+                                    }
                                 }
                                 DataQuery.this.stickerSetsByName.putAll(stickerSetsByNameNew);
                                 DataQuery.this.stickerSets[i3] = stickerSetsNew;
@@ -1537,6 +1568,8 @@ public class DataQuery {
                                 if (i3 == 0) {
                                     DataQuery.this.allStickers = allStickersNew;
                                     DataQuery.this.stickersByEmoji = stickersByEmojiNew;
+                                } else if (i3 == 3) {
+                                    DataQuery.this.allStickersFeatured = allStickersNew;
                                 }
                                 NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.stickersDidLoaded, Integer.valueOf(i3));
                             }
@@ -1575,6 +1608,7 @@ public class DataQuery {
                         this.stickerSets[type].add(0, set);
                     } else {
                         this.stickerSetsById.remove(set.set.id);
+                        this.installedStickerSetsById.remove(set.set.id);
                         this.stickerSetsByName.remove(set.set.short_name);
                     }
                     this.loadHash[type] = calcStickersHash(this.stickerSets[type]);
@@ -1836,19 +1870,19 @@ public class DataQuery {
                                         added = true;
                                         messageObject = new MessageObject(DataQuery.this.currentAccount, (Message) res.messages.get(a), false);
                                         DataQuery.this.searchResultMessages.add(messageObject);
-                                        SparseArray[] access$4300 = DataQuery.this.searchResultMessagesMap;
+                                        SparseArray[] access$4600 = DataQuery.this.searchResultMessagesMap;
                                         if (j2 == j3) {
                                             i = 0;
                                         } else {
                                             i = 1;
                                         }
-                                        access$4300[i].put(messageObject.getId(), messageObject);
+                                        access$4600[i].put(messageObject.getId(), messageObject);
                                     }
                                     DataQuery.this.messagesSearchEndReached[j2 == j3 ? 0 : 1] = res.messages.size() != 21;
-                                    int[] access$3700 = DataQuery.this.messagesSearchCount;
+                                    int[] access$4000 = DataQuery.this.messagesSearchCount;
                                     i = j2 == j3 ? 0 : 1;
                                     int size = ((res instanceof TL_messages_messagesSlice) || (res instanceof TL_messages_channelMessages)) ? res.count : res.messages.size();
-                                    access$3700[i] = size;
+                                    access$4000[i] = size;
                                     if (DataQuery.this.searchResultMessages.isEmpty()) {
                                         NotificationCenter.getInstance(DataQuery.this.currentAccount).postNotificationName(NotificationCenter.chatSearchResultsAvailable, Integer.valueOf(i3), Integer.valueOf(0), Integer.valueOf(DataQuery.this.getMask()), Long.valueOf(0), Integer.valueOf(0), Integer.valueOf(0));
                                     } else if (added) {
@@ -2006,7 +2040,7 @@ public class DataQuery {
     }
 
     public static boolean canAddMessageToMedia(Message message) {
-        if ((message instanceof TL_message_secret) && (message.media instanceof TL_messageMediaPhoto) && message.ttl != 0 && message.ttl <= 60) {
+        if ((message instanceof TL_message_secret) && (((message.media instanceof TL_messageMediaPhoto) || MessageObject.isVideoMessage(message) || MessageObject.isGifMessage(message)) && message.media.ttl_seconds != 0 && message.media.ttl_seconds <= 60)) {
             return false;
         }
         if (!(message instanceof TL_message_secret) && (message instanceof TL_message) && (((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)) && message.media.ttl_seconds != 0)) {

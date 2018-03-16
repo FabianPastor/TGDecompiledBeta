@@ -20,7 +20,9 @@ public class VoIPController {
     public static final int DATA_SAVING_MOBILE = 1;
     public static final int DATA_SAVING_NEVER = 0;
     public static final int ERROR_AUDIO_IO = 3;
+    public static final int ERROR_CONNECTION_SERVICE = -5;
     public static final int ERROR_INCOMPATIBLE = 1;
+    public static final int ERROR_INSECURE_UPGRADE = -4;
     public static final int ERROR_LOCALIZED = -3;
     public static final int ERROR_PEER_OUTDATED = -1;
     public static final int ERROR_PRIVACY = -2;
@@ -38,6 +40,7 @@ public class VoIPController {
     public static final int NET_TYPE_OTHER_MOBILE = 11;
     public static final int NET_TYPE_UNKNOWN = 0;
     public static final int NET_TYPE_WIFI = 6;
+    public static final int PEER_CAP_GROUP_CALLS = 1;
     public static final int STATE_ESTABLISHED = 3;
     public static final int STATE_FAILED = 4;
     public static final int STATE_RECONNECTING = 5;
@@ -48,7 +51,13 @@ public class VoIPController {
     protected long nativeInst;
 
     public interface ConnectionStateListener {
+        void onCallUpgradeRequestReceived();
+
         void onConnectionStateChanged(int i);
+
+        void onGroupCallKeyReceived(byte[] bArr);
+
+        void onGroupCallKeySent();
 
         void onSignalBarCountChanged(int i);
     }
@@ -74,6 +83,8 @@ public class VoIPController {
 
     private native int nativeGetLastError(long j);
 
+    private native int nativeGetPeerCapabilities(long j);
+
     private native long nativeGetPreferredRelayID(long j);
 
     private native void nativeGetStats(long j, Stats stats);
@@ -83,6 +94,10 @@ public class VoIPController {
     private native long nativeInit();
 
     private native void nativeRelease(long j);
+
+    private native void nativeRequestCallUpgrade(long j);
+
+    private native void nativeSendGroupCallKey(long j, byte[] bArr);
 
     private native void nativeSetAudioOutputGainControlEnabled(long j, boolean z);
 
@@ -100,7 +115,7 @@ public class VoIPController {
 
     private native void nativeSetProxy(long j, String str, int i, String str2, String str3);
 
-    private native void nativeSetRemoteEndpoints(long j, TL_phoneConnection[] tL_phoneConnectionArr, boolean z);
+    private native void nativeSetRemoteEndpoints(long j, TL_phoneConnection[] tL_phoneConnectionArr, boolean z, boolean z2, int i);
 
     private native void nativeStart(long j);
 
@@ -119,7 +134,7 @@ public class VoIPController {
         nativeConnect(this.nativeInst);
     }
 
-    public void setRemoteEndpoints(TL_phoneConnection[] endpoints, boolean allowP2p) {
+    public void setRemoteEndpoints(TL_phoneConnection[] endpoints, boolean allowP2p, boolean tcp, int connectionMaxLayer) {
         if (endpoints.length == 0) {
             throw new IllegalArgumentException("endpoints size is 0");
         }
@@ -135,7 +150,7 @@ public class VoIPController {
             }
         }
         ensureNativeInstance();
-        nativeSetRemoteEndpoints(this.nativeInst, endpoints, allowP2p);
+        nativeSetRemoteEndpoints(this.nativeInst, endpoints, allowP2p, tcp, connectionMaxLayer);
     }
 
     public void setEncryptionKey(byte[] key, boolean isOutgoing) {
@@ -183,6 +198,24 @@ public class VoIPController {
     private void handleSignalBarsChange(int count) {
         if (this.listener != null) {
             this.listener.onSignalBarCountChanged(count);
+        }
+    }
+
+    private void groupCallKeyReceived(byte[] key) {
+        if (this.listener != null) {
+            this.listener.onGroupCallKeyReceived(key);
+        }
+    }
+
+    private void groupCallKeySent() {
+        if (this.listener != null) {
+            this.listener.onGroupCallKeySent();
+        }
+    }
+
+    private void callUpgradeRequestReceived() {
+        if (this.listener != null) {
+            this.listener.onCallUpgradeRequestReceived();
         }
     }
 
@@ -300,6 +333,27 @@ public class VoIPController {
     public void setAudioOutputGainControlEnabled(boolean enabled) {
         ensureNativeInstance();
         nativeSetAudioOutputGainControlEnabled(this.nativeInst, enabled);
+    }
+
+    public int getPeerCapabilities() {
+        ensureNativeInstance();
+        return nativeGetPeerCapabilities(this.nativeInst);
+    }
+
+    public void sendGroupCallKey(byte[] key) {
+        if (key == null) {
+            throw new NullPointerException("key can not be null");
+        } else if (key.length != 256) {
+            throw new IllegalArgumentException("key must be 256 bytes long, got " + key.length);
+        } else {
+            ensureNativeInstance();
+            nativeSendGroupCallKey(this.nativeInst, key);
+        }
+    }
+
+    public void requestCallUpgrade() {
+        ensureNativeInstance();
+        nativeRequestCallUpgrade(this.nativeInst);
     }
 
     public void setEchoCancellationStrength(int strength) {

@@ -148,6 +148,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int enableAnimationsRow;
     private int extraHeight;
     private View extraHeightView;
+    private int forceTcpInCallsRow;
     private int languageRow;
     private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
@@ -197,6 +198,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             SettingsActivity.this.avatarImage.getImageReceiver().setVisible(true, true);
         }
     };
+    private int quickRepliesRow;
     private int raiseToSpeakRow;
     private int rowCount;
     private int saveToGalleryRow;
@@ -315,6 +317,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     } else if (position == SettingsActivity.this.emojiRow) {
                         textCell.setText(LocaleController.getString("Emoji", R.string.Emoji), true);
                         return;
+                    } else if (position == SettingsActivity.this.quickRepliesRow) {
+                        textCell.setText(LocaleController.getString("VoipQuickReplies", R.string.VoipQuickReplies), false);
+                        return;
                     } else {
                         return;
                     }
@@ -328,7 +333,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textCell2.setTextAndCheck(LocaleController.getString("SendByEnter", R.string.SendByEnter), preferences.getBoolean("send_by_enter", false), true);
                         return;
                     } else if (position == SettingsActivity.this.saveToGalleryRow) {
-                        textCell2.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", R.string.SaveToGallerySettings), SharedConfig.saveToGallery, false);
+                        textCell2.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", R.string.SaveToGallerySettings), SharedConfig.saveToGallery, true);
                         return;
                     } else if (position == SettingsActivity.this.autoplayGifsRow) {
                         textCell2.setTextAndCheck(LocaleController.getString("AutoplayGifs", R.string.AutoplayGifs), SharedConfig.autoplayGifs, true);
@@ -344,6 +349,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         return;
                     } else if (position == SettingsActivity.this.dumpCallStatsRow) {
                         textCell2.setTextAndCheck("Dump detailed call stats", preferences.getBoolean("dbg_dump_call_stats", false), true);
+                        return;
+                    } else if (position == SettingsActivity.this.forceTcpInCallsRow) {
+                        textCell2.setTextAndValueAndCheck("Force TCP in calls", "This disables UDP", preferences.getBoolean("dbg_force_tcp_in_calls", false), false, true);
                         return;
                     } else {
                         return;
@@ -406,7 +414,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         public boolean isEnabled(ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.bioRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.dataRow || position == SettingsActivity.this.themeRow || position == SettingsActivity.this.dumpCallStatsRow) {
+            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.bioRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.dataRow || position == SettingsActivity.this.themeRow || position == SettingsActivity.this.dumpCallStatsRow || position == SettingsActivity.this.forceTcpInCallsRow || position == SettingsActivity.this.quickRepliesRow) {
                 return true;
             }
             return false;
@@ -488,7 +496,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (position == SettingsActivity.this.settingsSectionRow || position == SettingsActivity.this.supportSectionRow || position == SettingsActivity.this.messagesSectionRow || position == SettingsActivity.this.contactsSectionRow) {
                 return 1;
             }
-            if (position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.dumpCallStatsRow) {
+            if (position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.dumpCallStatsRow || position == SettingsActivity.this.forceTcpInCallsRow) {
                 return 3;
             }
             if (position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.themeRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.dataRow) {
@@ -641,6 +649,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.saveToGalleryRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
+        this.quickRepliesRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
         this.supportSectionRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
@@ -670,6 +681,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             this.dumpCallStatsRow = -1;
         }
         if (BuildVars.DEBUG_VERSION) {
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.forceTcpInCallsRow = i;
             i = this.rowCount;
             this.rowCount = i + 1;
             this.switchBackendButtonRow = i;
@@ -822,7 +836,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             int start = spannableString.getSpanStart(span);
                             int end = spannableString.getSpanEnd(span);
                             spannableString.removeSpan(span);
-                            spannableString.setSpan(new URLSpanNoUnderline(span.getURL()), start, end, 0);
+                            spannableString.setSpan(new URLSpanNoUnderline(span.getURL()) {
+                                public void onClick(View widget) {
+                                    SettingsActivity.this.dismissCurrentDialig();
+                                    super.onClick(widget);
+                                }
+                            }, start, end, 0);
                         }
                         message.setText(spannableString);
                         message.setTextSize(1, 16.0f);
@@ -1007,13 +1026,24 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         }
                     } else if (position == SettingsActivity.this.dumpCallStatsRow) {
                         preferences = MessagesController.getGlobalMainSettings();
-                        boolean dump = preferences.getBoolean("dbg_dump_call_stats", false);
+                        dump = preferences.getBoolean("dbg_dump_call_stats", false);
                         editor = preferences.edit();
                         editor.putBoolean("dbg_dump_call_stats", !dump);
                         editor.commit();
                         if (view instanceof TextCheckCell) {
                             ((TextCheckCell) view).setChecked(!dump);
                         }
+                    } else if (position == SettingsActivity.this.forceTcpInCallsRow) {
+                        preferences = MessagesController.getGlobalMainSettings();
+                        dump = preferences.getBoolean("dbg_force_tcp_in_calls", false);
+                        editor = preferences.edit();
+                        editor.putBoolean("dbg_force_tcp_in_calls", !dump);
+                        editor.commit();
+                        if (view instanceof TextCheckCell) {
+                            ((TextCheckCell) view).setChecked(!dump);
+                        }
+                    } else if (position == SettingsActivity.this.quickRepliesRow) {
+                        SettingsActivity.this.presentFragment(new QuickRepliesSettingsActivity());
                     }
                 }
             }

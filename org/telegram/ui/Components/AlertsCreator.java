@@ -29,6 +29,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
+import org.telegram.tgnet.TLRPC.InputPeer;
 import org.telegram.tgnet.TLRPC.TL_account_changePhone;
 import org.telegram.tgnet.TLRPC.TL_account_confirmPhone;
 import org.telegram.tgnet.TLRPC.TL_account_getPassword;
@@ -54,6 +55,7 @@ import org.telegram.tgnet.TLRPC.TL_messages_editMessage;
 import org.telegram.tgnet.TLRPC.TL_messages_forwardMessages;
 import org.telegram.tgnet.TLRPC.TL_messages_getAttachedStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_importChatInvite;
+import org.telegram.tgnet.TLRPC.TL_messages_report;
 import org.telegram.tgnet.TLRPC.TL_messages_sendBroadcast;
 import org.telegram.tgnet.TLRPC.TL_messages_sendInlineBotResult;
 import org.telegram.tgnet.TLRPC.TL_messages_sendMedia;
@@ -347,33 +349,57 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    public static Dialog createReportAlert(Context context, final long dialog_id, final BaseFragment parentFragment) {
+    public static Dialog createReportAlert(Context context, long dialog_id, int messageId, BaseFragment parentFragment) {
         if (context == null || parentFragment == null) {
             return null;
         }
         BottomSheet.Builder builder = new BottomSheet.Builder(context);
         builder.setTitle(LocaleController.getString("ReportChat", R.string.ReportChat));
+        final long j = dialog_id;
+        final int i = messageId;
+        final BaseFragment baseFragment = parentFragment;
+        final Context context2 = context;
         builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence), LocaleController.getString("ReportChatPornography", R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", R.string.ReportChatOther)}, new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 3) {
                     Bundle args = new Bundle();
-                    args.putLong("dialog_id", dialog_id);
-                    parentFragment.presentFragment(new ReportOtherActivity(args));
+                    args.putLong("dialog_id", j);
+                    args.putLong("message_id", (long) i);
+                    baseFragment.presentFragment(new ReportOtherActivity(args));
                     return;
                 }
-                TL_account_reportPeer req = new TL_account_reportPeer();
-                req.peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) dialog_id);
-                if (i == 0) {
-                    req.reason = new TL_inputReportReasonSpam();
-                } else if (i == 1) {
-                    req.reason = new TL_inputReportReasonViolence();
-                } else if (i == 2) {
-                    req.reason = new TL_inputReportReasonPornography();
+                TLObject req;
+                InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) j);
+                TLObject request;
+                if (i != 0) {
+                    request = new TL_messages_report();
+                    request.peer = peer;
+                    request.id.add(Integer.valueOf(i));
+                    if (i == 0) {
+                        request.reason = new TL_inputReportReasonSpam();
+                    } else if (i == 1) {
+                        request.reason = new TL_inputReportReasonViolence();
+                    } else if (i == 2) {
+                        request.reason = new TL_inputReportReasonPornography();
+                    }
+                    req = request;
+                } else {
+                    request = new TL_account_reportPeer();
+                    request.peer = peer;
+                    if (i == 0) {
+                        request.reason = new TL_inputReportReasonSpam();
+                    } else if (i == 1) {
+                        request.reason = new TL_inputReportReasonViolence();
+                    } else if (i == 2) {
+                        request.reason = new TL_inputReportReasonPornography();
+                    }
+                    req = request;
                 }
                 ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
                     }
                 });
+                Toast.makeText(context2, LocaleController.getString("ReportChatSent", R.string.ReportChatSent), 0).show();
             }
         });
         return builder.create();
@@ -656,7 +682,7 @@ public class AlertsCreator {
                 }
             });
         }
-        Builder builder = new Builder(parentActivity);
+        Builder builder = new Builder((Context) parentActivity);
         builder.setTitle(LocaleController.getString("LedColor", R.string.LedColor));
         builder.setView(linearLayout);
         final boolean z = globalAll;
@@ -799,7 +825,7 @@ public class AlertsCreator {
             });
             a++;
         }
-        Builder builder = new Builder(parentActivity);
+        Builder builder = new Builder((Context) parentActivity);
         builder.setTitle(LocaleController.getString("Vibrate", R.string.Vibrate));
         builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -850,7 +876,7 @@ public class AlertsCreator {
             });
             a++;
         }
-        Builder builder = new Builder(parentActivity);
+        Builder builder = new Builder((Context) parentActivity);
         builder.setTopImage(new ShareLocationDrawable(parentActivity, false), Theme.getColor(Theme.key_dialogTopBackground));
         builder.setView(linearLayout);
         final IntCallback intCallback = callback;
@@ -931,7 +957,7 @@ public class AlertsCreator {
             });
             a++;
         }
-        Builder builder = new Builder(parentActivity);
+        Builder builder = new Builder((Context) parentActivity);
         builder.setTitle(LocaleController.getString("LowDiskSpaceTitle", R.string.LowDiskSpaceTitle));
         builder.setMessage(LocaleController.getString("LowDiskSpaceMessage", R.string.LowDiskSpaceMessage));
         builder.setView(linearLayout);
@@ -1045,7 +1071,7 @@ public class AlertsCreator {
             });
             a++;
         }
-        Builder builder = new Builder(parentActivity);
+        Builder builder = new Builder((Context) parentActivity);
         builder.setTitle(LocaleController.getString("NotificationsImportance", R.string.NotificationsImportance));
         builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -1087,7 +1113,7 @@ public class AlertsCreator {
             });
             a++;
         }
-        Builder builder = new Builder(parentActivity);
+        Builder builder = new Builder((Context) parentActivity);
         builder.setTitle(LocaleController.getString("PopupNotification", R.string.PopupNotification));
         builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -1121,7 +1147,7 @@ public class AlertsCreator {
                 }
             });
         }
-        Builder builder = new Builder(parentActivity);
+        Builder builder = new Builder((Context) parentActivity);
         builder.setTitle(title);
         builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);

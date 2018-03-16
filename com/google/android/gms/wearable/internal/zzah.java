@@ -7,6 +7,7 @@ import com.google.android.gms.internal.zzbfm;
 import com.google.android.gms.internal.zzbfp;
 import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.Node;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -48,6 +49,17 @@ public final class zzah extends zzbfm implements CapabilityInfo {
 
     public final String getName() {
         return this.mName;
+    }
+
+    public final Set<Node> getNodes() {
+        Set<Node> set;
+        synchronized (this.mLock) {
+            if (this.zzlio == null) {
+                this.zzlio = new HashSet(this.zzliu);
+            }
+            set = this.zzlio;
+        }
+        return set;
     }
 
     public final int hashCode() {
