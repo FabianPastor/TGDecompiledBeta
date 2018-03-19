@@ -368,6 +368,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public int callPacketTimeout = 10000;
     public int callReceiveTimeout = 20000;
     public int callRingTimeout = 90000;
+    public boolean canRevokePmInbox;
     private SparseArray<ArrayList<Integer>> channelAdmins = new SparseArray();
     private SparseArray<ArrayList<Integer>> channelViewsToSend = new SparseArray();
     private SparseIntArray channelsPts = new SparseIntArray();
@@ -481,6 +482,8 @@ public class MessagesController implements NotificationCenterDelegate {
     private messages_Dialogs resetDialogsAll;
     private TL_messages_peerDialogs resetDialogsPinned;
     private boolean resetingDialogs;
+    public int revokeTimeLimit = 172800;
+    public int revokeTimePmLimit = 172800;
     public int secretWebpagePreview = 2;
     public SparseArray<LongSparseArray<Boolean>> sendingTypings = new SparseArray();
     public boolean serverDialogsEndReached;
@@ -648,7 +651,10 @@ public class MessagesController implements NotificationCenterDelegate {
         this.maxPinnedDialogsCount = this.mainPreferences.getInt("maxPinnedDialogsCount", 5);
         this.installReferer = this.mainPreferences.getString("installReferer", null);
         this.defaultP2pContacts = this.mainPreferences.getBoolean("defaultP2pContacts", false);
-        this.preloadFeaturedStickers = this.mainPreferences.getBoolean("preloadFeaturedStickers", BuildVars.DEBUG_PRIVATE_VERSION);
+        this.revokeTimeLimit = this.mainPreferences.getInt("revokeTimeLimit", this.revokeTimeLimit);
+        this.revokeTimePmLimit = this.mainPreferences.getInt("revokeTimePmLimit", this.revokeTimePmLimit);
+        this.canRevokePmInbox = this.mainPreferences.getBoolean("canRevokePmInbox", this.canRevokePmInbox);
+        this.preloadFeaturedStickers = this.mainPreferences.getBoolean("preloadFeaturedStickers", false);
     }
 
     public void updateConfig(final TL_config config) {
@@ -662,6 +668,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesController.this.maxRecentGifsCount = config.saved_gifs_limit;
                 MessagesController.this.maxRecentStickersCount = config.stickers_recent_limit;
                 MessagesController.this.maxFaveStickersCount = config.stickers_faved_limit;
+                MessagesController.this.revokeTimeLimit = config.revoke_time_limit;
+                MessagesController.this.revokeTimePmLimit = config.revoke_pm_time_limit;
+                MessagesController.this.canRevokePmInbox = config.revoke_pm_inbox;
                 MessagesController.this.linkPrefix = config.me_url_prefix;
                 if (MessagesController.this.linkPrefix.endsWith("/")) {
                     MessagesController.this.linkPrefix = MessagesController.this.linkPrefix.substring(0, MessagesController.this.linkPrefix.length() - 1);
@@ -694,6 +703,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 editor.putInt("maxPinnedDialogsCount", MessagesController.this.maxPinnedDialogsCount);
                 editor.putBoolean("defaultP2pContacts", MessagesController.this.defaultP2pContacts);
                 editor.putBoolean("preloadFeaturedStickers", MessagesController.this.preloadFeaturedStickers);
+                editor.putInt("revokeTimeLimit", MessagesController.this.revokeTimeLimit);
+                editor.putInt("revokeTimePmLimit", MessagesController.this.revokeTimePmLimit);
+                editor.putBoolean("canRevokePmInbox", MessagesController.this.canRevokePmInbox);
                 editor.commit();
                 LocaleController.getInstance().checkUpdateForCurrentRemoteLocale(MessagesController.this.currentAccount, config.lang_pack_version);
             }
@@ -2334,8 +2346,6 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
         long newTaskId;
-        NativeByteBuffer data;
-        NativeByteBuffer data2;
         Throwable e;
         final int i;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
@@ -2363,6 +2373,8 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance(this.currentAccount).updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
+            NativeByteBuffer data;
+            NativeByteBuffer data2;
             if (channelId != 0) {
                 TL_channels_deleteMessages req;
                 if (taskRequest != null) {
@@ -3699,6 +3711,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         int a;
+                        MessageObject messageObject;
                         MessagesController.this.resetingDialogs = false;
                         MessagesController.this.applyDialogsNotificationsSettings(org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs);
                         if (!UserConfig.getInstance(MessagesController.this.currentAccount).draftsLoaded) {
@@ -3707,7 +3720,6 @@ public class MessagesController implements NotificationCenterDelegate {
                         MessagesController.this.putUsers(org_telegram_tgnet_TLRPC_messages_Dialogs.users, false);
                         MessagesController.this.putChats(org_telegram_tgnet_TLRPC_messages_Dialogs.chats, false);
                         for (a = 0; a < MessagesController.this.dialogs.size(); a++) {
-                            MessageObject messageObject;
                             TL_dialog oldDialog = (TL_dialog) MessagesController.this.dialogs.get(a);
                             if (((int) oldDialog.id) != 0) {
                                 MessagesController.this.dialogs_dict.remove(oldDialog.id);
@@ -4570,6 +4582,7 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
+                Chat chat;
                 final LongSparseArray<TL_dialog> new_dialogs_dict = new LongSparseArray();
                 final LongSparseArray<MessageObject> new_dialogMessage = new LongSparseArray();
                 SparseArray usersDict = new SparseArray(dialogsRes.users.size());
@@ -4584,7 +4597,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(c.id, c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -6121,13 +6133,13 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
-        int channelPts;
         Throwable e;
         long newTaskId;
         TL_updates_getChannelDifference req;
         final int i;
         final int i2;
         if (!this.gettingDifferenceChannels.get(channelId)) {
+            int channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = this.channelsPts.get(channelId);

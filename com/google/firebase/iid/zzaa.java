@@ -24,7 +24,6 @@ final class zzaa implements Runnable {
     }
 
     private final boolean zzcjn() {
-        String zzciv;
         Exception e;
         String str;
         String valueOf;
@@ -32,6 +31,7 @@ final class zzaa implements Runnable {
         if (zzciu != null && !zzciu.zzro(this.zznys.zzcjg())) {
             return true;
         }
+        String zzciv;
         try {
             zzciv = this.zznzx.zzciv();
             if (zzciv == null) {

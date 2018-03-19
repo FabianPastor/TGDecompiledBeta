@@ -1073,7 +1073,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         if (AndroidUtilities.handleProxyIntent(this, intent)) {
             return true;
         }
-        if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
+        if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible() && (intent == null || !"android.intent.action.MAIN".equals(intent.getAction()))) {
             PhotoViewer.getInstance().closePhoto(false, true);
         }
         int flags = intent.getFlags();
@@ -1403,6 +1403,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                                                                     if (!url.startsWith("tg://confirmphone")) {
                                                                                         if (!url.startsWith("tg:openmessage")) {
                                                                                         }
+                                                                                        data = Uri.parse(url.replace("tg:openmessage", "tg://telegram.org").replace("tg://openmessage", "tg://telegram.org"));
                                                                                         String userID = data.getQueryParameter("user_id");
                                                                                         String chatID = data.getQueryParameter("chat_id");
                                                                                         String msgID = data.getQueryParameter("message_id");
@@ -1425,6 +1426,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                                                                         }
                                                                                     }
                                                                                 }
+                                                                                data = Uri.parse(url.replace("tg:confirmphone", "tg://telegram.org").replace("tg://confirmphone", "tg://telegram.org"));
                                                                                 phone = data.getQueryParameter("phone");
                                                                                 phoneHash = data.getQueryParameter("hash");
                                                                             }

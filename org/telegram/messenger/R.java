@@ -1338,6 +1338,7 @@ public final class R {
         public static final int DidNotGetTheCode = NUM;
         public static final int DirectShare = NUM;
         public static final int DirectShareInfo = NUM;
+        public static final int DisappearingGif = NUM;
         public static final int DisappearingPhoto = NUM;
         public static final int DisappearingVideo = NUM;
         public static final int DiscardChanges = NUM;
@@ -2402,6 +2403,10 @@ public final class R {
         public static final int Subscribers_other = NUM;
         public static final int Subscribers_two = NUM;
         public static final int Subscribers_zero = NUM;
+        public static final int SuggestStickers = NUM;
+        public static final int SuggestStickersAll = NUM;
+        public static final int SuggestStickersInstalled = NUM;
+        public static final int SuggestStickersNone = NUM;
         public static final int Support = NUM;
         public static final int SyncContacts = NUM;
         public static final int SyncContactsAdded = NUM;
@@ -2561,6 +2566,7 @@ public final class R {
         public static final int VoipPeerIncompatible = NUM;
         public static final int VoipPeerOutdated = NUM;
         public static final int VoipQuickReplies = NUM;
+        public static final int VoipQuickRepliesExplain = NUM;
         public static final int VoipRateCallAlert = NUM;
         public static final int VoipRequesting = NUM;
         public static final int VoipRinging = NUM;

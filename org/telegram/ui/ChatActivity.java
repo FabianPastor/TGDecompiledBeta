@@ -442,6 +442,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean[] endReached = new boolean[2];
     private boolean first = true;
     private boolean firstLoading = true;
+    private boolean firstUnreadSent = false;
     private int first_unread_id;
     private boolean fixPaddingsInLayout;
     private AnimatorSet floatingDateAnimation;
@@ -6571,6 +6572,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     long j = this.dialog_id;
                     boolean z2 = maxPositiveUnreadId == this.minMessageId[0] || maxNegativeUnreadId == this.minMessageId[0];
                     instance.markDialogAsRead(j, maxPositiveUnreadId, maxNegativeUnreadId, maxUnreadDate, false, counterDicrement, z2);
+                    this.firstUnreadSent = true;
+                } else if (!this.firstUnreadSent && this.chatLayoutManager.findFirstVisibleItemPosition() == 0) {
+                    MessagesController.getInstance(this.currentAccount).markDialogAsRead(this.dialog_id, this.minMessageId[0], this.minMessageId[0], this.maxDate[0], false, 0, true);
+                    this.firstUnreadSent = true;
                 }
             }
         }
@@ -7576,13 +7581,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.currentPicturePath = args.getString("path");
     }
 
-    private void removeUnreadPlane() {
+    private void removeUnreadPlane(boolean scrollToEnd) {
         if (this.unreadMessageObject != null) {
-            boolean[] zArr = this.forwardEndReached;
-            this.forwardEndReached[1] = true;
-            zArr[0] = true;
-            this.first_unread_id = 0;
-            this.last_message_id = 0;
+            if (scrollToEnd) {
+                boolean[] zArr = this.forwardEndReached;
+                this.forwardEndReached[1] = true;
+                zArr[0] = true;
+                this.first_unread_id = 0;
+                this.last_message_id = 0;
+            }
             this.createUnreadMessageAfterId = 0;
             this.createUnreadMessageAfterIdLoading = false;
             this.unread_to_load = 0;
@@ -8368,7 +8375,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 this.minDate[0] = obj.messageOwner.date;
                             }
                             if (obj.isOut()) {
-                                removeUnreadPlane();
+                                removeUnreadPlane(true);
                                 hasFromMe = true;
                             }
                             if (obj.getId() > 0) {
@@ -8624,12 +8631,25 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 }
                                 obj.setIsRead();
                                 updated = true;
+                                this.newUnreadMessageCount--;
                             }
                         }
-                        removeUnreadPlane();
+                        removeUnreadPlane(false);
                     }
                 }
-                removeUnreadPlane();
+            }
+            if (updated) {
+                if (this.newUnreadMessageCount < 0) {
+                    this.newUnreadMessageCount = 0;
+                }
+                this.pagedownButtonCounter.setText(String.format("%d", new Object[]{Integer.valueOf(this.newUnreadMessageCount)}));
+                if (this.newUnreadMessageCount <= 0) {
+                    if (this.pagedownButtonCounter.getVisibility() != 4) {
+                        this.pagedownButtonCounter.setVisibility(4);
+                    }
+                } else if (this.pagedownButtonCounter.getVisibility() != 0) {
+                    this.pagedownButtonCounter.setVisibility(0);
+                }
             }
             if (outbox != null) {
                 b = 0;
@@ -8744,7 +8764,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                 }
                 if (updated && this.chatAdapter != null) {
-                    removeUnreadPlane();
+                    removeUnreadPlane(true);
                     this.chatAdapter.notifyDataSetChanged();
                 }
             }
@@ -8887,7 +8907,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 return;
             }
             if (updated) {
-                removeUnreadPlane();
+                removeUnreadPlane(false);
                 count = this.chatListView.getChildCount();
                 int position = -1;
                 int bottom2 = 0;
@@ -10766,6 +10786,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             boolean[] checks = new boolean[3];
             boolean[] deleteForAll = new boolean[1];
             User user = null;
+            boolean canRevokeInbox = this.currentUser != null && MessagesController.getInstance(this.currentAccount).canRevokePmInbox;
+            int revokeTimeLimit;
+            if (this.currentUser != null) {
+                revokeTimeLimit = MessagesController.getInstance(this.currentAccount).revokeTimePmLimit;
+            } else {
+                revokeTimeLimit = MessagesController.getInstance(this.currentAccount).revokeTimeLimit;
+            }
             boolean z;
             int currentDate;
             int a;
@@ -10773,7 +10800,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             MessageObject msg;
             boolean exit;
             View frameLayout;
-            CheckBoxCell cell;
             final boolean[] zArr;
             if (this.currentChat != null && this.currentChat.megagroup) {
                 z = false;
@@ -10783,7 +10809,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     if (finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty) || (finalSelectedObject.messageOwner.action instanceof TL_messageActionChatDeleteUser)) {
                         user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(finalSelectedObject.messageOwner.from_id));
                     }
-                    if (!finalSelectedObject.isSendError() && finalSelectedObject.getDialogId() == this.mergeDialogId && ((finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) && finalSelectedObject.isOut() && currentDate - finalSelectedObject.messageOwner.date <= 172800)) {
+                    if (!finalSelectedObject.isSendError() && finalSelectedObject.getDialogId() == this.mergeDialogId && ((finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) && finalSelectedObject.isOut() && currentDate - finalSelectedObject.messageOwner.date <= revokeTimeLimit)) {
                         z = true;
                     } else {
                         z = false;
@@ -10836,12 +10862,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 if (user == null || user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || loadParticipant == 2) {
                     if (z) {
                         frameLayout = new FrameLayout(getParentActivity());
-                        cell = new CheckBoxCell(getParentActivity(), 1);
-                        cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                        frameLayout = new CheckBoxCell(getParentActivity(), 1);
+                        frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                         if (this.currentChat != null) {
-                            cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                            frameLayout.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                         } else {
-                            cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(this.currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                            frameLayout.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(this.currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                         }
                         if (LocaleController.isRTL) {
                             dp = AndroidUtilities.dp(16.0f);
@@ -10853,10 +10879,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         } else {
                             dp2 = AndroidUtilities.dp(16.0f);
                         }
-                        cell.setPadding(dp, 0, dp2, 0);
-                        frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+                        frameLayout.setPadding(dp, 0, dp2, 0);
+                        frameLayout.addView(frameLayout, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                         zArr = deleteForAll;
-                        cell.setOnClickListener(new View.OnClickListener() {
+                        frameLayout.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
                                 boolean z;
                                 CheckBoxCell cell = (CheckBoxCell) v;
@@ -10880,15 +10906,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     a = 0;
                     while (a < 3) {
                         if (canBan || a != 0) {
-                            cell = new CheckBoxCell(getParentActivity(), 1);
-                            cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                            cell.setTag(Integer.valueOf(a));
+                            frameLayout = new CheckBoxCell(getParentActivity(), 1);
+                            frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                            frameLayout.setTag(Integer.valueOf(a));
                             if (a == 0) {
-                                cell.setText(LocaleController.getString("DeleteBanUser", R.string.DeleteBanUser), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                                frameLayout.setText(LocaleController.getString("DeleteBanUser", R.string.DeleteBanUser), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                             } else if (a == 1) {
-                                cell.setText(LocaleController.getString("DeleteReportSpam", R.string.DeleteReportSpam), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                                frameLayout.setText(LocaleController.getString("DeleteReportSpam", R.string.DeleteReportSpam), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                             } else if (a == 2) {
-                                cell.setText(LocaleController.formatString("DeleteAllFrom", R.string.DeleteAllFrom, ContactsController.formatName(user.first_name, user.last_name)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                                frameLayout.setText(LocaleController.formatString("DeleteAllFrom", R.string.DeleteAllFrom, ContactsController.formatName(user.first_name, user.last_name)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                             }
                             if (LocaleController.isRTL) {
                                 dp = AndroidUtilities.dp(16.0f);
@@ -10900,10 +10926,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             } else {
                                 dp2 = AndroidUtilities.dp(16.0f);
                             }
-                            cell.setPadding(dp, 0, dp2, 0);
-                            frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) (num * 48), 0.0f, 0.0f));
+                            frameLayout.setPadding(dp, 0, dp2, 0);
+                            frameLayout.addView(frameLayout, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) (num * 48), 0.0f, 0.0f));
                             zArr = checks;
-                            cell.setOnClickListener(new View.OnClickListener() {
+                            frameLayout.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
                                     if (v.isEnabled()) {
                                         CheckBoxCell cell = (CheckBoxCell) v;
@@ -10984,11 +11010,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             for (b = 0; b < this.selectedMessagesIds[a].size(); b++) {
                                 msg = (MessageObject) this.selectedMessagesIds[a].valueAt(b);
                                 if (msg.messageOwner.action == null) {
-                                    if (!msg.isOut() && (this.currentChat == null || (!this.currentChat.creator && (!this.currentChat.admin || !this.currentChat.admins_enabled)))) {
+                                    if (!msg.isOut() && !canRevokeInbox && (this.currentChat == null || (!this.currentChat.creator && (!this.currentChat.admin || !this.currentChat.admins_enabled)))) {
                                         exit = true;
                                         z = false;
                                         break;
-                                    } else if (!z && currentDate - msg.messageOwner.date <= 172800) {
+                                    } else if (!z && currentDate - msg.messageOwner.date <= revokeTimeLimit) {
                                         z = true;
                                     }
                                 }
@@ -10997,7 +11023,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 break;
                             }
                         }
-                    } else if (finalSelectedObject.isSendError() || (!(finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) || ((!finalSelectedObject.isOut() && (this.currentChat == null || !(this.currentChat.creator || (this.currentChat.admin && this.currentChat.admins_enabled)))) || currentDate - finalSelectedObject.messageOwner.date > 172800))) {
+                    } else if (finalSelectedObject.isSendError() || (!(finalSelectedObject.messageOwner.action == null || (finalSelectedObject.messageOwner.action instanceof TL_messageActionEmpty)) || (!(finalSelectedObject.isOut() || canRevokeInbox || (this.currentChat != null && (this.currentChat.creator || (this.currentChat.admin && this.currentChat.admins_enabled)))) || currentDate - finalSelectedObject.messageOwner.date > revokeTimeLimit))) {
                         z = false;
                     } else {
                         z = true;
@@ -11005,17 +11031,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 }
                 if (z) {
                     frameLayout = new FrameLayout(getParentActivity());
-                    cell = new CheckBoxCell(getParentActivity(), 1);
-                    cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                    frameLayout = new CheckBoxCell(getParentActivity(), 1);
+                    frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     if (this.currentChat != null) {
-                        cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                        frameLayout.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                     } else {
-                        cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(this.currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
+                        frameLayout.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(this.currentUser)), TtmlNode.ANONYMOUS_REGION_ID, false, false);
                     }
-                    cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
-                    frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+                    frameLayout.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
+                    frameLayout.addView(frameLayout, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                     zArr = deleteForAll;
-                    cell.setOnClickListener(new View.OnClickListener() {
+                    frameLayout.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             boolean z;
                             CheckBoxCell cell = (CheckBoxCell) v;
@@ -11775,13 +11801,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void processSelectedOption(int option) {
+        File file;
+        Intent intent;
         if (this.selectedObject != null && getParentActivity() != null) {
             int a;
             Bundle args;
-            File file;
             AlertDialog.Builder builder;
             String path;
-            Intent intent;
             switch (option) {
                 case 0:
                     if (this.selectedObjectGroup == null) {

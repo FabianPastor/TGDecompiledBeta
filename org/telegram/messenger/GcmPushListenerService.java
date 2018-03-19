@@ -18,6 +18,7 @@ import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.TL_message;
+import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
 import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC.TL_peerChannel;
 import org.telegram.tgnet.TLRPC.TL_peerChat;
@@ -40,8 +41,8 @@ public class GcmPushListenerService extends GcmListenerService {
                 ApplicationLoader.postInitApplication();
                 Utilities.stageQueue.postRunnable(new Runnable() {
                     public void run() {
-                        Throwable e;
                         int currentAccount;
+                        Throwable e;
                         try {
                             Object value = bundle.get(TtmlNode.TAG_P);
                             if (value instanceof String) {
@@ -142,6 +143,7 @@ public class GcmPushListenerService extends GcmListenerService {
                                                             String name;
                                                             boolean localMessage;
                                                             boolean supergroup;
+                                                            boolean pinned;
                                                             Object obj2;
                                                             Object obj3;
                                                             int dc;
@@ -175,9 +177,11 @@ public class GcmPushListenerService extends GcmListenerService {
                                                                     name = args[0];
                                                                     localMessage = false;
                                                                     supergroup = false;
+                                                                    pinned = false;
                                                                     if (loc_key.startsWith("CHAT_")) {
                                                                         if (loc_key.startsWith("PINNED_")) {
                                                                             supergroup = chat_from_id == 0;
+                                                                            pinned = true;
                                                                         }
                                                                     } else {
                                                                         supergroup = channel_id == 0;
@@ -1151,6 +1155,9 @@ public class GcmPushListenerService extends GcmListenerService {
                                                                         }
                                                                         messageOwner.message = message;
                                                                         messageOwner.date = (int) (time / 1000);
+                                                                        if (pinned) {
+                                                                            messageOwner.action = new TL_messageActionPinMessage();
+                                                                        }
                                                                         if (supergroup) {
                                                                             messageOwner.flags |= Integer.MIN_VALUE;
                                                                         }
@@ -1192,10 +1199,12 @@ public class GcmPushListenerService extends GcmListenerService {
                                                             name = args[0];
                                                             localMessage = false;
                                                             supergroup = false;
+                                                            pinned = false;
                                                             if (loc_key.startsWith("CHAT_")) {
                                                                 if (loc_key.startsWith("PINNED_")) {
                                                                     if (chat_from_id == 0) {
                                                                     }
+                                                                    pinned = true;
                                                                 }
                                                             } else {
                                                                 if (channel_id == 0) {
@@ -2158,6 +2167,9 @@ public class GcmPushListenerService extends GcmListenerService {
                                                                 }
                                                                 messageOwner.message = message;
                                                                 messageOwner.date = (int) (time / 1000);
+                                                                if (pinned) {
+                                                                    messageOwner.action = new TL_messageActionPinMessage();
+                                                                }
                                                                 if (supergroup) {
                                                                     messageOwner.flags |= Integer.MIN_VALUE;
                                                                 }
@@ -2220,10 +2232,10 @@ public class GcmPushListenerService extends GcmListenerService {
                                         } catch (Throwable th) {
                                             e = th;
                                             if (currentAccount == -1) {
+                                                GcmPushListenerService.this.onDecryptError();
+                                            } else {
                                                 ConnectionsManager.onInternalPushReceived(currentAccount);
                                                 ConnectionsManager.getInstance(currentAccount).resumeNetworkMaybe();
-                                            } else {
-                                                GcmPushListenerService.this.onDecryptError();
                                             }
                                             FileLog.e(e);
                                         }
@@ -2242,10 +2254,10 @@ public class GcmPushListenerService extends GcmListenerService {
                             e = th2;
                             currentAccount = -1;
                             if (currentAccount == -1) {
-                                GcmPushListenerService.this.onDecryptError();
-                            } else {
                                 ConnectionsManager.onInternalPushReceived(currentAccount);
                                 ConnectionsManager.getInstance(currentAccount).resumeNetworkMaybe();
+                            } else {
+                                GcmPushListenerService.this.onDecryptError();
                             }
                             FileLog.e(e);
                         }

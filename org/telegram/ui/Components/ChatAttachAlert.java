@@ -1484,6 +1484,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     private boolean processTouchEvent(MotionEvent event) {
+        if (event == null) {
+            return false;
+        }
         if ((this.pressed || event.getActionMasked() != 0) && event.getActionMasked() != 5) {
             if (this.pressed) {
                 AnimatorSet animatorSet;

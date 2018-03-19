@@ -162,7 +162,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         if (value.equals("NoSound")) {
                             value = LocaleController.getString("NoSound", R.string.NoSound);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("VoipSettingsRingtone", R.string.VoipSettingsRingtone), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("VoipSettingsRingtone", R.string.VoipSettingsRingtone), value, false);
                         return;
                     } else if (position == ProfileNotificationsActivity.this.vibrateRow) {
                         value = preferences.getInt("vibrate_" + ProfileNotificationsActivity.this.dialog_id, 0);

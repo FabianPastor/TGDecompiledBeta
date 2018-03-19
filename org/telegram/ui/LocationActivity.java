@@ -509,7 +509,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                                 LocationActivity.this.mapView.getMapAsync(new OnMapReadyCallback() {
                                     public void onMapReady(GoogleMap map) {
                                         LocationActivity.this.googleMap = map;
-                                        LocationActivity.this.googleMap.setPadding(0, 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
+                                        LocationActivity.this.googleMap.setPadding(AndroidUtilities.dp(70.0f), 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
                                         LocationActivity.this.onMapInit();
                                     }
                                 });
@@ -938,7 +938,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     if (layoutParams != null && layoutParams.height != this.overScrollHeight + AndroidUtilities.dp(10.0f)) {
                         layoutParams.height = this.overScrollHeight + AndroidUtilities.dp(10.0f);
                         if (this.googleMap != null) {
-                            this.googleMap.setPadding(0, 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
+                            this.googleMap.setPadding(AndroidUtilities.dp(70.0f), 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
                         }
                         this.mapView.setLayoutParams(layoutParams);
                     }
@@ -970,7 +970,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 if (layoutParams != null) {
                     layoutParams.height = this.overScrollHeight + AndroidUtilities.dp(10.0f);
                     if (this.googleMap != null) {
-                        this.googleMap.setPadding(0, 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
+                        this.googleMap.setPadding(AndroidUtilities.dp(70.0f), 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
                     }
                     this.mapView.setLayoutParams(layoutParams);
                 }

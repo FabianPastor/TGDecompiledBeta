@@ -4612,7 +4612,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         if (this.placeProvider != null) {
             int num = this.placeProvider.setPhotoChecked(this.currentIndex, getCurrentVideoEditedInfo());
             boolean checked = this.placeProvider.isPhotoChecked(this.currentIndex);
-            this.checkImageView.setChecked(num, checked, true);
+            this.checkImageView.setChecked(checked, true);
             if (num >= 0) {
                 if (this.placeProvider.allowGroupPhotos()) {
                     num++;
@@ -5709,6 +5709,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         this.photosCounterView.setVisibility(8);
         this.pickerView.setVisibility(8);
         this.pickerViewSendButton.setVisibility(8);
+        this.pickerViewSendButton.setTranslationY(0.0f);
         this.pickerView.setAlpha(1.0f);
         this.pickerViewSendButton.setAlpha(1.0f);
         this.pickerView.setTranslationY(0.0f);
@@ -5854,6 +5855,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             }
             this.pickerView.setVisibility(0);
             this.pickerViewSendButton.setVisibility(0);
+            this.pickerViewSendButton.setTranslationY(0.0f);
+            this.pickerViewSendButton.setAlpha(1.0f);
             this.bottomLayout.setVisibility(8);
             this.bottomLayout.setTag(null);
             this.containerView.setTag(null);
@@ -6028,7 +6031,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                 }
                             }
                             if (this.sendPhotoType == 0 || (this.sendPhotoType == 2 && this.imagesArrLocals.size() > 1)) {
-                                this.checkImageView.setChecked(this.placeProvider.getPhotoIndex(this.switchingToIndex), this.placeProvider.isPhotoChecked(this.switchingToIndex), false);
+                                this.checkImageView.setChecked(this.placeProvider.isPhotoChecked(this.switchingToIndex), false);
                             }
                             updateCaptionTextForCurrentPhoto(object);
                             ColorFilter porterDuffColorFilter = new PorterDuffColorFilter(-12734994, Mode.MULTIPLY);

@@ -2297,7 +2297,7 @@ public class MessageObject {
             } else if (c == ' ' || digitsInRow <= 0) {
                 digitsInRow = 0;
             }
-            if ((c == '@' || c == '#' || c == '/') && i == 0) {
+            if ((c == '@' || c == '#' || c == '/' || c == '$') && i == 0) {
                 return true;
             }
             if (i != 0 && (message.charAt(i - 1) == ' ' || message.charAt(i - 1) == '\n')) {
@@ -2401,13 +2401,14 @@ public class MessageObject {
     private static void addUsernamesAndHashtags(boolean isOut, CharSequence charSequence, boolean botCommands) {
         try {
             if (urlPattern == null) {
-                urlPattern = Pattern.compile("(^|\\s)/[a-zA-Z@\\d_]{1,255}|(^|\\s)@[a-zA-Z\\d_]{1,32}|(^|\\s)#[\\w\\.]+");
+                urlPattern = Pattern.compile("(^|\\s)/[a-zA-Z@\\d_]{1,255}|(^|\\s)@[a-zA-Z\\d_]{1,32}|(^|\\s)#[\\w\\.]+|(^|\\s)\\$[A-Z]+([ ,.]|$)");
             }
             Matcher matcher = urlPattern.matcher(charSequence);
             while (matcher.find()) {
                 int start = matcher.start();
                 int end = matcher.end();
-                if (!(charSequence.charAt(start) == '@' || charSequence.charAt(start) == '#' || charSequence.charAt(start) == '/')) {
+                char ch = charSequence.charAt(start);
+                if (!(ch == '@' || ch == '#' || ch == '/' || ch == '$')) {
                     start++;
                 }
                 URLSpanNoUnderline url = null;
@@ -2608,9 +2609,9 @@ public class MessageObject {
     }
 
     public void generateLayout(User fromUser) {
-        int a;
         if (this.type == 0 && this.messageOwner.to_id != null && !TextUtils.isEmpty(this.messageText)) {
             boolean hasEntities;
+            int a;
             TextPaint paint;
             StaticLayout textLayout;
             int blocksCount;
@@ -3067,7 +3068,7 @@ public class MessageObject {
 
     public boolean needDrawBluredPreview() {
         if (this.messageOwner instanceof TL_message_secret) {
-            if (this.messageOwner.ttl <= 0 || (((!(this.messageOwner.media instanceof TL_messageMediaPhoto) && !isVideo()) || this.messageOwner.media.ttl_seconds > 60) && !isRoundVideo())) {
+            if (this.messageOwner.ttl <= 0 || (((!(this.messageOwner.media instanceof TL_messageMediaPhoto) && !isVideo() && !isGif()) || this.messageOwner.media.ttl_seconds > 60) && !isRoundVideo())) {
                 return false;
             }
             return true;
@@ -3084,7 +3085,7 @@ public class MessageObject {
     public boolean isSecretMedia() {
         boolean z = true;
         if (this.messageOwner instanceof TL_message_secret) {
-            if (((this.messageOwner.media instanceof TL_messageMediaPhoto) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice() || isRoundVideo() || isVideo()) {
+            if ((((this.messageOwner.media instanceof TL_messageMediaPhoto) || isGif()) && this.messageOwner.ttl > 0 && this.messageOwner.ttl <= 60) || isVoice() || isRoundVideo() || isVideo()) {
                 return true;
             }
             return false;

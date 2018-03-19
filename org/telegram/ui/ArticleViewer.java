@@ -104,7 +104,6 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -6591,11 +6590,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     return;
                 }
                 Intent intent = new Intent("android.intent.action.SEND");
-                if (isMediaVideo(this.currentIndex)) {
-                    intent.setType(MimeTypes.VIDEO_MP4);
-                } else {
-                    intent.setType("image/jpeg");
-                }
+                intent.setType(getMediaMime(this.currentIndex));
                 if (VERSION.SDK_INT >= 24) {
                     try {
                         intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(this.parentActivity, "org.telegram.messenger.beta.provider", f));
@@ -6928,6 +6923,20 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
     private boolean isMediaVideo(int index) {
         return !this.imagesArr.isEmpty() && index < this.imagesArr.size() && index >= 0 && isVideoBlock((PageBlock) this.imagesArr.get(index));
+    }
+
+    private String getMediaMime(int index) {
+        if (index >= this.imagesArr.size() || index < 0) {
+            return "image/jpeg";
+        }
+        PageBlock block = (PageBlock) this.imagesArr.get(index);
+        if (block instanceof TL_pageBlockVideo) {
+            Document document = getDocumentWithId(block.video_id);
+            if (document != null) {
+                return document.mime_type;
+            }
+        }
+        return "image/jpeg";
     }
 
     private FileLocation getFileLocation(int index, int[] size) {

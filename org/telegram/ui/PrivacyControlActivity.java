@@ -336,8 +336,9 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 }
             }
         });
+        int visibility = this.doneButton != null ? this.doneButton.getVisibility() : 8;
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        this.doneButton.setVisibility(8);
+        this.doneButton.setVisibility(visibility);
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;

@@ -29,7 +29,10 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView;
+import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
+import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
@@ -87,6 +90,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
     private int eventLogRow;
     private ChatFull info;
     private int infoRow;
+    private LinearLayoutManager layoutManager;
     private RecyclerListView listView;
     private ListAdapter listViewAdapter;
     private int loadMoreMembersRow;
@@ -470,7 +474,10 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
         };
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setEmptyView(emptyView);
-        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        RecyclerListView recyclerListView = this.listView;
+        LayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
+        this.layoutManager = linearLayoutManager;
+        recyclerListView.setLayoutManager(linearLayoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listViewAdapter);
         this.listView.setOnItemClickListener(new OnItemClickListener() {
@@ -531,6 +538,13 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                     user = (TL_chatChannelParticipant) ChannelEditActivity.this.info.participants.participants.get(((Integer) ChannelEditActivity.this.sortedUsers.get(position - ChannelEditActivity.this.membersStartRow)).intValue());
                 }
                 return ChannelEditActivity.this.createMenuForParticipant(user, null, false);
+            }
+        });
+        this.listView.setOnScrollListener(new OnScrollListener() {
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (ChannelEditActivity.this.participantsMap != null && ChannelEditActivity.this.loadMoreMembersRow != -1 && ChannelEditActivity.this.layoutManager.findLastVisibleItemPosition() > ChannelEditActivity.this.loadMoreMembersRow - 8) {
+                    ChannelEditActivity.this.getChannelParticipants(false);
+                }
             }
         });
         return this.fragmentView;
@@ -599,7 +613,7 @@ public class ChannelEditActivity extends BaseFragment implements NotificationCen
                             if (error == null) {
                                 TL_channels_channelParticipants res = response;
                                 MessagesController.getInstance(ChannelEditActivity.this.currentAccount).putUsers(res.users, false);
-                                if (res.users.size() != Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+                                if (res.users.size() < Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
                                     ChannelEditActivity.this.usersEndReached = true;
                                 }
                                 if (req.offset == 0) {

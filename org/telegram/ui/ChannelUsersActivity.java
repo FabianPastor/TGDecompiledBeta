@@ -1246,7 +1246,6 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 }
 
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
                 }
             });
         }

@@ -61,6 +61,7 @@ public class DataSettingsActivity extends BaseFragment {
     private int proxyRow;
     private int proxySection2Row;
     private int proxySectionRow;
+    private int quickRepliesRow;
     private int resetDownloadRow;
     private int roamingUsageRow;
     private int rowCount;
@@ -115,7 +116,7 @@ public class DataSettingsActivity extends BaseFragment {
                                 value = LocaleController.getString("UseLessDataAlways", R.string.UseLessDataAlways);
                                 break;
                         }
-                        textCell.setTextAndValue(LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), value, false);
+                        textCell.setTextAndValue(LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), value, true);
                         return;
                     } else if (position == DataSettingsActivity.this.mobileUsageRow) {
                         textCell.setText(LocaleController.getString("MobileUsage", R.string.MobileUsage), true);
@@ -153,6 +154,9 @@ public class DataSettingsActivity extends BaseFragment {
                         return;
                     } else if (position == DataSettingsActivity.this.gifsRow) {
                         textCell.setText(LocaleController.getString("LocalGifCache", R.string.LocalGifCache), true);
+                        return;
+                    } else if (position == DataSettingsActivity.this.quickRepliesRow) {
+                        textCell.setText(LocaleController.getString("VoipQuickReplies", R.string.VoipQuickReplies), false);
                         return;
                     } else {
                         return;
@@ -239,7 +243,7 @@ public class DataSettingsActivity extends BaseFragment {
             if (position == DataSettingsActivity.this.photosRow || position == DataSettingsActivity.this.voiceMessagesRow || position == DataSettingsActivity.this.videoMessagesRow || position == DataSettingsActivity.this.videosRow || position == DataSettingsActivity.this.filesRow || position == DataSettingsActivity.this.musicRow || position == DataSettingsActivity.this.gifsRow) {
                 return DownloadController.getInstance(DataSettingsActivity.this.currentAccount).globalAutodownloadEnabled;
             }
-            return position == DataSettingsActivity.this.storageUsageRow || position == DataSettingsActivity.this.useLessDataForCallsRow || position == DataSettingsActivity.this.mobileUsageRow || position == DataSettingsActivity.this.roamingUsageRow || position == DataSettingsActivity.this.wifiUsageRow || position == DataSettingsActivity.this.proxyRow || position == DataSettingsActivity.this.resetDownloadRow || position == DataSettingsActivity.this.autoDownloadMediaRow || position == DataSettingsActivity.this.enableCacheStreamRow || position == DataSettingsActivity.this.enableStreamRow || position == DataSettingsActivity.this.enableAllStreamRow;
+            return position == DataSettingsActivity.this.storageUsageRow || position == DataSettingsActivity.this.useLessDataForCallsRow || position == DataSettingsActivity.this.mobileUsageRow || position == DataSettingsActivity.this.roamingUsageRow || position == DataSettingsActivity.this.wifiUsageRow || position == DataSettingsActivity.this.proxyRow || position == DataSettingsActivity.this.resetDownloadRow || position == DataSettingsActivity.this.autoDownloadMediaRow || position == DataSettingsActivity.this.enableCacheStreamRow || position == DataSettingsActivity.this.enableStreamRow || position == DataSettingsActivity.this.enableAllStreamRow || position == DataSettingsActivity.this.quickRepliesRow;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -363,6 +367,9 @@ public class DataSettingsActivity extends BaseFragment {
         i = this.rowCount;
         this.rowCount = i + 1;
         this.useLessDataForCallsRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.quickRepliesRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.callsSection2Row = i;
@@ -533,6 +540,8 @@ public class DataSettingsActivity extends BaseFragment {
                 } else if (position == DataSettingsActivity.this.enableCacheStreamRow) {
                     SharedConfig.toggleSaveStreamMedia();
                     ((TextCheckCell) view).setChecked(SharedConfig.saveStreamMedia);
+                } else if (position == DataSettingsActivity.this.quickRepliesRow) {
+                    DataSettingsActivity.this.presentFragment(new QuickRepliesSettingsActivity());
                 }
             }
         });

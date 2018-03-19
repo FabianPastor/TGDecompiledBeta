@@ -42,6 +42,7 @@ public class SharedConfig {
     public static boolean shuffleMusic;
     public static boolean streamAllVideo = false;
     public static boolean streamMedia = true;
+    public static int suggestStickers;
     private static final Object sync = new Object();
     public static boolean useFingerprint = true;
     public static boolean useSystemEmoji;
@@ -133,6 +134,7 @@ public class SharedConfig {
             streamMedia = preferences.getBoolean("streamMedia", true);
             saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
             streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
+            suggestStickers = preferences.getInt("suggestStickers", 0);
             configLoaded = true;
         }
     }
@@ -186,6 +188,13 @@ public class SharedConfig {
         allowScreenCapture = false;
         lastUpdateVersion = BuildVars.BUILD_VERSION_STRING;
         saveConfig();
+    }
+
+    public static void setSuggestStickers(int type) {
+        suggestStickers = type;
+        Editor editor = MessagesController.getGlobalMainSettings().edit();
+        editor.putInt("suggestStickers", suggestStickers);
+        editor.commit();
     }
 
     public static void toggleShuffleMusic(int type) {

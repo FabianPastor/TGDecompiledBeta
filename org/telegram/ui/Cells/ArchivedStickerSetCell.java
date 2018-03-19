@@ -49,7 +49,7 @@ public class ArchivedStickerSetCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 10.0f, 71.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 10.0f, needCheckBox ? 71.0f : 21.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
@@ -69,7 +69,7 @@ public class ArchivedStickerSetCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 35.0f, 71.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 35.0f, needCheckBox ? 71.0f : 21.0f, 0.0f));
         this.imageView = new BackupImageView(context);
         this.imageView.setAspectFit(true);
         view = this.imageView;

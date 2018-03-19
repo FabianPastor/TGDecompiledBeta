@@ -47,7 +47,6 @@ public class DownloadFileTask extends AsyncTask<Void, Integer, Long> {
     }
 
     protected Long doInBackground(Void... args) {
-        Long valueOf;
         Throwable e;
         Throwable th;
         InputStream input = null;
@@ -56,6 +55,7 @@ public class DownloadFileTask extends AsyncTask<Void, Integer, Long> {
         connection.connect();
         int lengthOfFile = connection.getContentLength();
         String contentType = connection.getContentType();
+        Long valueOf;
         if (contentType == null || !contentType.contains(MimeTypes.BASE_TYPE_TEXT)) {
             try {
                 if (this.mDirectory.mkdirs() || this.mDirectory.exists()) {

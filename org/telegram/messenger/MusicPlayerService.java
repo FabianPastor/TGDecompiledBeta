@@ -184,6 +184,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
             }
             this.mediaSession.setPlaybackState(this.playbackState.build());
             this.mediaSession.setMetadata(new MediaMetadata.Builder().putBitmap("android.media.metadata.ALBUM_ART", fullAlbumArt).putString("android.media.metadata.ALBUM_ARTIST", authorName).putString("android.media.metadata.TITLE", songName).putString("android.media.metadata.ALBUM", audioInfo != null ? audioInfo.getAlbum() : null).build());
+            bldr.setVisibility(1);
             notification = bldr.build();
             if (isPlaying) {
                 startForeground(5, notification);

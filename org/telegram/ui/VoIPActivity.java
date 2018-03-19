@@ -1457,7 +1457,16 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }).start();
     }
 
+    private void sendTextMessage(final String text) {
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                SendMessagesHelper.getInstance(VoIPActivity.this.currentAccount).sendMessage(text, (long) VoIPActivity.this.user.id, null, null, false, null, null, null);
+            }
+        });
+    }
+
     private void showMessagesSheet() {
+        BottomSheetCell cell;
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().stopRinging();
         }
@@ -1469,141 +1478,153 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         msgs[3] = prefs.getString("quick_reply_msg4", LocaleController.getString("QuickReplyDefault4", R.string.QuickReplyDefault4));
         LinearLayout sheetView = new LinearLayout(this);
         sheetView.setOrientation(1);
-        BottomSheet sheet = new BottomSheet.Builder(this, true).create();
-        final BottomSheet bottomSheet = sheet;
+        BottomSheet bottomSheet = new BottomSheet(this, true);
+        if (VERSION.SDK_INT >= 21) {
+            getWindow().setNavigationBarColor(-13948117);
+            bottomSheet.setOnDismissListener(new OnDismissListener() {
+                public void onDismiss(DialogInterface dialog) {
+                    VoIPActivity.this.getWindow().setNavigationBarColor(0);
+                }
+            });
+        }
+        final BottomSheet bottomSheet2 = bottomSheet;
         OnClickListener listener = new OnClickListener() {
-            public void onClick(View v) {
-                bottomSheet.dismiss();
-                SendMessagesHelper.getInstance(VoIPActivity.this.currentAccount).sendMessage((String) v.getTag(), (long) VoIPActivity.this.user.id, null, null, false, null, null, null);
+            public void onClick(final View v) {
+                bottomSheet2.dismiss();
                 if (VoIPService.getSharedInstance() != null) {
-                    VoIPService.getSharedInstance().declineIncomingCall(4, null);
+                    VoIPService.getSharedInstance().declineIncomingCall(4, new Runnable() {
+                        public void run() {
+                            VoIPActivity.this.sendTextMessage((String) v.getTag());
+                        }
+                    });
                 }
             }
         };
         for (String msg : msgs) {
-            BottomSheetCell cell = new BottomSheetCell(this, 0);
+            cell = new BottomSheetCell(this, 0);
             cell.setTextAndIcon(msg, 0);
             cell.setTextColor(-1);
             cell.setTag(msg);
             cell.setOnClickListener(listener);
             sheetView.addView(cell);
         }
-        if (prefs.getBoolean("quick_reply_allow_custom", true)) {
-            FrameLayout customWrap = new FrameLayout(this);
-            cell = new BottomSheetCell(this, 0);
-            cell.setTextAndIcon(LocaleController.getString("QuickReplyCustom", R.string.QuickReplyCustom), 0);
-            cell.setTextColor(-1);
-            customWrap.addView(cell);
-            final FrameLayout editor = new FrameLayout(this);
-            final EditText field = new EditText(this);
-            field.setTextSize(1, 16.0f);
-            field.setTextColor(-1);
-            field.setHintTextColor(DarkTheme.getColor(Theme.key_chat_messagePanelHint));
-            field.setBackgroundDrawable(null);
-            field.setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(11.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f));
-            field.setHint(LocaleController.getString("QuickReplyCustom", R.string.QuickReplyCustom));
-            field.setMinHeight(AndroidUtilities.dp(48.0f));
-            field.setGravity(80);
-            field.setMaxLines(4);
-            field.setSingleLine(false);
-            field.setInputType((field.getInputType() | MessagesController.UPDATE_MASK_CHAT_ADMINS) | 131072);
-            editor.addView(field, LayoutHelper.createFrame(-1, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 48.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 48.0f, 0.0f));
-            View imageView = new ImageView(this);
-            imageView.setScaleType(ScaleType.CENTER);
-            imageView.setImageDrawable(DarkTheme.getThemedDrawable(this, R.drawable.ic_send, Theme.key_chat_messagePanelSend));
-            if (LocaleController.isRTL) {
-                imageView.setScaleX(-0.1f);
-            } else {
-                imageView.setScaleX(0.1f);
-            }
-            imageView.setScaleY(0.1f);
-            imageView.setAlpha(0.0f);
-            editor.addView(imageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
-            bottomSheet = sheet;
-            imageView.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
-                    if (field.length() != 0) {
-                        bottomSheet.dismiss();
-                        SendMessagesHelper.getInstance(VoIPActivity.this.currentAccount).sendMessage(field.getText().toString(), (long) VoIPActivity.this.user.id, null, null, false, null, null, null);
-                        if (VoIPService.getSharedInstance() != null) {
-                            VoIPService.getSharedInstance().declineIncomingCall(4, null);
-                        }
-                    }
-                }
-            });
-            imageView.setVisibility(4);
-            final ImageView cancelBtn = new ImageView(this);
-            cancelBtn.setScaleType(ScaleType.CENTER);
-            cancelBtn.setImageDrawable(DarkTheme.getThemedDrawable(this, R.drawable.edit_cancel, Theme.key_chat_messagePanelIcons));
-            editor.addView(cancelBtn, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
-            cancelBtn.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
-                    editor.setVisibility(8);
-                    cell.setVisibility(0);
-                    field.setText(TtmlNode.ANONYMOUS_REGION_ID);
-                    ((InputMethodManager) VoIPActivity.this.getSystemService("input_method")).hideSoftInputFromWindow(field.getWindowToken(), 0);
-                }
-            });
-            final View view = imageView;
-            field.addTextChangedListener(new TextWatcher() {
-                boolean prevState = false;
-
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                public void afterTextChanged(Editable s) {
-                    boolean hasText;
-                    if (s.length() > 0) {
-                        hasText = true;
-                    } else {
-                        hasText = false;
-                    }
-                    if (this.prevState != hasText) {
-                        this.prevState = hasText;
-                        if (hasText) {
-                            float f;
-                            view.setVisibility(0);
-                            ViewPropertyAnimator alpha = view.animate().alpha(1.0f);
-                            if (LocaleController.isRTL) {
-                                f = -1.0f;
-                            } else {
-                                f = 1.0f;
-                            }
-                            alpha.scaleX(f).scaleY(1.0f).setDuration(200).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
-                            cancelBtn.animate().alpha(0.0f).scaleX(0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new Runnable() {
-                                public void run() {
-                                    cancelBtn.setVisibility(4);
-                                }
-                            }).start();
-                            return;
-                        }
-                        cancelBtn.setVisibility(0);
-                        cancelBtn.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(200).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
-                        view.animate().alpha(0.0f).scaleX(LocaleController.isRTL ? -0.1f : 0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new Runnable() {
+        FrameLayout customWrap = new FrameLayout(this);
+        cell = new BottomSheetCell(this, 0);
+        cell.setTextAndIcon(LocaleController.getString("QuickReplyCustom", R.string.QuickReplyCustom), 0);
+        cell.setTextColor(-1);
+        customWrap.addView(cell);
+        final FrameLayout editor = new FrameLayout(this);
+        final EditText field = new EditText(this);
+        field.setTextSize(1, 16.0f);
+        field.setTextColor(-1);
+        field.setHintTextColor(DarkTheme.getColor(Theme.key_chat_messagePanelHint));
+        field.setBackgroundDrawable(null);
+        field.setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(11.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f));
+        field.setHint(LocaleController.getString("QuickReplyCustom", R.string.QuickReplyCustom));
+        field.setMinHeight(AndroidUtilities.dp(48.0f));
+        field.setGravity(80);
+        field.setMaxLines(4);
+        field.setSingleLine(false);
+        field.setInputType((field.getInputType() | MessagesController.UPDATE_MASK_CHAT_ADMINS) | 131072);
+        editor.addView(field, LayoutHelper.createFrame(-1, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 48.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 48.0f, 0.0f));
+        View imageView = new ImageView(this);
+        imageView.setScaleType(ScaleType.CENTER);
+        imageView.setImageDrawable(DarkTheme.getThemedDrawable(this, R.drawable.ic_send, Theme.key_chat_messagePanelSend));
+        if (LocaleController.isRTL) {
+            imageView.setScaleX(-0.1f);
+        } else {
+            imageView.setScaleX(0.1f);
+        }
+        imageView.setScaleY(0.1f);
+        imageView.setAlpha(0.0f);
+        editor.addView(imageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
+        bottomSheet2 = bottomSheet;
+        imageView.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                if (field.length() != 0) {
+                    bottomSheet2.dismiss();
+                    if (VoIPService.getSharedInstance() != null) {
+                        VoIPService.getSharedInstance().declineIncomingCall(4, new Runnable() {
                             public void run() {
-                                view.setVisibility(4);
+                                VoIPActivity.this.sendTextMessage(field.getText().toString());
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        imageView.setVisibility(4);
+        final ImageView cancelBtn = new ImageView(this);
+        cancelBtn.setScaleType(ScaleType.CENTER);
+        cancelBtn.setImageDrawable(DarkTheme.getThemedDrawable(this, R.drawable.edit_cancel, Theme.key_chat_messagePanelIcons));
+        editor.addView(cancelBtn, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
+        cancelBtn.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                editor.setVisibility(8);
+                cell.setVisibility(0);
+                field.setText(TtmlNode.ANONYMOUS_REGION_ID);
+                ((InputMethodManager) VoIPActivity.this.getSystemService("input_method")).hideSoftInputFromWindow(field.getWindowToken(), 0);
+            }
+        });
+        final View view = imageView;
+        field.addTextChangedListener(new TextWatcher() {
+            boolean prevState = false;
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            public void afterTextChanged(Editable s) {
+                boolean hasText;
+                if (s.length() > 0) {
+                    hasText = true;
+                } else {
+                    hasText = false;
+                }
+                if (this.prevState != hasText) {
+                    this.prevState = hasText;
+                    if (hasText) {
+                        float f;
+                        view.setVisibility(0);
+                        ViewPropertyAnimator alpha = view.animate().alpha(1.0f);
+                        if (LocaleController.isRTL) {
+                            f = -1.0f;
+                        } else {
+                            f = 1.0f;
+                        }
+                        alpha.scaleX(f).scaleY(1.0f).setDuration(200).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+                        cancelBtn.animate().alpha(0.0f).scaleX(0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new Runnable() {
+                            public void run() {
+                                cancelBtn.setVisibility(4);
                             }
                         }).start();
+                        return;
                     }
+                    cancelBtn.setVisibility(0);
+                    cancelBtn.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(200).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+                    view.animate().alpha(0.0f).scaleX(LocaleController.isRTL ? -0.1f : 0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new Runnable() {
+                        public void run() {
+                            view.setVisibility(4);
+                        }
+                    }).start();
                 }
-            });
-            editor.setVisibility(8);
-            customWrap.addView(editor);
-            cell.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
-                    editor.setVisibility(0);
-                    cell.setVisibility(4);
-                    field.requestFocus();
-                    ((InputMethodManager) VoIPActivity.this.getSystemService("input_method")).showSoftInput(field, 0);
-                }
-            });
-            sheetView.addView(customWrap);
-        }
-        sheet.setCustomView(sheetView);
-        sheet.setBackgroundColor(-13948117);
-        sheet.show();
+            }
+        });
+        editor.setVisibility(8);
+        customWrap.addView(editor);
+        cell.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                editor.setVisibility(0);
+                cell.setVisibility(4);
+                field.requestFocus();
+                ((InputMethodManager) VoIPActivity.this.getSystemService("input_method")).showSoftInput(field, 0);
+            }
+        });
+        sheetView.addView(customWrap);
+        bottomSheet.setCustomView(sheetView);
+        bottomSheet.setBackgroundColor(-13948117);
+        bottomSheet.show();
     }
 }

@@ -115,16 +115,15 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     public static final int STATE_RECONNECTING = 5;
     public static final int STATE_WAIT_INIT = 1;
     public static final int STATE_WAIT_INIT_ACK = 2;
+    protected static final boolean USE_CONNECTION_SERVICE = false;
     protected static VoIPBaseService sharedInstance;
     protected Runnable afterSoundRunnable = new Runnable() {
         public void run() {
             VoIPBaseService.this.soundPool.release();
-            if (VERSION.SDK_INT < 26) {
-                if (VoIPBaseService.this.isBtHeadsetConnected) {
-                    ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).stopBluetoothSco();
-                }
-                ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).setSpeakerphoneOn(false);
+            if (VoIPBaseService.this.isBtHeadsetConnected) {
+                ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).stopBluetoothSco();
             }
+            ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).setSpeakerphoneOn(false);
         }
     };
     protected boolean audioConfigured;
@@ -288,34 +287,28 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected abstract void updateServerConfig();
 
     public boolean hasEarpiece() {
-        if (VERSION.SDK_INT < 26 || this.systemCallConnection == null || this.systemCallConnection.getCallAudioState() == null) {
-            if (((TelephonyManager) getSystemService("phone")).getPhoneType() != 0) {
-                return true;
-            }
-            if (this.mHasEarpiece != null) {
-                return this.mHasEarpiece.booleanValue();
-            }
-            try {
-                AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
-                Method method = AudioManager.class.getMethod("getDevicesForStream", new Class[]{Integer.TYPE});
-                int earpieceFlag = AudioManager.class.getField("DEVICE_OUT_EARPIECE").getInt(null);
-                if ((((Integer) method.invoke(am, new Object[]{Integer.valueOf(0)})).intValue() & earpieceFlag) == earpieceFlag) {
-                    this.mHasEarpiece = Boolean.TRUE;
-                } else {
-                    this.mHasEarpiece = Boolean.FALSE;
-                }
-            } catch (Throwable error) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("Error while checking earpiece! ", error);
-                }
-                this.mHasEarpiece = Boolean.TRUE;
-            }
-            return this.mHasEarpiece.booleanValue();
-        } else if ((this.systemCallConnection.getCallAudioState().getSupportedRouteMask() & 5) != 0) {
+        if (((TelephonyManager) getSystemService("phone")).getPhoneType() != 0) {
             return true;
-        } else {
-            return false;
         }
+        if (this.mHasEarpiece != null) {
+            return this.mHasEarpiece.booleanValue();
+        }
+        try {
+            AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+            Method method = AudioManager.class.getMethod("getDevicesForStream", new Class[]{Integer.TYPE});
+            int earpieceFlag = AudioManager.class.getField("DEVICE_OUT_EARPIECE").getInt(null);
+            if ((((Integer) method.invoke(am, new Object[]{Integer.valueOf(0)})).intValue() & earpieceFlag) == earpieceFlag) {
+                this.mHasEarpiece = Boolean.TRUE;
+            } else {
+                this.mHasEarpiece = Boolean.FALSE;
+            }
+        } catch (Throwable error) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Error while checking earpiece! ", error);
+            }
+            this.mHasEarpiece = Boolean.TRUE;
+        }
+        return this.mHasEarpiece.booleanValue();
     }
 
     protected int getStatsNetworkType() {
@@ -351,24 +344,13 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     public void toggleSpeakerphoneOrShowRouteSheet(Activity activity) {
+        boolean z = true;
         if (isBluetoothHeadsetConnected() && hasEarpiece()) {
             BottomSheet sheet = new Builder(activity).setItems(new CharSequence[]{LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth), LocaleController.getString("VoipAudioRoutingEarpiece", R.string.VoipAudioRoutingEarpiece), LocaleController.getString("VoipAudioRoutingSpeaker", R.string.VoipAudioRoutingSpeaker)}, new int[]{R.drawable.ic_bluetooth_white_24dp, R.drawable.ic_phone_in_talk_white_24dp, R.drawable.ic_volume_up_white_24dp}, new OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     AudioManager am = (AudioManager) VoIPBaseService.this.getSystemService(MimeTypes.BASE_TYPE_AUDIO);
                     if (VoIPBaseService.getSharedInstance() != null) {
-                        if (VERSION.SDK_INT >= 26 && VoIPBaseService.this.systemCallConnection != null) {
-                            switch (which) {
-                                case 0:
-                                    VoIPBaseService.this.systemCallConnection.setAudioRoute(2);
-                                    break;
-                                case 1:
-                                    VoIPBaseService.this.systemCallConnection.setAudioRoute(5);
-                                    break;
-                                case 2:
-                                    VoIPBaseService.this.systemCallConnection.setAudioRoute(8);
-                                    break;
-                            }
-                        } else if (!VoIPBaseService.this.audioConfigured || VERSION.SDK_INT >= 26) {
+                        if (!VoIPBaseService.this.audioConfigured) {
                             switch (which) {
                                 case 0:
                                     VoIPBaseService.this.audioRouteToSet = 2;
@@ -382,23 +364,22 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                                 default:
                                     break;
                             }
-                        } else {
-                            switch (which) {
-                                case 0:
-                                    am.setBluetoothScoOn(true);
-                                    am.setSpeakerphoneOn(false);
-                                    break;
-                                case 1:
-                                    am.setBluetoothScoOn(false);
-                                    am.setSpeakerphoneOn(false);
-                                    break;
-                                case 2:
-                                    am.setBluetoothScoOn(false);
-                                    am.setSpeakerphoneOn(true);
-                                    break;
-                            }
-                            VoIPBaseService.this.updateOutputGainControlState();
                         }
+                        switch (which) {
+                            case 0:
+                                am.setBluetoothScoOn(true);
+                                am.setSpeakerphoneOn(false);
+                                break;
+                            case 1:
+                                am.setBluetoothScoOn(false);
+                                am.setSpeakerphoneOn(false);
+                                break;
+                            case 2:
+                                am.setBluetoothScoOn(false);
+                                am.setSpeakerphoneOn(true);
+                                break;
+                        }
+                        VoIPBaseService.this.updateOutputGainControlState();
                         Iterator it = VoIPBaseService.this.stateListeners.iterator();
                         while (it.hasNext()) {
                             ((StateListener) it.next()).onAudioSettingsChanged();
@@ -414,29 +395,25 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             }
             return;
         }
-        if (VERSION.SDK_INT < 26 || this.systemCallConnection == null || this.systemCallConnection.getCallAudioState() == null) {
-            if (!this.audioConfigured || VERSION.SDK_INT >= 26) {
-                this.speakerphoneStateToSet = !this.speakerphoneStateToSet;
-            } else {
-                AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
-                if (hasEarpiece()) {
-                    am.setSpeakerphoneOn(!am.isSpeakerphoneOn());
-                } else {
-                    am.setBluetoothScoOn(!am.isBluetoothScoOn());
+        if (this.audioConfigured) {
+            AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+            if (hasEarpiece()) {
+                if (am.isSpeakerphoneOn()) {
+                    z = false;
                 }
-                updateOutputGainControlState();
-            }
-        } else if (hasEarpiece()) {
-            int i2;
-            CallConnection callConnection = this.systemCallConnection;
-            if (this.systemCallConnection.getCallAudioState().getRoute() == 8) {
-                i2 = 5;
+                am.setSpeakerphoneOn(z);
             } else {
-                i2 = 8;
+                if (am.isBluetoothScoOn()) {
+                    z = false;
+                }
+                am.setBluetoothScoOn(z);
             }
-            callConnection.setAudioRoute(i2);
+            updateOutputGainControlState();
         } else {
-            this.systemCallConnection.setAudioRoute(this.systemCallConnection.getCallAudioState().getRoute() == 2 ? 5 : 2);
+            if (this.speakerphoneStateToSet) {
+                z = false;
+            }
+            this.speakerphoneStateToSet = z;
         }
         Iterator it = this.stateListeners.iterator();
         while (it.hasNext()) {
@@ -445,52 +422,25 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     public boolean isSpeakerphoneOn() {
-        if (VERSION.SDK_INT >= 26 && this.systemCallConnection != null && this.systemCallConnection.getCallAudioState() != null) {
-            int route = this.systemCallConnection.getCallAudioState().getRoute();
-            if (hasEarpiece()) {
-                if (route == 8) {
-                    return true;
-                }
-                return false;
-            } else if (route != 2) {
-                return false;
-            } else {
-                return true;
-            }
-        } else if (!this.audioConfigured || VERSION.SDK_INT >= 26) {
+        if (!this.audioConfigured) {
             return this.speakerphoneStateToSet;
-        } else {
-            AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
-            return hasEarpiece() ? am.isSpeakerphoneOn() : am.isBluetoothScoOn();
         }
+        AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+        return hasEarpiece() ? am.isSpeakerphoneOn() : am.isBluetoothScoOn();
     }
 
     public int getCurrentAudioRoute() {
-        if (VERSION.SDK_INT >= 26) {
-            if (!(this.systemCallConnection == null || this.systemCallConnection.getCallAudioState() == null)) {
-                switch (this.systemCallConnection.getCallAudioState().getRoute()) {
-                    case 1:
-                    case 4:
-                        return 0;
-                    case 2:
-                        return 2;
-                    case 8:
-                        return 1;
-                }
-            }
+        if (!this.audioConfigured) {
             return this.audioRouteToSet;
-        } else if (!this.audioConfigured) {
-            return this.audioRouteToSet;
-        } else {
-            AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
-            if (am.isBluetoothScoOn()) {
-                return 2;
-            }
-            if (am.isSpeakerphoneOn()) {
-                return 1;
-            }
-            return 0;
         }
+        AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+        if (am.isBluetoothScoOn()) {
+            return 2;
+        }
+        if (am.isSpeakerphoneOn()) {
+            return 1;
+        }
+        return 0;
     }
 
     public String getDebugString() {
@@ -656,17 +606,15 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         }
         this.cpuWakelock.release();
         AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
-        if (VERSION.SDK_INT < 26) {
-            if (this.isBtHeadsetConnected && !this.playingSound) {
-                am.stopBluetoothSco();
-                am.setSpeakerphoneOn(false);
-            }
-            try {
-                am.setMode(0);
-            } catch (SecurityException x) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("Error setting audio more to normal", x);
-                }
+        if (this.isBtHeadsetConnected && !this.playingSound) {
+            am.stopBluetoothSco();
+            am.setSpeakerphoneOn(false);
+        }
+        try {
+            am.setMode(0);
+        } catch (SecurityException x) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Error setting audio more to normal", x);
             }
         }
         am.unregisterMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
@@ -675,9 +623,6 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         }
         if (!this.playingSound) {
             this.soundPool.release();
-        }
-        if (VERSION.SDK_INT >= 26 && this.systemCallConnection != null) {
-            this.systemCallConnection.destroy();
         }
         ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
         VoIPHelper.lastCallTime = System.currentTimeMillis();
@@ -715,14 +660,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             this.btAdapter = am.isBluetoothScoAvailableOffCall() ? BluetoothAdapter.getDefaultAdapter() : null;
             IntentFilter filter = new IntentFilter();
             filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-            if (VERSION.SDK_INT < 26) {
-                filter.addAction(ACTION_HEADSET_PLUG);
-                if (this.btAdapter != null) {
-                    filter.addAction("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED");
-                    filter.addAction("android.media.ACTION_SCO_AUDIO_STATE_UPDATED");
-                }
-                filter.addAction("android.intent.action.PHONE_STATE");
+            filter.addAction(ACTION_HEADSET_PLUG);
+            if (this.btAdapter != null) {
+                filter.addAction("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED");
+                filter.addAction("android.media.ACTION_SCO_AUDIO_STATE_UPDATED");
             }
+            filter.addAction("android.intent.action.PHONE_STATE");
             registerReceiver(this.receiver, filter);
             this.soundPool = new SoundPool(1, 0, 0);
             this.spConnectingId = this.soundPool.load(this, R.raw.voip_connecting, 1);
@@ -761,9 +704,6 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             FileLog.d("== Call " + getCallID() + " state changed to " + state + " ==");
         }
         this.currentState = state;
-        if (VERSION.SDK_INT >= 26 && state == 3 && this.systemCallConnection != null) {
-            this.systemCallConnection.setActive();
-        }
         for (int a = 0; a < this.stateListeners.size(); a++) {
             ((StateListener) this.stateListeners.get(a)).onStateChanged(state);
         }
@@ -797,60 +737,29 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     protected void configureDeviceForCall() {
-        int i = 5;
         this.needPlayEndSound = true;
         AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
-        if (VERSION.SDK_INT >= 26) {
-            if (isBluetoothHeadsetConnected() && hasEarpiece()) {
-                switch (this.audioRouteToSet) {
-                    case 0:
-                        this.systemCallConnection.setAudioRoute(2);
-                        break;
-                    case 1:
-                        this.systemCallConnection.setAudioRoute(5);
-                        break;
-                    case 2:
-                        this.systemCallConnection.setAudioRoute(8);
-                        break;
-                    default:
-                        break;
-                }
-            } else if (hasEarpiece()) {
-                CallConnection callConnection = this.systemCallConnection;
-                if (this.speakerphoneStateToSet) {
-                    i = 8;
-                }
-                callConnection.setAudioRoute(i);
-            } else {
-                CallConnection callConnection2 = this.systemCallConnection;
-                if (this.speakerphoneStateToSet) {
-                    i = 2;
-                }
-                callConnection2.setAudioRoute(i);
+        am.setMode(3);
+        am.requestAudioFocus(this, 0, 1);
+        if (isBluetoothHeadsetConnected() && hasEarpiece()) {
+            switch (this.audioRouteToSet) {
+                case 0:
+                    am.setBluetoothScoOn(false);
+                    am.setSpeakerphoneOn(false);
+                    break;
+                case 1:
+                    am.setBluetoothScoOn(false);
+                    am.setSpeakerphoneOn(true);
+                    break;
+                case 2:
+                    am.setBluetoothScoOn(true);
+                    am.setSpeakerphoneOn(false);
+                    break;
             }
+        } else if (isBluetoothHeadsetConnected()) {
+            am.setBluetoothScoOn(this.speakerphoneStateToSet);
         } else {
-            am.setMode(3);
-            am.requestAudioFocus(this, 0, 1);
-            if (isBluetoothHeadsetConnected() && hasEarpiece()) {
-                switch (this.audioRouteToSet) {
-                    case 0:
-                        am.setBluetoothScoOn(false);
-                        am.setSpeakerphoneOn(false);
-                        break;
-                    case 1:
-                        am.setBluetoothScoOn(false);
-                        am.setSpeakerphoneOn(true);
-                        break;
-                    case 2:
-                        am.setBluetoothScoOn(true);
-                        am.setSpeakerphoneOn(false);
-                        break;
-                }
-            } else if (isBluetoothHeadsetConnected()) {
-                am.setBluetoothScoOn(this.speakerphoneStateToSet);
-            } else {
-                am.setSpeakerphoneOn(this.speakerphoneStateToSet);
-            }
+            am.setSpeakerphoneOn(this.speakerphoneStateToSet);
         }
         updateOutputGainControlState();
         this.audioConfigured = true;
@@ -1088,7 +997,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             ((SpannableString) endTitle2).setSpan(new ForegroundColorSpan(-769226), 0, endTitle2.length(), 0);
             endTitle = endTitle2;
         }
-        PendingIntent endPendingIntent = PendingIntent.getBroadcast(this, 0, endIntent, 134217728);
+        PendingIntent endPendingIntent = PendingIntent.getBroadcast(this, 0, endIntent, 268435456);
         builder.addAction(R.drawable.ic_call_end_white_24dp, endTitle, endPendingIntent);
         Intent answerIntent = new Intent(this, VoIPActionsReceiver.class);
         answerIntent.setAction(getPackageName() + ".ANSWER_CALL");
@@ -1099,7 +1008,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             ((SpannableString) answerTitle2).setSpan(new ForegroundColorSpan(-16733696), 0, answerTitle2.length(), 0);
             answerTitle = answerTitle2;
         }
-        PendingIntent answerPendingIntent = PendingIntent.getBroadcast(this, 0, answerIntent, 134217728);
+        PendingIntent answerPendingIntent = PendingIntent.getBroadcast(this, 0, answerIntent, 268435456);
         builder.addAction(R.drawable.ic_call_white_24dp, answerTitle, answerPendingIntent);
         builder.setPriority(2);
         if (VERSION.SDK_INT >= 17) {
@@ -1155,11 +1064,6 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 this.playingSound = true;
                 this.soundPool.play(this.spFailedID, 1.0f, 1.0f, 0, 0, 1.0f);
                 AndroidUtilities.runOnUIThread(this.afterSoundRunnable, 1000);
-            }
-            if (VERSION.SDK_INT >= 26 && this.systemCallConnection != null) {
-                this.systemCallConnection.setDisconnected(new DisconnectCause(1));
-                this.systemCallConnection.destroy();
-                this.systemCallConnection = null;
             }
             stopSelf();
         }
@@ -1236,27 +1140,6 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);
             this.timeoutRunnable = null;
         }
-        if (VERSION.SDK_INT >= 26 && this.systemCallConnection != null) {
-            switch (this.callDiscardReason) {
-                case 1:
-                    this.systemCallConnection.setDisconnected(new DisconnectCause(this.isOutgoing ? 2 : 6));
-                    break;
-                case 2:
-                    this.systemCallConnection.setDisconnected(new DisconnectCause(1));
-                    break;
-                case 3:
-                    this.systemCallConnection.setDisconnected(new DisconnectCause(this.isOutgoing ? 4 : 5));
-                    break;
-                case 4:
-                    this.systemCallConnection.setDisconnected(new DisconnectCause(7));
-                    break;
-                default:
-                    this.systemCallConnection.setDisconnected(new DisconnectCause(3));
-                    break;
-            }
-            this.systemCallConnection.destroy();
-            this.systemCallConnection = null;
-        }
         stopSelf();
     }
 
@@ -1301,39 +1184,22 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     public void updateOutputGainControlState() {
-        int i = 0;
-        int i2 = 1;
+        int i = 1;
         if (this.controller != null && this.controllerStarted) {
-            VoIPController voIPController;
-            if (VERSION.SDK_INT < 26) {
-                boolean z;
-                AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
-                VoIPController voIPController2 = this.controller;
-                if (!hasEarpiece() || am.isSpeakerphoneOn() || am.isBluetoothScoOn() || this.isHeadsetPlugged) {
-                    z = false;
-                } else {
-                    z = true;
-                }
-                voIPController2.setAudioOutputGainControlEnabled(z);
-                voIPController = this.controller;
-                if (this.isHeadsetPlugged || !(!hasEarpiece() || am.isSpeakerphoneOn() || am.isBluetoothScoOn() || this.isHeadsetPlugged)) {
-                    i2 = 0;
-                }
-                voIPController.setEchoCancellationStrength(i2);
-                return;
-            }
-            boolean isEarpiece;
-            if (this.systemCallConnection.getCallAudioState().getRoute() == 1) {
-                isEarpiece = true;
+            boolean z;
+            AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+            VoIPController voIPController = this.controller;
+            if (!hasEarpiece() || am.isSpeakerphoneOn() || am.isBluetoothScoOn() || this.isHeadsetPlugged) {
+                z = false;
             } else {
-                isEarpiece = false;
+                z = true;
             }
-            this.controller.setAudioOutputGainControlEnabled(isEarpiece);
-            voIPController = this.controller;
-            if (!isEarpiece) {
-                i = 1;
+            voIPController.setAudioOutputGainControlEnabled(z);
+            VoIPController voIPController2 = this.controller;
+            if (this.isHeadsetPlugged || !(!hasEarpiece() || am.isSpeakerphoneOn() || am.isBluetoothScoOn() || this.isHeadsetPlugged)) {
+                i = 0;
             }
-            voIPController.setEchoCancellationStrength(i);
+            voIPController2.setEchoCancellationStrength(i);
         }
     }
 

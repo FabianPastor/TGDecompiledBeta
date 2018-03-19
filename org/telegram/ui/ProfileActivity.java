@@ -1761,7 +1761,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             if (error == null) {
                                 TL_channels_channelParticipants res = response;
                                 MessagesController.getInstance(ProfileActivity.this.currentAccount).putUsers(res.users, false);
-                                if (res.users.size() != Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+                                if (res.users.size() < Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
                                     ProfileActivity.this.usersEndReached = true;
                                 }
                                 if (req.offset == 0) {

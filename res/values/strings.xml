@@ -521,6 +521,7 @@
     <string name="DidNotGetTheCode">Didn\'t get the code?</string>
     <string name="DirectShare">Direct Share</string>
     <string name="DirectShareInfo">Show recent chats in share menu</string>
+    <string name="DisappearingGif">Secret GIF</string>
     <string name="DisappearingPhoto">Secret Photo</string>
     <string name="DisappearingVideo">Secret Video</string>
     <string name="DiscardChanges">Discard changes?</string>
@@ -1585,6 +1586,10 @@
     <string name="Subscribers_other">%1$d subscribers</string>
     <string name="Subscribers_two">%1$d subscribers</string>
     <string name="Subscribers_zero">%1$d subscribers</string>
+    <string name="SuggestStickers">Suggest stickers by emoji</string>
+    <string name="SuggestStickersAll">All</string>
+    <string name="SuggestStickersInstalled">Added</string>
+    <string name="SuggestStickersNone">None</string>
     <string name="Support">Support</string>
     <string name="SyncContacts">Sync Contacts</string>
     <string name="SyncContactsAdded">Contacts from this device were added to your account.</string>
@@ -1743,7 +1748,8 @@
     <string name="VoipOutgoingCall">Ongoing Telegram call</string>
     <string name="VoipPeerIncompatible">**%1$s**\'s app is using an incompatible protocol. They need to update their app before you can call them.</string>
     <string name="VoipPeerOutdated">**%1$s**\'s app does not support calls. They need to update their app before you can call them.</string>
-    <string name="VoipQuickReplies">Quick Replies</string>
+    <string name="VoipQuickReplies">Respond with Text</string>
+    <string name="VoipQuickRepliesExplain">These quick responses will be available when you respond to an incoming call with a Telegram message. Change them to say anything you like.</string>
     <string name="VoipRateCallAlert">Please rate the quality of your Telegram call</string>
     <string name="VoipRequesting">Requesting</string>
     <string name="VoipRinging">Ringing</string>

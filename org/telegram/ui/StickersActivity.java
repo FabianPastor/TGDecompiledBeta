@@ -21,6 +21,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -68,6 +69,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     private int stickersEndRow;
     private int stickersShadowRow;
     private int stickersStartRow;
+    private int suggestInfoRow;
+    private int suggestRow;
 
     public class TouchHelperCallback extends Callback {
         public boolean isLongPressDragEnabled() {
@@ -125,7 +128,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             if (i >= StickersActivity.this.stickersStartRow && i < StickersActivity.this.stickersEndRow) {
                 return ((TL_messages_stickerSet) DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType).get(i - StickersActivity.this.stickersStartRow)).set.id;
             }
-            if (i == StickersActivity.this.archivedRow || i == StickersActivity.this.archivedInfoRow || i == StickersActivity.this.featuredRow || i == StickersActivity.this.featuredInfoRow || i == StickersActivity.this.masksRow || i == StickersActivity.this.masksInfoRow) {
+            if (i == StickersActivity.this.suggestRow || i == StickersActivity.this.suggestInfoRow || i == StickersActivity.this.archivedRow || i == StickersActivity.this.archivedInfoRow || i == StickersActivity.this.featuredRow || i == StickersActivity.this.featuredInfoRow || i == StickersActivity.this.masksRow || i == StickersActivity.this.masksInfoRow) {
                 return -2147483648L;
             }
             return (long) i;
@@ -221,7 +224,32 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                             return;
                         }
                     } else if (position == StickersActivity.this.masksRow) {
-                        ((TextSettingsCell) holder.itemView).setText(LocaleController.getString("Masks", R.string.Masks), true);
+                        ((TextSettingsCell) holder.itemView).setText(LocaleController.getString("Masks", R.string.Masks), false);
+                        return;
+                    } else if (position == StickersActivity.this.suggestRow) {
+                        String value;
+                        switch (SharedConfig.suggestStickers) {
+                            case 0:
+                                value = LocaleController.getString("SuggestStickersAll", R.string.SuggestStickersAll);
+                                break;
+                            case 1:
+                                value = LocaleController.getString("SuggestStickersInstalled", R.string.SuggestStickersInstalled);
+                                break;
+                            default:
+                                value = LocaleController.getString("SuggestStickersNone", R.string.SuggestStickersNone);
+                                break;
+                        }
+                        ((TextSettingsCell) holder.itemView).setTextAndValue(LocaleController.getString("SuggestStickers", R.string.SuggestStickers), value, true);
+                        return;
+                    } else {
+                        return;
+                    }
+                case 3:
+                    if (position == StickersActivity.this.stickersShadowRow) {
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        return;
+                    } else if (position == StickersActivity.this.suggestInfoRow) {
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -284,7 +312,6 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     break;
                 case 3:
                     view = new ShadowSectionCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -298,10 +325,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             if (i == StickersActivity.this.featuredInfoRow || i == StickersActivity.this.archivedInfoRow || i == StickersActivity.this.masksInfoRow) {
                 return 1;
             }
-            if (i == StickersActivity.this.featuredRow || i == StickersActivity.this.archivedRow || i == StickersActivity.this.masksRow) {
+            if (i == StickersActivity.this.featuredRow || i == StickersActivity.this.archivedRow || i == StickersActivity.this.masksRow || i == StickersActivity.this.suggestRow) {
                 return 2;
             }
-            if (i == StickersActivity.this.stickersShadowRow) {
+            if (i == StickersActivity.this.stickersShadowRow || i == StickersActivity.this.suggestInfoRow) {
                 return 3;
             }
             return 0;
@@ -389,6 +416,16 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     StickersActivity.this.presentFragment(new ArchivedStickersActivity(StickersActivity.this.currentType));
                 } else if (position == StickersActivity.this.masksRow) {
                     StickersActivity.this.presentFragment(new StickersActivity(1));
+                } else if (position == StickersActivity.this.suggestRow) {
+                    Builder builder = new Builder(StickersActivity.this.getParentActivity());
+                    builder.setTitle(LocaleController.getString("SuggestStickers", R.string.SuggestStickers));
+                    builder.setItems(new CharSequence[]{LocaleController.getString("SuggestStickersAll", R.string.SuggestStickersAll), LocaleController.getString("SuggestStickersInstalled", R.string.SuggestStickersInstalled), LocaleController.getString("SuggestStickersNone", R.string.SuggestStickersNone)}, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedConfig.setSuggestStickers(which);
+                            StickersActivity.this.listAdapter.notifyItemChanged(StickersActivity.this.suggestRow);
+                        }
+                    });
+                    StickersActivity.this.showDialog(builder.create());
                 }
             }
         });
@@ -437,6 +474,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         this.rowCount = 0;
         if (this.currentType == 0) {
             int i = this.rowCount;
+            this.rowCount = i + 1;
+            this.suggestRow = i;
+            i = this.rowCount;
             this.rowCount = i + 1;
             this.featuredRow = i;
             i = this.rowCount;

@@ -9,12 +9,9 @@ import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build.VERSION;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationManagerCompat;
-import android.telecom.TelecomManager;
 import android.view.KeyEvent;
 import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
@@ -36,7 +33,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
@@ -130,23 +126,13 @@ public class VoIPService extends VoIPBaseService {
                 sharedInstance = this;
                 if (this.isOutgoing) {
                     dispatchStateChanged(14);
-                    if (VERSION.SDK_INT >= 26) {
-                        TelecomManager tm = (TelecomManager) getSystemService("telecom");
-                        Bundle extras = new Bundle();
-                        Bundle myExtras = new Bundle();
-                        extras.putParcelable("android.telecom.extra.PHONE_ACCOUNT_HANDLE", addAccountToTelecomManager());
-                        myExtras.putInt("call_type", 1);
-                        extras.putBundle("android.telecom.extra.OUTGOING_CALL_EXTRAS", myExtras);
-                        tm.placeCall(Uri.fromParts("sip", UserConfig.getInstance(this.currentAccount).getClientUserId() + ";user=" + this.user.id, null), extras);
-                    } else {
-                        this.delayedStartOutgoingCall = new Runnable() {
-                            public void run() {
-                                VoIPService.this.delayedStartOutgoingCall = null;
-                                VoIPService.this.startOutgoingCall();
-                            }
-                        };
-                        AndroidUtilities.runOnUIThread(this.delayedStartOutgoingCall, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
-                    }
+                    this.delayedStartOutgoingCall = new Runnable() {
+                        public void run() {
+                            VoIPService.this.delayedStartOutgoingCall = null;
+                            VoIPService.this.startOutgoingCall();
+                        }
+                    };
+                    AndroidUtilities.runOnUIThread(this.delayedStartOutgoingCall, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
                     if (intent.getBooleanExtra("start_incall_activity", false)) {
                         startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
                     }
@@ -154,12 +140,7 @@ public class VoIPService extends VoIPBaseService {
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeInCallActivity, new Object[0]);
                     this.call = callIShouldHavePutIntoIntent;
                     callIShouldHavePutIntoIntent = null;
-                    if (VERSION.SDK_INT >= 26) {
-                        acknowledgeCall(false);
-                        showNotification();
-                    } else {
-                        acknowledgeCall(true);
-                    }
+                    acknowledgeCall(true);
                 }
                 initializeAccountRelatedThings();
             }
@@ -228,9 +209,6 @@ public class VoIPService extends VoIPBaseService {
     }
 
     private void startOutgoingCall() {
-        if (VERSION.SDK_INT >= 26 && this.systemCallConnection != null) {
-            this.systemCallConnection.setDialing();
-        }
         configureDeviceForCall();
         showNotification();
         startConnectingSound();
@@ -378,15 +356,7 @@ public class VoIPService extends VoIPBaseService {
                                     FileLog.e("error on receivedCall: " + error);
                                 }
                                 VoIPService.this.stopSelf();
-                                return;
-                            }
-                            if (VERSION.SDK_INT >= 26) {
-                                TelecomManager tm = (TelecomManager) VoIPService.this.getSystemService("telecom");
-                                Bundle extras = new Bundle();
-                                extras.putInt("call_type", 1);
-                                tm.addNewIncomingCall(VoIPService.this.addAccountToTelecomManager(), extras);
-                            }
-                            if (startRinging) {
+                            } else if (startRinging) {
                                 VoIPService.this.startRinging();
                             }
                         }
@@ -398,9 +368,6 @@ public class VoIPService extends VoIPBaseService {
 
     protected void startRinging() {
         if (this.currentState != 15) {
-            if (VERSION.SDK_INT >= 26 && this.systemCallConnection != null) {
-                this.systemCallConnection.setRinging();
-            }
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("starting ringing for call " + this.call.id);
             }

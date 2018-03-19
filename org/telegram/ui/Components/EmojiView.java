@@ -1552,7 +1552,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         for (b = 0; b < size; b++) {
                             this.cache.put((b + 1) + this.totalItems, documents.get(b));
                             this.positionToRow.put((b + 1) + this.totalItems, (startRow + 1) + (b / EmojiView.this.stickersGridAdapter.stickersPerRow));
-                            if (a >= localSize) {
+                            if (a >= localSize && (pack instanceof StickerSetCovered)) {
                                 this.positionsToSets.put(this.totalItems + (b + 1), (StickerSetCovered) pack);
                             }
                         }

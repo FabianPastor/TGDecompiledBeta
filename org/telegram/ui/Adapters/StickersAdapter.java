@@ -15,6 +15,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -140,146 +141,152 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     }
 
     public void loadStikersForEmoji(CharSequence emoji) {
-        boolean search = emoji != null && emoji.length() > 0 && emoji.length() <= 14;
-        if (search) {
-            this.stickers = null;
-            this.stickersMap = null;
-            int length = emoji.length();
-            int a = 0;
-            while (a < length) {
-                CharSequence[] charSequenceArr;
-                if (a < length - 1 && ((emoji.charAt(a) == '?' && emoji.charAt(a + 1) >= '?' && emoji.charAt(a + 1) <= '?') || (emoji.charAt(a) == '‍' && (emoji.charAt(a + 1) == '♀' || emoji.charAt(a + 1) == '♂')))) {
-                    charSequenceArr = new CharSequence[2];
-                    charSequenceArr[0] = emoji.subSequence(0, a);
-                    charSequenceArr[1] = emoji.subSequence(a + 2, emoji.length());
-                    emoji = TextUtils.concat(charSequenceArr);
-                    length -= 2;
-                    a--;
-                } else if (emoji.charAt(a) == '️') {
-                    charSequenceArr = new CharSequence[2];
-                    charSequenceArr[0] = emoji.subSequence(0, a);
-                    charSequenceArr[1] = emoji.subSequence(a + 1, emoji.length());
-                    emoji = TextUtils.concat(charSequenceArr);
-                    length--;
-                    a--;
+        if (SharedConfig.suggestStickers != 2) {
+            boolean search = emoji != null && emoji.length() > 0 && emoji.length() <= 14;
+            if (search) {
+                this.stickers = null;
+                this.stickersMap = null;
+                int length = emoji.length();
+                int a = 0;
+                while (a < length) {
+                    CharSequence[] charSequenceArr;
+                    if (a < length - 1 && ((emoji.charAt(a) == '?' && emoji.charAt(a + 1) >= '?' && emoji.charAt(a + 1) <= '?') || (emoji.charAt(a) == '‍' && (emoji.charAt(a + 1) == '♀' || emoji.charAt(a + 1) == '♂')))) {
+                        charSequenceArr = new CharSequence[2];
+                        charSequenceArr[0] = emoji.subSequence(0, a);
+                        charSequenceArr[1] = emoji.subSequence(a + 2, emoji.length());
+                        emoji = TextUtils.concat(charSequenceArr);
+                        length -= 2;
+                        a--;
+                    } else if (emoji.charAt(a) == '️') {
+                        charSequenceArr = new CharSequence[2];
+                        charSequenceArr[0] = emoji.subSequence(0, a);
+                        charSequenceArr[1] = emoji.subSequence(a + 1, emoji.length());
+                        emoji = TextUtils.concat(charSequenceArr);
+                        length--;
+                        a--;
+                    }
+                    a++;
                 }
-                a++;
-            }
-            this.lastSticker = emoji.toString();
-            if (Emoji.isValidEmoji(this.lastSticker)) {
-                Document document;
-                this.delayLocalResults = false;
-                final ArrayList<Document> recentStickers = DataQuery.getInstance(this.currentAccount).getRecentStickersNoCopy(0);
-                final ArrayList<Document> favsStickers = DataQuery.getInstance(this.currentAccount).getRecentStickersNoCopy(2);
-                int recentsAdded = 0;
-                int size = recentStickers.size();
-                for (a = 0; a < size; a++) {
-                    document = (Document) recentStickers.get(a);
-                    if (isValidSticker(document, this.lastSticker)) {
-                        addStickerToResult(document);
-                        recentsAdded++;
-                        if (recentsAdded >= 5) {
-                            break;
+                this.lastSticker = emoji.toString();
+                if (Emoji.isValidEmoji(this.lastSticker)) {
+                    Document document;
+                    this.delayLocalResults = false;
+                    final ArrayList<Document> recentStickers = DataQuery.getInstance(this.currentAccount).getRecentStickersNoCopy(0);
+                    final ArrayList<Document> favsStickers = DataQuery.getInstance(this.currentAccount).getRecentStickersNoCopy(2);
+                    int recentsAdded = 0;
+                    int size = recentStickers.size();
+                    for (a = 0; a < size; a++) {
+                        document = (Document) recentStickers.get(a);
+                        if (isValidSticker(document, this.lastSticker)) {
+                            addStickerToResult(document);
+                            recentsAdded++;
+                            if (recentsAdded >= 5) {
+                                break;
+                            }
                         }
                     }
-                }
-                size = favsStickers.size();
-                for (a = 0; a < size; a++) {
-                    document = (Document) favsStickers.get(a);
-                    if (isValidSticker(document, this.lastSticker)) {
-                        addStickerToResult(document);
-                    }
-                }
-                HashMap<String, ArrayList<Document>> allStickersFeatured = DataQuery.getInstance(this.currentAccount).getAllStickersFeatured();
-                ArrayList<Document> newStickersFeatured = allStickersFeatured != null ? (ArrayList) allStickersFeatured.get(this.lastSticker) : null;
-                if (!(newStickersFeatured == null || newStickersFeatured.isEmpty())) {
-                    final LongSparseArray<Integer> indices = new LongSparseArray(newStickersFeatured.size());
-                    for (a = 0; a < newStickersFeatured.size(); a++) {
-                        indices.put(((Document) newStickersFeatured.get(a)).id, Integer.valueOf(Utilities.random.nextInt()));
-                    }
-                    Collections.sort(newStickersFeatured, new Comparator<Document>() {
-                        public int compare(Document o1, Document o2) {
-                            Integer idx1 = (Integer) indices.get(o1.id);
-                            Integer idx2 = (Integer) indices.get(o2.id);
-                            if (idx1 == null) {
-                                idx1 = Integer.valueOf(0);
-                            }
-                            if (idx2 == null) {
-                                idx2 = Integer.valueOf(0);
-                            }
-                            return idx1.compareTo(idx2);
+                    size = favsStickers.size();
+                    for (a = 0; a < size; a++) {
+                        document = (Document) favsStickers.get(a);
+                        if (isValidSticker(document, this.lastSticker)) {
+                            addStickerToResult(document);
                         }
-                    });
-                    addStickersToResult(newStickersFeatured);
-                }
-                HashMap<String, ArrayList<Document>> allStickers = DataQuery.getInstance(this.currentAccount).getAllStickers();
-                ArrayList<Document> newStickers = allStickers != null ? (ArrayList) allStickers.get(this.lastSticker) : null;
-                if (!(newStickers == null || newStickers.isEmpty())) {
-                    ArrayList<Document> arrayList = new ArrayList(newStickers);
-                    if (!recentStickers.isEmpty()) {
-                        Collections.sort(arrayList, new Comparator<Document>() {
-                            private int getIndex(long id) {
-                                int a;
-                                for (a = 0; a < favsStickers.size(); a++) {
-                                    if (((Document) favsStickers.get(a)).id == id) {
-                                        return a + 1000;
-                                    }
-                                }
-                                for (a = 0; a < recentStickers.size(); a++) {
-                                    if (((Document) recentStickers.get(a)).id == id) {
-                                        return a;
-                                    }
-                                }
-                                return -1;
+                    }
+                    if (SharedConfig.suggestStickers == 0) {
+                        HashMap<String, ArrayList<Document>> allStickersFeatured = DataQuery.getInstance(this.currentAccount).getAllStickersFeatured();
+                        ArrayList<Document> newStickersFeatured = allStickersFeatured != null ? (ArrayList) allStickersFeatured.get(this.lastSticker) : null;
+                        if (!(newStickersFeatured == null || newStickersFeatured.isEmpty())) {
+                            final LongSparseArray<Integer> indices = new LongSparseArray(newStickersFeatured.size());
+                            for (a = 0; a < newStickersFeatured.size(); a++) {
+                                indices.put(((Document) newStickersFeatured.get(a)).id, Integer.valueOf(Utilities.random.nextInt()));
                             }
-
-                            public int compare(Document lhs, Document rhs) {
-                                int idx1 = getIndex(lhs.id);
-                                int idx2 = getIndex(rhs.id);
-                                if (idx1 > idx2) {
+                            Collections.sort(newStickersFeatured, new Comparator<Document>() {
+                                public int compare(Document o1, Document o2) {
+                                    Integer idx1 = (Integer) indices.get(o1.id);
+                                    Integer idx2 = (Integer) indices.get(o2.id);
+                                    if (idx1 == null) {
+                                        idx1 = Integer.valueOf(0);
+                                    }
+                                    if (idx2 == null) {
+                                        idx2 = Integer.valueOf(0);
+                                    }
+                                    return idx1.compareTo(idx2);
+                                }
+                            });
+                            addStickersToResult(newStickersFeatured);
+                        }
+                    }
+                    HashMap<String, ArrayList<Document>> allStickers = DataQuery.getInstance(this.currentAccount).getAllStickers();
+                    ArrayList<Document> newStickers = allStickers != null ? (ArrayList) allStickers.get(this.lastSticker) : null;
+                    if (!(newStickers == null || newStickers.isEmpty())) {
+                        ArrayList<Document> arrayList = new ArrayList(newStickers);
+                        if (!recentStickers.isEmpty()) {
+                            Collections.sort(arrayList, new Comparator<Document>() {
+                                private int getIndex(long id) {
+                                    int a;
+                                    for (a = 0; a < favsStickers.size(); a++) {
+                                        if (((Document) favsStickers.get(a)).id == id) {
+                                            return a + 1000;
+                                        }
+                                    }
+                                    for (a = 0; a < recentStickers.size(); a++) {
+                                        if (((Document) recentStickers.get(a)).id == id) {
+                                            return a;
+                                        }
+                                    }
                                     return -1;
                                 }
-                                if (idx1 < idx2) {
-                                    return 1;
+
+                                public int compare(Document lhs, Document rhs) {
+                                    int idx1 = getIndex(lhs.id);
+                                    int idx2 = getIndex(rhs.id);
+                                    if (idx1 > idx2) {
+                                        return -1;
+                                    }
+                                    if (idx1 < idx2) {
+                                        return 1;
+                                    }
+                                    return 0;
                                 }
-                                return 0;
-                            }
-                        });
+                            });
+                        }
+                        addStickersToResult(arrayList);
                     }
-                    addStickersToResult(arrayList);
-                }
-                searchServerStickers(this.lastSticker);
-                if (this.stickers != null && !this.stickers.isEmpty()) {
-                    if (this.stickers.size() < 5) {
-                        this.delayLocalResults = true;
+                    if (SharedConfig.suggestStickers == 0) {
+                        searchServerStickers(this.lastSticker);
+                    }
+                    if (this.stickers != null && !this.stickers.isEmpty()) {
+                        if (SharedConfig.suggestStickers != 0 || this.stickers.size() >= 5) {
+                            checkStickerFilesExistAndDownload();
+                            StickersAdapterDelegate stickersAdapterDelegate = this.delegate;
+                            boolean z = (this.stickers == null || this.stickers.isEmpty() || !this.stickersToLoad.isEmpty()) ? false : true;
+                            stickersAdapterDelegate.needChangePanelVisibility(z);
+                            this.visible = true;
+                        } else {
+                            this.delayLocalResults = true;
+                            this.delegate.needChangePanelVisibility(false);
+                            this.visible = false;
+                        }
+                        notifyDataSetChanged();
+                        return;
+                    } else if (this.visible) {
                         this.delegate.needChangePanelVisibility(false);
                         this.visible = false;
+                        return;
                     } else {
-                        checkStickerFilesExistAndDownload();
-                        StickersAdapterDelegate stickersAdapterDelegate = this.delegate;
-                        boolean z = (this.stickers == null || this.stickers.isEmpty() || !this.stickersToLoad.isEmpty()) ? false : true;
-                        stickersAdapterDelegate.needChangePanelVisibility(z);
-                        this.visible = true;
+                        return;
                     }
-                    notifyDataSetChanged();
-                    return;
-                } else if (this.visible) {
-                    this.delegate.needChangePanelVisibility(false);
-                    this.visible = false;
-                    return;
-                } else {
-                    return;
                 }
+                this.visible = false;
+                this.delegate.needChangePanelVisibility(false);
+                notifyDataSetChanged();
+                return;
             }
-            this.visible = false;
-            this.delegate.needChangePanelVisibility(false);
-            notifyDataSetChanged();
-            return;
-        }
-        this.lastSticker = TtmlNode.ANONYMOUS_REGION_ID;
-        if (this.visible && this.stickers != null) {
-            this.visible = false;
-            this.delegate.needChangePanelVisibility(false);
+            this.lastSticker = TtmlNode.ANONYMOUS_REGION_ID;
+            if (this.visible && this.stickers != null) {
+                this.visible = false;
+                this.delegate.needChangePanelVisibility(false);
+            }
         }
     }
 
