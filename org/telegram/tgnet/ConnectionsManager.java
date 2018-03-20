@@ -751,15 +751,11 @@ public class ConnectionsManager {
                 DnsTxtLoadTask task = new DnsTxtLoadTask(currentAccount);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
                 currentTask = task;
-            } else if (BuildVars.DEBUG_VERSION) {
-                AzureLoadTask task2 = new AzureLoadTask(currentAccount);
-                task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                currentTask = task2;
-            } else {
-                DnsLoadTask task3 = new DnsLoadTask(currentAccount);
-                task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                currentTask = task3;
+                return;
             }
+            AzureLoadTask task2 = new AzureLoadTask(currentAccount);
+            task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+            currentTask = task2;
         }
     }
 

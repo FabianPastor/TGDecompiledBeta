@@ -1855,10 +1855,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     private void sendMessage(String message, String caption, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params, int ttl) {
         Throwable e;
-        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
             Document document2;
+            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             if (message == null && caption == null) {
@@ -4105,18 +4105,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private static boolean prepareSendingDocumentInternal(int currentAccount, String path, String originalPath, Uri uri, String mime, long dialog_id, MessageObject reply_to_msg, CharSequence caption, ArrayList<MessageEntity> entities) {
         Throwable e;
-        TL_documentAttributeFilename fileName;
+        Object obj;
         Bitmap bitmap;
-        RandomAccessFile randomAccessFile;
-        ByteBuffer buffer;
-        final String captionFinal;
         final HashMap<String, String> params;
-        final TL_document documentFinal;
-        final String pathFinal;
-        final int i;
-        final long j;
-        final MessageObject messageObject;
-        final ArrayList<MessageEntity> arrayList;
         Throwable th;
         if ((path == null || path.length() == 0) && uri == null) {
             return false;
@@ -4154,11 +4145,20 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
         boolean sendNew;
         TL_document tL_document;
-        Object obj;
+        TL_documentAttributeFilename fileName;
         String mimeType;
         Options bmOptions;
+        RandomAccessFile randomAccessFile;
+        ByteBuffer buffer;
         TL_documentAttributeSticker attributeSticker;
         TL_documentAttributeImageSize attributeImageSize;
+        final String captionFinal;
+        final TL_document documentFinal;
+        final String pathFinal;
+        final int i;
+        final long j;
+        final MessageObject messageObject;
+        final ArrayList<MessageEntity> arrayList;
         boolean isEncrypted = ((int) dialog_id) == 0;
         boolean allowSticker = !isEncrypted;
         String name = file.getName();

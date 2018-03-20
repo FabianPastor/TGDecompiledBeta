@@ -38,9 +38,9 @@ final class zzchu implements Runnable {
         HttpURLConnection httpURLConnection2;
         OutputStream outputStream2;
         Throwable th;
+        Map map2;
         int i2 = 0;
         this.zzjcm.zzawj();
-        Map map2;
         try {
             URLConnection openConnection = this.zzbxv.openConnection();
             if (openConnection instanceof HttpURLConnection) {

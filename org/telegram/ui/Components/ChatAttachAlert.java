@@ -725,10 +725,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
 
     private void updateCheckedPhotoIndices() {
         int a;
-        PhotoAttachPhotoCell cell;
         PhotoEntry photoEntry;
         int count = this.attachPhotoRecyclerView.getChildCount();
         for (a = 0; a < count; a++) {
+            PhotoAttachPhotoCell cell;
             View view = this.attachPhotoRecyclerView.getChildAt(a);
             if (view instanceof PhotoAttachPhotoCell) {
                 cell = (PhotoAttachPhotoCell) view;
@@ -1823,6 +1823,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     public void onActivityResultFragment(int requestCode, Intent data, String currentPicturePath) {
         Throwable e;
         Bitmap bitmap;
+        File file;
         OutputStream fileOutputStream;
         int i;
         PhotoEntry entry;
@@ -1852,7 +1853,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 lastImageId = i2 - 1;
                 openPhotoViewer(new PhotoEntry(0, i2, 0, currentPicturePath, orientation, false), false, true);
             } else if (requestCode == 2) {
-                File file;
                 String videoPath = null;
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("pic path " + currentPicturePath);

@@ -41,8 +41,8 @@ public class GcmPushListenerService extends GcmListenerService {
                 ApplicationLoader.postInitApplication();
                 Utilities.stageQueue.postRunnable(new Runnable() {
                     public void run() {
-                        int currentAccount;
                         Throwable e;
+                        int currentAccount;
                         try {
                             Object value = bundle.get(TtmlNode.TAG_P);
                             if (value instanceof String) {

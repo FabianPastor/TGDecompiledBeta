@@ -2401,7 +2401,7 @@ public class MessageObject {
     private static void addUsernamesAndHashtags(boolean isOut, CharSequence charSequence, boolean botCommands) {
         try {
             if (urlPattern == null) {
-                urlPattern = Pattern.compile("(^|\\s)/[a-zA-Z@\\d_]{1,255}|(^|\\s)@[a-zA-Z\\d_]{1,32}|(^|\\s)#[\\w\\.]+|(^|\\s)\\$[A-Z]+([ ,.]|$)");
+                urlPattern = Pattern.compile("(^|\\s)/[a-zA-Z@\\d_]{1,255}|(^|\\s)@[a-zA-Z\\d_]{1,32}|(^|\\s)#[\\w\\.]+|(^|\\s)\\$[A-Z]{3,8}([ ,.]|$)");
             }
             Matcher matcher = urlPattern.matcher(charSequence);
             while (matcher.find()) {

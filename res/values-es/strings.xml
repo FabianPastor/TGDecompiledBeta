@@ -12,6 +12,7 @@
     <string name="ActionAddUserSelfMega">un1 se unió al grupo</string>
     <string name="ActionAddUserSelfYou">Volviste al grupo</string>
     <string name="ActionAddUserYou">un1 te añadió</string>
+    <string name="ActionBotAllowed">Autorizaste que este bot te envíe mensajes cuando iniciaste sesión en %1$s.</string>
     <string name="ActionChangedPhoto">un1 cambió la foto del grupo</string>
     <string name="ActionChangedTitle">un1 cambió el nombre del grupo a un2</string>
     <string name="ActionChannelChangedPhoto">Foto del canal cambiada</string>
@@ -86,6 +87,7 @@
     <string name="Alert">Alerta</string>
     <string name="AllMedia">Toda la multimedia</string>
     <string name="AllPhotos">Todas las fotos</string>
+    <string name="AllowCustomQuickReply">Permitir personalización</string>
     <string name="AllowFillNumber">Por favor, permite a Telegram recibir llamadas y SMS, para que podamos ingresar tu número, enviarte un código e ingresarlo por ti.</string>
     <string name="AllowReadCall">Por favor, permite a Telegram recibir llamadas, para ingresar el código automáticamente.</string>
     <string name="AllowReadCallAndSms">Por favor, permite a Telegram recibir llamadas y SMS, para ingresar el código automáticamente.</string>
@@ -116,7 +118,7 @@
     <string name="AndOther_zero">y otros %1$d</string>
     <string name="ApkRestricted">La instalación de APK está restringida para esta aplicación. Puedes habilitarla en los ajustes del sistema.</string>
     <string name="AppName">Telegram</string>
-    <string name="AppNameBeta">Telegram Beta</string>
+    <string name="AppNameBeta">Telegram</string>
     <string name="ApplyLocalizationFile">Aplicar traducción</string>
     <string name="ApplyTheme">APLICAR</string>
     <string name="ApplyThemeFile">Aplicar tema</string>
@@ -203,7 +205,7 @@
     <string name="AutoNightUpdateLocationInfo">Calcular la hora de puesta y salida del sol requiere una única comprobación de tu ubicación aproximada. Recuerda que esta ubicación sólo es almacenada localmente en tu dispositivo.\n\nAnochecer: %1$s\nAmanecer: %2$s</string>
     <string name="AutodownloadChannels">Canales</string>
     <string name="AutodownloadContacts">Contactos</string>
-    <string name="AutodownloadGroupChats">Chats grupales</string>
+    <string name="AutodownloadGroupChats">Grupos</string>
     <string name="AutodownloadPrivateChats">Chats</string>
     <string name="AutodownloadSizeLimit">Limitar por tamaño</string>
     <string name="AutodownloadSizeLimitUpTo">hasta %1$s</string>
@@ -316,6 +318,7 @@
     <string name="ChannelMessageAudio">%1$s publicó un mensaje de voz</string>
     <string name="ChannelMessageContact">%1$s publicó un contacto</string>
     <string name="ChannelMessageDocument">%1$s publicó un archivo</string>
+    <string name="ChannelMessageFew">%1$s publicó %2$s</string>
     <string name="ChannelMessageGIF">%1$s publicó un GIF</string>
     <string name="ChannelMessageLiveLocation">%1$s publicó una ubicación en directo</string>
     <string name="ChannelMessageMap">%1$s publicó una ubicación</string>
@@ -518,6 +521,7 @@
     <string name="DidNotGetTheCode">¿No recibiste el código?</string>
     <string name="DirectShare">Direct Share</string>
     <string name="DirectShareInfo">Mostrar los chats recientes al compartir</string>
+    <string name="DisappearingGif">GIF secreto</string>
     <string name="DisappearingPhoto">Foto secreta</string>
     <string name="DisappearingVideo">Vídeo secreto</string>
     <string name="DiscardChanges">¿Descartar cambios?</string>
@@ -924,6 +928,12 @@
     <string name="Masks">Máscaras</string>
     <string name="MasksInfo">Puedes añadir máscaras a las fotos que envías. Para hacerlo, abre el editor de fotos antes de enviar una foto.</string>
     <string name="MasksRemoved">Máscaras eliminadas</string>
+    <string name="Media_few">%1$d archivos multimedia</string>
+    <string name="Media_many">%1$d archivos multimedia</string>
+    <string name="Media_one">%1$d archivo multimedia</string>
+    <string name="Media_other">%1$d archivos multimedia</string>
+    <string name="Media_two">%1$d archivos multimedia</string>
+    <string name="Media_zero">%1$d archivos multimedia</string>
     <string name="MegaAddedBy">un1 te añadió a este grupo</string>
     <string name="MegaAdminsInfo">Puedes añadir administradores para que te ayuden en el grupo. Mantén pulsado para eliminarlos.</string>
     <string name="MegaDeleteAlert">¡Espera! Al eliminar este grupo, todos los miembros y los mensajes se perderán. ¿Quieres eliminarlo?</string>
@@ -1041,6 +1051,7 @@
     <string name="NoSharedLinksSecret">Los enlaces de este chat aparecerán aquí.</string>
     <string name="NoSound">Sin sonido</string>
     <string name="NoStickers">Aún no hay stickers</string>
+    <string name="NoStickersFound">No se encontraron stickers</string>
     <string name="NoUsernameFound">No hay ninguna cuenta de Telegram con este alias.</string>
     <string name="NobodyLikesSpam1">Lo sentimos, por ahora puedes enviar mensajes sólo a contactos mutuos.</string>
     <string name="NobodyLikesSpam2">Lo sentimos, por ahora sólo puedes añadir contactos mutuos a grupos.</string>
@@ -1057,6 +1068,8 @@
     <string name="NotificationActionPinnedGeoLiveChannel">%1$s ancló una ubicación en directo</string>
     <string name="NotificationActionPinnedGif">%1$s ancló un GIF en el grupo %2$s</string>
     <string name="NotificationActionPinnedGifChannel">%1$s ancló un GIF</string>
+    <string name="NotificationActionPinnedInvoice">%1$s ancló una factura en el grupo %2$s</string>
+    <string name="NotificationActionPinnedInvoiceChannel">%1$s ancló una factura</string>
     <string name="NotificationActionPinnedMusic">%1$s ancló una pista en el grupo %2$s</string>
     <string name="NotificationActionPinnedMusicChannel">%1$s ancló una pista</string>
     <string name="NotificationActionPinnedNoText">%1$s ancló un mensaje en el grupo %2$s</string>
@@ -1082,6 +1095,8 @@
     <string name="NotificationGroupAddMember">%1$s invitó a %3$s al grupo %2$s</string>
     <string name="NotificationGroupAddSelf">%1$s volvió al grupo %2$s</string>
     <string name="NotificationGroupAddSelfMega">%1$s se unió al grupo %2$s</string>
+    <string name="NotificationGroupFew">%1$s envió %3$s al grupo %2$s</string>
+    <string name="NotificationGroupForwardedFew">%1$s reenvió %3$s al grupo %2$s</string>
     <string name="NotificationGroupKickMember">%1$s eliminó a %3$s del grupo %2$s</string>
     <string name="NotificationGroupKickYou">%1$s te eliminó del grupo %2$s</string>
     <string name="NotificationGroupLeftMember">%1$s dejó el grupo %2$s</string>
@@ -1090,6 +1105,8 @@
     <string name="NotificationMessageAudio">%1$s te envió un mensaje de voz</string>
     <string name="NotificationMessageContact">%1$s compartió un contacto contigo</string>
     <string name="NotificationMessageDocument">%1$s te envió un archivo</string>
+    <string name="NotificationMessageFew">%1$s te envió %2$s</string>
+    <string name="NotificationMessageForwardFew">%1$s te reenvió %2$s</string>
     <string name="NotificationMessageGame">%1$s te invitó a jugar a %2$s</string>
     <string name="NotificationMessageGif">%1$s te envió un GIF</string>
     <string name="NotificationMessageGroupAudio">%1$s envió un mensaje de voz al grupo %2$s</string>
@@ -1097,6 +1114,7 @@
     <string name="NotificationMessageGroupDocument">%1$s envió un archivo al grupo %2$s</string>
     <string name="NotificationMessageGroupGame">%1$s invitó al grupo %2$s a jugar a %3$s</string>
     <string name="NotificationMessageGroupGif">%1$s envió un GIF al grupo %2$s</string>
+    <string name="NotificationMessageGroupInvoice">%1$s envió una factura al grupo %2$s por %3$s</string>
     <string name="NotificationMessageGroupLiveLocation">%1$s envió una ubicación en directo al grupo %2$s</string>
     <string name="NotificationMessageGroupMap">%1$s envió una ubicación al grupo %2$s</string>
     <string name="NotificationMessageGroupMusic">%1$s envió una pista al grupo %2$s</string>
@@ -1107,6 +1125,7 @@
     <string name="NotificationMessageGroupStickerEmoji">%1$s envió un %3$s sticker al grupo %2$s</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
     <string name="NotificationMessageGroupVideo">%1$s envió un vídeo al grupo %2$s</string>
+    <string name="NotificationMessageInvoice">%1$s te envió una factura por %2$s</string>
     <string name="NotificationMessageLiveLocation">%1$s te envió una ubicación en directo</string>
     <string name="NotificationMessageMap">%1$s te envió una ubicación</string>
     <string name="NotificationMessageMusic">%1$s te envió una pista</string>
@@ -1277,6 +1296,12 @@
     <string name="PhoneOther">Otro</string>
     <string name="PhoneWork">Trabajo</string>
     <string name="PhotoCaption">Comentario de foto</string>
+    <string name="Photos_few">%1$d fotos</string>
+    <string name="Photos_many">%1$d fotos</string>
+    <string name="Photos_one">%1$d foto</string>
+    <string name="Photos_other">%1$d fotos</string>
+    <string name="Photos_two">%1$d fotos</string>
+    <string name="Photos_zero">%1$d fotos</string>
     <string name="PinMessage">Anclar</string>
     <string name="PinMessageAlert">¿Quieres anclar este mensaje en el grupo?</string>
     <string name="PinMessageAlertChannel">¿Quieres anclar este mensaje en el canal?</string>
@@ -1319,6 +1344,11 @@
     <string name="ProfilePopupNotificationInfo">Los mensajes nuevos de este contacto aparecerán en tu pantalla cuando no estés usando Telegram.</string>
     <string name="Proxy">Proxy</string>
     <string name="ProxySettings">Ajustes de proxy</string>
+    <string name="QuickReplyCustom">Mensaje personalizado...</string>
+    <string name="QuickReplyDefault1">No puedo hablar ahora. ¿Qué pasa?</string>
+    <string name="QuickReplyDefault2">Te llamaré enseguida.</string>
+    <string name="QuickReplyDefault3">Te llamaré más tarde.</string>
+    <string name="QuickReplyDefault4">No puedo hablar ahora. ¿Me llamas más tarde?</string>
     <string name="RaiseToSpeak">Elevar para hablar</string>
     <string name="ReEnterYourPasscode">Pon, otra vez, tu nuevo código</string>
     <string name="Recent">RECIENTES</string>
@@ -1348,6 +1378,7 @@
     <string name="ReportChatDescription">Descripción</string>
     <string name="ReportChatOther">Otros</string>
     <string name="ReportChatPornography">Pornografía</string>
+    <string name="ReportChatSent">Reporte enviado</string>
     <string name="ReportChatSpam">Spam</string>
     <string name="ReportChatViolence">Violencia</string>
     <string name="ReportSpam">REPORTAR SPAM</string>
@@ -1413,6 +1444,7 @@
     <string name="SearchImagesTitle">Buscar foto</string>
     <string name="SearchMembers">Buscar miembros</string>
     <string name="SearchMessages">MENSAJES</string>
+    <string name="SearchStickersHint">Buscar packs de stickers</string>
     <string name="SecondsBold_few">**%1$d** segundos</string>
     <string name="SecondsBold_many">**%1$d** segundos</string>
     <string name="SecondsBold_one">**%1$d** segundo</string>
@@ -1554,6 +1586,10 @@
     <string name="Subscribers_other">%1$d suscriptores</string>
     <string name="Subscribers_two">%1$d suscriptores</string>
     <string name="Subscribers_zero">%1$d suscriptores</string>
+    <string name="SuggestStickers">Sugerir stickers por emoji</string>
+    <string name="SuggestStickersAll">Todos</string>
+    <string name="SuggestStickersInstalled">Añadidos</string>
+    <string name="SuggestStickersNone">Ninguno</string>
     <string name="Support">Soporte</string>
     <string name="SyncContacts">Sincronizar contactos</string>
     <string name="SyncContactsAdded">Los contactos de este dispositivo fueron añadidos a tu cuenta.</string>
@@ -1616,6 +1652,7 @@
     <string name="UnpinFromTop">Desanclar</string>
     <string name="UnpinMessage">Desanclar</string>
     <string name="UnpinMessageAlert">¿Quieres desanclar este mensaje?</string>
+    <string name="UnreadMessages">Mensajes no leídos</string>
     <string name="UnsupportedAttachment">Adjunto no soportado</string>
     <string name="UnsupportedMedia">Tu versión de Telegram no soporta este mensaje. Por favor, actualiza tu app para verlo: https://telegram.org/update</string>
     <string name="UpdateContactsMessage">Telegram ha detectado muchos contactos sin sincronizar. ¿Quieres sincronizarlos ahora? Elige “OK” si estás usando tu dispositivo, tarjeta SIM y cuenta de Google.</string>
@@ -1691,11 +1728,13 @@
     <string name="VoipConnecting">Conectando</string>
     <string name="VoipDeclineCall">Rechazar</string>
     <string name="VoipEndCall">Finalizar llamada</string>
+    <string name="VoipErrorUnknown">No se puede establecer una llamada de Telegram en este momento.</string>
     <string name="VoipExchangingKeys">Intercambiando claves de cifrado</string>
     <string name="VoipFailed">Conexión fallida</string>
     <string name="VoipFeedbackCommentHint">Añade un comentario opcional</string>
     <string name="VoipHangingUp">Colgando</string>
     <string name="VoipInCallBranding">Llamada de Telegram</string>
+    <string name="VoipInCallBrandingWithName">Llamada de Telegram con %s</string>
     <string name="VoipIncoming">Llamada entrante</string>
     <string name="VoipNeedMicPermission">Telegram necesita acceso a tu micrófono para poder realizar llamadas.</string>
     <string name="VoipNotificationSettings">Llamadas de voz</string>
@@ -1709,6 +1748,8 @@
     <string name="VoipOutgoingCall">Llamada de Telegram en curso</string>
     <string name="VoipPeerIncompatible">La app de **%1$s** está usando un protocolo incompatible. Necesita actualizar la app para poder llamar.</string>
     <string name="VoipPeerOutdated">La app de **%1$s** no soporta llamadas. Necesita actualizar la app para poder llamar.</string>
+    <string name="VoipQuickReplies">Responder con mensaje</string>
+    <string name="VoipQuickRepliesExplain">Estas respuestas rápidas estarán disponibles cuando respondas a una llamada entrante con un mensaje de Telegram. Puedes modificarlas para decir lo que tú quieras.</string>
     <string name="VoipRateCallAlert">Por favor, evalúa la calidad de tu llamada de Telegram</string>
     <string name="VoipRequesting">Solicitando</string>
     <string name="VoipRinging">Llamando</string>

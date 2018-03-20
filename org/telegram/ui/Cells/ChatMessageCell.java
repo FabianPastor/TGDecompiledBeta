@@ -2063,15 +2063,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, GroupedMessages groupedMessages, boolean bottomNear, boolean topNear) {
+        int maxWidth;
         int a;
         String str;
         int linkPreviewMaxWidth;
         String description;
         Photo photo;
+        Document document;
         int duration;
-        boolean smallImage;
         TL_webDocument webDocument;
-        TL_webDocument webDocument2;
         int additinalWidth;
         int width;
         Throwable e;
@@ -2079,16 +2079,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
+        int textWidth;
         int maxPhotoWidth;
-        PhotoSize photoSize;
-        PhotoSize photoSize2;
-        int dp;
-        String fileName;
-        boolean autoDownload;
+        DocumentAttribute attribute;
+        int durationWidth;
+        ArrayList arrayList;
         int seconds;
         CharSequence str2;
         String price;
         SpannableStringBuilder spannableStringBuilder;
+        int timeWidthTotal;
         int mWidth;
         WebPage webPage;
         if (messageObject.checkLayout() || !(this.currentPosition == null || this.lastHeight == AndroidUtilities.displaySize.y)) {
@@ -2109,10 +2109,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
         if (messageChanged || dataChanged || groupChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int i;
-            int dp2;
+            int dp;
             int height;
             float f;
-            int timeWidthTotal;
             int widthForCaption;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
@@ -2227,9 +2226,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            int maxWidth;
             int count;
-            DocumentAttribute attribute;
+            String fileName;
+            boolean autoDownload;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -2357,8 +2356,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 setMessageObjectInternal(messageObject);
                 i = messageObject.textWidth;
-                dp2 = (this.hasGamePreview || this.hasInvoicePreview) ? AndroidUtilities.dp(10.0f) : 0;
-                this.backgroundWidth = dp2 + i;
+                dp = (this.hasGamePreview || this.hasInvoicePreview) ? AndroidUtilities.dp(10.0f) : 0;
+                this.backgroundWidth = dp + i;
                 this.totalHeight = (messageObject.textHeight + AndroidUtilities.dp(19.5f)) + this.namesOffset;
                 if (this.drawPinnedTop) {
                     this.namesOffset -= AndroidUtilities.dp(1.0f);
@@ -2369,12 +2368,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     String site_name;
                     String title;
                     String author;
-                    Document document;
                     String type;
+                    boolean smallImage;
+                    TL_webDocument webDocument2;
                     int restLines;
-                    int textWidth;
-                    int durationWidth;
-                    ArrayList arrayList;
+                    PhotoSize photoSize;
+                    PhotoSize photoSize2;
+                    int dp2;
                     if (AndroidUtilities.isTablet()) {
                         if (this.isChat && messageObject.needDrawAvatar() && !this.currentMessageObject.isOut()) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(132.0f);
@@ -2633,9 +2633,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     }
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp;
-                                    photoSize.w = dp;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
                                     this.documentAttach = document;
                                     this.documentAttachType = 2;
                                     webDocument2 = webDocument;
@@ -2651,9 +2651,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     }
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp;
-                                    photoSize.w = dp;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
                                     createDocumentLayout(0, messageObject);
                                     webDocument2 = webDocument;
                                 } else if (MessageObject.isStickerDocument(document)) {
@@ -2722,9 +2722,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     }
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp;
-                                    photoSize.w = dp;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
                                     this.documentAttach = document;
                                     this.documentAttachType = 6;
                                     webDocument2 = webDocument;
@@ -2736,11 +2736,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         this.drawImageButton = z;
                                         arrayList = messageObject.photoThumbs;
                                         if (this.drawImageButton) {
-                                            dp2 = maxPhotoWidth;
+                                            dp = maxPhotoWidth;
                                         } else {
-                                            dp2 = AndroidUtilities.getPhotoSize();
+                                            dp = AndroidUtilities.getPhotoSize();
                                         }
-                                        this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
+                                        this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
                                         this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                         if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                             this.currentPhotoObjectThumb = null;
@@ -2753,13 +2753,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.drawImageButton = z;
                                 arrayList = messageObject.photoThumbs;
                                 if (this.drawImageButton) {
-                                    dp2 = maxPhotoWidth;
+                                    dp = maxPhotoWidth;
                                 } else {
-                                    dp2 = AndroidUtilities.getPhotoSize();
+                                    dp = AndroidUtilities.getPhotoSize();
                                 }
                                 if (this.drawImageButton) {
                                 }
-                                this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
+                                this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
                                 this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                 if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                     this.currentPhotoObjectThumb = null;
@@ -3504,13 +3504,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                                 this.drawImageButton = z;
                                                 arrayList = messageObject.photoThumbs;
                                                 if (this.drawImageButton) {
-                                                    dp2 = AndroidUtilities.getPhotoSize();
+                                                    dp = AndroidUtilities.getPhotoSize();
                                                 } else {
-                                                    dp2 = maxPhotoWidth;
+                                                    dp = maxPhotoWidth;
                                                 }
                                                 if (this.drawImageButton) {
                                                 }
-                                                this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
+                                                this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
                                                 this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                                 if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                                     this.currentPhotoObjectThumb = null;
@@ -3523,13 +3523,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                         this.drawImageButton = z;
                                         arrayList = messageObject.photoThumbs;
                                         if (this.drawImageButton) {
-                                            dp2 = maxPhotoWidth;
+                                            dp = maxPhotoWidth;
                                         } else {
-                                            dp2 = AndroidUtilities.getPhotoSize();
+                                            dp = AndroidUtilities.getPhotoSize();
                                         }
                                         if (this.drawImageButton) {
                                         }
-                                        this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
+                                        this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
                                         this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                         if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                             this.currentPhotoObjectThumb = null;
@@ -3559,9 +3559,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     }
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp;
-                                    photoSize.w = dp;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
                                     this.documentAttach = document;
                                     this.documentAttachType = 2;
                                     webDocument2 = webDocument;
@@ -3577,9 +3577,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     }
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp;
-                                    photoSize.w = dp;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
                                     createDocumentLayout(0, messageObject);
                                     webDocument2 = webDocument;
                                 } else if (MessageObject.isStickerDocument(document)) {
@@ -3648,9 +3648,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     }
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp;
-                                    photoSize.w = dp;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
                                     this.documentAttach = document;
                                     this.documentAttachType = 6;
                                     webDocument2 = webDocument;
@@ -4358,13 +4358,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                             this.drawImageButton = z;
                                             arrayList = messageObject.photoThumbs;
                                             if (this.drawImageButton) {
-                                                dp2 = AndroidUtilities.getPhotoSize();
+                                                dp = AndroidUtilities.getPhotoSize();
                                             } else {
-                                                dp2 = maxPhotoWidth;
+                                                dp = maxPhotoWidth;
                                             }
                                             if (this.drawImageButton) {
                                             }
-                                            this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
+                                            this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
                                             this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                             if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                                 this.currentPhotoObjectThumb = null;
@@ -4377,13 +4377,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                     this.drawImageButton = z;
                                     arrayList = messageObject.photoThumbs;
                                     if (this.drawImageButton) {
-                                        dp2 = maxPhotoWidth;
+                                        dp = maxPhotoWidth;
                                     } else {
-                                        dp2 = AndroidUtilities.getPhotoSize();
+                                        dp = AndroidUtilities.getPhotoSize();
                                     }
                                     if (this.drawImageButton) {
                                     }
-                                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
+                                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
                                     this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                     if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                         this.currentPhotoObjectThumb = null;
@@ -4413,9 +4413,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp;
-                                photoSize.w = dp;
+                                dp2 = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp2;
+                                photoSize.w = dp2;
                                 this.documentAttach = document;
                                 this.documentAttachType = 2;
                                 webDocument2 = webDocument;
@@ -4431,9 +4431,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp;
-                                photoSize.w = dp;
+                                dp2 = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp2;
+                                photoSize.w = dp2;
                                 createDocumentLayout(0, messageObject);
                                 webDocument2 = webDocument;
                             } else if (MessageObject.isStickerDocument(document)) {
@@ -4502,9 +4502,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp;
-                                photoSize.w = dp;
+                                dp2 = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp2;
+                                photoSize.w = dp2;
                                 this.documentAttach = document;
                                 this.documentAttachType = 6;
                                 webDocument2 = webDocument;
@@ -5226,9 +5226,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp;
-                                    photoSize.w = dp;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
                                 }
                             }
                             this.documentAttach = document;
@@ -5248,9 +5248,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp;
-                                    photoSize.w = dp;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
                                 }
                             }
                             createDocumentLayout(0, messageObject);
@@ -5269,9 +5269,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 if (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp;
-                                    photoSize.w = dp;
+                                    dp2 = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp2;
+                                    photoSize.w = dp2;
                                 }
                             }
                             this.documentAttach = document;
@@ -5341,13 +5341,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                                 this.drawImageButton = z;
                                 arrayList = messageObject.photoThumbs;
                                 if (this.drawImageButton) {
-                                    dp2 = AndroidUtilities.getPhotoSize();
+                                    dp = AndroidUtilities.getPhotoSize();
                                 } else {
-                                    dp2 = maxPhotoWidth;
+                                    dp = maxPhotoWidth;
                                 }
                                 if (this.drawImageButton) {
                                 }
-                                this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
+                                this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
                                 this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                 if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                     this.currentPhotoObjectThumb = null;
@@ -5360,13 +5360,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         this.drawImageButton = z;
                         arrayList = messageObject.photoThumbs;
                         if (this.drawImageButton) {
-                            dp2 = maxPhotoWidth;
+                            dp = maxPhotoWidth;
                         } else {
-                            dp2 = AndroidUtilities.getPhotoSize();
+                            dp = AndroidUtilities.getPhotoSize();
                         }
                         if (this.drawImageButton) {
                         }
-                        this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp2, this.drawImageButton);
+                        this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(arrayList, dp, this.drawImageButton);
                         this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                         if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                             this.currentPhotoObjectThumb = null;
@@ -5958,11 +5958,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         String str4 = this.currentUrl;
                         Drawable[] drawableArr = Theme.chat_locationDrawable;
                         if (messageObject.isOutOwner()) {
-                            dp2 = 1;
+                            dp = 1;
                         } else {
-                            dp2 = 0;
+                            dp = 0;
                         }
-                        imageReceiver3.setImage(str4, null, drawableArr[dp2], null, 0);
+                        imageReceiver3.setImage(str4, null, drawableArr[dp], null, 0);
                     }
                 } else if (messageObject.type == 13) {
                     float maxWidth2;
@@ -6466,9 +6466,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             } else {
                 HashMap<String, BotButton> oldByPosition;
                 int rows = messageObject.messageOwner.reply_markup.rows.size();
-                dp2 = (AndroidUtilities.dp(48.0f) * rows) + AndroidUtilities.dp(1.0f);
-                this.keyboardHeight = dp2;
-                this.substractBackgroundHeight = dp2;
+                dp = (AndroidUtilities.dp(48.0f) * rows) + AndroidUtilities.dp(1.0f);
+                this.keyboardHeight = dp;
+                this.substractBackgroundHeight = dp;
                 this.widthForButtons = this.backgroundWidth;
                 boolean fullWidth = false;
                 if (messageObject.wantedBotKeyboardWidth > this.widthForButtons) {
@@ -6780,6 +6780,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         int linkPreviewY;
         int x;
         int y;
+        float progress;
         int x1;
         int y1;
         RadialProgress radialProgress;
@@ -7140,7 +7141,6 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             Theme.chat_photoStatesDrawables[drawable][this.buttonPressed].draw(canvas);
             if (this.currentMessageObject.messageOwner.destroyTime != 0) {
                 if (!this.currentMessageObject.isOutOwner()) {
-                    float progress;
                     progress = ((float) Math.max(0, (((long) this.currentMessageObject.messageOwner.destroyTime) * 1000) - (System.currentTimeMillis() + ((long) (ConnectionsManager.getInstance(this.currentAccount).getTimeDifference() * 1000))))) / (((float) this.currentMessageObject.messageOwner.ttl) * 1000.0f);
                     Theme.chat_deleteProgressPaint.setAlpha((int) (255.0f * this.controlsAlpha));
                     canvas.drawArc(this.deleteProgressRect, -90.0f, -360.0f * progress, true, Theme.chat_deleteProgressPaint);

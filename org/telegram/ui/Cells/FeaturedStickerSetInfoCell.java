@@ -8,7 +8,9 @@ import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils.TruncateAt;
+import android.text.style.ForegroundColorSpan;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
@@ -20,6 +22,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.ColorSpanUnderline;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class FeaturedStickerSetInfoCell extends FrameLayout {
@@ -134,8 +137,18 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     }
 
     public void setStickerSet(StickerSetCovered stickerSet, boolean unread) {
+        setStickerSet(stickerSet, unread, 0, 0);
+    }
+
+    public void setStickerSet(StickerSetCovered stickerSet, boolean unread, int index, int searchLength) {
         this.lastUpdateTime = System.currentTimeMillis();
-        this.nameTextView.setText(stickerSet.set.title);
+        if (searchLength != 0) {
+            SpannableStringBuilder builder = new SpannableStringBuilder(stickerSet.set.title);
+            builder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, index + searchLength, 33);
+            this.nameTextView.setText(builder);
+        } else {
+            this.nameTextView.setText(stickerSet.set.title);
+        }
         this.infoTextView.setText(LocaleController.formatPluralString("Stickers", stickerSet.set.count));
         if (unread) {
             this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, this.drawable, null);
@@ -158,6 +171,15 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             this.addButton.setVisibility(8);
         }
         this.set = stickerSet;
+    }
+
+    public void setUrl(CharSequence text, int searchLength) {
+        if (text != null) {
+            SpannableStringBuilder builder = new SpannableStringBuilder(text);
+            builder.setSpan(new ColorSpanUnderline(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, searchLength, 33);
+            builder.setSpan(new ColorSpanUnderline(Theme.getColor(Theme.key_chat_emojiPanelTrendingDescription)), searchLength, text.length(), 33);
+            this.infoTextView.setText(builder);
+        }
     }
 
     public boolean isInstalled() {

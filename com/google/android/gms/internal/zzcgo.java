@@ -157,13 +157,13 @@ final class zzcgo extends zzcjl {
     }
 
     private static boolean zza(zzchm com_google_android_gms_internal_zzchm, SQLiteDatabase sQLiteDatabase, String str) {
+        Cursor query;
         Object e;
         Throwable th;
         Cursor cursor = null;
         if (com_google_android_gms_internal_zzchm == null) {
             throw new IllegalArgumentException("Monitor must not be null");
         }
-        Cursor query;
         try {
             SQLiteDatabase sQLiteDatabase2 = sQLiteDatabase;
             query = sQLiteDatabase2.query("SQLITE_MASTER", new String[]{"name"}, "name=?", new String[]{str}, null, null, null);
@@ -406,7 +406,6 @@ final class zzcgo extends zzcjl {
     }
 
     public final zzcgp zza(long j, String str, boolean z, boolean z2, boolean z3, boolean z4, boolean z5) {
-        Cursor query;
         Object e;
         Throwable th;
         zzbq.zzgm(str);
@@ -414,6 +413,7 @@ final class zzcgo extends zzcjl {
         zzxf();
         String[] strArr = new String[]{str};
         zzcgp com_google_android_gms_internal_zzcgp = new zzcgp();
+        Cursor query;
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
             query = writableDatabase.query("apps", new String[]{"day", "daily_events_count", "daily_public_events_count", "daily_conversions_count", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);
@@ -952,7 +952,6 @@ final class zzcgo extends zzcjl {
     }
 
     public final zzcgl zzah(String str, String str2) {
-        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
@@ -960,6 +959,7 @@ final class zzcgo extends zzcjl {
         zzbq.zzgm(str2);
         zzve();
         zzxf();
+        Cursor query;
         try {
             query = getWritableDatabase().query("conditional_properties", new String[]{TtmlNode.ATTR_TTS_ORIGIN, "value", "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"}, "app_id=? and name=?", new String[]{str, str2}, null, null, null);
             try {
@@ -1202,7 +1202,6 @@ final class zzcgo extends zzcjl {
     }
 
     protected final long zzal(String str, String str2) {
-        long zza;
         Object e;
         zzbq.zzgm(str);
         zzbq.zzgm(str2);
@@ -1210,6 +1209,7 @@ final class zzcgo extends zzcjl {
         zzxf();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
+        long zza;
         try {
             zza = zza(new StringBuilder(String.valueOf(str2).length() + 32).append("select ").append(str2).append(" from app2 where app_id=?").toString(), new String[]{str}, -1);
             if (zza == -1) {
@@ -1375,12 +1375,12 @@ final class zzcgo extends zzcjl {
     }
 
     public final String zzba(long j) {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
         zzve();
         zzxf();
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from apps where app_id in (select distinct app_id from raw_events) and config_fetched_time < ? order by failed_config_fetch_time limit 1;", new String[]{String.valueOf(j)});
             try {
@@ -1687,12 +1687,12 @@ final class zzcgo extends zzcjl {
     }
 
     public final zzcgh zzjb(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzbq.zzgm(str);
         zzve();
         zzxf();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"app_instance_id", "gmp_app_id", "resettable_device_id_hash", "last_bundle_index", "last_bundle_start_timestamp", "last_bundle_end_timestamp", "app_version", "app_store", "gmp_version", "dev_cert_hash", "measurement_enabled", "day", "daily_public_events_count", "daily_events_count", "daily_conversions_count", "config_fetched_time", "failed_config_fetch_time", "app_version_int", "firebase_instance_id", "daily_error_events_count", "daily_realtime_events_count", "health_monitor_sample", "android_id", "adid_reporting_enabled"}, "app_id=?", new String[]{str}, null, null, null);
             try {

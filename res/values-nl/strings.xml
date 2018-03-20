@@ -12,6 +12,7 @@
     <string name="ActionAddUserSelfMega">un1 is lid van de groep</string>
     <string name="ActionAddUserSelfYou">Je keerde terug naar de groep</string>
     <string name="ActionAddUserYou">un1 heeft je toegevoegd</string>
+    <string name="ActionBotAllowed">Je hebt deze bot toegestaan je berichten te sturen door in te loggen op %1$s.</string>
     <string name="ActionChangedPhoto">un1 heeft de groepsafbeelding gewijzigd</string>
     <string name="ActionChangedTitle">un1 heeft de groepsnaam gewijzigd naar un2</string>
     <string name="ActionChannelChangedPhoto">Kanaalfoto bijgewerkt</string>
@@ -86,6 +87,7 @@
     <string name="Alert">Waarschuwing</string>
     <string name="AllMedia">Alle media</string>
     <string name="AllPhotos">Alle foto\'s</string>
+    <string name="AllowCustomQuickReply">Aangepast toestaan</string>
     <string name="AllowFillNumber">Sta het ontvangen van oproepen en SMS toe zodat we je nummer kunnen invullen en automatisch je inlogcode kunnen invoeren.</string>
     <string name="AllowReadCall">Sta het ontvangen van oproepen toe zodat we automatisch je inlogcode kunnen invoeren.</string>
     <string name="AllowReadCallAndSms">Sta het ontvangen van oproepen en SMS toe zodat we automatisch je inlogcode kunnen invoeren.</string>
@@ -116,7 +118,7 @@
     <string name="AndOther_zero">en %1$d anderen</string>
     <string name="ApkRestricted">APK-installatie is beperkt voor deze app. Je kunt dit inschakelen via de systeeminstellingen.</string>
     <string name="AppName">Telegram</string>
-    <string name="AppNameBeta">Telegram-bèta</string>
+    <string name="AppNameBeta">Telegram</string>
     <string name="ApplyLocalizationFile">Vertaling toepassen</string>
     <string name="ApplyTheme">TOEPASSEN</string>
     <string name="ApplyThemeFile">Thema toepassen</string>
@@ -316,6 +318,7 @@
     <string name="ChannelMessageAudio">%1$s plaatste een spraakbericht</string>
     <string name="ChannelMessageContact">%1$s plaatste een contact</string>
     <string name="ChannelMessageDocument">%1$s plaatste een bestand</string>
+    <string name="ChannelMessageFew">%1$s plaatste %2$s</string>
     <string name="ChannelMessageGIF">%1$s plaatste een GIF</string>
     <string name="ChannelMessageLiveLocation">%1$ plaatste een live-locatie</string>
     <string name="ChannelMessageMap">%1$s plaatste een locatie</string>
@@ -518,6 +521,7 @@
     <string name="DidNotGetTheCode">Geen code ontvangen?</string>
     <string name="DirectShare">Snel delen</string>
     <string name="DirectShareInfo">Recente chats in snel delen weergeven</string>
+    <string name="DisappearingGif">Geheime GIF</string>
     <string name="DisappearingPhoto">Geheime foto</string>
     <string name="DisappearingVideo">Geheime video</string>
     <string name="DiscardChanges">Wijzigingen negeren?</string>
@@ -924,6 +928,12 @@
     <string name="Masks">Maskers</string>
     <string name="MasksInfo">Je kunt maskers toevoegen aan foto\'s , gebruik de fotobewerkingsoptie en verstuur ze.</string>
     <string name="MasksRemoved">Maskers verwijderd</string>
+    <string name="Media_few">%1$d media</string>
+    <string name="Media_many">%1$d media</string>
+    <string name="Media_one">%1$d media</string>
+    <string name="Media_other">%1$d media</string>
+    <string name="Media_two">%1$d media</string>
+    <string name="Media_zero">%1$d media</string>
     <string name="MegaAddedBy">un1 heeft je toegevoegd aan deze groep</string>
     <string name="MegaAdminsInfo">Je kunt beheerders toevoegen om je te helpen je groep te beheren. Druk en houd ingedrukt om beheerders te verwijderen.</string>
     <string name="MegaDeleteAlert">Groep echt verwijderen? Berichten worden gewist en alle leden verwijderd.</string>
@@ -1041,6 +1051,7 @@
     <string name="NoSharedLinksSecret">Gedeelde links can deze chat verschijnen hier</string>
     <string name="NoSound">Geen geluid</string>
     <string name="NoStickers">Nog geen stickers</string>
+    <string name="NoStickersFound">Geen stickers gevonden</string>
     <string name="NoUsernameFound">Er is geen Telegram-account met deze gebruikersnaam.</string>
     <string name="NobodyLikesSpam1">Je kunt momenteel alleen berichten sturen aan onderlingen contacten.</string>
     <string name="NobodyLikesSpam2">Je kunt momenteel alleen onderlinge contacten aan groepen toevoegen</string>
@@ -1057,6 +1068,8 @@
     <string name="NotificationActionPinnedGeoLiveChannel">%1$s heeft een live-locatie vastgezet</string>
     <string name="NotificationActionPinnedGif">%1$s heeft GIF vastgezet in de groep %2$s</string>
     <string name="NotificationActionPinnedGifChannel">%1$s heeft GIF vastgezet</string>
+    <string name="NotificationActionPinnedInvoice">%1$s heeft een factuur in de groep %2$s vastgezet</string>
+    <string name="NotificationActionPinnedInvoiceChannel">%1$s heeft een factuur vastgezet</string>
     <string name="NotificationActionPinnedMusic">%1$s heeft muziekbestand vastgezet in de groep %2$s</string>
     <string name="NotificationActionPinnedMusicChannel">%1$s heeft muziekbestand vastgezet</string>
     <string name="NotificationActionPinnedNoText">%1$s heeft bericht vastgezet in de groep %2$s</string>
@@ -1082,6 +1095,8 @@
     <string name="NotificationGroupAddMember">%1$s heeft %3$s uitgenodigd voor de groep %2$s</string>
     <string name="NotificationGroupAddSelf">%1$s is terug in de groep %2$s</string>
     <string name="NotificationGroupAddSelfMega">%1$s is nu lid van de groep %2$s</string>
+    <string name="NotificationGroupFew">%1$s heeft %3$s naar de groep %2$s gestuurd</string>
+    <string name="NotificationGroupForwardedFew">%1$s heeft %3$s naar de groep %2$s doorgestuurd</string>
     <string name="NotificationGroupKickMember">%1$s heeft %3$s verwijderd uit de groep %2$s</string>
     <string name="NotificationGroupKickYou">%1$s heeft je verwijderd uit de groep %2$s</string>
     <string name="NotificationGroupLeftMember">%1$s heeft de groep %2$s verlaten</string>
@@ -1090,6 +1105,8 @@
     <string name="NotificationMessageAudio">%1$s heeft je een spraakbericht gestuurd</string>
     <string name="NotificationMessageContact">%1$s heeft een contact met je gedeeld</string>
     <string name="NotificationMessageDocument">%1$s heeft je een bestand gestuurd</string>
+    <string name="NotificationMessageFew">%1$s heeft je %2$s gestuurd</string>
+    <string name="NotificationMessageForwardFew">%1$s heeft %2$s naar je doorgestuurd</string>
     <string name="NotificationMessageGame">%1$s wil %2$s met je spelen</string>
     <string name="NotificationMessageGif">%1$s heeft je een GIF gestuurd</string>
     <string name="NotificationMessageGroupAudio">%1$s heeft een spraakbericht gestuurd naar de groep %2$s</string>
@@ -1097,6 +1114,7 @@
     <string name="NotificationMessageGroupDocument">%1$s heeft een bestand gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupGame">%1$s wil %3$s met de groep %2$s spelen</string>
     <string name="NotificationMessageGroupGif">%1$s heeft een GIF gestuurd naar de groep %2$s</string>
+    <string name="NotificationMessageGroupInvoice">%1$s heeft een factuur naar de groep %2$s voor %3$s gestuurd</string>
     <string name="NotificationMessageGroupLiveLocation">%1$s deelt een live-locatie met groep %2$s</string>
     <string name="NotificationMessageGroupMap">%1$s heeft een locatie gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupMusic">%1$s heeft een muziekbestand gestuurd naar de groep %2$s</string>
@@ -1107,6 +1125,7 @@
     <string name="NotificationMessageGroupStickerEmoji">%1$s heeft een %3$s sticker gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupText">%1$s @ %2$s: %3$s</string>
     <string name="NotificationMessageGroupVideo">%1$s heeft een video gestuurd naar de groep %2$s</string>
+    <string name="NotificationMessageInvoice">%1$s heeft je een factuur voor %2$s gestuurd</string>
     <string name="NotificationMessageLiveLocation">%1$s deelt een live-locatie met je</string>
     <string name="NotificationMessageMap">%1$s heeft je een locatie gestuurd</string>
     <string name="NotificationMessageMusic">%1$s heeft je een muziekbestand gestuurd</string>
@@ -1277,6 +1296,12 @@
     <string name="PhoneOther">Overig</string>
     <string name="PhoneWork">Werk</string>
     <string name="PhotoCaption">Foto-onderschrift</string>
+    <string name="Photos_few">%1$d foto\'s</string>
+    <string name="Photos_many">%1$d foto\'s</string>
+    <string name="Photos_one">%1$d foto</string>
+    <string name="Photos_other">%1$d foto\'s</string>
+    <string name="Photos_two">%1$d foto\'s</string>
+    <string name="Photos_zero">%1$d foto\'s</string>
     <string name="PinMessage">Vastzetten</string>
     <string name="PinMessageAlert">Wil je dit bericht vastzetten?</string>
     <string name="PinMessageAlertChannel">Wil je dit bericht vastzetten?</string>
@@ -1319,6 +1344,11 @@
     <string name="ProfilePopupNotificationInfo">Nieuwe berichten van deze persoon worden weergegeven als je Telegram niet gebruikt.</string>
     <string name="Proxy">Proxy</string>
     <string name="ProxySettings">Proxy-instellingen</string>
+    <string name="QuickReplyCustom">Aangepast bericht.</string>
+    <string name="QuickReplyDefault1">Kan nu niet praten, wat is er?</string>
+    <string name="QuickReplyDefault2">Ik bel je zo terug.</string>
+    <string name="QuickReplyDefault3">Ik bel je later.</string>
+    <string name="QuickReplyDefault4">Kan nu niet praten, bel je me later?</string>
     <string name="RaiseToSpeak">Houd bij oor</string>
     <string name="ReEnterYourPasscode">Toegangscode opnieuw invoeren</string>
     <string name="Recent">RECENT</string>
@@ -1348,6 +1378,7 @@
     <string name="ReportChatDescription">Beschrijving</string>
     <string name="ReportChatOther">Overig</string>
     <string name="ReportChatPornography">Pornografie</string>
+    <string name="ReportChatSent">Melding verzonden</string>
     <string name="ReportChatSpam">Spam</string>
     <string name="ReportChatViolence">Geweld</string>
     <string name="ReportSpam">SPAM MELDEN</string>
@@ -1413,6 +1444,7 @@
     <string name="SearchImagesTitle">Online zoeken</string>
     <string name="SearchMembers">Leden zoeken</string>
     <string name="SearchMessages">BERICHTEN</string>
+    <string name="SearchStickersHint">Zoek stickerbundels</string>
     <string name="SecondsBold_few">**%1$d** seconden</string>
     <string name="SecondsBold_many">**%1$d** seconden</string>
     <string name="SecondsBold_one">**%1$d** seconde</string>
@@ -1554,6 +1586,10 @@
     <string name="Subscribers_other">%1$d abonnees</string>
     <string name="Subscribers_two">%1$d abonnees</string>
     <string name="Subscribers_zero">%1$d abonnees</string>
+    <string name="SuggestStickers">Stickersuggesties via Emoji</string>
+    <string name="SuggestStickersAll">Alles</string>
+    <string name="SuggestStickersInstalled">Toegevoegd</string>
+    <string name="SuggestStickersNone">Geen</string>
     <string name="Support">Ondersteuning</string>
     <string name="SyncContacts">Contacten synchroniseren</string>
     <string name="SyncContactsAdded">Contacten van dit apparaat zijn aan je account toegevoegd.</string>
@@ -1616,6 +1652,7 @@
     <string name="UnpinFromTop">Losmaken</string>
     <string name="UnpinMessage">Losmaken</string>
     <string name="UnpinMessageAlert">Wil je dit bericht losmaken?</string>
+    <string name="UnreadMessages">Ongelezen berichten</string>
     <string name="UnsupportedAttachment">Bestandstype niet ondersteund</string>
     <string name="UnsupportedMedia">Dit bericht wordt niet ondersteund door jouw versie van Telegram. Werk Telegram bij om dit bericht te bekijken: https://telegram.org/update</string>
     <string name="UpdateContactsMessage">Veel van je contacten zijn niet gesynchroniseerd, wil je deze synchroniseren? Kies \'OK\' als je je eigen apparaat, SIM en Google-account gebruikt.</string>
@@ -1691,11 +1728,13 @@
     <string name="VoipConnecting">Verbinden</string>
     <string name="VoipDeclineCall">Weigeren</string>
     <string name="VoipEndCall">Oproep beëindigen</string>
+    <string name="VoipErrorUnknown">Kan momenteel geen Telegram-oproep starten.</string>
     <string name="VoipExchangingKeys">Encryptiesleutels uitwisselen</string>
     <string name="VoipFailed">Verbinden mislukt</string>
     <string name="VoipFeedbackCommentHint">Opmerking toevoegen</string>
     <string name="VoipHangingUp">Ophangen</string>
     <string name="VoipInCallBranding">Telegram-oproep</string>
+    <string name="VoipInCallBrandingWithName">Telegram-oproep naar %s</string>
     <string name="VoipIncoming">Inkomende oproep</string>
     <string name="VoipNeedMicPermission">Telegram heeft toegang tot je microfoon nodig zodat je kunt bellen.</string>
     <string name="VoipNotificationSettings">Spraakoproepen</string>
@@ -1709,6 +1748,8 @@
     <string name="VoipOutgoingCall">Telegram-oproep bezig</string>
     <string name="VoipPeerIncompatible">**%1$s** maakt gebruik van een niet-compatibel protocol voor spraakoproepen en moet eerst een update uitvoeren.</string>
     <string name="VoipPeerOutdated">**%1$s** heeft nog geen ondersteuning voor spraakoproepen en zal eerst een update moeten uitvoeren.</string>
+    <string name="VoipQuickReplies">Antwoord met bericht</string>
+    <string name="VoipQuickRepliesExplain">Deze snelle antwoorden zijn beschikbaar als je reageert op een inkomende oproep met een Telegram-bericht. Je kunt deze zelf wijzigen.</string>
     <string name="VoipRateCallAlert">Beoordeel de kwaliteit van je Telegram-oproep.</string>
     <string name="VoipRequesting">Aanvragen</string>
     <string name="VoipRinging">Gaat over</string>

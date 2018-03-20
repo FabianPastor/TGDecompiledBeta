@@ -1103,6 +1103,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         private ArrayList<ArrayList<Document>> emojiArrays = new ArrayList();
         private HashMap<ArrayList<Document>, String> emojiStickers = new HashMap();
         private ArrayList<TL_messages_stickerSet> localPacks = new ArrayList();
+        private HashMap<TL_messages_stickerSet, Integer> localPacksByName = new HashMap();
+        private HashMap<TL_messages_stickerSet, Boolean> localPacksByShortName = new HashMap();
         private SparseIntArray positionToRow = new SparseIntArray();
         private SparseArray<StickerSetCovered> positionsToSets = new SparseArray();
         private int reqId;
@@ -1117,6 +1119,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     StickersSearchGridAdapter.this.emojiArrays.clear();
                     StickersSearchGridAdapter.this.localPacks.clear();
                     StickersSearchGridAdapter.this.serverPacks.clear();
+                    StickersSearchGridAdapter.this.localPacksByShortName.clear();
+                    StickersSearchGridAdapter.this.localPacksByName.clear();
                 }
             }
 
@@ -1168,18 +1172,20 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                             StickersSearchGridAdapter.this.emojiArrays.add(emojiStickersArray);
                         }
                     }
-                    if (allStickers != null && !allStickers.isEmpty() && StickersSearchGridAdapter.this.searchQuery.startsWith(":") && StickersSearchGridAdapter.this.searchQuery.length() > 1) {
-                        Object[] suggestions = Emoji.getSuggestion(StickersSearchGridAdapter.this.searchQuery);
+                    if (!(allStickers == null || allStickers.isEmpty() || StickersSearchGridAdapter.this.searchQuery.length() <= 1)) {
+                        Object[] suggestions = Emoji.getSuggestion(StickersSearchGridAdapter.this.searchQuery.startsWith(":") ? StickersSearchGridAdapter.this.searchQuery : ":" + StickersSearchGridAdapter.this.searchQuery);
                         if (suggestions != null) {
                             size = Math.min(10, suggestions.length);
                             for (a = 0; a < size; a++) {
                                 EmojiSuggestion suggestion = suggestions[a];
                                 suggestion.emoji = suggestion.emoji.replace("️", TtmlNode.ANONYMOUS_REGION_ID);
                                 newStickers = allStickers != null ? (ArrayList) allStickers.get(suggestion.emoji) : null;
-                                if (!(newStickers == null || newStickers.isEmpty() || StickersSearchGridAdapter.this.emojiStickers.containsKey(newStickers))) {
+                                if (!(newStickers == null || newStickers.isEmpty())) {
                                     clear();
-                                    StickersSearchGridAdapter.this.emojiStickers.put(newStickers, suggestion.emoji);
-                                    StickersSearchGridAdapter.this.emojiArrays.add(newStickers);
+                                    if (!StickersSearchGridAdapter.this.emojiStickers.containsKey(newStickers)) {
+                                        StickersSearchGridAdapter.this.emojiStickers.put(newStickers, suggestion.emoji);
+                                        StickersSearchGridAdapter.this.emojiArrays.add(newStickers);
+                                    }
                                 }
                             }
                         }
@@ -1193,12 +1199,14 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                             if (index == 0 || set.set.title.charAt(index - 1) == ' ') {
                                 clear();
                                 StickersSearchGridAdapter.this.localPacks.add(set);
+                                StickersSearchGridAdapter.this.localPacksByName.put(set, Integer.valueOf(index));
                             }
                         } else if (set.set.short_name != null) {
                             index = set.set.short_name.toLowerCase().indexOf(StickersSearchGridAdapter.this.searchQuery);
                             if (index >= 0 && (index == 0 || set.set.short_name.charAt(index - 1) == ' ')) {
                                 clear();
                                 StickersSearchGridAdapter.this.localPacks.add(set);
+                                StickersSearchGridAdapter.this.localPacksByShortName.put(set, Boolean.valueOf(true));
                             }
                         }
                     }
@@ -1211,12 +1219,14 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                             if (index == 0 || set.set.title.charAt(index - 1) == ' ') {
                                 clear();
                                 StickersSearchGridAdapter.this.localPacks.add(set);
+                                StickersSearchGridAdapter.this.localPacksByName.put(set, Integer.valueOf(index));
                             }
                         } else if (set.set.short_name != null) {
                             index = set.set.short_name.toLowerCase().indexOf(StickersSearchGridAdapter.this.searchQuery);
                             if (index >= 0 && (index == 0 || set.set.short_name.charAt(index - 1) == ' ')) {
                                 clear();
                                 StickersSearchGridAdapter.this.localPacks.add(set);
+                                StickersSearchGridAdapter.this.localPacksByShortName.put(set, Boolean.valueOf(true));
                             }
                         }
                     }
@@ -1463,6 +1473,14 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     TL_messages_stickerSet object = this.cache.get(position);
                     if (object instanceof TL_messages_stickerSet) {
                         TL_messages_stickerSet set = object;
+                        if (TextUtils.isEmpty(this.searchQuery) || !this.localPacksByShortName.containsKey(set)) {
+                            if (set.set != null) {
+                                cell3.setText(set.set.title, 0, ((Integer) this.localPacksByName.get(set)).intValue(), !TextUtils.isEmpty(this.searchQuery) ? this.searchQuery.length() : 0);
+                            }
+                            cell3.setUrl(null, 0);
+                            return;
+                        }
+                        cell3.setUrl(set.set.short_name, this.searchQuery.length());
                         if (set.set != null) {
                             cell3.setText(set.set.title, 0);
                             return;
@@ -1470,6 +1488,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         return;
                     } else if (object instanceof ArrayList) {
                         cell3.setText((CharSequence) this.emojiStickers.get(object), 0);
+                        cell3.setUrl(null, 0);
                         return;
                     } else {
                         return;
@@ -1477,7 +1496,6 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 case 3:
                     StickerSetCovered stickerSetCovered = (StickerSetCovered) this.cache.get(position);
                     FeaturedStickerSetInfoCell cell4 = holder.itemView;
-                    cell4.setStickerSet(stickerSetCovered, false);
                     boolean installing = EmojiView.this.installingStickerSets.indexOfKey(stickerSetCovered.set.id) >= 0;
                     boolean removing = EmojiView.this.removingStickerSets.indexOfKey(stickerSetCovered.set.id) >= 0;
                     if (installing || removing) {
@@ -1489,12 +1507,20 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                             removing = false;
                         }
                     }
-                    if (installing || removing) {
-                        z = true;
-                    } else {
-                        z = false;
-                    }
+                    z = installing || removing;
                     cell4.setDrawProgress(z);
+                    if (TextUtils.isEmpty(this.searchQuery) || !stickerSetCovered.set.short_name.toLowerCase().startsWith(this.searchQuery)) {
+                        int idx = TextUtils.isEmpty(this.searchQuery) ? -1 : stickerSetCovered.set.title.toLowerCase().indexOf(this.searchQuery);
+                        if (idx >= 0) {
+                            cell4.setStickerSet(stickerSetCovered, false, idx, this.searchQuery.length());
+                            return;
+                        } else {
+                            cell4.setStickerSet(stickerSetCovered, false);
+                            return;
+                        }
+                    }
+                    cell4.setStickerSet(stickerSetCovered, false);
+                    cell4.setUrl(stickerSetCovered.set.short_name, this.searchQuery.length());
                     return;
                 default:
                     return;
@@ -1512,7 +1538,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             int localSize = this.localPacks.size();
             int emojiSize = this.emojiArrays.size();
             for (int a = -1; a < (serverSize + localSize) + emojiSize; a++) {
-                Object pack = null;
+                Object obj = null;
                 if (a == -1) {
                     SparseArray sparseArray = this.cache;
                     int i = this.totalItems;
@@ -1522,43 +1548,43 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 } else {
                     ArrayList<Document> documents;
                     int idx = a;
-                    if (idx < emojiSize) {
-                        documents = (ArrayList) this.emojiArrays.get(idx);
+                    if (idx < localSize) {
+                        TL_messages_stickerSet set = (TL_messages_stickerSet) this.localPacks.get(idx);
+                        documents = set.documents;
+                        obj = set;
                     } else {
-                        idx -= emojiSize;
-                        if (idx < localSize) {
-                            TL_messages_stickerSet set = (TL_messages_stickerSet) this.localPacks.get(idx);
-                            documents = set.documents;
-                            TL_messages_stickerSet pack2 = set;
+                        idx -= localSize;
+                        if (idx < emojiSize) {
+                            documents = (ArrayList) this.emojiArrays.get(idx);
                         } else {
-                            StickerSetCovered set2 = (StickerSetCovered) this.serverPacks.get(idx - localSize);
+                            StickerSetCovered set2 = (StickerSetCovered) this.serverPacks.get(idx - emojiSize);
                             documents = set2.covers;
-                            StickerSetCovered pack3 = set2;
+                            StickerSetCovered pack = set2;
                         }
                     }
                     if (!documents.isEmpty()) {
                         int b;
                         int count = (int) Math.ceil((double) (((float) documents.size()) / ((float) EmojiView.this.stickersGridAdapter.stickersPerRow)));
-                        if (pack != null) {
-                            this.cache.put(this.totalItems, pack);
+                        if (obj != null) {
+                            this.cache.put(this.totalItems, obj);
                         } else {
                             this.cache.put(this.totalItems, documents);
                         }
-                        if (a >= localSize + emojiSize) {
-                            this.positionsToSets.put(this.totalItems, (StickerSetCovered) pack);
+                        if (a >= localSize && (obj instanceof StickerSetCovered)) {
+                            this.positionsToSets.put(this.totalItems, (StickerSetCovered) obj);
                         }
                         this.positionToRow.put(this.totalItems, startRow);
                         int size = documents.size();
                         for (b = 0; b < size; b++) {
                             this.cache.put((b + 1) + this.totalItems, documents.get(b));
                             this.positionToRow.put((b + 1) + this.totalItems, (startRow + 1) + (b / EmojiView.this.stickersGridAdapter.stickersPerRow));
-                            if (a >= localSize && (pack instanceof StickerSetCovered)) {
-                                this.positionsToSets.put(this.totalItems + (b + 1), (StickerSetCovered) pack);
+                            if (a >= localSize && (obj instanceof StickerSetCovered)) {
+                                this.positionsToSets.put(this.totalItems + (b + 1), (StickerSetCovered) obj);
                             }
                         }
                         for (b = 0; b < count + 1; b++) {
-                            if (pack != null) {
-                                this.rowStartPack.put(startRow + b, pack);
+                            if (obj != null) {
+                                this.rowStartPack.put(startRow + b, obj);
                             } else {
                                 this.rowStartPack.put(startRow + b, documents);
                             }
