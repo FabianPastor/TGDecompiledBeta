@@ -1804,7 +1804,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     }
                     args.putInt("message_id", PhotoViewer.this.currentMessageObject.getId());
                     NotificationCenter.getInstance(PhotoViewer.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                    ((LaunchActivity) PhotoViewer.this.parentActivity).presentFragment(new ChatActivity(args), true, true);
+                    LaunchActivity launchActivity = (LaunchActivity) PhotoViewer.this.parentActivity;
+                    boolean remove = launchActivity.getMainFragmentsCount() > 1 || AndroidUtilities.isTablet();
+                    launchActivity.presentFragment(new ChatActivity(args), remove, true);
                     PhotoViewer.this.currentMessageObject = null;
                     PhotoViewer.this.closePhoto(false, false);
                 }

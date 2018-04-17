@@ -1588,17 +1588,17 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     if (object instanceof TL_messages_stickerSet) {
                         TL_messages_stickerSet set = object;
                         if (TextUtils.isEmpty(this.searchQuery) || !this.localPacksByShortName.containsKey(set)) {
-                            if (set.set != null) {
-                                cell3.setText(set.set.title, 0, ((Integer) this.localPacksByName.get(set)).intValue(), !TextUtils.isEmpty(this.searchQuery) ? this.searchQuery.length() : 0);
+                            Integer start = (Integer) this.localPacksByName.get(set);
+                            if (!(set.set == null || start == null)) {
+                                cell3.setText(set.set.title, 0, start.intValue(), !TextUtils.isEmpty(this.searchQuery) ? this.searchQuery.length() : 0);
                             }
                             cell3.setUrl(null, 0);
                             return;
                         }
-                        cell3.setUrl(set.set.short_name, this.searchQuery.length());
                         if (set.set != null) {
                             cell3.setText(set.set.title, 0);
-                            return;
                         }
+                        cell3.setUrl(set.set.short_name, this.searchQuery.length());
                         return;
                     } else if (object instanceof ArrayList) {
                         cell3.setText((CharSequence) this.emojiStickers.get(object), 0);
@@ -1623,18 +1623,16 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     }
                     z = installing || removing;
                     cell4.setDrawProgress(z);
-                    if (TextUtils.isEmpty(this.searchQuery) || !stickerSetCovered.set.short_name.toLowerCase().startsWith(this.searchQuery)) {
-                        int idx = TextUtils.isEmpty(this.searchQuery) ? -1 : stickerSetCovered.set.title.toLowerCase().indexOf(this.searchQuery);
-                        if (idx >= 0) {
-                            cell4.setStickerSet(stickerSetCovered, false, idx, this.searchQuery.length());
-                            return;
-                        } else {
-                            cell4.setStickerSet(stickerSetCovered, false);
-                            return;
-                        }
+                    int idx = TextUtils.isEmpty(this.searchQuery) ? -1 : stickerSetCovered.set.title.toLowerCase().indexOf(this.searchQuery);
+                    if (idx >= 0) {
+                        cell4.setStickerSet(stickerSetCovered, false, idx, this.searchQuery.length());
+                        return;
                     }
                     cell4.setStickerSet(stickerSetCovered, false);
-                    cell4.setUrl(stickerSetCovered.set.short_name, this.searchQuery.length());
+                    if (!TextUtils.isEmpty(this.searchQuery) && stickerSetCovered.set.short_name.toLowerCase().startsWith(this.searchQuery)) {
+                        cell4.setUrl(stickerSetCovered.set.short_name, this.searchQuery.length());
+                        return;
+                    }
                     return;
                 default:
                     return;

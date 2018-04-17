@@ -150,7 +150,10 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.lastUpdateTime = System.currentTimeMillis();
         if (searchLength != 0) {
             SpannableStringBuilder builder = new SpannableStringBuilder(stickerSet.set.title);
-            builder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, index + searchLength, 33);
+            try {
+                builder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), index, index + searchLength, 33);
+            } catch (Exception e) {
+            }
             this.nameTextView.setText(builder);
         } else {
             this.nameTextView.setText(stickerSet.set.title);
@@ -182,8 +185,11 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     public void setUrl(CharSequence text, int searchLength) {
         if (text != null) {
             SpannableStringBuilder builder = new SpannableStringBuilder(text);
-            builder.setSpan(new ColorSpanUnderline(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, searchLength, 33);
-            builder.setSpan(new ColorSpanUnderline(Theme.getColor(Theme.key_chat_emojiPanelTrendingDescription)), searchLength, text.length(), 33);
+            try {
+                builder.setSpan(new ColorSpanUnderline(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, searchLength, 33);
+                builder.setSpan(new ColorSpanUnderline(Theme.getColor(Theme.key_chat_emojiPanelTrendingDescription)), searchLength, text.length(), 33);
+            } catch (Exception e) {
+            }
             this.infoTextView.setText(builder);
         }
     }

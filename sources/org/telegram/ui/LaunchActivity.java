@@ -1002,6 +1002,10 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         finish();
     }
 
+    public int getMainFragmentsCount() {
+        return mainFragmentsStack.size();
+    }
+
     private void checkCurrentAccount() {
         if (this.currentAccount != UserConfig.selectedAccount) {
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.appDidLogout);

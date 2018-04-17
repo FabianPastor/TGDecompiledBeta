@@ -68,9 +68,17 @@ public class SeekBarView extends FrameLayout {
         if (ev.getAction() == 0) {
             getParent().requestDisallowInterceptTouchEvent(true);
             int additionWidth = (getMeasuredHeight() - this.thumbWidth) / 2;
-            if (((float) (this.thumbX - additionWidth)) <= ev.getX() && ev.getX() <= ((float) ((this.thumbX + this.thumbWidth) + additionWidth)) && ev.getY() >= 0.0f && ev.getY() <= ((float) getMeasuredHeight())) {
-                this.pressed = true;
+            if (ev.getY() >= 0.0f && ev.getY() <= ((float) getMeasuredHeight())) {
+                if (((float) (this.thumbX - additionWidth)) > ev.getX() || ev.getX() > ((float) ((this.thumbX + this.thumbWidth) + additionWidth))) {
+                    this.thumbX = ((int) ev.getX()) - (this.thumbWidth / 2);
+                    if (this.thumbX < 0) {
+                        this.thumbX = 0;
+                    } else if (this.thumbX > getMeasuredWidth() - this.thumbWidth) {
+                        this.thumbX = getMeasuredWidth() - this.thumbWidth;
+                    }
+                }
                 this.thumbDX = (int) (ev.getX() - ((float) this.thumbX));
+                this.pressed = true;
                 invalidate();
                 return true;
             }

@@ -109,9 +109,9 @@ public class ConnectionsManager {
         }
 
         protected NativeByteBuffer doInBackground(Void... voids) {
-            ByteArrayOutputStream outbuf;
-            byte[] bytes;
-            NativeByteBuffer buffer;
+            Throwable th;
+            ByteArrayOutputStream outbuf = null;
+            InputStream httpConnectionStream = null;
             try {
                 URL downloadUrl;
                 if (ConnectionsManager.native_isTestBackend(this.currentAccount) != 0) {
@@ -125,102 +125,71 @@ public class ConnectionsManager {
                 httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                 httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                 httpConnection.connect();
-                InputStream httpConnectionStream = httpConnection.getInputStream();
-                outbuf = new ByteArrayOutputStream();
-                byte[] data = new byte[32768];
-                while (!isCancelled()) {
-                    int read = httpConnectionStream.read(data);
-                    if (read > 0) {
-                        outbuf.write(data, 0, read);
-                    } else {
-                        if (read == -1) {
+                httpConnectionStream = httpConnection.getInputStream();
+                ByteArrayOutputStream outbuf2 = new ByteArrayOutputStream();
+                try {
+                    byte[] bytes;
+                    NativeByteBuffer buffer;
+                    byte[] data = new byte[32768];
+                    while (!isCancelled()) {
+                        int read = httpConnectionStream.read(data);
+                        if (read > 0) {
+                            outbuf2.write(data, 0, read);
+                        } else {
+                            if (read == -1) {
+                            }
+                            bytes = Base64.decode(outbuf2.toByteArray(), 0);
+                            buffer = new NativeByteBuffer(bytes.length);
+                            buffer.writeBytes(bytes);
+                            if (httpConnectionStream != null) {
+                                try {
+                                    httpConnectionStream.close();
+                                } catch (Throwable e) {
+                                    FileLog.m3e(e);
+                                }
+                            }
+                            if (outbuf2 != null) {
+                                try {
+                                    outbuf2.close();
+                                } catch (Exception e2) {
+                                }
+                            }
+                            outbuf = outbuf2;
+                            return buffer;
                         }
-                        if (httpConnectionStream != null) {
-                            httpConnectionStream.close();
-                        }
-                        bytes = Base64.decode(outbuf.toByteArray(), 0);
-                        buffer = new NativeByteBuffer(bytes.length);
-                        buffer.writeBytes(bytes);
-                        return buffer;
+                    }
+                    bytes = Base64.decode(outbuf2.toByteArray(), 0);
+                    buffer = new NativeByteBuffer(bytes.length);
+                    buffer.writeBytes(bytes);
+                    if (httpConnectionStream != null) {
+                        httpConnectionStream.close();
+                    }
+                    if (outbuf2 != null) {
+                        outbuf2.close();
+                    }
+                    outbuf = outbuf2;
+                    return buffer;
+                } catch (Throwable th2) {
+                    th = th2;
+                    outbuf = outbuf2;
+                }
+            } catch (Throwable th3) {
+                th = th3;
+                if (httpConnectionStream != null) {
+                    try {
+                        httpConnectionStream.close();
+                    } catch (Throwable e3) {
+                        FileLog.m3e(e3);
                     }
                 }
-                if (httpConnectionStream != null) {
-                    httpConnectionStream.close();
-                }
-            } catch (Throwable th) {
-                return null;
-            }
-            bytes = Base64.decode(outbuf.toByteArray(), 0);
-            buffer = new NativeByteBuffer(bytes.length);
-            buffer.writeBytes(bytes);
-            return buffer;
-        }
-
-        protected void onPostExecute(NativeByteBuffer result) {
-            if (result != null) {
-                ConnectionsManager.currentTask = null;
-                ConnectionsManager.native_applyDnsConfig(this.currentAccount, result.address);
-                return;
-            }
-            DnsTxtLoadTask task = new DnsTxtLoadTask(this.currentAccount);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-            ConnectionsManager.currentTask = task;
-        }
-    }
-
-    private static class DnsLoadTask extends AsyncTask<Void, Void, NativeByteBuffer> {
-        private int currentAccount;
-
-        public DnsLoadTask(int instance) {
-            this.currentAccount = instance;
-        }
-
-        protected NativeByteBuffer doInBackground(Void... voids) {
-            ByteArrayOutputStream outbuf;
-            byte[] bytes;
-            NativeByteBuffer buffer;
-            try {
-                URL downloadUrl;
-                if (ConnectionsManager.native_isTestBackend(this.currentAccount) != 0) {
-                    downloadUrl = new URL("https://google.com/test/");
-                } else {
-                    downloadUrl = new URL("https://google.com");
-                }
-                URLConnection httpConnection = downloadUrl.openConnection();
-                httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
-                httpConnection.addRequestProperty("Host", String.format(Locale.US, "dns-telegram%1$s.appspot.com", new Object[]{TtmlNode.ANONYMOUS_REGION_ID}));
-                httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
-                httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
-                httpConnection.connect();
-                InputStream httpConnectionStream = httpConnection.getInputStream();
-                outbuf = new ByteArrayOutputStream();
-                byte[] data = new byte[32768];
-                while (!isCancelled()) {
-                    int read = httpConnectionStream.read(data);
-                    if (read > 0) {
-                        outbuf.write(data, 0, read);
-                    } else {
-                        if (read == -1) {
-                        }
-                        if (httpConnectionStream != null) {
-                            httpConnectionStream.close();
-                        }
-                        bytes = Base64.decode(outbuf.toByteArray(), 0);
-                        buffer = new NativeByteBuffer(bytes.length);
-                        buffer.writeBytes(bytes);
-                        return buffer;
+                if (outbuf != null) {
+                    try {
+                        outbuf.close();
+                    } catch (Exception e4) {
                     }
                 }
-                if (httpConnectionStream != null) {
-                    httpConnectionStream.close();
-                }
-            } catch (Throwable th) {
-                return null;
+                throw th;
             }
-            bytes = Base64.decode(outbuf.toByteArray(), 0);
-            buffer = new NativeByteBuffer(bytes.length);
-            buffer.writeBytes(bytes);
-            return buffer;
         }
 
         protected void onPostExecute(NativeByteBuffer result) {
@@ -261,14 +230,9 @@ public class ConnectionsManager {
         }
 
         protected NativeByteBuffer doInBackground(Void... voids) {
-            ByteArrayOutputStream outbuf;
-            JSONArray array;
-            int len;
-            ArrayList<String> arrayList;
-            int a;
-            StringBuilder builder;
-            byte[] bytes;
-            NativeByteBuffer buffer;
+            Throwable th;
+            ByteArrayOutputStream outbuf = null;
+            InputStream httpConnectionStream = null;
             try {
                 URLConnection httpConnection = new URL("https://google.com/resolve?name=" + String.format(Locale.US, ConnectionsManager.native_isTestBackend(this.currentAccount) != 0 ? "tap%1$s.stel.com" : "ap%1$s.stel.com", new Object[]{TtmlNode.ANONYMOUS_REGION_ID}) + "&type=16").openConnection();
                 httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
@@ -276,57 +240,98 @@ public class ConnectionsManager {
                 httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                 httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                 httpConnection.connect();
-                InputStream httpConnectionStream = httpConnection.getInputStream();
-                outbuf = new ByteArrayOutputStream();
-                byte[] data = new byte[32768];
-                while (!isCancelled()) {
-                    int read = httpConnectionStream.read(data);
-                    if (read > 0) {
-                        outbuf.write(data, 0, read);
-                    } else {
-                        if (read == -1) {
+                httpConnectionStream = httpConnection.getInputStream();
+                ByteArrayOutputStream outbuf2 = new ByteArrayOutputStream();
+                try {
+                    JSONArray array;
+                    int len;
+                    ArrayList<String> arrayList;
+                    int a;
+                    StringBuilder builder;
+                    byte[] bytes;
+                    NativeByteBuffer buffer;
+                    byte[] data = new byte[32768];
+                    while (!isCancelled()) {
+                        int read = httpConnectionStream.read(data);
+                        if (read > 0) {
+                            outbuf2.write(data, 0, read);
+                        } else {
+                            if (read == -1) {
+                            }
+                            array = new JSONObject(new String(outbuf2.toByteArray(), C0539C.UTF8_NAME)).getJSONArray("Answer");
+                            len = array.length();
+                            arrayList = new ArrayList(len);
+                            for (a = 0; a < len; a++) {
+                                arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
+                            }
+                            Collections.sort(arrayList, new C06981());
+                            builder = new StringBuilder();
+                            for (a = 0; a < arrayList.size(); a++) {
+                                builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
+                            }
+                            bytes = Base64.decode(builder.toString(), 0);
+                            buffer = new NativeByteBuffer(bytes.length);
+                            buffer.writeBytes(bytes);
+                            if (httpConnectionStream != null) {
+                                try {
+                                    httpConnectionStream.close();
+                                } catch (Throwable e) {
+                                    FileLog.m3e(e);
+                                }
+                            }
+                            if (outbuf2 != null) {
+                                try {
+                                    outbuf2.close();
+                                } catch (Exception e2) {
+                                }
+                            }
+                            outbuf = outbuf2;
+                            return buffer;
                         }
-                        if (httpConnectionStream != null) {
-                            httpConnectionStream.close();
-                        }
-                        array = new JSONObject(new String(outbuf.toByteArray(), C0539C.UTF8_NAME)).getJSONArray("Answer");
-                        len = array.length();
-                        arrayList = new ArrayList(len);
-                        for (a = 0; a < len; a++) {
-                            arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
-                        }
-                        Collections.sort(arrayList, new C06981());
-                        builder = new StringBuilder();
-                        for (a = 0; a < arrayList.size(); a++) {
-                            builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
-                        }
-                        bytes = Base64.decode(builder.toString(), 0);
-                        buffer = new NativeByteBuffer(bytes.length);
-                        buffer.writeBytes(bytes);
-                        return buffer;
+                    }
+                    array = new JSONObject(new String(outbuf2.toByteArray(), C0539C.UTF8_NAME)).getJSONArray("Answer");
+                    len = array.length();
+                    arrayList = new ArrayList(len);
+                    for (a = 0; a < len; a++) {
+                        arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
+                    }
+                    Collections.sort(arrayList, new C06981());
+                    builder = new StringBuilder();
+                    for (a = 0; a < arrayList.size(); a++) {
+                        builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
+                    }
+                    bytes = Base64.decode(builder.toString(), 0);
+                    buffer = new NativeByteBuffer(bytes.length);
+                    buffer.writeBytes(bytes);
+                    if (httpConnectionStream != null) {
+                        httpConnectionStream.close();
+                    }
+                    if (outbuf2 != null) {
+                        outbuf2.close();
+                    }
+                    outbuf = outbuf2;
+                    return buffer;
+                } catch (Throwable th2) {
+                    th = th2;
+                    outbuf = outbuf2;
+                }
+            } catch (Throwable th3) {
+                th = th3;
+                if (httpConnectionStream != null) {
+                    try {
+                        httpConnectionStream.close();
+                    } catch (Throwable e3) {
+                        FileLog.m3e(e3);
                     }
                 }
-                if (httpConnectionStream != null) {
-                    httpConnectionStream.close();
+                if (outbuf != null) {
+                    try {
+                        outbuf.close();
+                    } catch (Exception e4) {
+                    }
                 }
-            } catch (Throwable th) {
-                return null;
+                throw th;
             }
-            array = new JSONObject(new String(outbuf.toByteArray(), C0539C.UTF8_NAME)).getJSONArray("Answer");
-            len = array.length();
-            arrayList = new ArrayList(len);
-            for (a = 0; a < len; a++) {
-                arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
-            }
-            Collections.sort(arrayList, new C06981());
-            builder = new StringBuilder();
-            for (a = 0; a < arrayList.size(); a++) {
-                builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
-            }
-            bytes = Base64.decode(builder.toString(), 0);
-            buffer = new NativeByteBuffer(bytes.length);
-            buffer.writeBytes(bytes);
-            return buffer;
         }
 
         protected void onPostExecute(NativeByteBuffer result) {
