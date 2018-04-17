@@ -57,11 +57,12 @@ final class FlacDecoderJni {
     }
 
     public boolean isEndOfData() {
+        boolean z = true;
         if (this.byteBufferData != null) {
-            if (this.byteBufferData.remaining() == 0) {
-                return true;
+            if (this.byteBufferData.remaining() != 0) {
+                z = false;
             }
-            return false;
+            return z;
         } else if (this.extractorInput != null) {
             return this.endOfExtractorInput;
         } else {

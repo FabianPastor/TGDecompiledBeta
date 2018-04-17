@@ -136,35 +136,58 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
 
     protected int supportsFormat(MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, Format format) throws DecoderQueryException {
         String mimeType = format.sampleMimeType;
+        int tunnelingSupport = 0;
         if (!MimeTypes.isVideo(mimeType)) {
             return 0;
         }
         boolean requiresSecureDecryption = false;
         DrmInitData drmInitData = format.drmInitData;
         if (drmInitData != null) {
+            boolean requiresSecureDecryption2 = false;
             for (int i = 0; i < drmInitData.schemeDataCount; i++) {
-                requiresSecureDecryption |= drmInitData.get(i).requiresSecureDecryption;
+                requiresSecureDecryption2 |= drmInitData.get(i).requiresSecureDecryption;
             }
+            requiresSecureDecryption = requiresSecureDecryption2;
         }
         MediaCodecInfo decoderInfo = mediaCodecSelector.getDecoderInfo(mimeType, requiresSecureDecryption);
+        int i2 = 2;
+        boolean z = true;
         if (decoderInfo == null) {
-            return (!requiresSecureDecryption || mediaCodecSelector.getDecoderInfo(mimeType, false) == null) ? 1 : 2;
-        } else {
-            if (!BaseRenderer.supportsFormatDrm(drmSessionManager, drmInitData)) {
-                return 2;
+            if (!requiresSecureDecryption || mediaCodecSelector.getDecoderInfo(mimeType, false) == null) {
+                i2 = 1;
             }
+            return i2;
+        } else if (!BaseRenderer.supportsFormatDrm(drmSessionManager, drmInitData)) {
+            return 2;
+        } else {
             boolean decoderCapable = decoderInfo.isCodecSupported(format.codecs);
             if (decoderCapable && format.width > 0 && format.height > 0) {
                 if (Util.SDK_INT >= 21) {
                     decoderCapable = decoderInfo.isVideoSizeAndRateSupportedV21(format.width, format.height, (double) format.frameRate);
                 } else {
-                    decoderCapable = format.width * format.height <= MediaCodecUtil.maxH264DecodableFrameSize();
+                    if (format.width * format.height > MediaCodecUtil.maxH264DecodableFrameSize()) {
+                        z = false;
+                    }
+                    decoderCapable = z;
                     if (!decoderCapable) {
-                        Log.d(TAG, "FalseCheck [legacyFrameSize, " + format.width + "x" + format.height + "] [" + Util.DEVICE_DEBUG_INFO + "]");
+                        String str = TAG;
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("FalseCheck [legacyFrameSize, ");
+                        stringBuilder.append(format.width);
+                        stringBuilder.append("x");
+                        stringBuilder.append(format.height);
+                        stringBuilder.append("] [");
+                        stringBuilder.append(Util.DEVICE_DEBUG_INFO);
+                        stringBuilder.append("]");
+                        Log.d(str, stringBuilder.toString());
                     }
                 }
             }
-            return ((decoderInfo.adaptive ? 16 : 8) | (decoderInfo.tunneling ? 32 : 0)) | (decoderCapable ? 4 : 3);
+            int adaptiveSupport = decoderInfo.adaptive ? 16 : 8;
+            if (decoderInfo.tunneling) {
+                tunnelingSupport = 32;
+            }
+            return (adaptiveSupport | tunnelingSupport) | (decoderCapable ? 4 : 3);
         }
     }
 
@@ -182,7 +205,11 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
             this.outputStreamOffsetUs = offsetUs;
         } else {
             if (this.pendingOutputStreamOffsetCount == this.pendingOutputStreamOffsetsUs.length) {
-                Log.w(TAG, "Too many stream changes, so dropping offset: " + this.pendingOutputStreamOffsetsUs[this.pendingOutputStreamOffsetCount - 1]);
+                String str = TAG;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Too many stream changes, so dropping offset: ");
+                stringBuilder.append(this.pendingOutputStreamOffsetsUs[this.pendingOutputStreamOffsetCount - 1]);
+                Log.w(str, stringBuilder.toString());
             } else {
                 this.pendingOutputStreamOffsetCount++;
             }
@@ -294,12 +321,12 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
             if (surface == null || surface == this.dummySurface) {
                 clearReportedVideoSize();
                 clearRenderedFirstFrame();
-                return;
-            }
-            maybeRenotifyVideoSizeChanged();
-            clearRenderedFirstFrame();
-            if (state == 2) {
-                setJoiningDeadlineMs();
+            } else {
+                maybeRenotifyVideoSizeChanged();
+                clearRenderedFirstFrame();
+                if (state == 2) {
+                    setJoiningDeadlineMs();
+                }
             }
         } else if (surface != null && surface != this.dummySurface) {
             maybeRenotifyVideoSizeChanged();
@@ -308,7 +335,12 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     protected boolean shouldInitCodec(MediaCodecInfo codecInfo) {
-        return this.surface != null || shouldUseDummySurface(codecInfo);
+        if (this.surface == null) {
+            if (!shouldUseDummySurface(codecInfo)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected void configureCodec(MediaCodecInfo codecInfo, MediaCodec codec, Format format, MediaCrypto crypto) throws DecoderQueryException {
@@ -331,7 +363,6 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         try {
             super.releaseCodec();
         } finally {
-            boolean z = false;
             this.buffersInCodecCount = 0;
             this.forceRenderFrame = false;
             if (this.dummySurface != null) {
@@ -401,64 +432,93 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     protected boolean processOutputBuffer(long positionUs, long elapsedRealtimeUs, MediaCodec codec, ByteBuffer buffer, int bufferIndex, int bufferFlags, long bufferPresentationTimeUs, boolean shouldSkip) throws ExoPlaybackException {
-        while (this.pendingOutputStreamOffsetCount != 0 && bufferPresentationTimeUs >= this.pendingOutputStreamOffsetsUs[0]) {
-            this.outputStreamOffsetUs = this.pendingOutputStreamOffsetsUs[0];
-            this.pendingOutputStreamOffsetCount--;
-            System.arraycopy(this.pendingOutputStreamOffsetsUs, 1, this.pendingOutputStreamOffsetsUs, 0, this.pendingOutputStreamOffsetCount);
+        MediaCodecVideoRenderer mediaCodecVideoRenderer = this;
+        long j = elapsedRealtimeUs;
+        MediaCodec mediaCodec = codec;
+        int i = bufferIndex;
+        long j2 = bufferPresentationTimeUs;
+        while (mediaCodecVideoRenderer.pendingOutputStreamOffsetCount != 0 && j2 >= mediaCodecVideoRenderer.pendingOutputStreamOffsetsUs[0]) {
+            mediaCodecVideoRenderer.outputStreamOffsetUs = mediaCodecVideoRenderer.pendingOutputStreamOffsetsUs[0];
+            mediaCodecVideoRenderer.pendingOutputStreamOffsetCount--;
+            System.arraycopy(mediaCodecVideoRenderer.pendingOutputStreamOffsetsUs, 1, mediaCodecVideoRenderer.pendingOutputStreamOffsetsUs, 0, mediaCodecVideoRenderer.pendingOutputStreamOffsetCount);
         }
-        long presentationTimeUs = bufferPresentationTimeUs - this.outputStreamOffsetUs;
+        long presentationTimeUs = j2 - mediaCodecVideoRenderer.outputStreamOffsetUs;
         if (shouldSkip) {
-            skipOutputBuffer(codec, bufferIndex, presentationTimeUs);
+            skipOutputBuffer(mediaCodec, i, presentationTimeUs);
             return true;
         }
-        long earlyUs = bufferPresentationTimeUs - positionUs;
-        if (this.surface == this.dummySurface) {
-            if (!isBufferLate(earlyUs)) {
+        long earlyUs = j2 - positionUs;
+        if (mediaCodecVideoRenderer.surface != mediaCodecVideoRenderer.dummySurface) {
+            boolean z;
+            if (!mediaCodecVideoRenderer.renderedFirstFrame) {
+                j = presentationTimeUs;
+                z = false;
+                presentationTimeUs = 21;
+            } else if (mediaCodecVideoRenderer.forceRenderFrame) {
+                j = presentationTimeUs;
+                z = false;
+                presentationTimeUs = 21;
+            } else if (getState() != 2) {
                 return false;
-            }
-            this.forceRenderFrame = false;
-            skipOutputBuffer(codec, bufferIndex, presentationTimeUs);
-            return true;
-        } else if (!this.renderedFirstFrame || this.forceRenderFrame) {
-            this.forceRenderFrame = false;
-            if (Util.SDK_INT >= 21) {
-                renderOutputBufferV21(codec, bufferIndex, presentationTimeUs, System.nanoTime());
             } else {
-                renderOutputBuffer(codec, bufferIndex, presentationTimeUs);
-            }
-            return true;
-        } else if (getState() != 2) {
-            return false;
-        } else {
-            earlyUs -= (SystemClock.elapsedRealtime() * 1000) - elapsedRealtimeUs;
-            long systemTimeNs = System.nanoTime();
-            long adjustedReleaseTimeNs = this.frameReleaseTimeHelper.adjustReleaseTime(bufferPresentationTimeUs, systemTimeNs + (1000 * earlyUs));
-            earlyUs = (adjustedReleaseTimeNs - systemTimeNs) / 1000;
-            if (shouldDropBuffersToKeyframe(earlyUs, elapsedRealtimeUs) && maybeDropBuffersToKeyframe(codec, bufferIndex, presentationTimeUs, positionUs)) {
-                this.forceRenderFrame = true;
-                return false;
-            } else if (shouldDropOutputBuffer(earlyUs, elapsedRealtimeUs)) {
-                dropOutputBuffer(codec, bufferIndex, presentationTimeUs);
-                return true;
-            } else {
-                if (Util.SDK_INT >= 21) {
-                    if (earlyUs < 50000) {
-                        renderOutputBufferV21(codec, bufferIndex, presentationTimeUs, adjustedReleaseTimeNs);
-                        return true;
+                long presentationTimeUs2;
+                long earlyUs2 = earlyUs - ((SystemClock.elapsedRealtime() * 1000) - j);
+                long systemTimeNs = System.nanoTime();
+                long unadjustedFrameReleaseTimeNs = systemTimeNs + (earlyUs2 * 1000);
+                long adjustedReleaseTimeNs = mediaCodecVideoRenderer.frameReleaseTimeHelper.adjustReleaseTime(j2, unadjustedFrameReleaseTimeNs);
+                earlyUs = (adjustedReleaseTimeNs - systemTimeNs) / 1000;
+                if (shouldDropBuffersToKeyframe(earlyUs, j)) {
+                    j2 = earlyUs;
+                    presentationTimeUs2 = presentationTimeUs;
+                    if (maybeDropBuffersToKeyframe(mediaCodec, i, presentationTimeUs, positionUs)) {
+                        mediaCodecVideoRenderer.forceRenderFrame = true;
+                        return false;
                     }
-                } else if (earlyUs < 30000) {
-                    if (earlyUs > 11000) {
-                        try {
-                            Thread.sleep((earlyUs - 10000) / 1000);
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
-                    }
-                    renderOutputBuffer(codec, bufferIndex, presentationTimeUs);
+                    z = false;
+                } else {
+                    j2 = earlyUs;
+                    presentationTimeUs2 = presentationTimeUs;
+                    long j3 = unadjustedFrameReleaseTimeNs;
+                    z = false;
+                }
+                if (shouldDropOutputBuffer(j2, j)) {
+                    dropOutputBuffer(mediaCodec, i, presentationTimeUs2);
                     return true;
                 }
-                return false;
+                unadjustedFrameReleaseTimeNs = presentationTimeUs2;
+                if (Util.SDK_INT < 21) {
+                    j = unadjustedFrameReleaseTimeNs;
+                    if (j2 < 30000) {
+                        if (j2 > 11000) {
+                            try {
+                                Thread.sleep((j2 - 10000) / 1000);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+                        }
+                        renderOutputBuffer(mediaCodec, i, j);
+                        return true;
+                    }
+                } else if (j2 < 50000) {
+                    renderOutputBufferV21(mediaCodec, i, unadjustedFrameReleaseTimeNs, adjustedReleaseTimeNs);
+                    return true;
+                }
+                return z;
             }
+            mediaCodecVideoRenderer.forceRenderFrame = z;
+            if (Util.SDK_INT >= presentationTimeUs) {
+                j2 = earlyUs;
+                renderOutputBufferV21(mediaCodec, i, j, System.nanoTime());
+            } else {
+                renderOutputBuffer(mediaCodec, i, j);
+            }
+            return true;
+        } else if (!isBufferLate(earlyUs)) {
+            return false;
+        } else {
+            mediaCodecVideoRenderer.forceRenderFrame = false;
+            skipOutputBuffer(mediaCodec, i, presentationTimeUs);
+            return true;
         }
     }
 
@@ -627,31 +687,51 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
             return new CodecMaxValues(maxWidth, maxHeight, maxInputSize);
         }
         boolean haveUnknownDimensions = false;
+        int maxInputSize2 = maxInputSize;
+        maxInputSize = maxHeight;
+        maxHeight = maxWidth;
         for (Format streamFormat : streamFormats) {
             if (areAdaptationCompatible(codecInfo.adaptive, format, streamFormat)) {
                 int i;
-                if (streamFormat.width == -1 || streamFormat.height == -1) {
-                    i = 1;
-                } else {
-                    i = 0;
+                if (streamFormat.width != -1) {
+                    if (streamFormat.height != -1) {
+                        i = 0;
+                        haveUnknownDimensions |= i;
+                        maxHeight = Math.max(maxHeight, streamFormat.width);
+                        maxInputSize = Math.max(maxInputSize, streamFormat.height);
+                        maxInputSize2 = Math.max(maxInputSize2, getMaxInputSize(streamFormat));
+                    }
                 }
+                i = 1;
                 haveUnknownDimensions |= i;
-                maxWidth = Math.max(maxWidth, streamFormat.width);
-                maxHeight = Math.max(maxHeight, streamFormat.height);
-                maxInputSize = Math.max(maxInputSize, getMaxInputSize(streamFormat));
+                maxHeight = Math.max(maxHeight, streamFormat.width);
+                maxInputSize = Math.max(maxInputSize, streamFormat.height);
+                maxInputSize2 = Math.max(maxInputSize2, getMaxInputSize(streamFormat));
             }
         }
         if (haveUnknownDimensions) {
-            Log.w(TAG, "Resolutions unknown. Codec max resolution: " + maxWidth + "x" + maxHeight);
+            String str = TAG;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Resolutions unknown. Codec max resolution: ");
+            stringBuilder.append(maxHeight);
+            stringBuilder.append("x");
+            stringBuilder.append(maxInputSize);
+            Log.w(str, stringBuilder.toString());
             Point codecMaxSize = getCodecMaxSize(codecInfo, format);
             if (codecMaxSize != null) {
-                maxWidth = Math.max(maxWidth, codecMaxSize.x);
-                maxHeight = Math.max(maxHeight, codecMaxSize.y);
-                maxInputSize = Math.max(maxInputSize, getMaxInputSize(format.sampleMimeType, maxWidth, maxHeight));
-                Log.w(TAG, "Codec max resolution adjusted to: " + maxWidth + "x" + maxHeight);
+                maxHeight = Math.max(maxHeight, codecMaxSize.x);
+                maxInputSize = Math.max(maxInputSize, codecMaxSize.y);
+                maxInputSize2 = Math.max(maxInputSize2, getMaxInputSize(format.sampleMimeType, maxHeight, maxInputSize));
+                String str2 = TAG;
+                StringBuilder stringBuilder2 = new StringBuilder();
+                stringBuilder2.append("Codec max resolution adjusted to: ");
+                stringBuilder2.append(maxHeight);
+                stringBuilder2.append("x");
+                stringBuilder2.append(maxInputSize);
+                Log.w(str2, stringBuilder2.toString());
             }
         }
-        return new CodecMaxValues(maxWidth, maxHeight, maxInputSize);
+        return new CodecMaxValues(maxHeight, maxInputSize, maxInputSize2);
     }
 
     @SuppressLint({"InlinedApi"})
@@ -672,39 +752,48 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     private static Point getCodecMaxSize(MediaCodecInfo codecInfo, Format format) throws DecoderQueryException {
-        boolean isVerticalVideo = format.height > format.width;
-        int formatLongEdgePx = isVerticalVideo ? format.height : format.width;
-        int formatShortEdgePx = isVerticalVideo ? format.width : format.height;
+        float f;
+        MediaCodecInfo mediaCodecInfo = codecInfo;
+        Format format2 = format;
+        int i = 0;
+        boolean isVerticalVideo = format2.height > format2.width;
+        int formatLongEdgePx = isVerticalVideo ? format2.height : format2.width;
+        int formatShortEdgePx = isVerticalVideo ? format2.width : format2.height;
         float aspectRatio = ((float) formatShortEdgePx) / ((float) formatLongEdgePx);
-        for (int longEdgePx : STANDARD_LONG_EDGE_VIDEO_PX) {
-            int longEdgePx2;
-            int shortEdgePx = (int) (((float) longEdgePx2) * aspectRatio);
-            if (longEdgePx2 <= formatLongEdgePx || shortEdgePx <= formatShortEdgePx) {
-                return null;
-            }
-            if (Util.SDK_INT >= 21) {
-                int i;
-                if (isVerticalVideo) {
-                    i = shortEdgePx;
-                } else {
-                    i = longEdgePx2;
-                }
-                Point alignedSize = codecInfo.alignVideoSizeV21(i, isVerticalVideo ? longEdgePx2 : shortEdgePx);
-                if (codecInfo.isVideoSizeAndRateSupportedV21(alignedSize.x, alignedSize.y, (double) format.frameRate)) {
-                    return alignedSize;
-                }
+        int[] iArr = STANDARD_LONG_EDGE_VIDEO_PX;
+        int length = iArr.length;
+        while (i < length) {
+            int longEdgePx = iArr[i];
+            int shortEdgePx = (int) (((float) longEdgePx) * aspectRatio);
+            if (longEdgePx <= formatLongEdgePx) {
+                f = aspectRatio;
+            } else if (shortEdgePx <= formatShortEdgePx) {
+                r15 = formatShortEdgePx;
+                f = aspectRatio;
             } else {
-                longEdgePx2 = Util.ceilDivide(longEdgePx2, 16) * 16;
-                shortEdgePx = Util.ceilDivide(shortEdgePx, 16) * 16;
-                if (longEdgePx2 * shortEdgePx <= MediaCodecUtil.maxH264DecodableFrameSize()) {
-                    int i2 = isVerticalVideo ? shortEdgePx : longEdgePx2;
-                    if (!isVerticalVideo) {
-                        longEdgePx2 = shortEdgePx;
+                if (Util.SDK_INT >= 21) {
+                    Point alignedSize = mediaCodecInfo.alignVideoSizeV21(isVerticalVideo ? shortEdgePx : longEdgePx, isVerticalVideo ? longEdgePx : shortEdgePx);
+                    r15 = formatShortEdgePx;
+                    f = aspectRatio;
+                    if (mediaCodecInfo.isVideoSizeAndRateSupportedV21(alignedSize.x, alignedSize.y, (double) format2.frameRate) != 0) {
+                        return alignedSize;
                     }
-                    return new Point(i2, longEdgePx2);
+                } else {
+                    r15 = formatShortEdgePx;
+                    f = aspectRatio;
+                    int longEdgePx2 = Util.ceilDivide(longEdgePx, 16) * 16;
+                    formatShortEdgePx = 16 * Util.ceilDivide(shortEdgePx, 16);
+                    if (longEdgePx2 * formatShortEdgePx <= MediaCodecUtil.maxH264DecodableFrameSize()) {
+                        return new Point(isVerticalVideo ? formatShortEdgePx : longEdgePx2, isVerticalVideo ? longEdgePx2 : formatShortEdgePx);
+                    }
                 }
+                i++;
+                formatShortEdgePx = r15;
+                aspectRatio = f;
             }
+            return null;
         }
+        f = aspectRatio;
         return null;
     }
 
@@ -722,73 +811,73 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private static int getMaxInputSize(String sampleMimeType, int width, int height) {
-        if (width == -1 || height == -1) {
-            return -1;
-        }
-        int i;
-        int maxPixels;
-        int minCompressionRatio;
-        switch (sampleMimeType.hashCode()) {
-            case -1664118616:
-                if (sampleMimeType.equals(MimeTypes.VIDEO_H263)) {
-                    i = 0;
-                    break;
+        if (width != -1) {
+            if (height != -1) {
+                int i;
+                int maxPixels;
+                switch (sampleMimeType.hashCode()) {
+                    case -1664118616:
+                        if (sampleMimeType.equals(MimeTypes.VIDEO_H263)) {
+                            i = 0;
+                            break;
+                        }
+                    case -1662541442:
+                        if (sampleMimeType.equals(MimeTypes.VIDEO_H265)) {
+                            i = 4;
+                            break;
+                        }
+                    case 1187890754:
+                        if (sampleMimeType.equals(MimeTypes.VIDEO_MP4V)) {
+                            i = 1;
+                            break;
+                        }
+                    case 1331836730:
+                        if (sampleMimeType.equals("video/avc")) {
+                            i = 2;
+                            break;
+                        }
+                    case 1599127256:
+                        if (sampleMimeType.equals(MimeTypes.VIDEO_VP8)) {
+                            i = 3;
+                            break;
+                        }
+                    case 1599127257:
+                        if (sampleMimeType.equals(MimeTypes.VIDEO_VP9)) {
+                            i = 5;
+                            break;
+                        }
+                    default:
                 }
-            case -1662541442:
-                if (sampleMimeType.equals(MimeTypes.VIDEO_H265)) {
-                    i = 4;
-                    break;
-                }
-            case 1187890754:
-                if (sampleMimeType.equals(MimeTypes.VIDEO_MP4V)) {
-                    i = 1;
-                    break;
-                }
-            case 1331836730:
-                if (sampleMimeType.equals("video/avc")) {
-                    i = 2;
-                    break;
-                }
-            case 1599127256:
-                if (sampleMimeType.equals(MimeTypes.VIDEO_VP8)) {
-                    i = 3;
-                    break;
-                }
-            case 1599127257:
-                if (sampleMimeType.equals(MimeTypes.VIDEO_VP9)) {
-                    i = 5;
-                    break;
-                }
-            default:
                 i = -1;
-                break;
-        }
-        switch (i) {
-            case 0:
-            case 1:
-                maxPixels = width * height;
-                minCompressionRatio = 2;
-                break;
-            case 2:
-                if (!"BRAVIA 4K 2015".equals(Util.MODEL)) {
-                    maxPixels = ((Util.ceilDivide(width, 16) * Util.ceilDivide(height, 16)) * 16) * 16;
-                    minCompressionRatio = 2;
-                    break;
+                switch (i) {
+                    case 0:
+                    case 1:
+                        maxPixels = width * height;
+                        i = 2;
+                        break;
+                    case 2:
+                        if (!"BRAVIA 4K 2015".equals(Util.MODEL)) {
+                            maxPixels = 16 * ((Util.ceilDivide(width, 16) * Util.ceilDivide(height, 16)) * 16);
+                            i = 2;
+                            break;
+                        }
+                        return -1;
+                    case 3:
+                        maxPixels = width * height;
+                        i = 2;
+                        break;
+                    case 4:
+                    case 5:
+                        maxPixels = width * height;
+                        i = 4;
+                        break;
+                    default:
+                        return -1;
                 }
-                return -1;
-            case 3:
-                maxPixels = width * height;
-                minCompressionRatio = 2;
-                break;
-            case 4:
-            case 5:
-                maxPixels = width * height;
-                minCompressionRatio = 4;
-                break;
-            default:
-                return -1;
+                return (maxPixels * 3) / (2 * i);
+            }
         }
-        return (maxPixels * 3) / (minCompressionRatio * 2);
+        return -1;
     }
 
     private static void setVideoScalingMode(MediaCodec codec, int scalingMode) {
@@ -800,10 +889,12 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     private static boolean codecNeedsSetOutputSurfaceWorkaround(String name) {
-        if ((("deb".equals(Util.DEVICE) || "flo".equals(Util.DEVICE)) && "OMX.qcom.video.decoder.avc".equals(name)) || ((("tcl_eu".equals(Util.DEVICE) || "SVP-DTV15".equals(Util.DEVICE) || "BRAVIA_ATV2".equals(Util.DEVICE)) && "OMX.MTK.VIDEO.DECODER.AVC".equals(name)) || ("OMX.k3.video.decoder.avc".equals(name) && "ALE-L21".equals(Util.MODEL)))) {
-            return true;
+        if (!((("deb".equals(Util.DEVICE) || "flo".equals(Util.DEVICE)) && "OMX.qcom.video.decoder.avc".equals(name)) || (("tcl_eu".equals(Util.DEVICE) || "SVP-DTV15".equals(Util.DEVICE) || "BRAVIA_ATV2".equals(Util.DEVICE)) && "OMX.MTK.VIDEO.DECODER.AVC".equals(name)))) {
+            if (!"OMX.k3.video.decoder.avc".equals(name) || !"ALE-L21".equals(Util.MODEL)) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     private static boolean areAdaptationCompatible(boolean codecIsAdaptive, Format first, Format second) {

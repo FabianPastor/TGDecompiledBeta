@@ -1829,6 +1829,7 @@
     <string name="common_open_on_phone">فتح على الهاتف</string>
     <string name="common_signin_button_text">تسجل الدخول</string>
     <string name="common_signin_button_text_long">‏تسجيل الدخول عبر Google</string>
+    <string name="fcm_fallback_notification_channel_label">متنوعة</string>
     <string name="formatDateAtTime">%1$s الساعة %2$s</string>
     <string name="formatterBannedUntil12H">MMM dd yyyy, h:mm a</string>
     <string name="formatterBannedUntil24H">MMM dd yyyy, HH:mm</string>
@@ -1843,7 +1844,6 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
-    <string name="gcm_fallback_notification_channel_label">متنوعة</string>
     <string name="items_few">%1$d ملفات</string>
     <string name="items_many">%1$d ملف</string>
     <string name="items_one">%1$d ملف</string>

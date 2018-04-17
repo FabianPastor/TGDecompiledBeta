@@ -40,50 +40,61 @@ public class WallpaperCell extends FrameLayout {
     }
 
     public void setWallpaper(WallPaper wallpaper, int selectedBackground, Drawable themedWallpaper, boolean themed) {
-        int i = 0;
+        int i = NUM;
+        int i2 = 4;
+        int a = 0;
         if (wallpaper == null) {
             this.imageView.setVisibility(4);
             this.imageView2.setVisibility(0);
             if (themed) {
-                this.selectionView.setVisibility(selectedBackground == -2 ? 0 : 4);
+                View view = this.selectionView;
+                if (selectedBackground == -2) {
+                    i2 = 0;
+                }
+                view.setVisibility(i2);
                 this.imageView2.setImageDrawable(themedWallpaper);
                 this.imageView2.setScaleType(ScaleType.CENTER_CROP);
                 return;
             }
-            View view = this.selectionView;
-            if (selectedBackground != -1) {
-                i = 4;
+            View view2 = this.selectionView;
+            if (selectedBackground == -1) {
+                i2 = 0;
             }
-            view.setVisibility(i);
+            view2.setVisibility(i2);
             ImageView imageView = this.imageView2;
-            int i2 = (selectedBackground == -1 || selectedBackground == 1000001) ? NUM : NUM;
-            imageView.setBackgroundColor(i2);
+            if (selectedBackground != -1) {
+                if (selectedBackground != 1000001) {
+                    i = NUM;
+                }
+            }
+            imageView.setBackgroundColor(i);
             this.imageView2.setScaleType(ScaleType.CENTER);
             this.imageView2.setImageResource(R.drawable.ic_gallery_background);
             return;
         }
         this.imageView.setVisibility(0);
         this.imageView2.setVisibility(4);
-        View view2 = this.selectionView;
-        if (selectedBackground != wallpaper.id) {
-            i = 4;
+        view2 = this.selectionView;
+        if (selectedBackground == wallpaper.id) {
+            i2 = 0;
         }
-        view2.setVisibility(i);
+        view2.setVisibility(i2);
         if (wallpaper instanceof TL_wallPaperSolid) {
             this.imageView.setImageBitmap(null);
             this.imageView.setBackgroundColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR | wallpaper.bg_color);
             return;
         }
-        int side = AndroidUtilities.dp(100.0f);
+        i2 = AndroidUtilities.dp(NUM);
         PhotoSize size = null;
-        for (int a = 0; a < wallpaper.sizes.size(); a++) {
+        while (a < wallpaper.sizes.size()) {
             PhotoSize obj = (PhotoSize) wallpaper.sizes.get(a);
             if (obj != null) {
                 int currentSide = obj.f43w >= obj.f42h ? obj.f43w : obj.f42h;
-                if (size == null || ((side > 100 && size.location != null && size.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || currentSide <= side)) {
+                if (size == null || ((i2 > 100 && size.location != null && size.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || currentSide <= i2)) {
                     size = obj;
                 }
             }
+            a++;
         }
         if (!(size == null || size.location == null)) {
             this.imageView.setImage(size.location, "100_100", (Drawable) null);

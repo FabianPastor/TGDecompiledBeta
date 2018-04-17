@@ -35,6 +35,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.exoplayer2.C0539C;
 import org.telegram.tgnet.SerializedData;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -65,9 +66,11 @@ public class WebviewActivity extends BaseFragment {
         }
 
         public void run() {
-            if (WebviewActivity.this.currentMessageObject != null && WebviewActivity.this.getParentActivity() != null && WebviewActivity.this.typingRunnable != null) {
-                MessagesController.getInstance(WebviewActivity.this.currentAccount).sendTyping(WebviewActivity.this.currentMessageObject.getDialogId(), 6, 0);
-                AndroidUtilities.runOnUIThread(WebviewActivity.this.typingRunnable, 25000);
+            if (!(WebviewActivity.this.currentMessageObject == null || WebviewActivity.this.getParentActivity() == null)) {
+                if (WebviewActivity.this.typingRunnable != null) {
+                    MessagesController.getInstance(WebviewActivity.this.currentAccount).sendTyping(WebviewActivity.this.currentMessageObject.getDialogId(), 6, 0);
+                    AndroidUtilities.runOnUIThread(WebviewActivity.this.typingRunnable, 25000);
+                }
             }
         }
     }
@@ -115,7 +118,12 @@ public class WebviewActivity extends BaseFragment {
         }
 
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return isInternalUrl(url) || super.shouldOverrideUrlLoading(view, url);
+            if (!isInternalUrl(url)) {
+                if (!super.shouldOverrideUrlLoading(view, url)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void onPageFinished(WebView view, String url) {
@@ -144,19 +152,15 @@ public class WebviewActivity extends BaseFragment {
                         }
                         String str = eventName;
                         boolean z = true;
-                        switch (str.hashCode()) {
-                            case -1788360622:
-                                if (str.equals("share_game")) {
-                                    z = false;
-                                    break;
-                                }
-                                break;
-                            case 406539826:
+                        int hashCode = str.hashCode();
+                        if (hashCode != -NUM) {
+                            if (hashCode == 406539826) {
                                 if (str.equals("share_score")) {
                                     z = true;
-                                    break;
                                 }
-                                break;
+                            }
+                        } else if (str.equals("share_game")) {
+                            z = false;
                         }
                         switch (z) {
                             case false:
@@ -164,6 +168,8 @@ public class WebviewActivity extends BaseFragment {
                                 break;
                             case true:
                                 WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = true;
+                                break;
+                            default:
                                 break;
                         }
                         WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
@@ -191,12 +197,27 @@ public class WebviewActivity extends BaseFragment {
     }
 
     public WebviewActivity(String url, String botName, String gameName, String startParam, MessageObject messageObject) {
+        String str;
         this.currentUrl = url;
         this.currentBot = botName;
         this.currentGame = gameName;
         this.currentMessageObject = messageObject;
         this.short_param = startParam;
-        this.linkToCopy = "https://" + MessagesController.getInstance(this.currentAccount).linkPrefix + "/" + this.currentBot + (TextUtils.isEmpty(startParam) ? TtmlNode.ANONYMOUS_REGION_ID : "?game=" + startParam);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("https://");
+        stringBuilder.append(MessagesController.getInstance(this.currentAccount).linkPrefix);
+        stringBuilder.append("/");
+        stringBuilder.append(this.currentBot);
+        if (TextUtils.isEmpty(startParam)) {
+            str = TtmlNode.ANONYMOUS_REGION_ID;
+        } else {
+            StringBuilder stringBuilder2 = new StringBuilder();
+            stringBuilder2.append("?game=");
+            stringBuilder2.append(startParam);
+            str = stringBuilder2.toString();
+        }
+        stringBuilder.append(str);
+        this.linkToCopy = stringBuilder.toString();
     }
 
     public void onFragmentDestroy() {
@@ -223,7 +244,11 @@ public class WebviewActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(this.currentGame);
-        this.actionBar.setSubtitle("@" + this.currentBot);
+        ActionBar actionBar = this.actionBar;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("@");
+        stringBuilder.append(this.currentBot);
+        actionBar.setSubtitle(stringBuilder.toString());
         this.actionBar.setActionBarMenuOnItemClick(new C23112());
         ActionBarMenu menu = this.actionBar.createMenu();
         this.progressItem = menu.addItemWithWidth(1, R.drawable.share, AndroidUtilities.dp(54.0f));
@@ -268,12 +293,23 @@ public class WebviewActivity extends BaseFragment {
     }
 
     public static void openGameInBrowser(String urlStr, MessageObject messageObject, Activity parentActivity, String short_name, String username) {
+        Throwable e;
+        Activity activity;
+        MessageObject messageObject2 = messageObject;
         String url = urlStr;
+        String str;
         try {
+            StringBuilder stringBuilder;
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare", 0);
-            String existing = sharedPreferences.getString(TtmlNode.ANONYMOUS_REGION_ID + messageObject.getId(), null);
+            StringBuilder stringBuilder2 = new StringBuilder();
+            stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
+            stringBuilder2.append(messageObject.getId());
+            String existing = sharedPreferences.getString(stringBuilder2.toString(), null);
             StringBuilder hash = new StringBuilder(existing != null ? existing : TtmlNode.ANONYMOUS_REGION_ID);
-            StringBuilder addHash = new StringBuilder("tgShareScoreUrl=" + URLEncoder.encode("tgb://share_game_score?hash=", C0539C.UTF8_NAME));
+            StringBuilder stringBuilder3 = new StringBuilder();
+            stringBuilder3.append("tgShareScoreUrl=");
+            stringBuilder3.append(URLEncoder.encode("tgb://share_game_score?hash=", C0539C.UTF8_NAME));
+            StringBuilder addHash = new StringBuilder(stringBuilder3.toString());
             if (existing == null) {
                 char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
                 for (int i = 0; i < 20; i++) {
@@ -283,41 +319,97 @@ public class WebviewActivity extends BaseFragment {
             addHash.append(hash);
             int index = url.indexOf(35);
             if (index < 0) {
-                url = url + "#" + addHash;
+                StringBuilder stringBuilder4 = new StringBuilder();
+                stringBuilder4.append(url);
+                stringBuilder4.append("#");
+                stringBuilder4.append(addHash);
+                url = stringBuilder4.toString();
             } else {
                 String curHash = url.substring(index + 1);
-                if (curHash.indexOf(61) >= 0 || curHash.indexOf(63) >= 0) {
-                    url = url + "&" + addHash;
-                } else if (curHash.length() > 0) {
-                    url = url + "?" + addHash;
-                } else {
-                    url = url + addHash;
+                if (curHash.indexOf(61) < 0) {
+                    if (curHash.indexOf(63) < 0) {
+                        if (curHash.length() > 0) {
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append(url);
+                            stringBuilder.append("?");
+                            stringBuilder.append(addHash);
+                            url = stringBuilder.toString();
+                        } else {
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append(url);
+                            stringBuilder.append(addHash);
+                            url = stringBuilder.toString();
+                        }
+                    }
                 }
+                stringBuilder = new StringBuilder();
+                stringBuilder.append(url);
+                stringBuilder.append("&");
+                stringBuilder.append(addHash);
+                url = stringBuilder.toString();
             }
             Editor editor = sharedPreferences.edit();
-            editor.putInt(hash + "_date", (int) (System.currentTimeMillis() / 1000));
-            SerializedData serializedData = new SerializedData(messageObject.messageOwner.getObjectSize());
-            messageObject.messageOwner.serializeToStream(serializedData);
-            editor.putString(hash + "_m", Utilities.bytesToHex(serializedData.toByteArray()));
-            editor.putString(hash + "_link", "https://" + MessagesController.getInstance(messageObject.currentAccount).linkPrefix + "/" + username + (TextUtils.isEmpty(short_name) ? TtmlNode.ANONYMOUS_REGION_ID : "?game=" + short_name));
-            editor.commit();
-            Browser.openUrl((Context) parentActivity, url, false);
-        } catch (Throwable e) {
+            stringBuilder = new StringBuilder();
+            stringBuilder.append(hash);
+            stringBuilder.append("_date");
+            editor.putInt(stringBuilder.toString(), (int) (System.currentTimeMillis() / 1000));
+            SerializedData serializedData = new SerializedData(messageObject2.messageOwner.getObjectSize());
+            messageObject2.messageOwner.serializeToStream(serializedData);
+            StringBuilder stringBuilder5 = new StringBuilder();
+            stringBuilder5.append(hash);
+            stringBuilder5.append("_m");
+            editor.putString(stringBuilder5.toString(), Utilities.bytesToHex(serializedData.toByteArray()));
+            stringBuilder5 = new StringBuilder();
+            stringBuilder5.append(hash);
+            stringBuilder5.append("_link");
+            String stringBuilder6 = stringBuilder5.toString();
+            StringBuilder stringBuilder7 = new StringBuilder();
+            stringBuilder7.append("https://");
+            stringBuilder7.append(MessagesController.getInstance(messageObject2.currentAccount).linkPrefix);
+            stringBuilder7.append("/");
+            try {
+                String str2;
+                stringBuilder7.append(username);
+                if (TextUtils.isEmpty(short_name)) {
+                    str2 = TtmlNode.ANONYMOUS_REGION_ID;
+                    str = short_name;
+                } else {
+                    StringBuilder stringBuilder8 = new StringBuilder();
+                    stringBuilder8.append("?game=");
+                    try {
+                        stringBuilder8.append(short_name);
+                        str2 = stringBuilder8.toString();
+                    } catch (Exception e2) {
+                        e = e2;
+                        activity = parentActivity;
+                        FileLog.m3e(e);
+                    }
+                }
+                stringBuilder7.append(str2);
+                editor.putString(stringBuilder6, stringBuilder7.toString());
+                editor.commit();
+            } catch (Exception e3) {
+                e = e3;
+                activity = parentActivity;
+                str = short_name;
+                FileLog.m3e(e);
+            }
+            try {
+                Browser.openUrl((Context) parentActivity, url, false);
+            } catch (Exception e4) {
+                e = e4;
+                FileLog.m3e(e);
+            }
+        } catch (Exception e5) {
+            e = e5;
+            activity = parentActivity;
+            str = short_name;
+            String str3 = username;
             FileLog.m3e(e);
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[9];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
-        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, Theme.key_actionBarDefaultSubmenuBackground);
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, Theme.key_actionBarDefaultSubmenuItem);
-        themeDescriptionArr[7] = new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressInner2);
-        themeDescriptionArr[8] = new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressOuter2);
-        return themeDescriptionArr;
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, Theme.key_actionBarDefaultSubmenuBackground), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, Theme.key_actionBarDefaultSubmenuItem), new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressInner2), new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressOuter2)};
     }
 }

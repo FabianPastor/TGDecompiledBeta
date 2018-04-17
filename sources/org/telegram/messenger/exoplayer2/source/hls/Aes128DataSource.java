@@ -3,12 +3,8 @@ package org.telegram.messenger.exoplayer2.source.hls;
 import android.net.Uri;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
@@ -29,26 +25,17 @@ final class Aes128DataSource implements DataSource {
     }
 
     public long open(DataSpec dataSpec) throws IOException {
-        GeneralSecurityException e;
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
             try {
                 cipher.init(2, new SecretKeySpec(this.encryptionKey, "AES"), new IvParameterSpec(this.encryptionIv));
                 this.cipherInputStream = new CipherInputStream(new DataSourceInputStream(this.upstream, dataSpec), cipher);
                 return -1;
-            } catch (InvalidKeyException e2) {
-                e = e2;
-                throw new RuntimeException(e);
-            } catch (InvalidAlgorithmParameterException e3) {
-                e = e3;
+            } catch (GeneralSecurityException e) {
                 throw new RuntimeException(e);
             }
-        } catch (NoSuchAlgorithmException e4) {
-            e = e4;
-            throw new RuntimeException(e);
-        } catch (NoSuchPaddingException e5) {
-            e = e5;
-            throw new RuntimeException(e);
+        } catch (GeneralSecurityException e2) {
+            throw new RuntimeException(e2);
         }
     }
 

@@ -139,119 +139,34 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static void removeLoginPhoneCall(java.lang.String r10, boolean r11) {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offset: 0x0004 in list [B:21:0x0072]
-	at jadx.core.utils.BlockUtils.getBlockByOffset(BlockUtils.java:43)
-	at jadx.core.dex.instructions.IfNode.initBlocks(IfNode.java:60)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.initBlocksInIfNodes(BlockFinish.java:48)
-	at jadx.core.dex.visitors.blocksmaker.BlockFinish.visit(BlockFinish.java:33)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r0 = hasCallPermissions;
-        if (r0 != 0) goto L_0x0005;
-    L_0x0004:
-        return;
-    L_0x0005:
-        r6 = 0;
-        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r0 = r0.getContentResolver();	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r1 = android.provider.CallLog.Calls.CONTENT_URI;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r2 = 2;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r2 = new java.lang.String[r2];	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r3 = 0;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r4 = "_id";	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r2[r3] = r4;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r3 = 1;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r4 = "number";	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r2[r3] = r4;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r3 = "type IN (3,1,5)";	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r4 = 0;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r5 = "date DESC LIMIT 5";	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r6 = r0.query(r1, r2, r3, r4, r5);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r9 = 0;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-    L_0x0029:
-        r0 = r6.moveToNext();	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        if (r0 == 0) goto L_0x005e;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-    L_0x002f:
-        r0 = 1;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r8 = r6.getString(r0);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r0 = r8.contains(r10);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        if (r0 != 0) goto L_0x0040;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-    L_0x003a:
-        r0 = r10.contains(r8);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        if (r0 == 0) goto L_0x0029;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-    L_0x0040:
-        r9 = 1;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r0 = r0.getContentResolver();	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r1 = android.provider.CallLog.Calls.CONTENT_URI;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r2 = "_id = ? ";	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r3 = 1;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r3 = new java.lang.String[r3];	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r4 = 0;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r5 = 0;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r5 = r6.getInt(r5);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r5 = java.lang.String.valueOf(r5);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r3[r4] = r5;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        r0.delete(r1, r2, r3);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-    L_0x005e:
-        if (r9 != 0) goto L_0x0066;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-    L_0x0060:
-        if (r11 == 0) goto L_0x0066;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-    L_0x0062:
-        r0 = 1;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        registerLoginContentObserver(r0, r10);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-    L_0x0066:
-        if (r6 == 0) goto L_0x0004;
-    L_0x0068:
-        r6.close();
-        goto L_0x0004;
-    L_0x006c:
-        r7 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r7);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
-        if (r6 == 0) goto L_0x0004;
-    L_0x0072:
-        r6.close();
-        goto L_0x0004;
-    L_0x0076:
-        r0 = move-exception;
-        if (r6 == 0) goto L_0x007c;
-    L_0x0079:
-        r6.close();
-    L_0x007c:
-        throw r0;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.removeLoginPhoneCall(java.lang.String, boolean):void");
-    }
-
     static {
-        boolean z;
+        boolean z = false;
         WEB_URL = null;
         try {
             String GOOD_IRI_CHAR = "a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef";
+            Pattern IP_ADDRESS = Pattern.compile("((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9]))");
             String IRI = "[a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]([a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef\\-]{0,61}[a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]){0,1}";
             String GOOD_GTLD_CHAR = "a-zA-Z\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef";
             String GTLD = "[a-zA-Z\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]{2,63}";
             String HOST_NAME = "([a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]([a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef\\-]{0,61}[a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]){0,1}\\.)+[a-zA-Z\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]{2,63}";
-            WEB_URL = Pattern.compile("((?:(http|https|Http|Https):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?(?:" + Pattern.compile("(([a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]([a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef\\-]{0,61}[a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]){0,1}\\.)+[a-zA-Z\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]{2,63}|" + Pattern.compile("((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9]))") + ")") + ")(?:\\:\\d{1,5})?)(\\/(?:(?:[" + "a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef" + "\\;\\/\\?\\:\\@\\&\\=\\#\\~\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?(?:\\b|$)");
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("(([a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]([a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef\\-]{0,61}[a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]){0,1}\\.)+[a-zA-Z\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef]{2,63}|");
+            stringBuilder.append(IP_ADDRESS);
+            stringBuilder.append(")");
+            Pattern DOMAIN_NAME = Pattern.compile(stringBuilder.toString());
+            StringBuilder stringBuilder2 = new StringBuilder();
+            stringBuilder2.append("((?:(http|https|Http|Https):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?(?:");
+            stringBuilder2.append(DOMAIN_NAME);
+            stringBuilder2.append(")(?:\\:\\d{1,5})?)(\\/(?:(?:[");
+            stringBuilder2.append("a-zA-Z0-9\u00a0-\ud7ff\uf900-\ufdcf\ufdf0-\uffef");
+            stringBuilder2.append("\\;\\/\\?\\:\\@\\&\\=\\#\\~\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?(?:\\b|$)");
+            WEB_URL = Pattern.compile(stringBuilder2.toString());
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
         checkDisplaySize(ApplicationLoader.applicationContext, null);
         if (VERSION.SDK_INT >= 23) {
             z = true;
-        } else {
-            z = false;
         }
         hasCallPermissions = z;
     }
@@ -294,16 +209,23 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         double max = (rf <= gf || rf <= bf) ? gf > bf ? gf : bf : rf;
         double min = (rf >= gf || rf >= bf) ? gf < bf ? gf : bf : rf;
         double d = max - min;
-        double s = max == 0.0d ? 0.0d : d / max;
+        double s = 0.0d;
+        if (max != 0.0d) {
+            s = d / max;
+        }
         if (max == min) {
             h = 0.0d;
+            double d2 = min;
         } else {
-            if (rf > gf && rf > bf) {
-                h = ((gf - bf) / d) + ((double) (gf < bf ? 6 : 0));
-            } else if (gf > bf) {
-                h = ((bf - rf) / d) + 2.0d;
+            if (rf <= gf || rf <= bf) {
+                if (gf > bf) {
+                    h = ((bf - rf) / d) + 2.0d;
+                } else {
+                    h = ((rf - gf) / d) + 4.0d;
+                    h /= 6.0d;
+                }
             } else {
-                h = ((rf - gf) / d) + 4.0d;
+                h = ((gf - bf) / d) + ((double) (gf < bf ? 6 : 0));
             }
             h /= 6.0d;
         }
@@ -314,11 +236,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         double r = 0.0d;
         double g = 0.0d;
         double b = 0.0d;
-        double i = (double) ((int) Math.floor(6.0d * h));
+        double i = (double) ((int) Math.floor(h * 6.0d));
         double f = (6.0d * h) - i;
-        double p = v * (1.0d - s);
-        double q = v * (1.0d - (f * s));
-        double t = v * (1.0d - ((1.0d - f) * s));
+        double p = (1.0d - s) * v;
+        double q = (1.0d - (f * s)) * v;
+        double t = (1.0d - ((1.0d - f) * s)) * v;
         switch (((int) i) % 6) {
             case 0:
                 r = v;
@@ -350,20 +272,28 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 g = p;
                 b = q;
                 break;
+            default:
+                break;
         }
-        return new int[]{(int) (255.0d * r), (int) (255.0d * g), (int) (255.0d * b)};
+        return new int[]{(int) (r * 255.0d), (int) (g * 255.0d), (int) (b * 255.0d)};
     }
 
     public static void requestAdjustResize(Activity activity, int classGuid) {
-        if (activity != null && !isTablet()) {
-            activity.getWindow().setSoftInputMode(16);
-            adjustOwnerClassGuid = classGuid;
+        if (activity != null) {
+            if (!isTablet()) {
+                activity.getWindow().setSoftInputMode(16);
+                adjustOwnerClassGuid = classGuid;
+            }
         }
     }
 
     public static void removeAdjustResize(Activity activity, int classGuid) {
-        if (activity != null && !isTablet() && adjustOwnerClassGuid == classGuid) {
-            activity.getWindow().setSoftInputMode(32);
+        if (activity != null) {
+            if (!isTablet()) {
+                if (adjustOwnerClassGuid == classGuid) {
+                    activity.getWindow().setSoftInputMode(32);
+                }
+            }
         }
     }
 
@@ -394,71 +324,79 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
 
     public static boolean isInternalUri(Uri uri) {
         String pathString = uri.getPath();
+        boolean z = false;
         if (pathString == null) {
             return false;
         }
         while (true) {
-            String path;
             String newPath = Utilities.readlink(pathString);
-            if (newPath != null && !newPath.equals(pathString)) {
+            if (newPath == null) {
+                break;
+            } else if (newPath.equals(pathString)) {
+                break;
+            } else {
                 pathString = newPath;
-            } else if (pathString != null) {
-                try {
-                    path = new File(pathString).getCanonicalPath();
-                    if (path != null) {
-                        pathString = path;
-                    }
-                } catch (Exception e) {
-                    pathString.replace("/./", "/");
-                }
             }
         }
         if (pathString != null) {
-            path = new File(pathString).getCanonicalPath();
-            if (path != null) {
-                pathString = path;
+            try {
+                newPath = new File(pathString).getCanonicalPath();
+                if (newPath != null) {
+                    pathString = newPath;
+                }
+            } catch (Exception e) {
+                pathString.replace("/./", "/");
             }
         }
-        if (pathString == null || !pathString.toLowerCase().contains("/data/data/" + ApplicationLoader.applicationContext.getPackageName() + "/files")) {
-            return false;
+        if (pathString != null) {
+            newPath = pathString.toLowerCase();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("/data/data/");
+            stringBuilder.append(ApplicationLoader.applicationContext.getPackageName());
+            stringBuilder.append("/files");
+            if (newPath.contains(stringBuilder.toString())) {
+                z = true;
+            }
         }
-        return true;
+        return z;
     }
 
     public static void lockOrientation(Activity activity) {
-        if (activity != null && prevOrientation == -10) {
-            try {
-                prevOrientation = activity.getRequestedOrientation();
-                WindowManager manager = (WindowManager) activity.getSystemService("window");
-                if (manager != null && manager.getDefaultDisplay() != null) {
-                    int rotation = manager.getDefaultDisplay().getRotation();
-                    int orientation = activity.getResources().getConfiguration().orientation;
-                    if (rotation == 3) {
-                        if (orientation == 1) {
-                            activity.setRequestedOrientation(1);
-                        } else {
+        if (activity != null) {
+            if (prevOrientation == -10) {
+                try {
+                    prevOrientation = activity.getRequestedOrientation();
+                    WindowManager manager = (WindowManager) activity.getSystemService("window");
+                    if (!(manager == null || manager.getDefaultDisplay() == null)) {
+                        int rotation = manager.getDefaultDisplay().getRotation();
+                        int orientation = activity.getResources().getConfiguration().orientation;
+                        if (rotation == 3) {
+                            if (orientation == 1) {
+                                activity.setRequestedOrientation(1);
+                            } else {
+                                activity.setRequestedOrientation(8);
+                            }
+                        } else if (rotation == 1) {
+                            if (orientation == 1) {
+                                activity.setRequestedOrientation(9);
+                            } else {
+                                activity.setRequestedOrientation(0);
+                            }
+                        } else if (rotation == 0) {
+                            if (orientation == 2) {
+                                activity.setRequestedOrientation(0);
+                            } else {
+                                activity.setRequestedOrientation(1);
+                            }
+                        } else if (orientation == 2) {
                             activity.setRequestedOrientation(8);
-                        }
-                    } else if (rotation == 1) {
-                        if (orientation == 1) {
+                        } else {
                             activity.setRequestedOrientation(9);
-                        } else {
-                            activity.setRequestedOrientation(0);
                         }
-                    } else if (rotation == 0) {
-                        if (orientation == 2) {
-                            activity.setRequestedOrientation(0);
-                        } else {
-                            activity.setRequestedOrientation(1);
-                        }
-                    } else if (orientation == 2) {
-                        activity.setRequestedOrientation(8);
-                    } else {
-                        activity.setRequestedOrientation(9);
                     }
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
                 }
-            } catch (Throwable e) {
-                FileLog.m3e(e);
             }
         }
     }
@@ -484,9 +422,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                     typefaceCache.put(assetPath, Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath));
                 } catch (Exception e) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m1e("Could not get typeface '" + assetPath + "' because " + e.getMessage());
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("Could not get typeface '");
+                        stringBuilder.append(assetPath);
+                        stringBuilder.append("' because ");
+                        stringBuilder.append(e.getMessage());
+                        FileLog.m1e(stringBuilder.toString());
                     }
-                    typeface = null;
+                    return null;
                 }
             }
             typeface = (Typeface) typefaceCache.get(assetPath);
@@ -533,15 +476,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static boolean isKeyboardShowed(View view) {
-        boolean z = false;
-        if (view != null) {
-            try {
-                z = ((InputMethodManager) view.getContext().getSystemService("input_method")).isActive(view);
-            } catch (Throwable e) {
-                FileLog.m3e(e);
-            }
+        if (view == null) {
+            return false;
         }
-        return z;
+        try {
+            return ((InputMethodManager) view.getContext().getSystemService("input_method")).isActive(view);
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+            return false;
+        }
     }
 
     public static void hideKeyboard(View view) {
@@ -580,10 +523,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (file != null) {
                 return file;
             }
+            return new File(TtmlNode.ANONYMOUS_REGION_ID);
         } catch (Throwable e22) {
             FileLog.m3e(e22);
         }
-        return new File(TtmlNode.ANONYMOUS_REGION_ID);
     }
 
     public static int dp(float value) {
@@ -618,7 +561,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static void checkDisplaySize(Context context, Configuration newConfiguration) {
-        boolean z = true;
         try {
             int newSize;
             density = context.getResources().getDisplayMetrics().density;
@@ -626,6 +568,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             if (configuration == null) {
                 configuration = context.getResources().getConfiguration();
             }
+            boolean z = true;
             if (configuration.keyboard == 1 || configuration.hardKeyboardHidden != 1) {
                 z = false;
             }
@@ -658,7 +601,16 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 }
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m1e("display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("display size = ");
+                stringBuilder.append(displaySize.x);
+                stringBuilder.append(" ");
+                stringBuilder.append(displaySize.y);
+                stringBuilder.append(" ");
+                stringBuilder.append(displayMetrics.xdpi);
+                stringBuilder.append("x");
+                stringBuilder.append(displayMetrics.ydpi);
+                FileLog.m1e(stringBuilder.toString());
             }
         } catch (Throwable e) {
             FileLog.m3e(e);
@@ -666,7 +618,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static float getPixelsInCM(float cm, boolean isX) {
-        return (isX ? displayMetrics.xdpi : displayMetrics.ydpi) * (cm / 2.54f);
+        return (cm / 2.54f) * (isX ? displayMetrics.xdpi : displayMetrics.ydpi);
     }
 
     public static long makeBroadcastId(int id) {
@@ -717,22 +669,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static int getMinTabletSide() {
-        int leftSide;
         if (isSmallTablet()) {
             int smallSide = Math.min(displaySize.x, displaySize.y);
             int maxSide = Math.max(displaySize.x, displaySize.y);
-            leftSide = (maxSide * 35) / 100;
+            int leftSide = (maxSide * 35) / 100;
             if (leftSide < dp(320.0f)) {
                 leftSide = dp(320.0f);
             }
             return Math.min(smallSide, maxSide - leftSide);
         }
         smallSide = Math.min(displaySize.x, displaySize.y);
-        leftSide = (smallSide * 35) / 100;
-        if (leftSide < dp(320.0f)) {
-            leftSide = dp(320.0f);
+        maxSide = (smallSide * 35) / 100;
+        if (maxSide < dp(320.0f)) {
+            maxSide = dp(320.0f);
         }
-        return smallSide - leftSide;
+        return smallSide - maxSide;
     }
 
     public static int getPhotoSize() {
@@ -749,9 +700,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 Method m = Class.forName(tm.getClass().getName()).getDeclaredMethod("getITelephony", new Class[0]);
                 m.setAccessible(true);
                 ITelephony telephonyService = (ITelephony) m.invoke(tm, new Object[0]);
-                telephonyService = (ITelephony) m.invoke(tm, new Object[0]);
-                telephonyService.silenceRinger();
-                telephonyService.endCall();
+                ITelephony telephonyService2 = (ITelephony) m.invoke(tm, new Object[0]);
+                telephonyService2.silenceRinger();
+                telephonyService2.endCall();
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
@@ -759,24 +710,29 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static boolean checkPhonePattern(String pattern, String phone) {
-        if (TextUtils.isEmpty(pattern) || pattern.equals("*")) {
-            return true;
-        }
-        String[] args = pattern.split("\\*");
-        phone = PhoneFormat.stripExceptNumbers(phone);
-        int checkStart = 0;
-        for (String arg : args) {
-            if (!TextUtils.isEmpty(arg)) {
-                int index = phone.indexOf(arg, checkStart);
-                if (index == -1) {
-                    return false;
+        if (!TextUtils.isEmpty(pattern)) {
+            if (!pattern.equals("*")) {
+                String[] args = pattern.split("\\*");
+                phone = PhoneFormat.stripExceptNumbers(phone);
+                int checkStart = 0;
+                for (String arg : args) {
+                    if (!TextUtils.isEmpty(arg)) {
+                        int indexOf = phone.indexOf(arg, checkStart);
+                        int checkStart2 = indexOf;
+                        if (indexOf == -1) {
+                            return false;
+                        }
+                        checkStart = checkStart2 + arg.length();
+                    }
                 }
-                checkStart = index + arg.length();
+                return true;
             }
         }
         return true;
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public static String obtainLoginPhoneCall(String pattern) {
         if (!hasCallPermissions) {
             return null;
@@ -788,30 +744,31 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 String number = cursor.getString(0);
                 long date = cursor.getLong(1);
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m1e("number = " + number);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("number = ");
+                    stringBuilder.append(number);
+                    FileLog.m1e(stringBuilder.toString());
                 }
-                if (Math.abs(System.currentTimeMillis() - date) < 3600000 && checkPhonePattern(pattern, number)) {
-                    if (cursor == null) {
+                if (Math.abs(System.currentTimeMillis() - date) < 3600000) {
+                    if (checkPhonePattern(pattern, number)) {
+                        if (cursor != null) {
+                            cursor.close();
+                        }
                         return number;
                     }
-                    cursor.close();
-                    return number;
                 }
-            }
-            if (cursor != null) {
-                cursor.close();
             }
         } catch (Throwable e) {
             FileLog.m3e(e);
             if (cursor != null) {
                 cursor.close();
             }
+            return null;
         } catch (Throwable th) {
             if (cursor != null) {
                 cursor.close();
             }
         }
-        return null;
     }
 
     private static void registerLoginContentObserver(boolean shouldRegister, final String number) {
@@ -848,33 +805,69 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             try {
                 ApplicationLoader.applicationContext.getContentResolver().unregisterContentObserver(callLogContentObserver);
             } catch (Exception e) {
-            } finally {
+            } catch (Throwable th) {
                 callLogContentObserver = null;
+            }
+            callLogContentObserver = null;
+        }
+    }
+
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static void removeLoginPhoneCall(String number, boolean first) {
+        if (hasCallPermissions) {
+            Cursor cursor = null;
+            try {
+                cursor = ApplicationLoader.applicationContext.getContentResolver().query(Calls.CONTENT_URI, new String[]{"_id", "number"}, "type IN (3,1,5)", null, "date DESC LIMIT 5");
+                boolean removed = false;
+                while (cursor.moveToNext()) {
+                    String phone = cursor.getString(1);
+                    if (!phone.contains(number)) {
+                        if (number.contains(phone)) {
+                        }
+                    }
+                    removed = true;
+                    ApplicationLoader.applicationContext.getContentResolver().delete(Calls.CONTENT_URI, "_id = ? ", new String[]{String.valueOf(cursor.getInt(0))});
+                }
+                if (!removed && first) {
+                    registerLoginContentObserver(true, number);
+                }
+            } catch (Throwable e) {
+                FileLog.m3e(e);
+                if (cursor != null) {
+                    cursor.close();
+                }
+            } catch (Throwable th) {
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
     }
 
     public static int getViewInset(View view) {
-        int i = 0;
-        if (!(view == null || VERSION.SDK_INT < 21 || view.getHeight() == displaySize.y || view.getHeight() == displaySize.y - statusBarHeight)) {
-            try {
-                if (mAttachInfoField == null) {
-                    mAttachInfoField = View.class.getDeclaredField("mAttachInfo");
-                    mAttachInfoField.setAccessible(true);
-                }
-                Object mAttachInfo = mAttachInfoField.get(view);
-                if (mAttachInfo != null) {
+        if (!(view == null || VERSION.SDK_INT < 21 || view.getHeight() == displaySize.y)) {
+            if (view.getHeight() != displaySize.y - statusBarHeight) {
+                try {
+                    if (mAttachInfoField == null) {
+                        mAttachInfoField = View.class.getDeclaredField("mAttachInfo");
+                        mAttachInfoField.setAccessible(true);
+                    }
+                    Object mAttachInfo = mAttachInfoField.get(view);
+                    if (mAttachInfo == null) {
+                        return 0;
+                    }
                     if (mStableInsetsField == null) {
                         mStableInsetsField = mAttachInfo.getClass().getDeclaredField("mStableInsets");
                         mStableInsetsField.setAccessible(true);
                     }
-                    i = ((Rect) mStableInsetsField.get(mAttachInfo)).bottom;
+                    return ((Rect) mStableInsetsField.get(mAttachInfo)).bottom;
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
                 }
-            } catch (Throwable e) {
-                FileLog.m3e(e);
             }
         }
-        return i;
+        return 0;
     }
 
     public static Point getRealScreenSize() {
@@ -910,12 +903,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static CharSequence getTrimmedString(CharSequence src) {
-        if (!(src == null || src.length() == 0)) {
-            while (src.length() > 0 && (src.charAt(0) == '\n' || src.charAt(0) == ' ')) {
-                src = src.subSequence(1, src.length());
-            }
-            while (src.length() > 0 && (src.charAt(src.length() - 1) == '\n' || src.charAt(src.length() - 1) == ' ')) {
-                src = src.subSequence(0, src.length() - 1);
+        if (src != null) {
+            if (src.length() != 0) {
+                while (src.length() > 0 && (src.charAt(0) == '\n' || src.charAt(0) == ' ')) {
+                    src = src.subSequence(1, src.length());
+                }
+                while (src.length() > 0 && (src.charAt(src.length() - 1) == '\n' || src.charAt(src.length() - 1) == ' ')) {
+                    src = src.subSequence(0, src.length() - 1);
+                }
+                return src;
             }
         }
         return src;
@@ -924,14 +920,13 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     public static void setViewPagerEdgeEffectColor(ViewPager viewPager, int color) {
         if (VERSION.SDK_INT >= 21) {
             try {
-                EdgeEffect mEdgeEffect;
                 Field field = ViewPager.class.getDeclaredField("mLeftEdge");
                 field.setAccessible(true);
                 EdgeEffectCompat mLeftEdge = (EdgeEffectCompat) field.get(viewPager);
                 if (mLeftEdge != null) {
                     field = EdgeEffectCompat.class.getDeclaredField("mEdgeEffect");
                     field.setAccessible(true);
-                    mEdgeEffect = (EdgeEffect) field.get(mLeftEdge);
+                    EdgeEffect mEdgeEffect = (EdgeEffect) field.get(mLeftEdge);
                     if (mEdgeEffect != null) {
                         mEdgeEffect.setColor(color);
                     }
@@ -942,9 +937,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 if (mRightEdge != null) {
                     field = EdgeEffectCompat.class.getDeclaredField("mEdgeEffect");
                     field.setAccessible(true);
-                    mEdgeEffect = (EdgeEffect) field.get(mRightEdge);
-                    if (mEdgeEffect != null) {
-                        mEdgeEffect.setColor(color);
+                    EdgeEffect mEdgeEffect2 = (EdgeEffect) field.get(mRightEdge);
+                    if (mEdgeEffect2 != null) {
+                        mEdgeEffect2.setColor(color);
                     }
                 }
             } catch (Throwable e) {
@@ -976,20 +971,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
 
     @SuppressLint({"NewApi"})
     public static void clearDrawableAnimation(View view) {
-        if (VERSION.SDK_INT >= 21 && view != null) {
-            Drawable drawable;
-            if (view instanceof ListView) {
-                drawable = ((ListView) view).getSelector();
-                if (drawable != null) {
-                    drawable.setState(StateSet.NOTHING);
-                    return;
+        if (VERSION.SDK_INT >= 21) {
+            if (view != null) {
+                Drawable drawable;
+                if (view instanceof ListView) {
+                    drawable = ((ListView) view).getSelector();
+                    if (drawable != null) {
+                        drawable.setState(StateSet.NOTHING);
+                    }
+                } else {
+                    drawable = view.getBackground();
+                    if (drawable != null) {
+                        drawable.setState(StateSet.NOTHING);
+                        drawable.jumpToCurrentState();
+                    }
                 }
-                return;
-            }
-            drawable = view.getBackground();
-            if (drawable != null) {
-                drawable.setState(StateSet.NOTHING);
-                drawable.jumpToCurrentState();
             }
         }
     }
@@ -1003,56 +999,60 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             int start;
             StringBuilder stringBuilder = new StringBuilder(str);
             if ((flag & 1) != 0) {
+                int indexOf;
                 while (true) {
-                    start = stringBuilder.indexOf("<br>");
-                    if (start != -1) {
-                        stringBuilder.replace(start, start + 4, "\n");
-                    } else {
-                        while (true) {
-                            stringBuilder.replace(start, start + 5, "\n");
-                        }
+                    indexOf = stringBuilder.indexOf("<br>");
+                    start = indexOf;
+                    if (indexOf == -1) {
+                        break;
                     }
+                    stringBuilder.replace(start, start + 4, "\n");
                 }
-                start = stringBuilder.indexOf("<br/>");
-                if (start == -1) {
-                    break;
+                while (true) {
+                    indexOf = stringBuilder.indexOf("<br/>");
+                    start = indexOf;
+                    if (indexOf == -1) {
+                        break;
+                    }
+                    stringBuilder.replace(start, start + 5, "\n");
                 }
-                stringBuilder.replace(start, start + 5, "\n");
             }
             ArrayList<Integer> bolds = new ArrayList();
             if ((flag & 2) != 0) {
-                int end;
+                int start2;
                 while (true) {
                     start = stringBuilder.indexOf("<b>");
+                    start2 = start;
                     if (start == -1) {
                         break;
                     }
-                    stringBuilder.replace(start, start + 3, TtmlNode.ANONYMOUS_REGION_ID);
-                    end = stringBuilder.indexOf("</b>");
-                    if (end == -1) {
-                        end = stringBuilder.indexOf("<b>");
+                    stringBuilder.replace(start2, start2 + 3, TtmlNode.ANONYMOUS_REGION_ID);
+                    start = stringBuilder.indexOf("</b>");
+                    if (start == -1) {
+                        start = stringBuilder.indexOf("<b>");
                     }
-                    stringBuilder.replace(end, end + 4, TtmlNode.ANONYMOUS_REGION_ID);
+                    stringBuilder.replace(start, start + 4, TtmlNode.ANONYMOUS_REGION_ID);
+                    bolds.add(Integer.valueOf(start2));
                     bolds.add(Integer.valueOf(start));
-                    bolds.add(Integer.valueOf(end));
                 }
                 while (true) {
                     start = stringBuilder.indexOf("**");
+                    start2 = start;
                     if (start == -1) {
                         break;
                     }
-                    stringBuilder.replace(start, start + 2, TtmlNode.ANONYMOUS_REGION_ID);
-                    end = stringBuilder.indexOf("**");
-                    if (end >= 0) {
-                        stringBuilder.replace(end, end + 2, TtmlNode.ANONYMOUS_REGION_ID);
+                    stringBuilder.replace(start2, start2 + 2, TtmlNode.ANONYMOUS_REGION_ID);
+                    start = stringBuilder.indexOf("**");
+                    if (start >= 0) {
+                        stringBuilder.replace(start, start + 2, TtmlNode.ANONYMOUS_REGION_ID);
+                        bolds.add(Integer.valueOf(start2));
                         bolds.add(Integer.valueOf(start));
-                        bolds.add(Integer.valueOf(end));
                     }
                 }
             }
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stringBuilder);
-            for (int a = 0; a < bolds.size() / 2; a++) {
-                spannableStringBuilder.setSpan(new TypefaceSpan(getTypeface("fonts/rmedium.ttf")), ((Integer) bolds.get(a * 2)).intValue(), ((Integer) bolds.get((a * 2) + 1)).intValue(), 33);
+            for (start = 0; start < bolds.size() / 2; start++) {
+                spannableStringBuilder.setSpan(new TypefaceSpan(getTypeface("fonts/rmedium.ttf")), ((Integer) bolds.get(start * 2)).intValue(), ((Integer) bolds.get((start * 2) + 1)).intValue(), 33);
             }
             return spannableStringBuilder;
         } catch (Throwable e) {
@@ -1133,65 +1133,57 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         if (VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0) {
             return FileLoader.getDirectory(4);
         }
+        File storageDir = null;
         if ("mounted".equals(Environment.getExternalStorageState())) {
-            File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Telegram");
-            if (storageDir.mkdirs() || storageDir.exists()) {
-                return storageDir;
+            storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Telegram");
+            if (!(storageDir.mkdirs() || storageDir.exists())) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m0d("failed to create directory");
+                }
+                return null;
             }
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("failed to create directory");
-            }
-            return null;
-        } else if (!BuildVars.LOGS_ENABLED) {
-            return null;
-        } else {
+        } else if (BuildVars.LOGS_ENABLED) {
             FileLog.m0d("External storage is not mounted READ/WRITE.");
-            return null;
         }
+        return storageDir;
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     @SuppressLint({"NewApi"})
     public static String getPath(Uri uri) {
-        Object obj = null;
         try {
             if ((VERSION.SDK_INT >= 19) && DocumentsContract.isDocumentUri(ApplicationLoader.applicationContext, uri)) {
                 String[] split;
                 if (isExternalStorageDocument(uri)) {
                     split = DocumentsContract.getDocumentId(uri).split(":");
                     if ("primary".equalsIgnoreCase(split[0])) {
-                        return Environment.getExternalStorageDirectory() + "/" + split[1];
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append(Environment.getExternalStorageDirectory());
+                        stringBuilder.append("/");
+                        stringBuilder.append(split[1]);
+                        return stringBuilder.toString();
                     }
-                    return null;
                 } else if (isDownloadsDocument(uri)) {
                     return getDataColumn(ApplicationLoader.applicationContext, ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(DocumentsContract.getDocumentId(uri)).longValue()), null, null);
-                } else if (!isMediaDocument(uri)) {
-                    return null;
-                } else {
+                } else if (isMediaDocument(uri)) {
                     String type = DocumentsContract.getDocumentId(uri).split(":")[0];
                     Uri contentUri = null;
-                    switch (type.hashCode()) {
-                        case 93166550:
-                            if (type.equals(MimeTypes.BASE_TYPE_AUDIO)) {
-                                obj = 2;
-                                break;
+                    int i = -1;
+                    int hashCode = type.hashCode();
+                    if (hashCode != 93166550) {
+                        if (hashCode != 100313435) {
+                            if (hashCode == 112202875) {
+                                if (type.equals(MimeTypes.BASE_TYPE_VIDEO)) {
+                                    i = 1;
+                                }
                             }
-                        case 100313435:
-                            if (type.equals("image")) {
-                                break;
-                            }
-                        case 112202875:
-                            if (type.equals(MimeTypes.BASE_TYPE_VIDEO)) {
-                                int i = 1;
-                                break;
-                            }
-                        default:
-                            obj = -1;
-                            break;
+                        } else if (type.equals("image")) {
+                            i = 0;
+                        }
+                    } else if (type.equals(MimeTypes.BASE_TYPE_AUDIO)) {
+                        i = 2;
                     }
-                    switch (obj) {
-                        case null:
+                    switch (i) {
+                        case 0:
                             contentUri = Media.EXTERNAL_CONTENT_URI;
                             break;
                         case 1:
@@ -1199,6 +1191,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             break;
                         case 2:
                             contentUri = Audio.Media.EXTERNAL_CONTENT_URI;
+                            break;
+                        default:
                             break;
                     }
                     String selection = "_id=?";
@@ -1210,41 +1204,40 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 if ("file".equalsIgnoreCase(uri.getScheme())) {
                     return uri.getPath();
                 }
-                return null;
             }
         } catch (Throwable e) {
             FileLog.m3e(e);
-            return null;
         }
+        return null;
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
         Cursor cursor = null;
         String column = "_data";
         try {
             cursor = context.getContentResolver().query(uri, new String[]{"_data"}, selection, selectionArgs, null);
-            if (cursor == null || !cursor.moveToFirst()) {
+            if (cursor != null && cursor.moveToFirst()) {
+                String value = cursor.getString(cursor.getColumnIndexOrThrow("_data"));
+                if (!value.startsWith("content://")) {
+                    if (value.startsWith("/") || value.startsWith("file://")) {
+                        if (cursor != null) {
+                            cursor.close();
+                        }
+                        return value;
+                    }
+                }
                 if (cursor != null) {
                     cursor.close();
                 }
                 return null;
-            }
-            String value = cursor.getString(cursor.getColumnIndexOrThrow("_data"));
-            if (value.startsWith("content://") || !(value.startsWith("/") || value.startsWith("file://"))) {
-                if (cursor != null) {
-                    cursor.close();
-                }
-                return null;
-            } else if (cursor == null) {
-                return value;
-            } else {
-                cursor.close();
-                return value;
             }
         } catch (Exception e) {
             if (cursor != null) {
                 cursor.close();
             }
+            return null;
         } catch (Throwable th) {
             if (cursor != null) {
                 cursor.close();
@@ -1269,7 +1262,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             File storageDir = getAlbumDir();
             Date date = new Date();
             date.setTime((System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000))) + 1);
-            return new File(storageDir, "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date) + ".jpg");
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("IMG_");
+            stringBuilder.append(timeStamp);
+            stringBuilder.append(".jpg");
+            return new File(storageDir, stringBuilder.toString());
         } catch (Throwable e) {
             FileLog.m3e(e);
             return null;
@@ -1280,40 +1278,103 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         if (name == null && name2 == null) {
             return TtmlNode.ANONYMOUS_REGION_ID;
         }
-        CharSequence builder = new SpannableStringBuilder();
+        String lower;
+        int lastIndex;
+        int indexOf;
+        int index;
+        int idx;
+        SpannableStringBuilder builder = new SpannableStringBuilder();
         String wholeString = name;
-        if (wholeString == null || wholeString.length() == 0) {
-            wholeString = name2;
-        } else if (!(name2 == null || name2.length() == 0)) {
-            wholeString = wholeString + " " + name2;
+        if (wholeString != null) {
+            if (wholeString.length() != 0) {
+                if (!(name2 == null || name2.length() == 0)) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(wholeString);
+                    stringBuilder.append(" ");
+                    stringBuilder.append(name2);
+                    wholeString = stringBuilder.toString();
+                }
+                wholeString = wholeString.trim();
+                lower = new StringBuilder();
+                lower.append(" ");
+                lower.append(wholeString.toLowerCase());
+                lower = lower.toString();
+                lastIndex = 0;
+                while (true) {
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    stringBuilder2.append(" ");
+                    stringBuilder2.append(q);
+                    indexOf = lower.indexOf(stringBuilder2.toString(), lastIndex);
+                    index = indexOf;
+                    if (indexOf != -1) {
+                        break;
+                    }
+                    String query;
+                    indexOf = 1;
+                    idx = index - (index != 0 ? 0 : 1);
+                    int length = q.length();
+                    if (index == 0) {
+                        indexOf = 0;
+                    }
+                    length = (length + indexOf) + idx;
+                    if (lastIndex == 0 && lastIndex != idx + 1) {
+                        builder.append(wholeString.substring(lastIndex, idx));
+                    } else if (lastIndex == 0 && idx != 0) {
+                        builder.append(wholeString.substring(0, idx));
+                    }
+                    query = wholeString.substring(idx, Math.min(wholeString.length(), length));
+                    if (query.startsWith(" ")) {
+                        builder.append(" ");
+                    }
+                    query = query.trim();
+                    int start = builder.length();
+                    builder.append(query);
+                    builder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), start, query.length() + start, 33);
+                    lastIndex = length;
+                }
+                if (lastIndex != -1 && lastIndex < wholeString.length()) {
+                    builder.append(wholeString.substring(lastIndex, wholeString.length()));
+                }
+                return builder;
+            }
         }
+        wholeString = name2;
         wholeString = wholeString.trim();
-        String lower = " " + wholeString.toLowerCase();
-        int lastIndex = 0;
+        lower = new StringBuilder();
+        lower.append(" ");
+        lower.append(wholeString.toLowerCase());
+        lower = lower.toString();
+        lastIndex = 0;
         while (true) {
-            int index = lower.indexOf(" " + q, lastIndex);
-            if (index == -1) {
+            StringBuilder stringBuilder22 = new StringBuilder();
+            stringBuilder22.append(" ");
+            stringBuilder22.append(q);
+            indexOf = lower.indexOf(stringBuilder22.toString(), lastIndex);
+            index = indexOf;
+            if (indexOf != -1) {
                 break;
             }
-            int idx = index - (index == 0 ? 0 : 1);
-            int end = ((index == 0 ? 0 : 1) + q.length()) + idx;
-            if (lastIndex != 0 && lastIndex != idx + 1) {
-                builder.append(wholeString.substring(lastIndex, idx));
-            } else if (lastIndex == 0 && idx != 0) {
-                builder.append(wholeString.substring(0, idx));
+            indexOf = 1;
+            if (index != 0) {
             }
-            String query = wholeString.substring(idx, Math.min(wholeString.length(), end));
+            idx = index - (index != 0 ? 0 : 1);
+            int length2 = q.length();
+            if (index == 0) {
+                indexOf = 0;
+            }
+            length2 = (length2 + indexOf) + idx;
+            if (lastIndex == 0) {
+            }
+            builder.append(wholeString.substring(0, idx));
+            query = wholeString.substring(idx, Math.min(wholeString.length(), length2));
             if (query.startsWith(" ")) {
                 builder.append(" ");
             }
             query = query.trim();
-            int start = builder.length();
+            int start2 = builder.length();
             builder.append(query);
-            builder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), start, query.length() + start, 33);
-            lastIndex = end;
-        }
-        if (lastIndex == -1 || lastIndex >= wholeString.length()) {
-            return builder;
+            builder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), start2, query.length() + start2, 33);
+            lastIndex = length2;
         }
         builder.append(wholeString.substring(lastIndex, wholeString.length()));
         return builder;
@@ -1324,7 +1385,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
             File storageDir = getAlbumDir();
             Date date = new Date();
             date.setTime((System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000))) + 1);
-            return new File(storageDir, "VID_" + new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date) + ".mp4");
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("VID_");
+            stringBuilder.append(timeStamp);
+            stringBuilder.append(".mp4");
+            return new File(storageDir, stringBuilder.toString());
         } catch (Throwable e) {
             FileLog.m3e(e);
             return null;
@@ -1344,42 +1410,43 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static byte[] decodeQuotedPrintable(byte[] bytes) {
-        byte[] bArr = null;
-        if (bytes != null) {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            int i = 0;
-            while (i < bytes.length) {
-                int b = bytes[i];
-                if (b == 61) {
-                    i++;
-                    try {
-                        int u = Character.digit((char) bytes[i], 16);
-                        i++;
-                        buffer.write((char) ((u << 4) + Character.digit((char) bytes[i], 16)));
-                    } catch (Throwable e) {
-                        FileLog.m3e(e);
-                    }
-                } else {
-                    buffer.write(b);
-                }
-                i++;
-            }
-            bArr = buffer.toByteArray();
-            try {
-                buffer.close();
-            } catch (Throwable e2) {
-                FileLog.m3e(e2);
-            }
+        if (bytes == null) {
+            return null;
         }
-        return bArr;
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int i = 0;
+        while (i < bytes.length) {
+            int b = bytes[i];
+            if (b == 61) {
+                i++;
+                try {
+                    int u = Character.digit((char) bytes[i], 16);
+                    i++;
+                    buffer.write((char) ((u << 4) + Character.digit((char) bytes[i], 16)));
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
+                    return null;
+                }
+            }
+            buffer.write(b);
+            i++;
+        }
+        byte[] array = buffer.toByteArray();
+        try {
+            buffer.close();
+        } catch (Throwable e2) {
+            FileLog.m3e(e2);
+        }
+        return array;
     }
 
     public static boolean copyFile(InputStream sourceFile, File destFile) throws IOException {
         OutputStream out = new FileOutputStream(destFile);
         byte[] buf = new byte[4096];
         while (true) {
-            int len = sourceFile.read(buf);
-            if (len > 0) {
+            int read = sourceFile.read(buf);
+            int len = read;
+            if (read > 0) {
                 Thread.yield();
                 out.write(buf, 0, len);
             } else {
@@ -1390,98 +1457,39 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     }
 
     public static boolean copyFile(File sourceFile, File destFile) throws IOException {
-        Throwable e;
-        Throwable th;
         if (!destFile.exists()) {
             destFile.createNewFile();
         }
         FileInputStream source = null;
         FileOutputStream destination = null;
         try {
-            FileInputStream source2 = new FileInputStream(sourceFile);
-            try {
-                FileOutputStream destination2 = new FileOutputStream(destFile);
-                try {
-                    destination2.getChannel().transferFrom(source2.getChannel(), 0, source2.getChannel().size());
-                    if (source2 != null) {
-                        source2.close();
-                    }
-                    if (destination2 != null) {
-                        destination2.close();
-                    }
-                    destination = destination2;
-                    source = source2;
-                    return true;
-                } catch (Exception e2) {
-                    e = e2;
-                    destination = destination2;
-                    source = source2;
-                    try {
-                        FileLog.m3e(e);
-                        if (source != null) {
-                            source.close();
-                        }
-                        if (destination != null) {
-                            return false;
-                        }
-                        destination.close();
-                        return false;
-                    } catch (Throwable th2) {
-                        th = th2;
-                        if (source != null) {
-                            source.close();
-                        }
-                        if (destination != null) {
-                            destination.close();
-                        }
-                        throw th;
-                    }
-                } catch (Throwable th3) {
-                    th = th3;
-                    destination = destination2;
-                    source = source2;
-                    if (source != null) {
-                        source.close();
-                    }
-                    if (destination != null) {
-                        destination.close();
-                    }
-                    throw th;
-                }
-            } catch (Exception e3) {
-                e = e3;
-                source = source2;
-                FileLog.m3e(e);
-                if (source != null) {
-                    source.close();
-                }
-                if (destination != null) {
-                    return false;
-                }
-                destination.close();
-                return false;
-            } catch (Throwable th4) {
-                th = th4;
-                source = source2;
-                if (source != null) {
-                    source.close();
-                }
-                if (destination != null) {
-                    destination.close();
-                }
-                throw th;
+            source = new FileInputStream(sourceFile);
+            destination = new FileOutputStream(destFile);
+            destination.getChannel().transferFrom(source.getChannel(), 0, source.getChannel().size());
+            if (source != null) {
+                source.close();
             }
-        } catch (Exception e4) {
-            e = e4;
+            if (destination != null) {
+                destination.close();
+            }
+            return true;
+        } catch (Throwable e) {
             FileLog.m3e(e);
             if (source != null) {
                 source.close();
             }
             if (destination != null) {
-                return false;
+                destination.close();
             }
-            destination.close();
             return false;
+        } catch (Throwable e2) {
+            if (source != null) {
+                source.close();
+            }
+            if (destination != null) {
+                destination.close();
+            }
+            throw e2;
         }
     }
 
@@ -1526,7 +1534,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 if (realMimeType != null) {
                     try {
                         activity.startActivityForResult(intent, 500);
-                        return;
                     } catch (Exception e) {
                         if (VERSION.SDK_INT >= 24) {
                             intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), "text/plain");
@@ -1534,71 +1541,76 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             intent.setDataAndType(Uri.fromFile(f), "text/plain");
                         }
                         activity.startActivityForResult(intent, 500);
-                        return;
                     }
+                } else {
+                    activity.startActivityForResult(intent, 500);
                 }
-                activity.startActivityForResult(intent, 500);
-                return;
+            } else {
+                Builder builder = new Builder((Context) activity);
+                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setMessage(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
+                builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new OnClickListener() {
+                    @TargetApi(26)
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            Activity activity = activity;
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("package:");
+                            stringBuilder.append(activity.getPackageName());
+                            activity.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse(stringBuilder.toString())));
+                        } catch (Throwable e) {
+                            FileLog.m3e(e);
+                        }
+                    }
+                });
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.show();
             }
-            Builder builder = new Builder((Context) activity);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setMessage(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
-            builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new OnClickListener() {
-                @TargetApi(26)
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    try {
-                        activity.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse("package:" + activity.getPackageName())));
-                    } catch (Throwable e) {
-                        FileLog.m3e(e);
-                    }
-                }
-            });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-            builder.show();
         }
     }
 
     public static void openForView(TLObject media, Activity activity) throws Exception {
-        if (media != null && activity != null) {
-            String fileName = FileLoader.getAttachFileName(media);
-            File f = FileLoader.getPathToAttach(media, true);
-            if (f != null && f.exists()) {
-                String realMimeType = null;
-                Intent intent = new Intent("android.intent.action.VIEW");
-                intent.setFlags(1);
-                MimeTypeMap myMime = MimeTypeMap.getSingleton();
-                int idx = fileName.lastIndexOf(46);
-                if (idx != -1) {
-                    realMimeType = myMime.getMimeTypeFromExtension(fileName.substring(idx + 1).toLowerCase());
-                    if (realMimeType == null) {
-                        if (media instanceof TL_document) {
-                            realMimeType = ((TL_document) media).mime_type;
-                        }
-                        if (realMimeType == null || realMimeType.length() == 0) {
-                            realMimeType = null;
+        if (media != null) {
+            if (activity != null) {
+                String fileName = FileLoader.getAttachFileName(media);
+                File f = FileLoader.getPathToAttach(media, true);
+                if (f != null && f.exists()) {
+                    String realMimeType = null;
+                    Intent intent = new Intent("android.intent.action.VIEW");
+                    intent.setFlags(1);
+                    MimeTypeMap myMime = MimeTypeMap.getSingleton();
+                    int idx = fileName.lastIndexOf(46);
+                    if (idx != -1) {
+                        realMimeType = myMime.getMimeTypeFromExtension(fileName.substring(idx + 1).toLowerCase());
+                        if (realMimeType == null) {
+                            if (media instanceof TL_document) {
+                                realMimeType = ((TL_document) media).mime_type;
+                            }
+                            if (realMimeType == null || realMimeType.length() == 0) {
+                                realMimeType = null;
+                            }
                         }
                     }
-                }
-                if (VERSION.SDK_INT >= 24) {
-                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), realMimeType != null ? realMimeType : "text/plain");
-                } else {
-                    intent.setDataAndType(Uri.fromFile(f), realMimeType != null ? realMimeType : "text/plain");
-                }
-                if (realMimeType != null) {
-                    try {
-                        activity.startActivityForResult(intent, 500);
-                        return;
-                    } catch (Exception e) {
-                        if (VERSION.SDK_INT >= 24) {
-                            intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), "text/plain");
-                        } else {
-                            intent.setDataAndType(Uri.fromFile(f), "text/plain");
+                    if (VERSION.SDK_INT >= 24) {
+                        intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), realMimeType != null ? realMimeType : "text/plain");
+                    } else {
+                        intent.setDataAndType(Uri.fromFile(f), realMimeType != null ? realMimeType : "text/plain");
+                    }
+                    if (realMimeType != null) {
+                        try {
+                            activity.startActivityForResult(intent, 500);
+                        } catch (Exception e) {
+                            if (VERSION.SDK_INT >= 24) {
+                                intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), "text/plain");
+                            } else {
+                                intent.setDataAndType(Uri.fromFile(f), "text/plain");
+                            }
+                            activity.startActivityForResult(intent, 500);
                         }
+                    } else {
                         activity.startActivityForResult(intent, 500);
-                        return;
                     }
                 }
-                activity.startActivityForResult(intent, 500);
             }
         }
     }
@@ -1610,22 +1622,47 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     public static void setRectToRect(Matrix matrix, RectF src, RectF dst, int rotation, ScaleToFit align) {
         float sx;
         float sy;
-        if (rotation == 90 || rotation == 270) {
-            sx = dst.height() / src.width();
-            sy = dst.width() / src.height();
-        } else {
-            sx = dst.width() / src.width();
-            sy = dst.height() / src.height();
-        }
-        if (align != ScaleToFit.FILL) {
-            if (sx > sy) {
-                sx = sy;
-            } else {
-                sy = sx;
+        float tx;
+        float ty;
+        if (rotation != 90) {
+            if (rotation != 270) {
+                sx = dst.width() / src.width();
+                sy = dst.height() / src.height();
+                if (align != ScaleToFit.FILL) {
+                    if (sx <= sy) {
+                        sx = sy;
+                    } else {
+                        sy = sx;
+                    }
+                }
+                tx = (-src.left) * sx;
+                ty = (-src.top) * sy;
+                matrix.setTranslate(dst.left, dst.top);
+                if (rotation == 90) {
+                    matrix.preRotate(90.0f);
+                    matrix.preTranslate(0.0f, -dst.width());
+                } else if (rotation == 180) {
+                    matrix.preRotate(180.0f);
+                    matrix.preTranslate(-dst.width(), -dst.height());
+                } else if (rotation == 270) {
+                    matrix.preRotate(270.0f);
+                    matrix.preTranslate(-dst.height(), 0.0f);
+                }
+                matrix.preScale(sx, sy);
+                matrix.preTranslate(tx, ty);
             }
         }
-        float tx = (-src.left) * sx;
-        float ty = (-src.top) * sy;
+        sx = dst.height() / src.width();
+        sy = dst.width() / src.height();
+        if (align != ScaleToFit.FILL) {
+            if (sx <= sy) {
+                sy = sx;
+            } else {
+                sx = sy;
+            }
+        }
+        tx = (-src.left) * sx;
+        ty = (-src.top) * sy;
         matrix.setTranslate(dst.left, dst.top);
         if (rotation == 90) {
             matrix.preRotate(90.0f);
@@ -1650,18 +1687,30 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                 return false;
             }
             Uri data = intent.getData();
-            if (data == null) {
-                return false;
-            }
-            String user = null;
-            String password = null;
-            String port = null;
-            String address = null;
-            String scheme = data.getScheme();
-            if (scheme != null) {
-                if (scheme.equals("http") || scheme.equals("https")) {
-                    String host = data.getHost().toLowerCase();
-                    if (host.equals("telegram.me") || host.equals("t.me") || host.equals("telegram.dog") || host.equals("telesco.pe")) {
+            if (data != null) {
+                String user = null;
+                String password = null;
+                String port = null;
+                String address = null;
+                String scheme = data.getScheme();
+                if (scheme != null) {
+                    String url;
+                    if (!scheme.equals("http")) {
+                        if (!scheme.equals("https")) {
+                            if (scheme.equals("tg")) {
+                                url = data.toString();
+                                if (url.startsWith("tg:socks") || url.startsWith("tg://socks")) {
+                                    data = Uri.parse(url.replace("tg:proxy", "tg://telegram.org").replace("tg://proxy", "tg://telegram.org"));
+                                    address = data.getQueryParameter("server");
+                                    port = data.getQueryParameter("port");
+                                    user = data.getQueryParameter("user");
+                                    password = data.getQueryParameter("pass");
+                                }
+                            }
+                        }
+                    }
+                    url = data.getHost().toLowerCase();
+                    if (url.equals("telegram.me") || url.equals("t.me") || url.equals("telegram.dog") || url.equals("telesco.pe")) {
                         String path = data.getPath();
                         if (path != null && path.startsWith("/socks")) {
                             address = data.getQueryParameter("server");
@@ -1670,30 +1719,20 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                             password = data.getQueryParameter("pass");
                         }
                     }
-                } else if (scheme.equals("tg")) {
-                    String url = data.toString();
-                    if (url.startsWith("tg:socks") || url.startsWith("tg://socks")) {
-                        data = Uri.parse(url.replace("tg:proxy", "tg://telegram.org").replace("tg://proxy", "tg://telegram.org"));
-                        address = data.getQueryParameter("server");
-                        port = data.getQueryParameter("port");
-                        user = data.getQueryParameter("user");
-                        password = data.getQueryParameter("pass");
+                }
+                if (!(TextUtils.isEmpty(address) || TextUtils.isEmpty(port))) {
+                    if (user == null) {
+                        user = TtmlNode.ANONYMOUS_REGION_ID;
                     }
+                    if (password == null) {
+                        password = TtmlNode.ANONYMOUS_REGION_ID;
+                    }
+                    showProxyAlert(activity, address, port, user, password);
+                    return true;
                 }
             }
-            if (TextUtils.isEmpty(address) || TextUtils.isEmpty(port)) {
-                return false;
-            }
-            if (user == null) {
-                user = TtmlNode.ANONYMOUS_REGION_ID;
-            }
-            if (password == null) {
-                password = TtmlNode.ANONYMOUS_REGION_ID;
-            }
-            showProxyAlert(activity, address, port, user, password);
-            return true;
-        } catch (Exception e) {
             return false;
+        } catch (Exception e) {
         }
     }
 
@@ -1702,15 +1741,28 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         builder.setTitle(LocaleController.getString("Proxy", R.string.Proxy));
         StringBuilder stringBuilder = new StringBuilder(LocaleController.getString("EnableProxyAlert", R.string.EnableProxyAlert));
         stringBuilder.append("\n\n");
-        stringBuilder.append(LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress)).append(": ").append(address).append("\n");
-        stringBuilder.append(LocaleController.getString("UseProxyPort", R.string.UseProxyPort)).append(": ").append(port).append("\n");
+        stringBuilder.append(LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress));
+        stringBuilder.append(": ");
+        stringBuilder.append(address);
+        stringBuilder.append("\n");
+        stringBuilder.append(LocaleController.getString("UseProxyPort", R.string.UseProxyPort));
+        stringBuilder.append(": ");
+        stringBuilder.append(port);
+        stringBuilder.append("\n");
         if (!TextUtils.isEmpty(user)) {
-            stringBuilder.append(LocaleController.getString("UseProxyUsername", R.string.UseProxyUsername)).append(": ").append(user).append("\n");
+            stringBuilder.append(LocaleController.getString("UseProxyUsername", R.string.UseProxyUsername));
+            stringBuilder.append(": ");
+            stringBuilder.append(user);
+            stringBuilder.append("\n");
         }
         if (!TextUtils.isEmpty(password)) {
-            stringBuilder.append(LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword)).append(": ").append(password).append("\n");
+            stringBuilder.append(LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword));
+            stringBuilder.append(": ");
+            stringBuilder.append(password);
+            stringBuilder.append("\n");
         }
-        stringBuilder.append("\n").append(LocaleController.getString("EnableProxyAlert2", R.string.EnableProxyAlert2));
+        stringBuilder.append("\n");
+        stringBuilder.append(LocaleController.getString("EnableProxyAlert2", R.string.EnableProxyAlert2));
         builder.setMessage(stringBuilder.toString());
         builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {

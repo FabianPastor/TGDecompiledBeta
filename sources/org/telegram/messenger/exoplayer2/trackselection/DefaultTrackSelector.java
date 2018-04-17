@@ -38,21 +38,24 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         }
 
         public boolean equals(Object obj) {
+            boolean z = true;
             if (this == obj) {
                 return true;
             }
-            if (obj == null || getClass() != obj.getClass()) {
-                return false;
-            }
-            AudioConfigurationTuple other = (AudioConfigurationTuple) obj;
-            if (this.channelCount == other.channelCount && this.sampleRate == other.sampleRate && TextUtils.equals(this.mimeType, other.mimeType)) {
-                return true;
+            if (obj != null) {
+                if (getClass() == obj.getClass()) {
+                    AudioConfigurationTuple other = (AudioConfigurationTuple) obj;
+                    if (this.channelCount != other.channelCount || this.sampleRate != other.sampleRate || !TextUtils.equals(this.mimeType, other.mimeType)) {
+                        z = false;
+                    }
+                    return z;
+                }
             }
             return false;
         }
 
         public int hashCode() {
-            return (((this.channelCount * 31) + this.sampleRate) * 31) + (this.mimeType != null ? this.mimeType.hashCode() : 0);
+            return (31 * ((31 * this.channelCount) + this.sampleRate)) + (this.mimeType != null ? this.mimeType.hashCode() : 0);
         }
     }
 
@@ -66,27 +69,20 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         private final int withinRendererCapabilitiesScore;
 
         public AudioTrackScore(Format format, Parameters parameters, int formatSupport) {
-            int i;
-            int i2 = 1;
             this.parameters = parameters;
-            this.withinRendererCapabilitiesScore = DefaultTrackSelector.isSupported(formatSupport, false) ? 1 : 0;
-            if (DefaultTrackSelector.formatHasLanguage(format, parameters.preferredAudioLanguage)) {
+            int i = 0;
+            this.withinRendererCapabilitiesScore = DefaultTrackSelector.isSupported(formatSupport, false);
+            this.matchLanguageScore = DefaultTrackSelector.formatHasLanguage(format, parameters.preferredAudioLanguage);
+            if ((format.selectionFlags & 1) != 0) {
                 i = 1;
-            } else {
-                i = 0;
             }
-            this.matchLanguageScore = i;
-            if ((format.selectionFlags & 1) == 0) {
-                i2 = 0;
-            }
-            this.defaultSelectionFlagScore = i2;
+            this.defaultSelectionFlagScore = i;
             this.channelCount = format.channelCount;
             this.sampleRate = format.sampleRate;
             this.bitrate = format.bitrate;
         }
 
         public int compareTo(AudioTrackScore other) {
-            int resultSign = 1;
             if (this.withinRendererCapabilitiesScore != other.withinRendererCapabilitiesScore) {
                 return DefaultTrackSelector.compareInts(this.withinRendererCapabilitiesScore, other.withinRendererCapabilitiesScore);
             }
@@ -99,9 +95,11 @@ public class DefaultTrackSelector extends MappingTrackSelector {
             if (this.parameters.forceLowestBitrate) {
                 return DefaultTrackSelector.compareInts(other.bitrate, this.bitrate);
             }
+            int i = 1;
             if (this.withinRendererCapabilitiesScore != 1) {
-                resultSign = -1;
+                i = -1;
             }
+            int resultSign = i;
             if (this.channelCount != other.channelCount) {
                 return DefaultTrackSelector.compareInts(this.channelCount, other.channelCount) * resultSign;
             }
@@ -112,21 +110,24 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         }
 
         public boolean equals(Object o) {
+            boolean z = true;
             if (this == o) {
                 return true;
             }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            AudioTrackScore that = (AudioTrackScore) o;
-            if (this.withinRendererCapabilitiesScore == that.withinRendererCapabilitiesScore && this.matchLanguageScore == that.matchLanguageScore && this.defaultSelectionFlagScore == that.defaultSelectionFlagScore && this.channelCount == that.channelCount && this.sampleRate == that.sampleRate && this.bitrate == that.bitrate) {
-                return true;
+            if (o != null) {
+                if (getClass() == o.getClass()) {
+                    AudioTrackScore that = (AudioTrackScore) o;
+                    if (this.withinRendererCapabilitiesScore != that.withinRendererCapabilitiesScore || this.matchLanguageScore != that.matchLanguageScore || this.defaultSelectionFlagScore != that.defaultSelectionFlagScore || this.channelCount != that.channelCount || this.sampleRate != that.sampleRate || this.bitrate != that.bitrate) {
+                        z = false;
+                    }
+                    return z;
+                }
             }
             return false;
         }
 
         public int hashCode() {
-            return (((((((((this.withinRendererCapabilitiesScore * 31) + this.matchLanguageScore) * 31) + this.defaultSelectionFlagScore) * 31) + this.channelCount) * 31) + this.sampleRate) * 31) + this.bitrate;
+            return (31 * ((31 * ((31 * ((31 * ((31 * this.withinRendererCapabilitiesScore) + this.matchLanguageScore)) + this.defaultSelectionFlagScore)) + this.channelCount)) + this.sampleRate)) + this.bitrate;
         }
     }
 
@@ -175,63 +176,24 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         }
 
         public boolean equals(Object obj) {
+            boolean z = true;
             if (this == obj) {
                 return true;
             }
-            if (obj == null || getClass() != obj.getClass()) {
-                return false;
-            }
-            Parameters other = (Parameters) obj;
-            if (this.selectUndeterminedTextLanguage == other.selectUndeterminedTextLanguage && this.disabledTextTrackSelectionFlags == other.disabledTextTrackSelectionFlags && this.forceLowestBitrate == other.forceLowestBitrate && this.allowMixedMimeAdaptiveness == other.allowMixedMimeAdaptiveness && this.allowNonSeamlessAdaptiveness == other.allowNonSeamlessAdaptiveness && this.maxVideoWidth == other.maxVideoWidth && this.maxVideoHeight == other.maxVideoHeight && this.exceedVideoConstraintsIfNecessary == other.exceedVideoConstraintsIfNecessary && this.exceedRendererCapabilitiesIfNecessary == other.exceedRendererCapabilitiesIfNecessary && this.viewportOrientationMayChange == other.viewportOrientationMayChange && this.viewportWidth == other.viewportWidth && this.viewportHeight == other.viewportHeight && this.maxVideoBitrate == other.maxVideoBitrate && TextUtils.equals(this.preferredAudioLanguage, other.preferredAudioLanguage) && TextUtils.equals(this.preferredTextLanguage, other.preferredTextLanguage)) {
-                return true;
+            if (obj != null) {
+                if (getClass() == obj.getClass()) {
+                    Parameters other = (Parameters) obj;
+                    if (this.selectUndeterminedTextLanguage != other.selectUndeterminedTextLanguage || this.disabledTextTrackSelectionFlags != other.disabledTextTrackSelectionFlags || this.forceLowestBitrate != other.forceLowestBitrate || this.allowMixedMimeAdaptiveness != other.allowMixedMimeAdaptiveness || this.allowNonSeamlessAdaptiveness != other.allowNonSeamlessAdaptiveness || this.maxVideoWidth != other.maxVideoWidth || this.maxVideoHeight != other.maxVideoHeight || this.exceedVideoConstraintsIfNecessary != other.exceedVideoConstraintsIfNecessary || this.exceedRendererCapabilitiesIfNecessary != other.exceedRendererCapabilitiesIfNecessary || this.viewportOrientationMayChange != other.viewportOrientationMayChange || this.viewportWidth != other.viewportWidth || this.viewportHeight != other.viewportHeight || this.maxVideoBitrate != other.maxVideoBitrate || !TextUtils.equals(this.preferredAudioLanguage, other.preferredAudioLanguage) || !TextUtils.equals(this.preferredTextLanguage, other.preferredTextLanguage)) {
+                        z = false;
+                    }
+                    return z;
+                }
             }
             return false;
         }
 
         public int hashCode() {
-            int result;
-            int i;
-            int i2 = 1;
-            if (this.selectUndeterminedTextLanguage) {
-                result = 1;
-            } else {
-                result = 0;
-            }
-            int i3 = ((result * 31) + this.disabledTextTrackSelectionFlags) * 31;
-            if (this.forceLowestBitrate) {
-                i = 1;
-            } else {
-                i = 0;
-            }
-            i3 = (i3 + i) * 31;
-            if (this.allowMixedMimeAdaptiveness) {
-                i = 1;
-            } else {
-                i = 0;
-            }
-            i3 = (i3 + i) * 31;
-            if (this.allowNonSeamlessAdaptiveness) {
-                i = 1;
-            } else {
-                i = 0;
-            }
-            i3 = (((((i3 + i) * 31) + this.maxVideoWidth) * 31) + this.maxVideoHeight) * 31;
-            if (this.exceedVideoConstraintsIfNecessary) {
-                i = 1;
-            } else {
-                i = 0;
-            }
-            i3 = (i3 + i) * 31;
-            if (this.exceedRendererCapabilitiesIfNecessary) {
-                i = 1;
-            } else {
-                i = 0;
-            }
-            i = (i3 + i) * 31;
-            if (!this.viewportOrientationMayChange) {
-                i2 = 0;
-            }
-            return ((((((((((i + i2) * 31) + this.viewportWidth) * 31) + this.viewportHeight) * 31) + this.maxVideoBitrate) * 31) + this.preferredAudioLanguage.hashCode()) * 31) + this.preferredTextLanguage.hashCode();
+            return (31 * ((31 * ((31 * ((31 * ((31 * ((31 * ((31 * ((31 * ((31 * ((31 * ((31 * ((31 * ((31 * ((31 * this.selectUndeterminedTextLanguage) + this.disabledTextTrackSelectionFlags)) + this.forceLowestBitrate)) + this.allowMixedMimeAdaptiveness)) + this.allowNonSeamlessAdaptiveness)) + this.maxVideoWidth)) + this.maxVideoHeight)) + this.exceedVideoConstraintsIfNecessary)) + this.exceedRendererCapabilitiesIfNecessary)) + this.viewportOrientationMayChange)) + this.viewportWidth)) + this.viewportHeight)) + this.maxVideoBitrate)) + this.preferredAudioLanguage.hashCode())) + this.preferredTextLanguage.hashCode();
         }
     }
 
@@ -384,34 +346,44 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     protected TrackSelection[] selectTracks(RendererCapabilities[] rendererCapabilities, TrackGroupArray[] rendererTrackGroupArrays, int[][][] rendererFormatSupports) throws ExoPlaybackException {
-        int i;
-        int rendererCount = rendererCapabilities.length;
+        RendererCapabilities[] rendererCapabilitiesArr = rendererCapabilities;
+        int rendererCount = rendererCapabilitiesArr.length;
         TrackSelection[] rendererTrackSelections = new TrackSelection[rendererCount];
         Parameters params = (Parameters) this.paramsReference.get();
         boolean seenVideoRendererWithMappedTracks = false;
         boolean selectedVideoTracks = false;
-        for (i = 0; i < rendererCount; i++) {
-            if (2 == rendererCapabilities[i].getTrackType()) {
-                int i2;
-                if (!selectedVideoTracks) {
-                    rendererTrackSelections[i] = selectVideoTrack(rendererCapabilities[i], rendererTrackGroupArrays[i], rendererFormatSupports[i], params, this.adaptiveTrackSelectionFactory);
-                    selectedVideoTracks = rendererTrackSelections[i] != null;
-                }
-                if (rendererTrackGroupArrays[i].length > 0) {
-                    i2 = 1;
-                } else {
-                    i2 = 0;
-                }
-                seenVideoRendererWithMappedTracks |= i2;
+        int i = 0;
+        while (true) {
+            int i2 = i;
+            int i3 = 1;
+            if (i2 >= rendererCount) {
+                break;
             }
+            int i4;
+            if (2 == rendererCapabilitiesArr[i2].getTrackType()) {
+                if (selectedVideoTracks) {
+                    i4 = i2;
+                } else {
+                    i4 = i2;
+                    rendererTrackSelections[i4] = selectVideoTrack(rendererCapabilitiesArr[i2], rendererTrackGroupArrays[i2], rendererFormatSupports[i2], params, r6.adaptiveTrackSelectionFactory);
+                    selectedVideoTracks = rendererTrackSelections[i4] != null;
+                }
+                if (rendererTrackGroupArrays[i4].length <= 0) {
+                    i3 = 0;
+                }
+                seenVideoRendererWithMappedTracks |= i3;
+            } else {
+                i4 = i2;
+            }
+            i = i4 + 1;
         }
-        boolean selectedAudioTracks = false;
         boolean selectedTextTracks = false;
+        boolean selectedAudioTracks = false;
         for (i = 0; i < rendererCount; i++) {
-            switch (rendererCapabilities[i].getTrackType()) {
+            switch (rendererCapabilitiesArr[i].getTrackType()) {
                 case 1:
                     if (!selectedAudioTracks) {
-                        rendererTrackSelections[i] = selectAudioTrack(rendererTrackGroupArrays[i], rendererFormatSupports[i], params, seenVideoRendererWithMappedTracks ? null : this.adaptiveTrackSelectionFactory);
+                        rendererTrackSelections[i] = selectAudioTrack(rendererTrackGroupArrays[i], rendererFormatSupports[i], params, seenVideoRendererWithMappedTracks ? null : r6.adaptiveTrackSelectionFactory);
                         selectedAudioTracks = rendererTrackSelections[i] != null;
                         break;
                     }
@@ -426,7 +398,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                     }
                     break;
                 default:
-                    rendererTrackSelections[i] = selectOtherTrack(rendererCapabilities[i].getTrackType(), rendererTrackGroupArrays[i], rendererFormatSupports[i], params);
+                    rendererTrackSelections[i] = selectOtherTrack(rendererCapabilitiesArr[i].getTrackType(), rendererTrackGroupArrays[i], rendererFormatSupports[i], params);
                     break;
             }
         }
@@ -445,42 +417,74 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     private static TrackSelection selectAdaptiveVideoTrack(RendererCapabilities rendererCapabilities, TrackGroupArray groups, int[][] formatSupport, Parameters params, Factory adaptiveTrackSelectionFactory) throws ExoPlaybackException {
-        int requiredAdaptiveSupport = params.allowNonSeamlessAdaptiveness ? 24 : 16;
-        boolean allowMixedMimeTypes = params.allowMixedMimeAdaptiveness && (rendererCapabilities.supportsMixedMimeTypeAdaptation() & requiredAdaptiveSupport) != 0;
-        for (int i = 0; i < groups.length; i++) {
-            TrackGroup group = groups.get(i);
-            int[] adaptiveTracks = getAdaptiveVideoTracksForGroup(group, formatSupport[i], allowMixedMimeTypes, requiredAdaptiveSupport, params.maxVideoWidth, params.maxVideoHeight, params.maxVideoBitrate, params.viewportWidth, params.viewportHeight, params.viewportOrientationMayChange);
-            if (adaptiveTracks.length > 0) {
-                return adaptiveTrackSelectionFactory.createTrackSelection(group, adaptiveTracks);
+        TrackGroupArray trackGroupArray = groups;
+        Parameters parameters = params;
+        int requiredAdaptiveSupport = parameters.allowNonSeamlessAdaptiveness ? 24 : 16;
+        int i = 0;
+        boolean allowMixedMimeTypes = parameters.allowMixedMimeAdaptiveness && (rendererCapabilities.supportsMixedMimeTypeAdaptation() & requiredAdaptiveSupport) != 0;
+        while (true) {
+            int i2 = i;
+            Factory factory;
+            if (i2 < trackGroupArray.length) {
+                TrackGroup group = trackGroupArray.get(i2);
+                int[] adaptiveTracks = getAdaptiveVideoTracksForGroup(group, formatSupport[i2], allowMixedMimeTypes, requiredAdaptiveSupport, parameters.maxVideoWidth, parameters.maxVideoHeight, parameters.maxVideoBitrate, parameters.viewportWidth, parameters.viewportHeight, parameters.viewportOrientationMayChange);
+                if (adaptiveTracks.length > 0) {
+                    return adaptiveTrackSelectionFactory.createTrackSelection(group, adaptiveTracks);
+                }
+                factory = adaptiveTrackSelectionFactory;
+                i = i2 + 1;
+            } else {
+                factory = adaptiveTrackSelectionFactory;
+                return null;
             }
         }
-        return null;
     }
 
     private static int[] getAdaptiveVideoTracksForGroup(TrackGroup group, int[] formatSupport, boolean allowMixedMimeTypes, int requiredAdaptiveSupport, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate, int viewportWidth, int viewportHeight, boolean viewportOrientationMayChange) {
-        if (group.length < 2) {
+        TrackGroup trackGroup = group;
+        if (trackGroup.length < 2) {
             return NO_TRACKS;
         }
-        List<Integer> selectedTrackIndices = getViewportFilteredTrackIndices(group, viewportWidth, viewportHeight, viewportOrientationMayChange);
+        List<Integer> selectedTrackIndices = getViewportFilteredTrackIndices(trackGroup, viewportWidth, viewportHeight, viewportOrientationMayChange);
         if (selectedTrackIndices.size() < 2) {
             return NO_TRACKS;
         }
-        String selectedMimeType = null;
+        String selectedMimeType;
         if (!allowMixedMimeTypes) {
             HashSet<String> seenMimeTypes = new HashSet();
+            int i = 0;
+            selectedMimeType = null;
             int selectedMimeTypeTrackCount = 0;
-            for (int i = 0; i < selectedTrackIndices.size(); i++) {
-                String sampleMimeType = group.getFormat(((Integer) selectedTrackIndices.get(i)).intValue()).sampleMimeType;
-                if (seenMimeTypes.add(sampleMimeType)) {
-                    int countForMimeType = getAdaptiveVideoTrackCountForMimeType(group, formatSupport, requiredAdaptiveSupport, sampleMimeType, maxVideoWidth, maxVideoHeight, maxVideoBitrate, selectedTrackIndices);
-                    if (countForMimeType > selectedMimeTypeTrackCount) {
-                        selectedMimeType = sampleMimeType;
-                        selectedMimeTypeTrackCount = countForMimeType;
-                    }
+            while (true) {
+                int i2 = i;
+                if (i2 >= selectedTrackIndices.size()) {
+                    break;
                 }
+                int i3;
+                int selectedMimeTypeTrackCount2;
+                int trackIndex = ((Integer) selectedTrackIndices.get(i2)).intValue();
+                String sampleMimeType = trackGroup.getFormat(trackIndex).sampleMimeType;
+                if (seenMimeTypes.add(sampleMimeType) != null) {
+                    String sampleMimeType2 = sampleMimeType;
+                    i3 = i2;
+                    selectedMimeTypeTrackCount2 = selectedMimeTypeTrackCount;
+                    String selectedMimeType2 = getAdaptiveVideoTrackCountForMimeType(trackGroup, formatSupport, requiredAdaptiveSupport, sampleMimeType, maxVideoWidth, maxVideoHeight, maxVideoBitrate, selectedTrackIndices);
+                    if (selectedMimeType2 > selectedMimeTypeTrackCount2) {
+                        selectedMimeTypeTrackCount = selectedMimeType2;
+                        selectedMimeType = sampleMimeType2;
+                        i = i3 + 1;
+                    }
+                } else {
+                    i3 = i2;
+                    selectedMimeTypeTrackCount2 = selectedMimeTypeTrackCount;
+                }
+                selectedMimeTypeTrackCount = selectedMimeTypeTrackCount2;
+                i = i3 + 1;
             }
+        } else {
+            selectedMimeType = null;
         }
-        filterAdaptiveVideoTrackCountForMimeType(group, formatSupport, requiredAdaptiveSupport, selectedMimeType, maxVideoWidth, maxVideoHeight, maxVideoBitrate, selectedTrackIndices);
+        filterAdaptiveVideoTrackCountForMimeType(trackGroup, formatSupport, requiredAdaptiveSupport, selectedMimeType, maxVideoWidth, maxVideoHeight, maxVideoBitrate, selectedTrackIndices);
         return selectedTrackIndices.size() < 2 ? NO_TRACKS : Util.toArray(selectedTrackIndices);
     }
 
@@ -492,16 +496,20 @@ public class DefaultTrackSelector extends MappingTrackSelector {
                 adaptiveTrackCount++;
             }
         }
+        TrackGroup trackGroup = group;
+        List<Integer> list = selectedTrackIndices;
         return adaptiveTrackCount;
     }
 
     private static void filterAdaptiveVideoTrackCountForMimeType(TrackGroup group, int[] formatSupport, int requiredAdaptiveSupport, String mimeType, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate, List<Integer> selectedTrackIndices) {
+        List<Integer> list = selectedTrackIndices;
         for (int i = selectedTrackIndices.size() - 1; i >= 0; i--) {
-            int trackIndex = ((Integer) selectedTrackIndices.get(i)).intValue();
+            int trackIndex = ((Integer) list.get(i)).intValue();
             if (!isSupportedAdaptiveVideoTrack(group.getFormat(trackIndex), mimeType, formatSupport[trackIndex], requiredAdaptiveSupport, maxVideoWidth, maxVideoHeight, maxVideoBitrate)) {
-                selectedTrackIndices.remove(i);
+                list.remove(i);
             }
         }
+        TrackGroup trackGroup = group;
     }
 
     private static boolean isSupportedAdaptiveVideoTrack(Format format, String mimeType, int formatSupport, int requiredAdaptiveSupport, int maxVideoWidth, int maxVideoHeight, int maxVideoBitrate) {
@@ -523,53 +531,95 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         return false;
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private static TrackSelection selectFixedVideoTrack(TrackGroupArray groups, int[][] formatSupport, Parameters params) {
-        TrackGroup selectedGroup = null;
-        int selectedTrackIndex = 0;
-        int selectedTrackScore = 0;
-        int selectedBitrate = -1;
+        TrackGroupArray trackGroupArray = groups;
+        Parameters parameters = params;
         int selectedPixelCount = -1;
-        for (int groupIndex = 0; groupIndex < groups.length; groupIndex++) {
-            TrackGroup trackGroup = groups.get(groupIndex);
-            List<Integer> selectedTrackIndices = getViewportFilteredTrackIndices(trackGroup, params.viewportWidth, params.viewportHeight, params.viewportOrientationMayChange);
+        int selectedBitrate = -1;
+        int selectedTrackScore = 0;
+        int selectedTrackIndex = 0;
+        TrackGroup selectedGroup = null;
+        int groupIndex = 0;
+        while (groupIndex < trackGroupArray.length) {
+            int selectedTrackIndex2;
+            TrackGroup trackGroup = trackGroupArray.get(groupIndex);
+            List<Integer> selectedTrackIndices = getViewportFilteredTrackIndices(trackGroup, parameters.viewportWidth, parameters.viewportHeight, parameters.viewportOrientationMayChange);
             int[] trackFormatSupport = formatSupport[groupIndex];
-            for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
-                if (isSupported(trackFormatSupport[trackIndex], params.exceedRendererCapabilitiesIfNecessary)) {
+            int selectedPixelCount2 = selectedPixelCount;
+            selectedPixelCount = selectedBitrate;
+            selectedBitrate = selectedTrackScore;
+            selectedTrackScore = selectedTrackIndex;
+            TrackGroup selectedGroup2 = selectedGroup;
+            int trackIndex = 0;
+            while (trackIndex < trackGroup.length) {
+                if (isSupported(trackFormatSupport[trackIndex], parameters.exceedRendererCapabilitiesIfNecessary)) {
                     Format format = trackGroup.getFormat(trackIndex);
-                    boolean isWithinConstraints = selectedTrackIndices.contains(Integer.valueOf(trackIndex)) && ((format.width == -1 || format.width <= params.maxVideoWidth) && ((format.height == -1 || format.height <= params.maxVideoHeight) && (format.bitrate == -1 || format.bitrate <= params.maxVideoBitrate)));
-                    if (isWithinConstraints || params.exceedVideoConstraintsIfNecessary) {
+                    boolean z = true;
+                    boolean isWithinConstraints = selectedTrackIndices.contains(Integer.valueOf(trackIndex)) && ((format.width == -1 || format.width <= parameters.maxVideoWidth) && ((format.height == -1 || format.height <= parameters.maxVideoHeight) && (format.bitrate == -1 || format.bitrate <= parameters.maxVideoBitrate)));
+                    if (isWithinConstraints || parameters.exceedVideoConstraintsIfNecessary) {
                         int trackScore = isWithinConstraints ? 2 : 1;
+                        selectedTrackIndex2 = selectedTrackScore;
                         boolean isWithinCapabilities = isSupported(trackFormatSupport[trackIndex], false);
                         if (isWithinCapabilities) {
                             trackScore += WITHIN_RENDERER_CAPABILITIES_BONUS;
                         }
-                        boolean selectTrack = trackScore > selectedTrackScore;
-                        if (trackScore == selectedTrackScore) {
-                            if (!params.forceLowestBitrate) {
-                                int comparisonResult;
-                                int formatPixelCount = format.getPixelCount();
-                                if (formatPixelCount != selectedPixelCount) {
-                                    comparisonResult = compareFormatValues(formatPixelCount, selectedPixelCount);
-                                } else {
-                                    comparisonResult = compareFormatValues(format.bitrate, selectedBitrate);
+                        boolean selectTrack = trackScore > selectedBitrate;
+                        if (trackScore == selectedBitrate) {
+                            if (parameters.forceLowestBitrate != 0) {
+                                if (compareFormatValues(format.bitrate, selectedPixelCount) >= 0) {
+                                    z = false;
                                 }
-                                selectTrack = (isWithinCapabilities && isWithinConstraints) ? comparisonResult > 0 : comparisonResult < 0;
-                            } else if (compareFormatValues(format.bitrate, selectedBitrate) < 0) {
-                                selectTrack = true;
+                                selectTrack = z;
                             } else {
-                                selectTrack = false;
+                                int compareFormatValues;
+                                selectedTrackScore = format.getPixelCount();
+                                if (selectedTrackScore != selectedPixelCount2) {
+                                    compareFormatValues = compareFormatValues(selectedTrackScore, selectedPixelCount2);
+                                } else {
+                                    compareFormatValues = compareFormatValues(format.bitrate, selectedPixelCount);
+                                }
+                                int comparisonResult = compareFormatValues;
+                                if (isWithinCapabilities && isWithinConstraints) {
+                                    if (comparisonResult > 0) {
+                                    }
+                                    z = false;
+                                    selectTrack = z;
+                                }
+                                selectTrack = z;
                             }
                         }
                         if (selectTrack) {
-                            selectedGroup = trackGroup;
-                            selectedTrackIndex = trackIndex;
-                            selectedTrackScore = trackScore;
-                            selectedBitrate = format.bitrate;
-                            selectedPixelCount = format.getPixelCount();
+                            selectedGroup2 = trackGroup;
+                            selectedTrackScore = trackIndex;
+                            selectedBitrate = trackScore;
+                            selectedPixelCount = format.bitrate;
+                            selectedPixelCount2 = format.getPixelCount();
+                            trackIndex++;
+                            trackGroupArray = groups;
+                            parameters = params;
                         }
+                    } else {
+                        selectedTrackIndex2 = selectedTrackScore;
                     }
+                } else {
+                    selectedTrackIndex2 = selectedTrackScore;
                 }
+                selectedTrackScore = selectedTrackIndex2;
+                trackIndex++;
+                trackGroupArray = groups;
+                parameters = params;
             }
+            selectedTrackIndex2 = selectedTrackScore;
+            groupIndex++;
+            selectedGroup = selectedGroup2;
+            selectedTrackScore = selectedBitrate;
+            selectedBitrate = selectedPixelCount;
+            selectedPixelCount = selectedPixelCount2;
+            selectedTrackIndex = selectedTrackIndex2;
+            trackGroupArray = groups;
+            parameters = params;
         }
         return selectedGroup == null ? null : new FixedTrackSelection(selectedGroup, selectedTrackIndex);
     }
@@ -579,22 +629,28 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     protected TrackSelection selectAudioTrack(TrackGroupArray groups, int[][] formatSupport, Parameters params, Factory adaptiveTrackSelectionFactory) throws ExoPlaybackException {
-        int selectedTrackIndex = -1;
         int selectedGroupIndex = -1;
         AudioTrackScore selectedTrackScore = null;
-        for (int groupIndex = 0; groupIndex < groups.length; groupIndex++) {
+        int selectedTrackIndex = -1;
+        int groupIndex = 0;
+        while (groupIndex < groups.length) {
             TrackGroup trackGroup = groups.get(groupIndex);
             int[] trackFormatSupport = formatSupport[groupIndex];
-            for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
-                if (isSupported(trackFormatSupport[trackIndex], params.exceedRendererCapabilitiesIfNecessary)) {
-                    AudioTrackScore trackScore = new AudioTrackScore(trackGroup.getFormat(trackIndex), params, trackFormatSupport[trackIndex]);
-                    if (selectedTrackScore == null || trackScore.compareTo(selectedTrackScore) > 0) {
-                        selectedGroupIndex = groupIndex;
-                        selectedTrackIndex = trackIndex;
-                        selectedTrackScore = trackScore;
+            AudioTrackScore selectedTrackScore2 = selectedTrackScore;
+            int selectedGroupIndex2 = selectedGroupIndex;
+            for (selectedGroupIndex = 0; selectedGroupIndex < trackGroup.length; selectedGroupIndex++) {
+                if (isSupported(trackFormatSupport[selectedGroupIndex], params.exceedRendererCapabilitiesIfNecessary)) {
+                    AudioTrackScore trackScore = new AudioTrackScore(trackGroup.getFormat(selectedGroupIndex), params, trackFormatSupport[selectedGroupIndex]);
+                    if (selectedTrackScore2 == null || trackScore.compareTo(selectedTrackScore2) > 0) {
+                        selectedGroupIndex2 = groupIndex;
+                        selectedTrackIndex = selectedGroupIndex;
+                        selectedTrackScore2 = trackScore;
                     }
                 }
             }
+            groupIndex++;
+            selectedGroupIndex = selectedGroupIndex2;
+            selectedTrackScore = selectedTrackScore2;
         }
         if (selectedGroupIndex == -1) {
             return null;
@@ -610,12 +666,12 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     private static int[] getAdaptiveAudioTracks(TrackGroup group, int[] formatSupport, boolean allowMixedMimeTypes) {
-        int i;
-        int selectedConfigurationTrackCount = 0;
-        AudioConfigurationTuple selectedConfiguration = null;
         HashSet<AudioConfigurationTuple> seenConfigurationTuples = new HashSet();
-        for (i = 0; i < group.length; i++) {
-            Format format = group.getFormat(i);
+        int i = 0;
+        AudioConfigurationTuple selectedConfiguration = null;
+        int selectedConfigurationTrackCount = 0;
+        for (int i2 = 0; i2 < group.length; i2++) {
+            Format format = group.getFormat(i2);
             AudioConfigurationTuple configuration = new AudioConfigurationTuple(format.channelCount, format.sampleRate, allowMixedMimeTypes ? null : format.sampleMimeType);
             if (seenConfigurationTuples.add(configuration)) {
                 int configurationCount = getAdaptiveAudioTrackCount(group, formatSupport, configuration);
@@ -628,16 +684,17 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         if (selectedConfigurationTrackCount <= 1) {
             return NO_TRACKS;
         }
-        int[] iArr = new int[selectedConfigurationTrackCount];
+        int[] adaptiveIndices = new int[selectedConfigurationTrackCount];
         int index = 0;
-        for (i = 0; i < group.length; i++) {
+        while (i < group.length) {
             if (isSupportedAdaptiveAudioTrack(group.getFormat(i), formatSupport[i], selectedConfiguration)) {
                 int index2 = index + 1;
-                iArr[index] = i;
+                adaptiveIndices[index] = i;
                 index = index2;
             }
+            i++;
         }
-        return iArr;
+        return adaptiveIndices;
     }
 
     private static int getAdaptiveAudioTrackCount(TrackGroup group, int[] formatSupport, AudioConfigurationTuple configuration) {
@@ -661,89 +718,164 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     protected TrackSelection selectTextTrack(TrackGroupArray groups, int[][] formatSupport, Parameters params) throws ExoPlaybackException {
-        TrackGroup selectedGroup = null;
-        int selectedTrackIndex = 0;
+        TrackGroupArray trackGroupArray = groups;
+        Parameters parameters = params;
         int selectedTrackScore = 0;
-        for (int groupIndex = 0; groupIndex < groups.length; groupIndex++) {
-            TrackGroup trackGroup = groups.get(groupIndex);
+        int selectedTrackIndex = 0;
+        TrackGroup selectedGroup = null;
+        int groupIndex = 0;
+        while (groupIndex < trackGroupArray.length) {
+            TrackGroup trackGroup = trackGroupArray.get(groupIndex);
             int[] trackFormatSupport = formatSupport[groupIndex];
-            for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
-                if (isSupported(trackFormatSupport[trackIndex], params.exceedRendererCapabilitiesIfNecessary)) {
+            int selectedTrackScore2 = selectedTrackScore;
+            selectedTrackScore = selectedTrackIndex;
+            TrackGroup selectedGroup2 = selectedGroup;
+            selectedGroup = null;
+            while (selectedGroup < trackGroup.length) {
+                if (isSupported(trackFormatSupport[selectedGroup], parameters.exceedRendererCapabilitiesIfNecessary)) {
                     int trackScore;
-                    Format format = trackGroup.getFormat(trackIndex);
-                    int maskedSelectionFlags = format.selectionFlags & (params.disabledTextTrackSelectionFlags ^ -1);
+                    Format format = trackGroup.getFormat(selectedGroup);
+                    int maskedSelectionFlags = format.selectionFlags & (parameters.disabledTextTrackSelectionFlags ^ -1);
                     boolean isDefault = (maskedSelectionFlags & 1) != 0;
                     boolean isForced = (maskedSelectionFlags & 2) != 0;
-                    boolean preferredLanguageFound = formatHasLanguage(format, params.preferredTextLanguage);
-                    if (preferredLanguageFound || (params.selectUndeterminedTextLanguage && formatHasNoLanguage(format))) {
-                        int i;
-                        if (isDefault) {
-                            trackScore = 8;
-                        } else if (isForced) {
-                            trackScore = 4;
-                        } else {
-                            trackScore = 6;
-                        }
-                        if (preferredLanguageFound) {
-                            i = 1;
-                        } else {
-                            i = 0;
-                        }
-                        trackScore += i;
-                    } else if (isDefault) {
-                        trackScore = 3;
-                    } else if (isForced) {
-                        if (formatHasLanguage(format, params.preferredAudioLanguage)) {
-                            trackScore = 2;
-                        } else {
-                            trackScore = 1;
+                    boolean preferredLanguageFound = formatHasLanguage(format, parameters.preferredTextLanguage);
+                    if (!preferredLanguageFound) {
+                        if (!parameters.selectUndeterminedTextLanguage || !formatHasNoLanguage(format)) {
+                            if (isDefault) {
+                                trackScore = 3;
+                            } else if (isForced) {
+                                if (formatHasLanguage(format, parameters.preferredAudioLanguage)) {
+                                    trackScore = 2;
+                                } else {
+                                    trackScore = 1;
+                                    if (isSupported(trackFormatSupport[selectedGroup], false)) {
+                                        trackScore += WITHIN_RENDERER_CAPABILITIES_BONUS;
+                                    }
+                                    if (trackScore <= selectedTrackScore2) {
+                                        selectedGroup2 = trackGroup;
+                                        selectedTrackScore = selectedGroup;
+                                        selectedTrackScore2 = trackScore;
+                                    }
+                                    selectedGroup++;
+                                    trackGroupArray = groups;
+                                    parameters = params;
+                                }
+                            }
+                            if (isSupported(trackFormatSupport[selectedGroup], false)) {
+                                trackScore += WITHIN_RENDERER_CAPABILITIES_BONUS;
+                            }
+                            if (trackScore <= selectedTrackScore2) {
+                                selectedGroup2 = trackGroup;
+                                selectedTrackScore = selectedGroup;
+                                selectedTrackScore2 = trackScore;
+                            }
+                            selectedGroup++;
+                            trackGroupArray = groups;
+                            parameters = params;
                         }
                     }
-                    if (isSupported(trackFormatSupport[trackIndex], false)) {
+                    if (isDefault) {
+                        trackScore = 8;
+                    } else if (isForced) {
+                        trackScore = 4;
+                        trackScore += preferredLanguageFound;
+                        if (isSupported(trackFormatSupport[selectedGroup], false)) {
+                            trackScore += WITHIN_RENDERER_CAPABILITIES_BONUS;
+                        }
+                        if (trackScore <= selectedTrackScore2) {
+                            selectedGroup2 = trackGroup;
+                            selectedTrackScore = selectedGroup;
+                            selectedTrackScore2 = trackScore;
+                        }
+                        selectedGroup++;
+                        trackGroupArray = groups;
+                        parameters = params;
+                    } else {
+                        trackScore = 6;
+                    }
+                    trackScore += preferredLanguageFound;
+                    if (isSupported(trackFormatSupport[selectedGroup], false)) {
                         trackScore += WITHIN_RENDERER_CAPABILITIES_BONUS;
                     }
-                    if (trackScore > selectedTrackScore) {
-                        selectedGroup = trackGroup;
-                        selectedTrackIndex = trackIndex;
-                        selectedTrackScore = trackScore;
+                    if (trackScore <= selectedTrackScore2) {
+                        selectedGroup2 = trackGroup;
+                        selectedTrackScore = selectedGroup;
+                        selectedTrackScore2 = trackScore;
                     }
+                    selectedGroup++;
+                    trackGroupArray = groups;
+                    parameters = params;
                 }
+                selectedGroup++;
+                trackGroupArray = groups;
+                parameters = params;
             }
+            groupIndex++;
+            selectedGroup = selectedGroup2;
+            selectedTrackIndex = selectedTrackScore;
+            selectedTrackScore = selectedTrackScore2;
+            trackGroupArray = groups;
+            parameters = params;
         }
         return selectedGroup == null ? null : new FixedTrackSelection(selectedGroup, selectedTrackIndex);
     }
 
     protected TrackSelection selectOtherTrack(int trackType, TrackGroupArray groups, int[][] formatSupport, Parameters params) throws ExoPlaybackException {
-        TrackGroup selectedGroup = null;
-        int selectedTrackIndex = 0;
+        Parameters parameters;
+        TrackGroupArray trackGroupArray = groups;
         int selectedTrackScore = 0;
-        for (int groupIndex = 0; groupIndex < groups.length; groupIndex++) {
-            TrackGroup trackGroup = groups.get(groupIndex);
+        int selectedTrackIndex = 0;
+        TrackGroup selectedGroup = null;
+        int groupIndex = 0;
+        while (groupIndex < trackGroupArray.length) {
+            TrackGroup trackGroup = trackGroupArray.get(groupIndex);
             int[] trackFormatSupport = formatSupport[groupIndex];
+            int selectedTrackScore2 = selectedTrackScore;
+            selectedTrackScore = selectedTrackIndex;
+            TrackGroup selectedGroup2 = selectedGroup;
             for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
                 if (isSupported(trackFormatSupport[trackIndex], params.exceedRendererCapabilitiesIfNecessary)) {
-                    int trackScore = (trackGroup.getFormat(trackIndex).selectionFlags & 1) != 0 ? 2 : 1;
+                    int trackScore = 1;
+                    if ((trackGroup.getFormat(trackIndex).selectionFlags & 1) != 0) {
+                        trackScore = 2;
+                    }
                     if (isSupported(trackFormatSupport[trackIndex], false)) {
                         trackScore += WITHIN_RENDERER_CAPABILITIES_BONUS;
                     }
-                    if (trackScore > selectedTrackScore) {
-                        selectedGroup = trackGroup;
-                        selectedTrackIndex = trackIndex;
-                        selectedTrackScore = trackScore;
+                    if (trackScore > selectedTrackScore2) {
+                        selectedGroup2 = trackGroup;
+                        selectedTrackScore = trackIndex;
+                        selectedTrackScore2 = trackScore;
                     }
                 }
             }
+            parameters = params;
+            groupIndex++;
+            selectedGroup = selectedGroup2;
+            selectedTrackIndex = selectedTrackScore;
+            selectedTrackScore = selectedTrackScore2;
         }
+        parameters = params;
         return selectedGroup == null ? null : new FixedTrackSelection(selectedGroup, selectedTrackIndex);
     }
 
     protected static boolean isSupported(int formatSupport, boolean allowExceedsCapabilities) {
         int maskedSupport = formatSupport & 7;
-        return maskedSupport == 4 || (allowExceedsCapabilities && maskedSupport == 3);
+        if (maskedSupport != 4) {
+            if (!allowExceedsCapabilities || maskedSupport != 3) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected static boolean formatHasNoLanguage(Format format) {
-        return TextUtils.isEmpty(format.language) || formatHasLanguage(format, C0539C.LANGUAGE_UNDETERMINED);
+        if (!TextUtils.isEmpty(format.language)) {
+            if (!formatHasLanguage(format, C0539C.LANGUAGE_UNDETERMINED)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected static boolean formatHasLanguage(Format format, String language) {
@@ -751,41 +883,45 @@ public class DefaultTrackSelector extends MappingTrackSelector {
     }
 
     private static List<Integer> getViewportFilteredTrackIndices(TrackGroup group, int viewportWidth, int viewportHeight, boolean orientationMayChange) {
-        int i;
         ArrayList<Integer> selectedTrackIndices = new ArrayList(group.length);
-        for (i = 0; i < group.length; i++) {
-            selectedTrackIndices.add(Integer.valueOf(i));
+        int i = 0;
+        for (int i2 = 0; i2 < group.length; i2++) {
+            selectedTrackIndices.add(Integer.valueOf(i2));
         }
-        if (!(viewportWidth == ConnectionsManager.DEFAULT_DATACENTER_ID || viewportHeight == ConnectionsManager.DEFAULT_DATACENTER_ID)) {
-            int maxVideoPixelsToRetain = ConnectionsManager.DEFAULT_DATACENTER_ID;
-            for (i = 0; i < group.length; i++) {
-                Format format = group.getFormat(i);
-                if (format.width > 0 && format.height > 0) {
-                    Point maxVideoSizeInViewport = getMaxVideoSizeInViewport(orientationMayChange, viewportWidth, viewportHeight, format.width, format.height);
-                    int videoPixels = format.width * format.height;
-                    if (format.width >= ((int) (((float) maxVideoSizeInViewport.x) * FRACTION_TO_CONSIDER_FULLSCREEN)) && format.height >= ((int) (((float) maxVideoSizeInViewport.y) * FRACTION_TO_CONSIDER_FULLSCREEN)) && videoPixels < maxVideoPixelsToRetain) {
-                        maxVideoPixelsToRetain = videoPixels;
+        if (viewportWidth != ConnectionsManager.DEFAULT_DATACENTER_ID) {
+            if (viewportHeight != ConnectionsManager.DEFAULT_DATACENTER_ID) {
+                int maxVideoPixelsToRetain = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                while (i < group.length) {
+                    Format format = group.getFormat(i);
+                    if (format.width > 0 && format.height > 0) {
+                        Point maxVideoSizeInViewport = getMaxVideoSizeInViewport(orientationMayChange, viewportWidth, viewportHeight, format.width, format.height);
+                        int videoPixels = format.width * format.height;
+                        if (format.width >= ((int) (((float) maxVideoSizeInViewport.x) * FRACTION_TO_CONSIDER_FULLSCREEN)) && format.height >= ((int) (((float) maxVideoSizeInViewport.y) * FRACTION_TO_CONSIDER_FULLSCREEN)) && videoPixels < maxVideoPixelsToRetain) {
+                            maxVideoPixelsToRetain = videoPixels;
+                        }
+                    }
+                    i++;
+                }
+                if (maxVideoPixelsToRetain != ConnectionsManager.DEFAULT_DATACENTER_ID) {
+                    for (i = selectedTrackIndices.size() - 1; i >= 0; i--) {
+                        int pixelCount = group.getFormat(((Integer) selectedTrackIndices.get(i)).intValue()).getPixelCount();
+                        if (pixelCount == -1 || pixelCount > maxVideoPixelsToRetain) {
+                            selectedTrackIndices.remove(i);
+                        }
                     }
                 }
-            }
-            if (maxVideoPixelsToRetain != ConnectionsManager.DEFAULT_DATACENTER_ID) {
-                for (i = selectedTrackIndices.size() - 1; i >= 0; i--) {
-                    int pixelCount = group.getFormat(((Integer) selectedTrackIndices.get(i)).intValue()).getPixelCount();
-                    if (pixelCount == -1 || pixelCount > maxVideoPixelsToRetain) {
-                        selectedTrackIndices.remove(i);
-                    }
-                }
+                return selectedTrackIndices;
             }
         }
         return selectedTrackIndices;
     }
 
     private static Point getMaxVideoSizeInViewport(boolean orientationMayChange, int viewportWidth, int viewportHeight, int videoWidth, int videoHeight) {
-        Object obj = 1;
         if (orientationMayChange) {
+            Object obj = null;
             Object obj2 = videoWidth > videoHeight ? 1 : null;
-            if (viewportWidth <= viewportHeight) {
-                obj = null;
+            if (viewportWidth > viewportHeight) {
+                obj = 1;
             }
             if (obj2 != obj) {
                 int tempViewportWidth = viewportWidth;

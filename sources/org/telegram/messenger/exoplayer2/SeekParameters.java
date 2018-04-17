@@ -12,37 +12,34 @@ public final class SeekParameters {
     public final long toleranceBeforeUs;
 
     public SeekParameters(long toleranceBeforeUs, long toleranceAfterUs) {
-        boolean z;
-        boolean z2 = true;
-        if (toleranceBeforeUs >= 0) {
+        boolean z = false;
+        Assertions.checkArgument(toleranceBeforeUs >= 0);
+        if (toleranceAfterUs >= 0) {
             z = true;
-        } else {
-            z = false;
         }
         Assertions.checkArgument(z);
-        if (toleranceAfterUs < 0) {
-            z2 = false;
-        }
-        Assertions.checkArgument(z2);
         this.toleranceBeforeUs = toleranceBeforeUs;
         this.toleranceAfterUs = toleranceAfterUs;
     }
 
     public boolean equals(Object obj) {
+        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        SeekParameters other = (SeekParameters) obj;
-        if (this.toleranceBeforeUs == other.toleranceBeforeUs && this.toleranceAfterUs == other.toleranceAfterUs) {
-            return true;
+        if (obj != null) {
+            if (getClass() == obj.getClass()) {
+                SeekParameters other = (SeekParameters) obj;
+                if (this.toleranceBeforeUs != other.toleranceBeforeUs || this.toleranceAfterUs != other.toleranceAfterUs) {
+                    z = false;
+                }
+                return z;
+            }
         }
         return false;
     }
 
     public int hashCode() {
-        return (((int) this.toleranceBeforeUs) * 31) + ((int) this.toleranceAfterUs);
+        return (31 * ((int) this.toleranceBeforeUs)) + ((int) this.toleranceAfterUs);
     }
 }

@@ -17,6 +17,7 @@ import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkSampleStream;
 import org.telegram.messenger.exoplayer2.source.smoothstreaming.SsChunkSource.Factory;
 import org.telegram.messenger.exoplayer2.source.smoothstreaming.manifest.SsManifest;
+import org.telegram.messenger.exoplayer2.source.smoothstreaming.manifest.SsManifest.ProtectionElement;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.upstream.LoaderErrorThrower;
@@ -37,21 +38,30 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
     private final TrackGroupArray trackGroups;
 
     public SsMediaPeriod(SsManifest manifest, Factory chunkSourceFactory, CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory, int minLoadableRetryCount, EventDispatcher eventDispatcher, LoaderErrorThrower manifestLoaderErrorThrower, Allocator allocator) {
+        int i;
+        SsManifest ssManifest = manifest;
+        CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory2 = compositeSequenceableLoaderFactory;
         this.chunkSourceFactory = chunkSourceFactory;
         this.manifestLoaderErrorThrower = manifestLoaderErrorThrower;
         this.minLoadableRetryCount = minLoadableRetryCount;
         this.eventDispatcher = eventDispatcher;
         this.allocator = allocator;
-        this.compositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory;
+        this.compositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory2;
         this.trackGroups = buildTrackGroups(manifest);
-        if (manifest.protectionElement != null) {
-            this.trackEncryptionBoxes = new TrackEncryptionBox[]{new TrackEncryptionBox(true, null, 8, getProtectionElementKeyId(manifest.protectionElement.data), 0, 0, null)};
+        ProtectionElement protectionElement = ssManifest.protectionElement;
+        if (protectionElement != null) {
+            TrackEncryptionBox[] trackEncryptionBoxArr = new TrackEncryptionBox[1];
+            TrackEncryptionBox trackEncryptionBox = new TrackEncryptionBox(true, null, 8, getProtectionElementKeyId(protectionElement.data), 0, 0, null);
+            i = 0;
+            trackEncryptionBoxArr[0] = trackEncryptionBox;
+            r0.trackEncryptionBoxes = trackEncryptionBoxArr;
         } else {
-            this.trackEncryptionBoxes = null;
+            i = 0;
+            r0.trackEncryptionBoxes = null;
         }
-        this.manifest = manifest;
-        this.sampleStreams = newSampleStreamArray(0);
-        this.compositeSequenceableLoader = compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(this.sampleStreams);
+        r0.manifest = ssManifest;
+        r0.sampleStreams = newSampleStreamArray(i);
+        r0.compositeSequenceableLoader = compositeSequenceableLoaderFactory2.createCompositeSequenceableLoader(r0.sampleStreams);
     }
 
     public void updateManifest(SsManifest manifest) {
@@ -88,12 +98,13 @@ final class SsMediaPeriod implements MediaPeriod, Callback<ChunkSampleStream<SsC
             ChunkSampleStream<SsChunkSource> stream;
             if (streams[i] != null) {
                 stream = streams[i];
-                if (selections[i] == null || !mayRetainStreamFlags[i]) {
-                    stream.release();
-                    streams[i] = null;
-                } else {
-                    sampleStreamsList.add(stream);
+                if (selections[i] != null) {
+                    if (mayRetainStreamFlags[i]) {
+                        sampleStreamsList.add(stream);
+                    }
                 }
+                stream.release();
+                streams[i] = null;
             }
             if (streams[i] == null && selections[i] != null) {
                 stream = buildSampleStream(selections[i], positionUs);

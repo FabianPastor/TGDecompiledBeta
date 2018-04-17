@@ -117,8 +117,8 @@ public class DrawerLayoutContainer extends FrameLayout {
 
     @SuppressLint({"NewApi"})
     private void applyMarginInsets(MarginLayoutParams lp, Object insets, int drawerGravity, boolean topOnly) {
-        int i = 0;
         WindowInsets wi = (WindowInsets) insets;
+        int i = 0;
         if (drawerGravity == 3) {
             wi = wi.replaceSystemWindowInsets(wi.getSystemWindowInsetLeft(), wi.getSystemWindowInsetTop(), 0, wi.getSystemWindowInsetBottom());
         } else if (drawerGravity == 5) {
@@ -134,10 +134,14 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     private int getTopInset(Object insets) {
-        if (VERSION.SDK_INT < 21 || insets == null) {
+        int i = 0;
+        if (VERSION.SDK_INT < 21) {
             return 0;
         }
-        return ((WindowInsets) insets).getSystemWindowInsetTop();
+        if (insets != null) {
+            i = ((WindowInsets) insets).getSystemWindowInsetTop();
+        }
+        return i;
     }
 
     public void setDrawerLayout(ViewGroup layout) {
@@ -276,10 +280,10 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     public boolean onTouchEvent(MotionEvent ev) {
-        boolean z = true;
         if (this.parentActionBarLayout.checkTransitionAnimation()) {
             return false;
         }
+        boolean z = true;
         if (!this.drawerOpened || ev == null || ev.getX() <= this.drawerPosition || this.startedTracking) {
             if (this.allowOpenDrawer && this.parentActionBarLayout.fragmentsStack.size() == 1) {
                 if (ev != null && ((ev.getAction() == 0 || ev.getAction() == 2) && !this.startedTracking && !this.maybeStartTracking)) {
@@ -298,7 +302,7 @@ public class DrawerLayoutContainer extends FrameLayout {
                     if (this.velocityTracker == null) {
                         this.velocityTracker = VelocityTracker.obtain();
                     }
-                    float dx = (float) ((int) (ev.getX() - ((float) this.startedTrackingX)));
+                    dx = (float) ((int) (ev.getX() - ((float) this.startedTrackingX)));
                     float dy = (float) Math.abs(((int) ev.getY()) - this.startedTrackingY);
                     this.velocityTracker.addMovement(ev);
                     if (this.maybeStartTracking && !this.startedTracking && ((dx > 0.0f && dx / 3.0f > Math.abs(dy) && Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.2f, true)) || (dx < 0.0f && Math.abs(dx) >= Math.abs(dy) && Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.4f, true)))) {
@@ -321,27 +325,18 @@ public class DrawerLayoutContainer extends FrameLayout {
                     }
                     this.velocityTracker.computeCurrentVelocity(1000);
                     if (this.startedTracking || !(this.drawerPosition == 0.0f || this.drawerPosition == ((float) this.drawerLayout.getMeasuredWidth()))) {
-                        boolean backAnimation;
-                        float velX = this.velocityTracker.getXVelocity();
-                        float velY = this.velocityTracker.getYVelocity();
-                        if ((this.drawerPosition >= ((float) this.drawerLayout.getMeasuredWidth()) / 2.0f || (velX >= 3500.0f && Math.abs(velX) >= Math.abs(velY))) && (velX >= 0.0f || Math.abs(velX) < 3500.0f)) {
-                            backAnimation = false;
-                        } else {
-                            backAnimation = true;
-                        }
+                        dx = this.velocityTracker.getXVelocity();
+                        boolean backAnimation = (this.drawerPosition < ((float) this.drawerLayout.getMeasuredWidth()) / 2.0f && (dx < 3500.0f || Math.abs(dx) < Math.abs(this.velocityTracker.getYVelocity()))) || (dx < 0.0f && Math.abs(dx) >= 3500.0f);
                         if (backAnimation) {
-                            if (!this.drawerOpened || Math.abs(velX) < 3500.0f) {
+                            if (!this.drawerOpened || Math.abs(dx) < 3500.0f) {
                                 z = false;
                             }
                             closeDrawer(z);
                         } else {
-                            boolean z2;
-                            if (this.drawerOpened || Math.abs(velX) < 3500.0f) {
-                                z2 = false;
-                            } else {
-                                z2 = true;
+                            if (this.drawerOpened || Math.abs(dx) < 3500.0f) {
+                                z = false;
                             }
-                            openDrawer(z2);
+                            openDrawer(z);
                         }
                     }
                     this.startedTracking = false;
@@ -353,16 +348,20 @@ public class DrawerLayoutContainer extends FrameLayout {
                 }
             }
             return this.startedTracking;
-        } else if (ev.getAction() != 1) {
-            return true;
-        } else {
-            closeDrawer(false);
-            return true;
         }
+        if (ev.getAction() == 1) {
+            closeDrawer(false);
+        }
+        return true;
     }
 
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return this.parentActionBarLayout.checkTransitionAnimation() || onTouchEvent(ev);
+        if (!this.parentActionBarLayout.checkTransitionAnimation()) {
+            if (!onTouchEvent(ev)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
@@ -407,11 +406,13 @@ public class DrawerLayoutContainer extends FrameLayout {
 
     @SuppressLint({"NewApi"})
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int i;
+        int i2;
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         setMeasuredDimension(widthSize, heightSize);
         if (VERSION.SDK_INT < 21) {
-            this.inLayout = true;
+            r0.inLayout = true;
             if (heightSize == AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight) {
                 if (getLayoutParams() instanceof MarginLayoutParams) {
                     setPadding(0, AndroidUtilities.statusBarHeight, 0, 0);
@@ -420,80 +421,90 @@ public class DrawerLayoutContainer extends FrameLayout {
             } else if (getLayoutParams() instanceof MarginLayoutParams) {
                 setPadding(0, 0, 0, 0);
             }
-            this.inLayout = false;
+            r0.inLayout = false;
         }
-        boolean applyInsets = this.lastInsets != null && VERSION.SDK_INT >= 21;
+        boolean applyInsets = r0.lastInsets != null && VERSION.SDK_INT >= 21;
         int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View child = getChildAt(i);
+        for (int i3 = 0; i3 < childCount; i3++) {
+            View child = getChildAt(i3);
             if (child.getVisibility() != 8) {
                 LayoutParams lp = (LayoutParams) child.getLayoutParams();
                 if (applyInsets) {
                     if (child.getFitsSystemWindows()) {
-                        dispatchChildInsets(child, this.lastInsets, lp.gravity);
+                        dispatchChildInsets(child, r0.lastInsets, lp.gravity);
                     } else if (child.getTag() == null) {
-                        applyMarginInsets(lp, this.lastInsets, lp.gravity, VERSION.SDK_INT >= 21);
+                        applyMarginInsets(lp, r0.lastInsets, lp.gravity, VERSION.SDK_INT >= 21);
                     }
                 }
-                if (this.drawerLayout != child) {
+                if (r0.drawerLayout != child) {
                     child.measure(MeasureSpec.makeMeasureSpec((widthSize - lp.leftMargin) - lp.rightMargin, NUM), MeasureSpec.makeMeasureSpec((heightSize - lp.topMargin) - lp.bottomMargin, NUM));
                 } else {
                     child.setPadding(0, 0, 0, 0);
-                    child.measure(getChildMeasureSpec(widthMeasureSpec, (this.minDrawerMargin + lp.leftMargin) + lp.rightMargin, lp.width), getChildMeasureSpec(heightMeasureSpec, lp.topMargin + lp.bottomMargin, lp.height));
+                    child.measure(getChildMeasureSpec(widthMeasureSpec, (r0.minDrawerMargin + lp.leftMargin) + lp.rightMargin, lp.width), getChildMeasureSpec(heightMeasureSpec, lp.topMargin + lp.bottomMargin, lp.height));
                 }
             }
+            i = widthMeasureSpec;
+            i2 = heightMeasureSpec;
         }
+        i = widthMeasureSpec;
+        i2 = heightMeasureSpec;
     }
 
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        Canvas canvas2 = canvas;
+        View view = child;
         if (!this.allowDrawContent) {
             return false;
         }
+        int vright;
+        int clipLeft;
         int height = getHeight();
-        boolean drawingContent = child != this.drawerLayout;
-        int lastVisibleChild = 0;
-        int clipLeft = 0;
+        boolean drawingContent = view != r0.drawerLayout;
+        int clipLeft2 = 0;
         int clipRight = getWidth();
         int restoreCount = canvas.save();
         if (drawingContent) {
             int childCount = getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                View v = getChildAt(i);
-                if (v.getVisibility() == 0 && v != this.drawerLayout) {
-                    lastVisibleChild = i;
+            int lastVisibleChild = 0;
+            for (int lastVisibleChild2 = 0; lastVisibleChild2 < childCount; lastVisibleChild2++) {
+                View v = getChildAt(lastVisibleChild2);
+                if (v.getVisibility() == 0 && v != r0.drawerLayout) {
+                    lastVisibleChild = lastVisibleChild2;
                 }
-                if (v != child && v.getVisibility() == 0 && v == this.drawerLayout && v.getHeight() >= height) {
-                    int vright = v.getRight();
-                    if (vright > clipLeft) {
-                        clipLeft = vright;
+                if (v != view && v.getVisibility() == 0 && v == r0.drawerLayout) {
+                    if (v.getHeight() >= height) {
+                        vright = v.getRight();
+                        if (vright > clipLeft2) {
+                            clipLeft2 = vright;
+                        }
                     }
                 }
             }
-            if (clipLeft != 0) {
-                canvas.clipRect(clipLeft, 0, clipRight, getHeight());
+            if (clipLeft2 != 0) {
+                canvas2.clipRect(clipLeft2, 0, clipRight, getHeight());
             }
+            clipLeft = clipLeft2;
+            vright = lastVisibleChild;
+        } else {
+            vright = 0;
+            clipLeft = 0;
         }
         boolean result = super.drawChild(canvas, child, drawingTime);
-        canvas.restoreToCount(restoreCount);
-        if (this.scrimOpacity <= 0.0f || !drawingContent) {
-            if (this.shadowLeft == null) {
-                return result;
+        canvas2.restoreToCount(restoreCount);
+        if (r0.scrimOpacity <= 0.0f || !drawingContent) {
+            if (r0.shadowLeft != null) {
+                float alpha = Math.max(0.0f, Math.min(r0.drawerPosition / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
+                if (alpha != 0.0f) {
+                    r0.shadowLeft.setBounds((int) r0.drawerPosition, child.getTop(), ((int) r0.drawerPosition) + r0.shadowLeft.getIntrinsicWidth(), child.getBottom());
+                    r0.shadowLeft.setAlpha((int) (255.0f * alpha));
+                    r0.shadowLeft.draw(canvas2);
+                }
             }
-            float alpha = Math.max(0.0f, Math.min(this.drawerPosition / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
-            if (alpha == 0.0f) {
-                return result;
-            }
-            this.shadowLeft.setBounds((int) this.drawerPosition, child.getTop(), ((int) this.drawerPosition) + this.shadowLeft.getIntrinsicWidth(), child.getBottom());
-            this.shadowLeft.setAlpha((int) (255.0f * alpha));
-            this.shadowLeft.draw(canvas);
-            return result;
-        } else if (indexOfChild(child) != lastVisibleChild) {
-            return result;
-        } else {
-            this.scrimPaint.setColor(((int) (153.0f * this.scrimOpacity)) << 24);
-            canvas.drawRect((float) clipLeft, 0.0f, (float) clipRight, (float) getHeight(), this.scrimPaint);
-            return result;
+        } else if (indexOfChild(view) == vright) {
+            r0.scrimPaint.setColor(((int) (153.0f * r0.scrimOpacity)) << 24);
+            canvas2.drawRect((float) clipLeft, 0.0f, (float) clipRight, (float) getHeight(), r0.scrimPaint);
         }
+        return result;
     }
 
     public boolean hasOverlappingRendering() {

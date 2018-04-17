@@ -10,10 +10,7 @@ public class LayoutHelper {
     public static final int WRAP_CONTENT = -2;
 
     private static int getSize(float size) {
-        if (size >= 0.0f) {
-            size = (float) AndroidUtilities.dp(size);
-        }
-        return (int) size;
+        return (int) (size < 0.0f ? size : (float) AndroidUtilities.dp(size));
     }
 
     public static LayoutParams createScroll(int width, int height, int gravity) {

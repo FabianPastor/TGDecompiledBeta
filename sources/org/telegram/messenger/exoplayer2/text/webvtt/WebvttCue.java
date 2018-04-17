@@ -129,7 +129,11 @@ public final class WebvttCue extends Cue {
                         this.positionAnchor = 2;
                         break;
                     default:
-                        Log.w(TAG, "Unrecognized alignment: " + this.textAlignment);
+                        String str = TAG;
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("Unrecognized alignment: ");
+                        stringBuilder.append(this.textAlignment);
+                        Log.w(str, stringBuilder.toString());
                         this.positionAnchor = 0;
                         break;
                 }

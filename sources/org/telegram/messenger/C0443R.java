@@ -35,6 +35,8 @@ public final class C0443R {
         public static final int cameraZoom = NUM;
         public static final int circleCrop = NUM;
         public static final int colorScheme = NUM;
+        public static final int coordinatorLayoutStyle = NUM;
+        public static final int customThemeStyle = NUM;
         public static final int environment = NUM;
         public static final int font = NUM;
         public static final int fontProviderAuthority = NUM;
@@ -49,10 +51,17 @@ public final class C0443R {
         public static final int fragmentStyle = NUM;
         public static final int imageAspectRatio = NUM;
         public static final int imageAspectRatioAdjust = NUM;
+        public static final int keylines = NUM;
         public static final int latLngBoundsNorthEastLatitude = NUM;
         public static final int latLngBoundsNorthEastLongitude = NUM;
         public static final int latLngBoundsSouthWestLatitude = NUM;
         public static final int latLngBoundsSouthWestLongitude = NUM;
+        public static final int layout_anchor = NUM;
+        public static final int layout_anchorGravity = NUM;
+        public static final int layout_behavior = NUM;
+        public static final int layout_dodgeInsetEdges = NUM;
+        public static final int layout_insetEdge = NUM;
+        public static final int layout_keyline = NUM;
         public static final int liteMode = NUM;
         public static final int mapType = NUM;
         public static final int maskedWalletDetailsBackground = NUM;
@@ -63,6 +72,7 @@ public final class C0443R {
         public static final int maskedWalletDetailsLogoTextColor = NUM;
         public static final int maskedWalletDetailsTextAppearance = NUM;
         public static final int scopeUris = NUM;
+        public static final int statusBarBackground = NUM;
         public static final int toolbarTextColorStyle = NUM;
         public static final int uiCompass = NUM;
         public static final int uiMapToolbar = NUM;
@@ -295,6 +305,7 @@ public final class C0443R {
         public static final int floating_shadow_profile = NUM;
         public static final int forwardvideo = NUM;
         public static final int foursquare = NUM;
+        public static final int go_to_message = NUM;
         public static final int googleg_disabled_color_18 = NUM;
         public static final int googleg_standard_color_18 = NUM;
         public static final int gradient_bottom = NUM;
@@ -681,6 +692,7 @@ public final class C0443R {
         public static final int actions = NUM;
         public static final int adjust_height = NUM;
         public static final int adjust_width = NUM;
+        public static final int all = NUM;
         public static final int android_pay = NUM;
         public static final int android_pay_dark = NUM;
         public static final int android_pay_light = NUM;
@@ -691,6 +703,7 @@ public final class C0443R {
         public static final int auto = NUM;
         public static final int blocking = NUM;
         public static final int book_now = NUM;
+        public static final int bottom = NUM;
         public static final int button_add_response = NUM;
         public static final int button_attachment = NUM;
         public static final int button_login = NUM;
@@ -702,14 +715,24 @@ public final class C0443R {
         public static final int buy_now = NUM;
         public static final int buy_with = NUM;
         public static final int buy_with_google = NUM;
+        public static final int center = NUM;
+        public static final int center_horizontal = NUM;
+        public static final int center_vertical = NUM;
         public static final int chronometer = NUM;
         public static final int classic = NUM;
+        public static final int clip_horizontal = NUM;
+        public static final int clip_vertical = NUM;
         public static final int dark = NUM;
         public static final int decline_btn = NUM;
         public static final int decline_text = NUM;
         public static final int donate_with = NUM;
         public static final int donate_with_google = NUM;
+        public static final int end = NUM;
+        public static final int fill = NUM;
+        public static final int fill_horizontal = NUM;
+        public static final int fill_vertical = NUM;
         public static final int forever = NUM;
+        public static final int googleMaterial2 = NUM;
         public static final int google_wallet_classic = NUM;
         public static final int google_wallet_grayscale = NUM;
         public static final int google_wallet_monochrome = NUM;
@@ -734,6 +757,7 @@ public final class C0443R {
         public static final int label_text = NUM;
         public static final int label_title = NUM;
         public static final int label_version = NUM;
+        public static final int left = NUM;
         public static final int light = NUM;
         public static final int line1 = NUM;
         public static final int line3 = NUM;
@@ -741,6 +765,7 @@ public final class C0443R {
         public static final int list_feedback_messages = NUM;
         public static final int logo_only = NUM;
         public static final int match_parent = NUM;
+        public static final int material = NUM;
         public static final int menu_bold = NUM;
         public static final int menu_groupbolditalic = NUM;
         public static final int menu_italic = NUM;
@@ -764,6 +789,7 @@ public final class C0443R {
         public static final int player_progress_bar = NUM;
         public static final int player_song_name = NUM;
         public static final int production = NUM;
+        public static final int right = NUM;
         public static final int right_icon = NUM;
         public static final int right_side = NUM;
         public static final int sandbox = NUM;
@@ -771,6 +797,7 @@ public final class C0443R {
         public static final int selectionDetails = NUM;
         public static final int slide = NUM;
         public static final int standard = NUM;
+        public static final int start = NUM;
         public static final int strict_sandbox = NUM;
         public static final int subtitle = NUM;
         public static final int tag_transition_group = NUM;
@@ -782,6 +809,7 @@ public final class C0443R {
         public static final int text_wrap = NUM;
         public static final int time = NUM;
         public static final int title = NUM;
+        public static final int top = NUM;
         public static final int view_header = NUM;
         public static final int web_update_details = NUM;
         public static final int wide = NUM;
@@ -2662,6 +2690,7 @@ public final class C0443R {
         public static final int common_signin_button_text = NUM;
         public static final int common_signin_button_text_long = NUM;
         public static final int default_web_client_id = NUM;
+        public static final int fcm_fallback_notification_channel_label = NUM;
         public static final int firebase_database_url = NUM;
         public static final int formatDateAtTime = NUM;
         public static final int formatterBannedUntil12H = NUM;
@@ -2678,7 +2707,6 @@ public final class C0443R {
         public static final int formatterYear = NUM;
         public static final int formatterYearMax = NUM;
         public static final int gcm_defaultSenderId = NUM;
-        public static final int gcm_fallback_notification_channel_label = NUM;
         public static final int google_api_key = NUM;
         public static final int google_app_id = NUM;
         public static final int google_crash_reporting_api_key = NUM;
@@ -2819,13 +2847,26 @@ public final class C0443R {
         public static final int WalletFragmentDefaultStyle = NUM;
         public static final int Widget_Compat_NotificationActionContainer = NUM;
         public static final int Widget_Compat_NotificationActionText = NUM;
+        public static final int Widget_Support_CoordinatorLayout = NUM;
     }
 
     /* renamed from: org.telegram.messenger.R$styleable */
     public static final class styleable {
-        public static final int[] CustomWalletTheme = new int[]{R.attr.toolbarTextColorStyle, R.attr.windowTransitionStyle};
-        public static final int CustomWalletTheme_toolbarTextColorStyle = 0;
-        public static final int CustomWalletTheme_windowTransitionStyle = 1;
+        public static final int[] CoordinatorLayout = new int[]{R.attr.keylines, R.attr.statusBarBackground};
+        public static final int[] CoordinatorLayout_Layout = new int[]{16842931, R.attr.layout_anchor, R.attr.layout_anchorGravity, R.attr.layout_behavior, R.attr.layout_dodgeInsetEdges, R.attr.layout_insetEdge, R.attr.layout_keyline};
+        public static final int CoordinatorLayout_Layout_android_layout_gravity = 0;
+        public static final int CoordinatorLayout_Layout_layout_anchor = 1;
+        public static final int CoordinatorLayout_Layout_layout_anchorGravity = 2;
+        public static final int CoordinatorLayout_Layout_layout_behavior = 3;
+        public static final int CoordinatorLayout_Layout_layout_dodgeInsetEdges = 4;
+        public static final int CoordinatorLayout_Layout_layout_insetEdge = 5;
+        public static final int CoordinatorLayout_Layout_layout_keyline = 6;
+        public static final int CoordinatorLayout_keylines = 0;
+        public static final int CoordinatorLayout_statusBarBackground = 1;
+        public static final int[] CustomWalletTheme = new int[]{R.attr.customThemeStyle, R.attr.toolbarTextColorStyle, R.attr.windowTransitionStyle};
+        public static final int CustomWalletTheme_customThemeStyle = 0;
+        public static final int CustomWalletTheme_toolbarTextColorStyle = 1;
+        public static final int CustomWalletTheme_windowTransitionStyle = 2;
         public static final int[] FontFamily = new int[]{R.attr.fontProviderAuthority, R.attr.fontProviderCerts, R.attr.fontProviderFetchStrategy, R.attr.fontProviderFetchTimeout, R.attr.fontProviderPackage, R.attr.fontProviderQuery};
         public static final int[] FontFamilyFont = new int[]{16844082, 16844083, 16844095, R.attr.font, R.attr.fontStyle, R.attr.fontWeight};
         public static final int FontFamilyFont_android_font = 0;

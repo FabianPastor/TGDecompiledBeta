@@ -271,12 +271,11 @@ public class PipVideoView {
             int height = getMeasuredHeight();
             int progressLineY = height - AndroidUtilities.dp(3.0f);
             int cy = height - AndroidUtilities.dp(7.0f);
-            int progressX = 0 + ((int) (((float) (width - 0)) * this.progress));
+            int progressX = ((int) (((float) (width - 0)) * this.progress)) + 0;
             if (this.bufferedPosition != 0.0f) {
-                Canvas canvas2 = canvas;
-                canvas2.drawRect((float) null, (float) progressLineY, (((float) (width - 0)) * this.bufferedPosition) + ((float) null), (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressInnerPaint);
+                canvas.drawRect((float) null, (float) progressLineY, ((float) null) + (((float) (width - 0)) * r0.bufferedPosition), (float) (AndroidUtilities.dp(3.0f) + progressLineY), r0.progressInnerPaint);
             }
-            canvas.drawRect((float) null, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressPaint);
+            canvas.drawRect((float) null, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.dp(3.0f) + progressLineY), r0.progressPaint);
         }
     }
 
@@ -290,10 +289,15 @@ public class PipVideoView {
 
     public TextureView show(Activity activity, PhotoViewer viewer, EmbedBottomSheet sheet, View controls, float aspectRatio, int rotation, WebView webview) {
         TextureView textureView;
+        Context context = activity;
+        PhotoViewer photoViewer = viewer;
+        View view = controls;
+        float f = aspectRatio;
+        View view2 = webview;
         this.parentSheet = sheet;
-        this.parentActivity = activity;
-        this.photoViewer = viewer;
-        this.windowView = new FrameLayout(activity) {
+        this.parentActivity = context;
+        this.photoViewer = photoViewer;
+        this.windowView = new FrameLayout(context) {
             private boolean dragging;
             private float startX;
             private float startY;
@@ -363,54 +367,54 @@ public class PipVideoView {
                 return true;
             }
         };
-        if (aspectRatio > 1.0f) {
-            this.videoWidth = AndroidUtilities.dp(192.0f);
-            this.videoHeight = (int) (((float) this.videoWidth) / aspectRatio);
+        if (f > 1.0f) {
+            r1.videoWidth = AndroidUtilities.dp(192.0f);
+            r1.videoHeight = (int) (((float) r1.videoWidth) / f);
         } else {
-            this.videoHeight = AndroidUtilities.dp(192.0f);
-            this.videoWidth = (int) (((float) this.videoHeight) * aspectRatio);
+            r1.videoHeight = AndroidUtilities.dp(192.0f);
+            r1.videoWidth = (int) (((float) r1.videoHeight) * f);
         }
-        AspectRatioFrameLayout aspectRatioFrameLayout = new AspectRatioFrameLayout(activity);
-        aspectRatioFrameLayout.setAspectRatio(aspectRatio, rotation);
-        this.windowView.addView(aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
-        if (webview != null) {
+        AspectRatioFrameLayout aspectRatioFrameLayout = new AspectRatioFrameLayout(context);
+        aspectRatioFrameLayout.setAspectRatio(f, rotation);
+        r1.windowView.addView(aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
+        if (view2 != null) {
             ViewGroup parent = (ViewGroup) webview.getParent();
             if (parent != null) {
-                parent.removeView(webview);
+                parent.removeView(view2);
             }
-            aspectRatioFrameLayout.addView(webview, LayoutHelper.createFrame(-1, -1.0f));
+            aspectRatioFrameLayout.addView(view2, LayoutHelper.createFrame(-1, -1.0f));
             textureView = null;
         } else {
-            textureView = new TextureView(activity);
+            textureView = new TextureView(context);
             aspectRatioFrameLayout.addView(textureView, LayoutHelper.createFrame(-1, -1.0f));
         }
-        if (controls == null) {
-            this.controlsView = new MiniControlsView(activity, viewer != null);
+        if (view == null) {
+            r1.controlsView = new MiniControlsView(context, photoViewer != null);
         } else {
-            this.controlsView = controls;
+            r1.controlsView = view;
         }
-        this.windowView.addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
-        this.windowManager = (WindowManager) ApplicationLoader.applicationContext.getSystemService("window");
-        this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
-        int sidex = this.preferences.getInt("sidex", 1);
-        int sidey = this.preferences.getInt("sidey", 0);
-        float px = this.preferences.getFloat("px", 0.0f);
-        float py = this.preferences.getFloat("py", 0.0f);
+        r1.windowView.addView(r1.controlsView, LayoutHelper.createFrame(-1, -1.0f));
+        r1.windowManager = (WindowManager) ApplicationLoader.applicationContext.getSystemService("window");
+        r1.preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
+        int sidex = r1.preferences.getInt("sidex", 1);
+        int sidey = r1.preferences.getInt("sidey", 0);
+        float px = r1.preferences.getFloat("px", 0.0f);
+        float py = r1.preferences.getFloat("py", 0.0f);
         try {
-            this.windowLayoutParams = new LayoutParams();
-            this.windowLayoutParams.width = this.videoWidth;
-            this.windowLayoutParams.height = this.videoHeight;
-            this.windowLayoutParams.x = getSideCoord(true, sidex, px, this.videoWidth);
-            this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
-            this.windowLayoutParams.format = -3;
-            this.windowLayoutParams.gravity = 51;
+            r1.windowLayoutParams = new LayoutParams();
+            r1.windowLayoutParams.width = r1.videoWidth;
+            r1.windowLayoutParams.height = r1.videoHeight;
+            r1.windowLayoutParams.x = getSideCoord(true, sidex, px, r1.videoWidth);
+            r1.windowLayoutParams.y = getSideCoord(false, sidey, py, r1.videoHeight);
+            r1.windowLayoutParams.format = -3;
+            r1.windowLayoutParams.gravity = 51;
             if (VERSION.SDK_INT >= 26) {
-                this.windowLayoutParams.type = 2038;
+                r1.windowLayoutParams.type = 2038;
             } else {
-                this.windowLayoutParams.type = 2003;
+                r1.windowLayoutParams.type = 2003;
             }
-            this.windowLayoutParams.flags = 16777736;
-            this.windowManager.addView(this.windowView, this.windowLayoutParams);
+            r1.windowLayoutParams.flags = 16777736;
+            r1.windowManager.addView(r1.windowView, r1.windowLayoutParams);
             return textureView;
         } catch (Throwable e) {
             FileLog.m3e(e);
@@ -457,7 +461,11 @@ public class PipVideoView {
         } else if (side == 1) {
             result = total - AndroidUtilities.dp(10.0f);
         } else {
-            result = Math.round(((float) (total - AndroidUtilities.dp(20.0f))) * p) + AndroidUtilities.dp(10.0f);
+            result = AndroidUtilities.dp(10.0f) + Math.round(((float) (total - AndroidUtilities.dp(20.0f))) * p);
+            if (isX) {
+                return result + ActionBar.getCurrentActionBarHeight();
+            }
+            return result;
         }
         if (isX) {
             return result;
@@ -486,74 +494,159 @@ public class PipVideoView {
     }
 
     private void animateToBoundsMaybe() {
+        AnimatorSet animatorSet;
         int startX = getSideCoord(true, 0, 0.0f, this.videoWidth);
         int endX = getSideCoord(true, 1, 0.0f, this.videoWidth);
         int startY = getSideCoord(false, 0, 0.0f, this.videoHeight);
         int endY = getSideCoord(false, 1, 0.0f, this.videoHeight);
         ArrayList<Animator> animators = null;
         Editor editor = this.preferences.edit();
-        int maxDiff = AndroidUtilities.dp(20.0f);
+        int maxDiff = AndroidUtilities.dp(NUM);
         boolean slideOut = false;
-        if (Math.abs(startX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x < 0 && this.windowLayoutParams.x > (-this.videoWidth) / 4)) {
-            if (null == null) {
-                animators = new ArrayList();
+        if (Math.abs(startX - this.windowLayoutParams.x) > maxDiff) {
+            if (r0.windowLayoutParams.x >= 0 || r0.windowLayoutParams.x <= (-r0.videoWidth) / 4) {
+                if (Math.abs(endX - r0.windowLayoutParams.x) > maxDiff) {
+                    if (r0.windowLayoutParams.x <= AndroidUtilities.displaySize.x - r0.videoWidth || r0.windowLayoutParams.x >= AndroidUtilities.displaySize.x - ((r0.videoWidth / 4) * 3)) {
+                        if (r0.windowView.getAlpha() != 1.0f) {
+                            if (null == null) {
+                                animators = new ArrayList();
+                            }
+                            if (r0.windowLayoutParams.x < 0) {
+                                animators.add(ObjectAnimator.ofInt(r0, "x", new int[]{-r0.videoWidth}));
+                            } else {
+                                animators.add(ObjectAnimator.ofInt(r0, "x", new int[]{AndroidUtilities.displaySize.x}));
+                            }
+                            slideOut = true;
+                        } else {
+                            editor.putFloat("px", ((float) (r0.windowLayoutParams.x - startX)) / ((float) (endX - startX)));
+                            editor.putInt("sidex", 2);
+                        }
+                        if (!slideOut) {
+                            if (Math.abs(startY - r0.windowLayoutParams.y) > maxDiff) {
+                                if (r0.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
+                                    if (Math.abs(endY - r0.windowLayoutParams.y) <= maxDiff) {
+                                        if (animators == null) {
+                                            animators = new ArrayList();
+                                        }
+                                        editor.putInt("sidey", 1);
+                                        animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{endY}));
+                                    } else {
+                                        editor.putFloat("py", ((float) (r0.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
+                                        editor.putInt("sidey", 2);
+                                    }
+                                    editor.commit();
+                                }
+                            }
+                            if (animators == null) {
+                                animators = new ArrayList();
+                            }
+                            editor.putInt("sidey", 0);
+                            animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{startY}));
+                            editor.commit();
+                        }
+                        if (animators == null) {
+                            if (r0.decelerateInterpolator == null) {
+                                r0.decelerateInterpolator = new DecelerateInterpolator();
+                            }
+                            animatorSet = new AnimatorSet();
+                            animatorSet.setInterpolator(r0.decelerateInterpolator);
+                            animatorSet.setDuration(150);
+                            if (slideOut) {
+                                animators.add(ObjectAnimator.ofFloat(r0.windowView, "alpha", new float[]{0.0f}));
+                                animatorSet.addListener(new C12682());
+                            }
+                            animatorSet.playTogether(animators);
+                            animatorSet.start();
+                        }
+                    }
+                }
+                if (null == null) {
+                    animators = new ArrayList();
+                }
+                editor.putInt("sidex", 1);
+                if (r0.windowView.getAlpha() != 1.0f) {
+                    animators.add(ObjectAnimator.ofFloat(r0.windowView, "alpha", new float[]{1.0f}));
+                }
+                animators.add(ObjectAnimator.ofInt(r0, "x", new int[]{endX}));
+                if (slideOut) {
+                    if (Math.abs(startY - r0.windowLayoutParams.y) > maxDiff) {
+                        if (r0.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
+                            if (Math.abs(endY - r0.windowLayoutParams.y) <= maxDiff) {
+                                editor.putFloat("py", ((float) (r0.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
+                                editor.putInt("sidey", 2);
+                            } else {
+                                if (animators == null) {
+                                    animators = new ArrayList();
+                                }
+                                editor.putInt("sidey", 1);
+                                animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{endY}));
+                            }
+                            editor.commit();
+                        }
+                    }
+                    if (animators == null) {
+                        animators = new ArrayList();
+                    }
+                    editor.putInt("sidey", 0);
+                    animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{startY}));
+                    editor.commit();
+                }
+                if (animators == null) {
+                    if (r0.decelerateInterpolator == null) {
+                        r0.decelerateInterpolator = new DecelerateInterpolator();
+                    }
+                    animatorSet = new AnimatorSet();
+                    animatorSet.setInterpolator(r0.decelerateInterpolator);
+                    animatorSet.setDuration(150);
+                    if (slideOut) {
+                        animators.add(ObjectAnimator.ofFloat(r0.windowView, "alpha", new float[]{0.0f}));
+                        animatorSet.addListener(new C12682());
+                    }
+                    animatorSet.playTogether(animators);
+                    animatorSet.start();
+                }
             }
-            editor.putInt("sidex", 0);
-            if (this.windowView.getAlpha() != 1.0f) {
-                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
-            }
-            animators.add(ObjectAnimator.ofInt(this, "x", new int[]{startX}));
-        } else if (Math.abs(endX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x > AndroidUtilities.displaySize.x - this.videoWidth && this.windowLayoutParams.x < AndroidUtilities.displaySize.x - ((this.videoWidth / 4) * 3))) {
-            if (null == null) {
-                animators = new ArrayList();
-            }
-            editor.putInt("sidex", 1);
-            if (this.windowView.getAlpha() != 1.0f) {
-                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
-            }
-            animators.add(ObjectAnimator.ofInt(this, "x", new int[]{endX}));
-        } else if (this.windowView.getAlpha() != 1.0f) {
-            if (null == null) {
-                animators = new ArrayList();
-            }
-            if (this.windowLayoutParams.x < 0) {
-                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{-this.videoWidth}));
-            } else {
-                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{AndroidUtilities.displaySize.x}));
-            }
-            slideOut = true;
-        } else {
-            editor.putFloat("px", ((float) (this.windowLayoutParams.x - startX)) / ((float) (endX - startX)));
-            editor.putInt("sidex", 2);
         }
-        if (!slideOut) {
-            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
-                if (animators == null) {
-                    animators = new ArrayList();
+        if (null == null) {
+            animators = new ArrayList();
+        }
+        editor.putInt("sidex", 0);
+        if (r0.windowView.getAlpha() != 1.0f) {
+            animators.add(ObjectAnimator.ofFloat(r0.windowView, "alpha", new float[]{1.0f}));
+        }
+        animators.add(ObjectAnimator.ofInt(r0, "x", new int[]{startX}));
+        if (slideOut) {
+            if (Math.abs(startY - r0.windowLayoutParams.y) > maxDiff) {
+                if (r0.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
+                    if (Math.abs(endY - r0.windowLayoutParams.y) <= maxDiff) {
+                        if (animators == null) {
+                            animators = new ArrayList();
+                        }
+                        editor.putInt("sidey", 1);
+                        animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{endY}));
+                    } else {
+                        editor.putFloat("py", ((float) (r0.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
+                        editor.putInt("sidey", 2);
+                    }
+                    editor.commit();
                 }
-                editor.putInt("sidey", 0);
-                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{startY}));
-            } else if (Math.abs(endY - this.windowLayoutParams.y) <= maxDiff) {
-                if (animators == null) {
-                    animators = new ArrayList();
-                }
-                editor.putInt("sidey", 1);
-                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{endY}));
-            } else {
-                editor.putFloat("py", ((float) (this.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
-                editor.putInt("sidey", 2);
             }
+            if (animators == null) {
+                animators = new ArrayList();
+            }
+            editor.putInt("sidey", 0);
+            animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{startY}));
             editor.commit();
         }
-        if (animators != null) {
-            if (this.decelerateInterpolator == null) {
-                this.decelerateInterpolator = new DecelerateInterpolator();
+        if (animators == null) {
+            if (r0.decelerateInterpolator == null) {
+                r0.decelerateInterpolator = new DecelerateInterpolator();
             }
-            AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.setInterpolator(this.decelerateInterpolator);
+            animatorSet = new AnimatorSet();
+            animatorSet.setInterpolator(r0.decelerateInterpolator);
             animatorSet.setDuration(150);
             if (slideOut) {
-                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
+                animators.add(ObjectAnimator.ofFloat(r0.windowView, "alpha", new float[]{0.0f}));
                 animatorSet.addListener(new C12682());
             }
             animatorSet.playTogether(animators);

@@ -50,18 +50,18 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             ManageSpaceActivity.this.layersActionBarLayout.getLocationOnScreen(location);
             int viewX = location[0];
             int viewY = location[1];
-            if (ManageSpaceActivity.this.layersActionBarLayout.checkTransitionAnimation() || (x > ((float) viewX) && x < ((float) (ManageSpaceActivity.this.layersActionBarLayout.getWidth() + viewX)) && y > ((float) viewY) && y < ((float) (ManageSpaceActivity.this.layersActionBarLayout.getHeight() + viewY)))) {
-                return false;
-            }
-            if (!ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.isEmpty()) {
-                int a = 0;
-                while (ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.size() - 1 > 0) {
-                    ManageSpaceActivity.this.layersActionBarLayout.removeFragmentFromStack((BaseFragment) ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.get(0));
-                    a = (a - 1) + 1;
+            if (!ManageSpaceActivity.this.layersActionBarLayout.checkTransitionAnimation()) {
+                if (x <= ((float) viewX) || x >= ((float) (ManageSpaceActivity.this.layersActionBarLayout.getWidth() + viewX)) || y <= ((float) viewY) || y >= ((float) (ManageSpaceActivity.this.layersActionBarLayout.getHeight() + viewY))) {
+                    if (!ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.isEmpty()) {
+                        for (int a = 0; a < ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.size() - 1; a = (a - 1) + 1) {
+                            ManageSpaceActivity.this.layersActionBarLayout.removeFragmentFromStack((BaseFragment) ManageSpaceActivity.this.layersActionBarLayout.fragmentsStack.get(0));
+                        }
+                        ManageSpaceActivity.this.layersActionBarLayout.closeLastFragment(true);
+                    }
+                    return true;
                 }
-                ManageSpaceActivity.this.layersActionBarLayout.closeLastFragment(true);
             }
-            return true;
+            return false;
         }
     }
 
@@ -88,8 +88,8 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
     }
 
     protected void onCreate(Bundle savedInstanceState) {
-        boolean z = true;
         ApplicationLoader.postInitApplication();
+        boolean z = true;
         requestWindowFeature(1);
         setTheme(R.style.Theme.TMessages);
         getWindow().setBackgroundDrawableResource(R.drawable.transparent);
@@ -193,27 +193,28 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             int y = VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
             relativeLayoutParams.topMargin = (((AndroidUtilities.displaySize.y - relativeLayoutParams.height) - y) / 2) + y;
             this.layersActionBarLayout.setLayoutParams(relativeLayoutParams);
-            if (!AndroidUtilities.isSmallTablet() || getResources().getConfiguration().orientation == 2) {
-                int leftWidth = (AndroidUtilities.displaySize.x / 100) * 35;
-                if (leftWidth < AndroidUtilities.dp(320.0f)) {
-                    leftWidth = AndroidUtilities.dp(320.0f);
-                }
-                relativeLayoutParams = (RelativeLayout.LayoutParams) this.actionBarLayout.getLayoutParams();
-                relativeLayoutParams.width = leftWidth;
-                relativeLayoutParams.height = -1;
-                this.actionBarLayout.setLayoutParams(relativeLayoutParams);
-                if (AndroidUtilities.isSmallTablet() && this.actionBarLayout.fragmentsStack.size() == 2) {
-                    ((BaseFragment) this.actionBarLayout.fragmentsStack.get(1)).onPause();
-                    this.actionBarLayout.fragmentsStack.remove(1);
-                    this.actionBarLayout.showLastFragment();
+            if (AndroidUtilities.isSmallTablet()) {
+                if (getResources().getConfiguration().orientation != 2) {
+                    relativeLayoutParams = (RelativeLayout.LayoutParams) this.actionBarLayout.getLayoutParams();
+                    relativeLayoutParams.width = -1;
+                    relativeLayoutParams.height = -1;
+                    this.actionBarLayout.setLayoutParams(relativeLayoutParams);
                     return;
                 }
-                return;
+            }
+            int leftWidth = (AndroidUtilities.displaySize.x / 100) * 35;
+            if (leftWidth < AndroidUtilities.dp(320.0f)) {
+                leftWidth = AndroidUtilities.dp(320.0f);
             }
             relativeLayoutParams = (RelativeLayout.LayoutParams) this.actionBarLayout.getLayoutParams();
-            relativeLayoutParams.width = -1;
+            relativeLayoutParams.width = leftWidth;
             relativeLayoutParams.height = -1;
             this.actionBarLayout.setLayoutParams(relativeLayoutParams);
+            if (AndroidUtilities.isSmallTablet() && this.actionBarLayout.fragmentsStack.size() == 2) {
+                ((BaseFragment) this.actionBarLayout.fragmentsStack.get(1)).onPause();
+                this.actionBarLayout.fragmentsStack.remove(1);
+                this.actionBarLayout.showLastFragment();
+            }
         }
     }
 

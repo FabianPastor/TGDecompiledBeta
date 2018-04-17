@@ -72,16 +72,11 @@ public class VideoTimelinePlayView extends View {
                     return null;
                 }
                 if (bitmap != null) {
-                    float scale;
                     Bitmap result = Bitmap.createBitmap(VideoTimelinePlayView.this.frameWidth, VideoTimelinePlayView.this.frameHeight, bitmap.getConfig());
                     Canvas canvas = new Canvas(result);
                     float scaleX = ((float) VideoTimelinePlayView.this.frameWidth) / ((float) bitmap.getWidth());
                     float scaleY = ((float) VideoTimelinePlayView.this.frameHeight) / ((float) bitmap.getHeight());
-                    if (scaleX > scaleY) {
-                        scale = scaleX;
-                    } else {
-                        scale = scaleY;
-                    }
+                    float scale = scaleX > scaleY ? scaleX : scaleY;
                     int w = (int) (((float) bitmap.getWidth()) * scale);
                     int h = (int) (((float) bitmap.getHeight()) * scale);
                     canvas.drawBitmap(bitmap, new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()), new Rect((VideoTimelinePlayView.this.frameWidth - w) / 2, (VideoTimelinePlayView.this.frameHeight - h) / 2, w, h), null);
@@ -175,8 +170,8 @@ public class VideoTimelinePlayView extends View {
             if (this.mediaMetadataRetriever == null) {
                 return false;
             }
-            int additionWidth = AndroidUtilities.dp(12.0f);
-            int additionWidthPlay = AndroidUtilities.dp(8.0f);
+            int additionWidth = AndroidUtilities.dp(NUM);
+            int additionWidthPlay = AndroidUtilities.dp(NUM);
             if (((float) (playX - additionWidthPlay)) <= x && x <= ((float) (playX + additionWidthPlay)) && y >= 0.0f && y <= ((float) getMeasuredHeight())) {
                 if (this.delegate != null) {
                     this.delegate.didStartDragging();
@@ -202,7 +197,69 @@ public class VideoTimelinePlayView extends View {
                 invalidate();
                 return true;
             }
-        } else if (event.getAction() == 1 || event.getAction() == 3) {
+        } else {
+            if (event.getAction() != 1) {
+                if (event.getAction() != 3) {
+                    if (event.getAction() == 2) {
+                        if (this.pressedPlay) {
+                            this.playProgress = ((float) (((int) (x - this.pressDx)) - AndroidUtilities.dp(16.0f))) / ((float) width);
+                            if (this.playProgress < this.progressLeft) {
+                                this.playProgress = this.progressLeft;
+                            } else if (this.playProgress > this.progressRight) {
+                                this.playProgress = this.progressRight;
+                            }
+                            this.playProgress = (this.playProgress - this.progressLeft) / (this.progressRight - this.progressLeft);
+                            if (this.delegate != null) {
+                                this.delegate.onPlayProgressChanged(this.progressLeft + ((this.progressRight - this.progressLeft) * this.playProgress));
+                            }
+                            invalidate();
+                            return true;
+                        } else if (this.pressedLeft) {
+                            startX = (int) (x - this.pressDx);
+                            if (startX < AndroidUtilities.dp(16.0f)) {
+                                startX = AndroidUtilities.dp(16.0f);
+                            } else if (startX > endX) {
+                                startX = endX;
+                            }
+                            this.progressLeft = ((float) (startX - AndroidUtilities.dp(16.0f))) / ((float) width);
+                            if (this.progressRight - this.progressLeft > this.maxProgressDiff) {
+                                this.progressRight = this.progressLeft + this.maxProgressDiff;
+                            } else if (this.minProgressDiff != 0.0f && this.progressRight - this.progressLeft < this.minProgressDiff) {
+                                this.progressLeft = this.progressRight - this.minProgressDiff;
+                                if (this.progressLeft < 0.0f) {
+                                    this.progressLeft = 0.0f;
+                                }
+                            }
+                            if (this.delegate != null) {
+                                this.delegate.onLeftProgressChanged(this.progressLeft);
+                            }
+                            invalidate();
+                            return true;
+                        } else if (this.pressedRight) {
+                            startX = (int) (x - this.pressDx);
+                            if (startX < startX) {
+                                startX = startX;
+                            } else if (startX > AndroidUtilities.dp(16.0f) + width) {
+                                startX = width + AndroidUtilities.dp(16.0f);
+                            }
+                            this.progressRight = ((float) (startX - AndroidUtilities.dp(16.0f))) / ((float) width);
+                            if (this.progressRight - this.progressLeft > this.maxProgressDiff) {
+                                this.progressLeft = this.progressRight - this.maxProgressDiff;
+                            } else if (this.minProgressDiff != 0.0f && this.progressRight - this.progressLeft < this.minProgressDiff) {
+                                this.progressRight = this.progressLeft + this.minProgressDiff;
+                                if (this.progressRight > 1.0f) {
+                                    this.progressRight = 1.0f;
+                                }
+                            }
+                            if (this.delegate != null) {
+                                this.delegate.onRightProgressChanged(this.progressRight);
+                            }
+                            invalidate();
+                            return true;
+                        }
+                    }
+                }
+            }
             if (this.pressedLeft) {
                 if (this.delegate != null) {
                     this.delegate.didStopDragging();
@@ -220,63 +277,6 @@ public class VideoTimelinePlayView extends View {
                     this.delegate.didStopDragging();
                 }
                 this.pressedPlay = false;
-                return true;
-            }
-        } else if (event.getAction() == 2) {
-            if (this.pressedPlay) {
-                this.playProgress = ((float) (((int) (x - this.pressDx)) - AndroidUtilities.dp(16.0f))) / ((float) width);
-                if (this.playProgress < this.progressLeft) {
-                    this.playProgress = this.progressLeft;
-                } else if (this.playProgress > this.progressRight) {
-                    this.playProgress = this.progressRight;
-                }
-                this.playProgress = (this.playProgress - this.progressLeft) / (this.progressRight - this.progressLeft);
-                if (this.delegate != null) {
-                    this.delegate.onPlayProgressChanged(this.progressLeft + ((this.progressRight - this.progressLeft) * this.playProgress));
-                }
-                invalidate();
-                return true;
-            } else if (this.pressedLeft) {
-                startX = (int) (x - this.pressDx);
-                if (startX < AndroidUtilities.dp(16.0f)) {
-                    startX = AndroidUtilities.dp(16.0f);
-                } else if (startX > endX) {
-                    startX = endX;
-                }
-                this.progressLeft = ((float) (startX - AndroidUtilities.dp(16.0f))) / ((float) width);
-                if (this.progressRight - this.progressLeft > this.maxProgressDiff) {
-                    this.progressRight = this.progressLeft + this.maxProgressDiff;
-                } else if (this.minProgressDiff != 0.0f && this.progressRight - this.progressLeft < this.minProgressDiff) {
-                    this.progressLeft = this.progressRight - this.minProgressDiff;
-                    if (this.progressLeft < 0.0f) {
-                        this.progressLeft = 0.0f;
-                    }
-                }
-                if (this.delegate != null) {
-                    this.delegate.onLeftProgressChanged(this.progressLeft);
-                }
-                invalidate();
-                return true;
-            } else if (this.pressedRight) {
-                endX = (int) (x - this.pressDx);
-                if (endX < startX) {
-                    endX = startX;
-                } else if (endX > AndroidUtilities.dp(16.0f) + width) {
-                    endX = width + AndroidUtilities.dp(16.0f);
-                }
-                this.progressRight = ((float) (endX - AndroidUtilities.dp(16.0f))) / ((float) width);
-                if (this.progressRight - this.progressLeft > this.maxProgressDiff) {
-                    this.progressLeft = this.progressRight - this.maxProgressDiff;
-                } else if (this.minProgressDiff != 0.0f && this.progressRight - this.progressLeft < this.minProgressDiff) {
-                    this.progressRight = this.progressLeft + this.minProgressDiff;
-                    if (this.progressRight > 1.0f) {
-                        this.progressRight = 1.0f;
-                    }
-                }
-                if (this.delegate != null) {
-                    this.delegate.onRightProgressChanged(this.progressRight);
-                }
-                invalidate();
                 return true;
             }
         }
@@ -383,53 +383,58 @@ public class VideoTimelinePlayView extends View {
     }
 
     protected void onDraw(Canvas canvas) {
+        Canvas canvas2 = canvas;
         int width = getMeasuredWidth() - AndroidUtilities.dp(36.0f);
+        float f = 16.0f;
         int startX = ((int) (((float) width) * this.progressLeft)) + AndroidUtilities.dp(16.0f);
         int endX = ((int) (((float) width) * this.progressRight)) + AndroidUtilities.dp(16.0f);
         canvas.save();
-        canvas.clipRect(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(20.0f) + width, AndroidUtilities.dp(48.0f));
-        if (this.frames.isEmpty() && this.currentTask == null) {
+        canvas2.clipRect(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(20.0f) + width, AndroidUtilities.dp(48.0f));
+        int a = 0;
+        if (this.frames.isEmpty() && r0.currentTask == null) {
             reloadFrames(0);
         } else {
             int offset = 0;
-            for (int a = 0; a < this.frames.size(); a++) {
-                Bitmap bitmap = (Bitmap) this.frames.get(a);
+            while (a < r0.frames.size()) {
+                Bitmap bitmap = (Bitmap) r0.frames.get(a);
                 if (bitmap != null) {
-                    int x = AndroidUtilities.dp(16.0f) + ((this.isRoundFrames ? this.frameWidth / 2 : this.frameWidth) * offset);
+                    int x = AndroidUtilities.dp(f) + ((r0.isRoundFrames ? r0.frameWidth / 2 : r0.frameWidth) * offset);
                     int y = AndroidUtilities.dp(6.0f);
-                    if (this.isRoundFrames) {
-                        this.rect2.set(x, y, AndroidUtilities.dp(28.0f) + x, AndroidUtilities.dp(28.0f) + y);
-                        canvas.drawBitmap(bitmap, this.rect1, this.rect2, null);
+                    if (r0.isRoundFrames) {
+                        r0.rect2.set(x, y, x + AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f) + y);
+                        canvas2.drawBitmap(bitmap, r0.rect1, r0.rect2, null);
                     } else {
-                        canvas.drawBitmap(bitmap, (float) x, (float) y, null);
+                        canvas2.drawBitmap(bitmap, (float) x, (float) y, null);
                     }
                 }
                 offset++;
+                a++;
+                f = 16.0f;
             }
         }
         int top = AndroidUtilities.dp(6.0f);
         int end = AndroidUtilities.dp(48.0f);
-        canvas.drawRect((float) AndroidUtilities.dp(16.0f), (float) top, (float) startX, (float) AndroidUtilities.dp(46.0f), this.paint2);
-        canvas.drawRect((float) (AndroidUtilities.dp(4.0f) + endX), (float) top, (float) ((AndroidUtilities.dp(16.0f) + width) + AndroidUtilities.dp(4.0f)), (float) AndroidUtilities.dp(46.0f), this.paint2);
-        canvas.drawRect((float) startX, (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(2.0f) + startX), (float) end, this.paint);
-        canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + endX), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(4.0f) + endX), (float) end, this.paint);
-        canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + startX), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(4.0f) + endX), (float) top, this.paint);
-        canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + startX), (float) (end - AndroidUtilities.dp(2.0f)), (float) (AndroidUtilities.dp(4.0f) + endX), (float) end, this.paint);
+        canvas2.drawRect((float) AndroidUtilities.dp(16.0f), (float) top, (float) startX, (float) AndroidUtilities.dp(46.0f), r0.paint2);
+        canvas2.drawRect((float) (AndroidUtilities.dp(4.0f) + endX), (float) top, (float) ((AndroidUtilities.dp(16.0f) + width) + AndroidUtilities.dp(4.0f)), (float) AndroidUtilities.dp(46.0f), r0.paint2);
+        canvas2.drawRect((float) startX, (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(2.0f) + startX), (float) end, r0.paint);
+        canvas2.drawRect((float) (AndroidUtilities.dp(2.0f) + endX), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(4.0f) + endX), (float) end, r0.paint);
+        canvas2.drawRect((float) (AndroidUtilities.dp(2.0f) + startX), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(4.0f) + endX), (float) top, r0.paint);
+        canvas2.drawRect((float) (AndroidUtilities.dp(2.0f) + startX), (float) (end - AndroidUtilities.dp(2.0f)), (float) (AndroidUtilities.dp(4.0f) + endX), (float) end, r0.paint);
         canvas.restore();
-        this.rect3.set((float) (startX - AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(2.0f) + startX), (float) end);
-        canvas.drawRoundRect(this.rect3, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), this.paint);
-        this.drawableLeft.setBounds(startX - AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f) + ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2), AndroidUtilities.dp(2.0f) + startX, ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2) + AndroidUtilities.dp(22.0f));
-        this.drawableLeft.draw(canvas);
-        this.rect3.set((float) (AndroidUtilities.dp(2.0f) + endX), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(12.0f) + endX), (float) end);
-        canvas.drawRoundRect(this.rect3, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), this.paint);
-        this.drawableRight.setBounds(AndroidUtilities.dp(2.0f) + endX, AndroidUtilities.dp(4.0f) + ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2), AndroidUtilities.dp(12.0f) + endX, ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2) + AndroidUtilities.dp(22.0f));
-        this.drawableRight.draw(canvas);
-        float cx = ((float) AndroidUtilities.dp(18.0f)) + (((float) width) * (this.progressLeft + ((this.progressRight - this.progressLeft) * this.playProgress)));
-        this.rect3.set(cx - ((float) AndroidUtilities.dp(1.5f)), (float) AndroidUtilities.dp(2.0f), ((float) AndroidUtilities.dp(1.5f)) + cx, (float) AndroidUtilities.dp(50.0f));
-        canvas.drawRoundRect(this.rect3, (float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f), this.paint2);
-        canvas.drawCircle(cx, (float) AndroidUtilities.dp(52.0f), (float) AndroidUtilities.dp(3.5f), this.paint2);
-        this.rect3.set(cx - ((float) AndroidUtilities.dp(1.0f)), (float) AndroidUtilities.dp(2.0f), ((float) AndroidUtilities.dp(1.0f)) + cx, (float) AndroidUtilities.dp(50.0f));
-        canvas.drawRoundRect(this.rect3, (float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f), this.paint);
-        canvas.drawCircle(cx, (float) AndroidUtilities.dp(52.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
+        r0.rect3.set((float) (startX - AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(2.0f) + startX), (float) end);
+        canvas2.drawRoundRect(r0.rect3, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), r0.paint);
+        r0.drawableLeft.setBounds(startX - AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f) + ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2), AndroidUtilities.dp(2.0f) + startX, ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2) + AndroidUtilities.dp(22.0f));
+        r0.drawableLeft.draw(canvas2);
+        r0.rect3.set((float) (AndroidUtilities.dp(2.0f) + endX), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(12.0f) + endX), (float) end);
+        canvas2.drawRoundRect(r0.rect3, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), r0.paint);
+        r0.drawableRight.setBounds(AndroidUtilities.dp(2.0f) + endX, AndroidUtilities.dp(4.0f) + ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2), AndroidUtilities.dp(12.0f) + endX, ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2) + AndroidUtilities.dp(22.0f));
+        r0.drawableRight.draw(canvas2);
+        float cx = ((float) AndroidUtilities.dp(18.0f)) + (((float) width) * (r0.progressLeft + ((r0.progressRight - r0.progressLeft) * r0.playProgress)));
+        r0.rect3.set(cx - ((float) AndroidUtilities.dp(1.5f)), (float) AndroidUtilities.dp(2.0f), ((float) AndroidUtilities.dp(1.5f)) + cx, (float) AndroidUtilities.dp(50.0f));
+        canvas2.drawRoundRect(r0.rect3, (float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f), r0.paint2);
+        canvas2.drawCircle(cx, (float) AndroidUtilities.dp(52.0f), (float) AndroidUtilities.dp(3.5f), r0.paint2);
+        r0.rect3.set(cx - ((float) AndroidUtilities.dp(1.0f)), (float) AndroidUtilities.dp(2.0f), ((float) AndroidUtilities.dp(1.0f)) + cx, (float) AndroidUtilities.dp(50.0f));
+        canvas2.drawRoundRect(r0.rect3, (float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f), r0.paint);
+        canvas2.drawCircle(cx, (float) AndroidUtilities.dp(52.0f), (float) AndroidUtilities.dp(3.0f), r0.paint);
     }
 }

@@ -75,10 +75,10 @@ public class CheckBoxSquare extends View {
             this.isChecked = checked;
             if (this.attachedToWindow && animated) {
                 animateToCheckedState(checked);
-                return;
+            } else {
+                cancelCheckAnimator();
+                setProgress(checked ? 1.0f : 0.0f);
             }
-            cancelCheckAnimator();
-            setProgress(checked ? 1.0f : 0.0f);
         }
     }
 
@@ -92,38 +92,39 @@ public class CheckBoxSquare extends View {
     }
 
     protected void onDraw(Canvas canvas) {
+        CheckBoxSquare checkBoxSquare = this;
         if (getVisibility() == 0) {
-            float checkProgress;
             float bounceProgress;
-            int uncheckedColor = Theme.getColor(this.isAlert ? Theme.key_dialogCheckboxSquareUnchecked : Theme.key_checkboxSquareUnchecked);
-            int color = Theme.getColor(this.isAlert ? Theme.key_dialogCheckboxSquareBackground : Theme.key_checkboxSquareBackground);
-            if (this.progress <= 0.5f) {
-                checkProgress = this.progress / 0.5f;
-                bounceProgress = checkProgress;
+            float checkProgress;
+            int uncheckedColor = Theme.getColor(checkBoxSquare.isAlert ? Theme.key_dialogCheckboxSquareUnchecked : Theme.key_checkboxSquareUnchecked);
+            int color = Theme.getColor(checkBoxSquare.isAlert ? Theme.key_dialogCheckboxSquareBackground : Theme.key_checkboxSquareBackground);
+            if (checkBoxSquare.progress <= 0.5f) {
+                bounceProgress = checkBoxSquare.progress / 0.5f;
+                checkProgress = bounceProgress;
                 Theme.checkboxSquare_backgroundPaint.setColor(Color.rgb(Color.red(uncheckedColor) + ((int) (((float) (Color.red(color) - Color.red(uncheckedColor))) * checkProgress)), Color.green(uncheckedColor) + ((int) (((float) (Color.green(color) - Color.green(uncheckedColor))) * checkProgress)), Color.blue(uncheckedColor) + ((int) (((float) (Color.blue(color) - Color.blue(uncheckedColor))) * checkProgress))));
             } else {
-                bounceProgress = 2.0f - (this.progress / 0.5f);
+                bounceProgress = 2.0f - (checkBoxSquare.progress / 0.5f);
                 checkProgress = 1.0f;
                 Theme.checkboxSquare_backgroundPaint.setColor(color);
             }
-            if (this.isDisabled) {
-                Theme.checkboxSquare_backgroundPaint.setColor(Theme.getColor(this.isAlert ? Theme.key_dialogCheckboxSquareDisabled : Theme.key_checkboxSquareDisabled));
+            if (checkBoxSquare.isDisabled) {
+                Theme.checkboxSquare_backgroundPaint.setColor(Theme.getColor(checkBoxSquare.isAlert ? Theme.key_dialogCheckboxSquareDisabled : Theme.key_checkboxSquareDisabled));
             }
             float bounce = ((float) AndroidUtilities.dp(1.0f)) * bounceProgress;
-            this.rectF.set(bounce, bounce, ((float) AndroidUtilities.dp(18.0f)) - bounce, ((float) AndroidUtilities.dp(18.0f)) - bounce);
-            this.drawBitmap.eraseColor(0);
-            this.drawCanvas.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), Theme.checkboxSquare_backgroundPaint);
+            checkBoxSquare.rectF.set(bounce, bounce, ((float) AndroidUtilities.dp(18.0f)) - bounce, ((float) AndroidUtilities.dp(18.0f)) - bounce);
+            checkBoxSquare.drawBitmap.eraseColor(0);
+            checkBoxSquare.drawCanvas.drawRoundRect(checkBoxSquare.rectF, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), Theme.checkboxSquare_backgroundPaint);
             if (checkProgress != 1.0f) {
                 float rad = Math.min((float) AndroidUtilities.dp(7.0f), (((float) AndroidUtilities.dp(7.0f)) * checkProgress) + bounce);
-                this.rectF.set(((float) AndroidUtilities.dp(2.0f)) + rad, ((float) AndroidUtilities.dp(2.0f)) + rad, ((float) AndroidUtilities.dp(16.0f)) - rad, ((float) AndroidUtilities.dp(16.0f)) - rad);
-                this.drawCanvas.drawRect(this.rectF, Theme.checkboxSquare_eraserPaint);
+                checkBoxSquare.rectF.set(((float) AndroidUtilities.dp(2.0f)) + rad, ((float) AndroidUtilities.dp(2.0f)) + rad, ((float) AndroidUtilities.dp(16.0f)) - rad, ((float) AndroidUtilities.dp(16.0f)) - rad);
+                checkBoxSquare.drawCanvas.drawRect(checkBoxSquare.rectF, Theme.checkboxSquare_eraserPaint);
             }
-            if (this.progress > 0.5f) {
-                Theme.checkboxSquare_checkPaint.setColor(Theme.getColor(this.isAlert ? Theme.key_dialogCheckboxSquareCheck : Theme.key_checkboxSquareCheck));
-                this.drawCanvas.drawLine((float) AndroidUtilities.dp(7.5f), (float) ((int) AndroidUtilities.dpf2(13.5f)), (float) ((int) (((float) AndroidUtilities.dp(7.5f)) - (((float) AndroidUtilities.dp(5.0f)) * (1.0f - bounceProgress)))), (float) ((int) (AndroidUtilities.dpf2(13.5f) - (((float) AndroidUtilities.dp(5.0f)) * (1.0f - bounceProgress)))), Theme.checkboxSquare_checkPaint);
-                this.drawCanvas.drawLine((float) ((int) AndroidUtilities.dpf2(6.5f)), (float) ((int) AndroidUtilities.dpf2(13.5f)), (float) ((int) (AndroidUtilities.dpf2(6.5f) + (((float) AndroidUtilities.dp(9.0f)) * (1.0f - bounceProgress)))), (float) ((int) (AndroidUtilities.dpf2(13.5f) - (((float) AndroidUtilities.dp(9.0f)) * (1.0f - bounceProgress)))), Theme.checkboxSquare_checkPaint);
+            if (checkBoxSquare.progress > 0.5f) {
+                Theme.checkboxSquare_checkPaint.setColor(Theme.getColor(checkBoxSquare.isAlert ? Theme.key_dialogCheckboxSquareCheck : Theme.key_checkboxSquareCheck));
+                checkBoxSquare.drawCanvas.drawLine((float) AndroidUtilities.dp(7.5f), (float) ((int) AndroidUtilities.dpf2(13.5f)), (float) ((int) (((float) AndroidUtilities.dp(7.5f)) - (((float) AndroidUtilities.dp(5.0f)) * (1.0f - bounceProgress)))), (float) ((int) (AndroidUtilities.dpf2(13.5f) - (((float) AndroidUtilities.dp(5.0f)) * (1.0f - bounceProgress)))), Theme.checkboxSquare_checkPaint);
+                checkBoxSquare.drawCanvas.drawLine((float) ((int) AndroidUtilities.dpf2(6.5f)), (float) ((int) AndroidUtilities.dpf2(13.5f)), (float) ((int) (AndroidUtilities.dpf2(6.5f) + (((float) AndroidUtilities.dp(9.0f)) * (1.0f - bounceProgress)))), (float) ((int) (AndroidUtilities.dpf2(13.5f) - (((float) AndroidUtilities.dp(9.0f)) * (1.0f - bounceProgress)))), Theme.checkboxSquare_checkPaint);
             }
-            canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);
+            canvas.drawBitmap(checkBoxSquare.drawBitmap, 0.0f, 0.0f, null);
         }
     }
 }

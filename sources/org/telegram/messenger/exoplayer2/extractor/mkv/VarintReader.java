@@ -52,13 +52,16 @@ final class VarintReader {
     }
 
     public static long assembleVarint(byte[] varintBytes, int varintLength, boolean removeLengthMask) {
+        long j;
         long varint = ((long) varintBytes[0]) & 255;
         if (removeLengthMask) {
-            varint &= VARINT_LENGTH_MASKS[varintLength - 1] ^ -1;
+            j = varint & (VARINT_LENGTH_MASKS[varintLength - 1] ^ -1);
+        } else {
+            j = varint;
         }
         for (int i = 1; i < varintLength; i++) {
-            varint = (varint << 8) | (((long) varintBytes[i]) & 255);
+            j = (j << 8) | (((long) varintBytes[i]) & 255);
         }
-        return varint;
+        return j;
     }
 }

@@ -39,14 +39,18 @@ public final class ContentDataSource implements DataSource {
             this.uri = dataSpec.uri;
             this.assetFileDescriptor = this.resolver.openAssetFileDescriptor(this.uri, "r");
             if (this.assetFileDescriptor == null) {
-                throw new FileNotFoundException("Could not open file descriptor for: " + this.uri);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Could not open file descriptor for: ");
+                stringBuilder.append(this.uri);
+                throw new FileNotFoundException(stringBuilder.toString());
             }
             this.inputStream = new FileInputStream(this.assetFileDescriptor.getFileDescriptor());
             long assetStartOffset = this.assetFileDescriptor.getStartOffset();
-            long skipped = this.inputStream.skip(dataSpec.position + assetStartOffset) - assetStartOffset;
+            long skipped = this.inputStream.skip(assetStartOffset + dataSpec.position) - assetStartOffset;
             if (skipped != dataSpec.position) {
                 throw new EOFException();
             }
+            long j = -1;
             if (dataSpec.length != -1) {
                 this.bytesRemaining = dataSpec.length;
             } else {
@@ -54,7 +58,10 @@ public final class ContentDataSource implements DataSource {
                 if (assetFileDescriptorLength == -1) {
                     FileChannel channel = this.inputStream.getChannel();
                     long channelSize = channel.size();
-                    this.bytesRemaining = channelSize == 0 ? -1 : channelSize - channel.position();
+                    if (channelSize != 0) {
+                        j = channelSize - channel.position();
+                    }
+                    this.bytesRemaining = j;
                 } else {
                     this.bytesRemaining = assetFileDescriptorLength - skipped;
                 }
@@ -77,21 +84,14 @@ public final class ContentDataSource implements DataSource {
             return -1;
         }
         try {
-            int bytesToRead;
-            if (this.bytesRemaining == -1) {
-                bytesToRead = readLength;
-            } else {
-                bytesToRead = (int) Math.min(this.bytesRemaining, (long) readLength);
-            }
-            int bytesRead = this.inputStream.read(buffer, offset, bytesToRead);
+            int bytesRead = this.inputStream.read(buffer, offset, this.bytesRemaining == -1 ? readLength : (int) Math.min(this.bytesRemaining, (long) readLength));
             if (bytesRead != -1) {
                 if (this.bytesRemaining != -1) {
                     this.bytesRemaining -= (long) bytesRead;
                 }
-                if (this.listener == null) {
-                    return bytesRead;
+                if (this.listener != null) {
+                    this.listener.onBytesTransferred(this, bytesRead);
                 }
-                this.listener.onBytesTransferred(this, bytesRead);
                 return bytesRead;
             } else if (this.bytesRemaining == -1) {
                 return -1;

@@ -74,7 +74,13 @@ public class StickersArchiveAlert extends Builder {
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            ((ArchivedStickerSetCell) holder.itemView).setStickersSet((StickerSetCovered) StickersArchiveAlert.this.stickerSets.get(position), position != StickersArchiveAlert.this.stickerSets.size() + -1);
+            ArchivedStickerSetCell archivedStickerSetCell = (ArchivedStickerSetCell) holder.itemView;
+            StickerSetCovered stickerSetCovered = (StickerSetCovered) StickersArchiveAlert.this.stickerSets.get(position);
+            boolean z = true;
+            if (position == StickersArchiveAlert.this.stickerSets.size() - 1) {
+                z = false;
+            }
+            archivedStickerSetCell.setStickersSet(stickerSetCovered, z);
         }
     }
 

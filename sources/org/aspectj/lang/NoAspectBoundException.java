@@ -4,10 +4,18 @@ public class NoAspectBoundException extends RuntimeException {
     Throwable cause;
 
     public NoAspectBoundException(String aspectName, Throwable inner) {
-        if (inner != null) {
-            aspectName = new StringBuffer().append("Exception while initializing ").append(aspectName).append(": ").append(inner).toString();
+        String str;
+        if (inner == null) {
+            str = aspectName;
+        } else {
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append("Exception while initializing ");
+            stringBuffer.append(aspectName);
+            stringBuffer.append(": ");
+            stringBuffer.append(inner);
+            str = stringBuffer.toString();
         }
-        super(aspectName);
+        super(str);
         this.cause = inner;
     }
 

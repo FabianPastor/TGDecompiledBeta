@@ -70,19 +70,26 @@ public class CustomTabsHelper {
     private static boolean hasSpecializedHandlerIntents(Context context, Intent intent) {
         try {
             List<ResolveInfo> handlers = context.getPackageManager().queryIntentActivities(intent, 64);
-            if (handlers == null || handlers.size() == 0) {
-                return false;
-            }
-            for (ResolveInfo resolveInfo : handlers) {
-                IntentFilter filter = resolveInfo.filter;
-                if (filter != null && filter.countDataAuthorities() != 0 && filter.countDataPaths() != 0 && resolveInfo.activityInfo != null) {
-                    return true;
+            if (handlers != null) {
+                if (handlers.size() != 0) {
+                    for (ResolveInfo resolveInfo : handlers) {
+                        IntentFilter filter = resolveInfo.filter;
+                        if (filter != null) {
+                            if (filter.countDataAuthorities() == 0) {
+                                continue;
+                            } else if (filter.countDataPaths() != 0) {
+                                if (resolveInfo.activityInfo != null) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    return false;
                 }
             }
             return false;
         } catch (RuntimeException e) {
             Log.e(TAG, "Runtime exception while getting specialized handlers");
-            return false;
         }
     }
 

@@ -37,55 +37,43 @@ public class ThemeCell extends FrameLayout {
     private TextView textView;
 
     public ThemeCell(Context context, boolean nightTheme) {
-        int i;
-        int i2 = 3;
+        Context context2 = context;
         super(context);
         setWillNotDraw(false);
         this.isNightTheme = nightTheme;
-        this.textView = new TextView(context);
+        this.textView = new TextView(context2);
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(1.0f));
         this.textView.setEllipsize(TruncateAt.END);
+        int i = 3;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        View view = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 101.0f : 60.0f, 0.0f, LocaleController.isRTL ? 60.0f : 101.0f, 0.0f));
-        this.checkImage = new ImageView(context);
-        this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
-        this.checkImage.setImageResource(R.drawable.sticker_added);
-        if (this.isNightTheme) {
-            view = this.checkImage;
+        addView(r0.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 101.0f : 60.0f, 0.0f, LocaleController.isRTL ? 60.0f : 101.0f, 0.0f));
+        r0.checkImage = new ImageView(context2);
+        r0.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
+        r0.checkImage.setImageResource(R.drawable.sticker_added);
+        if (r0.isNightTheme) {
+            View view = r0.checkImage;
             if (!LocaleController.isRTL) {
-                i2 = 5;
+                i = 5;
             }
-            addView(view, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 17.0f, 0.0f, 17.0f, 0.0f));
+            addView(view, LayoutHelper.createFrame(19, 14.0f, i | 16, 17.0f, 0.0f, 17.0f, 0.0f));
             return;
         }
-        view = this.checkImage;
-        if (LocaleController.isRTL) {
-            i = 3;
-        } else {
+        addView(r0.checkImage, LayoutHelper.createFrame(19, 14.0f, (LocaleController.isRTL ? 3 : 5) | 16, 55.0f, 0.0f, 55.0f, 0.0f));
+        r0.optionsButton = new ImageView(context2);
+        r0.optionsButton.setFocusable(false);
+        r0.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
+        r0.optionsButton.setImageResource(R.drawable.ic_ab_other);
+        r0.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
+        r0.optionsButton.setScaleType(ScaleType.CENTER);
+        view = r0.optionsButton;
+        if (!LocaleController.isRTL) {
             i = 5;
         }
-        addView(view, LayoutHelper.createFrame(19, 14.0f, i | 16, 55.0f, 0.0f, 55.0f, 0.0f));
-        this.optionsButton = new ImageView(context);
-        this.optionsButton.setFocusable(false);
-        this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
-        this.optionsButton.setImageResource(R.drawable.ic_ab_other);
-        this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
-        this.optionsButton.setScaleType(ScaleType.CENTER);
-        View view2 = this.optionsButton;
-        if (!LocaleController.isRTL) {
-            i2 = 5;
-        }
-        addView(view2, LayoutHelper.createFrame(48, 48, i2 | 48));
+        addView(view, LayoutHelper.createFrame(48, 48, i | 48));
     }
 
     protected void onAttachedToWindow() {
@@ -95,7 +83,7 @@ public class ThemeCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f) + this.needDivider, NUM));
     }
 
     public void setOnOptionsClick(OnClickListener listener) {
@@ -114,112 +102,167 @@ public class ThemeCell extends FrameLayout {
         return this.currentThemeInfo;
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setTheme(ThemeInfo themeInfo, boolean divider) {
         Throwable e;
-        Throwable th;
-        this.currentThemeInfo = themeInfo;
+        boolean finished;
+        ThemeInfo themeInfo2 = themeInfo;
+        this.currentThemeInfo = themeInfo2;
         String text = themeInfo.getName();
+        int i = 0;
         if (text.endsWith(".attheme")) {
             text = text.substring(0, text.lastIndexOf(46));
         }
-        this.textView.setText(text);
-        this.needDivider = divider;
+        r1.textView.setText(text);
+        r1.needDivider = divider;
         updateCurrentThemeCheck();
-        boolean finished = false;
-        if (!(themeInfo.pathToFile == null && themeInfo.assetName == null)) {
-            FileInputStream fileInputStream = null;
-            int currentPosition = 0;
-            try {
-                File file;
-                if (themeInfo.assetName != null) {
-                    file = Theme.getAssetFile(themeInfo.assetName);
-                } else {
-                    file = new File(themeInfo.pathToFile);
-                }
-                FileInputStream fileInputStream2 = new FileInputStream(file);
-                int linesRead = 0;
-                do {
-                    try {
-                        int read = fileInputStream2.read(bytes);
-                        if (read == -1) {
-                            break;
-                        }
-                        int previousPosition = currentPosition;
-                        int start = 0;
-                        for (int a = 0; a < read; a++) {
-                            if (bytes[a] == (byte) 10) {
-                                linesRead++;
-                                int len = (a - start) + 1;
-                                String line = new String(bytes, start, len - 1, C0539C.UTF8_NAME);
-                                if (line.startsWith("WPS")) {
-                                    break;
-                                }
-                                int idx = line.indexOf(61);
-                                if (idx == -1 || !line.substring(0, idx).equals(Theme.key_actionBarDefault)) {
-                                    start += len;
-                                    currentPosition += len;
-                                } else {
-                                    int value;
-                                    String param = line.substring(idx + 1);
-                                    if (param.length() <= 0 || param.charAt(0) != '#') {
-                                        value = Utilities.parseInt(param).intValue();
-                                    } else {
-                                        try {
-                                            value = Color.parseColor(param);
-                                        } catch (Exception e2) {
-                                            value = Utilities.parseInt(param).intValue();
-                                        }
-                                    }
-                                    finished = true;
-                                    this.paint.setColor(value);
-                                }
-                            }
-                        }
-                        if (previousPosition == currentPosition || linesRead >= 500) {
-                            break;
-                        }
-                        fileInputStream2.getChannel().position((long) currentPosition);
-                    } catch (Throwable th2) {
-                        th = th2;
-                        fileInputStream = fileInputStream2;
-                    }
-                } while (!finished);
-                if (fileInputStream2 != null) {
-                    try {
-                        fileInputStream2.close();
-                    } catch (Throwable e3) {
-                        FileLog.m3e(e3);
-                    }
-                }
-            } catch (Throwable th3) {
-                e3 = th3;
-                try {
-                    FileLog.m3e(e3);
-                    if (fileInputStream != null) {
-                        try {
-                            fileInputStream.close();
-                        } catch (Throwable e32) {
-                            FileLog.m3e(e32);
-                        }
-                    }
-                    if (!finished) {
-                        this.paint.setColor(Theme.getDefaultColor(Theme.key_actionBarDefault));
-                    }
-                } catch (Throwable th4) {
-                    th = th4;
-                    if (fileInputStream != null) {
-                        try {
-                            fileInputStream.close();
-                        } catch (Throwable e322) {
-                            FileLog.m3e(e322);
-                        }
-                    }
-                    throw th;
+        boolean finished2 = false;
+        if (themeInfo2.pathToFile == null) {
+            if (themeInfo2.assetName == null) {
+                String str = text;
+                if (!finished2) {
+                    r1.paint.setColor(Theme.getDefaultColor(Theme.key_actionBarDefault));
                 }
             }
         }
-        if (!finished) {
-            this.paint.setColor(Theme.getDefaultColor(Theme.key_actionBarDefault));
+        FileInputStream stream = null;
+        int currentPosition = 0;
+        try {
+            File file;
+            if (themeInfo2.assetName != null) {
+                try {
+                    file = Theme.getAssetFile(themeInfo2.assetName);
+                } catch (Throwable th) {
+                    e = th;
+                    str = text;
+                    if (stream != null) {
+                        stream.close();
+                    }
+                    throw e;
+                }
+            }
+            file = new File(themeInfo2.pathToFile);
+            stream = new FileInputStream(file);
+            finished = false;
+            int linesRead = 0;
+            while (true) {
+                try {
+                    int read = stream.read(bytes);
+                    int read2 = read;
+                    if (read == -1) {
+                        break;
+                    }
+                    boolean z;
+                    read = currentPosition;
+                    int start = 0;
+                    int currentPosition2 = currentPosition;
+                    currentPosition = linesRead;
+                    linesRead = i;
+                    while (linesRead < read2) {
+                        if (bytes[linesRead] == (byte) 10) {
+                            currentPosition++;
+                            i = (linesRead - start) + 1;
+                            str = text;
+                            try {
+                                String line = new String(bytes, start, i - 1, C0539C.UTF8_NAME);
+                                if (line.startsWith("WPS") == null) {
+                                    text = line.indexOf(61);
+                                    int idx = text;
+                                    if (text != -1) {
+                                        text = line.substring(null, idx);
+                                        if (text.equals(Theme.key_actionBarDefault)) {
+                                            String param = line.substring(idx + 1);
+                                            String key;
+                                            if (param.length() > 0) {
+                                                key = text;
+                                                if (param.charAt(null) == 35) {
+                                                    try {
+                                                        line = Color.parseColor(param);
+                                                    } catch (Exception e2) {
+                                                        Exception line2 = e2;
+                                                        line = Utilities.parseInt(param).intValue();
+                                                    }
+                                                    r1.paint.setColor(line);
+                                                    finished = true;
+                                                }
+                                            } else {
+                                                key = text;
+                                            }
+                                            line = Utilities.parseInt(param).intValue();
+                                            try {
+                                                r1.paint.setColor(line);
+                                                finished = true;
+                                            } catch (Throwable th2) {
+                                                e = th2;
+                                                int i2 = 1;
+                                            }
+                                        }
+                                    }
+                                    String str2 = line;
+                                    start += i;
+                                    currentPosition2 += i;
+                                }
+                                linesRead = currentPosition;
+                                break;
+                            } catch (Throwable th22) {
+                                e = th22;
+                            }
+                        } else {
+                            str = text;
+                        }
+                        linesRead++;
+                        text = str;
+                        themeInfo2 = themeInfo;
+                        z = divider;
+                    }
+                    str = text;
+                    linesRead = currentPosition;
+                    if (read == currentPosition2) {
+                        break;
+                    } else if (linesRead >= 500) {
+                        break;
+                    } else {
+                        stream.getChannel().position((long) currentPosition2);
+                        if (finished) {
+                            break;
+                        }
+                        currentPosition = currentPosition2;
+                        text = str;
+                        themeInfo2 = themeInfo;
+                        z = divider;
+                        i = 0;
+                    }
+                    if (stream != null) {
+                        try {
+                            stream.close();
+                        } catch (Throwable th222) {
+                            FileLog.m3e(th222);
+                        }
+                    }
+                } catch (Throwable th2222) {
+                    str = text;
+                    e = th2222;
+                }
+                if (!finished2) {
+                    r1.paint.setColor(Theme.getDefaultColor(Theme.key_actionBarDefault));
+                }
+            }
+            finished2 = finished;
+            if (stream != null) {
+                stream.close();
+            }
+        } catch (Throwable th22222) {
+            str = text;
+            e = th22222;
+            finished = false;
+            if (stream != null) {
+                stream.close();
+            }
+            throw e;
+        }
+        if (!finished2) {
+            r1.paint.setColor(Theme.getDefaultColor(Theme.key_actionBarDefault));
         }
     }
 
@@ -240,7 +283,7 @@ public class ThemeCell extends FrameLayout {
         if (this.needDivider) {
             canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
-        int x = AndroidUtilities.dp(27.0f);
+        int x = AndroidUtilities.dp(NUM);
         if (LocaleController.isRTL) {
             x = getWidth() - x;
         }

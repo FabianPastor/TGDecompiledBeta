@@ -20,9 +20,6 @@ public class TextPriceCell extends FrameLayout {
     private TextView valueTextView;
 
     public TextPriceCell(Context context) {
-        int i;
-        int i2;
-        int i3 = 3;
         super(context);
         this.dotstring = LocaleController.isRTL ? " ." : ". ";
         setWillNotDraw(false);
@@ -32,20 +29,9 @@ public class TextPriceCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
-        TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        textView.setGravity(i | 16);
-        View view = this.textView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-2, -1.0f, i2 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        int i = 3;
+        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        addView(this.textView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 0.0f, 17.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -53,18 +39,12 @@ public class TextPriceCell extends FrameLayout {
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setEllipsize(TruncateAt.END);
-        textView = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i = 3;
-        } else {
+        this.valueTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
+        View view = this.valueTextView;
+        if (!LocaleController.isRTL) {
             i = 5;
         }
-        textView.setGravity(i | 16);
-        view = this.valueTextView;
-        if (!LocaleController.isRTL) {
-            i3 = 5;
-        }
-        addView(view, LayoutHelper.createFrame(-2, -1.0f, i3 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

@@ -66,18 +66,19 @@ public class Slice {
                     inflater.setInput(input, 0, numRead);
                 }
                 while (true) {
-                    int numDecompressed = inflater.inflate(output, 0, output.length);
-                    if (numDecompressed == 0) {
+                    int inflate = inflater.inflate(output, 0, output.length);
+                    int numDecompressed = inflate;
+                    if (inflate == 0) {
                         break;
                     }
                     bos.write(output, 0, numDecompressed);
                 }
                 if (inflater.finished()) {
                     inflater.end();
-                    ByteBuffer result = ByteBuffer.wrap(bos.toByteArray(), 0, bos.size());
+                    numRead = ByteBuffer.wrap(bos.toByteArray(), 0, bos.size());
                     bos.close();
                     fin.close();
-                    return result;
+                    return numRead;
                 } else if (inflater.needsInput()) {
                 }
             }

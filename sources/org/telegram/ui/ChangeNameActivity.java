@@ -112,7 +112,7 @@ public class ChangeNameActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        int i = 5;
+        Context context2 = context;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
@@ -120,57 +120,58 @@ public class ChangeNameActivity extends BaseFragment {
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
-            user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
+            user = UserConfig.getInstance(r0.currentAccount).getCurrentUser();
         }
-        LinearLayout linearLayout = new LinearLayout(context);
-        this.fragmentView = linearLayout;
-        this.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
-        ((LinearLayout) this.fragmentView).setOrientation(1);
-        this.fragmentView.setOnTouchListener(new C09082());
-        this.firstNameField = new EditTextBoldCursor(context);
-        this.firstNameField.setTextSize(1, 18.0f);
-        this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-        this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-        this.firstNameField.setMaxLines(1);
-        this.firstNameField.setLines(1);
-        this.firstNameField.setSingleLine(true);
-        this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.firstNameField.setInputType(49152);
-        this.firstNameField.setImeOptions(5);
-        this.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
-        this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
-        this.firstNameField.setCursorWidth(1.5f);
-        linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
-        this.firstNameField.setOnEditorActionListener(new C09093());
-        this.lastNameField = new EditTextBoldCursor(context);
-        this.lastNameField.setTextSize(1, 18.0f);
-        this.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-        this.lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.lastNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-        this.lastNameField.setMaxLines(1);
-        this.lastNameField.setLines(1);
-        this.lastNameField.setSingleLine(true);
-        EditTextBoldCursor editTextBoldCursor = this.lastNameField;
-        if (!LocaleController.isRTL) {
-            i = 3;
+        LinearLayout linearLayout = new LinearLayout(context2);
+        r0.fragmentView = linearLayout;
+        r0.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
+        ((LinearLayout) r0.fragmentView).setOrientation(1);
+        r0.fragmentView.setOnTouchListener(new C09082());
+        r0.firstNameField = new EditTextBoldCursor(context2);
+        r0.firstNameField.setTextSize(1, 18.0f);
+        r0.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        r0.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        r0.firstNameField.setMaxLines(1);
+        r0.firstNameField.setLines(1);
+        r0.firstNameField.setSingleLine(true);
+        int i = 3;
+        r0.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
+        r0.firstNameField.setInputType(49152);
+        r0.firstNameField.setImeOptions(5);
+        r0.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
+        r0.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
+        r0.firstNameField.setCursorWidth(1.5f);
+        linearLayout.addView(r0.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
+        r0.firstNameField.setOnEditorActionListener(new C09093());
+        r0.lastNameField = new EditTextBoldCursor(context2);
+        r0.lastNameField.setTextSize(1, 18.0f);
+        r0.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        r0.lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.lastNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        r0.lastNameField.setMaxLines(1);
+        r0.lastNameField.setLines(1);
+        r0.lastNameField.setSingleLine(true);
+        EditTextBoldCursor editTextBoldCursor = r0.lastNameField;
+        if (LocaleController.isRTL) {
+            i = 5;
         }
         editTextBoldCursor.setGravity(i);
-        this.lastNameField.setInputType(49152);
-        this.lastNameField.setImeOptions(6);
-        this.lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
-        this.lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
-        this.lastNameField.setCursorWidth(1.5f);
-        linearLayout.addView(this.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
-        this.lastNameField.setOnEditorActionListener(new C09104());
+        r0.lastNameField.setInputType(49152);
+        r0.lastNameField.setImeOptions(6);
+        r0.lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
+        r0.lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
+        r0.lastNameField.setCursorWidth(1.5f);
+        linearLayout.addView(r0.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
+        r0.lastNameField.setOnEditorActionListener(new C09104());
         if (user != null) {
-            this.firstNameField.setText(user.first_name);
-            this.firstNameField.setSelection(this.firstNameField.length());
-            this.lastNameField.setText(user.last_name);
+            r0.firstNameField.setText(user.first_name);
+            r0.firstNameField.setSelection(r0.firstNameField.length());
+            r0.lastNameField.setText(user.last_name);
         }
-        return this.fragmentView;
+        return r0.fragmentView;
     }
 
     public void onResume() {
@@ -183,25 +184,27 @@ public class ChangeNameActivity extends BaseFragment {
 
     private void saveName() {
         User currentUser = UserConfig.getInstance(this.currentAccount).getCurrentUser();
-        if (currentUser != null && this.lastNameField.getText() != null && this.firstNameField.getText() != null) {
-            String newFirst = this.firstNameField.getText().toString();
-            String newLast = this.lastNameField.getText().toString();
-            if (currentUser.first_name == null || !currentUser.first_name.equals(newFirst) || currentUser.last_name == null || !currentUser.last_name.equals(newLast)) {
-                TL_account_updateProfile req = new TL_account_updateProfile();
-                req.flags = 3;
-                req.first_name = newFirst;
-                currentUser.first_name = newFirst;
-                req.last_name = newLast;
-                currentUser.last_name = newLast;
-                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
-                if (user != null) {
-                    user.first_name = req.first_name;
-                    user.last_name = req.last_name;
+        if (!(currentUser == null || this.lastNameField.getText() == null)) {
+            if (this.firstNameField.getText() != null) {
+                String newFirst = this.firstNameField.getText().toString();
+                String newLast = this.lastNameField.getText().toString();
+                if (currentUser.first_name == null || !currentUser.first_name.equals(newFirst) || currentUser.last_name == null || !currentUser.last_name.equals(newLast)) {
+                    TL_account_updateProfile req = new TL_account_updateProfile();
+                    req.flags = 3;
+                    req.first_name = newFirst;
+                    currentUser.first_name = newFirst;
+                    req.last_name = newLast;
+                    currentUser.last_name = newLast;
+                    User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+                    if (user != null) {
+                        user.first_name = req.first_name;
+                        user.last_name = req.last_name;
+                    }
+                    UserConfig.getInstance(this.currentAccount).saveConfig(true);
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19455());
                 }
-                UserConfig.getInstance(this.currentAccount).saveConfig(true);
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19455());
             }
         }
     }
@@ -213,20 +216,6 @@ public class ChangeNameActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[13];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
-        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        themeDescriptionArr[5] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[6] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
-        themeDescriptionArr[7] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
-        themeDescriptionArr[8] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
-        themeDescriptionArr[9] = new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[10] = new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
-        themeDescriptionArr[11] = new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
-        themeDescriptionArr[12] = new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
-        return themeDescriptionArr;
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField), new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated)};
     }
 }

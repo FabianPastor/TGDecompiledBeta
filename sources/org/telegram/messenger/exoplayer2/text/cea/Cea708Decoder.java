@@ -175,7 +175,12 @@ public final class Cea708Decoder extends CeaDecoder {
         }
 
         public boolean isEmpty() {
-            return !isDefined() || (this.rolledUpCaptions.isEmpty() && this.captionStringBuilder.length() == 0);
+            if (isDefined()) {
+                if (!this.rolledUpCaptions.isEmpty() || this.captionStringBuilder.length() != 0) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void reset() {
@@ -220,33 +225,36 @@ public final class Cea708Decoder extends CeaDecoder {
         }
 
         public void defineWindow(boolean visible, boolean rowLock, boolean columnLock, int priority, boolean relativePositioning, int verticalAnchor, int horizontalAnchor, int rowCount, int columnCount, int anchorId, int windowStyleId, int penStyleId) {
+            boolean z = rowLock;
+            int i = windowStyleId;
+            int i2 = penStyleId;
             this.defined = true;
             this.visible = visible;
-            this.rowLock = rowLock;
+            this.rowLock = z;
             this.priority = priority;
             this.relativePositioning = relativePositioning;
             this.verticalAnchor = verticalAnchor;
             this.horizontalAnchor = horizontalAnchor;
             this.anchorId = anchorId;
             if (this.rowCount != rowCount + 1) {
-                this.rowCount = rowCount + 1;
+                r8.rowCount = rowCount + 1;
                 while (true) {
-                    if ((!rowLock || this.rolledUpCaptions.size() < this.rowCount) && this.rolledUpCaptions.size() < 15) {
+                    if ((!z || r8.rolledUpCaptions.size() < r8.rowCount) && r8.rolledUpCaptions.size() < 15) {
                         break;
                     }
-                    this.rolledUpCaptions.remove(0);
+                    r8.rolledUpCaptions.remove(0);
                 }
             }
-            if (!(windowStyleId == 0 || this.windowStyleId == windowStyleId)) {
-                this.windowStyleId = windowStyleId;
-                int windowStyleIdIndex = windowStyleId - 1;
+            if (!(i == 0 || r8.windowStyleId == i)) {
+                r8.windowStyleId = i;
+                int windowStyleIdIndex = i - 1;
                 setWindowAttributes(WINDOW_STYLE_FILL[windowStyleIdIndex], COLOR_TRANSPARENT, WINDOW_STYLE_WORD_WRAP[windowStyleIdIndex], 0, WINDOW_STYLE_PRINT_DIRECTION[windowStyleIdIndex], WINDOW_STYLE_SCROLL_DIRECTION[windowStyleIdIndex], WINDOW_STYLE_JUSTIFICATION[windowStyleIdIndex]);
             }
-            if (penStyleId != 0 && this.penStyleId != penStyleId) {
-                this.penStyleId = penStyleId;
-                int penStyleIdIndex = penStyleId - 1;
-                setPenAttributes(0, 1, 1, false, false, PEN_STYLE_EDGE_TYPE[penStyleIdIndex], PEN_STYLE_FONT_STYLE[penStyleIdIndex]);
-                setPenColor(COLOR_SOLID_WHITE, PEN_STYLE_BACKGROUND[penStyleIdIndex], COLOR_SOLID_BLACK);
+            if (i2 != 0 && r8.penStyleId != i2) {
+                r8.penStyleId = i2;
+                windowStyleIdIndex = i2 - 1;
+                setPenAttributes(0, 1, 1, false, false, PEN_STYLE_EDGE_TYPE[windowStyleIdIndex], PEN_STYLE_FONT_STYLE[windowStyleIdIndex]);
+                setPenColor(COLOR_SOLID_WHITE, PEN_STYLE_BACKGROUND[windowStyleIdIndex], COLOR_SOLID_BLACK);
             }
         }
 
@@ -353,22 +361,23 @@ public final class Cea708Decoder extends CeaDecoder {
         }
 
         public Cea708Cue build() {
-            boolean windowColorSet = true;
+            CueBuilder cueBuilder = this;
             if (isEmpty()) {
                 return null;
             }
+            int i;
             Alignment alignment;
             float position;
             float line;
             int verticalAnchorType;
             int horizontalAnchorType;
             SpannableStringBuilder cueString = new SpannableStringBuilder();
-            for (int i = 0; i < this.rolledUpCaptions.size(); i++) {
-                cueString.append((CharSequence) this.rolledUpCaptions.get(i));
+            for (i = 0; i < cueBuilder.rolledUpCaptions.size(); i++) {
+                cueString.append((CharSequence) cueBuilder.rolledUpCaptions.get(i));
                 cueString.append('\n');
             }
             cueString.append(buildSpannableString());
-            switch (this.justification) {
+            switch (cueBuilder.justification) {
                 case 0:
                 case 3:
                     alignment = Alignment.ALIGN_NORMAL;
@@ -380,35 +389,55 @@ public final class Cea708Decoder extends CeaDecoder {
                     alignment = Alignment.ALIGN_CENTER;
                     break;
                 default:
-                    throw new IllegalArgumentException("Unexpected justification value: " + this.justification);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("Unexpected justification value: ");
+                    stringBuilder.append(cueBuilder.justification);
+                    throw new IllegalArgumentException(stringBuilder.toString());
             }
-            if (this.relativePositioning) {
-                position = ((float) this.horizontalAnchor) / 99.0f;
-                line = ((float) this.verticalAnchor) / 99.0f;
+            Alignment alignment2 = alignment;
+            if (cueBuilder.relativePositioning) {
+                position = ((float) cueBuilder.horizontalAnchor) / 99.0f;
+                line = ((float) cueBuilder.verticalAnchor) / 99.0f;
             } else {
-                position = ((float) this.horizontalAnchor) / 209.0f;
-                line = ((float) this.verticalAnchor) / 74.0f;
+                position = ((float) cueBuilder.horizontalAnchor) / 209.0f;
+                line = ((float) cueBuilder.verticalAnchor) / 74.0f;
             }
-            position = (position * 0.9f) + 0.05f;
-            line = (line * 0.9f) + 0.05f;
-            if (this.anchorId % 3 == 0) {
-                verticalAnchorType = 0;
-            } else if (this.anchorId % 3 == 1) {
-                verticalAnchorType = 1;
+            float position2 = (position * 0.9f) + 0.05f;
+            float line2 = (0.9f * line) + 0.05f;
+            if (cueBuilder.anchorId % 3 == 0) {
+                i = 0;
+            } else if (cueBuilder.anchorId % 3 == 1) {
+                i = 1;
             } else {
                 verticalAnchorType = 2;
+                if (cueBuilder.anchorId / 3 == 0) {
+                    i = 0;
+                } else if (cueBuilder.anchorId / 3 != 1) {
+                    i = 1;
+                } else {
+                    horizontalAnchorType = 2;
+                    return new Cea708Cue(cueString, alignment2, line2, 0, verticalAnchorType, position2, horizontalAnchorType, Float.MIN_VALUE, cueBuilder.windowFillColor == COLOR_SOLID_BLACK, cueBuilder.windowFillColor, cueBuilder.priority);
+                }
+                horizontalAnchorType = i;
+                if (cueBuilder.windowFillColor == COLOR_SOLID_BLACK) {
+                }
+                return new Cea708Cue(cueString, alignment2, line2, 0, verticalAnchorType, position2, horizontalAnchorType, Float.MIN_VALUE, cueBuilder.windowFillColor == COLOR_SOLID_BLACK, cueBuilder.windowFillColor, cueBuilder.priority);
             }
-            if (this.anchorId / 3 == 0) {
-                horizontalAnchorType = 0;
-            } else if (this.anchorId / 3 == 1) {
-                horizontalAnchorType = 1;
-            } else {
+            verticalAnchorType = i;
+            if (cueBuilder.anchorId / 3 == 0) {
+                i = 0;
+            } else if (cueBuilder.anchorId / 3 != 1) {
                 horizontalAnchorType = 2;
+                if (cueBuilder.windowFillColor == COLOR_SOLID_BLACK) {
+                }
+                return new Cea708Cue(cueString, alignment2, line2, 0, verticalAnchorType, position2, horizontalAnchorType, Float.MIN_VALUE, cueBuilder.windowFillColor == COLOR_SOLID_BLACK, cueBuilder.windowFillColor, cueBuilder.priority);
+            } else {
+                i = 1;
             }
-            if (this.windowFillColor == COLOR_SOLID_BLACK) {
-                windowColorSet = false;
+            horizontalAnchorType = i;
+            if (cueBuilder.windowFillColor == COLOR_SOLID_BLACK) {
             }
-            return new Cea708Cue(cueString, alignment, line, 0, verticalAnchorType, position, horizontalAnchorType, Float.MIN_VALUE, windowColorSet, this.windowFillColor, this.priority);
+            return new Cea708Cue(cueString, alignment2, line2, 0, verticalAnchorType, position2, horizontalAnchorType, Float.MIN_VALUE, cueBuilder.windowFillColor == COLOR_SOLID_BLACK, cueBuilder.windowFillColor, cueBuilder.priority);
         }
 
         public static int getArgbColorFromCeaColor(int red, int green, int blue) {
@@ -417,13 +446,11 @@ public final class Cea708Decoder extends CeaDecoder {
 
         public static int getArgbColorFromCeaColor(int red, int green, int blue, int opacity) {
             int alpha;
-            int i;
-            int i2;
-            int i3 = 255;
             Assertions.checkIndex(red, 0, 4);
             Assertions.checkIndex(green, 0, 4);
             Assertions.checkIndex(blue, 0, 4);
             Assertions.checkIndex(opacity, 0, 4);
+            int i = 255;
             switch (opacity) {
                 case 0:
                 case 1:
@@ -439,20 +466,12 @@ public final class Cea708Decoder extends CeaDecoder {
                     alpha = 255;
                     break;
             }
-            if (red > 1) {
-                i = 255;
-            } else {
+            int i2 = red > 1 ? 255 : 0;
+            int i3 = green > 1 ? 255 : 0;
+            if (blue <= 1) {
                 i = 0;
             }
-            if (green > 1) {
-                i2 = 255;
-            } else {
-                i2 = 0;
-            }
-            if (blue <= 1) {
-                i3 = 0;
-            }
-            return Color.argb(alpha, i, i2, i3);
+            return Color.argb(alpha, i2, i3, i);
         }
     }
 
@@ -465,7 +484,7 @@ public final class Cea708Decoder extends CeaDecoder {
         public DtvCcPacket(int sequenceNumber, int packetSize) {
             this.sequenceNumber = sequenceNumber;
             this.packetSize = packetSize;
-            this.packetData = new byte[((packetSize * 2) - 1)];
+            this.packetData = new byte[((2 * packetSize) - 1)];
         }
     }
 
@@ -490,10 +509,7 @@ public final class Cea708Decoder extends CeaDecoder {
     }
 
     public Cea708Decoder(int accessibilityChannel) {
-        if (accessibilityChannel == -1) {
-            accessibilityChannel = 1;
-        }
-        this.selectedServiceNumber = accessibilityChannel;
+        this.selectedServiceNumber = accessibilityChannel == -1 ? 1 : accessibilityChannel;
         this.cueBuilders = new CueBuilder[8];
         for (int i = 0; i < 8; i++) {
             this.cueBuilders[i] = new CueBuilder();
@@ -530,45 +546,48 @@ public final class Cea708Decoder extends CeaDecoder {
         while (this.ccData.bytesLeft() >= 3) {
             int ccTypeAndValid = this.ccData.readUnsignedByte() & 7;
             int ccType = ccTypeAndValid & 3;
+            boolean z = false;
             boolean ccValid = (ccTypeAndValid & 4) == 4;
             byte ccData1 = (byte) this.ccData.readUnsignedByte();
             byte ccData2 = (byte) this.ccData.readUnsignedByte();
-            if ((ccType == 2 || ccType == 3) && ccValid) {
-                byte[] bArr;
-                DtvCcPacket dtvCcPacket;
-                int i;
-                if (ccType == 3) {
-                    finalizeCurrentPacket();
-                    int sequenceNumber = (ccData1 & PsExtractor.AUDIO_STREAM) >> 6;
-                    int packetSize = ccData1 & CHARACTER_DIAERESIS_Y;
-                    if (packetSize == 0) {
-                        packetSize = 64;
-                    }
-                    this.currentDtvCcPacket = new DtvCcPacket(sequenceNumber, packetSize);
-                    bArr = this.currentDtvCcPacket.packetData;
-                    dtvCcPacket = this.currentDtvCcPacket;
-                    i = dtvCcPacket.currentIndex;
-                    dtvCcPacket.currentIndex = i + 1;
-                    bArr[i] = ccData2;
-                } else {
-                    Assertions.checkArgument(ccType == 2);
-                    if (this.currentDtvCcPacket == null) {
-                        Log.e(TAG, "Encountered DTVCC_PACKET_DATA before DTVCC_PACKET_START");
-                    } else {
-                        bArr = this.currentDtvCcPacket.packetData;
-                        dtvCcPacket = this.currentDtvCcPacket;
-                        i = dtvCcPacket.currentIndex;
-                        dtvCcPacket.currentIndex = i + 1;
-                        bArr[i] = ccData1;
-                        bArr = this.currentDtvCcPacket.packetData;
-                        dtvCcPacket = this.currentDtvCcPacket;
-                        i = dtvCcPacket.currentIndex;
+            if (ccType == 2 || ccType == 3) {
+                if (ccValid) {
+                    if (ccType == 3) {
+                        finalizeCurrentPacket();
+                        int sequenceNumber = (ccData1 & PsExtractor.AUDIO_STREAM) >> 6;
+                        int packetSize = ccData1 & CHARACTER_DIAERESIS_Y;
+                        if (packetSize == 0) {
+                            packetSize = 64;
+                        }
+                        this.currentDtvCcPacket = new DtvCcPacket(sequenceNumber, packetSize);
+                        byte[] bArr = this.currentDtvCcPacket.packetData;
+                        DtvCcPacket dtvCcPacket = this.currentDtvCcPacket;
+                        int i = dtvCcPacket.currentIndex;
                         dtvCcPacket.currentIndex = i + 1;
                         bArr[i] = ccData2;
+                    } else {
+                        if (ccType == 2) {
+                            z = true;
+                        }
+                        Assertions.checkArgument(z);
+                        if (this.currentDtvCcPacket == null) {
+                            Log.e(TAG, "Encountered DTVCC_PACKET_DATA before DTVCC_PACKET_START");
+                        } else {
+                            byte[] bArr2 = this.currentDtvCcPacket.packetData;
+                            DtvCcPacket dtvCcPacket2 = this.currentDtvCcPacket;
+                            int i2 = dtvCcPacket2.currentIndex;
+                            dtvCcPacket2.currentIndex = i2 + 1;
+                            bArr2[i2] = ccData1;
+                            bArr2 = this.currentDtvCcPacket.packetData;
+                            dtvCcPacket2 = this.currentDtvCcPacket;
+                            i2 = dtvCcPacket2.currentIndex;
+                            dtvCcPacket2.currentIndex = i2 + 1;
+                            bArr2[i2] = ccData2;
+                        }
                     }
-                }
-                if (this.currentDtvCcPacket.currentIndex == (this.currentDtvCcPacket.packetSize * 2) - 1) {
-                    finalizeCurrentPacket();
+                    if (this.currentDtvCcPacket.currentIndex == (this.currentDtvCcPacket.packetSize * 2) - 1) {
+                        finalizeCurrentPacket();
+                    }
                 }
             }
         }
@@ -583,7 +602,16 @@ public final class Cea708Decoder extends CeaDecoder {
 
     private void processCurrentPacket() {
         if (this.currentDtvCcPacket.currentIndex != (this.currentDtvCcPacket.packetSize * 2) - 1) {
-            Log.w(TAG, "DtvCcPacket ended prematurely; size is " + ((this.currentDtvCcPacket.packetSize * 2) - 1) + ", but current index is " + this.currentDtvCcPacket.currentIndex + " (sequence number " + this.currentDtvCcPacket.sequenceNumber + "); ignoring packet");
+            String str = TAG;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("DtvCcPacket ended prematurely; size is ");
+            stringBuilder.append((this.currentDtvCcPacket.packetSize * 2) - 1);
+            stringBuilder.append(", but current index is ");
+            stringBuilder.append(this.currentDtvCcPacket.currentIndex);
+            stringBuilder.append(" (sequence number ");
+            stringBuilder.append(this.currentDtvCcPacket.sequenceNumber);
+            stringBuilder.append("); ignoring packet");
+            Log.w(str, stringBuilder.toString());
             return;
         }
         this.serviceBlockPacket.reset(this.currentDtvCcPacket.packetData, this.currentDtvCcPacket.currentIndex);
@@ -595,12 +623,19 @@ public final class Cea708Decoder extends CeaDecoder {
         }
         if (blockSize == 0) {
             if (serviceNumber != 0) {
-                Log.w(TAG, "serviceNumber is non-zero (" + serviceNumber + ") when blockSize is 0");
+                String str2 = TAG;
+                StringBuilder stringBuilder2 = new StringBuilder();
+                stringBuilder2.append("serviceNumber is non-zero (");
+                stringBuilder2.append(serviceNumber);
+                stringBuilder2.append(") when blockSize is 0");
+                Log.w(str2, stringBuilder2.toString());
             }
         } else if (serviceNumber == this.selectedServiceNumber) {
             boolean cuesNeedUpdate = false;
             while (this.serviceBlockPacket.bitsLeft() > 0) {
                 int command = this.serviceBlockPacket.readBits(8);
+                String str3;
+                StringBuilder stringBuilder3;
                 if (command == 16) {
                     command = this.serviceBlockPacket.readBits(8);
                     if (command <= 31) {
@@ -614,7 +649,11 @@ public final class Cea708Decoder extends CeaDecoder {
                         handleG3Character(command);
                         cuesNeedUpdate = true;
                     } else {
-                        Log.w(TAG, "Invalid extended command: " + command);
+                        str3 = TAG;
+                        stringBuilder3 = new StringBuilder();
+                        stringBuilder3.append("Invalid extended command: ");
+                        stringBuilder3.append(command);
+                        Log.w(str3, stringBuilder3.toString());
                     }
                 } else if (command <= 31) {
                     handleC0Command(command);
@@ -628,7 +667,11 @@ public final class Cea708Decoder extends CeaDecoder {
                     handleG1Character(command);
                     cuesNeedUpdate = true;
                 } else {
-                    Log.w(TAG, "Invalid base command: " + command);
+                    str3 = TAG;
+                    stringBuilder3 = new StringBuilder();
+                    stringBuilder3.append("Invalid base command: ");
+                    stringBuilder3.append(command);
+                    Log.w(str3, stringBuilder3.toString());
                 }
             }
             if (cuesNeedUpdate) {
@@ -638,41 +681,55 @@ public final class Cea708Decoder extends CeaDecoder {
     }
 
     private void handleC0Command(int command) {
-        switch (command) {
-            case 0:
-            case 14:
-                return;
-            case 3:
-                this.cues = getDisplayCues();
-                return;
-            case 8:
-                this.currentCueBuilder.backspace();
-                return;
-            case 12:
-                resetCueBuilders();
-                return;
-            case 13:
-                this.currentCueBuilder.append('\n');
-                return;
-            default:
-                if (command >= 17 && command <= COMMAND_EXT1_END) {
-                    Log.w(TAG, "Currently unsupported COMMAND_EXT1 Command: " + command);
-                    this.serviceBlockPacket.skipBits(8);
+        if (command == 0) {
+            return;
+        }
+        if (command == 3) {
+            this.cues = getDisplayCues();
+        } else if (command != 8) {
+            switch (command) {
+                case 12:
+                    resetCueBuilders();
                     return;
-                } else if (command < 24 || command > 31) {
-                    Log.w(TAG, "Invalid C0 command: " + command);
+                case 13:
+                    this.currentCueBuilder.append('\n');
                     return;
-                } else {
-                    Log.w(TAG, "Currently unsupported COMMAND_P16 Command: " + command);
-                    this.serviceBlockPacket.skipBits(16);
+                case 14:
                     return;
-                }
+                default:
+                    if (command >= 17 && command <= COMMAND_EXT1_END) {
+                        String str = TAG;
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("Currently unsupported COMMAND_EXT1 Command: ");
+                        stringBuilder.append(command);
+                        Log.w(str, stringBuilder.toString());
+                        this.serviceBlockPacket.skipBits(8);
+                        return;
+                    } else if (command < 24 || command > 31) {
+                        r0 = TAG;
+                        r1 = new StringBuilder();
+                        r1.append("Invalid C0 command: ");
+                        r1.append(command);
+                        Log.w(r0, r1.toString());
+                        return;
+                    } else {
+                        r0 = TAG;
+                        r1 = new StringBuilder();
+                        r1.append("Currently unsupported COMMAND_P16 Command: ");
+                        r1.append(command);
+                        Log.w(r0, r1.toString());
+                        this.serviceBlockPacket.skipBits(16);
+                        return;
+                    }
+            }
+        } else {
+            this.currentCueBuilder.backspace();
         }
     }
 
     private void handleC1Command(int command) {
+        int i = 1;
         int window;
-        int i;
         switch (command) {
             case 128:
             case 129:
@@ -690,47 +747,56 @@ public final class Cea708Decoder extends CeaDecoder {
                 }
                 return;
             case COMMAND_CLW /*136*/:
-                for (i = 1; i <= 8; i++) {
-                    if (this.serviceBlockPacket.readBit()) {
-                        this.cueBuilders[8 - i].clear();
+                while (true) {
+                    window = i;
+                    if (window <= 8) {
+                        if (this.serviceBlockPacket.readBit()) {
+                            this.cueBuilders[8 - window].clear();
+                        }
+                        i = window + 1;
+                    } else {
+                        return;
                     }
                 }
-                return;
             case COMMAND_DSW /*137*/:
-                for (i = 1; i <= 8; i++) {
+                for (window = 1; window <= 8; window++) {
                     if (this.serviceBlockPacket.readBit()) {
-                        this.cueBuilders[8 - i].setVisibility(true);
+                        this.cueBuilders[8 - window].setVisibility(true);
                     }
                 }
                 return;
             case 138:
-                for (i = 1; i <= 8; i++) {
-                    if (this.serviceBlockPacket.readBit()) {
-                        this.cueBuilders[8 - i].setVisibility(false);
+                while (true) {
+                    window = i;
+                    if (window <= 8) {
+                        if (this.serviceBlockPacket.readBit()) {
+                            this.cueBuilders[8 - window].setVisibility(false);
+                        }
+                        i = window + 1;
+                    } else {
+                        return;
                     }
                 }
-                return;
             case COMMAND_TGW /*139*/:
-                for (i = 1; i <= 8; i++) {
+                for (window = 1; window <= 8; window++) {
                     if (this.serviceBlockPacket.readBit()) {
-                        boolean z;
-                        CueBuilder cueBuilder = this.cueBuilders[8 - i];
-                        if (cueBuilder.isVisible()) {
-                            z = false;
-                        } else {
-                            z = true;
-                        }
-                        cueBuilder.setVisibility(z);
+                        CueBuilder cueBuilder = this.cueBuilders[8 - window];
+                        cueBuilder.setVisibility(cueBuilder.isVisible() ^ true);
                     }
                 }
                 return;
             case COMMAND_DLW /*140*/:
-                for (i = 1; i <= 8; i++) {
-                    if (this.serviceBlockPacket.readBit()) {
-                        this.cueBuilders[8 - i].reset();
+                while (true) {
+                    window = i;
+                    if (window <= 8) {
+                        if (this.serviceBlockPacket.readBit()) {
+                            this.cueBuilders[8 - window].reset();
+                        }
+                        i = window + 1;
+                    } else {
+                        return;
                     }
                 }
-                return;
             case COMMAND_DLY /*141*/:
                 this.serviceBlockPacket.skipBits(8);
                 return;
@@ -763,33 +829,40 @@ public final class Cea708Decoder extends CeaDecoder {
                     this.serviceBlockPacket.skipBits(16);
                     return;
                 }
-            case COMMAND_SWA /*151*/:
-                if (this.currentCueBuilder.isDefined()) {
-                    handleSetWindowAttributes();
-                    return;
-                } else {
-                    this.serviceBlockPacket.skipBits(32);
-                    return;
-                }
-            case COMMAND_DF0 /*152*/:
-            case COMMAND_DF1 /*153*/:
-            case COMMAND_DF2 /*154*/:
-            case COMMAND_DF3 /*155*/:
-            case COMMAND_DF4 /*156*/:
-            case COMMAND_DF5 /*157*/:
-            case COMMAND_DF6 /*158*/:
-            case 159:
-                window = command - 152;
-                handleDefineWindow(window);
-                if (this.currentWindow != window) {
-                    this.currentWindow = window;
-                    this.currentCueBuilder = this.cueBuilders[window];
-                    return;
-                }
-                return;
             default:
-                Log.w(TAG, "Invalid C1 command: " + command);
-                return;
+                switch (command) {
+                    case COMMAND_SWA /*151*/:
+                        if (this.currentCueBuilder.isDefined()) {
+                            handleSetWindowAttributes();
+                            return;
+                        } else {
+                            this.serviceBlockPacket.skipBits(32);
+                            return;
+                        }
+                    case COMMAND_DF0 /*152*/:
+                    case COMMAND_DF1 /*153*/:
+                    case COMMAND_DF2 /*154*/:
+                    case COMMAND_DF3 /*155*/:
+                    case COMMAND_DF4 /*156*/:
+                    case COMMAND_DF5 /*157*/:
+                    case COMMAND_DF6 /*158*/:
+                    case 159:
+                        window = command - 152;
+                        handleDefineWindow(window);
+                        if (this.currentWindow != window) {
+                            this.currentWindow = window;
+                            this.currentCueBuilder = this.cueBuilders[window];
+                            return;
+                        }
+                        return;
+                    default:
+                        String str = TAG;
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("Invalid C1 command: ");
+                        stringBuilder.append(command);
+                        Log.w(str, stringBuilder.toString());
+                        return;
+                }
         }
     }
 
@@ -812,7 +885,7 @@ public final class Cea708Decoder extends CeaDecoder {
             this.serviceBlockPacket.skipBits(40);
         } else if (command <= 159) {
             this.serviceBlockPacket.skipBits(2);
-            this.serviceBlockPacket.skipBits(this.serviceBlockPacket.readBits(6) * 8);
+            this.serviceBlockPacket.skipBits(8 * this.serviceBlockPacket.readBits(6));
         }
     }
 
@@ -829,88 +902,102 @@ public final class Cea708Decoder extends CeaDecoder {
     }
 
     private void handleG2Character(int characterCode) {
-        switch (characterCode) {
-            case 32:
-                this.currentCueBuilder.append(' ');
-                return;
-            case CHARACTER_NBTSP /*33*/:
-                this.currentCueBuilder.append('\u00a0');
-                return;
-            case CHARACTER_ELLIPSIS /*37*/:
-                this.currentCueBuilder.append('\u2026');
-                return;
-            case CHARACTER_BIG_CARONS /*42*/:
-                this.currentCueBuilder.append('\u0160');
-                return;
-            case CHARACTER_BIG_OE /*44*/:
-                this.currentCueBuilder.append('\u0152');
-                return;
-            case CHARACTER_SOLID_BLOCK /*48*/:
-                this.currentCueBuilder.append('\u2588');
-                return;
-            case CHARACTER_OPEN_SINGLE_QUOTE /*49*/:
-                this.currentCueBuilder.append('\u2018');
-                return;
-            case CHARACTER_CLOSE_SINGLE_QUOTE /*50*/:
-                this.currentCueBuilder.append('\u2019');
-                return;
-            case CHARACTER_OPEN_DOUBLE_QUOTE /*51*/:
-                this.currentCueBuilder.append('\u201c');
-                return;
-            case CHARACTER_CLOSE_DOUBLE_QUOTE /*52*/:
-                this.currentCueBuilder.append('\u201d');
-                return;
-            case CHARACTER_BOLD_BULLET /*53*/:
-                this.currentCueBuilder.append('\u2022');
-                return;
-            case CHARACTER_TM /*57*/:
-                this.currentCueBuilder.append('\u2122');
-                return;
-            case CHARACTER_SMALL_CARONS /*58*/:
-                this.currentCueBuilder.append('\u0161');
-                return;
-            case CHARACTER_SMALL_OE /*60*/:
-                this.currentCueBuilder.append('\u0153');
-                return;
-            case CHARACTER_SM /*61*/:
-                this.currentCueBuilder.append('\u2120');
-                return;
-            case CHARACTER_DIAERESIS_Y /*63*/:
-                this.currentCueBuilder.append('\u0178');
-                return;
-            case CHARACTER_ONE_EIGHTH /*118*/:
-                this.currentCueBuilder.append('\u215b');
-                return;
-            case CHARACTER_THREE_EIGHTHS /*119*/:
-                this.currentCueBuilder.append('\u215c');
-                return;
-            case CHARACTER_FIVE_EIGHTHS /*120*/:
-                this.currentCueBuilder.append('\u215d');
-                return;
-            case CHARACTER_SEVEN_EIGHTHS /*121*/:
-                this.currentCueBuilder.append('\u215e');
-                return;
-            case CHARACTER_VERTICAL_BORDER /*122*/:
-                this.currentCueBuilder.append('\u2502');
-                return;
-            case CHARACTER_UPPER_RIGHT_BORDER /*123*/:
-                this.currentCueBuilder.append('\u2510');
-                return;
-            case CHARACTER_LOWER_LEFT_BORDER /*124*/:
-                this.currentCueBuilder.append('\u2514');
-                return;
-            case CHARACTER_HORIZONTAL_BORDER /*125*/:
-                this.currentCueBuilder.append('\u2500');
-                return;
-            case CHARACTER_LOWER_RIGHT_BORDER /*126*/:
-                this.currentCueBuilder.append('\u2518');
-                return;
-            case 127:
-                this.currentCueBuilder.append('\u250c');
-                return;
-            default:
-                Log.w(TAG, "Invalid G2 character: " + characterCode);
-                return;
+        if (characterCode == CHARACTER_ELLIPSIS) {
+            this.currentCueBuilder.append('\u2026');
+        } else if (characterCode == CHARACTER_BIG_CARONS) {
+            this.currentCueBuilder.append('\u0160');
+        } else if (characterCode == CHARACTER_BIG_OE) {
+            this.currentCueBuilder.append('\u0152');
+        } else if (characterCode != CHARACTER_DIAERESIS_Y) {
+            switch (characterCode) {
+                case 32:
+                    this.currentCueBuilder.append(' ');
+                    return;
+                case CHARACTER_NBTSP /*33*/:
+                    this.currentCueBuilder.append('\u00a0');
+                    return;
+                default:
+                    switch (characterCode) {
+                        case CHARACTER_SOLID_BLOCK /*48*/:
+                            this.currentCueBuilder.append('\u2588');
+                            return;
+                        case CHARACTER_OPEN_SINGLE_QUOTE /*49*/:
+                            this.currentCueBuilder.append('\u2018');
+                            return;
+                        case CHARACTER_CLOSE_SINGLE_QUOTE /*50*/:
+                            this.currentCueBuilder.append('\u2019');
+                            return;
+                        case CHARACTER_OPEN_DOUBLE_QUOTE /*51*/:
+                            this.currentCueBuilder.append('\u201c');
+                            return;
+                        case CHARACTER_CLOSE_DOUBLE_QUOTE /*52*/:
+                            this.currentCueBuilder.append('\u201d');
+                            return;
+                        case CHARACTER_BOLD_BULLET /*53*/:
+                            this.currentCueBuilder.append('\u2022');
+                            return;
+                        default:
+                            switch (characterCode) {
+                                case CHARACTER_TM /*57*/:
+                                    this.currentCueBuilder.append('\u2122');
+                                    return;
+                                case CHARACTER_SMALL_CARONS /*58*/:
+                                    this.currentCueBuilder.append('\u0161');
+                                    return;
+                                default:
+                                    switch (characterCode) {
+                                        case CHARACTER_SMALL_OE /*60*/:
+                                            this.currentCueBuilder.append('\u0153');
+                                            return;
+                                        case CHARACTER_SM /*61*/:
+                                            this.currentCueBuilder.append('\u2120');
+                                            return;
+                                        default:
+                                            switch (characterCode) {
+                                                case CHARACTER_ONE_EIGHTH /*118*/:
+                                                    this.currentCueBuilder.append('\u215b');
+                                                    return;
+                                                case CHARACTER_THREE_EIGHTHS /*119*/:
+                                                    this.currentCueBuilder.append('\u215c');
+                                                    return;
+                                                case CHARACTER_FIVE_EIGHTHS /*120*/:
+                                                    this.currentCueBuilder.append('\u215d');
+                                                    return;
+                                                case CHARACTER_SEVEN_EIGHTHS /*121*/:
+                                                    this.currentCueBuilder.append('\u215e');
+                                                    return;
+                                                case CHARACTER_VERTICAL_BORDER /*122*/:
+                                                    this.currentCueBuilder.append('\u2502');
+                                                    return;
+                                                case CHARACTER_UPPER_RIGHT_BORDER /*123*/:
+                                                    this.currentCueBuilder.append('\u2510');
+                                                    return;
+                                                case CHARACTER_LOWER_LEFT_BORDER /*124*/:
+                                                    this.currentCueBuilder.append('\u2514');
+                                                    return;
+                                                case CHARACTER_HORIZONTAL_BORDER /*125*/:
+                                                    this.currentCueBuilder.append('\u2500');
+                                                    return;
+                                                case CHARACTER_LOWER_RIGHT_BORDER /*126*/:
+                                                    this.currentCueBuilder.append('\u2518');
+                                                    return;
+                                                case 127:
+                                                    this.currentCueBuilder.append('\u250c');
+                                                    return;
+                                                default:
+                                                    String str = TAG;
+                                                    StringBuilder stringBuilder = new StringBuilder();
+                                                    stringBuilder.append("Invalid G2 character: ");
+                                                    stringBuilder.append(characterCode);
+                                                    Log.w(str, stringBuilder.toString());
+                                                    return;
+                                            }
+                                    }
+                            }
+                    }
+            }
+        } else {
+            this.currentCueBuilder.append('\u0178');
         }
     }
 
@@ -919,7 +1006,11 @@ public final class Cea708Decoder extends CeaDecoder {
             this.currentCueBuilder.append('\u33c4');
             return;
         }
-        Log.w(TAG, "Invalid G3 character: " + characterCode);
+        String str = TAG;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Invalid G3 character: ");
+        stringBuilder.append(characterCode);
+        Log.w(str, stringBuilder.toString());
         this.currentCueBuilder.append('_');
     }
 
@@ -944,16 +1035,20 @@ public final class Cea708Decoder extends CeaDecoder {
     private void handleSetWindowAttributes() {
         int fillColor = CueBuilder.getArgbColorFromCeaColor(this.serviceBlockPacket.readBits(2), this.serviceBlockPacket.readBits(2), this.serviceBlockPacket.readBits(2), this.serviceBlockPacket.readBits(2));
         int borderType = this.serviceBlockPacket.readBits(2);
-        int borderColor = CueBuilder.getArgbColorFromCeaColor(this.serviceBlockPacket.readBits(2), this.serviceBlockPacket.readBits(2), this.serviceBlockPacket.readBits(2));
+        int borderR = this.serviceBlockPacket.readBits(2);
+        int borderG = this.serviceBlockPacket.readBits(2);
+        int borderB = this.serviceBlockPacket.readBits(2);
+        int borderColor = CueBuilder.getArgbColorFromCeaColor(borderR, borderG, borderB);
         if (this.serviceBlockPacket.readBit()) {
             borderType |= 4;
         }
-        boolean wordWrapToggle = this.serviceBlockPacket.readBit();
-        int printDirection = this.serviceBlockPacket.readBits(2);
-        int scrollDirection = this.serviceBlockPacket.readBits(2);
-        int justification = this.serviceBlockPacket.readBits(2);
-        this.serviceBlockPacket.skipBits(8);
-        this.currentCueBuilder.setWindowAttributes(fillColor, borderColor, wordWrapToggle, borderType, printDirection, scrollDirection, justification);
+        int borderType2 = borderType;
+        boolean wordWrapToggle = r0.serviceBlockPacket.readBit();
+        int printDirection = r0.serviceBlockPacket.readBits(2);
+        int scrollDirection = r0.serviceBlockPacket.readBits(2);
+        int justification = r0.serviceBlockPacket.readBits(2);
+        r0.serviceBlockPacket.skipBits(8);
+        r0.currentCueBuilder.setWindowAttributes(fillColor, borderColor, wordWrapToggle, borderType2, printDirection, scrollDirection, justification);
     }
 
     private void handleDefineWindow(int window) {

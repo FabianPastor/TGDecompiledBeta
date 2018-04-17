@@ -158,14 +158,16 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
 
         public void onClick(View v) {
-            if (!IntroActivity.this.startPressed && IntroActivity.this.localeInfo != null) {
-                LocaleController.getInstance().applyLanguage(IntroActivity.this.localeInfo, true, false, IntroActivity.this.currentAccount);
-                IntroActivity.this.startPressed = true;
-                Intent intent2 = new Intent(IntroActivity.this, LaunchActivity.class);
-                intent2.putExtra("fromIntro", true);
-                IntroActivity.this.startActivity(intent2);
-                IntroActivity.this.destroyed = true;
-                IntroActivity.this.finish();
+            if (!IntroActivity.this.startPressed) {
+                if (IntroActivity.this.localeInfo != null) {
+                    LocaleController.getInstance().applyLanguage(IntroActivity.this.localeInfo, true, false, IntroActivity.this.currentAccount);
+                    IntroActivity.this.startPressed = true;
+                    Intent intent2 = new Intent(IntroActivity.this, LaunchActivity.class);
+                    intent2.putExtra("fromIntro", true);
+                    IntroActivity.this.startActivity(intent2);
+                    IntroActivity.this.destroyed = true;
+                    IntroActivity.this.finish();
+                }
             }
         }
     }
@@ -195,25 +197,25 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
 
         protected void onDraw(Canvas canvas) {
-            int x;
+            int a;
             float d = (float) AndroidUtilities.dp(5.0f);
             this.paint.setColor(-4473925);
             this.currentPage = IntroActivity.this.viewPager.getCurrentItem();
-            for (int a = 0; a < 6; a++) {
+            for (a = 0; a < 6; a++) {
                 if (a != this.currentPage) {
-                    x = a * AndroidUtilities.dp(11.0f);
+                    int x = AndroidUtilities.dp(11.0f) * a;
                     this.rect.set((float) x, 0.0f, (float) (AndroidUtilities.dp(5.0f) + x), (float) AndroidUtilities.dp(5.0f));
                     canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(2.5f), (float) AndroidUtilities.dp(2.5f), this.paint);
                 }
             }
             this.paint.setColor(-13851168);
-            x = this.currentPage * AndroidUtilities.dp(11.0f);
+            a = this.currentPage * AndroidUtilities.dp(11.0f);
             if (this.progress == 0.0f) {
-                this.rect.set((float) x, 0.0f, (float) (AndroidUtilities.dp(5.0f) + x), (float) AndroidUtilities.dp(5.0f));
+                this.rect.set((float) a, 0.0f, (float) (AndroidUtilities.dp(5.0f) + a), (float) AndroidUtilities.dp(5.0f));
             } else if (this.scrollPosition >= this.currentPage) {
-                this.rect.set((float) x, 0.0f, ((float) (AndroidUtilities.dp(5.0f) + x)) + (((float) AndroidUtilities.dp(11.0f)) * this.progress), (float) AndroidUtilities.dp(5.0f));
+                this.rect.set((float) a, 0.0f, ((float) (AndroidUtilities.dp(5.0f) + a)) + (((float) AndroidUtilities.dp(11.0f)) * this.progress), (float) AndroidUtilities.dp(5.0f));
             } else {
-                this.rect.set(((float) x) - (((float) AndroidUtilities.dp(11.0f)) * (1.0f - this.progress)), 0.0f, (float) (AndroidUtilities.dp(5.0f) + x), (float) AndroidUtilities.dp(5.0f));
+                this.rect.set(((float) a) - (((float) AndroidUtilities.dp(11.0f)) * (1.0f - this.progress)), 0.0f, (float) (AndroidUtilities.dp(5.0f) + a), (float) AndroidUtilities.dp(5.0f));
             }
             canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(2.5f), (float) AndroidUtilities.dp(2.5f), this.paint);
         }
@@ -321,8 +323,13 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                     Intro.onDrawFrame();
                     EGLThread.this.egl10.eglSwapBuffers(EGLThread.this.eglDisplay, EGLThread.this.eglSurface);
                     EGLThread.this.postRunnable(new C14251(), 16);
-                } else if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m1e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(EGLThread.this.egl10.eglGetError()));
+                    return;
+                }
+                if (BuildVars.LOGS_ENABLED) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("eglMakeCurrent failed ");
+                    stringBuilder.append(GLUtils.getEGLErrorString(EGLThread.this.egl10.eglGetError()));
+                    FileLog.m1e(stringBuilder.toString());
                 }
             }
         }
@@ -351,80 +358,96 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             if (this.eglDisplay == EGL10.EGL_NO_DISPLAY) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m1e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("eglGetDisplay failed ");
+                    stringBuilder.append(GLUtils.getEGLErrorString(r0.egl10.eglGetError()));
+                    FileLog.m1e(stringBuilder.toString());
                 }
                 finish();
                 return false;
             }
-            if (this.egl10.eglInitialize(this.eglDisplay, new int[2])) {
+            if (r0.egl10.eglInitialize(r0.eglDisplay, new int[2])) {
                 int[] configsCount = new int[1];
                 EGLConfig[] configs = new EGLConfig[1];
-                if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 24, 12326, 0, 12338, 1, 12337, 2, 12344}, configs, 1, configsCount)) {
+                if (!r0.egl10.eglChooseConfig(r0.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 24, 12326, 0, 12338, 1, 12337, 2, 12344}, configs, 1, configsCount)) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m1e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("eglChooseConfig failed ");
+                        stringBuilder.append(GLUtils.getEGLErrorString(r0.egl10.eglGetError()));
+                        FileLog.m1e(stringBuilder.toString());
                     }
                     finish();
                     return false;
                 } else if (configsCount[0] > 0) {
-                    this.eglConfig = configs[0];
-                    int[] iArr = new int[3];
-                    this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
-                    if (this.eglContext == null) {
+                    r0.eglConfig = configs[0];
+                    r0.eglContext = r0.egl10.eglCreateContext(r0.eglDisplay, r0.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
+                    if (r0.eglContext == null) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m1e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("eglCreateContext failed ");
+                            stringBuilder.append(GLUtils.getEGLErrorString(r0.egl10.eglGetError()));
+                            FileLog.m1e(stringBuilder.toString());
                         }
                         finish();
                         return false;
-                    } else if (this.surfaceTexture instanceof SurfaceTexture) {
-                        this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, this.surfaceTexture, null);
-                        if (this.eglSurface == null || this.eglSurface == EGL10.EGL_NO_SURFACE) {
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m1e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                    } else if (r0.surfaceTexture instanceof SurfaceTexture) {
+                        r0.eglSurface = r0.egl10.eglCreateWindowSurface(r0.eglDisplay, r0.eglConfig, r0.surfaceTexture, null);
+                        if (r0.eglSurface != null) {
+                            if (r0.eglSurface != EGL10.EGL_NO_SURFACE) {
+                                if (r0.egl10.eglMakeCurrent(r0.eglDisplay, r0.eglSurface, r0.eglSurface, r0.eglContext)) {
+                                    r0.gl = r0.eglContext.getGL();
+                                    GLES20.glGenTextures(23, r0.textures, 0);
+                                    loadTexture(R.drawable.intro_fast_arrow_shadow, 0);
+                                    loadTexture(R.drawable.intro_fast_arrow, 1);
+                                    loadTexture(R.drawable.intro_fast_body, 2);
+                                    loadTexture(R.drawable.intro_fast_spiral, 3);
+                                    loadTexture(R.drawable.intro_ic_bubble_dot, 4);
+                                    loadTexture(R.drawable.intro_ic_bubble, 5);
+                                    loadTexture(R.drawable.intro_ic_cam_lens, 6);
+                                    loadTexture(R.drawable.intro_ic_cam, 7);
+                                    loadTexture(R.drawable.intro_ic_pencil, 8);
+                                    loadTexture(R.drawable.intro_ic_pin, 9);
+                                    loadTexture(R.drawable.intro_ic_smile_eye, 10);
+                                    loadTexture(R.drawable.intro_ic_smile, 11);
+                                    loadTexture(R.drawable.intro_ic_videocam, 12);
+                                    loadTexture(R.drawable.intro_knot_down, 13);
+                                    loadTexture(R.drawable.intro_knot_up, 14);
+                                    loadTexture(R.drawable.intro_powerful_infinity_white, 15);
+                                    loadTexture(R.drawable.intro_powerful_infinity, 16);
+                                    loadTexture(R.drawable.intro_powerful_mask, 17);
+                                    loadTexture(R.drawable.intro_powerful_star, 18);
+                                    loadTexture(R.drawable.intro_private_door, 19);
+                                    loadTexture(R.drawable.intro_private_screw, 20);
+                                    loadTexture(R.drawable.intro_tg_plane, 21);
+                                    loadTexture(R.drawable.intro_tg_sphere, 22);
+                                    Intro.setTelegramTextures(r0.textures[22], r0.textures[21]);
+                                    Intro.setPowerfulTextures(r0.textures[17], r0.textures[18], r0.textures[16], r0.textures[15]);
+                                    Intro.setPrivateTextures(r0.textures[19], r0.textures[20]);
+                                    Intro.setFreeTextures(r0.textures[14], r0.textures[13]);
+                                    Intro.setFastTextures(r0.textures[2], r0.textures[3], r0.textures[1], r0.textures[0]);
+                                    Intro.setIcTextures(r0.textures[4], r0.textures[5], r0.textures[6], r0.textures[7], r0.textures[8], r0.textures[9], r0.textures[10], r0.textures[11], r0.textures[12]);
+                                    Intro.onSurfaceCreated();
+                                    IntroActivity.this.currentDate = System.currentTimeMillis() - 1000;
+                                    return true;
+                                }
+                                if (BuildVars.LOGS_ENABLED) {
+                                    stringBuilder = new StringBuilder();
+                                    stringBuilder.append("eglMakeCurrent failed ");
+                                    stringBuilder.append(GLUtils.getEGLErrorString(r0.egl10.eglGetError()));
+                                    FileLog.m1e(stringBuilder.toString());
+                                }
+                                finish();
+                                return false;
                             }
-                            finish();
-                            return false;
-                        } else if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
-                            this.gl = this.eglContext.getGL();
-                            GLES20.glGenTextures(23, this.textures, 0);
-                            loadTexture(R.drawable.intro_fast_arrow_shadow, 0);
-                            loadTexture(R.drawable.intro_fast_arrow, 1);
-                            loadTexture(R.drawable.intro_fast_body, 2);
-                            loadTexture(R.drawable.intro_fast_spiral, 3);
-                            loadTexture(R.drawable.intro_ic_bubble_dot, 4);
-                            loadTexture(R.drawable.intro_ic_bubble, 5);
-                            loadTexture(R.drawable.intro_ic_cam_lens, 6);
-                            loadTexture(R.drawable.intro_ic_cam, 7);
-                            loadTexture(R.drawable.intro_ic_pencil, 8);
-                            loadTexture(R.drawable.intro_ic_pin, 9);
-                            loadTexture(R.drawable.intro_ic_smile_eye, 10);
-                            loadTexture(R.drawable.intro_ic_smile, 11);
-                            loadTexture(R.drawable.intro_ic_videocam, 12);
-                            loadTexture(R.drawable.intro_knot_down, 13);
-                            loadTexture(R.drawable.intro_knot_up, 14);
-                            loadTexture(R.drawable.intro_powerful_infinity_white, 15);
-                            loadTexture(R.drawable.intro_powerful_infinity, 16);
-                            loadTexture(R.drawable.intro_powerful_mask, 17);
-                            loadTexture(R.drawable.intro_powerful_star, 18);
-                            loadTexture(R.drawable.intro_private_door, 19);
-                            loadTexture(R.drawable.intro_private_screw, 20);
-                            loadTexture(R.drawable.intro_tg_plane, 21);
-                            loadTexture(R.drawable.intro_tg_sphere, 22);
-                            Intro.setTelegramTextures(this.textures[22], this.textures[21]);
-                            Intro.setPowerfulTextures(this.textures[17], this.textures[18], this.textures[16], this.textures[15]);
-                            Intro.setPrivateTextures(this.textures[19], this.textures[20]);
-                            Intro.setFreeTextures(this.textures[14], this.textures[13]);
-                            Intro.setFastTextures(this.textures[2], this.textures[3], this.textures[1], this.textures[0]);
-                            Intro.setIcTextures(this.textures[4], this.textures[5], this.textures[6], this.textures[7], this.textures[8], this.textures[9], this.textures[10], this.textures[11], this.textures[12]);
-                            Intro.onSurfaceCreated();
-                            IntroActivity.this.currentDate = System.currentTimeMillis() - 1000;
-                            return true;
-                        } else {
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m1e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                            }
-                            finish();
-                            return false;
                         }
+                        if (BuildVars.LOGS_ENABLED) {
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("createWindowSurface failed ");
+                            stringBuilder.append(GLUtils.getEGLErrorString(r0.egl10.eglGetError()));
+                            FileLog.m1e(stringBuilder.toString());
+                        }
+                        finish();
+                        return false;
                     } else {
                         finish();
                         return false;
@@ -438,7 +461,10 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                 }
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m1e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("eglInitialize failed ");
+                stringBuilder.append(GLUtils.getEGLErrorString(r0.egl10.eglGetError()));
+                FileLog.m1e(stringBuilder.toString());
             }
             finish();
             return false;
@@ -550,60 +576,57 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         MessagesController.getGlobalMainSettings().edit().putLong("intro_crashed_time", System.currentTimeMillis()).commit();
         this.titles = new String[]{LocaleController.getString("Page1Title", R.string.Page1Title), LocaleController.getString("Page2Title", R.string.Page2Title), LocaleController.getString("Page3Title", R.string.Page3Title), LocaleController.getString("Page5Title", R.string.Page5Title), LocaleController.getString("Page4Title", R.string.Page4Title), LocaleController.getString("Page6Title", R.string.Page6Title)};
         this.messages = new String[]{LocaleController.getString("Page1Message", R.string.Page1Message), LocaleController.getString("Page2Message", R.string.Page2Message), LocaleController.getString("Page3Message", R.string.Page3Message), LocaleController.getString("Page5Message", R.string.Page5Message), LocaleController.getString("Page4Message", R.string.Page4Message), LocaleController.getString("Page6Message", R.string.Page6Message)};
-        View scrollView = new ScrollView(this);
+        ScrollView scrollView = new ScrollView(this);
         scrollView.setFillViewport(true);
         FrameLayout frameLayout = new FrameLayout(this);
         frameLayout.setBackgroundColor(-1);
         scrollView.addView(frameLayout, LayoutHelper.createScroll(-1, -2, 51));
         FrameLayout frameLayout2 = new FrameLayout(this);
         frameLayout.addView(frameLayout2, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
-        scrollView = new TextureView(this);
-        frameLayout2.addView(scrollView, LayoutHelper.createFrame(Callback.DEFAULT_DRAG_ANIMATION_DURATION, 150, 17));
-        scrollView.setSurfaceTextureListener(new C14201());
+        TextureView textureView = new TextureView(this);
+        frameLayout2.addView(textureView, LayoutHelper.createFrame(Callback.DEFAULT_DRAG_ANIMATION_DURATION, 150, 17));
+        textureView.setSurfaceTextureListener(new C14201());
         this.viewPager = new ViewPager(this);
-        IntroActivity introActivity = this;
         this.viewPager.setAdapter(new IntroAdapter());
         this.viewPager.setPageMargin(0);
         this.viewPager.setOffscreenPageLimit(1);
         frameLayout.addView(this.viewPager, LayoutHelper.createFrame(-1, -1.0f));
         this.viewPager.addOnPageChangeListener(new C21492());
-        scrollView = new TextView(this);
-        scrollView.setText(LocaleController.getString("StartMessaging", R.string.StartMessaging).toUpperCase());
-        scrollView.setGravity(17);
-        scrollView.setTextColor(-1);
-        scrollView.setTextSize(1, 16.0f);
-        scrollView.setBackgroundResource(R.drawable.regbtn_states);
+        TextView startMessagingButton = new TextView(this);
+        startMessagingButton.setText(LocaleController.getString("StartMessaging", R.string.StartMessaging).toUpperCase());
+        startMessagingButton.setGravity(17);
+        startMessagingButton.setTextColor(-1);
+        startMessagingButton.setTextSize(1, 16.0f);
+        startMessagingButton.setBackgroundResource(R.drawable.regbtn_states);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
-            scrollView = scrollView;
-            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(scrollView, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
-            scrollView = scrollView;
-            animator.addState(new int[0], ObjectAnimator.ofFloat(scrollView, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
-            scrollView.setStateListAnimator(animator);
+            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(startMessagingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
+            animator.addState(new int[0], ObjectAnimator.ofFloat(startMessagingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
+            startMessagingButton.setStateListAnimator(animator);
         }
-        scrollView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f));
-        frameLayout.addView(scrollView, LayoutHelper.createFrame(-2, -2.0f, 81, 10.0f, 0.0f, 10.0f, 76.0f));
-        scrollView.setOnClickListener(new C14213());
+        startMessagingButton.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(10.0f));
+        frameLayout.addView(startMessagingButton, LayoutHelper.createFrame(-2, -2.0f, 81, 10.0f, 0.0f, 10.0f, 76.0f));
+        startMessagingButton.setOnClickListener(new C14213());
         if (BuildVars.DEBUG_VERSION) {
-            scrollView.setOnLongClickListener(new C14224());
+            startMessagingButton.setOnLongClickListener(new C14224());
         }
-        this.bottomPages = new BottomPagesView(this);
-        frameLayout.addView(this.bottomPages, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
-        this.textView = new TextView(this);
-        this.textView.setTextColor(-15494190);
-        this.textView.setGravity(17);
-        this.textView.setTextSize(1, 16.0f);
-        frameLayout.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
-        this.textView.setOnClickListener(new C14235());
+        r0.bottomPages = new BottomPagesView(r0);
+        frameLayout.addView(r0.bottomPages, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
+        r0.textView = new TextView(r0);
+        r0.textView.setTextColor(-15494190);
+        r0.textView.setGravity(17);
+        r0.textView.setTextSize(1, 16.0f);
+        frameLayout.addView(r0.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
+        r0.textView.setOnClickListener(new C14235());
         if (AndroidUtilities.isTablet()) {
-            FrameLayout frameLayout3 = new FrameLayout(this);
+            FrameLayout frameLayout3 = new FrameLayout(r0);
             setContentView(frameLayout3);
-            View imageView = new ImageView(this);
+            View imageView = new ImageView(r0);
             BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             imageView.setBackgroundDrawable(drawable);
             frameLayout3.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
-            FrameLayout frameLayout4 = new FrameLayout(this);
+            FrameLayout frameLayout4 = new FrameLayout(r0);
             frameLayout4.setBackgroundResource(R.drawable.btnshadow);
             frameLayout4.addView(scrollView, LayoutHelper.createFrame(-1, -1.0f));
             frameLayout3.addView(frameLayout4, LayoutHelper.createFrame(498, 528, 17));
@@ -611,11 +634,11 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             setRequestedOrientation(1);
             setContentView(scrollView);
         }
-        LocaleController.getInstance().loadRemoteLanguages(this.currentAccount);
+        LocaleController.getInstance().loadRemoteLanguages(r0.currentAccount);
         checkContinueText();
-        this.justCreated = true;
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
-        AndroidUtilities.handleProxyIntent(this, getIntent());
+        r0.justCreated = true;
+        NotificationCenter.getGlobalInstance().addObserver(r0, NotificationCenter.suggestedLangpack);
+        AndroidUtilities.handleProxyIntent(r0, getIntent());
     }
 
     protected void onResume() {
@@ -649,18 +672,14 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
     }
 
     private void checkContinueText() {
-        String arg;
         LocaleInfo englishInfo = null;
         LocaleInfo systemInfo = null;
         LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
         String systemLang = LocaleController.getSystemLocaleStringIso639().toLowerCase();
-        if (systemLang.contains("-")) {
-            arg = systemLang.split("-")[0];
-        } else {
-            arg = systemLang;
-        }
+        int a = 0;
+        String arg = systemLang.contains("-") ? systemLang.split("-")[0] : systemLang;
         String alias = LocaleController.getLocaleAlias(arg);
-        for (int a = 0; a < LocaleController.getInstance().languages.size(); a++) {
+        while (a < LocaleController.getInstance().languages.size()) {
             LocaleInfo info = (LocaleInfo) LocaleController.getInstance().languages.get(a);
             if (info.shortName.equals("en")) {
                 englishInfo = info;
@@ -671,18 +690,21 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             if (englishInfo != null && systemInfo != null) {
                 break;
             }
+            a++;
         }
-        if (englishInfo != null && systemInfo != null && englishInfo != systemInfo) {
-            TL_langpack_getStrings req = new TL_langpack_getStrings();
-            if (systemInfo != currentLocaleInfo) {
-                req.lang_code = systemInfo.shortName.replace("_", "-");
-                this.localeInfo = systemInfo;
-            } else {
-                req.lang_code = englishInfo.shortName.replace("_", "-");
-                this.localeInfo = englishInfo;
+        if (!(englishInfo == null || systemInfo == null)) {
+            if (englishInfo != systemInfo) {
+                TL_langpack_getStrings req = new TL_langpack_getStrings();
+                if (systemInfo != currentLocaleInfo) {
+                    req.lang_code = systemInfo.shortName.replace("_", "-");
+                    this.localeInfo = systemInfo;
+                } else {
+                    req.lang_code = englishInfo.shortName.replace("_", "-");
+                    this.localeInfo = englishInfo;
+                }
+                req.keys.add("ContinueOnThisLanguage");
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C21506(), 8);
             }
-            req.keys.add("ContinueOnThisLanguage");
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C21506(), 8);
         }
     }
 

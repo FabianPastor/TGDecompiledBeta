@@ -10,25 +10,22 @@ public final class LibraryLoader {
     }
 
     public synchronized void setLibraries(String... libraries) {
-        Assertions.checkState(!this.loadAttempted, "Cannot set libraries after loading");
+        Assertions.checkState(this.loadAttempted ^ 1, "Cannot set libraries after loading");
         this.nativeLibraries = libraries;
     }
 
     public synchronized boolean isAvailable() {
-        boolean z;
         if (this.loadAttempted) {
-            z = this.isAvailable;
-        } else {
-            this.loadAttempted = true;
-            try {
-                for (String lib : this.nativeLibraries) {
-                    System.loadLibrary(lib);
-                }
-                this.isAvailable = true;
-            } catch (UnsatisfiedLinkError e) {
-            }
-            z = this.isAvailable;
+            return this.isAvailable;
         }
-        return z;
+        this.loadAttempted = true;
+        try {
+            for (String lib : this.nativeLibraries) {
+                System.loadLibrary(lib);
+            }
+            this.isAvailable = true;
+        } catch (UnsatisfiedLinkError e) {
+        }
+        return this.isAvailable;
     }
 }

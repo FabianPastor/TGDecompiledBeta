@@ -27,13 +27,14 @@ abstract class CeaDecoder implements SubtitleDecoder {
     protected abstract boolean isNewSubtitleDataAvailable();
 
     public CeaDecoder() {
-        int i;
-        for (i = 0; i < 10; i++) {
+        int i = 0;
+        for (int i2 = 0; i2 < 10; i2++) {
             this.availableInputBuffers.add(new SubtitleInputBuffer());
         }
         this.availableOutputBuffers = new LinkedList();
-        for (i = 0; i < 2; i++) {
+        while (i < 2) {
             this.availableOutputBuffers.add(new CeaOutputBuffer(this));
+            i++;
         }
         this.queuedInputBuffers = new PriorityQueue();
     }

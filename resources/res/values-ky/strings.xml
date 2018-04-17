@@ -18,7 +18,7 @@
     <string name="common_open_on_phone">Телефондо ачык</string>
     <string name="common_signin_button_text">Кирүү</string>
     <string name="common_signin_button_text_long">Google менен кирүү</string>
-    <string name="gcm_fallback_notification_channel_label">Аралаш</string>
+    <string name="fcm_fallback_notification_channel_label">Аралаш</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google аркылуу сатып алуу</string>
 </resources>

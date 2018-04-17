@@ -38,14 +38,13 @@ import java.util.regex.Pattern;
 import org.telegram.messenger.exoplayer2.C0539C;
 import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
-import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 
 public final class Util {
     private static final int[] CRC32_BYTES_MSBF = new int[]{0, 79764919, 159529838, 222504665, 319059676, 398814059, 445009330, 507990021, 638119352, 583659535, 797628118, 726387553, 890018660, 835552979, NUM, 944750013, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -734892656, -789352409, -575645954, -646886583, -952755380, -NUM, -827056094, -898286187, -231047128, -151282273, -71779514, -8804623, -515967244, -436212925, -390279782, -327299027, 881225847, 809987520, NUM, 969234094, 662832811, 591600412, 771767749, 717299826, 311336399, 374308984, 453813921, 533576470, 25881363, 88864420, 134795389, 214552010, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -525066777, -462094256, -382327159, -302564546, -206542021, -143559028, -97365931, -17609246, -960696225, -NUM, -817968335, -872425850, -709327229, -780559564, -600130067, -654598054, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, 622672798, 568075817, 748617968, 677256519, 907627842, 853037301, NUM, 995781531, 51762726, 131386257, 177728840, 240578815, 269590778, 349224269, 429104020, 491947555, -248556018, -168932423, -122852000, -60002089, -500490030, -420856475, -341238852, -278395381, -685261898, -739858943, -559578920, -630940305, -NUM, -NUM, -845023740, -916395085, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, 295390185, 358241886, 404320391, 483945776, 43990325, 106832002, 186451547, 266083308, 932423249, 861060070, NUM, 986742920, 613929101, 542559546, 756411363, 701822548, -978770311, -NUM, -869589737, -924188512, -693284699, -764654318, -550540341, -605129092, -475935807, -413084042, -366743377, -287118056, -257573603, -194731862, -114850189, -35218492, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM};
     public static final String DEVICE = Build.DEVICE;
-    public static final String DEVICE_DEBUG_INFO = (DEVICE + ", " + MODEL + ", " + MANUFACTURER + ", " + SDK_INT);
+    public static final String DEVICE_DEBUG_INFO;
     private static final Pattern ESCAPED_CHARACTER_PATTERN = Pattern.compile("%([A-Fa-f0-9]{2})");
     public static final String MANUFACTURER = Build.MANUFACTURER;
     public static final String MODEL = Build.MODEL;
@@ -57,6 +56,15 @@ public final class Util {
     static {
         int i = (VERSION.SDK_INT == 25 && VERSION.CODENAME.charAt(0) == 'O') ? 26 : VERSION.SDK_INT;
         SDK_INT = i;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(DEVICE);
+        stringBuilder.append(", ");
+        stringBuilder.append(MODEL);
+        stringBuilder.append(", ");
+        stringBuilder.append(MANUFACTURER);
+        stringBuilder.append(", ");
+        stringBuilder.append(SDK_INT);
+        DEVICE_DEBUG_INFO = stringBuilder.toString();
     }
 
     private Util() {
@@ -66,8 +74,9 @@ public final class Util {
         byte[] buffer = new byte[4096];
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         while (true) {
-            int bytesRead = inputStream.read(buffer);
-            if (bytesRead == -1) {
+            int read = inputStream.read(buffer);
+            int bytesRead = read;
+            if (read == -1) {
                 return outputStream.toByteArray();
             }
             outputStream.write(buffer, 0, bytesRead);
@@ -79,16 +88,13 @@ public final class Util {
         if (SDK_INT < 23) {
             return false;
         }
-        int length = uris.length;
-        int i = 0;
-        while (i < length) {
-            if (!isLocalFileUri(uris[i])) {
-                i++;
-            } else if (activity.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
+        for (Uri uri : uris) {
+            if (isLocalFileUri(uri)) {
+                if (activity.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0) {
+                    activity.requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 0);
+                    return true;
+                }
                 return false;
-            } else {
-                activity.requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 0);
-                return true;
             }
         }
         return false;
@@ -96,7 +102,12 @@ public final class Util {
 
     public static boolean isLocalFileUri(Uri uri) {
         String scheme = uri.getScheme();
-        return TextUtils.isEmpty(scheme) || scheme.equals("file");
+        if (!TextUtils.isEmpty(scheme)) {
+            if (!scheme.equals("file")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean areEqual(Object o1, Object o2) {
@@ -147,14 +158,17 @@ public final class Util {
     }
 
     public static String normalizeLanguageCode(String language) {
+        String str;
         if (language == null) {
-            return null;
+            str = null;
+        } else {
+            try {
+                str = new Locale(language).getISO3Language();
+            } catch (MissingResourceException e) {
+                return language.toLowerCase();
+            }
         }
-        try {
-            return new Locale(language).getISO3Language();
-        } catch (MissingResourceException e) {
-            return language.toLowerCase();
-        }
+        return str;
     }
 
     public static String fromUtf8Bytes(byte[] bytes) {
@@ -166,7 +180,12 @@ public final class Util {
     }
 
     public static boolean isLinebreak(int c) {
-        return c == 10 || c == 13;
+        if (c != 10) {
+            if (c != 13) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static String toLowerInvariant(String text) {
@@ -195,12 +214,18 @@ public final class Util {
 
     public static long addWithOverflowDefault(long x, long y, long overflowResult) {
         long result = x + y;
-        return ((x ^ result) & (y ^ result)) < 0 ? overflowResult : result;
+        if (((x ^ result) & (y ^ result)) < 0) {
+            return overflowResult;
+        }
+        return result;
     }
 
     public static long subtractWithOverflowDefault(long x, long y, long overflowResult) {
         long result = x - y;
-        return ((x ^ y) & (x ^ result)) < 0 ? overflowResult : result;
+        if (((x ^ y) & (x ^ result)) < 0) {
+            return overflowResult;
+        }
+        return result;
     }
 
     public static int binarySearchFloor(int[] array, int value, boolean inclusive, boolean stayInBounds) {
@@ -208,12 +233,14 @@ public final class Util {
         if (index < 0) {
             index = -(index + 2);
         } else {
-            do {
+            while (true) {
                 index--;
-                if (index < 0) {
-                    break;
+                if (index < 0 || array[index] != value) {
+                    if (inclusive) {
+                        index++;
+                    }
                 }
-            } while (array[index] == value);
+            }
             if (inclusive) {
                 index++;
             }
@@ -226,12 +253,14 @@ public final class Util {
         if (index < 0) {
             index = -(index + 2);
         } else {
-            do {
+            while (true) {
                 index--;
-                if (index < 0) {
-                    break;
+                if (index < 0 || array[index] != value) {
+                    if (inclusive) {
+                        index++;
+                    }
                 }
-            } while (array[index] == value);
+            }
             if (inclusive) {
                 index++;
             }
@@ -244,12 +273,14 @@ public final class Util {
         if (index < 0) {
             index = -(index + 2);
         } else {
-            do {
+            while (true) {
                 index--;
-                if (index < 0) {
-                    break;
+                if (index < 0 || ((Comparable) list.get(index)).compareTo(value) != 0) {
+                    if (inclusive) {
+                        index++;
+                    }
                 }
-            } while (((Comparable) list.get(index)).compareTo(value) == 0);
+            }
             if (inclusive) {
                 index++;
             }
@@ -262,12 +293,14 @@ public final class Util {
         if (index < 0) {
             index ^= -1;
         } else {
-            do {
+            while (true) {
                 index++;
-                if (index >= array.length) {
-                    break;
+                if (index >= array.length || array[index] != value) {
+                    if (inclusive) {
+                        index--;
+                    }
                 }
-            } while (array[index] == value);
+            }
             if (inclusive) {
                 index--;
             }
@@ -281,12 +314,14 @@ public final class Util {
             index ^= -1;
         } else {
             int listSize = list.size();
-            do {
+            while (true) {
                 index++;
-                if (index >= listSize) {
-                    break;
+                if (index >= listSize || ((Comparable) list.get(index)).compareTo(value) != 0) {
+                    if (inclusive) {
+                        index--;
+                    }
                 }
-            } while (((Comparable) list.get(index)).compareTo(value) == 0);
+            }
             if (inclusive) {
                 index--;
             }
@@ -306,29 +341,33 @@ public final class Util {
         if (!matcher.matches()) {
             return (long) ((Double.parseDouble(value) * 3600.0d) * 1000.0d);
         }
-        boolean negated = !TextUtils.isEmpty(matcher.group(1));
+        boolean negated = true ^ TextUtils.isEmpty(matcher.group(1));
         String years = matcher.group(3);
+        double d = 0.0d;
         double durationSeconds = years != null ? Double.parseDouble(years) * 3.1556908E7d : 0.0d;
         String months = matcher.group(5);
         durationSeconds += months != null ? Double.parseDouble(months) * 2629739.0d : 0.0d;
         String days = matcher.group(7);
         durationSeconds += days != null ? Double.parseDouble(days) * 86400.0d : 0.0d;
         String hours = matcher.group(10);
-        durationSeconds += hours != null ? Double.parseDouble(hours) * 3600.0d : 0.0d;
+        durationSeconds += hours != null ? 3600.0d * Double.parseDouble(hours) : 0.0d;
         String minutes = matcher.group(12);
         durationSeconds += minutes != null ? Double.parseDouble(minutes) * 60.0d : 0.0d;
         String seconds = matcher.group(14);
-        long durationMillis = (long) (1000.0d * (durationSeconds + (seconds != null ? Double.parseDouble(seconds) : 0.0d)));
-        if (negated) {
-            return -durationMillis;
+        if (seconds != null) {
+            d = Double.parseDouble(seconds);
         }
-        return durationMillis;
+        long durationMillis = (long) (4652007308841189376L * (durationSeconds + d));
+        return negated ? -durationMillis : durationMillis;
     }
 
     public static long parseXsDateTime(String value) throws ParserException {
         Matcher matcher = XS_DATE_TIME_PATTERN.matcher(value);
         if (matcher.matches()) {
             int timezoneShift;
+            Calendar dateTime;
+            StringBuilder stringBuilder;
+            long time;
             if (matcher.group(9) == null) {
                 timezoneShift = 0;
             } else if (matcher.group(9).equalsIgnoreCase("Z")) {
@@ -338,20 +377,40 @@ public final class Util {
                 if (matcher.group(11).equals("-")) {
                     timezoneShift *= -1;
                 }
+                dateTime = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+                dateTime.clear();
+                dateTime.set(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)) - 1, Integer.parseInt(matcher.group(3)), Integer.parseInt(matcher.group(4)), Integer.parseInt(matcher.group(5)), Integer.parseInt(matcher.group(6)));
+                if (!TextUtils.isEmpty(matcher.group(8))) {
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("0.");
+                    stringBuilder.append(matcher.group(8));
+                    dateTime.set(14, new BigDecimal(stringBuilder.toString()).movePointRight(3).intValue());
+                }
+                time = dateTime.getTimeInMillis();
+                if (timezoneShift == 0) {
+                    return time - ((long) (60000 * timezoneShift));
+                }
+                return time;
             }
-            Calendar dateTime = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+            dateTime = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
             dateTime.clear();
             dateTime.set(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)) - 1, Integer.parseInt(matcher.group(3)), Integer.parseInt(matcher.group(4)), Integer.parseInt(matcher.group(5)), Integer.parseInt(matcher.group(6)));
-            if (!TextUtils.isEmpty(matcher.group(8))) {
-                dateTime.set(14, new BigDecimal("0." + matcher.group(8)).movePointRight(3).intValue());
+            if (TextUtils.isEmpty(matcher.group(8))) {
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("0.");
+                stringBuilder.append(matcher.group(8));
+                dateTime.set(14, new BigDecimal(stringBuilder.toString()).movePointRight(3).intValue());
             }
-            long time = dateTime.getTimeInMillis();
-            if (timezoneShift != 0) {
-                return time - ((long) (60000 * timezoneShift));
+            time = dateTime.getTimeInMillis();
+            if (timezoneShift == 0) {
+                return time;
             }
-            return time;
+            return time - ((long) (60000 * timezoneShift));
         }
-        throw new ParserException("Invalid date/time format: " + value);
+        StringBuilder stringBuilder2 = new StringBuilder();
+        stringBuilder2.append("Invalid date/time format: ");
+        stringBuilder2.append(value);
+        throw new ParserException(stringBuilder2.toString());
     }
 
     public static long scaleLargeTimestamp(long timestamp, long multiplier, long divisor) {
@@ -366,75 +425,125 @@ public final class Util {
 
     public static long[] scaleLargeTimestamps(List<Long> timestamps, long multiplier, long divisor) {
         long[] scaledTimestamps = new long[timestamps.size()];
-        int i;
-        if (divisor >= multiplier && divisor % multiplier == 0) {
-            long divisionFactor = divisor / multiplier;
-            for (i = 0; i < scaledTimestamps.length; i++) {
-                scaledTimestamps[i] = ((Long) timestamps.get(i)).longValue() / divisionFactor;
-            }
-        } else if (divisor >= multiplier || multiplier % divisor != 0) {
-            double multiplicationFactor = ((double) multiplier) / ((double) divisor);
-            for (i = 0; i < scaledTimestamps.length; i++) {
-                scaledTimestamps[i] = (long) (((double) ((Long) timestamps.get(i)).longValue()) * multiplicationFactor);
+        int i = 0;
+        long multiplicationFactor;
+        int i2;
+        if (divisor < multiplier || divisor % multiplier != 0) {
+            if (divisor < multiplier && multiplier % divisor == 0) {
+                multiplicationFactor = multiplier / divisor;
+                while (true) {
+                    i2 = i;
+                    if (i2 >= scaledTimestamps.length) {
+                        break;
+                    }
+                    scaledTimestamps[i2] = ((Long) timestamps.get(i2)).longValue() * multiplicationFactor;
+                    i = i2 + 1;
+                }
+            } else {
+                double multiplicationFactor2 = ((double) multiplier) / ((double) divisor);
+                while (true) {
+                    i2 = i;
+                    if (i2 >= scaledTimestamps.length) {
+                        break;
+                    }
+                    scaledTimestamps[i2] = (long) (((double) ((Long) timestamps.get(i2)).longValue()) * multiplicationFactor2);
+                    i = i2 + 1;
+                }
             }
         } else {
-            long multiplicationFactor2 = multiplier / divisor;
-            for (i = 0; i < scaledTimestamps.length; i++) {
-                scaledTimestamps[i] = ((Long) timestamps.get(i)).longValue() * multiplicationFactor2;
+            multiplicationFactor = divisor / multiplier;
+            while (true) {
+                i2 = i;
+                if (i2 >= scaledTimestamps.length) {
+                    break;
+                }
+                scaledTimestamps[i2] = ((Long) timestamps.get(i2)).longValue() / multiplicationFactor;
+                i = i2 + 1;
             }
         }
         return scaledTimestamps;
     }
 
     public static void scaleLargeTimestampsInPlace(long[] timestamps, long multiplier, long divisor) {
-        int i;
+        int i = 0;
+        long divisionFactor;
+        int i2;
         if (divisor >= multiplier && divisor % multiplier == 0) {
-            long divisionFactor = divisor / multiplier;
-            for (i = 0; i < timestamps.length; i++) {
-                timestamps[i] = timestamps[i] / divisionFactor;
+            divisionFactor = divisor / multiplier;
+            while (true) {
+                i2 = i;
+                if (i2 < timestamps.length) {
+                    timestamps[i2] = timestamps[i2] / divisionFactor;
+                    i = i2 + 1;
+                } else {
+                    return;
+                }
             }
         } else if (divisor >= multiplier || multiplier % divisor != 0) {
             double multiplicationFactor = ((double) multiplier) / ((double) divisor);
-            for (i = 0; i < timestamps.length; i++) {
-                timestamps[i] = (long) (((double) timestamps[i]) * multiplicationFactor);
+            while (true) {
+                i2 = i;
+                if (i2 < timestamps.length) {
+                    timestamps[i2] = (long) (((double) timestamps[i2]) * multiplicationFactor);
+                    i = i2 + 1;
+                } else {
+                    return;
+                }
             }
         } else {
-            long multiplicationFactor2 = multiplier / divisor;
-            for (i = 0; i < timestamps.length; i++) {
-                timestamps[i] = timestamps[i] * multiplicationFactor2;
+            divisionFactor = multiplier / divisor;
+            while (true) {
+                i2 = i;
+                if (i2 < timestamps.length) {
+                    timestamps[i2] = timestamps[i2] * divisionFactor;
+                    i = i2 + 1;
+                } else {
+                    return;
+                }
             }
         }
     }
 
     public static long getMediaDurationForPlayoutDuration(long playoutDuration, float speed) {
-        return speed == 1.0f ? playoutDuration : Math.round(((double) playoutDuration) * ((double) speed));
+        if (speed == 1.0f) {
+            return playoutDuration;
+        }
+        return Math.round(((double) playoutDuration) * ((double) speed));
     }
 
     public static long getPlayoutDurationForMediaDuration(long mediaDuration, float speed) {
-        return speed == 1.0f ? mediaDuration : Math.round(((double) mediaDuration) / ((double) speed));
+        if (speed == 1.0f) {
+            return mediaDuration;
+        }
+        return Math.round(((double) mediaDuration) / ((double) speed));
     }
 
     public static long resolveSeekPositionUs(long positionUs, SeekParameters seekParameters, long firstSyncUs, long secondSyncUs) {
-        if (SeekParameters.EXACT.equals(seekParameters)) {
+        SeekParameters seekParameters2 = seekParameters;
+        if (SeekParameters.EXACT.equals(seekParameters2)) {
             return positionUs;
         }
-        long minPositionUs = subtractWithOverflowDefault(positionUs, seekParameters.toleranceBeforeUs, Long.MIN_VALUE);
-        long maxPositionUs = addWithOverflowDefault(positionUs, seekParameters.toleranceAfterUs, Long.MAX_VALUE);
+        long maxPositionUs = positionUs;
+        long minPositionUs = subtractWithOverflowDefault(maxPositionUs, seekParameters2.toleranceBeforeUs, Long.MIN_VALUE);
+        maxPositionUs = addWithOverflowDefault(maxPositionUs, seekParameters2.toleranceAfterUs, Long.MAX_VALUE);
+        boolean secondSyncPositionValid = false;
         boolean firstSyncPositionValid = minPositionUs <= firstSyncUs && firstSyncUs <= maxPositionUs;
-        boolean secondSyncPositionValid = minPositionUs <= secondSyncUs && secondSyncUs <= maxPositionUs;
-        if (firstSyncPositionValid && secondSyncPositionValid) {
-            if (Math.abs(firstSyncUs - positionUs) > Math.abs(secondSyncUs - positionUs)) {
-                return secondSyncUs;
-            }
-            return firstSyncUs;
-        } else if (firstSyncPositionValid) {
-            return firstSyncUs;
-        } else {
-            if (secondSyncPositionValid) {
-                return secondSyncUs;
-            }
-            return minPositionUs;
+        if (minPositionUs <= secondSyncUs && secondSyncUs <= maxPositionUs) {
+            secondSyncPositionValid = true;
         }
+        if (firstSyncPositionValid && secondSyncPositionValid) {
+            if (Math.abs(firstSyncUs - positionUs) <= Math.abs(secondSyncUs - positionUs)) {
+                return firstSyncUs;
+            }
+            return secondSyncUs;
+        }
+        if (firstSyncPositionValid) {
+            return firstSyncUs;
+        }
+        if (secondSyncPositionValid) {
+            return secondSyncUs;
+        }
+        return minPositionUs;
     }
 
     public static int[] toArray(List<Integer> list) {
@@ -451,10 +560,12 @@ public final class Util {
 
     public static int getIntegerCodeForString(String string) {
         int length = string.length();
+        int i = 0;
         Assertions.checkArgument(length <= 4);
         int result = 0;
-        for (int i = 0; i < length; i++) {
+        while (i < length) {
             result = (result << 8) | string.charAt(i);
+            i++;
         }
         return result;
     }
@@ -486,10 +597,19 @@ public final class Util {
         } catch (NameNotFoundException e) {
             versionName = "?";
         }
-        return applicationName + "/" + versionName + " (Linux;Android " + VERSION.RELEASE + ") " + ExoPlayerLibraryInfo.VERSION_SLASHY;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(applicationName);
+        stringBuilder.append("/");
+        stringBuilder.append(versionName);
+        stringBuilder.append(" (Linux;Android ");
+        stringBuilder.append(VERSION.RELEASE);
+        stringBuilder.append(") ");
+        stringBuilder.append(ExoPlayerLibraryInfo.VERSION_SLASHY);
+        return stringBuilder.toString();
     }
 
     public static String getCodecsOfType(String codecs, int trackType) {
+        String str = null;
         if (TextUtils.isEmpty(codecs)) {
             return null;
         }
@@ -504,44 +624,53 @@ public final class Util {
             }
         }
         if (builder.length() > 0) {
-            return builder.toString();
+            str = builder.toString();
         }
-        return null;
+        return str;
     }
 
     public static int getPcmEncoding(int bitDepth) {
-        switch (bitDepth) {
-            case 8:
-                return 3;
-            case 16:
-                return 2;
-            case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
-                return Integer.MIN_VALUE;
-            case 32:
-                return NUM;
-            default:
-                return 0;
+        if (bitDepth == 8) {
+            return 3;
         }
+        if (bitDepth == 16) {
+            return 2;
+        }
+        if (bitDepth == 24) {
+            return Integer.MIN_VALUE;
+        }
+        if (bitDepth != 32) {
+            return 0;
+        }
+        return NUM;
     }
 
     public static boolean isEncodingHighResolutionIntegerPcm(int encoding) {
-        return encoding == Integer.MIN_VALUE || encoding == NUM;
+        if (encoding != Integer.MIN_VALUE) {
+            if (encoding != NUM) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static int getPcmFrameSize(int pcmEncoding, int channelCount) {
-        switch (pcmEncoding) {
-            case Integer.MIN_VALUE:
-                return channelCount * 3;
-            case 2:
-                return channelCount * 2;
-            case 3:
-                return channelCount;
-            case 4:
-            case 1073741824:
-                return channelCount * 4;
-            default:
-                throw new IllegalArgumentException();
+        if (pcmEncoding == Integer.MIN_VALUE) {
+            return channelCount * 3;
         }
+        if (pcmEncoding != NUM) {
+            switch (pcmEncoding) {
+                case 2:
+                    return channelCount * 2;
+                case 3:
+                    return channelCount;
+                case 4:
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+        return channelCount * 4;
     }
 
     public static int getAudioUsageForStreamType(int streamType) {
@@ -580,6 +709,10 @@ public final class Util {
 
     public static int getStreamTypeForAudioUsage(int usage) {
         switch (usage) {
+            case 1:
+            case 12:
+            case 14:
+                return 3;
             case 2:
                 return 0;
             case 3:
@@ -602,28 +735,57 @@ public final class Util {
     }
 
     public static UUID getDrmUuid(String drmScheme) {
+        Object obj;
         String toLowerInvariant = toLowerInvariant(drmScheme);
-        Object obj = -1;
-        switch (toLowerInvariant.hashCode()) {
-            case -1860423953:
-                if (toLowerInvariant.equals("playready")) {
-                    obj = 1;
-                    break;
+        int hashCode = toLowerInvariant.hashCode();
+        if (hashCode != -NUM) {
+            if (hashCode != -NUM) {
+                if (hashCode == 790309106) {
+                    if (toLowerInvariant.equals("clearkey")) {
+                        obj = 2;
+                        switch (obj) {
+                            case null:
+                                return C0539C.WIDEVINE_UUID;
+                            case 1:
+                                return C0539C.PLAYREADY_UUID;
+                            case 2:
+                                return C0539C.CLEARKEY_UUID;
+                            default:
+                                try {
+                                    return UUID.fromString(drmScheme);
+                                } catch (RuntimeException e) {
+                                    return null;
+                                }
+                        }
+                    }
                 }
-                break;
-            case -1400551171:
-                if (toLowerInvariant.equals("widevine")) {
-                    obj = null;
-                    break;
+            } else if (toLowerInvariant.equals("widevine")) {
+                obj = null;
+                switch (obj) {
+                    case null:
+                        return C0539C.WIDEVINE_UUID;
+                    case 1:
+                        return C0539C.PLAYREADY_UUID;
+                    case 2:
+                        return C0539C.CLEARKEY_UUID;
+                    default:
+                        return UUID.fromString(drmScheme);
                 }
-                break;
-            case 790309106:
-                if (toLowerInvariant.equals("clearkey")) {
-                    obj = 2;
-                    break;
-                }
-                break;
+            }
+        } else if (toLowerInvariant.equals("playready")) {
+            obj = 1;
+            switch (obj) {
+                case null:
+                    return C0539C.WIDEVINE_UUID;
+                case 1:
+                    return C0539C.PLAYREADY_UUID;
+                case 2:
+                    return C0539C.CLEARKEY_UUID;
+                default:
+                    return UUID.fromString(drmScheme);
+            }
         }
+        obj = -1;
         switch (obj) {
             case null:
                 return C0539C.WIDEVINE_UUID;
@@ -632,11 +794,7 @@ public final class Util {
             case 2:
                 return C0539C.CLEARKEY_UUID;
             default:
-                try {
-                    return UUID.fromString(drmScheme);
-                } catch (RuntimeException e) {
-                    return null;
-                }
+                return UUID.fromString(drmScheme);
         }
     }
 
@@ -660,18 +818,22 @@ public final class Util {
     }
 
     public static String getStringForTime(StringBuilder builder, Formatter formatter, long timeMs) {
+        long timeMs2;
+        Formatter formatter2 = formatter;
         if (timeMs == C0539C.TIME_UNSET) {
-            timeMs = 0;
+            timeMs2 = 0;
+        } else {
+            timeMs2 = timeMs;
         }
-        long totalSeconds = (500 + timeMs) / 1000;
+        long totalSeconds = (timeMs2 + 500) / 1000;
         long seconds = totalSeconds % 60;
         long minutes = (totalSeconds / 60) % 60;
         long hours = totalSeconds / 3600;
         builder.setLength(0);
         if (hours > 0) {
-            return formatter.format("%d:%02d:%02d", new Object[]{Long.valueOf(hours), Long.valueOf(minutes), Long.valueOf(seconds)}).toString();
+            return formatter2.format("%d:%02d:%02d", new Object[]{Long.valueOf(hours), Long.valueOf(minutes), Long.valueOf(seconds)}).toString();
         }
-        return formatter.format("%02d:%02d", new Object[]{Long.valueOf(minutes), Long.valueOf(seconds)}).toString();
+        return formatter2.format("%02d:%02d", new Object[]{Long.valueOf(minutes), Long.valueOf(seconds)}).toString();
     }
 
     public static int getDefaultBufferSize(int trackType) {
@@ -683,6 +845,7 @@ public final class Util {
             case 2:
                 return C0539C.DEFAULT_VIDEO_BUFFER_SIZE;
             case 3:
+                return 131072;
             case 4:
                 return 131072;
             default:
@@ -702,48 +865,45 @@ public final class Util {
         if (charactersToEscapeCount == 0) {
             return fileName;
         }
+        i = 0;
         StringBuilder builder = new StringBuilder((charactersToEscapeCount * 2) + length);
-        int i2 = 0;
         while (charactersToEscapeCount > 0) {
-            i = i2 + 1;
-            char c = fileName.charAt(i2);
-            if (shouldEscapeCharacter(c)) {
-                builder.append('%').append(Integer.toHexString(c));
+            int i2 = i + 1;
+            i = fileName.charAt(i);
+            if (shouldEscapeCharacter(i)) {
+                builder.append('%');
+                builder.append(Integer.toHexString(i));
                 charactersToEscapeCount--;
             } else {
-                builder.append(c);
+                builder.append(i);
             }
-            i2 = i;
+            i = i2;
         }
-        if (i2 < length) {
-            builder.append(fileName, i2, length);
+        if (i < length) {
+            builder.append(fileName, i, length);
         }
-        i = i2;
         return builder.toString();
     }
 
     private static boolean shouldEscapeCharacter(char c) {
-        switch (c) {
-            case '\"':
-            case '%':
-            case '*':
-            case '/':
-            case ':':
-            case '<':
-            case '>':
-            case '?':
-            case '\\':
-            case '|':
-                return true;
-            default:
-                return false;
+        if (!(c == '\"' || c == '%' || c == '*' || c == '/' || c == ':' || c == '<' || c == '\\' || c == '|')) {
+            switch (c) {
+                case '>':
+                case '?':
+                    break;
+                default:
+                    return false;
+            }
         }
+        return true;
     }
 
     public static String unescapeFileName(String fileName) {
+        int i;
         int length = fileName.length();
+        int startOfNotEscaped = 0;
         int percentCharacterCount = 0;
-        for (int i = 0; i < length; i++) {
+        for (i = 0; i < length; i++) {
             if (fileName.charAt(i) == '%') {
                 percentCharacterCount++;
             }
@@ -751,19 +911,20 @@ public final class Util {
         if (percentCharacterCount == 0) {
             return fileName;
         }
-        int expectedLength = length - (percentCharacterCount * 2);
-        StringBuilder builder = new StringBuilder(expectedLength);
+        i = length - (percentCharacterCount * 2);
+        StringBuilder builder = new StringBuilder(i);
         Matcher matcher = ESCAPED_CHARACTER_PATTERN.matcher(fileName);
-        int startOfNotEscaped = 0;
         while (percentCharacterCount > 0 && matcher.find()) {
-            builder.append(fileName, startOfNotEscaped, matcher.start()).append((char) Integer.parseInt(matcher.group(1), 16));
+            char unescapedCharacter = (char) Integer.parseInt(matcher.group(1), 16);
+            builder.append(fileName, startOfNotEscaped, matcher.start());
+            builder.append(unescapedCharacter);
             startOfNotEscaped = matcher.end();
             percentCharacterCount--;
         }
         if (startOfNotEscaped < length) {
             builder.append(fileName, startOfNotEscaped, length);
         }
-        if (builder.length() != expectedLength) {
+        if (builder.length() != i) {
             return null;
         }
         return builder.toString();
@@ -798,10 +959,11 @@ public final class Util {
     }
 
     public static int crc(byte[] bytes, int start, int end, int initialValue) {
-        for (int i = start; i < end; i++) {
-            initialValue = (initialValue << 8) ^ CRC32_BYTES_MSBF[((initialValue >>> 24) ^ (bytes[i] & 255)) & 255];
+        int initialValue2 = initialValue;
+        for (initialValue = start; initialValue < end; initialValue++) {
+            initialValue2 = (initialValue2 << 8) ^ CRC32_BYTES_MSBF[((initialValue2 >>> 24) ^ (bytes[initialValue] & 255)) & 255];
         }
-        return initialValue;
+        return initialValue2;
     }
 
     public static Point getPhysicalDisplaySize(Context context) {
@@ -833,24 +995,25 @@ public final class Util {
                         }
                     } catch (NumberFormatException e2) {
                     }
-                    Log.e(TAG, "Invalid sys.display-size: " + sysDisplaySize);
+                    String str = TAG;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("Invalid sys.display-size: ");
+                    stringBuilder.append(sysDisplaySize);
+                    Log.e(str, stringBuilder.toString());
                 }
             }
         }
         Point displaySize = new Point();
         if (SDK_INT >= 23) {
             getDisplaySizeV23(display, displaySize);
-            return displaySize;
         } else if (SDK_INT >= 17) {
             getDisplaySizeV17(display, displaySize);
-            return displaySize;
         } else if (SDK_INT >= 16) {
             getDisplaySizeV16(display, displaySize);
-            return displaySize;
         } else {
             getDisplaySizeV9(display, displaySize);
-            return displaySize;
         }
+        return displaySize;
     }
 
     @TargetApi(23)

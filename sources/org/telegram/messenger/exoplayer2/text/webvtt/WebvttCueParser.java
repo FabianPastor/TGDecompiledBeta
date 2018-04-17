@@ -139,82 +139,87 @@ public final class WebvttCueParser {
                 } else if ("size".equals(name)) {
                     builder.setWidth(WebvttParserUtil.parsePercentage(value));
                 } else {
-                    Log.w(TAG, "Unknown cue setting " + name + ":" + value);
+                    String str = TAG;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("Unknown cue setting ");
+                    stringBuilder.append(name);
+                    stringBuilder.append(":");
+                    stringBuilder.append(value);
+                    Log.w(str, stringBuilder.toString());
                 }
             } catch (NumberFormatException e) {
-                Log.w(TAG, "Skipping bad cue setting: " + cueSettingMatcher.group());
+                String str2 = TAG;
+                StringBuilder stringBuilder2 = new StringBuilder();
+                stringBuilder2.append("Skipping bad cue setting: ");
+                stringBuilder2.append(cueSettingMatcher.group());
+                Log.w(str2, stringBuilder2.toString());
             }
         }
     }
 
     static void parseCueText(String id, String markup, Builder builder, List<WebvttCssStyle> styles) {
+        String str = id;
+        String str2 = markup;
+        List<WebvttCssStyle> list = styles;
         SpannableStringBuilder spannedText = new SpannableStringBuilder();
         Stack<StartTag> startTagStack = new Stack();
         List<StyleMatch> scratchStyleMatches = new ArrayList();
         int pos = 0;
         while (pos < markup.length()) {
-            char curr = markup.charAt(pos);
-            switch (curr) {
-                case '&':
-                    int semiColonEndIndex = markup.indexOf(59, pos + 1);
-                    int spaceEndIndex = markup.indexOf(32, pos + 1);
-                    int entityEndIndex = semiColonEndIndex == -1 ? spaceEndIndex : spaceEndIndex == -1 ? semiColonEndIndex : Math.min(semiColonEndIndex, spaceEndIndex);
-                    if (entityEndIndex == -1) {
-                        spannedText.append(curr);
-                        pos++;
-                        break;
-                    }
-                    applyEntity(markup.substring(pos + 1, entityEndIndex), spannedText);
+            char curr = str2.charAt(pos);
+            int semiColonEndIndex;
+            int entityEndIndex;
+            if (curr == CHAR_AMPERSAND) {
+                semiColonEndIndex = str2.indexOf(59, pos + 1);
+                int spaceEndIndex = str2.indexOf(32, pos + 1);
+                entityEndIndex = semiColonEndIndex == -1 ? spaceEndIndex : spaceEndIndex == -1 ? semiColonEndIndex : Math.min(semiColonEndIndex, spaceEndIndex);
+                if (entityEndIndex != -1) {
+                    applyEntity(str2.substring(pos + 1, entityEndIndex), spannedText);
                     if (entityEndIndex == spaceEndIndex) {
                         spannedText.append(" ");
                     }
                     pos = entityEndIndex + 1;
-                    break;
-                case '<':
-                    if (pos + 1 < markup.length()) {
-                        int i;
-                        int ltPos = pos;
-                        boolean isClosingTag = markup.charAt(ltPos + 1) == '/';
-                        pos = findEndOfTag(markup, ltPos + 1);
-                        boolean isVoidTag = markup.charAt(pos + -2) == '/';
-                        int i2 = ltPos + (isClosingTag ? 2 : 1);
-                        if (isVoidTag) {
-                            i = pos - 2;
-                        } else {
-                            i = pos - 1;
-                        }
-                        String fullTagExpression = markup.substring(i2, i);
-                        String tagName = getTagName(fullTagExpression);
-                        if (tagName != null && isSupportedTag(tagName)) {
-                            if (!isClosingTag) {
-                                if (!isVoidTag) {
-                                    startTagStack.push(StartTag.buildStartTag(fullTagExpression, spannedText.length()));
-                                    break;
-                                }
-                                break;
-                            }
+                } else {
+                    spannedText.append(curr);
+                    pos++;
+                }
+            } else if (curr != CHAR_LESS_THAN) {
+                spannedText.append(curr);
+                pos++;
+            } else if (pos + 1 >= markup.length()) {
+                pos++;
+            } else {
+                semiColonEndIndex = pos;
+                entityEndIndex = 1;
+                boolean isClosingTag = str2.charAt(semiColonEndIndex + 1) == CHAR_SLASH;
+                pos = findEndOfTag(str2, semiColonEndIndex + 1);
+                boolean isVoidTag = str2.charAt(pos + -2) == CHAR_SLASH;
+                if (isClosingTag) {
+                    entityEndIndex = 2;
+                }
+                String fullTagExpression = str2.substring(entityEndIndex + semiColonEndIndex, isVoidTag ? pos - 2 : pos - 1);
+                String tagName = getTagName(fullTagExpression);
+                if (tagName != null) {
+                    if (isSupportedTag(tagName)) {
+                        if (isClosingTag) {
                             while (!startTagStack.isEmpty()) {
                                 StartTag startTag = (StartTag) startTagStack.pop();
-                                applySpansForTag(id, startTag, spannedText, styles, scratchStyleMatches);
+                                applySpansForTag(str, startTag, spannedText, list, scratchStyleMatches);
                                 if (startTag.name.equals(tagName)) {
                                     break;
                                 }
                             }
-                            break;
+                        } else if (!isVoidTag) {
+                            startTagStack.push(StartTag.buildStartTag(fullTagExpression, spannedText.length()));
                         }
                     }
-                    pos++;
-                    break;
-                default:
-                    spannedText.append(curr);
-                    pos++;
-                    break;
+                }
             }
         }
         while (!startTagStack.isEmpty()) {
-            applySpansForTag(id, (StartTag) startTagStack.pop(), spannedText, styles, scratchStyleMatches);
+            applySpansForTag(str, (StartTag) startTagStack.pop(), spannedText, list, scratchStyleMatches);
         }
-        applySpansForTag(id, StartTag.buildWholeCueVirtualTag(), spannedText, styles, scratchStyleMatches);
+        applySpansForTag(str, StartTag.buildWholeCueVirtualTag(), spannedText, list, scratchStyleMatches);
         builder.setText(spannedText);
     }
 
@@ -224,8 +229,9 @@ public final class WebvttCueParser {
             parseCueSettingsList(cueHeaderMatcher.group(3), builder);
             textBuilder.setLength(0);
             while (true) {
-                String line = webvttData.readLine();
-                if (TextUtils.isEmpty(line)) {
+                CharSequence readLine = webvttData.readLine();
+                CharSequence line = readLine;
+                if (TextUtils.isEmpty(readLine)) {
                     parseCueText(id, textBuilder.toString(), builder, styles);
                     return true;
                 }
@@ -235,7 +241,11 @@ public final class WebvttCueParser {
                 textBuilder.append(line.trim());
             }
         } catch (NumberFormatException e) {
-            Log.w(TAG, "Skipping cue with bad header: " + cueHeaderMatcher.group());
+            String str = TAG;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Skipping cue with bad header: ");
+            stringBuilder.append(cueHeaderMatcher.group());
+            Log.w(str, stringBuilder.toString());
             return false;
         }
     }
@@ -271,34 +281,92 @@ public final class WebvttCueParser {
     }
 
     private static int parsePositionAnchor(String s) {
-        int i = -1;
-        switch (s.hashCode()) {
-            case -1364013995:
-                if (s.equals(TtmlNode.CENTER)) {
-                    i = 1;
-                    break;
+        String str;
+        StringBuilder stringBuilder;
+        int hashCode = s.hashCode();
+        if (hashCode != -NUM) {
+            if (hashCode != -NUM) {
+                if (hashCode != 100571) {
+                    if (hashCode == 109757538) {
+                        if (s.equals(TtmlNode.START)) {
+                            hashCode = 0;
+                            switch (hashCode) {
+                                case 0:
+                                    return 0;
+                                case 1:
+                                case 2:
+                                    return 1;
+                                case 3:
+                                    return 2;
+                                default:
+                                    str = TAG;
+                                    stringBuilder = new StringBuilder();
+                                    stringBuilder.append("Invalid anchor value: ");
+                                    stringBuilder.append(s);
+                                    Log.w(str, stringBuilder.toString());
+                                    return Integer.MIN_VALUE;
+                            }
+                        }
+                    }
+                } else if (s.equals(TtmlNode.END)) {
+                    hashCode = 3;
+                    switch (hashCode) {
+                        case 0:
+                            return 0;
+                        case 1:
+                        case 2:
+                            return 1;
+                        case 3:
+                            return 2;
+                        default:
+                            str = TAG;
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("Invalid anchor value: ");
+                            stringBuilder.append(s);
+                            Log.w(str, stringBuilder.toString());
+                            return Integer.MIN_VALUE;
+                    }
                 }
-                break;
-            case -1074341483:
-                if (s.equals("middle")) {
-                    i = 2;
-                    break;
+            } else if (s.equals("middle")) {
+                hashCode = 2;
+                switch (hashCode) {
+                    case 0:
+                        return 0;
+                    case 1:
+                    case 2:
+                        return 1;
+                    case 3:
+                        return 2;
+                    default:
+                        str = TAG;
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("Invalid anchor value: ");
+                        stringBuilder.append(s);
+                        Log.w(str, stringBuilder.toString());
+                        return Integer.MIN_VALUE;
                 }
-                break;
-            case 100571:
-                if (s.equals(TtmlNode.END)) {
-                    i = 3;
-                    break;
-                }
-                break;
-            case 109757538:
-                if (s.equals(TtmlNode.START)) {
-                    i = 0;
-                    break;
-                }
-                break;
+            }
+        } else if (s.equals(TtmlNode.CENTER)) {
+            hashCode = 1;
+            switch (hashCode) {
+                case 0:
+                    return 0;
+                case 1:
+                case 2:
+                    return 1;
+                case 3:
+                    return 2;
+                default:
+                    str = TAG;
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("Invalid anchor value: ");
+                    stringBuilder.append(s);
+                    Log.w(str, stringBuilder.toString());
+                    return Integer.MIN_VALUE;
+            }
         }
-        switch (i) {
+        hashCode = -1;
+        switch (hashCode) {
             case 0:
                 return 0;
             case 1:
@@ -307,51 +375,53 @@ public final class WebvttCueParser {
             case 3:
                 return 2;
             default:
-                Log.w(TAG, "Invalid anchor value: " + s);
+                str = TAG;
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("Invalid anchor value: ");
+                stringBuilder.append(s);
+                Log.w(str, stringBuilder.toString());
                 return Integer.MIN_VALUE;
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private static Alignment parseTextAlignment(String s) {
-        Object obj = -1;
+        Object obj;
         switch (s.hashCode()) {
             case -1364013995:
                 if (s.equals(TtmlNode.CENTER)) {
                     obj = 2;
                     break;
                 }
-                break;
             case -1074341483:
                 if (s.equals("middle")) {
                     obj = 3;
                     break;
                 }
-                break;
             case 100571:
                 if (s.equals(TtmlNode.END)) {
                     obj = 4;
                     break;
                 }
-                break;
             case 3317767:
                 if (s.equals(TtmlNode.LEFT)) {
                     obj = 1;
                     break;
                 }
-                break;
             case 108511772:
                 if (s.equals(TtmlNode.RIGHT)) {
                     obj = 5;
                     break;
                 }
-                break;
             case 109757538:
                 if (s.equals(TtmlNode.START)) {
                     obj = null;
                     break;
                 }
-                break;
+            default:
         }
+        obj = -1;
         switch (obj) {
             case null:
             case 1:
@@ -363,7 +433,11 @@ public final class WebvttCueParser {
             case 5:
                 return Alignment.ALIGN_OPPOSITE;
             default:
-                Log.w(TAG, "Invalid alignment value: " + s);
+                String str = TAG;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Invalid alignment value: ");
+                stringBuilder.append(s);
+                Log.w(str, stringBuilder.toString());
                 return null;
         }
     }
@@ -374,33 +448,116 @@ public final class WebvttCueParser {
     }
 
     private static void applyEntity(String entity, SpannableStringBuilder spannedText) {
-        Object obj = -1;
-        switch (entity.hashCode()) {
-            case 3309:
-                if (entity.equals(ENTITY_GREATER_THAN)) {
-                    obj = 1;
-                    break;
-                }
-                break;
-            case 3464:
-                if (entity.equals(ENTITY_LESS_THAN)) {
-                    obj = null;
-                    break;
-                }
-                break;
-            case 96708:
-                if (entity.equals(ENTITY_AMPERSAND)) {
+        Object obj;
+        String str;
+        StringBuilder stringBuilder;
+        int hashCode = entity.hashCode();
+        if (hashCode != 3309) {
+            if (hashCode != 3464) {
+                if (hashCode != 96708) {
+                    if (hashCode == 3374865) {
+                        if (entity.equals(ENTITY_NON_BREAK_SPACE)) {
+                            obj = 2;
+                            switch (obj) {
+                                case null:
+                                    spannedText.append(CHAR_LESS_THAN);
+                                    return;
+                                case 1:
+                                    spannedText.append(CHAR_GREATER_THAN);
+                                    return;
+                                case 2:
+                                    spannedText.append(CHAR_SPACE);
+                                    return;
+                                case 3:
+                                    spannedText.append(CHAR_AMPERSAND);
+                                    return;
+                                default:
+                                    str = TAG;
+                                    stringBuilder = new StringBuilder();
+                                    stringBuilder.append("ignoring unsupported entity: '&");
+                                    stringBuilder.append(entity);
+                                    stringBuilder.append(";'");
+                                    Log.w(str, stringBuilder.toString());
+                                    return;
+                            }
+                        }
+                    }
+                } else if (entity.equals(ENTITY_AMPERSAND)) {
                     obj = 3;
-                    break;
+                    switch (obj) {
+                        case null:
+                            spannedText.append(CHAR_LESS_THAN);
+                            return;
+                        case 1:
+                            spannedText.append(CHAR_GREATER_THAN);
+                            return;
+                        case 2:
+                            spannedText.append(CHAR_SPACE);
+                            return;
+                        case 3:
+                            spannedText.append(CHAR_AMPERSAND);
+                            return;
+                        default:
+                            str = TAG;
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("ignoring unsupported entity: '&");
+                            stringBuilder.append(entity);
+                            stringBuilder.append(";'");
+                            Log.w(str, stringBuilder.toString());
+                            return;
+                    }
                 }
-                break;
-            case 3374865:
-                if (entity.equals(ENTITY_NON_BREAK_SPACE)) {
-                    obj = 2;
-                    break;
+            } else if (entity.equals(ENTITY_LESS_THAN)) {
+                obj = null;
+                switch (obj) {
+                    case null:
+                        spannedText.append(CHAR_LESS_THAN);
+                        return;
+                    case 1:
+                        spannedText.append(CHAR_GREATER_THAN);
+                        return;
+                    case 2:
+                        spannedText.append(CHAR_SPACE);
+                        return;
+                    case 3:
+                        spannedText.append(CHAR_AMPERSAND);
+                        return;
+                    default:
+                        str = TAG;
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("ignoring unsupported entity: '&");
+                        stringBuilder.append(entity);
+                        stringBuilder.append(";'");
+                        Log.w(str, stringBuilder.toString());
+                        return;
                 }
-                break;
+            }
+        } else if (entity.equals(ENTITY_GREATER_THAN)) {
+            obj = 1;
+            switch (obj) {
+                case null:
+                    spannedText.append(CHAR_LESS_THAN);
+                    return;
+                case 1:
+                    spannedText.append(CHAR_GREATER_THAN);
+                    return;
+                case 2:
+                    spannedText.append(CHAR_SPACE);
+                    return;
+                case 3:
+                    spannedText.append(CHAR_AMPERSAND);
+                    return;
+                default:
+                    str = TAG;
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("ignoring unsupported entity: '&");
+                    stringBuilder.append(entity);
+                    stringBuilder.append(";'");
+                    Log.w(str, stringBuilder.toString());
+                    return;
+            }
         }
+        obj = -1;
         switch (obj) {
             case null:
                 spannedText.append(CHAR_LESS_THAN);
@@ -415,51 +572,54 @@ public final class WebvttCueParser {
                 spannedText.append(CHAR_AMPERSAND);
                 return;
             default:
-                Log.w(TAG, "ignoring unsupported entity: '&" + entity + ";'");
+                str = TAG;
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("ignoring unsupported entity: '&");
+                stringBuilder.append(entity);
+                stringBuilder.append(";'");
+                Log.w(str, stringBuilder.toString());
                 return;
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private static boolean isSupportedTag(String tagName) {
-        boolean z = true;
+        boolean z;
         switch (tagName.hashCode()) {
             case 98:
                 if (tagName.equals(TAG_BOLD)) {
                     z = false;
                     break;
                 }
-                break;
             case 99:
                 if (tagName.equals(TAG_CLASS)) {
                     z = true;
                     break;
                 }
-                break;
             case 105:
                 if (tagName.equals(TAG_ITALIC)) {
                     z = true;
                     break;
                 }
-                break;
             case 117:
                 if (tagName.equals(TAG_UNDERLINE)) {
                     z = true;
                     break;
                 }
-                break;
             case 118:
                 if (tagName.equals(TAG_VOICE)) {
                     z = true;
                     break;
                 }
-                break;
             case 3314158:
                 if (tagName.equals(TAG_LANG)) {
                     z = true;
                     break;
                 }
-                break;
+            default:
         }
+        z = true;
         switch (z) {
             case false:
             case true:
@@ -473,55 +633,53 @@ public final class WebvttCueParser {
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private static void applySpansForTag(String cueId, StartTag startTag, SpannableStringBuilder text, List<WebvttCssStyle> styles, List<StyleMatch> scratchStyleMatches) {
+        int i;
         int start = startTag.position;
         int end = text.length();
         String str = startTag.name;
-        int i = -1;
+        int i2 = 0;
         switch (str.hashCode()) {
             case 0:
                 if (str.equals(TtmlNode.ANONYMOUS_REGION_ID)) {
                     i = 6;
                     break;
                 }
-                break;
             case 98:
                 if (str.equals(TAG_BOLD)) {
                     i = 0;
                     break;
                 }
-                break;
             case 99:
                 if (str.equals(TAG_CLASS)) {
                     i = 3;
                     break;
                 }
-                break;
             case 105:
                 if (str.equals(TAG_ITALIC)) {
                     i = 1;
                     break;
                 }
-                break;
             case 117:
                 if (str.equals(TAG_UNDERLINE)) {
                     i = 2;
                     break;
                 }
-                break;
             case 118:
                 if (str.equals(TAG_VOICE)) {
                     i = 5;
                     break;
                 }
-                break;
             case 3314158:
                 if (str.equals(TAG_LANG)) {
                     i = 4;
                     break;
                 }
-                break;
+            default:
         }
+        i = -1;
         switch (i) {
             case 0:
                 text.setSpan(new StyleSpan(1), start, end, 33);
@@ -542,9 +700,15 @@ public final class WebvttCueParser {
         }
         scratchStyleMatches.clear();
         getApplicableStyles(styles, cueId, startTag, scratchStyleMatches);
-        int styleMatchesCount = scratchStyleMatches.size();
-        for (int i2 = 0; i2 < styleMatchesCount; i2++) {
-            applyStyleToText(text, ((StyleMatch) scratchStyleMatches.get(i2)).style, start, end);
+        i = scratchStyleMatches.size();
+        while (true) {
+            int i3 = i2;
+            if (i3 < i) {
+                applyStyleToText(text, ((StyleMatch) scratchStyleMatches.get(i3)).style, start, end);
+                i2 = i3 + 1;
+            } else {
+                return;
+            }
         }
     }
 
@@ -574,15 +738,15 @@ public final class WebvttCueParser {
             switch (style.getFontSizeUnit()) {
                 case 1:
                     spannedText.setSpan(new AbsoluteSizeSpan((int) style.getFontSize(), true), start, end, 33);
-                    return;
+                    break;
                 case 2:
                     spannedText.setSpan(new RelativeSizeSpan(style.getFontSize()), start, end, 33);
-                    return;
+                    break;
                 case 3:
                     spannedText.setSpan(new RelativeSizeSpan(style.getFontSize() / 100.0f), start, end, 33);
-                    return;
+                    break;
                 default:
-                    return;
+                    break;
             }
         }
     }

@@ -22,18 +22,11 @@ public class AudioTrackJNI {
 
         public void run() {
             try {
-                ByteBuffer tmp48;
-                ByteBuffer tmp44;
                 AudioTrackJNI.this.audioTrack.play();
-                if (AudioTrackJNI.this.needResampling) {
-                    tmp48 = ByteBuffer.allocateDirect(1920);
-                } else {
-                    tmp48 = null;
-                }
+                ByteBuffer tmp44 = null;
+                ByteBuffer tmp48 = AudioTrackJNI.this.needResampling ? ByteBuffer.allocateDirect(1920) : null;
                 if (AudioTrackJNI.this.needResampling) {
                     tmp44 = ByteBuffer.allocateDirect(1764);
-                } else {
-                    tmp44 = null;
                 }
                 while (AudioTrackJNI.this.running) {
                     try {
@@ -77,29 +70,28 @@ public class AudioTrackJNI {
     }
 
     public void init(int sampleRate, int bitsPerSample, int channels, int bufferSize) {
+        int i = channels;
+        int i2 = bufferSize;
         if (this.audioTrack != null) {
             throw new IllegalStateException("already inited");
         }
-        int size = getBufferSize(bufferSize, 48000);
-        this.bufferSize = bufferSize;
-        this.audioTrack = new AudioTrack(0, 48000, channels == 1 ? 4 : 12, 2, size, 1);
-        if (this.audioTrack.getState() != 1) {
-            int i;
+        int size = getBufferSize(i2, 48000);
+        r1.bufferSize = i2;
+        r1.audioTrack = new AudioTrack(0, 48000, i == 1 ? 4 : 12, 2, size, 1);
+        if (r1.audioTrack.getState() != 1) {
             try {
-                this.audioTrack.release();
+                r1.audioTrack.release();
             } catch (Throwable th) {
             }
-            size = getBufferSize(bufferSize * 6, 44100);
+            size = getBufferSize(i2 * 6, 44100);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("buffer size: " + size);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("buffer size: ");
+                stringBuilder.append(size);
+                FileLog.m0d(stringBuilder.toString());
             }
-            if (channels == 1) {
-                i = 4;
-            } else {
-                i = 12;
-            }
-            this.audioTrack = new AudioTrack(0, 44100, i, 2, size, 1);
-            this.needResampling = true;
+            r1.audioTrack = new AudioTrack(0, 44100, i == 1 ? 4 : 12, 2, size, 1);
+            r1.needResampling = true;
         }
     }
 

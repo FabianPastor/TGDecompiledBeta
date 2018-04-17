@@ -18,7 +18,7 @@
     <string name="common_open_on_phone">Открыть на телефоне</string>
     <string name="common_signin_button_text">Войти</string>
     <string name="common_signin_button_text_long">Войти через аккаунт Google</string>
-    <string name="gcm_fallback_notification_channel_label">Другое</string>
+    <string name="fcm_fallback_notification_channel_label">Другое</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">Это приложение</string>
     <string name="hockeyapp_crash_dialog_message">Хотели бы вы отправить анонимный отчёт об ошибке, чтобы мы могли исправить проблему?</string>
     <string name="hockeyapp_crash_dialog_negative_button">Не отправлять</string>

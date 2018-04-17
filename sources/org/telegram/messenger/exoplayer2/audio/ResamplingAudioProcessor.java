@@ -45,50 +45,43 @@ final class ResamplingAudioProcessor implements AudioProcessor {
     }
 
     public void queueInput(ByteBuffer inputBuffer) {
-        int resampledSize;
         int position = inputBuffer.position();
         int limit = inputBuffer.limit();
         int size = limit - position;
-        switch (this.encoding) {
-            case Integer.MIN_VALUE:
-                resampledSize = (size / 3) * 2;
-                break;
-            case 3:
-                resampledSize = size * 2;
-                break;
-            case 1073741824:
-                resampledSize = size / 2;
-                break;
-            default:
-                throw new IllegalStateException();
+        int i = this.encoding;
+        if (i == Integer.MIN_VALUE) {
+            i = (size / 3) * 2;
+        } else if (i == 3) {
+            i = size * 2;
+        } else if (i != NUM) {
+            throw new IllegalStateException();
+        } else {
+            i = size / 2;
         }
-        if (this.buffer.capacity() < resampledSize) {
-            this.buffer = ByteBuffer.allocateDirect(resampledSize).order(ByteOrder.nativeOrder());
+        if (this.buffer.capacity() < i) {
+            this.buffer = ByteBuffer.allocateDirect(i).order(ByteOrder.nativeOrder());
         } else {
             this.buffer.clear();
         }
-        int i;
-        switch (this.encoding) {
-            case Integer.MIN_VALUE:
-                for (i = position; i < limit; i += 3) {
-                    this.buffer.put(inputBuffer.get(i + 1));
-                    this.buffer.put(inputBuffer.get(i + 2));
-                }
-                break;
-            case 3:
-                for (i = position; i < limit; i++) {
-                    this.buffer.put((byte) 0);
-                    this.buffer.put((byte) ((inputBuffer.get(i) & 255) - 128));
-                }
-                break;
-            case 1073741824:
-                for (i = position; i < limit; i += 4) {
-                    this.buffer.put(inputBuffer.get(i + 2));
-                    this.buffer.put(inputBuffer.get(i + 3));
-                }
-                break;
-            default:
-                throw new IllegalStateException();
+        int i2 = this.encoding;
+        int i3;
+        if (i2 == Integer.MIN_VALUE) {
+            for (i3 = position; i3 < limit; i3 += 3) {
+                this.buffer.put(inputBuffer.get(i3 + 1));
+                this.buffer.put(inputBuffer.get(i3 + 2));
+            }
+        } else if (i2 == 3) {
+            for (i3 = position; i3 < limit; i3++) {
+                this.buffer.put((byte) 0);
+                this.buffer.put((byte) ((inputBuffer.get(i3) & 255) - 128));
+            }
+        } else if (i2 != NUM) {
+            throw new IllegalStateException();
+        } else {
+            for (i3 = position; i3 < limit; i3 += 4) {
+                this.buffer.put(inputBuffer.get(i3 + 2));
+                this.buffer.put(inputBuffer.get(i3 + 3));
+            }
         }
         inputBuffer.position(inputBuffer.limit());
         this.buffer.flip();

@@ -60,10 +60,7 @@ public class ID3v1Info extends AudioInfo {
         try {
             String text = new String(bytes, offset, length, "ISO-8859-1");
             int zeroIndex = text.indexOf(0);
-            if (zeroIndex < 0) {
-                return text;
-            }
-            return text.substring(0, zeroIndex);
+            return zeroIndex < 0 ? text : text.substring(0, zeroIndex);
         } catch (Exception e) {
             return TtmlNode.ANONYMOUS_REGION_ID;
         }

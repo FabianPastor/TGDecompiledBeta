@@ -27,7 +27,12 @@ public abstract class SimpleItemAnimator extends ItemAnimator {
     }
 
     public boolean canReuseUpdatedViewHolder(ViewHolder viewHolder) {
-        return !this.mSupportsChangeAnimations || viewHolder.isInvalid();
+        if (this.mSupportsChangeAnimations) {
+            if (!viewHolder.isInvalid()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean animateDisappearance(ViewHolder viewHolder, ItemHolderInfo preLayoutInfo, ItemHolderInfo postLayoutInfo) {
@@ -51,26 +56,28 @@ public abstract class SimpleItemAnimator extends ItemAnimator {
     }
 
     public boolean animatePersistence(ViewHolder viewHolder, ItemHolderInfo preInfo, ItemHolderInfo postInfo) {
-        if (preInfo.left == postInfo.left && preInfo.top == postInfo.top) {
-            dispatchMoveFinished(viewHolder);
-            return false;
+        if (preInfo.left == postInfo.left) {
+            if (preInfo.top == postInfo.top) {
+                dispatchMoveFinished(viewHolder);
+                return false;
+            }
         }
         return animateMove(viewHolder, preInfo.left, preInfo.top, postInfo.left, postInfo.top);
     }
 
     public boolean animateChange(ViewHolder oldHolder, ViewHolder newHolder, ItemHolderInfo preInfo, ItemHolderInfo postInfo) {
         int toLeft;
-        int toTop;
+        int i;
         int fromLeft = preInfo.left;
         int fromTop = preInfo.top;
         if (newHolder.shouldIgnore()) {
             toLeft = preInfo.left;
-            toTop = preInfo.top;
+            i = preInfo.top;
         } else {
             toLeft = postInfo.left;
-            toTop = postInfo.top;
+            i = postInfo.top;
         }
-        return animateChange(oldHolder, newHolder, fromLeft, fromTop, toLeft, toTop);
+        return animateChange(oldHolder, newHolder, fromLeft, fromTop, toLeft, i);
     }
 
     public final void dispatchRemoveFinished(ViewHolder item) {

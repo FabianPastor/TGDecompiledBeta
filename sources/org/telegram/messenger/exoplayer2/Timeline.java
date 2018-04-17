@@ -65,6 +65,7 @@ public abstract class Timeline {
 
         public int getAdGroupIndexForPositionUs(long positionUs) {
             long[] adGroupTimesUs = this.adPlaybackState.adGroupTimesUs;
+            int i = -1;
             if (adGroupTimesUs == null) {
                 return -1;
             }
@@ -72,14 +73,15 @@ public abstract class Timeline {
             while (index >= 0 && (adGroupTimesUs[index] == Long.MIN_VALUE || adGroupTimesUs[index] > positionUs)) {
                 index--;
             }
-            if (index < 0 || hasPlayedAdGroup(index)) {
-                index = -1;
+            if (index >= 0 && !hasPlayedAdGroup(index)) {
+                i = index;
             }
-            return index;
+            return i;
         }
 
         public int getAdGroupIndexAfterPositionUs(long positionUs) {
             long[] adGroupTimesUs = this.adPlaybackState.adGroupTimesUs;
+            int i = -1;
             if (adGroupTimesUs == null) {
                 return -1;
             }
@@ -87,10 +89,10 @@ public abstract class Timeline {
             while (index < adGroupTimesUs.length && adGroupTimesUs[index] != Long.MIN_VALUE && (positionUs >= adGroupTimesUs[index] || hasPlayedAdGroup(index))) {
                 index++;
             }
-            if (index >= adGroupTimesUs.length) {
-                index = -1;
+            if (index < adGroupTimesUs.length) {
+                i = index;
             }
-            return index;
+            return i;
         }
 
         public int getAdCountInAdGroup(int adGroupIndex) {
@@ -209,10 +211,7 @@ public abstract class Timeline {
             case 1:
                 return windowIndex;
             case 2:
-                if (windowIndex == getLastWindowIndex(shuffleModeEnabled)) {
-                    return getFirstWindowIndex(shuffleModeEnabled);
-                }
-                return windowIndex + 1;
+                return windowIndex == getLastWindowIndex(shuffleModeEnabled) ? getFirstWindowIndex(shuffleModeEnabled) : windowIndex + 1;
             default:
                 throw new IllegalStateException();
         }
@@ -225,10 +224,7 @@ public abstract class Timeline {
             case 1:
                 return windowIndex;
             case 2:
-                if (windowIndex == getFirstWindowIndex(shuffleModeEnabled)) {
-                    return getLastWindowIndex(shuffleModeEnabled);
-                }
-                return windowIndex - 1;
+                return windowIndex == getFirstWindowIndex(shuffleModeEnabled) ? getLastWindowIndex(shuffleModeEnabled) : windowIndex - 1;
             default:
                 throw new IllegalStateException();
         }
@@ -271,21 +267,27 @@ public abstract class Timeline {
     }
 
     public final Pair<Integer, Long> getPeriodPosition(Window window, Period period, int windowIndex, long windowPositionUs, long defaultPositionProjectionUs) {
-        Assertions.checkIndex(windowIndex, 0, getWindowCount());
-        getWindow(windowIndex, window, false, defaultPositionProjectionUs);
+        long windowPositionUs2;
+        Window window2 = window;
+        Period period2 = period;
+        int i = windowIndex;
+        Assertions.checkIndex(i, 0, getWindowCount());
+        getWindow(i, window2, false, defaultPositionProjectionUs);
         if (windowPositionUs == C0539C.TIME_UNSET) {
-            windowPositionUs = window.getDefaultPositionUs();
-            if (windowPositionUs == C0539C.TIME_UNSET) {
+            windowPositionUs2 = window.getDefaultPositionUs();
+            if (windowPositionUs2 == C0539C.TIME_UNSET) {
                 return null;
             }
         }
-        int periodIndex = window.firstPeriodIndex;
-        long periodPositionUs = window.getPositionInFirstPeriodUs() + windowPositionUs;
-        long periodDurationUs = getPeriod(periodIndex, period).getDurationUs();
-        while (periodDurationUs != C0539C.TIME_UNSET && periodPositionUs >= periodDurationUs && periodIndex < window.lastPeriodIndex) {
-            periodPositionUs -= periodDurationUs;
+        windowPositionUs2 = windowPositionUs;
+        int periodIndex = window2.firstPeriodIndex;
+        long periodPositionUs = window.getPositionInFirstPeriodUs() + windowPositionUs2;
+        long periodDurationUs = getPeriod(periodIndex, period2).getDurationUs();
+        while (periodDurationUs != C0539C.TIME_UNSET && periodPositionUs >= periodDurationUs && periodIndex < window2.lastPeriodIndex) {
+            long periodPositionUs2 = periodPositionUs - periodDurationUs;
             periodIndex++;
-            periodDurationUs = getPeriod(periodIndex, period).getDurationUs();
+            periodDurationUs = getPeriod(periodIndex, period2).getDurationUs();
+            periodPositionUs = periodPositionUs2;
         }
         return Pair.create(Integer.valueOf(periodIndex), Long.valueOf(periodPositionUs));
     }

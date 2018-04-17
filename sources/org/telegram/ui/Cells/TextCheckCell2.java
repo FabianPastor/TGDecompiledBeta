@@ -22,10 +22,6 @@ public class TextCheckCell2 extends FrameLayout {
     private TextView valueTextView;
 
     public TextCheckCell2(Context context) {
-        int i;
-        int i2;
-        float f = 17.0f;
-        int i3 = 3;
         super(context);
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -33,60 +29,37 @@ public class TextCheckCell2 extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
+        int i = 3;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TruncateAt.END);
-        View view = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 64.0f : 17.0f, 0.0f, LocaleController.isRTL ? 17.0f : 64.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 64.0f : 17.0f, 0.0f, LocaleController.isRTL ? 17.0f : 64.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
-        TextView textView = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        textView.setGravity(i2);
+        this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setPadding(0, 0, 0, 0);
         this.valueTextView.setEllipsize(TruncateAt.END);
-        View view2 = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        int i4 = i2 | 48;
-        float f2 = LocaleController.isRTL ? 64.0f : 17.0f;
-        if (!LocaleController.isRTL) {
-            f = 64.0f;
-        }
-        addView(view2, LayoutHelper.createFrame(-2, -2.0f, i4, f2, 35.0f, f, 0.0f));
+        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 64.0f : 17.0f, 35.0f, LocaleController.isRTL ? 17.0f : 64.0f, 0.0f));
         this.checkBox = new Switch2(context);
-        view = this.checkBox;
+        View view = this.checkBox;
         if (!LocaleController.isRTL) {
-            i3 = 5;
+            i = 5;
         }
-        addView(view, LayoutHelper.createFrame(44, 40.0f, i3 | 16, 14.0f, 0.0f, 14.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(44, 40.0f, i | 16, 14.0f, 0.0f, 14.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (this.isMultiline) {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
-            return;
+        } else {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.valueTextView.getVisibility() == 0 ? 64.0f : 48.0f) + this.needDivider, NUM));
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(this.valueTextView.getVisibility() == 0 ? 64.0f : 48.0f), NUM));
     }
 
     public void setTextAndCheck(String text, boolean checked, boolean divider) {
-        boolean z = false;
         this.textView.setText(text);
         this.isMultiline = false;
         this.checkBox.setChecked(checked, false);
@@ -96,14 +69,10 @@ public class TextCheckCell2 extends FrameLayout {
         layoutParams.height = -1;
         layoutParams.topMargin = 0;
         this.textView.setLayoutParams(layoutParams);
-        if (!divider) {
-            z = true;
-        }
-        setWillNotDraw(z);
+        setWillNotDraw(divider ^ 1);
     }
 
     public void setTextAndValueAndCheck(String text, String value, boolean checked, boolean multiline, boolean divider) {
-        boolean z = true;
         this.textView.setText(text);
         this.valueTextView.setText(value);
         this.checkBox.setChecked(checked, false);
@@ -127,10 +96,7 @@ public class TextCheckCell2 extends FrameLayout {
         layoutParams.height = -2;
         layoutParams.topMargin = AndroidUtilities.dp(10.0f);
         this.textView.setLayoutParams(layoutParams);
-        if (divider) {
-            z = false;
-        }
-        setWillNotDraw(z);
+        setWillNotDraw(divider ^ 1);
     }
 
     public void setEnabled(boolean value) {

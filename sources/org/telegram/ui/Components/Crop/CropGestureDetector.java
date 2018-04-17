@@ -29,11 +29,13 @@ public class CropGestureDetector {
 
         public boolean onScale(ScaleGestureDetector detector) {
             float scaleFactor = detector.getScaleFactor();
-            if (Float.isNaN(scaleFactor) || Float.isInfinite(scaleFactor)) {
-                return false;
+            if (!Float.isNaN(scaleFactor)) {
+                if (!Float.isInfinite(scaleFactor)) {
+                    CropGestureDetector.this.mListener.onScale(scaleFactor, detector.getFocusX(), detector.getFocusY());
+                    return true;
+                }
             }
-            CropGestureDetector.this.mListener.onScale(scaleFactor, detector.getFocusX(), detector.getFocusY());
-            return true;
+            return false;
         }
 
         public boolean onScaleBegin(ScaleGestureDetector detector) {
@@ -86,32 +88,111 @@ public class CropGestureDetector {
     }
 
     public boolean onTouchEvent(MotionEvent ev) {
+        float x;
+        float y;
+        float dx;
+        float dy;
         this.mDetector.onTouchEvent(ev);
         int i = 0;
-        switch (ev.getAction() & 255) {
-            case 0:
-                this.mActivePointerId = ev.getPointerId(0);
-                break;
-            case 1:
-            case 3:
-                this.mActivePointerId = -1;
-                break;
-            case 6:
-                int pointerIndex = (65280 & ev.getAction()) >> 8;
-                if (ev.getPointerId(pointerIndex) == this.mActivePointerId) {
-                    int newPointerIndex;
-                    if (pointerIndex == 0) {
-                        newPointerIndex = 1;
-                    } else {
-                        newPointerIndex = 0;
-                    }
-                    this.mActivePointerId = ev.getPointerId(newPointerIndex);
-                    this.mLastTouchX = ev.getX(newPointerIndex);
-                    this.mLastTouchY = ev.getY(newPointerIndex);
-                    break;
+        int action = ev.getAction() & 255;
+        boolean z = false;
+        if (action != 3) {
+            if (action != 6) {
+                switch (action) {
+                    case 0:
+                        this.mActivePointerId = ev.getPointerId(0);
+                        break;
+                    case 1:
+                        break;
+                    default:
+                        break;
                 }
-                break;
+            }
+            action = (65280 & ev.getAction()) >> 8;
+            if (ev.getPointerId(action) == this.mActivePointerId) {
+                int newPointerIndex;
+                if (action == 0) {
+                    newPointerIndex = 1;
+                } else {
+                    newPointerIndex = 0;
+                }
+                this.mActivePointerId = ev.getPointerId(newPointerIndex);
+                this.mLastTouchX = ev.getX(newPointerIndex);
+                this.mLastTouchY = ev.getY(newPointerIndex);
+            }
+            if (this.mActivePointerId != -1) {
+                i = this.mActivePointerId;
+            }
+            this.mActivePointerIndex = ev.findPointerIndex(i);
+            switch (ev.getAction()) {
+                case 0:
+                case 2:
+                    if (!this.started) {
+                        x = getActiveX(ev);
+                        y = getActiveY(ev);
+                        dx = x - this.mLastTouchX;
+                        dy = y - this.mLastTouchY;
+                        if (!this.mIsDragging) {
+                            if (((float) Math.sqrt((double) ((dx * dx) + (dy * dy)))) >= this.mTouchSlop) {
+                                z = true;
+                            }
+                            this.mIsDragging = z;
+                        }
+                        if (this.mIsDragging) {
+                            this.mListener.onDrag(dx, dy);
+                            this.mLastTouchX = x;
+                            this.mLastTouchY = y;
+                            if (this.mVelocityTracker != null) {
+                                this.mVelocityTracker.addMovement(ev);
+                                break;
+                            }
+                        }
+                    }
+                    this.mVelocityTracker = VelocityTracker.obtain();
+                    if (this.mVelocityTracker != null) {
+                        this.mVelocityTracker.addMovement(ev);
+                    }
+                    this.mLastTouchX = getActiveX(ev);
+                    this.mLastTouchY = getActiveY(ev);
+                    this.mIsDragging = false;
+                    this.started = true;
+                    return true;
+                    break;
+                case 1:
+                    if (this.mIsDragging) {
+                        if (this.mVelocityTracker != null) {
+                            this.mLastTouchX = getActiveX(ev);
+                            this.mLastTouchY = getActiveY(ev);
+                            this.mVelocityTracker.addMovement(ev);
+                            this.mVelocityTracker.computeCurrentVelocity(1000);
+                            x = this.mVelocityTracker.getXVelocity();
+                            dx = this.mVelocityTracker.getYVelocity();
+                            if (Math.max(Math.abs(x), Math.abs(dx)) >= this.mMinimumVelocity) {
+                                this.mListener.onFling(this.mLastTouchX, this.mLastTouchY, -x, -dx);
+                            }
+                        }
+                        this.mIsDragging = false;
+                    }
+                    if (this.mVelocityTracker != null) {
+                        this.mVelocityTracker.recycle();
+                        this.mVelocityTracker = null;
+                    }
+                    this.started = false;
+                    break;
+                case 3:
+                    if (this.mVelocityTracker != null) {
+                        this.mVelocityTracker.recycle();
+                        this.mVelocityTracker = null;
+                    }
+                    this.started = false;
+                    this.mIsDragging = false;
+                    break;
+                default:
+                    break;
+            }
+            return true;
         }
+        this.mActivePointerId = -1;
         if (this.mActivePointerId != -1) {
             i = this.mActivePointerId;
         }
@@ -119,13 +200,16 @@ public class CropGestureDetector {
         switch (ev.getAction()) {
             case 0:
             case 2:
-                if (this.started) {
-                    float x = getActiveX(ev);
-                    float y = getActiveY(ev);
-                    float dx = x - this.mLastTouchX;
-                    float dy = y - this.mLastTouchY;
-                    if (!this.mIsDragging) {
-                        this.mIsDragging = ((float) Math.sqrt((double) ((dx * dx) + (dy * dy)))) >= this.mTouchSlop;
+                if (!this.started) {
+                    x = getActiveX(ev);
+                    y = getActiveY(ev);
+                    dx = x - this.mLastTouchX;
+                    dy = y - this.mLastTouchY;
+                    if (this.mIsDragging) {
+                        if (((float) Math.sqrt((double) ((dx * dx) + (dy * dy)))) >= this.mTouchSlop) {
+                            z = true;
+                        }
+                        this.mIsDragging = z;
                     }
                     if (this.mIsDragging) {
                         this.mListener.onDrag(dx, dy);
@@ -154,10 +238,10 @@ public class CropGestureDetector {
                         this.mLastTouchY = getActiveY(ev);
                         this.mVelocityTracker.addMovement(ev);
                         this.mVelocityTracker.computeCurrentVelocity(1000);
-                        float vX = this.mVelocityTracker.getXVelocity();
-                        float vY = this.mVelocityTracker.getYVelocity();
-                        if (Math.max(Math.abs(vX), Math.abs(vY)) >= this.mMinimumVelocity) {
-                            this.mListener.onFling(this.mLastTouchX, this.mLastTouchY, -vX, -vY);
+                        x = this.mVelocityTracker.getXVelocity();
+                        dx = this.mVelocityTracker.getYVelocity();
+                        if (Math.max(Math.abs(x), Math.abs(dx)) >= this.mMinimumVelocity) {
+                            this.mListener.onFling(this.mLastTouchX, this.mLastTouchY, -x, -dx);
                         }
                     }
                     this.mIsDragging = false;
@@ -175,6 +259,8 @@ public class CropGestureDetector {
                 }
                 this.started = false;
                 this.mIsDragging = false;
+                break;
+            default:
                 break;
         }
         return true;

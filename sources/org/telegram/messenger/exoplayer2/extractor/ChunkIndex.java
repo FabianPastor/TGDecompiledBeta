@@ -39,9 +39,11 @@ public final class ChunkIndex implements SeekMap {
     public SeekPoints getSeekPoints(long timeUs) {
         int chunkIndex = getChunkIndex(timeUs);
         SeekPoint seekPoint = new SeekPoint(this.timesUs[chunkIndex], this.offsets[chunkIndex]);
-        if (seekPoint.timeUs >= timeUs || chunkIndex == this.length - 1) {
-            return new SeekPoints(seekPoint);
+        if (seekPoint.timeUs < timeUs) {
+            if (chunkIndex != this.length - 1) {
+                return new SeekPoints(seekPoint, new SeekPoint(this.timesUs[chunkIndex + 1], this.offsets[chunkIndex + 1]));
+            }
         }
-        return new SeekPoints(seekPoint, new SeekPoint(this.timesUs[chunkIndex + 1], this.offsets[chunkIndex + 1]));
+        return new SeekPoints(seekPoint);
     }
 }

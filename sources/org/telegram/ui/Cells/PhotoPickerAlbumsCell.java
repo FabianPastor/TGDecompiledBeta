@@ -41,16 +41,19 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
         private BackupImageView imageView;
         private TextView nameTextView;
         private View selector;
+        final /* synthetic */ PhotoPickerAlbumsCell this$0;
 
-        public AlbumView(Context context) {
-            super(context);
-            this.imageView = new BackupImageView(context);
+        public AlbumView(PhotoPickerAlbumsCell photoPickerAlbumsCell, Context context) {
+            Context context2 = context;
+            this.this$0 = photoPickerAlbumsCell;
+            super(context2);
+            this.imageView = new BackupImageView(context2);
             addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
-            LinearLayout linearLayout = new LinearLayout(context);
+            LinearLayout linearLayout = new LinearLayout(context2);
             linearLayout.setOrientation(0);
             linearLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             addView(linearLayout, LayoutHelper.createFrame(-1, 28, 83));
-            this.nameTextView = new TextView(context);
+            this.nameTextView = new TextView(context2);
             this.nameTextView.setTextSize(1, 13.0f);
             this.nameTextView.setTextColor(-1);
             this.nameTextView.setSingleLine(true);
@@ -58,7 +61,7 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             this.nameTextView.setMaxLines(1);
             this.nameTextView.setGravity(16);
             linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(0, -1, 1.0f, 8, 0, 0, 0));
-            this.countTextView = new TextView(context);
+            this.countTextView = new TextView(context2);
             this.countTextView.setTextSize(1, 13.0f);
             this.countTextView.setTextColor(-5592406);
             this.countTextView.setSingleLine(true);
@@ -66,7 +69,7 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             this.countTextView.setMaxLines(1);
             this.countTextView.setGravity(16);
             linearLayout.addView(this.countTextView, LayoutHelper.createLinear(-2, -1, 4.0f, 0.0f, 4.0f, 0.0f));
-            this.selector = new View(context);
+            this.selector = new View(context2);
             this.selector.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             addView(this.selector, LayoutHelper.createFrame(-1, -1.0f));
         }
@@ -86,7 +89,7 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
     public PhotoPickerAlbumsCell(Context context) {
         super(context);
         for (int a = 0; a < 4; a++) {
-            this.albumViews[a] = new AlbumView(context);
+            this.albumViews[a] = new AlbumView(this, context);
             addView(this.albumViews[a]);
             this.albumViews[a].setVisibility(4);
             this.albumViews[a].setTag(Integer.valueOf(a));
@@ -116,10 +119,24 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
                 albumView.imageView.setImageResource(R.drawable.nophotos);
             } else {
                 albumView.imageView.setOrientation(albumEntry.coverPhoto.orientation, true);
+                BackupImageView access$200;
+                StringBuilder stringBuilder;
                 if (albumEntry.coverPhoto.isVideo) {
-                    albumView.imageView.setImage("vthumb://" + albumEntry.coverPhoto.imageId + ":" + albumEntry.coverPhoto.path, null, getContext().getResources().getDrawable(R.drawable.nophotos));
+                    access$200 = albumView.imageView;
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("vthumb://");
+                    stringBuilder.append(albumEntry.coverPhoto.imageId);
+                    stringBuilder.append(":");
+                    stringBuilder.append(albumEntry.coverPhoto.path);
+                    access$200.setImage(stringBuilder.toString(), null, getContext().getResources().getDrawable(R.drawable.nophotos));
                 } else {
-                    albumView.imageView.setImage("thumb://" + albumEntry.coverPhoto.imageId + ":" + albumEntry.coverPhoto.path, null, getContext().getResources().getDrawable(R.drawable.nophotos));
+                    access$200 = albumView.imageView;
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("thumb://");
+                    stringBuilder.append(albumEntry.coverPhoto.imageId);
+                    stringBuilder.append(":");
+                    stringBuilder.append(albumEntry.coverPhoto.path);
+                    access$200.setImage(stringBuilder.toString(), null, getContext().getResources().getDrawable(R.drawable.nophotos));
                 }
             }
             albumView.nameTextView.setText(albumEntry.bucketName);

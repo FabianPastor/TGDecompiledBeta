@@ -49,29 +49,33 @@ public final class WavExtractor implements Extractor {
     }
 
     public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
+        ExtractorInput extractorInput = input;
         if (this.wavHeader == null) {
-            this.wavHeader = WavHeaderReader.peek(input);
-            if (this.wavHeader == null) {
+            r0.wavHeader = WavHeaderReader.peek(input);
+            if (r0.wavHeader == null) {
                 throw new ParserException("Unsupported or unrecognized wav header.");
             }
-            this.trackOutput.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_RAW, null, this.wavHeader.getBitrate(), 32768, this.wavHeader.getNumChannels(), this.wavHeader.getSampleRateHz(), this.wavHeader.getEncoding(), null, null, 0, null));
-            this.bytesPerFrame = this.wavHeader.getBytesPerFrame();
+            r0.trackOutput.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_RAW, null, r0.wavHeader.getBitrate(), 32768, r0.wavHeader.getNumChannels(), r0.wavHeader.getSampleRateHz(), r0.wavHeader.getEncoding(), null, null, 0, null));
+            r0.bytesPerFrame = r0.wavHeader.getBytesPerFrame();
         }
-        if (!this.wavHeader.hasDataBounds()) {
-            WavHeaderReader.skipToData(input, this.wavHeader);
-            this.extractorOutput.seekMap(this.wavHeader);
+        if (!r0.wavHeader.hasDataBounds()) {
+            WavHeaderReader.skipToData(extractorInput, r0.wavHeader);
+            r0.extractorOutput.seekMap(r0.wavHeader);
         }
-        int bytesAppended = this.trackOutput.sampleData(input, 32768 - this.pendingBytes, true);
+        int bytesAppended = r0.trackOutput.sampleData(extractorInput, 32768 - r0.pendingBytes, true);
         if (bytesAppended != -1) {
-            this.pendingBytes += bytesAppended;
+            r0.pendingBytes += bytesAppended;
         }
-        int pendingFrames = this.pendingBytes / this.bytesPerFrame;
+        int pendingFrames = r0.pendingBytes / r0.bytesPerFrame;
         if (pendingFrames > 0) {
-            long timeUs = this.wavHeader.getTimeUs(input.getPosition() - ((long) this.pendingBytes));
-            int size = pendingFrames * this.bytesPerFrame;
-            this.pendingBytes -= size;
-            this.trackOutput.sampleMetadata(timeUs, 1, size, this.pendingBytes, null);
+            long timeUs = r0.wavHeader.getTimeUs(input.getPosition() - ((long) r0.pendingBytes));
+            int size = r0.bytesPerFrame * pendingFrames;
+            r0.pendingBytes -= size;
+            r0.trackOutput.sampleMetadata(timeUs, 1, size, r0.pendingBytes, null);
         }
-        return bytesAppended == -1 ? -1 : 0;
+        if (bytesAppended == -1) {
+            return -1;
+        }
+        return 0;
     }
 }

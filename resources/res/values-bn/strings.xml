@@ -18,7 +18,7 @@
     <string name="common_open_on_phone">ফোনে খুলুন</string>
     <string name="common_signin_button_text">সাইন-ইন করুন</string>
     <string name="common_signin_button_text_long">Google এর মাধ্যমে সাইন-ইন করুন</string>
-    <string name="gcm_fallback_notification_channel_label">বিবিধ</string>
+    <string name="fcm_fallback_notification_channel_label">বিবিধ</string>
     <string name="status_bar_notification_info_overflow">৯৯৯+</string>
     <string name="wallet_buy_button_place_holder">Google ব্যবহার করে কিনুন</string>
 </resources>

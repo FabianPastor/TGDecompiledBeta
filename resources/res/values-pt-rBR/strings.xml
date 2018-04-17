@@ -1829,6 +1829,7 @@
     <string name="common_open_on_phone">Abrir no smartphone</string>
     <string name="common_signin_button_text">Fazer login</string>
     <string name="common_signin_button_text_long">Fazer login com o Google</string>
+    <string name="fcm_fallback_notification_channel_label">Diversos</string>
     <string name="formatDateAtTime">%1$s às %2$s</string>
     <string name="formatterBannedUntil12H">dd MMM yyyy, h:mm a</string>
     <string name="formatterBannedUntil24H">dd MMM yyyy, h:mm a</string>
@@ -1843,7 +1844,6 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
-    <string name="gcm_fallback_notification_channel_label">Diversos</string>
     <string name="items_few">%1$d itens</string>
     <string name="items_many">%1$d itens</string>
     <string name="items_one">%1$d item</string>

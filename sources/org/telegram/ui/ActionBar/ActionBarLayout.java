@@ -162,20 +162,24 @@ public class ActionBarLayout extends FrameLayout {
             int childCount = getChildCount();
             for (int a = 0; a < childCount; a++) {
                 View view = getChildAt(a);
-                if (view != child && (view instanceof ActionBar) && view.getVisibility() == 0) {
-                    if (((ActionBar) view).getCastShadows()) {
-                        actionBarHeight = view.getMeasuredHeight();
-                    }
-                    result = super.drawChild(canvas, child, drawingTime);
-                    if (actionBarHeight == 0 && ActionBarLayout.headerShadowDrawable != null) {
-                        ActionBarLayout.headerShadowDrawable.setBounds(0, actionBarHeight, getMeasuredWidth(), ActionBarLayout.headerShadowDrawable.getIntrinsicHeight() + actionBarHeight);
-                        ActionBarLayout.headerShadowDrawable.draw(canvas);
+                if (view != child) {
+                    if ((view instanceof ActionBar) && view.getVisibility() == 0) {
+                        if (((ActionBar) view).getCastShadows()) {
+                            actionBarHeight = view.getMeasuredHeight();
+                        }
+                        result = super.drawChild(canvas, child, drawingTime);
+                        if (!(actionBarHeight == 0 || ActionBarLayout.headerShadowDrawable == null)) {
+                            ActionBarLayout.headerShadowDrawable.setBounds(0, actionBarHeight, getMeasuredWidth(), ActionBarLayout.headerShadowDrawable.getIntrinsicHeight() + actionBarHeight);
+                            ActionBarLayout.headerShadowDrawable.draw(canvas);
+                        }
                         return result;
                     }
                 }
             }
             result = super.drawChild(canvas, child, drawingTime);
-            return actionBarHeight == 0 ? result : result;
+            ActionBarLayout.headerShadowDrawable.setBounds(0, actionBarHeight, getMeasuredWidth(), ActionBarLayout.headerShadowDrawable.getIntrinsicHeight() + actionBarHeight);
+            ActionBarLayout.headerShadowDrawable.draw(canvas);
+            return result;
         }
 
         public boolean hasOverlappingRendering() {
@@ -183,18 +187,11 @@ public class ActionBarLayout extends FrameLayout {
         }
 
         protected void onLayout(boolean changed, int l, int t, int r, int b) {
-            int i;
-            boolean z = false;
             super.onLayout(changed, l, t, r, b);
             View rootView = getRootView();
             getWindowVisibleDisplayFrame(this.rect);
-            int height = rootView.getHeight();
-            if (this.rect.top != 0) {
-                i = AndroidUtilities.statusBarHeight;
-            } else {
-                i = 0;
-            }
-            if (((height - i) - AndroidUtilities.getViewInset(rootView)) - (this.rect.bottom - this.rect.top) > 0) {
+            boolean z = false;
+            if (((rootView.getHeight() - (this.rect.top != 0 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.getViewInset(rootView)) - (this.rect.bottom - this.rect.top) > 0) {
                 z = true;
             }
             this.isKeyboardVisible = z;
@@ -297,7 +294,12 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return this.animationInProgress || checkTransitionAnimation() || onTouchEvent(ev);
+        if (!(this.animationInProgress || checkTransitionAnimation())) {
+            if (!onTouchEvent(ev)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
@@ -306,44 +308,52 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public boolean dispatchKeyEventPreIme(KeyEvent event) {
-        if (event == null || event.getKeyCode() != 4 || event.getAction() != 1) {
-            return super.dispatchKeyEventPreIme(event);
+        if (event != null && event.getKeyCode() == 4) {
+            boolean z = true;
+            if (event.getAction() == 1) {
+                if ((this.delegate == null || !this.delegate.onPreIme()) && !super.dispatchKeyEventPreIme(event)) {
+                    z = false;
+                }
+                return z;
+            }
         }
-        if ((this.delegate == null || !this.delegate.onPreIme()) && !super.dispatchKeyEventPreIme(event)) {
-            return false;
-        }
-        return true;
+        return super.dispatchKeyEventPreIme(event);
     }
 
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        Canvas canvas2 = canvas;
+        View view = child;
         int width = (getWidth() - getPaddingLeft()) - getPaddingRight();
         int translationX = ((int) this.innerTranslationX) + getPaddingRight();
         int clipLeft = getPaddingLeft();
-        int clipRight = width + getPaddingLeft();
-        if (child == this.containerViewBack) {
+        int clipRight = getPaddingLeft() + width;
+        if (view == this.containerViewBack) {
             clipRight = translationX;
-        } else if (child == this.containerView) {
+        } else if (view == r0.containerView) {
             clipLeft = translationX;
         }
+        int clipLeft2 = clipLeft;
+        int clipRight2 = clipRight;
         int restoreCount = canvas.save();
-        if (!this.transitionAnimationInProgress) {
-            canvas.clipRect(clipLeft, 0, clipRight, getHeight());
+        if (!r0.transitionAnimationInProgress) {
+            canvas2.clipRect(clipLeft2, 0, clipRight2, getHeight());
         }
         boolean result = super.drawChild(canvas, child, drawingTime);
-        canvas.restoreToCount(restoreCount);
+        canvas2.restoreToCount(restoreCount);
         if (translationX != 0) {
-            if (child == this.containerView) {
-                float alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
+            float alpha;
+            if (view == r0.containerView) {
+                alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
                 layerShadowDrawable.setBounds(translationX - layerShadowDrawable.getIntrinsicWidth(), child.getTop(), translationX, child.getBottom());
                 layerShadowDrawable.setAlpha((int) (255.0f * alpha));
-                layerShadowDrawable.draw(canvas);
-            } else if (child == this.containerViewBack) {
-                float opacity = Math.min(0.8f, ((float) (width - translationX)) / ((float) width));
-                if (opacity < 0.0f) {
-                    opacity = 0.0f;
+                layerShadowDrawable.draw(canvas2);
+            } else if (view == r0.containerViewBack) {
+                alpha = Math.min(0.8f, ((float) (width - translationX)) / ((float) width));
+                if (alpha < 0.0f) {
+                    alpha = 0.0f;
                 }
-                scrimPaint.setColor(((int) (153.0f * opacity)) << 24);
-                canvas.drawRect((float) clipLeft, 0.0f, (float) clipRight, (float) getHeight(), scrimPaint);
+                scrimPaint.setColor(((int) (153.0f * alpha)) << 24);
+                canvas2.drawRect((float) clipLeft2, 0.0f, (float) clipRight2, (float) getHeight(), scrimPaint);
             }
         }
         return result;
@@ -480,19 +490,19 @@ public class ActionBarLayout extends FrameLayout {
                     }
                     if (this.startedTracking) {
                         float distToMove;
-                        float x = this.containerView.getX();
+                        velX = this.containerView.getX();
                         AnimatorSet animatorSet = new AnimatorSet();
-                        velX = this.velocityTracker.getXVelocity();
-                        final boolean backAnimation = x < ((float) this.containerView.getMeasuredWidth()) / 3.0f && (velX < 3500.0f || velX < this.velocityTracker.getYVelocity());
+                        float velX2 = this.velocityTracker.getXVelocity();
+                        final boolean backAnimation = velX < ((float) this.containerView.getMeasuredWidth()) / 3.0f && (velX2 < 3500.0f || velX2 < this.velocityTracker.getYVelocity());
                         Animator[] animatorArr;
                         if (backAnimation) {
-                            distToMove = x;
+                            distToMove = velX;
                             animatorArr = new Animator[2];
                             animatorArr[0] = ObjectAnimator.ofFloat(this.containerView, "translationX", new float[]{0.0f});
                             animatorArr[1] = ObjectAnimator.ofFloat(this, "innerTranslationX", new float[]{0.0f});
                             animatorSet.playTogether(animatorArr);
                         } else {
-                            distToMove = ((float) this.containerView.getMeasuredWidth()) - x;
+                            distToMove = ((float) this.containerView.getMeasuredWidth()) - velX;
                             animatorArr = new Animator[2];
                             animatorArr[0] = ObjectAnimator.ofFloat(this.containerView, "translationX", new float[]{(float) this.containerView.getMeasuredWidth()});
                             animatorArr[1] = ObjectAnimator.ofFloat(this, "innerTranslationX", new float[]{(float) this.containerView.getMeasuredWidth()});
@@ -538,11 +548,15 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void onBackPressed() {
-        if (!this.startedTracking && !checkTransitionAnimation() && !this.fragmentsStack.isEmpty()) {
-            if (this.currentActionBar != null && this.currentActionBar.isSearchFieldVisible) {
+        if (!(this.startedTracking || checkTransitionAnimation())) {
+            if (!this.fragmentsStack.isEmpty()) {
+                if (this.currentActionBar == null || !this.currentActionBar.isSearchFieldVisible) {
+                    if (((BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1)).onBackPressed() && !this.fragmentsStack.isEmpty()) {
+                        closeLastFragment(true);
+                    }
+                    return;
+                }
                 this.currentActionBar.closeSearchField();
-            } else if (((BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1)).onBackPressed() && !this.fragmentsStack.isEmpty()) {
-                closeLastFragment(true);
             }
         }
     }
@@ -679,124 +693,133 @@ public class ActionBarLayout extends FrameLayout {
         }
     }
 
-    public boolean presentFragment(final BaseFragment fragment, final boolean removeLast, boolean forceWithoutAnimation, boolean check) {
-        if (checkTransitionAnimation() || ((this.delegate != null && check && !this.delegate.needPresentFragment(fragment, removeLast, forceWithoutAnimation, this)) || !fragment.onFragmentCreate())) {
-            return false;
-        }
-        ViewGroup parent;
-        if (this.parentActivity.getCurrentFocus() != null) {
-            AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
-        }
-        boolean needAnimation = !forceWithoutAnimation && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
-        final BaseFragment currentFragment = !this.fragmentsStack.isEmpty() ? (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1) : null;
-        fragment.setParentLayout(this);
-        View fragmentView = fragment.fragmentView;
-        if (fragmentView == null) {
-            fragmentView = fragment.createView(this.parentActivity);
-        } else {
-            parent = (ViewGroup) fragmentView.getParent();
-            if (parent != null) {
-                fragment.onRemoveFromParent();
-                parent.removeView(fragmentView);
-            }
-        }
-        if (fragment.actionBar != null && fragment.actionBar.getAddToContainer()) {
-            if (this.removeActionBarExtraHeight) {
-                fragment.actionBar.setOccupyStatusBar(false);
-            }
-            parent = (ViewGroup) fragment.actionBar.getParent();
-            if (parent != null) {
-                parent.removeView(fragment.actionBar);
-            }
-            this.containerViewBack.addView(fragment.actionBar);
-            fragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.subtitleOverlayText, this.overlayAction);
-        }
-        this.containerViewBack.addView(fragmentView);
-        ViewGroup.LayoutParams layoutParams = fragmentView.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        fragmentView.setLayoutParams(layoutParams);
-        this.fragmentsStack.add(fragment);
-        fragment.onResume();
-        this.currentActionBar = fragment.actionBar;
-        if (!fragment.hasOwnBackground && fragmentView.getBackground() == null) {
-            fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        }
-        LinearLayoutContainer temp = this.containerView;
-        this.containerView = this.containerViewBack;
-        this.containerViewBack = temp;
-        this.containerView.setVisibility(0);
-        setInnerTranslationX(0.0f);
-        bringChildToFront(this.containerView);
-        if (!needAnimation) {
-            presentFragmentInternalRemoveOld(removeLast, currentFragment);
-            if (this.backgroundView != null) {
-                this.backgroundView.setVisibility(0);
-            }
-        }
-        if (!needAnimation) {
-            if (this.backgroundView != null) {
-                this.backgroundView.setAlpha(1.0f);
-                this.backgroundView.setVisibility(0);
-            }
-            fragment.onTransitionAnimationStart(true, false);
-            fragment.onTransitionAnimationEnd(true, false);
-            fragment.onBecomeFullyVisible();
-        } else if (this.useAlphaAnimations && this.fragmentsStack.size() == 1) {
-            presentFragmentInternalRemoveOld(removeLast, currentFragment);
-            this.transitionAnimationStartTime = System.currentTimeMillis();
-            this.transitionAnimationInProgress = true;
-            this.onOpenAnimationEndRunnable = new Runnable() {
-                public void run() {
-                    fragment.onTransitionAnimationEnd(true, false);
-                    fragment.onBecomeFullyVisible();
+    public boolean presentFragment(BaseFragment fragment, boolean removeLast, boolean forceWithoutAnimation, boolean check) {
+        ActionBarLayout actionBarLayout = this;
+        final BaseFragment baseFragment = fragment;
+        final boolean z = removeLast;
+        boolean z2 = forceWithoutAnimation;
+        if (!checkTransitionAnimation() && (actionBarLayout.delegate == null || !check || actionBarLayout.delegate.needPresentFragment(baseFragment, z, z2, actionBarLayout))) {
+            if (fragment.onFragmentCreate()) {
+                ViewGroup parent;
+                if (actionBarLayout.parentActivity.getCurrentFocus() != null) {
+                    AndroidUtilities.hideKeyboard(actionBarLayout.parentActivity.getCurrentFocus());
                 }
-            };
-            ArrayList<Animator> animators = new ArrayList();
-            animators.add(ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f, 1.0f}));
-            if (this.backgroundView != null) {
-                this.backgroundView.setVisibility(0);
-                animators.add(ObjectAnimator.ofFloat(this.backgroundView, "alpha", new float[]{0.0f, 1.0f}));
-            }
-            fragment.onTransitionAnimationStart(true, false);
-            this.currentAnimation = new AnimatorSet();
-            this.currentAnimation.playTogether(animators);
-            this.currentAnimation.setInterpolator(this.accelerateDecelerateInterpolator);
-            this.currentAnimation.setDuration(200);
-            this.currentAnimation.addListener(new C07084());
-            this.currentAnimation.start();
-        } else {
-            this.transitionAnimationStartTime = System.currentTimeMillis();
-            this.transitionAnimationInProgress = true;
-            this.onOpenAnimationEndRunnable = new Runnable() {
-                public void run() {
-                    ActionBarLayout.this.presentFragmentInternalRemoveOld(removeLast, currentFragment);
-                    fragment.onTransitionAnimationEnd(true, false);
-                    fragment.onBecomeFullyVisible();
-                    ActionBarLayout.this.containerView.setTranslationX(0.0f);
-                }
-            };
-            fragment.onTransitionAnimationStart(true, false);
-            AnimatorSet animation = fragment.onCustomTransitionAnimation(true, new C07106());
-            if (animation == null) {
-                this.containerView.setAlpha(0.0f);
-                this.containerView.setTranslationX(48.0f);
-                if (this.containerView.isKeyboardVisible || this.containerViewBack.isKeyboardVisible) {
-                    this.waitingForKeyboardCloseRunnable = new C07117();
-                    AndroidUtilities.runOnUIThread(this.waitingForKeyboardCloseRunnable, 200);
-                } else if (fragment.needDelayOpenAnimation()) {
-                    this.delayedOpenAnimationRunnable = new C07128();
-                    AndroidUtilities.runOnUIThread(this.delayedOpenAnimationRunnable, 200);
+                boolean needAnimation = !z2 && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
+                final BaseFragment currentFragment = !actionBarLayout.fragmentsStack.isEmpty() ? (BaseFragment) actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1) : null;
+                baseFragment.setParentLayout(actionBarLayout);
+                View fragmentView = baseFragment.fragmentView;
+                if (fragmentView == null) {
+                    fragmentView = baseFragment.createView(actionBarLayout.parentActivity);
                 } else {
-                    startLayoutAnimation(true, true);
+                    parent = (ViewGroup) fragmentView.getParent();
+                    if (parent != null) {
+                        fragment.onRemoveFromParent();
+                        parent.removeView(fragmentView);
+                    }
                 }
-            } else {
-                this.containerView.setAlpha(1.0f);
-                this.containerView.setTranslationX(0.0f);
-                this.currentAnimation = animation;
+                if (baseFragment.actionBar != null && baseFragment.actionBar.getAddToContainer()) {
+                    if (actionBarLayout.removeActionBarExtraHeight) {
+                        baseFragment.actionBar.setOccupyStatusBar(false);
+                    }
+                    parent = (ViewGroup) baseFragment.actionBar.getParent();
+                    if (parent != null) {
+                        parent.removeView(baseFragment.actionBar);
+                    }
+                    actionBarLayout.containerViewBack.addView(baseFragment.actionBar);
+                    baseFragment.actionBar.setTitleOverlayText(actionBarLayout.titleOverlayText, actionBarLayout.subtitleOverlayText, actionBarLayout.overlayAction);
+                }
+                actionBarLayout.containerViewBack.addView(fragmentView);
+                ViewGroup.LayoutParams layoutParams = fragmentView.getLayoutParams();
+                layoutParams.width = -1;
+                layoutParams.height = -1;
+                fragmentView.setLayoutParams(layoutParams);
+                actionBarLayout.fragmentsStack.add(baseFragment);
+                fragment.onResume();
+                actionBarLayout.currentActionBar = baseFragment.actionBar;
+                if (!baseFragment.hasOwnBackground && fragmentView.getBackground() == null) {
+                    fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                }
+                LinearLayoutContainer temp = actionBarLayout.containerView;
+                actionBarLayout.containerView = actionBarLayout.containerViewBack;
+                actionBarLayout.containerViewBack = temp;
+                actionBarLayout.containerView.setVisibility(0);
+                setInnerTranslationX(0.0f);
+                bringChildToFront(actionBarLayout.containerView);
+                if (!needAnimation) {
+                    presentFragmentInternalRemoveOld(z, currentFragment);
+                    if (actionBarLayout.backgroundView != null) {
+                        actionBarLayout.backgroundView.setVisibility(0);
+                    }
+                }
+                if (!needAnimation) {
+                    if (actionBarLayout.backgroundView != null) {
+                        actionBarLayout.backgroundView.setAlpha(1.0f);
+                        actionBarLayout.backgroundView.setVisibility(0);
+                    }
+                    baseFragment.onTransitionAnimationStart(true, false);
+                    baseFragment.onTransitionAnimationEnd(true, false);
+                    fragment.onBecomeFullyVisible();
+                } else if (actionBarLayout.useAlphaAnimations && actionBarLayout.fragmentsStack.size() == 1) {
+                    presentFragmentInternalRemoveOld(z, currentFragment);
+                    actionBarLayout.transitionAnimationStartTime = System.currentTimeMillis();
+                    actionBarLayout.transitionAnimationInProgress = true;
+                    actionBarLayout.onOpenAnimationEndRunnable = new Runnable() {
+                        public void run() {
+                            baseFragment.onTransitionAnimationEnd(true, false);
+                            baseFragment.onBecomeFullyVisible();
+                        }
+                    };
+                    ArrayList<Animator> animators = new ArrayList();
+                    animators.add(ObjectAnimator.ofFloat(actionBarLayout, "alpha", new float[]{0.0f, 1.0f}));
+                    if (actionBarLayout.backgroundView != null) {
+                        actionBarLayout.backgroundView.setVisibility(0);
+                        animators.add(ObjectAnimator.ofFloat(actionBarLayout.backgroundView, "alpha", new float[]{0.0f, 1.0f}));
+                    }
+                    baseFragment.onTransitionAnimationStart(true, false);
+                    actionBarLayout.currentAnimation = new AnimatorSet();
+                    actionBarLayout.currentAnimation.playTogether(animators);
+                    actionBarLayout.currentAnimation.setInterpolator(actionBarLayout.accelerateDecelerateInterpolator);
+                    actionBarLayout.currentAnimation.setDuration(200);
+                    actionBarLayout.currentAnimation.addListener(new C07084());
+                    actionBarLayout.currentAnimation.start();
+                } else {
+                    actionBarLayout.transitionAnimationStartTime = System.currentTimeMillis();
+                    actionBarLayout.transitionAnimationInProgress = true;
+                    actionBarLayout.onOpenAnimationEndRunnable = new Runnable() {
+                        public void run() {
+                            ActionBarLayout.this.presentFragmentInternalRemoveOld(z, currentFragment);
+                            baseFragment.onTransitionAnimationEnd(true, false);
+                            baseFragment.onBecomeFullyVisible();
+                            ActionBarLayout.this.containerView.setTranslationX(0.0f);
+                        }
+                    };
+                    baseFragment.onTransitionAnimationStart(true, false);
+                    AnimatorSet animation = baseFragment.onCustomTransitionAnimation(true, new C07106());
+                    if (animation == null) {
+                        actionBarLayout.containerView.setAlpha(0.0f);
+                        actionBarLayout.containerView.setTranslationX(48.0f);
+                        if (!actionBarLayout.containerView.isKeyboardVisible) {
+                            if (!actionBarLayout.containerViewBack.isKeyboardVisible) {
+                                if (fragment.needDelayOpenAnimation()) {
+                                    actionBarLayout.delayedOpenAnimationRunnable = new C07128();
+                                    AndroidUtilities.runOnUIThread(actionBarLayout.delayedOpenAnimationRunnable, 200);
+                                } else {
+                                    startLayoutAnimation(true, true);
+                                }
+                            }
+                        }
+                        actionBarLayout.waitingForKeyboardCloseRunnable = new C07117();
+                        AndroidUtilities.runOnUIThread(actionBarLayout.waitingForKeyboardCloseRunnable, 200);
+                    } else {
+                        actionBarLayout.containerView.setAlpha(1.0f);
+                        actionBarLayout.containerView.setTranslationX(0.0f);
+                        actionBarLayout.currentAnimation = animation;
+                    }
+                }
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public boolean addFragmentToStack(BaseFragment fragment) {
@@ -844,139 +867,142 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void closeLastFragment(boolean animated) {
-        if ((this.delegate == null || this.delegate.needCloseLastFragment(this)) && !checkTransitionAnimation() && !this.fragmentsStack.isEmpty()) {
-            if (this.parentActivity.getCurrentFocus() != null) {
-                AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
-            }
-            setInnerTranslationX(0.0f);
-            boolean needAnimation = animated && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
-            final BaseFragment currentFragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1);
-            BaseFragment previousFragment = null;
-            if (this.fragmentsStack.size() > 1) {
-                previousFragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 2);
-            }
-            if (previousFragment != null) {
-                ViewGroup parent;
-                LinearLayoutContainer temp = this.containerView;
-                this.containerView = this.containerViewBack;
-                this.containerViewBack = temp;
-                this.containerView.setVisibility(0);
-                previousFragment.setParentLayout(this);
-                View fragmentView = previousFragment.fragmentView;
-                if (fragmentView == null) {
-                    fragmentView = previousFragment.createView(this.parentActivity);
-                } else {
-                    parent = (ViewGroup) fragmentView.getParent();
-                    if (parent != null) {
-                        previousFragment.onRemoveFromParent();
-                        parent.removeView(fragmentView);
+        if ((this.delegate == null || this.delegate.needCloseLastFragment(this)) && !checkTransitionAnimation()) {
+            if (!this.fragmentsStack.isEmpty()) {
+                if (this.parentActivity.getCurrentFocus() != null) {
+                    AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
+                }
+                setInnerTranslationX(0.0f);
+                boolean needAnimation = animated && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
+                final BaseFragment currentFragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1);
+                BaseFragment previousFragment = null;
+                if (this.fragmentsStack.size() > 1) {
+                    previousFragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 2);
+                }
+                if (previousFragment != null) {
+                    ViewGroup parent;
+                    LinearLayoutContainer temp = this.containerView;
+                    this.containerView = this.containerViewBack;
+                    this.containerViewBack = temp;
+                    this.containerView.setVisibility(0);
+                    previousFragment.setParentLayout(this);
+                    View fragmentView = previousFragment.fragmentView;
+                    if (fragmentView == null) {
+                        fragmentView = previousFragment.createView(this.parentActivity);
+                    } else {
+                        parent = (ViewGroup) fragmentView.getParent();
+                        if (parent != null) {
+                            previousFragment.onRemoveFromParent();
+                            parent.removeView(fragmentView);
+                        }
                     }
-                }
-                if (previousFragment.actionBar != null && previousFragment.actionBar.getAddToContainer()) {
-                    if (this.removeActionBarExtraHeight) {
-                        previousFragment.actionBar.setOccupyStatusBar(false);
+                    if (previousFragment.actionBar != null && previousFragment.actionBar.getAddToContainer()) {
+                        if (this.removeActionBarExtraHeight) {
+                            previousFragment.actionBar.setOccupyStatusBar(false);
+                        }
+                        parent = (ViewGroup) previousFragment.actionBar.getParent();
+                        if (parent != null) {
+                            parent.removeView(previousFragment.actionBar);
+                        }
+                        this.containerView.addView(previousFragment.actionBar);
+                        previousFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.subtitleOverlayText, this.overlayAction);
                     }
-                    parent = (ViewGroup) previousFragment.actionBar.getParent();
-                    if (parent != null) {
-                        parent.removeView(previousFragment.actionBar);
+                    this.containerView.addView(fragmentView);
+                    ViewGroup.LayoutParams layoutParams = fragmentView.getLayoutParams();
+                    layoutParams.width = -1;
+                    layoutParams.height = -1;
+                    fragmentView.setLayoutParams(layoutParams);
+                    previousFragment.onTransitionAnimationStart(true, true);
+                    currentFragment.onTransitionAnimationStart(false, false);
+                    previousFragment.onResume();
+                    this.currentActionBar = previousFragment.actionBar;
+                    if (!previousFragment.hasOwnBackground && fragmentView.getBackground() == null) {
+                        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     }
-                    this.containerView.addView(previousFragment.actionBar);
-                    previousFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.subtitleOverlayText, this.overlayAction);
-                }
-                this.containerView.addView(fragmentView);
-                ViewGroup.LayoutParams layoutParams = fragmentView.getLayoutParams();
-                layoutParams.width = -1;
-                layoutParams.height = -1;
-                fragmentView.setLayoutParams(layoutParams);
-                previousFragment.onTransitionAnimationStart(true, true);
-                currentFragment.onTransitionAnimationStart(false, false);
-                previousFragment.onResume();
-                this.currentActionBar = previousFragment.actionBar;
-                if (!previousFragment.hasOwnBackground && fragmentView.getBackground() == null) {
-                    fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                }
-                if (!needAnimation) {
-                    closeLastFragmentInternalRemoveOld(currentFragment);
-                }
-                if (needAnimation) {
+                    if (!needAnimation) {
+                        closeLastFragmentInternalRemoveOld(currentFragment);
+                    }
+                    if (needAnimation) {
+                        this.transitionAnimationStartTime = System.currentTimeMillis();
+                        this.transitionAnimationInProgress = true;
+                        final BaseFragment previousFragmentFinal = previousFragment;
+                        this.onCloseAnimationEndRunnable = new Runnable() {
+                            public void run() {
+                                ActionBarLayout.this.closeLastFragmentInternalRemoveOld(currentFragment);
+                                ActionBarLayout.this.containerViewBack.setTranslationX(0.0f);
+                                currentFragment.onTransitionAnimationEnd(false, false);
+                                previousFragmentFinal.onTransitionAnimationEnd(true, true);
+                                previousFragmentFinal.onBecomeFullyVisible();
+                            }
+                        };
+                        AnimatorSet animation = currentFragment.onCustomTransitionAnimation(false, new Runnable() {
+                            public void run() {
+                                ActionBarLayout.this.onAnimationEndCheck(false);
+                            }
+                        });
+                        if (animation == null) {
+                            if (!this.containerView.isKeyboardVisible) {
+                                if (!this.containerViewBack.isKeyboardVisible) {
+                                    startLayoutAnimation(false, true);
+                                }
+                            }
+                            this.waitingForKeyboardCloseRunnable = new Runnable() {
+                                public void run() {
+                                    if (ActionBarLayout.this.waitingForKeyboardCloseRunnable == this) {
+                                        ActionBarLayout.this.waitingForKeyboardCloseRunnable = null;
+                                        ActionBarLayout.this.startLayoutAnimation(false, true);
+                                    }
+                                }
+                            };
+                            AndroidUtilities.runOnUIThread(this.waitingForKeyboardCloseRunnable, 200);
+                        } else {
+                            this.currentAnimation = animation;
+                        }
+                    } else {
+                        currentFragment.onTransitionAnimationEnd(false, false);
+                        previousFragment.onTransitionAnimationEnd(true, true);
+                        previousFragment.onBecomeFullyVisible();
+                    }
+                } else if (this.useAlphaAnimations) {
                     this.transitionAnimationStartTime = System.currentTimeMillis();
                     this.transitionAnimationInProgress = true;
-                    final BaseFragment previousFragmentFinal = previousFragment;
                     this.onCloseAnimationEndRunnable = new Runnable() {
                         public void run() {
-                            ActionBarLayout.this.closeLastFragmentInternalRemoveOld(currentFragment);
-                            ActionBarLayout.this.containerViewBack.setTranslationX(0.0f);
-                            currentFragment.onTransitionAnimationEnd(false, false);
-                            previousFragmentFinal.onTransitionAnimationEnd(true, true);
-                            previousFragmentFinal.onBecomeFullyVisible();
+                            ActionBarLayout.this.removeFragmentFromStackInternal(currentFragment);
+                            ActionBarLayout.this.setVisibility(8);
+                            if (ActionBarLayout.this.backgroundView != null) {
+                                ActionBarLayout.this.backgroundView.setVisibility(8);
+                            }
+                            if (ActionBarLayout.this.drawerLayoutContainer != null) {
+                                ActionBarLayout.this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
+                            }
                         }
                     };
-                    AnimatorSet animation = currentFragment.onCustomTransitionAnimation(false, new Runnable() {
-                        public void run() {
+                    ArrayList<Animator> animators = new ArrayList();
+                    animators.add(ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f, 0.0f}));
+                    if (this.backgroundView != null) {
+                        animators.add(ObjectAnimator.ofFloat(this.backgroundView, "alpha", new float[]{1.0f, 0.0f}));
+                    }
+                    this.currentAnimation = new AnimatorSet();
+                    this.currentAnimation.playTogether(animators);
+                    this.currentAnimation.setInterpolator(this.accelerateDecelerateInterpolator);
+                    this.currentAnimation.setDuration(200);
+                    this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationStart(Animator animation) {
+                            ActionBarLayout.this.transitionAnimationStartTime = System.currentTimeMillis();
+                        }
+
+                        public void onAnimationEnd(Animator animation) {
                             ActionBarLayout.this.onAnimationEndCheck(false);
                         }
                     });
-                    if (animation != null) {
-                        this.currentAnimation = animation;
-                        return;
-                    } else if (this.containerView.isKeyboardVisible || this.containerViewBack.isKeyboardVisible) {
-                        this.waitingForKeyboardCloseRunnable = new Runnable() {
-                            public void run() {
-                                if (ActionBarLayout.this.waitingForKeyboardCloseRunnable == this) {
-                                    ActionBarLayout.this.waitingForKeyboardCloseRunnable = null;
-                                    ActionBarLayout.this.startLayoutAnimation(false, true);
-                                }
-                            }
-                        };
-                        AndroidUtilities.runOnUIThread(this.waitingForKeyboardCloseRunnable, 200);
-                        return;
-                    } else {
-                        startLayoutAnimation(false, true);
-                        return;
+                    this.currentAnimation.start();
+                } else {
+                    removeFragmentFromStackInternal(currentFragment);
+                    setVisibility(8);
+                    if (this.backgroundView != null) {
+                        this.backgroundView.setVisibility(8);
                     }
-                }
-                currentFragment.onTransitionAnimationEnd(false, false);
-                previousFragment.onTransitionAnimationEnd(true, true);
-                previousFragment.onBecomeFullyVisible();
-            } else if (this.useAlphaAnimations) {
-                this.transitionAnimationStartTime = System.currentTimeMillis();
-                this.transitionAnimationInProgress = true;
-                this.onCloseAnimationEndRunnable = new Runnable() {
-                    public void run() {
-                        ActionBarLayout.this.removeFragmentFromStackInternal(currentFragment);
-                        ActionBarLayout.this.setVisibility(8);
-                        if (ActionBarLayout.this.backgroundView != null) {
-                            ActionBarLayout.this.backgroundView.setVisibility(8);
-                        }
-                        if (ActionBarLayout.this.drawerLayoutContainer != null) {
-                            ActionBarLayout.this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
-                        }
-                    }
-                };
-                ArrayList<Animator> animators = new ArrayList();
-                animators.add(ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f, 0.0f}));
-                if (this.backgroundView != null) {
-                    animators.add(ObjectAnimator.ofFloat(this.backgroundView, "alpha", new float[]{1.0f, 0.0f}));
-                }
-                this.currentAnimation = new AnimatorSet();
-                this.currentAnimation.playTogether(animators);
-                this.currentAnimation.setInterpolator(this.accelerateDecelerateInterpolator);
-                this.currentAnimation.setDuration(200);
-                this.currentAnimation.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationStart(Animator animation) {
-                        ActionBarLayout.this.transitionAnimationStartTime = System.currentTimeMillis();
-                    }
-
-                    public void onAnimationEnd(Animator animation) {
-                        ActionBarLayout.this.onAnimationEndCheck(false);
-                    }
-                });
-                this.currentAnimation.start();
-            } else {
-                removeFragmentFromStackInternal(currentFragment);
-                setVisibility(8);
-                if (this.backgroundView != null) {
-                    this.backgroundView.setVisibility(8);
                 }
             }
         }
@@ -984,10 +1010,9 @@ public class ActionBarLayout extends FrameLayout {
 
     public void showLastFragment() {
         if (!this.fragmentsStack.isEmpty()) {
-            BaseFragment previousFragment;
             ViewGroup parent;
             for (int a = 0; a < this.fragmentsStack.size() - 1; a++) {
-                previousFragment = (BaseFragment) this.fragmentsStack.get(a);
+                BaseFragment previousFragment = (BaseFragment) this.fragmentsStack.get(a);
                 if (previousFragment.actionBar != null && previousFragment.actionBar.getAddToContainer()) {
                     parent = (ViewGroup) previousFragment.actionBar.getParent();
                     if (parent != null) {
@@ -1003,33 +1028,33 @@ public class ActionBarLayout extends FrameLayout {
                     }
                 }
             }
-            previousFragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1);
-            previousFragment.setParentLayout(this);
-            View fragmentView = previousFragment.fragmentView;
+            BaseFragment previousFragment2 = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1);
+            previousFragment2.setParentLayout(this);
+            View fragmentView = previousFragment2.fragmentView;
             if (fragmentView == null) {
-                fragmentView = previousFragment.createView(this.parentActivity);
+                fragmentView = previousFragment2.createView(this.parentActivity);
             } else {
                 parent = (ViewGroup) fragmentView.getParent();
                 if (parent != null) {
-                    previousFragment.onRemoveFromParent();
+                    previousFragment2.onRemoveFromParent();
                     parent.removeView(fragmentView);
                 }
             }
-            if (previousFragment.actionBar != null && previousFragment.actionBar.getAddToContainer()) {
+            if (previousFragment2.actionBar != null && previousFragment2.actionBar.getAddToContainer()) {
                 if (this.removeActionBarExtraHeight) {
-                    previousFragment.actionBar.setOccupyStatusBar(false);
+                    previousFragment2.actionBar.setOccupyStatusBar(false);
                 }
-                parent = (ViewGroup) previousFragment.actionBar.getParent();
-                if (parent != null) {
-                    parent.removeView(previousFragment.actionBar);
+                ViewGroup parent2 = (ViewGroup) previousFragment2.actionBar.getParent();
+                if (parent2 != null) {
+                    parent2.removeView(previousFragment2.actionBar);
                 }
-                this.containerView.addView(previousFragment.actionBar);
-                previousFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.subtitleOverlayText, this.overlayAction);
+                this.containerView.addView(previousFragment2.actionBar);
+                previousFragment2.actionBar.setTitleOverlayText(this.titleOverlayText, this.subtitleOverlayText, this.overlayAction);
             }
             this.containerView.addView(fragmentView, LayoutHelper.createLinear(-1, -1));
-            previousFragment.onResume();
-            this.currentActionBar = previousFragment.actionBar;
-            if (!previousFragment.hasOwnBackground && fragmentView.getBackground() == null) {
+            previousFragment2.onResume();
+            this.currentActionBar = previousFragment2.actionBar;
+            if (!previousFragment2.hasOwnBackground && fragmentView.getBackground() == null) {
                 fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
             }
         }
@@ -1057,30 +1082,35 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void removeAllFragments() {
-        int a = 0;
-        while (this.fragmentsStack.size() > 0) {
+        for (int a = 0; a < this.fragmentsStack.size(); a = (a - 1) + 1) {
             removeFragmentFromStackInternal((BaseFragment) this.fragmentsStack.get(a));
-            a = (a - 1) + 1;
         }
     }
 
     @Keep
     public void setThemeAnimationValue(float value) {
-        this.themeAnimationValue = value;
+        float f = value;
+        this.themeAnimationValue = f;
         if (this.themeAnimatorDescriptions != null) {
-            for (int i = 0; i < this.themeAnimatorDescriptions.length; i++) {
-                int rE = Color.red(this.animateEndColors[i]);
-                int gE = Color.green(this.animateEndColors[i]);
-                int bE = Color.blue(this.animateEndColors[i]);
-                int aE = Color.alpha(this.animateEndColors[i]);
-                int rS = Color.red(this.animateStartColors[i]);
-                int gS = Color.green(this.animateStartColors[i]);
-                int bS = Color.blue(this.animateStartColors[i]);
-                int aS = Color.alpha(this.animateStartColors[i]);
-                this.themeAnimatorDescriptions[i].setColor(Color.argb(Math.min(255, (int) (((float) aS) + (((float) (aE - aS)) * value))), Math.min(255, (int) (((float) rS) + (((float) (rE - rS)) * value))), Math.min(255, (int) (((float) gS) + (((float) (gE - gS)) * value))), Math.min(255, (int) (((float) bS) + (((float) (bE - bS)) * value)))), false, false);
+            int i = 0;
+            while (i < r0.themeAnimatorDescriptions.length) {
+                int rE = Color.red(r0.animateEndColors[i]);
+                int gE = Color.green(r0.animateEndColors[i]);
+                int bE = Color.blue(r0.animateEndColors[i]);
+                int aE = Color.alpha(r0.animateEndColors[i]);
+                int rS = Color.red(r0.animateStartColors[i]);
+                int gS = Color.green(r0.animateStartColors[i]);
+                int bS = Color.blue(r0.animateStartColors[i]);
+                int aS = Color.alpha(r0.animateStartColors[i]);
+                int a = Math.min(255, (int) (((float) aS) + (((float) (aE - aS)) * f)));
+                int r = Math.min(255, (int) (((float) rS) + (((float) (rE - rS)) * f)));
+                int g = Math.min(255, (int) (((float) gS) + (((float) (gE - gS)) * f)));
+                r0.themeAnimatorDescriptions[i].setColor(Color.argb(a, r, g, Math.min(255, (int) (((float) bS) + (((float) (bE - bS)) * f)))), false, false);
+                i++;
+                f = value;
             }
-            if (this.themeAnimatorDelegate != null) {
-                this.themeAnimatorDelegate.didSetColor();
+            if (r0.themeAnimatorDelegate != null) {
+                r0.themeAnimatorDelegate.didSetColor();
             }
         }
     }
@@ -1091,86 +1121,91 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void animateThemedValues(ThemeInfo theme) {
-        if (this.transitionAnimationInProgress || this.startedTracking) {
-            this.animateThemeAfterAnimation = true;
-            this.animateSetThemeAfterAnimation = theme;
-            return;
-        }
-        if (this.themeAnimatorSet != null) {
-            this.themeAnimatorSet.cancel();
-            this.themeAnimatorSet = null;
-        }
-        BaseFragment fragment = getLastFragment();
-        if (fragment != null) {
-            int a;
-            this.themeAnimatorDescriptions = fragment.getThemeDescriptions();
-            this.animateStartColors = new int[this.themeAnimatorDescriptions.length];
-            for (a = 0; a < this.themeAnimatorDescriptions.length; a++) {
-                this.animateStartColors[a] = this.themeAnimatorDescriptions[a].getSetColor();
-                ThemeDescriptionDelegate delegate = this.themeAnimatorDescriptions[a].setDelegateDisabled();
-                if (this.themeAnimatorDelegate == null && delegate != null) {
-                    this.themeAnimatorDelegate = delegate;
+        if (!this.transitionAnimationInProgress) {
+            if (!this.startedTracking) {
+                if (this.themeAnimatorSet != null) {
+                    this.themeAnimatorSet.cancel();
+                    this.themeAnimatorSet = null;
                 }
-            }
-            Theme.applyTheme(theme, true);
-            this.animateEndColors = new int[this.themeAnimatorDescriptions.length];
-            for (a = 0; a < this.themeAnimatorDescriptions.length; a++) {
-                this.animateEndColors[a] = this.themeAnimatorDescriptions[a].getSetColor();
-            }
-            this.themeAnimatorSet = new AnimatorSet();
-            this.themeAnimatorSet.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    if (animation.equals(ActionBarLayout.this.themeAnimatorSet)) {
-                        ActionBarLayout.this.themeAnimatorDescriptions = null;
-                        ActionBarLayout.this.themeAnimatorDelegate = null;
-                        ActionBarLayout.this.themeAnimatorSet = null;
-                        ActionBarLayout.this.animateStartColors = null;
-                        ActionBarLayout.this.animateEndColors = null;
+                BaseFragment fragment = getLastFragment();
+                if (fragment != null) {
+                    int a;
+                    this.themeAnimatorDescriptions = fragment.getThemeDescriptions();
+                    int a2 = 0;
+                    this.animateStartColors = new int[this.themeAnimatorDescriptions.length];
+                    for (a = 0; a < this.themeAnimatorDescriptions.length; a++) {
+                        this.animateStartColors[a] = this.themeAnimatorDescriptions[a].getSetColor();
+                        ThemeDescriptionDelegate delegate = this.themeAnimatorDescriptions[a].setDelegateDisabled();
+                        if (this.themeAnimatorDelegate == null && delegate != null) {
+                            this.themeAnimatorDelegate = delegate;
+                        }
                     }
-                }
+                    Theme.applyTheme(theme, true);
+                    this.animateEndColors = new int[this.themeAnimatorDescriptions.length];
+                    for (a = 0; a < this.themeAnimatorDescriptions.length; a++) {
+                        this.animateEndColors[a] = this.themeAnimatorDescriptions[a].getSetColor();
+                    }
+                    this.themeAnimatorSet = new AnimatorSet();
+                    this.themeAnimatorSet.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animation) {
+                            if (animation.equals(ActionBarLayout.this.themeAnimatorSet)) {
+                                ActionBarLayout.this.themeAnimatorDescriptions = null;
+                                ActionBarLayout.this.themeAnimatorDelegate = null;
+                                ActionBarLayout.this.themeAnimatorSet = null;
+                                ActionBarLayout.this.animateStartColors = null;
+                                ActionBarLayout.this.animateEndColors = null;
+                            }
+                        }
 
-                public void onAnimationCancel(Animator animation) {
-                    if (animation.equals(ActionBarLayout.this.themeAnimatorSet)) {
-                        ActionBarLayout.this.themeAnimatorDescriptions = null;
-                        ActionBarLayout.this.themeAnimatorSet = null;
-                        ActionBarLayout.this.animateStartColors = null;
-                        ActionBarLayout.this.animateEndColors = null;
+                        public void onAnimationCancel(Animator animation) {
+                            if (animation.equals(ActionBarLayout.this.themeAnimatorSet)) {
+                                ActionBarLayout.this.themeAnimatorDescriptions = null;
+                                ActionBarLayout.this.themeAnimatorSet = null;
+                                ActionBarLayout.this.animateStartColors = null;
+                                ActionBarLayout.this.animateEndColors = null;
+                            }
+                        }
+                    });
+                    this.themeAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "themeAnimationValue", new float[]{0.0f, 1.0f})});
+                    this.themeAnimatorSet.setDuration(200);
+                    this.themeAnimatorSet.start();
+                    while (true) {
+                        a = a2;
+                        if (a >= this.fragmentsStack.size() - 1) {
+                            break;
+                        }
+                        fragment = (BaseFragment) this.fragmentsStack.get(a);
+                        fragment.clearViews();
+                        fragment.setParentLayout(this);
+                        a2 = a + 1;
                     }
                 }
-            });
-            this.themeAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "themeAnimationValue", new float[]{0.0f, 1.0f})});
-            this.themeAnimatorSet.setDuration(200);
-            this.themeAnimatorSet.start();
-            for (a = 0; a < this.fragmentsStack.size() - 1; a++) {
-                fragment = (BaseFragment) this.fragmentsStack.get(a);
-                fragment.clearViews();
-                fragment.setParentLayout(this);
+                return;
             }
         }
+        this.animateThemeAfterAnimation = true;
+        this.animateSetThemeAfterAnimation = theme;
     }
 
     public void rebuildAllFragmentViews(boolean last, boolean showLastAfter) {
-        if (this.transitionAnimationInProgress || this.startedTracking) {
-            this.rebuildAfterAnimation = true;
-            this.rebuildLastAfterAnimation = last;
-            this.showLastAfterAnimation = showLastAfter;
-            return;
-        }
-        int a = 0;
-        while (true) {
-            if (a >= this.fragmentsStack.size() - (last ? 0 : 1)) {
-                break;
+        if (!this.transitionAnimationInProgress) {
+            if (!this.startedTracking) {
+                for (int a = 0; a < this.fragmentsStack.size() - (last ^ 1); a++) {
+                    ((BaseFragment) this.fragmentsStack.get(a)).clearViews();
+                    ((BaseFragment) this.fragmentsStack.get(a)).setParentLayout(this);
+                }
+                if (this.delegate != null) {
+                    this.delegate.onRebuildAllFragments(this, last);
+                }
+                if (showLastAfter) {
+                    showLastFragment();
+                }
+                return;
             }
-            ((BaseFragment) this.fragmentsStack.get(a)).clearViews();
-            ((BaseFragment) this.fragmentsStack.get(a)).setParentLayout(this);
-            a++;
         }
-        if (this.delegate != null) {
-            this.delegate.onRebuildAllFragments(this, last);
-        }
-        if (showLastAfter) {
-            showLastFragment();
-        }
+        this.rebuildAfterAnimation = true;
+        this.rebuildLastAfterAnimation = last;
+        this.showLastAfterAnimation = showLastAfter;
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {

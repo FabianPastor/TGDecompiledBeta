@@ -44,38 +44,29 @@ public final class GeobFrame extends Id3Frame {
     }
 
     public boolean equals(Object obj) {
+        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        GeobFrame other = (GeobFrame) obj;
-        if (Util.areEqual(this.mimeType, other.mimeType) && Util.areEqual(this.filename, other.filename) && Util.areEqual(this.description, other.description) && Arrays.equals(this.data, other.data)) {
-            return true;
+        if (obj != null) {
+            if (getClass() == obj.getClass()) {
+                GeobFrame other = (GeobFrame) obj;
+                if (!Util.areEqual(this.mimeType, other.mimeType) || !Util.areEqual(this.filename, other.filename) || !Util.areEqual(this.description, other.description) || !Arrays.equals(this.data, other.data)) {
+                    z = false;
+                }
+                return z;
+            }
         }
         return false;
     }
 
     public int hashCode() {
-        int hashCode;
         int i = 0;
-        if (this.mimeType != null) {
-            hashCode = this.mimeType.hashCode();
-        } else {
-            hashCode = 0;
-        }
-        int i2 = (hashCode + 527) * 31;
-        if (this.filename != null) {
-            hashCode = this.filename.hashCode();
-        } else {
-            hashCode = 0;
-        }
-        hashCode = (i2 + hashCode) * 31;
+        int hashCode = 31 * ((31 * ((31 * 17) + (this.mimeType != null ? this.mimeType.hashCode() : 0))) + (this.filename != null ? this.filename.hashCode() : 0));
         if (this.description != null) {
             i = this.description.hashCode();
         }
-        return ((hashCode + i) * 31) + Arrays.hashCode(this.data);
+        return (31 * (hashCode + i)) + Arrays.hashCode(this.data);
     }
 
     public void writeToParcel(Parcel dest, int flags) {

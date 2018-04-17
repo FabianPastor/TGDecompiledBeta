@@ -32,28 +32,37 @@ public final class PgsDecoder extends SimpleSubtitleDecoder {
         private int planeWidth;
 
         private void parsePaletteSection(ParsableByteArray buffer, int sectionLength) {
+            CueBuilder cueBuilder = this;
             if (sectionLength % 5 == 2) {
                 buffer.skipBytes(2);
-                Arrays.fill(this.colors, 0);
+                Arrays.fill(cueBuilder.colors, 0);
                 int entryCount = sectionLength / 5;
-                for (int i = 0; i < entryCount; i++) {
+                int i = 0;
+                while (i < entryCount) {
                     int index = buffer.readUnsignedByte();
                     int y = buffer.readUnsignedByte();
                     int cr = buffer.readUnsignedByte();
                     int cb = buffer.readUnsignedByte();
-                    this.colors[index] = (((buffer.readUnsignedByte() << 24) | (Util.constrainValue((int) (((double) y) + (1.402d * ((double) (cr - 128)))), 0, 255) << 16)) | (Util.constrainValue((int) ((((double) y) - (0.34414d * ((double) (cb - 128)))) - (0.71414d * ((double) (cr - 128)))), 0, 255) << 8)) | Util.constrainValue((int) (((double) y) + (1.772d * ((double) (cb - 128)))), 0, 255);
+                    int i2 = i;
+                    int entryCount2 = entryCount;
+                    cueBuilder.colors[index] = (((buffer.readUnsignedByte() << 24) | (Util.constrainValue((int) (((double) y) + (1.402d * ((double) (cr - 128)))), 0, 255) << 16)) | (Util.constrainValue((int) ((((double) y) - (0.34414d * ((double) (cb - 128)))) - (0.71414d * ((double) (cr - 128)))), 0, 255) << 8)) | Util.constrainValue((int) (((double) y) + (1.772d * ((double) (cb - 128)))), 0, 255);
+                    i = i2 + 1;
+                    int i3 = 0;
+                    entryCount = entryCount2;
+                    ParsableByteArray parsableByteArray = buffer;
                 }
-                this.colorsSet = true;
+                cueBuilder.colorsSet = true;
             }
         }
 
         private void parseBitmapSection(ParsableByteArray buffer, int sectionLength) {
             if (sectionLength >= 4) {
+                int totalLength;
                 buffer.skipBytes(3);
                 sectionLength -= 4;
-                if ((buffer.readUnsignedByte() & 128) != 0) {
+                if ((128 & buffer.readUnsignedByte()) != 0) {
                     if (sectionLength >= 7) {
-                        int totalLength = buffer.readUnsignedInt24();
+                        totalLength = buffer.readUnsignedInt24();
                         if (totalLength >= 4) {
                             this.bitmapWidth = buffer.readUnsignedShort();
                             this.bitmapHeight = buffer.readUnsignedShort();
@@ -66,9 +75,9 @@ public final class PgsDecoder extends SimpleSubtitleDecoder {
                     return;
                 }
                 int position = this.bitmapData.getPosition();
-                int limit = this.bitmapData.limit();
-                if (position < limit && sectionLength > 0) {
-                    int bytesToRead = Math.min(sectionLength, limit - position);
+                totalLength = this.bitmapData.limit();
+                if (position < totalLength && sectionLength > 0) {
+                    int bytesToRead = Math.min(sectionLength, totalLength - position);
                     buffer.readBytes(this.bitmapData.data, position, bytesToRead);
                     this.bitmapData.setPosition(position + bytesToRead);
                 }
@@ -86,33 +95,36 @@ public final class PgsDecoder extends SimpleSubtitleDecoder {
         }
 
         public Cue build() {
-            if (this.planeWidth == 0 || this.planeHeight == 0 || this.bitmapWidth == 0 || this.bitmapHeight == 0 || this.bitmapData.limit() == 0 || this.bitmapData.getPosition() != this.bitmapData.limit() || !this.colorsSet) {
-                return null;
-            }
-            this.bitmapData.setPosition(0);
-            int[] argbBitmapData = new int[(this.bitmapWidth * this.bitmapHeight)];
-            int argbBitmapDataIndex = 0;
-            while (argbBitmapDataIndex < argbBitmapData.length) {
-                int colorIndex = this.bitmapData.readUnsignedByte();
-                if (colorIndex != 0) {
-                    int argbBitmapDataIndex2 = argbBitmapDataIndex + 1;
-                    argbBitmapData[argbBitmapDataIndex] = this.colors[colorIndex];
-                    argbBitmapDataIndex = argbBitmapDataIndex2;
-                } else {
-                    int switchBits = this.bitmapData.readUnsignedByte();
-                    if (switchBits != 0) {
-                        int runLength;
-                        if ((switchBits & 64) == 0) {
-                            runLength = switchBits & 63;
+            if (!(this.planeWidth == 0 || this.planeHeight == 0 || this.bitmapWidth == 0 || this.bitmapHeight == 0 || this.bitmapData.limit() == 0 || this.bitmapData.getPosition() != this.bitmapData.limit())) {
+                if (this.colorsSet) {
+                    this.bitmapData.setPosition(0);
+                    int[] argbBitmapData = new int[(this.bitmapWidth * this.bitmapHeight)];
+                    int argbBitmapDataIndex = 0;
+                    while (argbBitmapDataIndex < argbBitmapData.length) {
+                        int colorIndex = this.bitmapData.readUnsignedByte();
+                        int argbBitmapDataIndex2;
+                        if (colorIndex != 0) {
+                            argbBitmapDataIndex2 = argbBitmapDataIndex + 1;
+                            argbBitmapData[argbBitmapDataIndex] = this.colors[colorIndex];
+                            argbBitmapDataIndex = argbBitmapDataIndex2;
                         } else {
-                            runLength = ((switchBits & 63) << 8) | this.bitmapData.readUnsignedByte();
+                            argbBitmapDataIndex2 = this.bitmapData.readUnsignedByte();
+                            if (argbBitmapDataIndex2 != 0) {
+                                int runLength;
+                                if ((argbBitmapDataIndex2 & 64) == 0) {
+                                    runLength = argbBitmapDataIndex2 & 63;
+                                } else {
+                                    runLength = ((argbBitmapDataIndex2 & 63) << 8) | this.bitmapData.readUnsignedByte();
+                                }
+                                Arrays.fill(argbBitmapData, argbBitmapDataIndex, argbBitmapDataIndex + runLength, (argbBitmapDataIndex2 & 128) == 0 ? 0 : this.colors[this.bitmapData.readUnsignedByte()]);
+                                argbBitmapDataIndex += runLength;
+                            }
                         }
-                        Arrays.fill(argbBitmapData, argbBitmapDataIndex, argbBitmapDataIndex + runLength, (switchBits & 128) == 0 ? 0 : this.colors[this.bitmapData.readUnsignedByte()]);
-                        argbBitmapDataIndex += runLength;
                     }
+                    return new Cue(Bitmap.createBitmap(argbBitmapData, this.bitmapWidth, this.bitmapHeight, Config.ARGB_8888), ((float) this.bitmapX) / ((float) this.planeWidth), 0, ((float) this.bitmapY) / ((float) this.planeHeight), 0, ((float) this.bitmapWidth) / ((float) this.planeWidth), ((float) this.bitmapHeight) / ((float) this.planeHeight));
                 }
             }
-            return new Cue(Bitmap.createBitmap(argbBitmapData, this.bitmapWidth, this.bitmapHeight, Config.ARGB_8888), ((float) this.bitmapX) / ((float) this.planeWidth), 0, ((float) this.bitmapY) / ((float) this.planeHeight), 0, ((float) this.bitmapWidth) / ((float) this.planeWidth), ((float) this.bitmapHeight) / ((float) this.planeHeight));
+            return null;
         }
 
         public void reset() {
@@ -154,21 +166,23 @@ public final class PgsDecoder extends SimpleSubtitleDecoder {
             return null;
         }
         Cue cue = null;
-        switch (sectionType) {
-            case 20:
-                cueBuilder.parsePaletteSection(buffer, sectionLength);
-                break;
-            case 21:
-                cueBuilder.parseBitmapSection(buffer, sectionLength);
-                break;
-            case 22:
-                cueBuilder.parseIdentifierSection(buffer, sectionLength);
-                break;
-            case 128:
-                cue = cueBuilder.build();
-                cueBuilder.reset();
-                break;
+        if (sectionType != 128) {
+            switch (sectionType) {
+                case 20:
+                    cueBuilder.parsePaletteSection(buffer, sectionLength);
+                    break;
+                case 21:
+                    cueBuilder.parseBitmapSection(buffer, sectionLength);
+                    break;
+                case 22:
+                    cueBuilder.parseIdentifierSection(buffer, sectionLength);
+                    break;
+                default:
+                    break;
+            }
         }
+        cue = cueBuilder.build();
+        cueBuilder.reset();
         buffer.setPosition(nextSectionPosition);
         return cue;
     }

@@ -72,9 +72,12 @@ public class PhotoEditRadioCell extends FrameLayout {
                 RadioButton radioButton = (RadioButton) child;
                 int num = ((Integer) radioButton.getTag()).intValue();
                 radioButton.setChecked(this.currentColor == (this.currentType == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num]), animated);
-                int i = num == 0 ? -1 : this.currentType == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num];
+                int i = -1;
                 int i2 = num == 0 ? -1 : this.currentType == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num];
-                radioButton.setColor(i, i2);
+                if (num != 0) {
+                    i = this.currentType == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num];
+                }
+                radioButton.setColor(i2, i);
             }
         }
     }
@@ -90,7 +93,11 @@ public class PhotoEditRadioCell extends FrameLayout {
     public void setIconAndTextAndValue(String text, int type, int value) {
         this.currentType = type;
         this.currentColor = value;
-        this.nameTextView.setText(text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase());
+        TextView textView = this.nameTextView;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(text.substring(0, 1).toUpperCase());
+        stringBuilder.append(text.substring(1).toLowerCase());
+        textView.setText(stringBuilder.toString());
         updateSelectedTintButton(false);
     }
 }

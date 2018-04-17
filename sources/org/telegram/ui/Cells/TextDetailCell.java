@@ -21,56 +21,38 @@ public class TextDetailCell extends FrameLayout {
     private TextView valueTextView;
 
     public TextDetailCell(Context context) {
-        int i;
-        int i2;
-        int i3 = 5;
         super(context);
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
+        int i = 3;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
-        View view = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 16.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 16.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
-        TextView textView = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        textView.setGravity(i2);
-        view = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 16.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
+        this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 16.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
         this.imageView = new ImageView(context);
         this.imageView.setScaleType(ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), Mode.MULTIPLY));
-        view = this.imageView;
-        if (!LocaleController.isRTL) {
-            i3 = 3;
+        View view = this.imageView;
+        if (LocaleController.isRTL) {
+            i = 5;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, LocaleController.isRTL ? 0.0f : 16.0f, 11.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, LocaleController.isRTL ? 0.0f : 16.0f, 11.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (this.multiline) {
-            measureChildWithMargins(this.textView, widthMeasureSpec, 0, heightMeasureSpec, 0);
-            measureChildWithMargins(this.valueTextView, widthMeasureSpec, 0, heightMeasureSpec, 0);
-            measureChildWithMargins(this.imageView, widthMeasureSpec, 0, heightMeasureSpec, 0);
+            int i = widthMeasureSpec;
+            int i2 = heightMeasureSpec;
+            measureChildWithMargins(this.textView, i, 0, i2, 0);
+            measureChildWithMargins(this.valueTextView, i, 0, i2, 0);
+            measureChildWithMargins(this.imageView, i, 0, i2, 0);
             setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), Math.max(AndroidUtilities.dp(64.0f), (this.textView.getMeasuredHeight() + this.valueTextView.getMeasuredHeight()) + AndroidUtilities.dp(20.0f)));
             return;
         }
@@ -92,15 +74,25 @@ public class TextDetailCell extends FrameLayout {
     }
 
     public void setTextAndValueAndIcon(String text, String value, int resId, int offset) {
+        int i = offset;
         this.textView.setText(text);
         this.valueTextView.setText(value);
         this.imageView.setVisibility(0);
         this.imageView.setImageResource(resId);
-        if (offset == 0) {
-            this.imageView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, LocaleController.isRTL ? 0.0f : 16.0f, 0.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
-        } else {
-            this.imageView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, (float) offset, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
+        int i2 = 3;
+        if (i == 0) {
+            ImageView imageView = r0.imageView;
+            if (LocaleController.isRTL) {
+                i2 = 5;
+            }
+            imageView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, i2 | 16, LocaleController.isRTL ? 0.0f : 16.0f, 0.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
+            return;
         }
+        imageView = r0.imageView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        }
+        imageView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, i2 | 48, LocaleController.isRTL ? 0.0f : 16.0f, (float) i, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
     }
 
     public void setMultiline(boolean value) {

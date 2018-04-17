@@ -18,7 +18,7 @@
     <string name="common_open_on_phone">Ouvrir sur le téléphone</string>
     <string name="common_signin_button_text">Connexion</string>
     <string name="common_signin_button_text_long">Se connecter avec Google</string>
-    <string name="gcm_fallback_notification_channel_label">Divers</string>
+    <string name="fcm_fallback_notification_channel_label">Divers</string>
     <string name="status_bar_notification_info_overflow">&gt;999</string>
     <string name="wallet_buy_button_place_holder">Acheter avec Google</string>
 </resources>

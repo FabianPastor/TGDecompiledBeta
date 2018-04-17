@@ -51,48 +51,46 @@ public final class CachedRegionTracker implements Listener {
         this.cache.removeListener(this.cacheKey, this);
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public synchronized int getRegionEndTimeMs(long byteOffset) {
-        int i = -1;
-        synchronized (this) {
-            this.lookupRegion.startOffset = byteOffset;
-            Region floorRegion = (Region) this.regions.floor(this.lookupRegion);
-            if (!(floorRegion == null || byteOffset > floorRegion.endOffset || floorRegion.endOffsetIndex == -1)) {
+        this.lookupRegion.startOffset = byteOffset;
+        Region floorRegion = (Region) this.regions.floor(this.lookupRegion);
+        if (floorRegion != null && byteOffset <= floorRegion.endOffset) {
+            if (floorRegion.endOffsetIndex != -1) {
                 int index = floorRegion.endOffsetIndex;
                 if (index == this.chunkIndex.length - 1 && floorRegion.endOffset == this.chunkIndex.offsets[index] + ((long) this.chunkIndex.sizes[index])) {
-                    i = -2;
-                } else {
-                    i = (int) ((this.chunkIndex.timesUs[index] + ((this.chunkIndex.durationsUs[index] * (floorRegion.endOffset - this.chunkIndex.offsets[index])) / ((long) this.chunkIndex.sizes[index]))) / 1000);
+                    return -2;
                 }
+                return (int) ((this.chunkIndex.timesUs[index] + ((this.chunkIndex.durationsUs[index] * (floorRegion.endOffset - this.chunkIndex.offsets[index])) / ((long) this.chunkIndex.sizes[index]))) / 1000);
             }
         }
-        return i;
     }
 
     public synchronized void onSpanAdded(Cache cache, CacheSpan span) {
         mergeSpan(span);
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public synchronized void onSpanRemoved(Cache cache, CacheSpan span) {
         Region removedRegion = new Region(span.position, span.position + span.length);
         Region floorRegion = (Region) this.regions.floor(removedRegion);
         if (floorRegion == null) {
             Log.e(TAG, "Removed a span we were not aware of");
-        } else {
-            this.regions.remove(floorRegion);
-            if (floorRegion.startOffset < removedRegion.startOffset) {
-                Region newFloorRegion = new Region(floorRegion.startOffset, removedRegion.startOffset);
-                int index = Arrays.binarySearch(this.chunkIndex.offsets, newFloorRegion.endOffset);
-                if (index < 0) {
-                    index = (-index) - 2;
-                }
-                newFloorRegion.endOffsetIndex = index;
-                this.regions.add(newFloorRegion);
-            }
-            if (floorRegion.endOffset > removedRegion.endOffset) {
-                Region newCeilingRegion = new Region(removedRegion.endOffset + 1, floorRegion.endOffset);
-                newCeilingRegion.endOffsetIndex = floorRegion.endOffsetIndex;
-                this.regions.add(newCeilingRegion);
-            }
+            return;
+        }
+        this.regions.remove(floorRegion);
+        if (floorRegion.startOffset < removedRegion.startOffset) {
+            Region newFloorRegion = new Region(floorRegion.startOffset, removedRegion.startOffset);
+            int index = Arrays.binarySearch(this.chunkIndex.offsets, newFloorRegion.endOffset);
+            newFloorRegion.endOffsetIndex = index < 0 ? (-index) - 2 : index;
+            this.regions.add(newFloorRegion);
+        }
+        if (floorRegion.endOffset > removedRegion.endOffset) {
+            newFloorRegion = new Region(removedRegion.endOffset + 1, floorRegion.endOffset);
+            newFloorRegion.endOffsetIndex = floorRegion.endOffsetIndex;
+            this.regions.add(newFloorRegion);
         }
     }
 
@@ -123,10 +121,7 @@ public final class CachedRegionTracker implements Listener {
             floorRegion.endOffsetIndex = index;
         } else {
             index = Arrays.binarySearch(this.chunkIndex.offsets, newRegion.endOffset);
-            if (index < 0) {
-                index = (-index) - 2;
-            }
-            newRegion.endOffsetIndex = index;
+            newRegion.endOffsetIndex = index < 0 ? (-index) - 2 : index;
             this.regions.add(newRegion);
         }
     }

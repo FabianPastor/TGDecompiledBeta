@@ -26,8 +26,9 @@ public final class SubripDecoder extends SimpleSubtitleDecoder {
         LongArray cueTimesUs = new LongArray();
         ParsableByteArray subripData = new ParsableByteArray(bytes, length);
         while (true) {
-            String currentLine = subripData.readLine();
-            if (currentLine == null) {
+            String readLine = subripData.readLine();
+            String currentLine = readLine;
+            if (readLine == null) {
                 break;
             } else if (currentLine.length() != 0) {
                 try {
@@ -46,24 +47,33 @@ public final class SubripDecoder extends SimpleSubtitleDecoder {
                         }
                         this.textBuilder.setLength(0);
                         while (true) {
-                            currentLine = subripData.readLine();
-                            if (TextUtils.isEmpty(currentLine)) {
+                            CharSequence readLine2 = subripData.readLine();
+                            CharSequence currentLine2 = readLine2;
+                            if (TextUtils.isEmpty(readLine2)) {
                                 break;
                             }
                             if (this.textBuilder.length() > 0) {
                                 this.textBuilder.append("<br>");
                             }
-                            this.textBuilder.append(currentLine.trim());
+                            this.textBuilder.append(currentLine2.trim());
                         }
                         cues.add(new Cue(Html.fromHtml(this.textBuilder.toString())));
                         if (haveEndTimecode) {
                             cues.add(null);
                         }
                     } else {
-                        Log.w(TAG, "Skipping invalid timing: " + currentLine);
+                        String str = TAG;
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("Skipping invalid timing: ");
+                        stringBuilder.append(currentLine);
+                        Log.w(str, stringBuilder.toString());
                     }
                 } catch (NumberFormatException e) {
-                    Log.w(TAG, "Skipping invalid index: " + currentLine);
+                    String str2 = TAG;
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    stringBuilder2.append("Skipping invalid index: ");
+                    stringBuilder2.append(currentLine);
+                    Log.w(str2, stringBuilder2.toString());
                 }
             }
         }
@@ -74,6 +84,6 @@ public final class SubripDecoder extends SimpleSubtitleDecoder {
     }
 
     private static long parseTimecode(Matcher matcher, int groupOffset) {
-        return ((((((Long.parseLong(matcher.group(groupOffset + 1)) * 60) * 60) * 1000) + ((Long.parseLong(matcher.group(groupOffset + 2)) * 60) * 1000)) + (Long.parseLong(matcher.group(groupOffset + 3)) * 1000)) + Long.parseLong(matcher.group(groupOffset + 4))) * 1000;
+        return 1000 * ((((((Long.parseLong(matcher.group(groupOffset + 1)) * 60) * 60) * 1000) + ((Long.parseLong(matcher.group(groupOffset + 2)) * 60) * 1000)) + (Long.parseLong(matcher.group(groupOffset + 3)) * 1000)) + Long.parseLong(matcher.group(groupOffset + 4)));
     }
 }

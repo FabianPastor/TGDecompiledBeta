@@ -35,56 +35,68 @@ public final class MediaCodecInfo {
     }
 
     private MediaCodecInfo(String name, String mimeType, CodecCapabilities capabilities, boolean forceDisableAdaptive, boolean forceSecure) {
-        boolean z;
-        boolean z2 = false;
         this.name = (String) Assertions.checkNotNull(name);
         this.mimeType = mimeType;
         this.capabilities = capabilities;
-        if (forceDisableAdaptive || capabilities == null || !isAdaptive(capabilities)) {
-            z = false;
-        } else {
-            z = true;
+        boolean z = false;
+        boolean z2 = (forceDisableAdaptive || capabilities == null || !isAdaptive(capabilities)) ? false : true;
+        this.adaptive = z2;
+        z2 = capabilities != null && isTunneling(capabilities);
+        this.tunneling = z2;
+        if (!forceSecure) {
+            if (capabilities == null || !isSecure(capabilities)) {
+                this.secure = z;
+            }
         }
-        this.adaptive = z;
-        if (capabilities == null || !isTunneling(capabilities)) {
-            z = false;
-        } else {
-            z = true;
-        }
-        this.tunneling = z;
-        if (forceSecure || (capabilities != null && isSecure(capabilities))) {
-            z2 = true;
-        }
-        this.secure = z2;
+        z = true;
+        this.secure = z;
     }
 
     public CodecProfileLevel[] getProfileLevels() {
-        return (this.capabilities == null || this.capabilities.profileLevels == null) ? new CodecProfileLevel[0] : this.capabilities.profileLevels;
+        if (this.capabilities != null) {
+            if (this.capabilities.profileLevels != null) {
+                return this.capabilities.profileLevels;
+            }
+        }
+        return new CodecProfileLevel[0];
     }
 
     public boolean isCodecSupported(String codec) {
-        if (codec == null || this.mimeType == null) {
-            return true;
-        }
-        String codecMimeType = MimeTypes.getMediaMimeType(codec);
-        if (codecMimeType == null) {
-            return true;
-        }
-        if (this.mimeType.equals(codecMimeType)) {
-            Pair<Integer, Integer> codecProfileAndLevel = MediaCodecUtil.getCodecProfileAndLevel(codec);
-            if (codecProfileAndLevel == null) {
-                return true;
-            }
-            for (CodecProfileLevel capabilities : getProfileLevels()) {
-                if (capabilities.profile == ((Integer) codecProfileAndLevel.first).intValue() && capabilities.level >= ((Integer) codecProfileAndLevel.second).intValue()) {
+        if (codec != null) {
+            if (this.mimeType != null) {
+                String codecMimeType = MimeTypes.getMediaMimeType(codec);
+                if (codecMimeType == null) {
                     return true;
                 }
+                StringBuilder stringBuilder;
+                if (this.mimeType.equals(codecMimeType)) {
+                    Pair<Integer, Integer> codecProfileAndLevel = MediaCodecUtil.getCodecProfileAndLevel(codec);
+                    if (codecProfileAndLevel == null) {
+                        return true;
+                    }
+                    for (CodecProfileLevel capabilities : getProfileLevels()) {
+                        if (capabilities.profile == ((Integer) codecProfileAndLevel.first).intValue() && capabilities.level >= ((Integer) codecProfileAndLevel.second).intValue()) {
+                            return true;
+                        }
+                    }
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("codec.profileLevel, ");
+                    stringBuilder.append(codec);
+                    stringBuilder.append(", ");
+                    stringBuilder.append(codecMimeType);
+                    logNoSupport(stringBuilder.toString());
+                    return false;
+                }
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("codec.mime ");
+                stringBuilder.append(codec);
+                stringBuilder.append(", ");
+                stringBuilder.append(codecMimeType);
+                logNoSupport(stringBuilder.toString());
+                return false;
             }
-            logNoSupport("codec.profileLevel, " + codec + ", " + codecMimeType);
-            return false;
         }
-        logNoSupport("codec.mime " + codec + ", " + codecMimeType);
-        return false;
+        return true;
     }
 
     @TargetApi(21)
@@ -99,11 +111,27 @@ public final class MediaCodecInfo {
             return false;
         }
         if (!areSizeAndRateSupportedV21(videoCapabilities, width, height, frameRate)) {
-            if (width >= height || !areSizeAndRateSupportedV21(videoCapabilities, height, width, frameRate)) {
-                logNoSupport("sizeAndRate.support, " + width + "x" + height + "x" + frameRate);
-                return false;
+            if (width < height) {
+                if (areSizeAndRateSupportedV21(videoCapabilities, height, width, frameRate)) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("sizeAndRate.rotated, ");
+                    stringBuilder.append(width);
+                    stringBuilder.append("x");
+                    stringBuilder.append(height);
+                    stringBuilder.append("x");
+                    stringBuilder.append(frameRate);
+                    logAssumedSupport(stringBuilder.toString());
+                }
             }
-            logAssumedSupport("sizeAndRate.rotated, " + width + "x" + height + "x" + frameRate);
+            StringBuilder stringBuilder2 = new StringBuilder();
+            stringBuilder2.append("sizeAndRate.support, ");
+            stringBuilder2.append(width);
+            stringBuilder2.append("x");
+            stringBuilder2.append(height);
+            stringBuilder2.append("x");
+            stringBuilder2.append(frameRate);
+            logNoSupport(stringBuilder2.toString());
+            return false;
         }
         return true;
     }
@@ -137,7 +165,10 @@ public final class MediaCodecInfo {
         } else if (audioCapabilities.isSampleRateSupported(sampleRate)) {
             return true;
         } else {
-            logNoSupport("sampleRate.support, " + sampleRate);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("sampleRate.support, ");
+            stringBuilder.append(sampleRate);
+            logNoSupport(stringBuilder.toString());
             return false;
         }
     }
@@ -155,36 +186,87 @@ public final class MediaCodecInfo {
         } else if (adjustMaxInputChannelCount(this.name, this.mimeType, audioCapabilities.getMaxInputChannelCount()) >= channelCount) {
             return true;
         } else {
-            logNoSupport("channelCount.support, " + channelCount);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("channelCount.support, ");
+            stringBuilder.append(channelCount);
+            logNoSupport(stringBuilder.toString());
             return false;
         }
     }
 
     private void logNoSupport(String message) {
-        Log.d(TAG, "NoSupport [" + message + "] [" + this.name + ", " + this.mimeType + "] [" + Util.DEVICE_DEBUG_INFO + "]");
+        String str = TAG;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("NoSupport [");
+        stringBuilder.append(message);
+        stringBuilder.append("] [");
+        stringBuilder.append(this.name);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.mimeType);
+        stringBuilder.append("] [");
+        stringBuilder.append(Util.DEVICE_DEBUG_INFO);
+        stringBuilder.append("]");
+        Log.d(str, stringBuilder.toString());
     }
 
     private void logAssumedSupport(String message) {
-        Log.d(TAG, "AssumedSupport [" + message + "] [" + this.name + ", " + this.mimeType + "] [" + Util.DEVICE_DEBUG_INFO + "]");
+        String str = TAG;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("AssumedSupport [");
+        stringBuilder.append(message);
+        stringBuilder.append("] [");
+        stringBuilder.append(this.name);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.mimeType);
+        stringBuilder.append("] [");
+        stringBuilder.append(Util.DEVICE_DEBUG_INFO);
+        stringBuilder.append("]");
+        Log.d(str, stringBuilder.toString());
     }
 
     private static int adjustMaxInputChannelCount(String name, String mimeType, int maxChannelCount) {
-        if (maxChannelCount > 1) {
-            return maxChannelCount;
+        if (maxChannelCount <= 1) {
+            if (Util.SDK_INT < 26 || maxChannelCount <= 0) {
+                if (!(MimeTypes.AUDIO_MPEG.equals(mimeType) || MimeTypes.AUDIO_AMR_NB.equals(mimeType) || MimeTypes.AUDIO_AMR_WB.equals(mimeType) || MimeTypes.AUDIO_AAC.equals(mimeType) || MimeTypes.AUDIO_VORBIS.equals(mimeType) || MimeTypes.AUDIO_OPUS.equals(mimeType) || MimeTypes.AUDIO_RAW.equals(mimeType) || MimeTypes.AUDIO_FLAC.equals(mimeType) || MimeTypes.AUDIO_ALAW.equals(mimeType) || MimeTypes.AUDIO_MLAW.equals(mimeType))) {
+                    if (!MimeTypes.AUDIO_MSGSM.equals(mimeType)) {
+                        int assumedMaxChannelCount;
+                        String str;
+                        StringBuilder stringBuilder;
+                        if (MimeTypes.AUDIO_AC3.equals(mimeType)) {
+                            assumedMaxChannelCount = 6;
+                        } else if (MimeTypes.AUDIO_E_AC3.equals(mimeType)) {
+                            assumedMaxChannelCount = 16;
+                        } else {
+                            assumedMaxChannelCount = 30;
+                            str = TAG;
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("AssumedMaxChannelAdjustment: ");
+                            stringBuilder.append(name);
+                            stringBuilder.append(", [");
+                            stringBuilder.append(maxChannelCount);
+                            stringBuilder.append(" to ");
+                            stringBuilder.append(assumedMaxChannelCount);
+                            stringBuilder.append("]");
+                            Log.w(str, stringBuilder.toString());
+                            return assumedMaxChannelCount;
+                        }
+                        str = TAG;
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("AssumedMaxChannelAdjustment: ");
+                        stringBuilder.append(name);
+                        stringBuilder.append(", [");
+                        stringBuilder.append(maxChannelCount);
+                        stringBuilder.append(" to ");
+                        stringBuilder.append(assumedMaxChannelCount);
+                        stringBuilder.append("]");
+                        Log.w(str, stringBuilder.toString());
+                        return assumedMaxChannelCount;
+                    }
+                }
+                return maxChannelCount;
+            }
         }
-        if ((Util.SDK_INT >= 26 && maxChannelCount > 0) || MimeTypes.AUDIO_MPEG.equals(mimeType) || MimeTypes.AUDIO_AMR_NB.equals(mimeType) || MimeTypes.AUDIO_AMR_WB.equals(mimeType) || MimeTypes.AUDIO_AAC.equals(mimeType) || MimeTypes.AUDIO_VORBIS.equals(mimeType) || MimeTypes.AUDIO_OPUS.equals(mimeType) || MimeTypes.AUDIO_RAW.equals(mimeType) || MimeTypes.AUDIO_FLAC.equals(mimeType) || MimeTypes.AUDIO_ALAW.equals(mimeType) || MimeTypes.AUDIO_MLAW.equals(mimeType) || MimeTypes.AUDIO_MSGSM.equals(mimeType)) {
-            return maxChannelCount;
-        }
-        int assumedMaxChannelCount;
-        if (MimeTypes.AUDIO_AC3.equals(mimeType)) {
-            assumedMaxChannelCount = 6;
-        } else if (MimeTypes.AUDIO_E_AC3.equals(mimeType)) {
-            assumedMaxChannelCount = 16;
-        } else {
-            assumedMaxChannelCount = 30;
-        }
-        Log.w(TAG, "AssumedMaxChannelAdjustment: " + name + ", [" + maxChannelCount + " to " + assumedMaxChannelCount + "]");
-        return assumedMaxChannelCount;
+        return maxChannelCount;
     }
 
     private static boolean isAdaptive(CodecCapabilities capabilities) {
@@ -216,9 +298,11 @@ public final class MediaCodecInfo {
 
     @TargetApi(21)
     private static boolean areSizeAndRateSupportedV21(VideoCapabilities capabilities, int width, int height, double frameRate) {
-        if (frameRate == -1.0d || frameRate <= 0.0d) {
-            return capabilities.isSizeSupported(width, height);
+        if (frameRate != -1.0d) {
+            if (frameRate > 0.0d) {
+                return capabilities.areSizeAndRateSupported(width, height, frameRate);
+            }
         }
-        return capabilities.areSizeAndRateSupported(width, height, frameRate);
+        return capabilities.isSizeSupported(width, height);
     }
 }

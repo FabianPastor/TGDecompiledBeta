@@ -32,40 +32,50 @@ final class VideoTagPayloadReader extends TagPayloadReader {
         int frameType = (header >> 4) & 15;
         int videoCodec = header & 15;
         if (videoCodec != 7) {
-            throw new UnsupportedFormatException("Video format not supported: " + videoCodec);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Video format not supported: ");
+            stringBuilder.append(videoCodec);
+            throw new UnsupportedFormatException(stringBuilder.toString());
         }
         this.frameType = frameType;
         return frameType != 5;
     }
 
     protected void parsePayload(ParsableByteArray data, long timeUs) throws ParserException {
+        VideoTagPayloadReader videoTagPayloadReader = this;
+        ParsableByteArray parsableByteArray = data;
         int packetType = data.readUnsignedByte();
-        timeUs += ((long) data.readInt24()) * 1000;
-        if (packetType == 0 && !this.hasOutputFormat) {
-            ParsableByteArray parsableByteArray = new ParsableByteArray(new byte[data.bytesLeft()]);
-            data.readBytes(parsableByteArray.data, 0, data.bytesLeft());
-            AvcConfig avcConfig = AvcConfig.parse(parsableByteArray);
-            this.nalUnitLengthFieldLength = avcConfig.nalUnitLengthFieldLength;
-            this.output.format(Format.createVideoSampleFormat(null, "video/avc", null, -1, -1, avcConfig.width, avcConfig.height, -1.0f, avcConfig.initializationData, -1, avcConfig.pixelWidthAspectRatio, null));
-            this.hasOutputFormat = true;
-        } else if (packetType == 1 && this.hasOutputFormat) {
-            byte[] nalLengthData = this.nalLength.data;
+        long timeUs2 = timeUs + (((long) data.readInt24()) * 1000);
+        if (packetType == 0 && !videoTagPayloadReader.hasOutputFormat) {
+            ParsableByteArray videoSequence = new ParsableByteArray(new byte[data.bytesLeft()]);
+            parsableByteArray.readBytes(videoSequence.data, 0, data.bytesLeft());
+            AvcConfig avcConfig = AvcConfig.parse(videoSequence);
+            videoTagPayloadReader.nalUnitLengthFieldLength = avcConfig.nalUnitLengthFieldLength;
+            videoTagPayloadReader.output.format(Format.createVideoSampleFormat(null, "video/avc", null, -1, -1, avcConfig.width, avcConfig.height, -1.0f, avcConfig.initializationData, -1, avcConfig.pixelWidthAspectRatio, null));
+            videoTagPayloadReader.hasOutputFormat = true;
+        } else if (packetType == 1 && videoTagPayloadReader.hasOutputFormat) {
+            int bytesWritten;
+            byte[] nalLengthData = videoTagPayloadReader.nalLength.data;
             nalLengthData[0] = (byte) 0;
             nalLengthData[1] = (byte) 0;
             nalLengthData[2] = (byte) 0;
-            int nalUnitLengthFieldLengthDiff = 4 - this.nalUnitLengthFieldLength;
-            int bytesWritten = 0;
-            while (data.bytesLeft() > 0) {
-                data.readBytes(this.nalLength.data, nalUnitLengthFieldLengthDiff, this.nalUnitLengthFieldLength);
-                this.nalLength.setPosition(0);
-                int bytesToWrite = this.nalLength.readUnsignedIntToInt();
-                this.nalStartCode.setPosition(0);
-                this.output.sampleData(this.nalStartCode, 4);
+            int nalUnitLengthFieldLengthDiff = 4 - videoTagPayloadReader.nalUnitLengthFieldLength;
+            int bytesWritten2 = 0;
+            while (true) {
+                bytesWritten = bytesWritten2;
+                if (data.bytesLeft() <= 0) {
+                    break;
+                }
+                parsableByteArray.readBytes(videoTagPayloadReader.nalLength.data, nalUnitLengthFieldLengthDiff, videoTagPayloadReader.nalUnitLengthFieldLength);
+                videoTagPayloadReader.nalLength.setPosition(0);
+                bytesWritten2 = videoTagPayloadReader.nalLength.readUnsignedIntToInt();
+                videoTagPayloadReader.nalStartCode.setPosition(0);
+                videoTagPayloadReader.output.sampleData(videoTagPayloadReader.nalStartCode, 4);
                 bytesWritten += 4;
-                this.output.sampleData(data, bytesToWrite);
-                bytesWritten += bytesToWrite;
+                videoTagPayloadReader.output.sampleData(parsableByteArray, bytesWritten2);
+                bytesWritten2 = bytesWritten + bytesWritten2;
             }
-            this.output.sampleMetadata(timeUs, this.frameType == 1 ? 1 : 0, bytesWritten, 0, null);
+            videoTagPayloadReader.output.sampleMetadata(timeUs2, videoTagPayloadReader.frameType == 1 ? 1 : 0, bytesWritten, 0, null);
         }
     }
 }

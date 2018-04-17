@@ -21,21 +21,24 @@ public interface TrackOutput {
         }
 
         public boolean equals(Object obj) {
+            boolean z = true;
             if (this == obj) {
                 return true;
             }
-            if (obj == null || getClass() != obj.getClass()) {
-                return false;
-            }
-            CryptoData other = (CryptoData) obj;
-            if (this.cryptoMode == other.cryptoMode && this.encryptedBlocks == other.encryptedBlocks && this.clearBlocks == other.clearBlocks && Arrays.equals(this.encryptionKey, other.encryptionKey)) {
-                return true;
+            if (obj != null) {
+                if (getClass() == obj.getClass()) {
+                    CryptoData other = (CryptoData) obj;
+                    if (this.cryptoMode != other.cryptoMode || this.encryptedBlocks != other.encryptedBlocks || this.clearBlocks != other.clearBlocks || !Arrays.equals(this.encryptionKey, other.encryptionKey)) {
+                        z = false;
+                    }
+                    return z;
+                }
             }
             return false;
         }
 
         public int hashCode() {
-            return (((((this.cryptoMode * 31) + Arrays.hashCode(this.encryptionKey)) * 31) + this.encryptedBlocks) * 31) + this.clearBlocks;
+            return (31 * ((31 * ((31 * this.cryptoMode) + Arrays.hashCode(this.encryptionKey))) + this.encryptedBlocks)) + this.clearBlocks;
         }
     }
 

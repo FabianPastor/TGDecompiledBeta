@@ -21,13 +21,31 @@ final class SeiReader {
 
     public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
         for (int i = 0; i < this.outputs.length; i++) {
+            boolean z;
+            StringBuilder stringBuilder;
             idGenerator.generateNewId();
             TrackOutput output = extractorOutput.track(idGenerator.getTrackId(), 3);
             Format channelFormat = (Format) this.closedCaptionFormats.get(i);
             String channelMimeType = channelFormat.sampleMimeType;
-            boolean z = MimeTypes.APPLICATION_CEA608.equals(channelMimeType) || MimeTypes.APPLICATION_CEA708.equals(channelMimeType);
-            Assertions.checkArgument(z, "Invalid closed caption mime type provided: " + channelMimeType);
-            output.format(Format.createTextSampleFormat(channelFormat.id != null ? channelFormat.id : idGenerator.getFormatId(), channelMimeType, null, -1, channelFormat.selectionFlags, channelFormat.language, channelFormat.accessibilityChannel, null));
+            if (!MimeTypes.APPLICATION_CEA608.equals(channelMimeType)) {
+                if (!MimeTypes.APPLICATION_CEA708.equals(channelMimeType)) {
+                    z = false;
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("Invalid closed caption mime type provided: ");
+                    stringBuilder.append(channelMimeType);
+                    Assertions.checkArgument(z, stringBuilder.toString());
+                    output.format(Format.createTextSampleFormat(channelFormat.id == null ? channelFormat.id : idGenerator.getFormatId(), channelMimeType, null, -1, channelFormat.selectionFlags, channelFormat.language, channelFormat.accessibilityChannel, null));
+                    this.outputs[i] = output;
+                }
+            }
+            z = true;
+            stringBuilder = new StringBuilder();
+            stringBuilder.append("Invalid closed caption mime type provided: ");
+            stringBuilder.append(channelMimeType);
+            Assertions.checkArgument(z, stringBuilder.toString());
+            if (channelFormat.id == null) {
+            }
+            output.format(Format.createTextSampleFormat(channelFormat.id == null ? channelFormat.id : idGenerator.getFormatId(), channelMimeType, null, -1, channelFormat.selectionFlags, channelFormat.language, channelFormat.accessibilityChannel, null));
             this.outputs[i] = output;
         }
     }

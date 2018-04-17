@@ -44,10 +44,10 @@ final class TtmlStyle {
     }
 
     public int getStyle() {
-        int i = 0;
         if (this.bold == -1 && this.italic == -1) {
             return -1;
         }
+        int i = 0;
         int i2 = this.bold == 1 ? 1 : 0;
         if (this.italic == 1) {
             i = 2;
@@ -60,18 +60,8 @@ final class TtmlStyle {
     }
 
     public TtmlStyle setLinethrough(boolean linethrough) {
-        boolean z;
-        int i = 1;
-        if (this.inheritableStyle == null) {
-            z = true;
-        } else {
-            z = false;
-        }
-        Assertions.checkState(z);
-        if (!linethrough) {
-            i = 0;
-        }
-        this.linethrough = i;
+        Assertions.checkState(this.inheritableStyle == null);
+        this.linethrough = linethrough;
         return this;
     }
 
@@ -80,50 +70,20 @@ final class TtmlStyle {
     }
 
     public TtmlStyle setUnderline(boolean underline) {
-        boolean z;
-        int i = 1;
-        if (this.inheritableStyle == null) {
-            z = true;
-        } else {
-            z = false;
-        }
-        Assertions.checkState(z);
-        if (!underline) {
-            i = 0;
-        }
-        this.underline = i;
+        Assertions.checkState(this.inheritableStyle == null);
+        this.underline = underline;
         return this;
     }
 
     public TtmlStyle setBold(boolean bold) {
-        boolean z;
-        int i = 1;
-        if (this.inheritableStyle == null) {
-            z = true;
-        } else {
-            z = false;
-        }
-        Assertions.checkState(z);
-        if (!bold) {
-            i = 0;
-        }
-        this.bold = i;
+        Assertions.checkState(this.inheritableStyle == null);
+        this.bold = bold;
         return this;
     }
 
     public TtmlStyle setItalic(boolean italic) {
-        boolean z;
-        int i = 1;
-        if (this.inheritableStyle == null) {
-            z = true;
-        } else {
-            z = false;
-        }
-        Assertions.checkState(z);
-        if (!italic) {
-            i = 0;
-        }
-        this.italic = i;
+        Assertions.checkState(this.inheritableStyle == null);
+        this.italic = italic;
         return this;
     }
 

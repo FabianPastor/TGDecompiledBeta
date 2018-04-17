@@ -97,20 +97,17 @@ public class ReportOtherActivity extends BaseFragment {
             } else if (id == 1 && ReportOtherActivity.this.firstNameField.getText().length() != 0) {
                 TLObject req;
                 InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
-                TLObject request;
                 if (ReportOtherActivity.this.message_id != 0) {
-                    request = new TL_messages_report();
-                    request.peer = peer;
-                    request.id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
-                    request.reason = new TL_inputReportReasonOther();
-                    request.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
-                    req = request;
+                    req = new TL_messages_report();
+                    req.peer = peer;
+                    req.id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
+                    req.reason = new TL_inputReportReasonOther();
+                    req.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
                 } else {
-                    request = new TL_account_reportPeer();
-                    request.peer = MessagesController.getInstance(ReportOtherActivity.this.currentAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
-                    request.reason = new TL_inputReportReasonOther();
-                    request.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
-                    req = request;
+                    req = new TL_account_reportPeer();
+                    req.peer = MessagesController.getInstance(ReportOtherActivity.this.currentAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
+                    req.reason = new TL_inputReportReasonOther();
+                    req.reason.text = ReportOtherActivity.this.firstNameField.getText().toString();
                 }
                 ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(req, new C22631());
                 if (ReportOtherActivity.this.getParentActivity() != null) {
@@ -126,7 +123,6 @@ public class ReportOtherActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        int i = 3;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ReportChat", R.string.ReportChat));
@@ -142,6 +138,7 @@ public class ReportOtherActivity extends BaseFragment {
         this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+        int i = 3;
         this.firstNameField.setMaxLines(3);
         this.firstNameField.setPadding(0, 0, 0, 0);
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
@@ -177,16 +174,6 @@ public class ReportOtherActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[9];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
-        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        themeDescriptionArr[5] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[6] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
-        themeDescriptionArr[7] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
-        themeDescriptionArr[8] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
-        return themeDescriptionArr;
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated)};
     }
 }

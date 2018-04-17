@@ -47,8 +47,7 @@ public class LinearSnapHelper extends SnapHelper {
             return -1;
         }
         int hDeltaJump;
-        int vDeltaJump;
-        int deltaJump;
+        int vDeltaJump = 0;
         if (layoutManager.canScrollHorizontally()) {
             hDeltaJump = estimateNextPositionDiffForFling(layoutManager, getHorizontalHelper(layoutManager), velocityX, 0);
             if (vectorForEnd.x < 0.0f) {
@@ -62,23 +61,17 @@ public class LinearSnapHelper extends SnapHelper {
             if (vectorForEnd.y < 0.0f) {
                 vDeltaJump = -vDeltaJump;
             }
-        } else {
-            vDeltaJump = 0;
         }
-        if (layoutManager.canScrollVertically()) {
-            deltaJump = vDeltaJump;
-        } else {
-            deltaJump = hDeltaJump;
-        }
-        if (deltaJump == 0) {
+        vDeltaJump = layoutManager.canScrollVertically() ? vDeltaJump : hDeltaJump;
+        if (vDeltaJump == 0) {
             return -1;
         }
-        int targetPos = currentPosition + deltaJump;
+        int targetPos = currentPosition + vDeltaJump;
         if (targetPos < 0) {
             targetPos = 0;
         }
         if (targetPos >= itemCount) {
-            return itemCount - 1;
+            targetPos = itemCount - 1;
         }
         return targetPos;
     }
@@ -160,14 +153,16 @@ public class LinearSnapHelper extends SnapHelper {
                 }
             }
         }
-        if (minPosView == null || maxPosView == null) {
-            return INVALID_DISTANCE;
+        if (minPosView != null) {
+            if (maxPosView != null) {
+                pos = Math.max(helper.getDecoratedEnd(minPosView), helper.getDecoratedEnd(maxPosView)) - Math.min(helper.getDecoratedStart(minPosView), helper.getDecoratedStart(maxPosView));
+                if (pos == 0) {
+                    return INVALID_DISTANCE;
+                }
+                return (INVALID_DISTANCE * ((float) pos)) / ((float) ((maxPos - minPos) + 1));
+            }
         }
-        int distance = Math.max(helper.getDecoratedEnd(minPosView), helper.getDecoratedEnd(maxPosView)) - Math.min(helper.getDecoratedStart(minPosView), helper.getDecoratedStart(maxPosView));
-        if (distance == 0) {
-            return INVALID_DISTANCE;
-        }
-        return (INVALID_DISTANCE * ((float) distance)) / ((float) ((maxPos - minPos) + 1));
+        return INVALID_DISTANCE;
     }
 
     private OrientationHelper getVerticalHelper(LayoutManager layoutManager) {

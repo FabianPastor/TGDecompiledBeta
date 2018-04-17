@@ -132,78 +132,170 @@ public final class TsExtractor implements Extractor {
         }
 
         public void consume(ParsableByteArray sectionData) {
+            PmtReader pmtReader = this;
+            ParsableByteArray parsableByteArray = sectionData;
             if (sectionData.readUnsignedByte() == 2) {
                 TimestampAdjuster timestampAdjuster;
-                int trackId;
+                int programNumber;
+                int i;
+                int i2;
+                int i3;
+                int i4;
+                int remainingEntriesLength;
+                int streamType;
+                int elementaryPid;
+                int esInfoLength;
+                EsInfo esInfo;
                 TsPayloadReader reader;
-                if (TsExtractor.this.mode == 1 || TsExtractor.this.mode == 2 || TsExtractor.this.remainingPmts == 1) {
-                    timestampAdjuster = (TimestampAdjuster) TsExtractor.this.timestampAdjusters.get(0);
-                } else {
-                    timestampAdjuster = new TimestampAdjuster(((TimestampAdjuster) TsExtractor.this.timestampAdjusters.get(0)).getFirstSampleTimestampUs());
-                    TsExtractor.this.timestampAdjusters.add(timestampAdjuster);
+                TsExtractor tsExtractor;
+                if (!(TsExtractor.this.mode == 1 || TsExtractor.this.mode == 2)) {
+                    if (TsExtractor.this.remainingPmts != 1) {
+                        timestampAdjuster = new TimestampAdjuster(((TimestampAdjuster) TsExtractor.this.timestampAdjusters.get(0)).getFirstSampleTimestampUs());
+                        TsExtractor.this.timestampAdjusters.add(timestampAdjuster);
+                        parsableByteArray.skipBytes(2);
+                        programNumber = sectionData.readUnsignedShort();
+                        i = 5;
+                        parsableByteArray.skipBytes(5);
+                        parsableByteArray.readBytes(pmtReader.pmtScratch, 2);
+                        i2 = 4;
+                        pmtReader.pmtScratch.skipBits(4);
+                        i3 = 12;
+                        parsableByteArray.skipBytes(pmtReader.pmtScratch.readBits(12));
+                        i4 = 21;
+                        if (TsExtractor.this.mode == 2 && TsExtractor.this.id3Reader == null) {
+                            TsExtractor.this.id3Reader = TsExtractor.this.payloadReaderFactory.createPayloadReader(21, new EsInfo(21, null, null, new byte[0]));
+                            TsExtractor.this.id3Reader.init(timestampAdjuster, TsExtractor.this.output, new TrackIdGenerator(programNumber, 21, 8192));
+                        }
+                        pmtReader.trackIdToReaderScratch.clear();
+                        pmtReader.trackIdToPidScratch.clear();
+                        remainingEntriesLength = sectionData.bytesLeft();
+                        while (remainingEntriesLength > 0) {
+                            parsableByteArray.readBytes(pmtReader.pmtScratch, i);
+                            streamType = pmtReader.pmtScratch.readBits(8);
+                            pmtReader.pmtScratch.skipBits(3);
+                            elementaryPid = pmtReader.pmtScratch.readBits(13);
+                            pmtReader.pmtScratch.skipBits(i2);
+                            esInfoLength = pmtReader.pmtScratch.readBits(i3);
+                            esInfo = readEsInfo(parsableByteArray, esInfoLength);
+                            if (streamType == 6) {
+                                streamType = esInfo.streamType;
+                            }
+                            remainingEntriesLength -= esInfoLength + 5;
+                            i2 = TsExtractor.this.mode != 2 ? streamType : elementaryPid;
+                            if (TsExtractor.this.trackIds.get(i2)) {
+                                if (TsExtractor.this.mode == 2 || streamType != r14) {
+                                    reader = TsExtractor.this.payloadReaderFactory.createPayloadReader(streamType, esInfo);
+                                } else {
+                                    reader = TsExtractor.this.id3Reader;
+                                }
+                                if (TsExtractor.this.mode != 2 || elementaryPid < pmtReader.trackIdToPidScratch.get(i2, 8192)) {
+                                    pmtReader.trackIdToPidScratch.put(i2, elementaryPid);
+                                    pmtReader.trackIdToReaderScratch.put(i2, reader);
+                                }
+                            }
+                            i = 5;
+                            i2 = 4;
+                            i3 = 12;
+                            i4 = 21;
+                        }
+                        streamType = pmtReader.trackIdToPidScratch.size();
+                        for (i = 0; i < streamType; i++) {
+                            i2 = pmtReader.trackIdToPidScratch.keyAt(i);
+                            TsExtractor.this.trackIds.put(i2, true);
+                            reader = (TsPayloadReader) pmtReader.trackIdToReaderScratch.valueAt(i);
+                            if (reader == null) {
+                                if (reader != TsExtractor.this.id3Reader) {
+                                    reader.init(timestampAdjuster, TsExtractor.this.output, new TrackIdGenerator(programNumber, i2, 8192));
+                                }
+                                TsExtractor.this.tsPayloadReaders.put(pmtReader.trackIdToPidScratch.valueAt(i), reader);
+                            }
+                        }
+                        if (TsExtractor.this.mode == 2) {
+                            i = 0;
+                            TsExtractor.this.tsPayloadReaders.remove(pmtReader.pid);
+                            tsExtractor = TsExtractor.this;
+                            if (TsExtractor.this.mode == 1) {
+                                i = TsExtractor.this.remainingPmts - 1;
+                            }
+                            tsExtractor.remainingPmts = i;
+                            if (TsExtractor.this.remainingPmts == 0) {
+                                TsExtractor.this.output.endTracks();
+                                TsExtractor.this.tracksEnded = true;
+                            }
+                        } else if (!TsExtractor.this.tracksEnded) {
+                            TsExtractor.this.output.endTracks();
+                            TsExtractor.this.remainingPmts = 0;
+                            TsExtractor.this.tracksEnded = true;
+                        }
+                    }
                 }
-                sectionData.skipBytes(2);
-                int programNumber = sectionData.readUnsignedShort();
-                sectionData.skipBytes(5);
-                sectionData.readBytes(this.pmtScratch, 2);
-                this.pmtScratch.skipBits(4);
-                sectionData.skipBytes(this.pmtScratch.readBits(12));
-                if (TsExtractor.this.mode == 2 && TsExtractor.this.id3Reader == null) {
-                    TsExtractor.this.id3Reader = TsExtractor.this.payloadReaderFactory.createPayloadReader(21, new EsInfo(21, null, null, new byte[0]));
-                    TsExtractor.this.id3Reader.init(timestampAdjuster, TsExtractor.this.output, new TrackIdGenerator(programNumber, 21, 8192));
-                }
-                this.trackIdToReaderScratch.clear();
-                this.trackIdToPidScratch.clear();
-                int remainingEntriesLength = sectionData.bytesLeft();
+                timestampAdjuster = (TimestampAdjuster) TsExtractor.this.timestampAdjusters.get(0);
+                parsableByteArray.skipBytes(2);
+                programNumber = sectionData.readUnsignedShort();
+                i = 5;
+                parsableByteArray.skipBytes(5);
+                parsableByteArray.readBytes(pmtReader.pmtScratch, 2);
+                i2 = 4;
+                pmtReader.pmtScratch.skipBits(4);
+                i3 = 12;
+                parsableByteArray.skipBytes(pmtReader.pmtScratch.readBits(12));
+                i4 = 21;
+                TsExtractor.this.id3Reader = TsExtractor.this.payloadReaderFactory.createPayloadReader(21, new EsInfo(21, null, null, new byte[0]));
+                TsExtractor.this.id3Reader.init(timestampAdjuster, TsExtractor.this.output, new TrackIdGenerator(programNumber, 21, 8192));
+                pmtReader.trackIdToReaderScratch.clear();
+                pmtReader.trackIdToPidScratch.clear();
+                remainingEntriesLength = sectionData.bytesLeft();
                 while (remainingEntriesLength > 0) {
-                    sectionData.readBytes(this.pmtScratch, 5);
-                    int streamType = this.pmtScratch.readBits(8);
-                    this.pmtScratch.skipBits(3);
-                    int elementaryPid = this.pmtScratch.readBits(13);
-                    this.pmtScratch.skipBits(4);
-                    int esInfoLength = this.pmtScratch.readBits(12);
-                    EsInfo esInfo = readEsInfo(sectionData, esInfoLength);
+                    parsableByteArray.readBytes(pmtReader.pmtScratch, i);
+                    streamType = pmtReader.pmtScratch.readBits(8);
+                    pmtReader.pmtScratch.skipBits(3);
+                    elementaryPid = pmtReader.pmtScratch.readBits(13);
+                    pmtReader.pmtScratch.skipBits(i2);
+                    esInfoLength = pmtReader.pmtScratch.readBits(i3);
+                    esInfo = readEsInfo(parsableByteArray, esInfoLength);
                     if (streamType == 6) {
                         streamType = esInfo.streamType;
                     }
                     remainingEntriesLength -= esInfoLength + 5;
-                    if (TsExtractor.this.mode == 2) {
-                        trackId = streamType;
-                    } else {
-                        trackId = elementaryPid;
+                    if (TsExtractor.this.mode != 2) {
                     }
-                    if (!TsExtractor.this.trackIds.get(trackId)) {
-                        if (TsExtractor.this.mode == 2 && streamType == 21) {
-                            reader = TsExtractor.this.id3Reader;
-                        } else {
-                            reader = TsExtractor.this.payloadReaderFactory.createPayloadReader(streamType, esInfo);
+                    if (TsExtractor.this.trackIds.get(i2)) {
+                        if (TsExtractor.this.mode == 2) {
                         }
-                        if (TsExtractor.this.mode != 2 || elementaryPid < this.trackIdToPidScratch.get(trackId, 8192)) {
-                            this.trackIdToPidScratch.put(trackId, elementaryPid);
-                            this.trackIdToReaderScratch.put(trackId, reader);
-                        }
+                        reader = TsExtractor.this.payloadReaderFactory.createPayloadReader(streamType, esInfo);
+                        pmtReader.trackIdToPidScratch.put(i2, elementaryPid);
+                        pmtReader.trackIdToReaderScratch.put(i2, reader);
                     }
+                    i = 5;
+                    i2 = 4;
+                    i3 = 12;
+                    i4 = 21;
                 }
-                int trackIdCount = this.trackIdToPidScratch.size();
-                for (int i = 0; i < trackIdCount; i++) {
-                    trackId = this.trackIdToPidScratch.keyAt(i);
-                    TsExtractor.this.trackIds.put(trackId, true);
-                    reader = (TsPayloadReader) this.trackIdToReaderScratch.valueAt(i);
-                    if (reader != null) {
+                streamType = pmtReader.trackIdToPidScratch.size();
+                for (i = 0; i < streamType; i++) {
+                    i2 = pmtReader.trackIdToPidScratch.keyAt(i);
+                    TsExtractor.this.trackIds.put(i2, true);
+                    reader = (TsPayloadReader) pmtReader.trackIdToReaderScratch.valueAt(i);
+                    if (reader == null) {
                         if (reader != TsExtractor.this.id3Reader) {
-                            reader.init(timestampAdjuster, TsExtractor.this.output, new TrackIdGenerator(programNumber, trackId, 8192));
+                            reader.init(timestampAdjuster, TsExtractor.this.output, new TrackIdGenerator(programNumber, i2, 8192));
                         }
-                        TsExtractor.this.tsPayloadReaders.put(this.trackIdToPidScratch.valueAt(i), reader);
+                        TsExtractor.this.tsPayloadReaders.put(pmtReader.trackIdToPidScratch.valueAt(i), reader);
                     }
                 }
-                if (TsExtractor.this.mode != 2) {
-                    TsExtractor.this.tsPayloadReaders.remove(this.pid);
-                    TsExtractor.this.remainingPmts = TsExtractor.this.mode == 1 ? 0 : TsExtractor.this.remainingPmts - 1;
+                if (TsExtractor.this.mode == 2) {
+                    i = 0;
+                    TsExtractor.this.tsPayloadReaders.remove(pmtReader.pid);
+                    tsExtractor = TsExtractor.this;
+                    if (TsExtractor.this.mode == 1) {
+                        i = TsExtractor.this.remainingPmts - 1;
+                    }
+                    tsExtractor.remainingPmts = i;
                     if (TsExtractor.this.remainingPmts == 0) {
                         TsExtractor.this.output.endTracks();
                         TsExtractor.this.tracksEnded = true;
                     }
-                } else if (!TsExtractor.this.tracksEnded) {
+                } else if (TsExtractor.this.tracksEnded) {
                     TsExtractor.this.output.endTracks();
                     TsExtractor.this.remainingPmts = 0;
                     TsExtractor.this.tracksEnded = true;
@@ -212,6 +304,7 @@ public final class TsExtractor implements Extractor {
         }
 
         private EsInfo readEsInfo(ParsableByteArray data, int length) {
+            ParsableByteArray parsableByteArray = data;
             int descriptorsStartPosition = data.getPosition();
             int descriptorsEndPosition = descriptorsStartPosition + length;
             int streamType = -1;
@@ -236,22 +329,22 @@ public final class TsExtractor implements Extractor {
                 } else if (descriptorTag == TS_PMT_DESC_DTS) {
                     streamType = TsExtractor.TS_STREAM_TYPE_DTS;
                 } else if (descriptorTag == 10) {
-                    language = data.readString(3).trim();
+                    language = parsableByteArray.readString(3).trim();
                 } else if (descriptorTag == 89) {
                     streamType = 89;
                     dvbSubtitleInfos = new ArrayList();
                     while (data.getPosition() < positionOfNextDescriptor) {
-                        String dvbLanguage = data.readString(3).trim();
+                        String dvbLanguage = parsableByteArray.readString(3).trim();
                         int dvbSubtitlingType = data.readUnsignedByte();
                         byte[] initializationData = new byte[4];
-                        data.readBytes(initializationData, 0, 4);
+                        parsableByteArray.readBytes(initializationData, 0, 4);
                         dvbSubtitleInfos.add(new DvbSubtitleInfo(dvbLanguage, dvbSubtitlingType, initializationData));
                     }
                 }
-                data.skipBytes(positionOfNextDescriptor - data.getPosition());
+                parsableByteArray.skipBytes(positionOfNextDescriptor - data.getPosition());
             }
-            data.setPosition(descriptorsEndPosition);
-            return new EsInfo(streamType, language, dvbSubtitleInfos, Arrays.copyOfRange(data.data, descriptorsStartPosition, descriptorsEndPosition));
+            parsableByteArray.setPosition(descriptorsEndPosition);
+            return new EsInfo(streamType, language, dvbSubtitleInfos, Arrays.copyOfRange(parsableByteArray.data, descriptorsStartPosition, descriptorsEndPosition));
         }
     }
 
@@ -270,12 +363,18 @@ public final class TsExtractor implements Extractor {
     public TsExtractor(int mode, TimestampAdjuster timestampAdjuster, Factory payloadReaderFactory) {
         this.payloadReaderFactory = (Factory) Assertions.checkNotNull(payloadReaderFactory);
         this.mode = mode;
-        if (mode == 1 || mode == 2) {
-            this.timestampAdjusters = Collections.singletonList(timestampAdjuster);
-        } else {
-            this.timestampAdjusters = new ArrayList();
-            this.timestampAdjusters.add(timestampAdjuster);
+        if (mode != 1) {
+            if (mode != 2) {
+                this.timestampAdjusters = new ArrayList();
+                this.timestampAdjusters.add(timestampAdjuster);
+                this.tsPacketBuffer = new ParsableByteArray(new byte[BUFFER_SIZE], 0);
+                this.trackIds = new SparseBooleanArray();
+                this.tsPayloadReaders = new SparseArray();
+                this.continuityCounters = new SparseIntArray();
+                resetPayloadReaders();
+            }
         }
+        this.timestampAdjusters = Collections.singletonList(timestampAdjuster);
         this.tsPacketBuffer = new ParsableByteArray(new byte[BUFFER_SIZE], 0);
         this.trackIds = new SparseBooleanArray();
         this.tsPayloadReaders = new SparseArray();
@@ -322,70 +421,76 @@ public final class TsExtractor implements Extractor {
     }
 
     public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
-        int limit;
+        int bytesLeft;
+        int read;
         byte[] data = this.tsPacketBuffer.data;
         if (9400 - this.tsPacketBuffer.getPosition() < TS_PACKET_SIZE) {
-            int bytesLeft = this.tsPacketBuffer.bytesLeft();
+            bytesLeft = r0.tsPacketBuffer.bytesLeft();
             if (bytesLeft > 0) {
-                System.arraycopy(data, this.tsPacketBuffer.getPosition(), data, 0, bytesLeft);
+                System.arraycopy(data, r0.tsPacketBuffer.getPosition(), data, 0, bytesLeft);
             }
-            this.tsPacketBuffer.reset(data, bytesLeft);
+            r0.tsPacketBuffer.reset(data, bytesLeft);
         }
-        while (this.tsPacketBuffer.bytesLeft() < TS_PACKET_SIZE) {
-            limit = this.tsPacketBuffer.limit();
-            int read = input.read(data, limit, 9400 - limit);
+        while (r0.tsPacketBuffer.bytesLeft() < TS_PACKET_SIZE) {
+            bytesLeft = r0.tsPacketBuffer.limit();
+            read = input.read(data, bytesLeft, 9400 - bytesLeft);
             if (read == -1) {
                 return -1;
             }
-            this.tsPacketBuffer.setLimit(limit + read);
+            r0.tsPacketBuffer.setLimit(bytesLeft + read);
         }
-        limit = this.tsPacketBuffer.limit();
-        int position = this.tsPacketBuffer.getPosition();
-        int searchStart = position;
-        while (position < limit && data[position] != TS_SYNC_BYTE) {
-            position++;
+        ExtractorInput extractorInput = input;
+        bytesLeft = r0.tsPacketBuffer.limit();
+        int searchStart = r0.tsPacketBuffer.getPosition();
+        read = searchStart;
+        while (read < bytesLeft && data[read] != (byte) 71) {
+            read++;
         }
-        this.tsPacketBuffer.setPosition(position);
-        int endOfPacket = position + TS_PACKET_SIZE;
-        if (endOfPacket > limit) {
-            this.bytesSinceLastSync += position - searchStart;
-            if (this.mode != 2 || this.bytesSinceLastSync <= 376) {
+        r0.tsPacketBuffer.setPosition(read);
+        int endOfPacket = read + TS_PACKET_SIZE;
+        if (endOfPacket > bytesLeft) {
+            r0.bytesSinceLastSync += read - searchStart;
+            if (r0.mode != 2 || r0.bytesSinceLastSync <= 376) {
                 return 0;
             }
             throw new ParserException("Cannot find sync byte. Most likely not a Transport Stream.");
         }
-        this.bytesSinceLastSync = 0;
-        int tsPacketHeader = this.tsPacketBuffer.readInt();
+        r0.bytesSinceLastSync = 0;
+        int tsPacketHeader = r0.tsPacketBuffer.readInt();
         if ((8388608 & tsPacketHeader) != 0) {
-            this.tsPacketBuffer.setPosition(endOfPacket);
+            r0.tsPacketBuffer.setPosition(endOfPacket);
             return 0;
         }
+        boolean payloadExists = true;
         boolean payloadUnitStartIndicator = (4194304 & tsPacketHeader) != 0;
         int pid = (2096896 & tsPacketHeader) >> 8;
         boolean adaptationFieldExists = (tsPacketHeader & 32) != 0;
-        TsPayloadReader payloadReader = (tsPacketHeader & 16) != 0 ? (TsPayloadReader) this.tsPayloadReaders.get(pid) : null;
+        if ((tsPacketHeader & 16) == 0) {
+            payloadExists = false;
+        }
+        TsPayloadReader payloadReader = payloadExists ? (TsPayloadReader) r0.tsPayloadReaders.get(pid) : null;
         if (payloadReader == null) {
-            this.tsPacketBuffer.setPosition(endOfPacket);
+            r0.tsPacketBuffer.setPosition(endOfPacket);
             return 0;
         }
-        if (this.mode != 2) {
+        if (r0.mode != 2) {
             int continuityCounter = tsPacketHeader & 15;
-            int previousCounter = this.continuityCounters.get(pid, continuityCounter - 1);
-            this.continuityCounters.put(pid, continuityCounter);
+            int previousCounter = r0.continuityCounters.get(pid, continuityCounter - 1);
+            r0.continuityCounters.put(pid, continuityCounter);
             if (previousCounter == continuityCounter) {
-                this.tsPacketBuffer.setPosition(endOfPacket);
+                r0.tsPacketBuffer.setPosition(endOfPacket);
                 return 0;
             } else if (continuityCounter != ((previousCounter + 1) & 15)) {
                 payloadReader.seek();
             }
         }
         if (adaptationFieldExists) {
-            this.tsPacketBuffer.skipBytes(this.tsPacketBuffer.readUnsignedByte());
+            r0.tsPacketBuffer.skipBytes(r0.tsPacketBuffer.readUnsignedByte());
         }
-        this.tsPacketBuffer.setLimit(endOfPacket);
-        payloadReader.consume(this.tsPacketBuffer, payloadUnitStartIndicator);
-        this.tsPacketBuffer.setLimit(limit);
-        this.tsPacketBuffer.setPosition(endOfPacket);
+        r0.tsPacketBuffer.setLimit(endOfPacket);
+        payloadReader.consume(r0.tsPacketBuffer, payloadUnitStartIndicator);
+        r0.tsPacketBuffer.setLimit(bytesLeft);
+        r0.tsPacketBuffer.setPosition(endOfPacket);
         return 0;
     }
 

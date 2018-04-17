@@ -1829,6 +1829,7 @@
     <string name="common_open_on_phone">Auf Smartphone öffnen</string>
     <string name="common_signin_button_text">Anmelden</string>
     <string name="common_signin_button_text_long">Über Google anmelden</string>
+    <string name="fcm_fallback_notification_channel_label">Sonstiges</string>
     <string name="formatDateAtTime">%1$s um %2$s</string>
     <string name="formatterBannedUntil12H">dd MMM yyyy, h:mm a</string>
     <string name="formatterBannedUntil24H">dd MMM yyyy, HH:mm</string>
@@ -1843,7 +1844,6 @@
     <string name="formatterWeek">EEE</string>
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
-    <string name="gcm_fallback_notification_channel_label">Sonstiges</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">Die App</string>
     <string name="hockeyapp_crash_dialog_message">Möchten Sie einen anonymen Bericht senden, sodass wir das Problem beheben können?</string>
     <string name="hockeyapp_crash_dialog_negative_button">Nicht senden</string>

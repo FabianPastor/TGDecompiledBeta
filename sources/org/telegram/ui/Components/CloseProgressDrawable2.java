@@ -40,73 +40,87 @@ public class CloseProgressDrawable2 extends Drawable {
     }
 
     public void draw(Canvas canvas) {
+        float f;
+        Canvas canvas2 = canvas;
         long newTime = System.currentTimeMillis();
+        float f2 = 0.0f;
         if (this.lastFrameTime != 0) {
-            long dt = newTime - this.lastFrameTime;
-            if (this.animating || this.angle != 0.0f) {
-                this.angle += ((float) (360 * dt)) / 500.0f;
-                if (this.animating || this.angle < 720.0f) {
-                    this.angle -= (float) (((int) (this.angle / 720.0f)) * 720);
+            long dt = newTime - r0.lastFrameTime;
+            if (r0.animating || r0.angle != 0.0f) {
+                r0.angle += ((float) (360 * dt)) / 500.0f;
+                if (r0.animating || r0.angle < 720.0f) {
+                    r0.angle -= (float) (((int) (r0.angle / 720.0f)) * 720);
                 } else {
-                    this.angle = 0.0f;
+                    r0.angle = 0.0f;
                 }
                 invalidateSelf();
             }
         }
         canvas.save();
-        canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
-        canvas.rotate(-45.0f);
+        canvas2.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
+        canvas2.rotate(-45.0f);
         float progress1 = 1.0f;
         float progress2 = 1.0f;
         float progress3 = 1.0f;
         float progress4 = 0.0f;
-        if (this.angle >= 0.0f && this.angle < 90.0f) {
-            progress1 = 1.0f - (this.angle / 90.0f);
-        } else if (this.angle >= 90.0f && this.angle < 180.0f) {
+        if (r0.angle >= 0.0f && r0.angle < 90.0f) {
+            progress1 = 1.0f - (r0.angle / 90.0f);
+        } else if (r0.angle >= 90.0f && r0.angle < 180.0f) {
             progress1 = 0.0f;
-            progress2 = 1.0f - ((this.angle - 90.0f) / 90.0f);
-        } else if (this.angle >= 180.0f && this.angle < 270.0f) {
+            progress2 = 1.0f - ((r0.angle - 90.0f) / 90.0f);
+        } else if (r0.angle >= 180.0f && r0.angle < 270.0f) {
             progress2 = 0.0f;
             progress1 = 0.0f;
-            progress3 = 1.0f - ((this.angle - 180.0f) / 90.0f);
-        } else if (this.angle >= 270.0f && this.angle < 360.0f) {
+            progress3 = 1.0f - ((r0.angle - 180.0f) / 90.0f);
+        } else if (r0.angle >= 270.0f && r0.angle < 360.0f) {
             progress3 = 0.0f;
             progress2 = 0.0f;
             progress1 = 0.0f;
-            progress4 = (this.angle - 270.0f) / 90.0f;
-        } else if (this.angle >= 360.0f && this.angle < 450.0f) {
+            progress4 = (r0.angle - 270.0f) / 90.0f;
+        } else if (r0.angle >= 360.0f && r0.angle < 450.0f) {
             progress3 = 0.0f;
             progress2 = 0.0f;
             progress1 = 0.0f;
-            progress4 = 1.0f - ((this.angle - 360.0f) / 90.0f);
-        } else if (this.angle >= 450.0f && this.angle < 540.0f) {
+            progress4 = 1.0f - ((r0.angle - 360.0f) / 90.0f);
+        } else if (r0.angle >= 450.0f && r0.angle < 540.0f) {
             progress3 = 0.0f;
             progress2 = 0.0f;
-            progress1 = (this.angle - 450.0f) / 90.0f;
-        } else if (this.angle >= 540.0f && this.angle < 630.0f) {
+            progress1 = (r0.angle - 450.0f) / 90.0f;
+        } else if (r0.angle >= 540.0f && r0.angle < 630.0f) {
             progress3 = 0.0f;
-            progress2 = (this.angle - 540.0f) / 90.0f;
-        } else if (this.angle >= 630.0f && this.angle < 720.0f) {
-            progress3 = (this.angle - 630.0f) / 90.0f;
+            progress2 = (r0.angle - 540.0f) / 90.0f;
+        } else if (r0.angle >= 630.0f && r0.angle < 720.0f) {
+            progress3 = (r0.angle - 630.0f) / 90.0f;
         }
-        if (progress1 != 0.0f) {
-            canvas.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.dp(8.0f)) * progress1, this.paint);
+        float progress12 = progress1;
+        float progress22 = progress2;
+        float progress32 = progress3;
+        float progress42 = progress4;
+        if (progress12 != 0.0f) {
+            f = 8.0f;
+            canvas2.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.dp(8.0f)) * progress12, r0.paint);
+        } else {
+            f = 8.0f;
         }
-        if (progress2 != 0.0f) {
-            canvas.drawLine(((float) (-AndroidUtilities.dp(8.0f))) * progress2, 0.0f, 0.0f, 0.0f, this.paint);
+        if (progress22 != 0.0f) {
+            canvas2.drawLine(((float) (-AndroidUtilities.dp(f))) * progress22, 0.0f, 0.0f, 0.0f, r0.paint);
         }
-        if (progress3 != 0.0f) {
-            canvas.drawLine(0.0f, ((float) (-AndroidUtilities.dp(8.0f))) * progress3, 0.0f, 0.0f, this.paint);
+        if (progress32 != 0.0f) {
+            canvas2.drawLine(0.0f, ((float) (-AndroidUtilities.dp(f))) * progress32, 0.0f, 0.0f, r0.paint);
         }
-        if (progress4 != 1.0f) {
-            canvas.drawLine(((float) AndroidUtilities.dp(8.0f)) * progress4, 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
+        if (progress42 != 1.0f) {
+            canvas2.drawLine(((float) AndroidUtilities.dp(f)) * progress42, 0.0f, (float) AndroidUtilities.dp(f), 0.0f, r0.paint);
         }
         canvas.restore();
         int cx = getBounds().centerX();
         int cy = getBounds().centerY();
-        this.rect.set((float) (cx - AndroidUtilities.dp(8.0f)), (float) (cy - AndroidUtilities.dp(8.0f)), (float) (AndroidUtilities.dp(8.0f) + cx), (float) (AndroidUtilities.dp(8.0f) + cy));
-        canvas.drawArc(this.rect, (this.angle < 360.0f ? 0.0f : this.angle - 360.0f) - 45.0f, this.angle < 360.0f ? this.angle : 720.0f - this.angle, false, this.paint);
-        this.lastFrameTime = newTime;
+        r0.rect.set((float) (cx - AndroidUtilities.dp(f)), (float) (cy - AndroidUtilities.dp(f)), (float) (AndroidUtilities.dp(f) + cx), (float) (cy + AndroidUtilities.dp(f)));
+        RectF rectF = r0.rect;
+        if (r0.angle >= 360.0f) {
+            f2 = r0.angle - 360.0f;
+        }
+        canvas2.drawArc(rectF, f2 - 45.0f, r0.angle < 360.0f ? r0.angle : 720.0f - r0.angle, false, r0.paint);
+        r0.lastFrameTime = newTime;
     }
 
     public void setAlpha(int alpha) {

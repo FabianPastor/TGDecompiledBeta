@@ -34,44 +34,39 @@ public class ID3v2TagBody {
 
     public ID3v2FrameBody frameBody(ID3v2FrameHeader frameHeader) throws IOException, ID3v2Exception {
         int dataLength = frameHeader.getBodySize();
-        InputStream inputStream = this.input;
+        InputStream input = this.input;
         if (frameHeader.isUnsynchronization()) {
             byte[] bytes = this.data.readFully(frameHeader.getBodySize());
-            boolean ff = false;
-            int length = bytes.length;
-            int i = 0;
             int len = 0;
-            while (i < length) {
-                int len2;
-                byte b = bytes[i];
-                if (ff && b == (byte) 0) {
-                    len2 = len;
-                } else {
-                    len2 = len + 1;
+            boolean ff = false;
+            for (byte b : bytes) {
+                if (!(ff && b == (byte) 0)) {
+                    int len2 = len + 1;
                     bytes[len] = b;
+                    len = len2;
                 }
-                if (b == (byte) -1) {
-                    ff = true;
-                } else {
-                    ff = false;
-                }
-                i++;
-                len = len2;
+                ff = b == (byte) -1;
             }
             dataLength = len;
-            inputStream = new ByteArrayInputStream(bytes, 0, len);
+            input = new ByteArrayInputStream(bytes, 0, len);
         }
         if (frameHeader.isEncryption()) {
             throw new ID3v2Exception("Frame encryption is not supported");
         }
         if (frameHeader.isCompression()) {
             dataLength = frameHeader.getDataLengthIndicator();
-            inputStream = new InflaterInputStream(inputStream);
+            input = new InflaterInputStream(input);
         }
-        return new ID3v2FrameBody(inputStream, (long) frameHeader.getHeaderSize(), dataLength, this.tagHeader, frameHeader);
+        return new ID3v2FrameBody(input, (long) frameHeader.getHeaderSize(), dataLength, this.tagHeader, frameHeader);
     }
 
     public String toString() {
-        return "id3v2tag[pos=" + getPosition() + ", " + getRemainingLength() + " left]";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("id3v2tag[pos=");
+        stringBuilder.append(getPosition());
+        stringBuilder.append(", ");
+        stringBuilder.append(getRemainingLength());
+        stringBuilder.append(" left]");
+        return stringBuilder.toString();
     }
 }

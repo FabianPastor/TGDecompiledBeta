@@ -130,6 +130,7 @@ public class DataUsageActivity extends BaseFragment {
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
+            boolean z = false;
             switch (holder.getItemViewType()) {
                 case 0:
                     if (position == DataUsageActivity.this.resetSection2Row) {
@@ -148,33 +149,249 @@ public class DataUsageActivity extends BaseFragment {
                         return;
                     }
                     int type;
+                    int total;
+                    int hours;
+                    String time;
+                    String string;
+                    String formatFileSize;
                     textCell.setTag(Theme.key_windowBackgroundWhiteBlackText);
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                    if (position == DataUsageActivity.this.callsSentRow || position == DataUsageActivity.this.callsReceivedRow || position == DataUsageActivity.this.callsBytesSentRow || position == DataUsageActivity.this.callsBytesReceivedRow) {
-                        type = 0;
-                    } else if (position == DataUsageActivity.this.messagesSentRow || position == DataUsageActivity.this.messagesReceivedRow || position == DataUsageActivity.this.messagesBytesSentRow || position == DataUsageActivity.this.messagesBytesReceivedRow) {
-                        type = 1;
-                    } else if (position == DataUsageActivity.this.photosSentRow || position == DataUsageActivity.this.photosReceivedRow || position == DataUsageActivity.this.photosBytesSentRow || position == DataUsageActivity.this.photosBytesReceivedRow) {
-                        type = 4;
-                    } else if (position == DataUsageActivity.this.audiosSentRow || position == DataUsageActivity.this.audiosReceivedRow || position == DataUsageActivity.this.audiosBytesSentRow || position == DataUsageActivity.this.audiosBytesReceivedRow) {
-                        type = 3;
-                    } else if (position == DataUsageActivity.this.videosSentRow || position == DataUsageActivity.this.videosReceivedRow || position == DataUsageActivity.this.videosBytesSentRow || position == DataUsageActivity.this.videosBytesReceivedRow) {
-                        type = 2;
-                    } else if (position == DataUsageActivity.this.filesSentRow || position == DataUsageActivity.this.filesReceivedRow || position == DataUsageActivity.this.filesBytesSentRow || position == DataUsageActivity.this.filesBytesReceivedRow) {
-                        type = 5;
-                    } else {
-                        type = 6;
+                    if (!(position == DataUsageActivity.this.callsSentRow || position == DataUsageActivity.this.callsReceivedRow || position == DataUsageActivity.this.callsBytesSentRow)) {
+                        if (position != DataUsageActivity.this.callsBytesReceivedRow) {
+                            if (!(position == DataUsageActivity.this.messagesSentRow || position == DataUsageActivity.this.messagesReceivedRow || position == DataUsageActivity.this.messagesBytesSentRow)) {
+                                if (position != DataUsageActivity.this.messagesBytesReceivedRow) {
+                                    if (!(position == DataUsageActivity.this.photosSentRow || position == DataUsageActivity.this.photosReceivedRow || position == DataUsageActivity.this.photosBytesSentRow)) {
+                                        if (position != DataUsageActivity.this.photosBytesReceivedRow) {
+                                            if (!(position == DataUsageActivity.this.audiosSentRow || position == DataUsageActivity.this.audiosReceivedRow || position == DataUsageActivity.this.audiosBytesSentRow)) {
+                                                if (position != DataUsageActivity.this.audiosBytesReceivedRow) {
+                                                    if (!(position == DataUsageActivity.this.videosSentRow || position == DataUsageActivity.this.videosReceivedRow || position == DataUsageActivity.this.videosBytesSentRow)) {
+                                                        if (position != DataUsageActivity.this.videosBytesReceivedRow) {
+                                                            if (!(position == DataUsageActivity.this.filesSentRow || position == DataUsageActivity.this.filesReceivedRow || position == DataUsageActivity.this.filesBytesSentRow)) {
+                                                                if (position != DataUsageActivity.this.filesBytesReceivedRow) {
+                                                                    type = 6;
+                                                                    if (position != DataUsageActivity.this.callsSentRow) {
+                                                                        textCell.setTextAndValue(LocaleController.getString("OutgoingCalls", R.string.OutgoingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                                    } else if (position != DataUsageActivity.this.callsReceivedRow) {
+                                                                        textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                                    } else if (position == DataUsageActivity.this.callsTotalTimeRow) {
+                                                                        total = StatsController.getInstance(DataUsageActivity.this.currentAccount).getCallsTotalTime(DataUsageActivity.this.currentType);
+                                                                        hours = total / 3600;
+                                                                        total -= hours * 3600;
+                                                                        total -= (total / 60) * 60;
+                                                                        if (hours != 0) {
+                                                                            time = String.format("%d:%02d:%02d", new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf(total)});
+                                                                        } else {
+                                                                            time = String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(total)});
+                                                                        }
+                                                                        textCell.setTextAndValue(LocaleController.getString("CallsTotalTime", R.string.CallsTotalTime), time, false);
+                                                                    } else {
+                                                                        if (!(position == DataUsageActivity.this.messagesSentRow || position == DataUsageActivity.this.photosSentRow || position == DataUsageActivity.this.videosSentRow || position == DataUsageActivity.this.audiosSentRow)) {
+                                                                            if (position != DataUsageActivity.this.filesSentRow) {
+                                                                                if (!(position == DataUsageActivity.this.messagesReceivedRow || position == DataUsageActivity.this.photosReceivedRow || position == DataUsageActivity.this.videosReceivedRow || position == DataUsageActivity.this.audiosReceivedRow)) {
+                                                                                    if (position != DataUsageActivity.this.filesReceivedRow) {
+                                                                                        if (!(position == DataUsageActivity.this.messagesBytesSentRow || position == DataUsageActivity.this.photosBytesSentRow || position == DataUsageActivity.this.videosBytesSentRow || position == DataUsageActivity.this.audiosBytesSentRow || position == DataUsageActivity.this.filesBytesSentRow || position == DataUsageActivity.this.callsBytesSentRow)) {
+                                                                                            if (position != DataUsageActivity.this.totalBytesSentRow) {
+                                                                                                if (position == DataUsageActivity.this.messagesBytesReceivedRow || position == DataUsageActivity.this.photosBytesReceivedRow || position == DataUsageActivity.this.videosBytesReceivedRow || position == DataUsageActivity.this.audiosBytesReceivedRow || position == DataUsageActivity.this.filesBytesReceivedRow || position == DataUsageActivity.this.callsBytesReceivedRow || position == DataUsageActivity.this.totalBytesReceivedRow) {
+                                                                                                    string = LocaleController.getString("BytesReceived", R.string.BytesReceived);
+                                                                                                    formatFileSize = AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(DataUsageActivity.this.currentType, type));
+                                                                                                    if (position != DataUsageActivity.this.totalBytesReceivedRow) {
+                                                                                                        z = true;
+                                                                                                    }
+                                                                                                    textCell.setTextAndValue(string, formatFileSize, z);
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                        textCell.setTextAndValue(LocaleController.getString("BytesSent", R.string.BytesSent), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentBytesCount(DataUsageActivity.this.currentType, type)), true);
+                                                                                    }
+                                                                                }
+                                                                                textCell.setTextAndValue(LocaleController.getString("CountReceived", R.string.CountReceived), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                                            }
+                                                                        }
+                                                                        textCell.setTextAndValue(LocaleController.getString("CountSent", R.string.CountSent), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                                    }
+                                                                    return;
+                                                                }
+                                                            }
+                                                            type = 5;
+                                                            if (position != DataUsageActivity.this.callsSentRow) {
+                                                                textCell.setTextAndValue(LocaleController.getString("OutgoingCalls", R.string.OutgoingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                            } else if (position != DataUsageActivity.this.callsReceivedRow) {
+                                                                textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                            } else if (position == DataUsageActivity.this.callsTotalTimeRow) {
+                                                                if (position != DataUsageActivity.this.filesSentRow) {
+                                                                    if (position != DataUsageActivity.this.filesReceivedRow) {
+                                                                        if (position != DataUsageActivity.this.totalBytesSentRow) {
+                                                                            string = LocaleController.getString("BytesReceived", R.string.BytesReceived);
+                                                                            formatFileSize = AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(DataUsageActivity.this.currentType, type));
+                                                                            if (position != DataUsageActivity.this.totalBytesReceivedRow) {
+                                                                                z = true;
+                                                                            }
+                                                                            textCell.setTextAndValue(string, formatFileSize, z);
+                                                                        } else {
+                                                                            textCell.setTextAndValue(LocaleController.getString("BytesSent", R.string.BytesSent), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentBytesCount(DataUsageActivity.this.currentType, type)), true);
+                                                                        }
+                                                                        break;
+                                                                    }
+                                                                    textCell.setTextAndValue(LocaleController.getString("CountReceived", R.string.CountReceived), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                                    break;
+                                                                }
+                                                                textCell.setTextAndValue(LocaleController.getString("CountSent", R.string.CountSent), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                                break;
+                                                            } else {
+                                                                total = StatsController.getInstance(DataUsageActivity.this.currentAccount).getCallsTotalTime(DataUsageActivity.this.currentType);
+                                                                hours = total / 3600;
+                                                                total -= hours * 3600;
+                                                                total -= (total / 60) * 60;
+                                                                if (hours != 0) {
+                                                                    time = String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(total)});
+                                                                } else {
+                                                                    time = String.format("%d:%02d:%02d", new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf(total)});
+                                                                }
+                                                                textCell.setTextAndValue(LocaleController.getString("CallsTotalTime", R.string.CallsTotalTime), time, false);
+                                                            }
+                                                            return;
+                                                        }
+                                                    }
+                                                    type = 2;
+                                                    if (position != DataUsageActivity.this.callsSentRow) {
+                                                        textCell.setTextAndValue(LocaleController.getString("OutgoingCalls", R.string.OutgoingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                    } else if (position != DataUsageActivity.this.callsReceivedRow) {
+                                                        textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                    } else if (position == DataUsageActivity.this.callsTotalTimeRow) {
+                                                        total = StatsController.getInstance(DataUsageActivity.this.currentAccount).getCallsTotalTime(DataUsageActivity.this.currentType);
+                                                        hours = total / 3600;
+                                                        total -= hours * 3600;
+                                                        total -= (total / 60) * 60;
+                                                        if (hours != 0) {
+                                                            time = String.format("%d:%02d:%02d", new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf(total)});
+                                                        } else {
+                                                            time = String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(total)});
+                                                        }
+                                                        textCell.setTextAndValue(LocaleController.getString("CallsTotalTime", R.string.CallsTotalTime), time, false);
+                                                    } else if (position != DataUsageActivity.this.filesSentRow) {
+                                                        textCell.setTextAndValue(LocaleController.getString("CountSent", R.string.CountSent), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                    } else if (position != DataUsageActivity.this.filesReceivedRow) {
+                                                        textCell.setTextAndValue(LocaleController.getString("CountReceived", R.string.CountReceived), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                                    } else if (position != DataUsageActivity.this.totalBytesSentRow) {
+                                                        textCell.setTextAndValue(LocaleController.getString("BytesSent", R.string.BytesSent), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentBytesCount(DataUsageActivity.this.currentType, type)), true);
+                                                    } else {
+                                                        string = LocaleController.getString("BytesReceived", R.string.BytesReceived);
+                                                        formatFileSize = AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(DataUsageActivity.this.currentType, type));
+                                                        if (position != DataUsageActivity.this.totalBytesReceivedRow) {
+                                                            z = true;
+                                                        }
+                                                        textCell.setTextAndValue(string, formatFileSize, z);
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                            type = 3;
+                                            if (position != DataUsageActivity.this.callsSentRow) {
+                                                textCell.setTextAndValue(LocaleController.getString("OutgoingCalls", R.string.OutgoingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                            } else if (position != DataUsageActivity.this.callsReceivedRow) {
+                                                textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                            } else if (position == DataUsageActivity.this.callsTotalTimeRow) {
+                                                total = StatsController.getInstance(DataUsageActivity.this.currentAccount).getCallsTotalTime(DataUsageActivity.this.currentType);
+                                                hours = total / 3600;
+                                                total -= hours * 3600;
+                                                total -= (total / 60) * 60;
+                                                if (hours != 0) {
+                                                    time = String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(total)});
+                                                } else {
+                                                    time = String.format("%d:%02d:%02d", new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf(total)});
+                                                }
+                                                textCell.setTextAndValue(LocaleController.getString("CallsTotalTime", R.string.CallsTotalTime), time, false);
+                                            } else if (position != DataUsageActivity.this.filesSentRow) {
+                                                textCell.setTextAndValue(LocaleController.getString("CountSent", R.string.CountSent), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                            } else if (position != DataUsageActivity.this.filesReceivedRow) {
+                                                textCell.setTextAndValue(LocaleController.getString("CountReceived", R.string.CountReceived), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                            } else if (position != DataUsageActivity.this.totalBytesSentRow) {
+                                                string = LocaleController.getString("BytesReceived", R.string.BytesReceived);
+                                                formatFileSize = AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(DataUsageActivity.this.currentType, type));
+                                                if (position != DataUsageActivity.this.totalBytesReceivedRow) {
+                                                    z = true;
+                                                }
+                                                textCell.setTextAndValue(string, formatFileSize, z);
+                                            } else {
+                                                textCell.setTextAndValue(LocaleController.getString("BytesSent", R.string.BytesSent), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentBytesCount(DataUsageActivity.this.currentType, type)), true);
+                                            }
+                                            return;
+                                        }
+                                    }
+                                    type = 4;
+                                    if (position != DataUsageActivity.this.callsSentRow) {
+                                        textCell.setTextAndValue(LocaleController.getString("OutgoingCalls", R.string.OutgoingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                    } else if (position != DataUsageActivity.this.callsReceivedRow) {
+                                        textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                    } else if (position == DataUsageActivity.this.callsTotalTimeRow) {
+                                        total = StatsController.getInstance(DataUsageActivity.this.currentAccount).getCallsTotalTime(DataUsageActivity.this.currentType);
+                                        hours = total / 3600;
+                                        total -= hours * 3600;
+                                        total -= (total / 60) * 60;
+                                        if (hours != 0) {
+                                            time = String.format("%d:%02d:%02d", new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf(total)});
+                                        } else {
+                                            time = String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(total)});
+                                        }
+                                        textCell.setTextAndValue(LocaleController.getString("CallsTotalTime", R.string.CallsTotalTime), time, false);
+                                    } else if (position != DataUsageActivity.this.filesSentRow) {
+                                        textCell.setTextAndValue(LocaleController.getString("CountSent", R.string.CountSent), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                    } else if (position != DataUsageActivity.this.filesReceivedRow) {
+                                        textCell.setTextAndValue(LocaleController.getString("CountReceived", R.string.CountReceived), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                                    } else if (position != DataUsageActivity.this.totalBytesSentRow) {
+                                        textCell.setTextAndValue(LocaleController.getString("BytesSent", R.string.BytesSent), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentBytesCount(DataUsageActivity.this.currentType, type)), true);
+                                    } else {
+                                        string = LocaleController.getString("BytesReceived", R.string.BytesReceived);
+                                        formatFileSize = AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(DataUsageActivity.this.currentType, type));
+                                        if (position != DataUsageActivity.this.totalBytesReceivedRow) {
+                                            z = true;
+                                        }
+                                        textCell.setTextAndValue(string, formatFileSize, z);
+                                    }
+                                    return;
+                                }
+                            }
+                            type = 1;
+                            if (position != DataUsageActivity.this.callsSentRow) {
+                                textCell.setTextAndValue(LocaleController.getString("OutgoingCalls", R.string.OutgoingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                            } else if (position != DataUsageActivity.this.callsReceivedRow) {
+                                textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                            } else if (position == DataUsageActivity.this.callsTotalTimeRow) {
+                                total = StatsController.getInstance(DataUsageActivity.this.currentAccount).getCallsTotalTime(DataUsageActivity.this.currentType);
+                                hours = total / 3600;
+                                total -= hours * 3600;
+                                total -= (total / 60) * 60;
+                                if (hours != 0) {
+                                    time = String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(total)});
+                                } else {
+                                    time = String.format("%d:%02d:%02d", new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf(total)});
+                                }
+                                textCell.setTextAndValue(LocaleController.getString("CallsTotalTime", R.string.CallsTotalTime), time, false);
+                            } else if (position != DataUsageActivity.this.filesSentRow) {
+                                textCell.setTextAndValue(LocaleController.getString("CountSent", R.string.CountSent), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                            } else if (position != DataUsageActivity.this.filesReceivedRow) {
+                                textCell.setTextAndValue(LocaleController.getString("CountReceived", R.string.CountReceived), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                            } else if (position != DataUsageActivity.this.totalBytesSentRow) {
+                                string = LocaleController.getString("BytesReceived", R.string.BytesReceived);
+                                formatFileSize = AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(DataUsageActivity.this.currentType, type));
+                                if (position != DataUsageActivity.this.totalBytesReceivedRow) {
+                                    z = true;
+                                }
+                                textCell.setTextAndValue(string, formatFileSize, z);
+                            } else {
+                                textCell.setTextAndValue(LocaleController.getString("BytesSent", R.string.BytesSent), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentBytesCount(DataUsageActivity.this.currentType, type)), true);
+                            }
+                            return;
+                        }
                     }
-                    if (position == DataUsageActivity.this.callsSentRow) {
+                    type = 0;
+                    if (position != DataUsageActivity.this.callsSentRow) {
                         textCell.setTextAndValue(LocaleController.getString("OutgoingCalls", R.string.OutgoingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
-                        return;
-                    } else if (position == DataUsageActivity.this.callsReceivedRow) {
+                    } else if (position != DataUsageActivity.this.callsReceivedRow) {
                         textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
-                        return;
                     } else if (position == DataUsageActivity.this.callsTotalTimeRow) {
-                        String time;
-                        int total = StatsController.getInstance(DataUsageActivity.this.currentAccount).getCallsTotalTime(DataUsageActivity.this.currentType);
-                        int hours = total / 3600;
+                        total = StatsController.getInstance(DataUsageActivity.this.currentAccount).getCallsTotalTime(DataUsageActivity.this.currentType);
+                        hours = total / 3600;
                         total -= hours * 3600;
                         total -= (total / 60) * 60;
                         if (hours != 0) {
@@ -183,22 +400,21 @@ public class DataUsageActivity extends BaseFragment {
                             time = String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(total)});
                         }
                         textCell.setTextAndValue(LocaleController.getString("CallsTotalTime", R.string.CallsTotalTime), time, false);
-                        return;
-                    } else if (position == DataUsageActivity.this.messagesSentRow || position == DataUsageActivity.this.photosSentRow || position == DataUsageActivity.this.videosSentRow || position == DataUsageActivity.this.audiosSentRow || position == DataUsageActivity.this.filesSentRow) {
+                    } else if (position != DataUsageActivity.this.filesSentRow) {
                         textCell.setTextAndValue(LocaleController.getString("CountSent", R.string.CountSent), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
-                        return;
-                    } else if (position == DataUsageActivity.this.messagesReceivedRow || position == DataUsageActivity.this.photosReceivedRow || position == DataUsageActivity.this.videosReceivedRow || position == DataUsageActivity.this.audiosReceivedRow || position == DataUsageActivity.this.filesReceivedRow) {
+                    } else if (position != DataUsageActivity.this.filesReceivedRow) {
                         textCell.setTextAndValue(LocaleController.getString("CountReceived", R.string.CountReceived), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
-                        return;
-                    } else if (position == DataUsageActivity.this.messagesBytesSentRow || position == DataUsageActivity.this.photosBytesSentRow || position == DataUsageActivity.this.videosBytesSentRow || position == DataUsageActivity.this.audiosBytesSentRow || position == DataUsageActivity.this.filesBytesSentRow || position == DataUsageActivity.this.callsBytesSentRow || position == DataUsageActivity.this.totalBytesSentRow) {
+                    } else if (position != DataUsageActivity.this.totalBytesSentRow) {
                         textCell.setTextAndValue(LocaleController.getString("BytesSent", R.string.BytesSent), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentBytesCount(DataUsageActivity.this.currentType, type)), true);
-                        return;
-                    } else if (position == DataUsageActivity.this.messagesBytesReceivedRow || position == DataUsageActivity.this.photosBytesReceivedRow || position == DataUsageActivity.this.videosBytesReceivedRow || position == DataUsageActivity.this.audiosBytesReceivedRow || position == DataUsageActivity.this.filesBytesReceivedRow || position == DataUsageActivity.this.callsBytesReceivedRow || position == DataUsageActivity.this.totalBytesReceivedRow) {
-                        textCell.setTextAndValue(LocaleController.getString("BytesReceived", R.string.BytesReceived), AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(DataUsageActivity.this.currentType, type)), position != DataUsageActivity.this.totalBytesReceivedRow);
-                        return;
                     } else {
-                        return;
+                        string = LocaleController.getString("BytesReceived", R.string.BytesReceived);
+                        formatFileSize = AndroidUtilities.formatFileSize(StatsController.getInstance(DataUsageActivity.this.currentAccount).getReceivedBytesCount(DataUsageActivity.this.currentType, type));
+                        if (position != DataUsageActivity.this.totalBytesReceivedRow) {
+                            z = true;
+                        }
+                        textCell.setTextAndValue(string, formatFileSize, z);
                     }
+                    return;
                 case 2:
                     HeaderCell headerCell = holder.itemView;
                     if (position == DataUsageActivity.this.totalSectionRow) {
@@ -256,6 +472,8 @@ public class DataUsageActivity extends BaseFragment {
                 case 3:
                     view = new TextInfoPrivacyCell(this.mContext);
                     break;
+                default:
+                    break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
             return new Holder(view);
@@ -265,13 +483,17 @@ public class DataUsageActivity extends BaseFragment {
             if (position == DataUsageActivity.this.resetSection2Row) {
                 return 3;
             }
-            if (position == DataUsageActivity.this.resetSection2Row || position == DataUsageActivity.this.callsSection2Row || position == DataUsageActivity.this.filesSection2Row || position == DataUsageActivity.this.audiosSection2Row || position == DataUsageActivity.this.videosSection2Row || position == DataUsageActivity.this.photosSection2Row || position == DataUsageActivity.this.messagesSection2Row || position == DataUsageActivity.this.totalSection2Row) {
-                return 0;
+            if (!(position == DataUsageActivity.this.resetSection2Row || position == DataUsageActivity.this.callsSection2Row || position == DataUsageActivity.this.filesSection2Row || position == DataUsageActivity.this.audiosSection2Row || position == DataUsageActivity.this.videosSection2Row || position == DataUsageActivity.this.photosSection2Row || position == DataUsageActivity.this.messagesSection2Row)) {
+                if (position != DataUsageActivity.this.totalSection2Row) {
+                    if (!(position == DataUsageActivity.this.totalSectionRow || position == DataUsageActivity.this.callsSectionRow || position == DataUsageActivity.this.filesSectionRow || position == DataUsageActivity.this.audiosSectionRow || position == DataUsageActivity.this.videosSectionRow || position == DataUsageActivity.this.photosSectionRow)) {
+                        if (position != DataUsageActivity.this.messagesSectionRow) {
+                            return 1;
+                        }
+                    }
+                    return 2;
+                }
             }
-            if (position == DataUsageActivity.this.totalSectionRow || position == DataUsageActivity.this.callsSectionRow || position == DataUsageActivity.this.filesSectionRow || position == DataUsageActivity.this.audiosSectionRow || position == DataUsageActivity.this.videosSectionRow || position == DataUsageActivity.this.photosSectionRow || position == DataUsageActivity.this.messagesSectionRow) {
-                return 2;
-            }
-            return 1;
+            return 0;
         }
     }
 
@@ -443,23 +665,23 @@ public class DataUsageActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r9 = new ThemeDescription[16];
-        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, HeaderCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
-        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
-        r9[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        r9[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
-        r9[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        r9[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        r9[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        r9[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
-        r9[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        r9[12] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
-        r9[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r9[14] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
-        r9[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteRedText2);
-        return r9;
+        r1 = new ThemeDescription[16];
+        r1[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, HeaderCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r1[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r1[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r1[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r1[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r1[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r1[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r1[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r1[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r1[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r1[10] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
+        r1[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r1[12] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        r1[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r1[14] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
+        r1[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteRedText2);
+        return r1;
     }
 }

@@ -23,11 +23,12 @@ public class GroupCreateDividerItemDecoration extends ItemDecoration {
     }
 
     public void onDraw(Canvas canvas, RecyclerView parent, State state) {
+        RecyclerView recyclerView = parent;
         int width = parent.getWidth();
-        int childCount = parent.getChildCount() - (this.single ? 0 : 1);
+        int childCount = parent.getChildCount() - (this.single ^ 1);
         for (int i = 0; i < childCount; i++) {
-            View child = parent.getChildAt(i);
-            int position = parent.getChildAdapterPosition(child);
+            View child = recyclerView.getChildAt(i);
+            int position = recyclerView.getChildAdapterPosition(child);
             int top = child.getBottom();
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), (float) top, (float) (width - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), (float) top, Theme.dividerPaint);
         }

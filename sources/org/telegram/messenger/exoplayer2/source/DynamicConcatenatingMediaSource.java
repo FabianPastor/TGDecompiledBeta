@@ -126,7 +126,7 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
 
         public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
             if (this.timeline != null) {
-                return this.timeline.getWindow(windowIndex, window, setIds, defaultPositionProjectionUs);
+                return r0.timeline.getWindow(windowIndex, window, setIds, defaultPositionProjectionUs);
             }
             return window.set(setIds ? DUMMY_ID : null, C0539C.TIME_UNSET, C0539C.TIME_UNSET, false, true, 0, C0539C.TIME_UNSET, 0, 0, 0);
         }
@@ -136,24 +136,18 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
         }
 
         public Period getPeriod(int periodIndex, Period period, boolean setIds) {
-            Object obj = null;
             if (this.timeline == null) {
-                Object obj2;
-                if (setIds) {
-                    obj2 = DUMMY_ID;
-                } else {
-                    obj2 = null;
-                }
+                Object obj = null;
+                Object obj2 = setIds ? DUMMY_ID : null;
                 if (setIds) {
                     obj = DUMMY_ID;
                 }
                 return period.set(obj2, obj, 0, C0539C.TIME_UNSET, C0539C.TIME_UNSET);
             }
             this.timeline.getPeriod(periodIndex, period, setIds);
-            if (period.uid != this.replacedID) {
-                return period;
+            if (period.uid == this.replacedID) {
+                period.uid = DUMMY_ID;
             }
-            period.uid = DUMMY_ID;
             return period;
         }
 
@@ -161,11 +155,14 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
             if (this.timeline == null) {
                 return uid == DUMMY_ID ? 0 : -1;
             } else {
+                Object obj;
                 Timeline timeline = this.timeline;
                 if (uid == DUMMY_ID) {
-                    uid = this.replacedID;
+                    obj = this.replacedID;
+                } else {
+                    obj = uid;
                 }
-                return timeline.getIndexOfPeriod(uid);
+                return timeline.getIndexOfPeriod(obj);
             }
         }
     }
@@ -209,14 +206,15 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
         }
 
         protected int getChildIndexByChildUid(Object childUid) {
+            int i = -1;
             if (!(childUid instanceof Integer)) {
                 return -1;
             }
             int index = this.childIndexByUid.get(((Integer) childUid).intValue(), -1);
-            if (index == -1) {
-                index = -1;
+            if (index != -1) {
+                i = index;
             }
-            return index;
+            return i;
         }
 
         protected Timeline getTimelineByChildIndex(int childIndex) {
@@ -270,19 +268,13 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
     }
 
     public synchronized void addMediaSource(int index, MediaSource mediaSource, Runnable actionOnCompletion) {
-        boolean z = false;
-        synchronized (this) {
-            Assertions.checkNotNull(mediaSource);
-            if (!this.mediaSourcesPublic.contains(mediaSource)) {
-                z = true;
-            }
-            Assertions.checkArgument(z);
-            this.mediaSourcesPublic.add(index, mediaSource);
-            if (this.player != null) {
-                this.player.createMessage(this).setType(0).setPayload(new MessageData(index, mediaSource, actionOnCompletion)).send();
-            } else if (actionOnCompletion != null) {
-                actionOnCompletion.run();
-            }
+        Assertions.checkNotNull(mediaSource);
+        Assertions.checkArgument(this.mediaSourcesPublic.contains(mediaSource) ^ 1);
+        this.mediaSourcesPublic.add(index, mediaSource);
+        if (this.player != null) {
+            this.player.createMessage(this).setType(0).setPayload(new MessageData(index, mediaSource, actionOnCompletion)).send();
+        } else if (actionOnCompletion != null) {
+            actionOnCompletion.run();
         }
     }
 
@@ -301,7 +293,7 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
     public synchronized void addMediaSources(int index, Collection<MediaSource> mediaSources, Runnable actionOnCompletion) {
         for (MediaSource mediaSource : mediaSources) {
             Assertions.checkNotNull(mediaSource);
-            Assertions.checkArgument(!this.mediaSourcesPublic.contains(mediaSource));
+            Assertions.checkArgument(true ^ this.mediaSourcesPublic.contains(mediaSource));
         }
         this.mediaSourcesPublic.addAll(index, mediaSources);
         if (this.player != null && !mediaSources.isEmpty()) {
@@ -328,6 +320,8 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
         moveMediaSource(currentIndex, newIndex, null);
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public synchronized void moveMediaSource(int currentIndex, int newIndex, Runnable actionOnCompletion) {
         if (currentIndex != newIndex) {
             this.mediaSourcesPublic.add(newIndex, this.mediaSourcesPublic.remove(currentIndex));
@@ -348,20 +342,14 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
     }
 
     public synchronized void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
-        boolean z = true;
-        synchronized (this) {
-            if (this.listener != null) {
-                z = false;
-            }
-            Assertions.checkState(z, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
-            this.player = player;
-            this.listener = listener;
-            this.preventListenerNotification = true;
-            this.shuffleOrder = this.shuffleOrder.cloneAndInsert(0, this.mediaSourcesPublic.size());
-            addMediaSourcesInternal(0, this.mediaSourcesPublic);
-            this.preventListenerNotification = false;
-            maybeNotifyListener(null);
-        }
+        Assertions.checkState(this.listener == null, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+        this.player = player;
+        this.listener = listener;
+        this.preventListenerNotification = true;
+        this.shuffleOrder = this.shuffleOrder.cloneAndInsert(0, this.mediaSourcesPublic.size());
+        addMediaSourcesInternal(0, this.mediaSourcesPublic);
+        this.preventListenerNotification = false;
+        maybeNotifyListener(null);
     }
 
     public void maybeThrowSourceInfoRefreshError() throws IOException {
@@ -407,6 +395,7 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
             return;
         }
         EventDispatcher actionOnCompletion;
+        EventDispatcher actionOnCompletion2;
         this.preventListenerNotification = true;
         switch (messageType) {
             case 0:
@@ -419,13 +408,13 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
                 MessageData<Collection<MediaSource>> messageData2 = (MessageData) message;
                 this.shuffleOrder = this.shuffleOrder.cloneAndInsert(messageData2.index, ((Collection) messageData2.customData).size());
                 addMediaSourcesInternal(messageData2.index, (Collection) messageData2.customData);
-                actionOnCompletion = messageData2.actionOnCompletion;
+                actionOnCompletion2 = messageData2.actionOnCompletion;
                 break;
             case 2:
                 MessageData<Void> messageData3 = (MessageData) message;
                 this.shuffleOrder = this.shuffleOrder.cloneAndRemove(messageData3.index);
                 removeMediaSourceInternal(messageData3.index);
-                actionOnCompletion = messageData3.actionOnCompletion;
+                actionOnCompletion2 = messageData3.actionOnCompletion;
                 break;
             case 3:
                 MessageData<Integer> messageData4 = (MessageData) message;
@@ -437,6 +426,7 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
             default:
                 throw new IllegalStateException();
         }
+        actionOnCompletion = actionOnCompletion2;
         this.preventListenerNotification = false;
         maybeNotifyListener(actionOnCompletion);
     }
@@ -452,11 +442,11 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
 
     private void addMediaSourceInternal(int newIndex, MediaSource newMediaSource) {
         MediaSourceHolder newMediaSourceHolder;
-        Integer newUid = Integer.valueOf(System.identityHashCode(newMediaSource));
+        Object newUid = Integer.valueOf(System.identityHashCode(newMediaSource));
         DeferredTimeline newTimeline = new DeferredTimeline();
         if (newIndex > 0) {
             MediaSourceHolder previousHolder = (MediaSourceHolder) this.mediaSourceHolders.get(newIndex - 1);
-            newMediaSourceHolder = new MediaSourceHolder(newMediaSource, newTimeline, previousHolder.timeline.getWindowCount() + previousHolder.firstWindowIndexInChild, previousHolder.timeline.getPeriodCount() + previousHolder.firstPeriodIndexInChild, newUid);
+            newMediaSourceHolder = new MediaSourceHolder(newMediaSource, newTimeline, previousHolder.firstWindowIndexInChild + previousHolder.timeline.getWindowCount(), previousHolder.firstPeriodIndexInChild + previousHolder.timeline.getPeriodCount(), newUid);
         } else {
             newMediaSourceHolder = new MediaSourceHolder(newMediaSource, newTimeline, 0, 0, newUid);
         }
@@ -516,12 +506,14 @@ public final class DynamicConcatenatingMediaSource implements Target, MediaSourc
         int windowOffset = ((MediaSourceHolder) this.mediaSourceHolders.get(startIndex)).firstWindowIndexInChild;
         int periodOffset = ((MediaSourceHolder) this.mediaSourceHolders.get(startIndex)).firstPeriodIndexInChild;
         this.mediaSourceHolders.add(newIndex, this.mediaSourceHolders.remove(currentIndex));
-        for (int i = startIndex; i <= endIndex; i++) {
-            MediaSourceHolder holder = (MediaSourceHolder) this.mediaSourceHolders.get(i);
-            holder.firstWindowIndexInChild = windowOffset;
-            holder.firstPeriodIndexInChild = periodOffset;
-            windowOffset += holder.timeline.getWindowCount();
-            periodOffset += holder.timeline.getPeriodCount();
+        int periodOffset2 = periodOffset;
+        periodOffset = windowOffset;
+        for (windowOffset = startIndex; windowOffset <= endIndex; windowOffset++) {
+            MediaSourceHolder holder = (MediaSourceHolder) this.mediaSourceHolders.get(windowOffset);
+            holder.firstWindowIndexInChild = periodOffset;
+            holder.firstPeriodIndexInChild = periodOffset2;
+            periodOffset += holder.timeline.getWindowCount();
+            periodOffset2 += holder.timeline.getPeriodCount();
         }
     }
 

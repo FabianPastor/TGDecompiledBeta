@@ -27,10 +27,7 @@ public final class DataSourceInputStream extends InputStream {
     }
 
     public int read() throws IOException {
-        if (read(this.singleByteArray) == -1) {
-            return -1;
-        }
-        return this.singleByteArray[0] & 255;
+        return read(this.singleByteArray) == -1 ? -1 : this.singleByteArray[0] & 255;
     }
 
     public int read(byte[] buffer) throws IOException {
@@ -38,7 +35,7 @@ public final class DataSourceInputStream extends InputStream {
     }
 
     public int read(byte[] buffer, int offset, int length) throws IOException {
-        Assertions.checkState(!this.closed);
+        Assertions.checkState(this.closed ^ 1);
         checkOpened();
         int bytesRead = this.dataSource.read(buffer, offset, length);
         if (bytesRead == -1) {

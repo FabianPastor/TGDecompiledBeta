@@ -240,14 +240,14 @@ public class NativeByteBuffer extends AbstractSerializedData {
         } else {
             this.buffer.put(b, offset, count);
         }
-        int i = count <= 253 ? 1 : 4;
-        while ((count + i) % 4 != 0) {
+        Exception e2 = count <= 253 ? 1 : 4;
+        while ((count + e2) % 4 != 0) {
             if (this.justCalc) {
                 this.len++;
             } else {
                 this.buffer.put((byte) 0);
             }
-            i++;
+            e2++;
         }
     }
 
@@ -393,12 +393,11 @@ public class NativeByteBuffer extends AbstractSerializedData {
         }
         if (exception) {
             throw new RuntimeException("Not bool value!");
-        } else if (!BuildVars.LOGS_ENABLED) {
-            return false;
-        } else {
-            FileLog.m1e("Not bool value!");
-            return false;
         }
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.m1e("Not bool value!");
+        }
+        return false;
     }
 
     public long readInt64(boolean exception) {
@@ -480,12 +479,12 @@ public class NativeByteBuffer extends AbstractSerializedData {
                 l = (getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8)) | (getIntFromByte(this.buffer.get()) << 16);
                 sl = 4;
             }
-            byte[] bArr = new byte[l];
-            this.buffer.get(bArr);
+            byte[] b = new byte[l];
+            this.buffer.get(b);
             for (int i = sl; (l + i) % 4 != 0; i++) {
                 this.buffer.get();
             }
-            return bArr;
+            return b;
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read byte array error", e);
@@ -505,16 +504,16 @@ public class NativeByteBuffer extends AbstractSerializedData {
                 l = (getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8)) | (getIntFromByte(this.buffer.get()) << 16);
                 sl = 4;
             }
-            NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(l);
+            NativeByteBuffer b = new NativeByteBuffer(l);
             int old = this.buffer.limit();
             this.buffer.limit(this.buffer.position() + l);
-            nativeByteBuffer.buffer.put(this.buffer);
+            b.buffer.put(this.buffer);
             this.buffer.limit(old);
-            nativeByteBuffer.buffer.position(0);
+            b.buffer.position(0);
             for (int i = sl; (l + i) % 4 != 0; i++) {
                 this.buffer.get();
             }
-            return nativeByteBuffer;
+            return b;
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read byte array error", e);

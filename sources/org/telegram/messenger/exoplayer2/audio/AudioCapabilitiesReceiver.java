@@ -33,15 +33,9 @@ public final class AudioCapabilitiesReceiver {
     }
 
     public AudioCapabilitiesReceiver(Context context, Listener listener) {
-        BroadcastReceiver hdmiAudioPlugBroadcastReceiver;
         this.context = (Context) Assertions.checkNotNull(context);
         this.listener = (Listener) Assertions.checkNotNull(listener);
-        if (Util.SDK_INT >= 21) {
-            hdmiAudioPlugBroadcastReceiver = new HdmiAudioPlugBroadcastReceiver();
-        } else {
-            hdmiAudioPlugBroadcastReceiver = null;
-        }
-        this.receiver = hdmiAudioPlugBroadcastReceiver;
+        this.receiver = Util.SDK_INT >= 21 ? new HdmiAudioPlugBroadcastReceiver() : null;
     }
 
     public AudioCapabilities register() {

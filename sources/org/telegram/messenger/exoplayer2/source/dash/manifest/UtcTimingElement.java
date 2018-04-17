@@ -10,6 +10,10 @@ public final class UtcTimingElement {
     }
 
     public String toString() {
-        return this.schemeIdUri + ", " + this.value;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.schemeIdUri);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.value);
+        return stringBuilder.toString();
     }
 }

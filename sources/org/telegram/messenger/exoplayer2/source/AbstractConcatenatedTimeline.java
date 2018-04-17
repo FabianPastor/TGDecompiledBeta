@@ -29,17 +29,9 @@ abstract class AbstractConcatenatedTimeline extends Timeline {
     }
 
     public int getNextWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
-        int i;
         int childIndex = getChildIndexByWindowIndex(windowIndex);
         int firstWindowIndexInChild = getFirstWindowIndexByChildIndex(childIndex);
-        Timeline timelineByChildIndex = getTimelineByChildIndex(childIndex);
-        int i2 = windowIndex - firstWindowIndexInChild;
-        if (repeatMode == 2) {
-            i = 0;
-        } else {
-            i = repeatMode;
-        }
-        int nextWindowIndexInChild = timelineByChildIndex.getNextWindowIndex(i2, i, shuffleModeEnabled);
+        int nextWindowIndexInChild = getTimelineByChildIndex(childIndex).getNextWindowIndex(windowIndex - firstWindowIndexInChild, repeatMode == 2 ? 0 : repeatMode, shuffleModeEnabled);
         if (nextWindowIndexInChild != -1) {
             return firstWindowIndexInChild + nextWindowIndexInChild;
         }
@@ -50,21 +42,16 @@ abstract class AbstractConcatenatedTimeline extends Timeline {
         if (nextChildIndex != -1) {
             return getFirstWindowIndexByChildIndex(nextChildIndex) + getTimelineByChildIndex(nextChildIndex).getFirstWindowIndex(shuffleModeEnabled);
         }
-        return repeatMode == 2 ? getFirstWindowIndex(shuffleModeEnabled) : -1;
+        if (repeatMode == 2) {
+            return getFirstWindowIndex(shuffleModeEnabled);
+        }
+        return -1;
     }
 
     public int getPreviousWindowIndex(int windowIndex, int repeatMode, boolean shuffleModeEnabled) {
-        int i;
         int childIndex = getChildIndexByWindowIndex(windowIndex);
         int firstWindowIndexInChild = getFirstWindowIndexByChildIndex(childIndex);
-        Timeline timelineByChildIndex = getTimelineByChildIndex(childIndex);
-        int i2 = windowIndex - firstWindowIndexInChild;
-        if (repeatMode == 2) {
-            i = 0;
-        } else {
-            i = repeatMode;
-        }
-        int previousWindowIndexInChild = timelineByChildIndex.getPreviousWindowIndex(i2, i, shuffleModeEnabled);
+        int previousWindowIndexInChild = getTimelineByChildIndex(childIndex).getPreviousWindowIndex(windowIndex - firstWindowIndexInChild, repeatMode == 2 ? 0 : repeatMode, shuffleModeEnabled);
         if (previousWindowIndexInChild != -1) {
             return firstWindowIndexInChild + previousWindowIndexInChild;
         }
@@ -75,7 +62,10 @@ abstract class AbstractConcatenatedTimeline extends Timeline {
         if (previousChildIndex != -1) {
             return getFirstWindowIndexByChildIndex(previousChildIndex) + getTimelineByChildIndex(previousChildIndex).getLastWindowIndex(shuffleModeEnabled);
         }
-        return repeatMode == 2 ? getLastWindowIndex(shuffleModeEnabled) : -1;
+        if (repeatMode == 2) {
+            return getLastWindowIndex(shuffleModeEnabled);
+        }
+        return -1;
     }
 
     public int getLastWindowIndex(boolean shuffleModeEnabled) {
@@ -128,6 +118,7 @@ abstract class AbstractConcatenatedTimeline extends Timeline {
     }
 
     public final int getIndexOfPeriod(Object uid) {
+        int i = -1;
         if (!(uid instanceof Pair)) {
             return -1;
         }
@@ -140,9 +131,9 @@ abstract class AbstractConcatenatedTimeline extends Timeline {
         }
         int periodIndexInChild = getTimelineByChildIndex(childIndex).getIndexOfPeriod(periodUid);
         if (periodIndexInChild != -1) {
-            return getFirstPeriodIndexByChildIndex(childIndex) + periodIndexInChild;
+            i = getFirstPeriodIndexByChildIndex(childIndex) + periodIndexInChild;
         }
-        return -1;
+        return i;
     }
 
     private int getNextChildIndex(int childIndex, boolean shuffleModeEnabled) {

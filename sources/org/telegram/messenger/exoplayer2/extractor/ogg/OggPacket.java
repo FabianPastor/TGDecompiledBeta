@@ -31,12 +31,13 @@ final class OggPacket {
         }
         while (!this.populated) {
             int segmentIndex;
+            int bytesToSkip;
             if (this.currentSegmentIndex < 0) {
                 if (!this.pageHeader.populate(input, true)) {
                     return false;
                 }
                 segmentIndex = 0;
-                int bytesToSkip = this.pageHeader.headerSize;
+                bytesToSkip = this.pageHeader.headerSize;
                 if ((this.pageHeader.type & 1) == 1 && this.packetArray.limit() == 0) {
                     bytesToSkip += calculatePacketSize(0);
                     segmentIndex = 0 + this.segmentCount;
@@ -44,26 +45,17 @@ final class OggPacket {
                 input.skipFully(bytesToSkip);
                 this.currentSegmentIndex = segmentIndex;
             }
-            int size = calculatePacketSize(this.currentSegmentIndex);
-            segmentIndex = this.currentSegmentIndex + this.segmentCount;
-            if (size > 0) {
-                boolean z;
-                if (this.packetArray.capacity() < this.packetArray.limit() + size) {
-                    this.packetArray.data = Arrays.copyOf(this.packetArray.data, this.packetArray.limit() + size);
+            segmentIndex = calculatePacketSize(this.currentSegmentIndex);
+            bytesToSkip = this.currentSegmentIndex + this.segmentCount;
+            if (segmentIndex > 0) {
+                if (this.packetArray.capacity() < this.packetArray.limit() + segmentIndex) {
+                    this.packetArray.data = Arrays.copyOf(this.packetArray.data, this.packetArray.limit() + segmentIndex);
                 }
-                input.readFully(this.packetArray.data, this.packetArray.limit(), size);
-                this.packetArray.setLimit(this.packetArray.limit() + size);
-                if (this.pageHeader.laces[segmentIndex - 1] != 255) {
-                    z = true;
-                } else {
-                    z = false;
-                }
-                this.populated = z;
+                input.readFully(this.packetArray.data, this.packetArray.limit(), segmentIndex);
+                this.packetArray.setLimit(this.packetArray.limit() + segmentIndex);
+                this.populated = this.pageHeader.laces[bytesToSkip + -1] != 255;
             }
-            if (segmentIndex == this.pageHeader.pageSegmentCount) {
-                segmentIndex = -1;
-            }
-            this.currentSegmentIndex = segmentIndex;
+            this.currentSegmentIndex = bytesToSkip == this.pageHeader.pageSegmentCount ? -1 : bytesToSkip;
         }
         return true;
     }
@@ -83,13 +75,13 @@ final class OggPacket {
     }
 
     private int calculatePacketSize(int startSegmentIndex) {
-        this.segmentCount = 0;
         int size = 0;
+        this.segmentCount = 0;
         while (this.segmentCount + startSegmentIndex < this.pageHeader.pageSegmentCount) {
-            int[] iArr = this.pageHeader.laces;
+            int segmentLength = this.pageHeader.laces;
             int i = this.segmentCount;
             this.segmentCount = i + 1;
-            int segmentLength = iArr[i + startSegmentIndex];
+            segmentLength = segmentLength[i + startSegmentIndex];
             size += segmentLength;
             if (segmentLength != 255) {
                 break;

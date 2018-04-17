@@ -105,48 +105,20 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         }
 
         public void onItemClick(View view, int position) {
-            boolean z = true;
             if (view instanceof TextCheckCell2) {
                 TextCheckCell2 checkCell = (TextCheckCell2) view;
                 if (checkCell.isEnabled()) {
-                    boolean z2;
-                    if (checkCell.isChecked()) {
-                        z2 = false;
-                    } else {
-                        z2 = true;
-                    }
-                    checkCell.setChecked(z2);
-                    TL_channelAdminRights access$600;
+                    checkCell.setChecked(checkCell.isChecked() ^ 1);
                     if (position == ChannelPermissionsActivity.this.changeInfoRow) {
-                        access$600 = ChannelPermissionsActivity.this.adminRights;
-                        if (ChannelPermissionsActivity.this.adminRights.change_info) {
-                            z = false;
-                        }
-                        access$600.change_info = z;
+                        ChannelPermissionsActivity.this.adminRights.change_info ^= 1;
                     } else if (position == ChannelPermissionsActivity.this.addUsersRow) {
-                        access$600 = ChannelPermissionsActivity.this.adminRights;
-                        if (ChannelPermissionsActivity.this.adminRights.invite_users) {
-                            z = false;
-                        }
-                        access$600.invite_users = z;
+                        ChannelPermissionsActivity.this.adminRights.invite_users ^= 1;
                     } else if (position == ChannelPermissionsActivity.this.sendMediaRow) {
-                        access$600 = ChannelPermissionsActivity.this.adminRights;
-                        if (ChannelPermissionsActivity.this.adminRights.ban_users) {
-                            z = false;
-                        }
-                        access$600.ban_users = z;
+                        ChannelPermissionsActivity.this.adminRights.ban_users ^= 1;
                     } else if (position == ChannelPermissionsActivity.this.sendStickersRow) {
-                        access$600 = ChannelPermissionsActivity.this.adminRights;
-                        if (ChannelPermissionsActivity.this.adminRights.add_admins) {
-                            z = false;
-                        }
-                        access$600.add_admins = z;
+                        ChannelPermissionsActivity.this.adminRights.add_admins ^= 1;
                     } else if (position == ChannelPermissionsActivity.this.embedLinksRow) {
-                        access$600 = ChannelPermissionsActivity.this.adminRights;
-                        if (ChannelPermissionsActivity.this.adminRights.pin_messages) {
-                            z = false;
-                        }
-                        access$600.pin_messages = z;
+                        ChannelPermissionsActivity.this.adminRights.pin_messages ^= 1;
                     }
                 }
             }
@@ -161,10 +133,7 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         }
 
         public boolean isEnabled(ViewHolder holder) {
-            if (holder.getItemViewType() == 1) {
-                return true;
-            }
-            return false;
+            return holder.getItemViewType() == 1;
         }
 
         public int getItemCount() {
@@ -193,36 +162,37 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            int i = R.drawable.greydivider_bottom;
-            switch (holder.getItemViewType()) {
-                case 2:
-                    ShadowSectionCell shadowCell = holder.itemView;
-                    if (position == ChannelPermissionsActivity.this.rightsShadowRow) {
-                        Context context = this.mContext;
-                        if (ChannelPermissionsActivity.this.forwardShadowRow != -1) {
-                            i = R.drawable.greydivider;
-                        }
-                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(context, i, Theme.key_windowBackgroundGrayShadow));
-                        return;
+            if (holder.getItemViewType() == 2) {
+                ShadowSectionCell shadowCell = holder.itemView;
+                int access$1500 = ChannelPermissionsActivity.this.rightsShadowRow;
+                int i = R.drawable.greydivider_bottom;
+                if (position == access$1500) {
+                    Context context = this.mContext;
+                    if (ChannelPermissionsActivity.this.forwardShadowRow != -1) {
+                        i = R.drawable.greydivider;
                     }
-                    shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(context, i, Theme.key_windowBackgroundGrayShadow));
                     return;
-                default:
-                    return;
+                }
+                shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             }
         }
 
         public int getItemViewType(int position) {
-            if (position == ChannelPermissionsActivity.this.rightsShadowRow || position == ChannelPermissionsActivity.this.forwardShadowRow) {
-                return 2;
+            if (position != ChannelPermissionsActivity.this.rightsShadowRow) {
+                if (position != ChannelPermissionsActivity.this.forwardShadowRow) {
+                    if (!(position == ChannelPermissionsActivity.this.changeInfoRow || position == ChannelPermissionsActivity.this.addUsersRow || position == ChannelPermissionsActivity.this.sendMediaRow || position == ChannelPermissionsActivity.this.sendStickersRow)) {
+                        if (position != ChannelPermissionsActivity.this.embedLinksRow) {
+                            if (position == ChannelPermissionsActivity.this.forwardRow) {
+                                return 3;
+                            }
+                            return position == ChannelPermissionsActivity.this.permissionsHeaderRow ? 0 : 0;
+                        }
+                    }
+                    return 1;
+                }
             }
-            if (position == ChannelPermissionsActivity.this.changeInfoRow || position == ChannelPermissionsActivity.this.addUsersRow || position == ChannelPermissionsActivity.this.sendMediaRow || position == ChannelPermissionsActivity.this.sendStickersRow || position == ChannelPermissionsActivity.this.embedLinksRow) {
-                return 1;
-            }
-            if (position == ChannelPermissionsActivity.this.forwardRow) {
-                return 3;
-            }
-            return position == ChannelPermissionsActivity.this.permissionsHeaderRow ? 0 : 0;
+            return 2;
         }
     }
 
@@ -255,12 +225,12 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
             this.forwardShadowRow = -1;
             return;
         }
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.forwardRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.forwardShadowRow = i;
+        int i2 = this.rowCount;
+        this.rowCount = i2 + 1;
+        this.forwardRow = i2;
+        i2 = this.rowCount;
+        this.rowCount = i2 + 1;
+        this.forwardShadowRow = i2;
     }
 
     public boolean onFragmentCreate() {
@@ -274,7 +244,6 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     }
 
     public View createView(Context context) {
-        boolean z = true;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new C19851());
@@ -308,13 +277,7 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         this.linearLayout.addView(this.headerCell2);
         this.radioButtonCell3 = new RadioButtonCell(context);
         this.radioButtonCell3.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        RadioButtonCell radioButtonCell = this.radioButtonCell3;
-        String string = LocaleController.getString("ChatHistoryVisible", R.string.ChatHistoryVisible);
-        String string2 = LocaleController.getString("ChatHistoryVisibleInfo", R.string.ChatHistoryVisibleInfo);
-        if (this.historyHidden) {
-            z = false;
-        }
-        radioButtonCell.setTextAndValue(string, string2, z);
+        this.radioButtonCell3.setTextAndValue(LocaleController.getString("ChatHistoryVisible", R.string.ChatHistoryVisible), LocaleController.getString("ChatHistoryVisibleInfo", R.string.ChatHistoryVisibleInfo), true ^ this.historyHidden);
         this.linearLayout.addView(this.radioButtonCell3, LayoutHelper.createLinear(-1, -2));
         this.radioButtonCell3.setOnClickListener(new C09944());
         this.radioButtonCell4 = new RadioButtonCell(context);
@@ -339,14 +302,7 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
                 if (this.info == null) {
                     this.historyHidden = chatFull.hidden_prehistory;
                     if (this.radioButtonCell3 != null) {
-                        boolean z;
-                        RadioButtonCell radioButtonCell = this.radioButtonCell3;
-                        if (this.historyHidden) {
-                            z = false;
-                        } else {
-                            z = true;
-                        }
-                        radioButtonCell.setChecked(z, false);
+                        this.radioButtonCell3.setChecked(this.historyHidden ^ 1, false);
                         this.radioButtonCell4.setChecked(this.historyHidden, false);
                     }
                 }
@@ -363,35 +319,35 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r9 = new ThemeDescription[28];
-        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextCheckCell2.class, HeaderCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
-        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
-        r9[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        r9[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
-        r9[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        r9[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        r9[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        r9[9] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
-        r9[11] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchThumb);
-        r9[12] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack);
-        r9[13] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchThumbChecked);
-        r9[14] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked);
-        r9[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        r9[16] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
-        r9[17] = new ThemeDescription(this.linearLayout, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
-        r9[18] = new ThemeDescription(this.radioButtonCell3, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        r9[19] = new ThemeDescription(this.radioButtonCell3, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackground);
-        r9[20] = new ThemeDescription(this.radioButtonCell3, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackgroundChecked);
-        r9[21] = new ThemeDescription(this.radioButtonCell3, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r9[22] = new ThemeDescription(this.radioButtonCell3, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
-        r9[23] = new ThemeDescription(this.radioButtonCell4, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        r9[24] = new ThemeDescription(this.radioButtonCell4, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackground);
-        r9[25] = new ThemeDescription(this.radioButtonCell4, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackgroundChecked);
-        r9[26] = new ThemeDescription(this.radioButtonCell4, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r9[27] = new ThemeDescription(this.radioButtonCell4, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
-        return r9;
+        r1 = new ThemeDescription[28];
+        r1[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextCheckCell2.class, HeaderCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r1[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r1[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r1[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r1[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r1[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r1[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r1[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r1[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r1[9] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r1[10] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        r1[11] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchThumb);
+        r1[12] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack);
+        r1[13] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchThumbChecked);
+        r1[14] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell2.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked);
+        r1[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r1[16] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
+        r1[17] = new ThemeDescription(this.linearLayout, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        r1[18] = new ThemeDescription(this.radioButtonCell3, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r1[19] = new ThemeDescription(this.radioButtonCell3, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackground);
+        r1[20] = new ThemeDescription(this.radioButtonCell3, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackgroundChecked);
+        r1[21] = new ThemeDescription(this.radioButtonCell3, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r1[22] = new ThemeDescription(this.radioButtonCell3, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        r1[23] = new ThemeDescription(this.radioButtonCell4, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r1[24] = new ThemeDescription(this.radioButtonCell4, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackground);
+        r1[25] = new ThemeDescription(this.radioButtonCell4, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioButtonCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackgroundChecked);
+        r1[26] = new ThemeDescription(this.radioButtonCell4, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r1[27] = new ThemeDescription(this.radioButtonCell4, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{RadioButtonCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        return r1;
     }
 }

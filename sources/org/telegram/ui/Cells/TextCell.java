@@ -20,11 +20,11 @@ public class TextCell extends FrameLayout {
     private SimpleTextView valueTextView;
 
     public TextCell(Context context) {
-        int i = 3;
         super(context);
         this.textView = new SimpleTextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(16);
+        int i = 3;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.textView);
         this.valueTextView = new SimpleTextView(context);
@@ -73,15 +73,15 @@ public class TextCell extends FrameLayout {
         int viewTop = (height - this.valueTextView.getTextHeight()) / 2;
         int viewLeft = LocaleController.isRTL ? AndroidUtilities.dp(24.0f) : 0;
         this.valueTextView.layout(viewLeft, viewTop, this.valueTextView.getMeasuredWidth() + viewLeft, this.valueTextView.getMeasuredHeight() + viewTop);
-        viewTop = (height - this.textView.getTextHeight()) / 2;
-        viewLeft = !LocaleController.isRTL ? AndroidUtilities.dp(71.0f) : AndroidUtilities.dp(24.0f);
-        this.textView.layout(viewLeft, viewTop, this.textView.getMeasuredWidth() + viewLeft, this.textView.getMeasuredHeight() + viewTop);
-        viewTop = AndroidUtilities.dp(5.0f);
-        viewLeft = !LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : (width - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(16.0f);
-        this.imageView.layout(viewLeft, viewTop, this.imageView.getMeasuredWidth() + viewLeft, this.imageView.getMeasuredHeight() + viewTop);
-        viewTop = (height - this.valueImageView.getMeasuredHeight()) / 2;
-        viewLeft = LocaleController.isRTL ? AndroidUtilities.dp(24.0f) : (width - this.valueImageView.getMeasuredWidth()) - AndroidUtilities.dp(24.0f);
-        this.valueImageView.layout(viewLeft, viewTop, this.valueImageView.getMeasuredWidth() + viewLeft, this.valueImageView.getMeasuredHeight() + viewTop);
+        int viewTop2 = (height - this.textView.getTextHeight()) / 2;
+        viewTop = !LocaleController.isRTL ? AndroidUtilities.dp(71.0f) : AndroidUtilities.dp(24.0f);
+        this.textView.layout(viewTop, viewTop2, this.textView.getMeasuredWidth() + viewTop, this.textView.getMeasuredHeight() + viewTop2);
+        viewLeft = AndroidUtilities.dp(NUM);
+        viewTop = !LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : (width - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(16.0f);
+        this.imageView.layout(viewTop, viewLeft, this.imageView.getMeasuredWidth() + viewTop, this.imageView.getMeasuredHeight() + viewLeft);
+        viewTop2 = (height - this.valueImageView.getMeasuredHeight()) / 2;
+        viewTop = LocaleController.isRTL ? AndroidUtilities.dp(24.0f) : (width - this.valueImageView.getMeasuredWidth()) - AndroidUtilities.dp(24.0f);
+        this.valueImageView.layout(viewTop, viewTop2, this.valueImageView.getMeasuredWidth() + viewTop, this.valueImageView.getMeasuredHeight() + viewTop2);
     }
 
     public void setTextColor(int color) {

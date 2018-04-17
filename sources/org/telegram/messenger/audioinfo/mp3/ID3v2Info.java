@@ -71,7 +71,7 @@ public class ID3v2Info extends AudioInfo {
             while (tagBody.getRemainingLength() > 10) {
                 ID3v2FrameHeader frameHeader = new ID3v2FrameHeader(tagBody);
                 if (frameHeader.isPadding()) {
-                    break loop0;
+                    break;
                 } else if (((long) frameHeader.getBodySize()) > tagBody.getRemainingLength()) {
                     if (LOGGER.isLoggable(debugLevel)) {
                         LOGGER.log(debugLevel, "ID3 frame claims to extend frames area");
@@ -79,24 +79,32 @@ public class ID3v2Info extends AudioInfo {
                 } else if (!frameHeader.isValid() || frameHeader.isEncryption()) {
                     tagBody.getData().skipFully((long) frameHeader.getBodySize());
                 } else {
+                    ID3v2DataInput e;
+                    long remainingLength;
                     ID3v2FrameBody frameBody = tagBody.frameBody(frameHeader);
                     try {
                         parseFrame(frameBody);
-                        frameBody.getData().skipFully(frameBody.getRemainingLength());
-                    } catch (ID3v2Exception e) {
-                        try {
-                            if (LOGGER.isLoggable(debugLevel)) {
-                                LOGGER.log(debugLevel, String.format("ID3 exception occured in frame %s: %s", new Object[]{frameHeader.getFrameId(), e.getMessage()}));
-                            }
-                            frameBody.getData().skipFully(frameBody.getRemainingLength());
-                        } catch (ID3v2Exception e2) {
-                            if (LOGGER.isLoggable(debugLevel)) {
-                                LOGGER.log(debugLevel, "ID3 exception occured: " + e2.getMessage());
-                            }
+                    } catch (ID3v2Exception e2) {
+                        if (LOGGER.isLoggable(debugLevel)) {
+                            LOGGER.log(debugLevel, String.format("ID3 exception occured in frame %s: %s", new Object[]{frameHeader.getFrameId(), e2.getMessage()}));
+                        }
+                        e = frameBody.getData();
+                        remainingLength = frameBody.getRemainingLength();
+                    }
+                    try {
+                        e = frameBody.getData();
+                        remainingLength = frameBody.getRemainingLength();
+                        e.skipFully(remainingLength);
+                    } catch (ID3v2Exception e3) {
+                        if (LOGGER.isLoggable(debugLevel)) {
+                            Logger logger = LOGGER;
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("ID3 exception occured: ");
+                            stringBuilder.append(e3.getMessage());
+                            logger.log(debugLevel, stringBuilder.toString());
                         }
                     } catch (Throwable th) {
                         frameBody.getData().skipFully(frameBody.getRemainingLength());
-                        throw th;
                     }
                 }
             }
@@ -108,215 +116,229 @@ public class ID3v2Info extends AudioInfo {
     }
 
     void parseFrame(ID3v2FrameBody frame) throws IOException, ID3v2Exception {
+        Logger logger;
+        Level level;
+        StringBuilder stringBuilder;
+        Logger logger2;
+        Level level2;
+        StringBuilder stringBuilder2;
         if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, "Parsing frame: " + frame.getFrameHeader().getFrameId());
+            Logger logger3 = LOGGER;
+            Level level3 = this.debugLevel;
+            StringBuilder stringBuilder3 = new StringBuilder();
+            stringBuilder3.append("Parsing frame: ");
+            stringBuilder3.append(frame.getFrameHeader().getFrameId());
+            logger3.log(level3, stringBuilder3.toString());
         }
         String frameId = frame.getFrameHeader().getFrameId();
-        Object obj = -1;
+        boolean z = true;
         switch (frameId.hashCode()) {
             case 66913:
                 if (frameId.equals("COM")) {
-                    obj = 2;
+                    z = true;
                     break;
                 }
                 break;
             case 79210:
                 if (frameId.equals("PIC")) {
-                    obj = null;
+                    z = false;
                     break;
                 }
                 break;
             case 82815:
                 if (frameId.equals("TAL")) {
-                    obj = 4;
+                    z = true;
                     break;
                 }
                 break;
             case 82878:
                 if (frameId.equals("TCM")) {
-                    obj = 8;
+                    z = true;
                     break;
                 }
                 break;
             case 82880:
                 if (frameId.equals("TCO")) {
-                    obj = 10;
+                    z = true;
                     break;
                 }
                 break;
             case 82881:
                 if (frameId.equals("TCP")) {
-                    obj = 6;
+                    z = true;
                     break;
                 }
                 break;
             case 82883:
                 if (frameId.equals("TCR")) {
-                    obj = 12;
+                    z = true;
                     break;
                 }
                 break;
             case 83149:
                 if (frameId.equals("TLE")) {
-                    obj = 15;
+                    z = true;
                     break;
                 }
                 break;
             case 83253:
                 if (frameId.equals("TP1")) {
-                    obj = 17;
+                    z = true;
                     break;
                 }
                 break;
             case 83254:
                 if (frameId.equals("TP2")) {
-                    obj = 19;
+                    z = true;
                     break;
                 }
                 break;
             case 83269:
                 if (frameId.equals("TPA")) {
-                    obj = 21;
+                    z = true;
                     break;
                 }
                 break;
             case 83341:
                 if (frameId.equals("TRK")) {
-                    obj = 23;
+                    z = true;
                     break;
                 }
                 break;
             case 83377:
                 if (frameId.equals("TT1")) {
-                    obj = 25;
+                    z = true;
                     break;
                 }
                 break;
             case 83378:
                 if (frameId.equals("TT2")) {
-                    obj = 27;
+                    z = true;
                     break;
                 }
                 break;
             case 83552:
                 if (frameId.equals("TYE")) {
-                    obj = 29;
+                    z = true;
                     break;
                 }
                 break;
             case 84125:
                 if (frameId.equals("ULT")) {
-                    obj = 31;
+                    z = true;
                     break;
                 }
                 break;
             case 2015625:
                 if (frameId.equals(ApicFrame.ID)) {
-                    obj = 1;
+                    z = true;
                     break;
                 }
                 break;
             case 2074380:
                 if (frameId.equals(CommentFrame.ID)) {
-                    obj = 3;
+                    z = true;
                     break;
                 }
                 break;
             case 2567331:
                 if (frameId.equals("TALB")) {
-                    obj = 5;
+                    z = true;
                     break;
                 }
                 break;
             case 2569298:
                 if (frameId.equals("TCMP")) {
-                    obj = 7;
+                    z = true;
                     break;
                 }
                 break;
             case 2569357:
                 if (frameId.equals("TCOM")) {
-                    obj = 9;
+                    z = true;
                     break;
                 }
                 break;
             case 2569358:
                 if (frameId.equals("TCON")) {
-                    obj = 11;
+                    z = true;
                     break;
                 }
                 break;
             case 2569360:
                 if (frameId.equals("TCOP")) {
-                    obj = 13;
+                    z = true;
                     break;
                 }
                 break;
             case 2570401:
                 if (frameId.equals("TDRC")) {
-                    obj = 14;
+                    z = true;
                     break;
                 }
                 break;
             case 2575250:
                 if (frameId.equals("TIT1")) {
-                    obj = 26;
+                    z = true;
                     break;
                 }
                 break;
             case 2575251:
                 if (frameId.equals("TIT2")) {
-                    obj = 28;
+                    z = true;
                     break;
                 }
                 break;
             case 2577697:
                 if (frameId.equals("TLEN")) {
-                    obj = 16;
+                    z = true;
                     break;
                 }
                 break;
             case 2581512:
                 if (frameId.equals("TPE1")) {
-                    obj = 18;
+                    z = true;
                     break;
                 }
                 break;
             case 2581513:
                 if (frameId.equals("TPE2")) {
-                    obj = 20;
+                    z = true;
                     break;
                 }
                 break;
             case 2581856:
                 if (frameId.equals("TPOS")) {
-                    obj = 22;
+                    z = true;
                     break;
                 }
                 break;
             case 2583398:
                 if (frameId.equals("TRCK")) {
-                    obj = 24;
+                    z = true;
                     break;
                 }
                 break;
             case 2590194:
                 if (frameId.equals("TYER")) {
-                    obj = 30;
+                    z = true;
                     break;
                 }
                 break;
             case 2614438:
                 if (frameId.equals("USLT")) {
-                    obj = 32;
+                    z = true;
                     break;
                 }
                 break;
+            default:
+                break;
         }
+        String tpos;
         int index;
-        switch (obj) {
-            case null:
-            case 1:
+        switch (z) {
+            case false:
+            case true:
                 if (this.cover == null || this.coverPictureType != (byte) 3) {
                     AttachedPicture picture = parseAttachedPictureFrame(frame);
                     if (this.cover == null || picture.type == (byte) 3 || picture.type == (byte) 0) {
@@ -348,197 +370,226 @@ public class ID3v2Info extends AudioInfo {
                             e.printStackTrace();
                         }
                         this.coverPictureType = picture.type;
-                        return;
                     }
                     return;
                 }
                 return;
-            case 2:
-            case 3:
+            case true:
+            case true:
                 CommentOrUnsynchronizedLyrics comm = parseCommentOrUnsynchronizedLyricsFrame(frame);
                 if (this.comment == null || comm.description == null || TtmlNode.ANONYMOUS_REGION_ID.equals(comm.description)) {
                     this.comment = comm.text;
                     return;
                 }
                 return;
-            case 4:
-            case 5:
+            case true:
+            case true:
                 this.album = parseTextFrame(frame);
                 return;
-            case 6:
-            case 7:
+            case true:
+            case true:
                 this.compilation = "1".equals(parseTextFrame(frame));
                 return;
-            case 8:
-            case 9:
+            case true:
+            case true:
                 this.composer = parseTextFrame(frame);
                 return;
-            case 10:
-            case 11:
-                String tcon = parseTextFrame(frame);
-                if (tcon.length() > 0) {
-                    this.genre = tcon;
+            case true:
+            case true:
+                frameId = parseTextFrame(frame);
+                if (frameId.length() > 0) {
+                    this.genre = frameId;
                     ID3v1Genre id3v1Genre = null;
                     try {
-                        if (tcon.charAt(0) == '(') {
-                            int pos = tcon.indexOf(41);
+                        if (frameId.charAt(0) == '(') {
+                            int pos = frameId.indexOf(41);
                             if (pos > 1) {
-                                id3v1Genre = ID3v1Genre.getGenre(Integer.parseInt(tcon.substring(1, pos)));
-                                if (id3v1Genre == null && tcon.length() > pos + 1) {
-                                    this.genre = tcon.substring(pos + 1);
+                                id3v1Genre = ID3v1Genre.getGenre(Integer.parseInt(frameId.substring(1, pos)));
+                                if (id3v1Genre == null && frameId.length() > pos + 1) {
+                                    this.genre = frameId.substring(pos + 1);
                                 }
                             }
                         } else {
-                            id3v1Genre = ID3v1Genre.getGenre(Integer.parseInt(tcon));
+                            id3v1Genre = ID3v1Genre.getGenre(Integer.parseInt(frameId));
                         }
                         if (id3v1Genre != null) {
                             this.genre = id3v1Genre.getDescription();
-                            return;
                         }
-                        return;
                     } catch (NumberFormatException e2) {
-                        return;
                     }
+                    return;
                 }
                 return;
-            case 12:
-            case 13:
+            case true:
+            case true:
                 this.copyright = parseTextFrame(frame);
                 return;
-            case 14:
-                String tdrc = parseTextFrame(frame);
-                if (tdrc.length() >= 4) {
+            case true:
+                frameId = parseTextFrame(frame);
+                if (frameId.length() >= 4) {
                     try {
-                        this.year = Short.valueOf(tdrc.substring(0, 4)).shortValue();
-                        return;
+                        this.year = Short.valueOf(frameId.substring(0, 4)).shortValue();
                     } catch (NumberFormatException e3) {
                         if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse year from: " + tdrc);
-                            return;
+                            logger = LOGGER;
+                            level = this.debugLevel;
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("Could not parse year from: ");
+                            stringBuilder.append(frameId);
+                            logger.log(level, stringBuilder.toString());
                         }
-                        return;
                     }
+                    return;
                 }
                 return;
-            case 15:
-            case 16:
-                String tlen = parseTextFrame(frame);
+            case true:
+            case true:
+                frameId = parseTextFrame(frame);
                 try {
-                    this.duration = Long.valueOf(tlen).longValue();
+                    this.duration = Long.valueOf(frameId).longValue();
                     return;
                 } catch (NumberFormatException e4) {
                     if (LOGGER.isLoggable(this.debugLevel)) {
-                        LOGGER.log(this.debugLevel, "Could not parse track duration: " + tlen);
-                        return;
+                        logger = LOGGER;
+                        level = this.debugLevel;
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("Could not parse track duration: ");
+                        stringBuilder.append(frameId);
+                        logger.log(level, stringBuilder.toString());
                     }
                     return;
                 }
-            case 17:
-            case 18:
+            case true:
+            case true:
                 this.artist = parseTextFrame(frame);
                 return;
-            case 19:
-            case 20:
+            case true:
+            case true:
                 this.albumArtist = parseTextFrame(frame);
                 return;
-            case 21:
-            case 22:
-                String tpos = parseTextFrame(frame);
+            case true:
+            case true:
+                tpos = parseTextFrame(frame);
                 if (tpos.length() > 0) {
                     index = tpos.indexOf(47);
                     if (index < 0) {
                         try {
                             this.disc = Short.valueOf(tpos).shortValue();
-                            return;
                         } catch (NumberFormatException e5) {
                             if (LOGGER.isLoggable(this.debugLevel)) {
-                                LOGGER.log(this.debugLevel, "Could not parse disc number: " + tpos);
-                                return;
+                                logger2 = LOGGER;
+                                level2 = this.debugLevel;
+                                stringBuilder2 = new StringBuilder();
+                                stringBuilder2.append("Could not parse disc number: ");
+                                stringBuilder2.append(tpos);
+                                logger2.log(level2, stringBuilder2.toString());
                             }
-                            return;
+                        }
+                    } else {
+                        try {
+                            this.disc = Short.valueOf(tpos.substring(0, index)).shortValue();
+                        } catch (NumberFormatException e6) {
+                            if (LOGGER.isLoggable(this.debugLevel)) {
+                                logger2 = LOGGER;
+                                level2 = this.debugLevel;
+                                stringBuilder2 = new StringBuilder();
+                                stringBuilder2.append("Could not parse disc number: ");
+                                stringBuilder2.append(tpos);
+                                logger2.log(level2, stringBuilder2.toString());
+                            }
+                        }
+                        try {
+                            this.discs = Short.valueOf(tpos.substring(index + 1)).shortValue();
+                        } catch (NumberFormatException e7) {
+                            if (LOGGER.isLoggable(this.debugLevel)) {
+                                logger2 = LOGGER;
+                                level2 = this.debugLevel;
+                                stringBuilder2 = new StringBuilder();
+                                stringBuilder2.append("Could not parse number of discs: ");
+                                stringBuilder2.append(tpos);
+                                logger2.log(level2, stringBuilder2.toString());
+                            }
                         }
                     }
-                    try {
-                        this.disc = Short.valueOf(tpos.substring(0, index)).shortValue();
-                    } catch (NumberFormatException e6) {
-                        if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse disc number: " + tpos);
-                        }
-                    }
-                    try {
-                        this.discs = Short.valueOf(tpos.substring(index + 1)).shortValue();
-                        return;
-                    } catch (NumberFormatException e7) {
-                        if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse number of discs: " + tpos);
-                            return;
-                        }
-                        return;
-                    }
+                    return;
                 }
                 return;
-            case 23:
+            case true:
             case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
-                String trck = parseTextFrame(frame);
-                if (trck.length() > 0) {
-                    index = trck.indexOf(47);
+                tpos = parseTextFrame(frame);
+                if (tpos.length() > 0) {
+                    index = tpos.indexOf(47);
                     if (index < 0) {
                         try {
-                            this.track = Short.valueOf(trck).shortValue();
-                            return;
+                            this.track = Short.valueOf(tpos).shortValue();
                         } catch (NumberFormatException e8) {
                             if (LOGGER.isLoggable(this.debugLevel)) {
-                                LOGGER.log(this.debugLevel, "Could not parse track number: " + trck);
-                                return;
+                                logger2 = LOGGER;
+                                level2 = this.debugLevel;
+                                stringBuilder2 = new StringBuilder();
+                                stringBuilder2.append("Could not parse track number: ");
+                                stringBuilder2.append(tpos);
+                                logger2.log(level2, stringBuilder2.toString());
                             }
-                            return;
+                        }
+                    } else {
+                        try {
+                            this.track = Short.valueOf(tpos.substring(0, index)).shortValue();
+                        } catch (NumberFormatException e9) {
+                            if (LOGGER.isLoggable(this.debugLevel)) {
+                                logger2 = LOGGER;
+                                level2 = this.debugLevel;
+                                stringBuilder2 = new StringBuilder();
+                                stringBuilder2.append("Could not parse track number: ");
+                                stringBuilder2.append(tpos);
+                                logger2.log(level2, stringBuilder2.toString());
+                            }
+                        }
+                        try {
+                            this.tracks = Short.valueOf(tpos.substring(index + 1)).shortValue();
+                        } catch (NumberFormatException e10) {
+                            if (LOGGER.isLoggable(this.debugLevel)) {
+                                logger2 = LOGGER;
+                                level2 = this.debugLevel;
+                                stringBuilder2 = new StringBuilder();
+                                stringBuilder2.append("Could not parse number of tracks: ");
+                                stringBuilder2.append(tpos);
+                                logger2.log(level2, stringBuilder2.toString());
+                            }
                         }
                     }
-                    try {
-                        this.track = Short.valueOf(trck.substring(0, index)).shortValue();
-                    } catch (NumberFormatException e9) {
-                        if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse track number: " + trck);
-                        }
-                    }
-                    try {
-                        this.tracks = Short.valueOf(trck.substring(index + 1)).shortValue();
-                        return;
-                    } catch (NumberFormatException e10) {
-                        if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse number of tracks: " + trck);
-                            return;
-                        }
-                        return;
-                    }
+                    return;
                 }
                 return;
-            case 25:
-            case 26:
+            case true:
+            case true:
                 this.grouping = parseTextFrame(frame);
                 return;
-            case 27:
-            case 28:
+            case true:
+            case true:
                 this.title = parseTextFrame(frame);
                 return;
-            case 29:
-            case 30:
-                String tyer = parseTextFrame(frame);
-                if (tyer.length() > 0) {
+            case true:
+            case true:
+                frameId = parseTextFrame(frame);
+                if (frameId.length() > 0) {
                     try {
-                        this.year = Short.valueOf(tyer).shortValue();
-                        return;
+                        this.year = Short.valueOf(frameId).shortValue();
                     } catch (NumberFormatException e11) {
                         if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse year: " + tyer);
-                            return;
+                            logger = LOGGER;
+                            level = this.debugLevel;
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("Could not parse year: ");
+                            stringBuilder.append(frameId);
+                            logger.log(level, stringBuilder.toString());
                         }
-                        return;
                     }
+                    return;
                 }
                 return;
-            case 31:
-            case 32:
+            case true:
+            case true:
                 if (this.lyrics == null) {
                     this.lyrics = parseCommentOrUnsynchronizedLyricsFrame(frame).text;
                     return;
@@ -564,33 +615,31 @@ public class ID3v2Info extends AudioInfo {
         if (data.getTagHeader().getVersion() == 2) {
             String toUpperCase = data.readFixedLengthString(3, ID3v2Encoding.ISO_8859_1).toUpperCase();
             Object obj = -1;
-            switch (toUpperCase.hashCode()) {
-                case 73665:
-                    if (toUpperCase.equals("JPG")) {
-                        obj = 1;
-                        break;
-                    }
-                    break;
-                case 79369:
+            int hashCode = toUpperCase.hashCode();
+            if (hashCode != 73665) {
+                if (hashCode == 79369) {
                     if (toUpperCase.equals("PNG")) {
                         obj = null;
-                        break;
                     }
-                    break;
+                }
+            } else if (toUpperCase.equals("JPG")) {
+                obj = 1;
             }
             switch (obj) {
                 case null:
-                    imageType = "image/png";
+                    toUpperCase = "image/png";
                     break;
                 case 1:
-                    imageType = "image/jpeg";
+                    toUpperCase = "image/jpeg";
                     break;
                 default:
-                    imageType = "image/unknown";
+                    toUpperCase = "image/unknown";
                     break;
             }
+            imageType = toUpperCase;
+        } else {
+            imageType = data.readZeroTerminatedString(20, ID3v2Encoding.ISO_8859_1);
         }
-        imageType = data.readZeroTerminatedString(20, ID3v2Encoding.ISO_8859_1);
         return new AttachedPicture(data.getData().readByte(), data.readZeroTerminatedString(Callback.DEFAULT_DRAG_ANIMATION_DURATION, encoding), imageType, data.getData().readFully((int) data.getRemainingLength()));
     }
 }

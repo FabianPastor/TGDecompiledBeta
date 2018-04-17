@@ -34,16 +34,22 @@ final class TrimmingAudioProcessor implements AudioProcessor {
         this.endBufferSize = 0;
         this.pendingTrimStartBytes = (this.trimStartSamples * channelCount) * 2;
         boolean wasActive = this.isActive;
-        if (this.trimStartSamples == 0 && this.trimEndSamples == 0) {
-            z = false;
-        } else {
-            z = true;
+        if (this.trimStartSamples == 0) {
+            if (this.trimEndSamples == 0) {
+                z = false;
+                this.isActive = z;
+                if (wasActive == this.isActive) {
+                    return true;
+                }
+                return false;
+            }
         }
+        z = true;
         this.isActive = z;
-        if (wasActive != this.isActive) {
-            return true;
+        if (wasActive == this.isActive) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     public boolean isActive() {

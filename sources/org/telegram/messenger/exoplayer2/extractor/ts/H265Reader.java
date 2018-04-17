@@ -65,8 +65,7 @@ public final class H265Reader implements ElementaryStreamReader {
         }
 
         public void startNalUnit(long position, int offset, int nalUnitType, long pesTimeUs) {
-            boolean z;
-            boolean z2 = false;
+            boolean z = false;
             this.isFirstSlice = false;
             this.isFirstParameterSet = false;
             this.nalUnitTimeUs = pesTimeUs;
@@ -78,33 +77,26 @@ public final class H265Reader implements ElementaryStreamReader {
                     this.readingSample = false;
                 }
                 if (nalUnitType <= H265Reader.PPS_NUT) {
-                    this.isFirstParameterSet = !this.writingParameterSets;
+                    this.isFirstParameterSet = this.writingParameterSets ^ true;
                     this.writingParameterSets = true;
                 }
             }
-            if (nalUnitType < 16 || nalUnitType > 21) {
-                z = false;
-            } else {
-                z = true;
+            boolean z2 = nalUnitType >= 16 && nalUnitType <= 21;
+            this.nalUnitHasKeyframeData = z2;
+            if (!this.nalUnitHasKeyframeData) {
+                if (nalUnitType > 9) {
+                    this.lookingForFirstSliceFlag = z;
+                }
             }
-            this.nalUnitHasKeyframeData = z;
-            if (this.nalUnitHasKeyframeData || nalUnitType <= 9) {
-                z2 = true;
-            }
-            this.lookingForFirstSliceFlag = z2;
+            z = true;
+            this.lookingForFirstSliceFlag = z;
         }
 
         public void readNalUnitData(byte[] data, int offset, int limit) {
             if (this.lookingForFirstSliceFlag) {
                 int headerOffset = (offset + 2) - this.nalUnitBytesRead;
                 if (headerOffset < limit) {
-                    boolean z;
-                    if ((data[headerOffset] & 128) != 0) {
-                        z = true;
-                    } else {
-                        z = false;
-                    }
-                    this.isFirstSlice = z;
+                    this.isFirstSlice = (data[headerOffset] & 128) != 0;
                     this.lookingForFirstSliceFlag = false;
                     return;
                 }
@@ -128,7 +120,7 @@ public final class H265Reader implements ElementaryStreamReader {
         }
 
         private void outputSample(int offset) {
-            this.output.sampleMetadata(this.sampleTimeUs, this.sampleIsKeyframe ? 1 : 0, (int) (this.nalUnitStartPosition - this.samplePosition), offset, null);
+            this.output.sampleMetadata(this.sampleTimeUs, this.sampleIsKeyframe, (int) (this.nalUnitStartPosition - this.samplePosition), offset, null);
         }
     }
 
@@ -160,28 +152,32 @@ public final class H265Reader implements ElementaryStreamReader {
     }
 
     public void consume(ParsableByteArray data) {
+        H265Reader h265Reader = this;
+        ParsableByteArray parsableByteArray = data;
         while (data.bytesLeft() > 0) {
             int offset = data.getPosition();
             int limit = data.limit();
-            byte[] dataArray = data.data;
-            this.totalBytesWritten += (long) data.bytesLeft();
-            this.output.sampleData(data, data.bytesLeft());
-            while (offset < limit) {
-                int nalUnitOffset = NalUnitUtil.findNalUnit(dataArray, offset, limit, this.prefixFlags);
+            byte[] dataArray = parsableByteArray.data;
+            h265Reader.totalBytesWritten += (long) data.bytesLeft();
+            h265Reader.output.sampleData(parsableByteArray, data.bytesLeft());
+            int offset2 = offset;
+            while (offset2 < limit) {
+                int nalUnitOffset = NalUnitUtil.findNalUnit(dataArray, offset2, limit, h265Reader.prefixFlags);
                 if (nalUnitOffset == limit) {
-                    nalUnitData(dataArray, offset, limit);
+                    nalUnitData(dataArray, offset2, limit);
                     return;
                 }
                 int nalUnitType = NalUnitUtil.getH265NalUnitType(dataArray, nalUnitOffset);
-                int lengthToNalUnit = nalUnitOffset - offset;
+                int lengthToNalUnit = nalUnitOffset - offset2;
                 if (lengthToNalUnit > 0) {
-                    nalUnitData(dataArray, offset, nalUnitOffset);
+                    nalUnitData(dataArray, offset2, nalUnitOffset);
                 }
                 int bytesWrittenPastPosition = limit - nalUnitOffset;
-                long absolutePosition = this.totalBytesWritten - ((long) bytesWrittenPastPosition);
-                endNalUnit(absolutePosition, bytesWrittenPastPosition, lengthToNalUnit < 0 ? -lengthToNalUnit : 0, this.pesTimeUs);
-                startNalUnit(absolutePosition, bytesWrittenPastPosition, nalUnitType, this.pesTimeUs);
-                offset = nalUnitOffset + 3;
+                long j = h265Reader.totalBytesWritten - ((long) bytesWrittenPastPosition);
+                int i = bytesWrittenPastPosition;
+                endNalUnit(j, i, lengthToNalUnit < 0 ? -lengthToNalUnit : 0, h265Reader.pesTimeUs);
+                startNalUnit(j, i, nalUnitType, h265Reader.pesTimeUs);
+                offset2 = nalUnitOffset + 3;
             }
         }
     }
@@ -239,11 +235,18 @@ public final class H265Reader implements ElementaryStreamReader {
 
     private static Format parseMediaFormat(String formatId, NalUnitTargetBuffer vps, NalUnitTargetBuffer sps, NalUnitTargetBuffer pps) {
         int i;
-        Object csd = new byte[((vps.nalLength + sps.nalLength) + pps.nalLength)];
-        System.arraycopy(vps.nalData, 0, csd, 0, vps.nalLength);
-        System.arraycopy(sps.nalData, 0, csd, vps.nalLength, sps.nalLength);
-        System.arraycopy(pps.nalData, 0, csd, vps.nalLength + sps.nalLength, pps.nalLength);
-        ParsableNalUnitBitArray bitArray = new ParsableNalUnitBitArray(sps.nalData, 0, sps.nalLength);
+        int confWinLeftOffset;
+        int confWinRightOffset;
+        int confWinTopOffset;
+        int subHeightC;
+        NalUnitTargetBuffer nalUnitTargetBuffer = vps;
+        NalUnitTargetBuffer nalUnitTargetBuffer2 = sps;
+        NalUnitTargetBuffer nalUnitTargetBuffer3 = pps;
+        byte[] csd = new byte[((nalUnitTargetBuffer.nalLength + nalUnitTargetBuffer2.nalLength) + nalUnitTargetBuffer3.nalLength)];
+        System.arraycopy(nalUnitTargetBuffer.nalData, 0, csd, 0, nalUnitTargetBuffer.nalLength);
+        System.arraycopy(nalUnitTargetBuffer2.nalData, 0, csd, nalUnitTargetBuffer.nalLength, nalUnitTargetBuffer2.nalLength);
+        System.arraycopy(nalUnitTargetBuffer3.nalData, 0, csd, nalUnitTargetBuffer.nalLength + nalUnitTargetBuffer2.nalLength, nalUnitTargetBuffer3.nalLength);
+        ParsableNalUnitBitArray bitArray = new ParsableNalUnitBitArray(nalUnitTargetBuffer2.nalData, 0, nalUnitTargetBuffer2.nalLength);
         bitArray.skipBits(44);
         int maxSubLayersMinus1 = bitArray.readBits(3);
         bitArray.skipBit();
@@ -270,23 +273,38 @@ public final class H265Reader implements ElementaryStreamReader {
         int picWidthInLumaSamples = bitArray.readUnsignedExpGolombCodedInt();
         int picHeightInLumaSamples = bitArray.readUnsignedExpGolombCodedInt();
         if (bitArray.readBit()) {
-            int confWinLeftOffset = bitArray.readUnsignedExpGolombCodedInt();
-            int confWinRightOffset = bitArray.readUnsignedExpGolombCodedInt();
-            int confWinTopOffset = bitArray.readUnsignedExpGolombCodedInt();
+            int subWidthC;
+            confWinLeftOffset = bitArray.readUnsignedExpGolombCodedInt();
+            confWinRightOffset = bitArray.readUnsignedExpGolombCodedInt();
+            confWinTopOffset = bitArray.readUnsignedExpGolombCodedInt();
             int confWinBottomOffset = bitArray.readUnsignedExpGolombCodedInt();
-            int subWidthC = (chromaFormatIdc == 1 || chromaFormatIdc == 2) ? 2 : 1;
+            subHeightC = 1;
+            if (chromaFormatIdc != 1) {
+                if (chromaFormatIdc != 2) {
+                    subWidthC = 1;
+                    if (chromaFormatIdc == 1) {
+                        subHeightC = 2;
+                    }
+                    picWidthInLumaSamples -= (confWinLeftOffset + confWinRightOffset) * subWidthC;
+                    picHeightInLumaSamples -= (confWinTopOffset + confWinBottomOffset) * subHeightC;
+                }
+            }
+            subWidthC = 2;
+            if (chromaFormatIdc == 1) {
+                subHeightC = 2;
+            }
             picWidthInLumaSamples -= (confWinLeftOffset + confWinRightOffset) * subWidthC;
-            picHeightInLumaSamples -= (confWinTopOffset + confWinBottomOffset) * (chromaFormatIdc == 1 ? 2 : 1);
+            picHeightInLumaSamples -= (confWinTopOffset + confWinBottomOffset) * subHeightC;
         }
         bitArray.readUnsignedExpGolombCodedInt();
         bitArray.readUnsignedExpGolombCodedInt();
-        int log2MaxPicOrderCntLsbMinus4 = bitArray.readUnsignedExpGolombCodedInt();
-        i = bitArray.readBit() ? 0 : maxSubLayersMinus1;
-        while (i <= maxSubLayersMinus1) {
+        subHeightC = bitArray.readUnsignedExpGolombCodedInt();
+        confWinLeftOffset = bitArray.readBit() ? 0 : maxSubLayersMinus1;
+        while (confWinLeftOffset <= maxSubLayersMinus1) {
             bitArray.readUnsignedExpGolombCodedInt();
             bitArray.readUnsignedExpGolombCodedInt();
             bitArray.readUnsignedExpGolombCodedInt();
-            i++;
+            confWinLeftOffset++;
         }
         bitArray.readUnsignedExpGolombCodedInt();
         bitArray.readUnsignedExpGolombCodedInt();
@@ -306,24 +324,34 @@ public final class H265Reader implements ElementaryStreamReader {
         }
         skipShortTermRefPicSets(bitArray);
         if (bitArray.readBit()) {
-            for (i = 0; i < bitArray.readUnsignedExpGolombCodedInt(); i++) {
-                bitArray.skipBits((log2MaxPicOrderCntLsbMinus4 + 4) + 1);
+            int i2 = 0;
+            while (true) {
+                confWinRightOffset = i2;
+                if (confWinRightOffset >= bitArray.readUnsignedExpGolombCodedInt()) {
+                    break;
+                }
+                bitArray.skipBits((subHeightC + 4) + 1);
+                i2 = confWinRightOffset + 1;
             }
         }
         bitArray.skipBits(2);
         float pixelWidthHeightRatio = 1.0f;
         if (bitArray.readBit() && bitArray.readBit()) {
-            int aspectRatioIdc = bitArray.readBits(8);
-            if (aspectRatioIdc == 255) {
-                int sarWidth = bitArray.readBits(16);
-                int sarHeight = bitArray.readBits(16);
-                if (!(sarWidth == 0 || sarHeight == 0)) {
-                    pixelWidthHeightRatio = ((float) sarWidth) / ((float) sarHeight);
+            i = bitArray.readBits(8);
+            if (i == 255) {
+                confWinTopOffset = bitArray.readBits(16);
+                confWinRightOffset = bitArray.readBits(16);
+                if (!(confWinTopOffset == 0 || confWinRightOffset == 0)) {
+                    pixelWidthHeightRatio = ((float) confWinTopOffset) / ((float) confWinRightOffset);
                 }
-            } else if (aspectRatioIdc < NalUnitUtil.ASPECT_RATIO_IDC_VALUES.length) {
-                pixelWidthHeightRatio = NalUnitUtil.ASPECT_RATIO_IDC_VALUES[aspectRatioIdc];
+            } else if (i < NalUnitUtil.ASPECT_RATIO_IDC_VALUES.length) {
+                pixelWidthHeightRatio = NalUnitUtil.ASPECT_RATIO_IDC_VALUES[i];
             } else {
-                Log.w(TAG, "Unexpected aspect_ratio_idc value: " + aspectRatioIdc);
+                String str = TAG;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Unexpected aspect_ratio_idc value: ");
+                stringBuilder.append(i);
+                Log.w(str, stringBuilder.toString());
             }
         }
         return Format.createVideoSampleFormat(formatId, MimeTypes.VIDEO_H265, null, -1, -1, picWidthInLumaSamples, picHeightInLumaSamples, -1.0f, Collections.singletonList(csd), -1, pixelWidthHeightRatio, null);
@@ -333,50 +361,50 @@ public final class H265Reader implements ElementaryStreamReader {
         for (int sizeId = 0; sizeId < 4; sizeId++) {
             int matrixId = 0;
             while (matrixId < 6) {
-                int i;
+                int coefNum;
                 if (bitArray.readBit()) {
-                    int coefNum = Math.min(64, 1 << ((sizeId << 1) + 4));
+                    coefNum = Math.min(64, 1 << ((sizeId << 1) + 4));
                     if (sizeId > 1) {
                         bitArray.readSignedExpGolombCodedInt();
                     }
-                    for (int i2 = 0; i2 < coefNum; i2++) {
+                    for (int i = 0; i < coefNum; i++) {
                         bitArray.readSignedExpGolombCodedInt();
                     }
                 } else {
                     bitArray.readUnsignedExpGolombCodedInt();
                 }
-                if (sizeId == 3) {
-                    i = 3;
-                } else {
-                    i = 1;
+                coefNum = 3;
+                if (sizeId != 3) {
+                    coefNum = 1;
                 }
-                matrixId += i;
+                matrixId += coefNum;
             }
         }
     }
 
     private static void skipShortTermRefPicSets(ParsableNalUnitBitArray bitArray) {
         int numShortTermRefPicSets = bitArray.readUnsignedExpGolombCodedInt();
-        boolean interRefPicSetPredictionFlag = false;
         int previousNumDeltaPocs = 0;
+        boolean interRefPicSetPredictionFlag = false;
         for (int stRpsIdx = 0; stRpsIdx < numShortTermRefPicSets; stRpsIdx++) {
             if (stRpsIdx != 0) {
                 interRefPicSetPredictionFlag = bitArray.readBit();
             }
+            int j;
             if (interRefPicSetPredictionFlag) {
                 bitArray.skipBit();
                 bitArray.readUnsignedExpGolombCodedInt();
-                for (int j = 0; j <= previousNumDeltaPocs; j++) {
+                for (j = 0; j <= previousNumDeltaPocs; j++) {
                     if (bitArray.readBit()) {
                         bitArray.skipBit();
                     }
                 }
             } else {
                 int i;
-                int numNegativePics = bitArray.readUnsignedExpGolombCodedInt();
+                j = bitArray.readUnsignedExpGolombCodedInt();
                 int numPositivePics = bitArray.readUnsignedExpGolombCodedInt();
-                previousNumDeltaPocs = numNegativePics + numPositivePics;
-                for (i = 0; i < numNegativePics; i++) {
+                previousNumDeltaPocs = j + numPositivePics;
+                for (i = 0; i < j; i++) {
                     bitArray.readUnsignedExpGolombCodedInt();
                     bitArray.skipBit();
                 }

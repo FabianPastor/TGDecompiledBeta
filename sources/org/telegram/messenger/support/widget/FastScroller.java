@@ -81,13 +81,15 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
         private boolean mCanceled;
 
         private AnimatorListener() {
-            this.mCanceled = false;
+            this.mCanceled = null;
         }
 
         public void onAnimationEnd(Animator animation) {
             if (this.mCanceled) {
                 this.mCanceled = false;
-            } else if (((Float) FastScroller.this.mShowHideAnimator.getAnimatedValue()).floatValue() == 0.0f) {
+                return;
+            }
+            if (((Float) FastScroller.this.mShowHideAnimator.getAnimatedValue()).floatValue() == 0.0f) {
                 FastScroller.this.mAnimationState = 0;
                 FastScroller.this.setState(0);
             } else {
@@ -106,7 +108,7 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
         }
 
         public void onAnimationUpdate(ValueAnimator valueAnimator) {
-            int alpha = (int) (((Float) valueAnimator.getAnimatedValue()).floatValue() * 255.0f);
+            int alpha = (int) (255.0f * ((Float) valueAnimator.getAnimatedValue()).floatValue());
             FastScroller.this.mVerticalThumbDrawable.setAlpha(alpha);
             FastScroller.this.mVerticalTrackDrawable.setAlpha(alpha);
             FastScroller.this.requestRedraw();
@@ -214,14 +216,13 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     }
 
     public void show() {
-        switch (this.mAnimationState) {
-            case 0:
-                break;
-            case 3:
+        int i = this.mAnimationState;
+        if (i != 0) {
+            if (i == 3) {
                 this.mShowHideAnimator.cancel();
-                break;
-            default:
+            } else {
                 return;
+            }
         }
         this.mAnimationState = 1;
         this.mShowHideAnimator.setFloatValues(new float[]{((Float) this.mShowHideAnimator.getAnimatedValue()).floatValue(), 1.0f});
@@ -260,18 +261,22 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     }
 
     public void onDrawOver(Canvas canvas, RecyclerView parent, org.telegram.messenger.support.widget.RecyclerView.State state) {
-        if (this.mRecyclerViewWidth != this.mRecyclerView.getWidth() || this.mRecyclerViewHeight != this.mRecyclerView.getHeight()) {
-            this.mRecyclerViewWidth = this.mRecyclerView.getWidth();
-            this.mRecyclerViewHeight = this.mRecyclerView.getHeight();
-            setState(0);
-        } else if (this.mAnimationState != 0) {
-            if (this.mNeedVerticalScrollbar) {
-                drawVerticalScrollbar(canvas);
-            }
-            if (this.mNeedHorizontalScrollbar) {
-                drawHorizontalScrollbar(canvas);
+        if (this.mRecyclerViewWidth == this.mRecyclerView.getWidth()) {
+            if (this.mRecyclerViewHeight == this.mRecyclerView.getHeight()) {
+                if (this.mAnimationState != 0) {
+                    if (this.mNeedVerticalScrollbar) {
+                        drawVerticalScrollbar(canvas);
+                    }
+                    if (this.mNeedHorizontalScrollbar) {
+                        drawHorizontalScrollbar(canvas);
+                    }
+                }
+                return;
             }
         }
+        this.mRecyclerViewWidth = this.mRecyclerView.getWidth();
+        this.mRecyclerViewHeight = this.mRecyclerView.getHeight();
+        setState(0);
     }
 
     private void drawVerticalScrollbar(Canvas canvas) {
@@ -308,23 +313,14 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
     }
 
     void updateScrollPosition(int offsetX, int offsetY) {
-        boolean z;
         int verticalContentLength = this.mRecyclerView.computeVerticalScrollRange();
         int verticalVisibleLength = this.mRecyclerViewHeight;
-        if (verticalContentLength - verticalVisibleLength <= 0 || this.mRecyclerViewHeight < this.mScrollbarMinimumRange) {
-            z = false;
-        } else {
-            z = true;
-        }
+        boolean z = verticalContentLength - verticalVisibleLength > 0 && this.mRecyclerViewHeight >= this.mScrollbarMinimumRange;
         this.mNeedVerticalScrollbar = z;
         int horizontalContentLength = this.mRecyclerView.computeHorizontalScrollRange();
         int horizontalVisibleLength = this.mRecyclerViewWidth;
-        if (horizontalContentLength - horizontalVisibleLength <= 0 || this.mRecyclerViewWidth < this.mScrollbarMinimumRange) {
-            z = false;
-        } else {
-            z = true;
-        }
-        this.mNeedHorizontalScrollbar = z;
+        boolean z2 = horizontalContentLength - horizontalVisibleLength > 0 && this.mRecyclerViewWidth >= this.mScrollbarMinimumRange;
+        this.mNeedHorizontalScrollbar = z2;
         if (this.mNeedVerticalScrollbar || this.mNeedHorizontalScrollbar) {
             if (this.mNeedVerticalScrollbar) {
                 this.mVerticalThumbCenterY = (int) ((((float) verticalVisibleLength) * (((float) offsetY) + (((float) verticalVisibleLength) / 2.0f))) / ((float) verticalContentLength));
@@ -337,32 +333,33 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
             if (this.mState == 0 || this.mState == 1) {
                 setState(1);
             }
-        } else if (this.mState != 0) {
+            return;
+        }
+        if (this.mState != 0) {
             setState(0);
         }
     }
 
     public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent ev) {
+        boolean handled = false;
         if (this.mState == 1) {
             boolean insideVerticalThumb = isPointInsideVerticalThumb(ev.getX(), ev.getY());
             boolean insideHorizontalThumb = isPointInsideHorizontalThumb(ev.getX(), ev.getY());
-            if (ev.getAction() != 0 || (!insideVerticalThumb && !insideHorizontalThumb)) {
-                return false;
+            if (ev.getAction() == 0 && (insideVerticalThumb || insideHorizontalThumb)) {
+                if (insideHorizontalThumb) {
+                    this.mDragState = 1;
+                    this.mHorizontalDragX = (float) ((int) ev.getX());
+                } else if (insideVerticalThumb) {
+                    this.mDragState = 2;
+                    this.mVerticalDragY = (float) ((int) ev.getY());
+                }
+                setState(2);
+                handled = true;
             }
-            if (insideHorizontalThumb) {
-                this.mDragState = 1;
-                this.mHorizontalDragX = (float) ((int) ev.getX());
-            } else if (insideVerticalThumb) {
-                this.mDragState = 2;
-                this.mVerticalDragY = (float) ((int) ev.getY());
-            }
-            setState(2);
-            return true;
         } else if (this.mState == 2) {
-            return true;
-        } else {
-            return false;
+            handled = true;
         }
+        return handled;
     }
 
     public void onTouchEvent(RecyclerView recyclerView, MotionEvent me) {
@@ -438,11 +435,16 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
         return scrollingBy;
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     boolean isPointInsideVerticalThumb(float x, float y) {
-        if (isLayoutRTL() ? x <= ((float) (this.mVerticalThumbWidth / 2)) : x >= ((float) (this.mRecyclerViewWidth - this.mVerticalThumbWidth))) {
-            if (y >= ((float) (this.mVerticalThumbCenterY - (this.mVerticalThumbHeight / 2))) && y <= ((float) (this.mVerticalThumbCenterY + (this.mVerticalThumbHeight / 2)))) {
-                return true;
+        if (isLayoutRTL()) {
+            if (x <= ((float) (this.mVerticalThumbWidth / 2))) {
             }
+            return false;
+        }
+        if (y >= ((float) (this.mVerticalThumbCenterY - (this.mVerticalThumbHeight / 2))) && y <= ((float) (this.mVerticalThumbCenterY + (this.mVerticalThumbHeight / 2)))) {
+            return true;
         }
         return false;
     }

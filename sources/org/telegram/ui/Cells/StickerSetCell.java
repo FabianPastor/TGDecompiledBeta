@@ -38,104 +38,73 @@ public class StickerSetCell extends FrameLayout {
     private TextView valueTextView;
 
     public StickerSetCell(Context context, int option) {
-        int i;
-        int i2;
-        int i3 = 5;
-        int i4 = 3;
+        Context context2 = context;
+        int i = option;
         super(context);
-        this.textView = new TextView(context);
+        this.textView = new TextView(context2);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
+        int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
-        View view = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 40.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
-        this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
-        this.valueTextView.setTextSize(1, 13.0f);
-        this.valueTextView.setLines(1);
-        this.valueTextView.setMaxLines(1);
-        this.valueTextView.setSingleLine(true);
-        TextView textView = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        textView.setGravity(i2);
-        view = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 40.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
-        this.imageView = new BackupImageView(context);
-        this.imageView.setAspectFit(true);
-        view = this.imageView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(view, LayoutHelper.createFrame(48, 48.0f, i | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
-        if (option == 2) {
-            float f;
-            float f2;
-            this.progressView = new RadialProgressView(getContext());
-            this.progressView.setProgressColor(Theme.getColor(Theme.key_dialogProgressCircle));
-            this.progressView.setSize(AndroidUtilities.dp(30.0f));
-            view = this.progressView;
+        addView(r0.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 40.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
+        r0.valueTextView = new TextView(context2);
+        r0.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        r0.valueTextView.setTextSize(1, 13.0f);
+        r0.valueTextView.setLines(1);
+        r0.valueTextView.setMaxLines(1);
+        r0.valueTextView.setSingleLine(true);
+        r0.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        addView(r0.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 40.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
+        r0.imageView = new BackupImageView(context2);
+        r0.imageView.setAspectFit(true);
+        addView(r0.imageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        View view;
+        if (i == 2) {
+            r0.progressView = new RadialProgressView(getContext());
+            r0.progressView.setProgressColor(Theme.getColor(Theme.key_dialogProgressCircle));
+            r0.progressView.setSize(AndroidUtilities.dp(30.0f));
+            view = r0.progressView;
             if (!LocaleController.isRTL) {
-                i3 = 3;
+                i2 = 3;
             }
-            i = i3 | 48;
-            if (LocaleController.isRTL) {
-                f = 0.0f;
-            } else {
-                f = 12.0f;
-            }
-            if (LocaleController.isRTL) {
-                f2 = 12.0f;
-            } else {
-                f2 = 0.0f;
-            }
-            addView(view, LayoutHelper.createFrame(48, 48.0f, i, f, 8.0f, f2, 0.0f));
-        } else if (option != 0) {
-            this.optionsButton = new ImageView(context);
-            this.optionsButton.setFocusable(false);
-            this.optionsButton.setScaleType(ScaleType.CENTER);
-            this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
-            if (option == 1) {
-                this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
-                this.optionsButton.setImageResource(R.drawable.msg_actions);
-                View view2 = this.optionsButton;
-                if (!LocaleController.isRTL) {
-                    i4 = 5;
+            addView(view, LayoutHelper.createFrame(48, 48.0f, i2 | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        } else if (i != 0) {
+            r0.optionsButton = new ImageView(context2);
+            int i3 = 0;
+            r0.optionsButton.setFocusable(false);
+            r0.optionsButton.setScaleType(ScaleType.CENTER);
+            r0.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
+            if (i == 1) {
+                r0.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
+                r0.optionsButton.setImageResource(R.drawable.msg_actions);
+                view = r0.optionsButton;
+                if (LocaleController.isRTL) {
+                    i2 = 3;
                 }
-                addView(view2, LayoutHelper.createFrame(40, 40, i4 | 48));
-            } else if (option == 3) {
-                this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
-                this.optionsButton.setImageResource(R.drawable.sticker_added);
-                view = this.optionsButton;
-                if (!LocaleController.isRTL) {
-                    i4 = 5;
+                addView(view, LayoutHelper.createFrame(40, 40, i2 | 48));
+            } else if (i == 3) {
+                r0.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
+                r0.optionsButton.setImageResource(R.drawable.sticker_added);
+                view = r0.optionsButton;
+                if (LocaleController.isRTL) {
+                    i2 = 3;
                 }
-                addView(view, LayoutHelper.createFrame(40, 40.0f, i4 | 48, (float) (LocaleController.isRTL ? 10 : 0), 12.0f, (float) (LocaleController.isRTL ? 0 : 10), 0.0f));
+                int i4 = i2 | 48;
+                float f = (float) (LocaleController.isRTL ? 10 : 0);
+                if (!LocaleController.isRTL) {
+                    i3 = 10;
+                }
+                addView(view, LayoutHelper.createFrame(40, 40.0f, i4, f, 12.0f, (float) i3, 0.0f));
             }
         }
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(64.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + this.needDivider, NUM));
     }
 
     public void setText(String title, String subtitle, int icon, boolean divider) {
@@ -188,7 +157,7 @@ public class StickerSetCell extends FrameLayout {
         }
         this.valueTextView.setText(LocaleController.formatPluralString("Stickers", documents.size()));
         Document document = (Document) documents.get(0);
-        if (document.thumb != null && document.thumb.location != null) {
+        if (!(document.thumb == null || document.thumb.location == null)) {
             this.imageView.setImage(document.thumb.location, null, "webp", null);
         }
     }

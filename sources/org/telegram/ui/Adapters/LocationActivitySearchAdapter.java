@@ -23,7 +23,14 @@ public class LocationActivitySearchAdapter extends BaseLocationAdapter {
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ((LocationCell) holder.itemView).setLocation((TL_messageMediaVenue) this.places.get(position), (String) this.iconUrls.get(position), position != this.places.size() + -1);
+        LocationCell locationCell = (LocationCell) holder.itemView;
+        TL_messageMediaVenue tL_messageMediaVenue = (TL_messageMediaVenue) this.places.get(position);
+        String str = (String) this.iconUrls.get(position);
+        boolean z = true;
+        if (position == this.places.size() - 1) {
+            z = false;
+        }
+        locationCell.setLocation(tL_messageMediaVenue, str, z);
     }
 
     public TL_messageMediaVenue getItem(int i) {

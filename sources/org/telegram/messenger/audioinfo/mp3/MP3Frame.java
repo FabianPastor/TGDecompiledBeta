@@ -12,15 +12,22 @@ public class MP3Frame {
 
         public void update(int value, int length) {
             int mask = 1 << (length - 1);
+            int i;
             do {
-                if ((((value & mask) == 0 ? 1 : 0) ^ ((this.crc & 32768) == 0 ? 1 : 0)) != 0) {
+                int i2 = 0;
+                i = (this.crc & 32768) == 0 ? 1 : 0;
+                if ((value & mask) == 0) {
+                    i2 = 1;
+                }
+                if ((i ^ i2) != 0) {
                     this.crc = (short) (this.crc << 1);
                     this.crc = (short) (this.crc ^ 32773);
                 } else {
                     this.crc = (short) (this.crc << 1);
                 }
-                mask >>>= 1;
-            } while (mask != 0);
+                i = mask >>> 1;
+                mask = i;
+            } while (i != 0);
         }
 
         public void update(byte value) {
@@ -94,7 +101,10 @@ public class MP3Frame {
                     minFrameSize += getSideInfoSize();
                 }
                 if (getFrameSize() < minFrameSize) {
-                    throw new MP3Exception("Frame size must be at least " + minFrameSize);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("Frame size must be at least ");
+                    stringBuilder.append(minFrameSize);
+                    throw new MP3Exception(stringBuilder.toString());
                 }
             }
         }
@@ -155,7 +165,7 @@ public class MP3Frame {
         }
 
         public int getXingOffset() {
-            return getSideInfoSize() + 4;
+            return 4 + getSideInfoSize();
         }
 
         public int getVBRIOffset() {
@@ -169,6 +179,7 @@ public class MP3Frame {
     }
 
     boolean isChecksumError() {
+        boolean z = false;
         if (this.header.getProtection() != 0 || this.header.getLayer() != 1) {
             return false;
         }
@@ -177,12 +188,12 @@ public class MP3Frame {
         crc16.update(this.bytes[3]);
         int sideInfoSize = this.header.getSideInfoSize();
         for (int i = 0; i < sideInfoSize; i++) {
-            crc16.update(this.bytes[i + 6]);
+            crc16.update(this.bytes[6 + i]);
         }
         if ((((this.bytes[4] & 255) << 8) | (this.bytes[5] & 255)) != crc16.getValue()) {
-            return true;
+            z = true;
         }
-        return false;
+        return z;
     }
 
     public int getSize() {
@@ -195,35 +206,42 @@ public class MP3Frame {
 
     boolean isXingFrame() {
         int xingOffset = this.header.getXingOffset();
-        if (this.bytes.length < xingOffset + 12 || xingOffset < 0 || this.bytes.length < xingOffset + 8) {
-            return false;
-        }
-        if (this.bytes[xingOffset] == (byte) 88 && this.bytes[xingOffset + 1] == (byte) 105 && this.bytes[xingOffset + 2] == (byte) 110 && this.bytes[xingOffset + 3] == (byte) 103) {
-            return true;
-        }
-        if (this.bytes[xingOffset] == (byte) 73 && this.bytes[xingOffset + 1] == (byte) 110 && this.bytes[xingOffset + 2] == (byte) 102 && this.bytes[xingOffset + 3] == (byte) 111) {
-            return true;
+        if (this.bytes.length >= xingOffset + 12 && xingOffset >= 0) {
+            if (this.bytes.length >= xingOffset + 8) {
+                if (this.bytes[xingOffset] == (byte) 88 && this.bytes[xingOffset + 1] == (byte) 105 && this.bytes[xingOffset + 2] == (byte) 110 && this.bytes[xingOffset + 3] == (byte) 103) {
+                    return true;
+                }
+                if (this.bytes[xingOffset] == (byte) 73 && this.bytes[xingOffset + 1] == (byte) 110 && this.bytes[xingOffset + 2] == (byte) 102 && this.bytes[xingOffset + 3] == (byte) 111) {
+                    return true;
+                }
+                return false;
+            }
         }
         return false;
     }
 
     boolean isVBRIFrame() {
         int vbriOffset = this.header.getVBRIOffset();
-        if (this.bytes.length >= vbriOffset + 26 && this.bytes[vbriOffset] == (byte) 86 && this.bytes[vbriOffset + 1] == (byte) 66 && this.bytes[vbriOffset + 2] == (byte) 82 && this.bytes[vbriOffset + 3] == (byte) 73) {
-            return true;
+        boolean z = false;
+        if (this.bytes.length < vbriOffset + 26) {
+            return false;
         }
-        return false;
+        if (this.bytes[vbriOffset] == (byte) 86 && this.bytes[vbriOffset + 1] == (byte) 66 && this.bytes[vbriOffset + 2] == (byte) 82 && this.bytes[vbriOffset + 3] == (byte) 73) {
+            z = true;
+        }
+        return z;
     }
 
     public int getNumberOfFrames() {
+        int xingOffset;
         if (isXingFrame()) {
-            int xingOffset = this.header.getXingOffset();
+            xingOffset = this.header.getXingOffset();
             if ((this.bytes[xingOffset + 7] & 1) != 0) {
                 return ((((this.bytes[xingOffset + 8] & 255) << 24) | ((this.bytes[xingOffset + 9] & 255) << 16)) | ((this.bytes[xingOffset + 10] & 255) << 8)) | (this.bytes[xingOffset + 11] & 255);
             }
         } else if (isVBRIFrame()) {
-            int vbriOffset = this.header.getVBRIOffset();
-            return ((((this.bytes[vbriOffset + 14] & 255) << 24) | ((this.bytes[vbriOffset + 15] & 255) << 16)) | ((this.bytes[vbriOffset + 16] & 255) << 8)) | (this.bytes[vbriOffset + 17] & 255);
+            xingOffset = this.header.getVBRIOffset();
+            return ((((this.bytes[xingOffset + 14] & 255) << 24) | ((this.bytes[xingOffset + 15] & 255) << 16)) | ((this.bytes[xingOffset + 16] & 255) << 8)) | (this.bytes[xingOffset + 17] & 255);
         }
         return -1;
     }

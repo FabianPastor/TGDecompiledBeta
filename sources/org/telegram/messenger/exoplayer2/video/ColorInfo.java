@@ -42,26 +42,39 @@ public final class ColorInfo implements Parcelable {
     }
 
     public boolean equals(Object obj) {
+        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        ColorInfo other = (ColorInfo) obj;
-        if (this.colorSpace == other.colorSpace && this.colorRange == other.colorRange && this.colorTransfer == other.colorTransfer && Arrays.equals(this.hdrStaticInfo, other.hdrStaticInfo)) {
-            return true;
+        if (obj != null) {
+            if (getClass() == obj.getClass()) {
+                ColorInfo other = (ColorInfo) obj;
+                if (this.colorSpace != other.colorSpace || this.colorRange != other.colorRange || this.colorTransfer != other.colorTransfer || !Arrays.equals(this.hdrStaticInfo, other.hdrStaticInfo)) {
+                    z = false;
+                }
+                return z;
+            }
         }
         return false;
     }
 
     public String toString() {
-        return "ColorInfo(" + this.colorSpace + ", " + this.colorRange + ", " + this.colorTransfer + ", " + (this.hdrStaticInfo != null) + ")";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("ColorInfo(");
+        stringBuilder.append(this.colorSpace);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.colorRange);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.colorTransfer);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.hdrStaticInfo != null);
+        stringBuilder.append(")");
+        return stringBuilder.toString();
     }
 
     public int hashCode() {
         if (this.hashCode == 0) {
-            this.hashCode = ((((((this.colorSpace + 527) * 31) + this.colorRange) * 31) + this.colorTransfer) * 31) + Arrays.hashCode(this.hdrStaticInfo);
+            this.hashCode = (31 * ((31 * ((31 * ((31 * 17) + this.colorSpace)) + this.colorRange)) + this.colorTransfer)) + Arrays.hashCode(this.hdrStaticInfo);
         }
         return this.hashCode;
     }

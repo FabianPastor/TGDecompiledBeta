@@ -106,7 +106,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
                     if (Math.abs(FeaturedStickerSetInfoCell.this.lastUpdateTime - System.currentTimeMillis()) < 1000) {
                         long delta = newTime - FeaturedStickerSetInfoCell.this.lastUpdateTime;
                         FeaturedStickerSetInfoCell.this.angle = (int) (((float) FeaturedStickerSetInfoCell.this.angle) + (((float) (360 * delta)) / 2000.0f));
-                        FeaturedStickerSetInfoCell.this.angle = FeaturedStickerSetInfoCell.this.angle - ((FeaturedStickerSetInfoCell.this.angle / 360) * 360);
+                        FeaturedStickerSetInfoCell.this.angle = FeaturedStickerSetInfoCell.this.angle - (360 * (FeaturedStickerSetInfoCell.this.angle / 360));
                         if (FeaturedStickerSetInfoCell.this.drawProgress) {
                             if (FeaturedStickerSetInfoCell.this.progressAlpha < 1.0f) {
                                 FeaturedStickerSetInfoCell.this.progressAlpha = FeaturedStickerSetInfoCell.this.progressAlpha + (((float) delta) / 200.0f);

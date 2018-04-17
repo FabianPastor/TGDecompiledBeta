@@ -22,6 +22,8 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.MessageEntity;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_messageEntityEmail;
@@ -83,10 +85,35 @@ public class SharedLinkCell extends FrameLayout {
 
     @SuppressLint({"DrawAllocation"})
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int a;
-        String link;
+        String title;
+        String description2;
+        String description;
+        String description22;
+        Throwable e;
+        int width;
+        StaticLayout staticLayout;
+        char c;
+        Throwable e2;
+        float f;
         int height;
+        String link;
+        int width2;
+        int a;
+        String title2;
+        float f2;
+        Throwable e3;
+        int maxPhotoWidth;
+        float f3;
         int x;
+        PhotoSize currentPhotoObject;
+        PhotoSize currentPhotoObjectThumb;
+        ImageReceiver imageReceiver;
+        TLObject tLObject;
+        FileLocation fileLocation;
+        Object[] objArr;
+        int i;
+        int height2;
+        StaticLayout layout;
         this.drawLinkImageView = false;
         this.descriptionLayout = null;
         this.titleLayout = null;
@@ -95,143 +122,457 @@ public class SharedLinkCell extends FrameLayout {
         this.linkLayout.clear();
         this.links.clear();
         int maxWidth = (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)) - AndroidUtilities.dp(8.0f);
-        String title = null;
-        String description = null;
-        String description2 = null;
         String webPageLink = null;
+        String title3 = null;
+        String description3 = null;
         boolean hasPhoto = false;
-        if ((this.message.messageOwner.media instanceof TL_messageMediaWebPage) && (this.message.messageOwner.media.webpage instanceof TL_webPage)) {
-            WebPage webPage = this.message.messageOwner.media.webpage;
-            if (this.message.photoThumbs == null && webPage.photo != null) {
-                this.message.generateThumbs(true);
+        boolean z = true;
+        if ((this.message.messageOwner.media instanceof TL_messageMediaWebPage) && (r1.message.messageOwner.media.webpage instanceof TL_webPage)) {
+            WebPage webPage = r1.message.messageOwner.media.webpage;
+            if (r1.message.photoThumbs == null && webPage.photo != null) {
+                r1.message.generateThumbs(true);
             }
-            hasPhoto = (webPage.photo == null || this.message.photoThumbs == null) ? false : true;
-            title = webPage.title;
-            if (title == null) {
-                title = webPage.site_name;
+            boolean z2 = (webPage.photo == null || r1.message.photoThumbs == null) ? false : true;
+            hasPhoto = z2;
+            webPageLink = webPage.title;
+            if (webPageLink == null) {
+                webPageLink = webPage.site_name;
             }
-            description = webPage.description;
-            webPageLink = webPage.url;
+            title3 = webPage.description;
+            description3 = webPage.url;
         }
-        if (!(this.message == null || this.message.messageOwner.entities.isEmpty())) {
-            for (a = 0; a < this.message.messageOwner.entities.size(); a++) {
-                MessageEntity entity = (MessageEntity) this.message.messageOwner.entities.get(a);
-                if (entity.length > 0 && entity.offset >= 0 && entity.offset < this.message.messageOwner.message.length()) {
-                    if (entity.offset + entity.length > this.message.messageOwner.message.length()) {
-                        entity.length = this.message.messageOwner.message.length() - entity.offset;
-                    }
-                    if (!(a != 0 || webPageLink == null || (entity.offset == 0 && entity.length == this.message.messageOwner.message.length()))) {
-                        if (this.message.messageOwner.entities.size() != 1) {
-                            description2 = this.message.messageOwner.message;
-                        } else if (description == null) {
-                            description2 = this.message.messageOwner.message;
+        boolean hasPhoto2 = hasPhoto;
+        String str = title3;
+        title3 = webPageLink;
+        webPageLink = description3;
+        description3 = str;
+        if (r1.message == null || r1.message.messageOwner.entities.isEmpty()) {
+            title = title3;
+            description2 = null;
+            description = description3;
+        } else {
+            description22 = null;
+            String description23 = title3;
+            title3 = null;
+            while (title3 < r1.message.messageOwner.entities.size()) {
+                MessageEntity entity = (MessageEntity) r1.message.messageOwner.entities.get(title3);
+                if (entity.length > 0 && entity.offset >= 0) {
+                    if (entity.offset < r1.message.messageOwner.message.length()) {
+                        if (entity.offset + entity.length > r1.message.messageOwner.message.length()) {
+                            entity.length = r1.message.messageOwner.message.length() - entity.offset;
                         }
-                    }
-                    link = null;
-                    try {
-                        if ((entity instanceof TL_messageEntityTextUrl) || (entity instanceof TL_messageEntityUrl)) {
-                            if (entity instanceof TL_messageEntityUrl) {
-                                link = this.message.messageOwner.message.substring(entity.offset, entity.offset + entity.length);
-                            } else {
-                                link = entity.url;
+                        if (!(title3 != null || webPageLink == null || (entity.offset == 0 && entity.length == r1.message.messageOwner.message.length()))) {
+                            if (r1.message.messageOwner.entities.size() != z) {
+                                description22 = r1.message.messageOwner.message;
+                            } else if (description3 == null) {
+                                description22 = r1.message.messageOwner.message;
                             }
-                            if (title == null || title.length() == 0) {
-                                title = Uri.parse(link).getHost();
-                                if (title == null) {
-                                    title = link;
-                                }
-                                if (title != null) {
-                                    int index = title.lastIndexOf(46);
-                                    if (index >= 0) {
-                                        title = title.substring(0, index);
-                                        index = title.lastIndexOf(46);
-                                        if (index >= 0) {
-                                            title = title.substring(index + 1);
+                        }
+                        String link2 = null;
+                        try {
+                            if (!(entity instanceof TL_messageEntityTextUrl)) {
+                                if (!(entity instanceof TL_messageEntityUrl)) {
+                                    if ((entity instanceof TL_messageEntityEmail) && (description23 == null || description23.length() == 0)) {
+                                        StringBuilder stringBuilder = new StringBuilder();
+                                        stringBuilder.append("mailto:");
+                                        stringBuilder.append(r1.message.messageOwner.message.substring(entity.offset, entity.offset + entity.length));
+                                        link2 = stringBuilder.toString();
+                                        title = r1.message.messageOwner.message.substring(entity.offset, entity.offset + entity.length);
+                                        try {
+                                            if (!(entity.offset == 0 && entity.length == r1.message.messageOwner.message.length())) {
+                                                description23 = title;
+                                                description3 = r1.message.messageOwner.message;
+                                            }
+                                            description23 = title;
+                                        } catch (Exception e4) {
+                                            e = e4;
+                                            description23 = title;
+                                            FileLog.m3e(e);
+                                            title3++;
+                                            z = true;
                                         }
-                                        title = title.substring(0, 1).toUpperCase() + title.substring(1);
+                                    }
+                                    if (link2 != null) {
+                                        if (link2.toLowerCase().indexOf("http") != 0 || link2.toLowerCase().indexOf("mailto") == 0) {
+                                            r1.links.add(link2);
+                                        } else {
+                                            ArrayList arrayList = r1.links;
+                                            StringBuilder stringBuilder2 = new StringBuilder();
+                                            stringBuilder2.append("http://");
+                                            stringBuilder2.append(link2);
+                                            arrayList.add(stringBuilder2.toString());
+                                        }
                                     }
                                 }
-                                if (!(entity.offset == 0 && entity.length == this.message.messageOwner.message.length())) {
-                                    description = this.message.messageOwner.message;
-                                }
                             }
-                        } else if ((entity instanceof TL_messageEntityEmail) && (title == null || title.length() == 0)) {
-                            link = "mailto:" + this.message.messageOwner.message.substring(entity.offset, entity.offset + entity.length);
-                            title = this.message.messageOwner.message.substring(entity.offset, entity.offset + entity.length);
-                            if (!(entity.offset == 0 && entity.length == this.message.messageOwner.message.length())) {
-                                description = this.message.messageOwner.message;
-                            }
-                        }
-                        if (link != null) {
-                            if (link.toLowerCase().indexOf("http") == 0 || link.toLowerCase().indexOf("mailto") == 0) {
-                                this.links.add(link);
+                            if (entity instanceof TL_messageEntityUrl) {
+                                title = r1.message.messageOwner.message.substring(entity.offset, entity.offset + entity.length);
                             } else {
-                                this.links.add("http://" + link);
+                                title = entity.url;
                             }
+                            link2 = title;
+                            if (description23 == null || description23.length() == 0) {
+                                title = link2;
+                                Uri uri = Uri.parse(title);
+                                title = uri.getHost();
+                                if (title == null) {
+                                    title = link2;
+                                }
+                                if (title != null) {
+                                    int lastIndexOf = title.lastIndexOf(46);
+                                    int index = lastIndexOf;
+                                    if (lastIndexOf >= 0) {
+                                        title = title.substring(0, index);
+                                        description23 = title.lastIndexOf(46);
+                                        lastIndexOf = description23;
+                                        if (description23 >= null) {
+                                            title = title.substring(lastIndexOf + 1);
+                                        }
+                                        description23 = new StringBuilder();
+                                        description23.append(title.substring(0, 1).toUpperCase());
+                                        description23.append(title.substring(1));
+                                        title = description23.toString();
+                                        if (!(entity.offset == 0 && entity.length == r1.message.messageOwner.message.length())) {
+                                            description3 = r1.message.messageOwner.message;
+                                        }
+                                        description23 = title;
+                                    }
+                                }
+                                description3 = r1.message.messageOwner.message;
+                                description23 = title;
+                            }
+                            if (link2 != null) {
+                                if (link2.toLowerCase().indexOf("http") != 0) {
+                                }
+                                r1.links.add(link2);
+                            }
+                        } catch (Exception e5) {
+                            e = e5;
+                            FileLog.m3e(e);
+                            title3++;
+                            z = true;
                         }
-                    } catch (Throwable e) {
-                        FileLog.m3e(e);
                     }
                 }
+                title3++;
+                z = true;
             }
+            title = description23;
+            description = description3;
+            description2 = description22;
         }
-        if (webPageLink != null && this.links.isEmpty()) {
-            this.links.add(webPageLink);
+        if (webPageLink != null && r1.links.isEmpty()) {
+            r1.links.add(webPageLink);
         }
         if (title != null) {
             try {
-                this.titleLayout = new StaticLayout(TextUtils.ellipsize(title.replace('\n', ' '), this.titleTextPaint, (float) Math.min((int) Math.ceil((double) this.titleTextPaint.measureText(title)), maxWidth), TruncateAt.END), this.titleTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-            } catch (Throwable e2) {
-                FileLog.m3e(e2);
-            }
-            this.letterDrawable.setTitle(title);
-        }
-        if (description != null) {
-            try {
-                this.descriptionLayout = ChatMessageCell.generateStaticLayout(description, this.descriptionTextPaint, maxWidth, maxWidth, 0, 3);
-                if (this.descriptionLayout.getLineCount() > 0) {
-                    this.description2Y = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(1.0f);
+                width = (int) Math.ceil((double) r1.titleTextPaint.measureText(title));
+                staticLayout = staticLayout;
+                StaticLayout staticLayout2 = staticLayout;
+                c = 32;
+                try {
+                    staticLayout = new StaticLayout(TextUtils.ellipsize(title.replace('\n', ' '), r1.titleTextPaint, (float) Math.min(width, maxWidth), TruncateAt.END), r1.titleTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    r1.titleLayout = staticLayout2;
+                } catch (Throwable e6) {
+                    e2 = e6;
+                    FileLog.m3e(e2);
+                    r1.letterDrawable.setTitle(title);
+                    f = 1.0f;
+                    if (description != null) {
+                        try {
+                            r1.descriptionLayout = ChatMessageCell.generateStaticLayout(description, r1.descriptionTextPaint, maxWidth, maxWidth, 0, 3);
+                            if (r1.descriptionLayout.getLineCount() > 0) {
+                                r1.description2Y = (r1.descriptionY + r1.descriptionLayout.getLineBottom(r1.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(1.0f);
+                            }
+                        } catch (Throwable e62) {
+                            FileLog.m3e(e62);
+                        }
+                    }
+                    if (description2 != null) {
+                        try {
+                            r1.descriptionLayout2 = ChatMessageCell.generateStaticLayout(description2, r1.descriptionTextPaint, maxWidth, maxWidth, 0, 3);
+                            height = r1.descriptionLayout2.getLineBottom(r1.descriptionLayout2.getLineCount() - 1);
+                            if (r1.descriptionLayout != null) {
+                                r1.description2Y += AndroidUtilities.dp(10.0f);
+                            }
+                        } catch (Throwable e622) {
+                            FileLog.m3e(e622);
+                        }
+                    }
+                    if (!r1.links.isEmpty()) {
+                        height = 0;
+                        while (true) {
+                            width = height;
+                            if (width < r1.links.size()) {
+                                break;
+                            }
+                            try {
+                                link = (String) r1.links.get(width);
+                                width2 = (int) Math.ceil((double) r1.descriptionTextPaint.measureText(link));
+                                try {
+                                    staticLayout = staticLayout;
+                                    a = width;
+                                    title2 = title;
+                                    f2 = f;
+                                } catch (Exception e7) {
+                                    e622 = e7;
+                                    title2 = title;
+                                    char c2 = '\n';
+                                    a = width;
+                                    f2 = f;
+                                    e3 = e622;
+                                    FileLog.m3e(e3);
+                                    height = a + 1;
+                                    f = f2;
+                                    title = title2;
+                                    c = ' ';
+                                }
+                                try {
+                                    staticLayout = new StaticLayout(TextUtils.ellipsize(link.replace('\n', c), r1.descriptionTextPaint, (float) Math.min(width2, maxWidth), TruncateAt.MIDDLE), r1.descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    r1.linkY = r1.description2Y;
+                                    r1.linkY += r1.descriptionLayout2.getLineBottom(r1.descriptionLayout2.getLineCount() - 1) + AndroidUtilities.dp(f2);
+                                    r1.linkLayout.add(staticLayout);
+                                } catch (Throwable e6222) {
+                                    e3 = e6222;
+                                    FileLog.m3e(e3);
+                                    height = a + 1;
+                                    f = f2;
+                                    title = title2;
+                                    c = ' ';
+                                }
+                            } catch (Exception e8) {
+                                e6222 = e8;
+                                title2 = title;
+                                a = width;
+                                f2 = f;
+                                e3 = e6222;
+                                FileLog.m3e(e3);
+                                height = a + 1;
+                                f = f2;
+                                title = title2;
+                                c = ' ';
+                            }
+                            height = a + 1;
+                            f = f2;
+                            title = title2;
+                            c = ' ';
+                        }
+                    }
+                    maxPhotoWidth = AndroidUtilities.dp(NUM);
+                    if (LocaleController.isRTL) {
+                        f3 = 10.0f;
+                        x = (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(10.0f)) - maxPhotoWidth;
+                    } else {
+                        f3 = 10.0f;
+                        x = AndroidUtilities.dp(10.0f);
+                    }
+                    r1.letterDrawable.setBounds(x, AndroidUtilities.dp(f3), x + maxPhotoWidth, AndroidUtilities.dp(62.0f));
+                    if (hasPhoto2) {
+                        currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(r1.message.photoThumbs, maxPhotoWidth, true);
+                        currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(r1.message.photoThumbs, 80);
+                        if (currentPhotoObjectThumb == currentPhotoObject) {
+                            currentPhotoObjectThumb = null;
+                        }
+                        currentPhotoObject.size = -1;
+                        if (currentPhotoObjectThumb != null) {
+                            currentPhotoObjectThumb.size = -1;
+                        }
+                        r1.linkImageView.setImageCoords(x, AndroidUtilities.dp(f3), maxPhotoWidth, maxPhotoWidth);
+                        description22 = FileLoader.getAttachFileName(currentPhotoObject);
+                        link = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)});
+                        imageReceiver = r1.linkImageView;
+                        tLObject = currentPhotoObject.location;
+                        fileLocation = currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null;
+                        objArr = new Object[2];
+                        i = 0;
+                        objArr[0] = Integer.valueOf(maxPhotoWidth);
+                        objArr[1] = Integer.valueOf(maxPhotoWidth);
+                        imageReceiver.setImage(tLObject, link, fileLocation, String.format(Locale.US, "%d_%d_b", objArr), 0, null, 0);
+                        r1.drawLinkImageView = true;
+                    } else {
+                        i = 0;
+                    }
+                    height2 = 0;
+                    height2 = 0 + r1.titleLayout.getLineBottom(r1.titleLayout.getLineCount() - 1);
+                    height2 += r1.descriptionLayout.getLineBottom(r1.descriptionLayout.getLineCount() - 1);
+                    height2 += r1.descriptionLayout2.getLineBottom(r1.descriptionLayout2.getLineCount() - 1);
+                    if (r1.descriptionLayout != null) {
+                        height2 += AndroidUtilities.dp(10.0f);
+                    }
+                    while (true) {
+                        height = i;
+                        if (height < r1.linkLayout.size()) {
+                            break;
+                        }
+                        layout = (StaticLayout) r1.linkLayout.get(height);
+                        if (layout.getLineCount() <= 0) {
+                            height2 += layout.getLineBottom(layout.getLineCount() - 1);
+                        }
+                        i = height + 1;
+                    }
+                    if (hasPhoto2) {
+                        height2 = Math.max(AndroidUtilities.dp(48.0f), height2);
+                    }
+                    r1.checkBox.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM));
+                    setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), Math.max(AndroidUtilities.dp(72.0f), AndroidUtilities.dp(16.0f) + height2) + r1.needDivider);
                 }
-            } catch (Throwable e22) {
-                FileLog.m3e(e22);
+            } catch (Throwable e62222) {
+                String str2 = webPageLink;
+                c = 32;
+                e2 = e62222;
+                FileLog.m3e(e2);
+                r1.letterDrawable.setTitle(title);
+                f = 1.0f;
+                if (description != null) {
+                    r1.descriptionLayout = ChatMessageCell.generateStaticLayout(description, r1.descriptionTextPaint, maxWidth, maxWidth, 0, 3);
+                    if (r1.descriptionLayout.getLineCount() > 0) {
+                        r1.description2Y = (r1.descriptionY + r1.descriptionLayout.getLineBottom(r1.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(1.0f);
+                    }
+                }
+                if (description2 != null) {
+                    r1.descriptionLayout2 = ChatMessageCell.generateStaticLayout(description2, r1.descriptionTextPaint, maxWidth, maxWidth, 0, 3);
+                    height = r1.descriptionLayout2.getLineBottom(r1.descriptionLayout2.getLineCount() - 1);
+                    if (r1.descriptionLayout != null) {
+                        r1.description2Y += AndroidUtilities.dp(10.0f);
+                    }
+                }
+                if (!r1.links.isEmpty()) {
+                    height = 0;
+                    while (true) {
+                        width = height;
+                        if (width < r1.links.size()) {
+                            break;
+                        }
+                        link = (String) r1.links.get(width);
+                        width2 = (int) Math.ceil((double) r1.descriptionTextPaint.measureText(link));
+                        staticLayout = staticLayout;
+                        a = width;
+                        title2 = title;
+                        f2 = f;
+                        staticLayout = new StaticLayout(TextUtils.ellipsize(link.replace('\n', c), r1.descriptionTextPaint, (float) Math.min(width2, maxWidth), TruncateAt.MIDDLE), r1.descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        r1.linkY = r1.description2Y;
+                        r1.linkY += r1.descriptionLayout2.getLineBottom(r1.descriptionLayout2.getLineCount() - 1) + AndroidUtilities.dp(f2);
+                        r1.linkLayout.add(staticLayout);
+                        height = a + 1;
+                        f = f2;
+                        title = title2;
+                        c = ' ';
+                    }
+                }
+                maxPhotoWidth = AndroidUtilities.dp(NUM);
+                if (LocaleController.isRTL) {
+                    f3 = 10.0f;
+                    x = AndroidUtilities.dp(10.0f);
+                } else {
+                    f3 = 10.0f;
+                    x = (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(10.0f)) - maxPhotoWidth;
+                }
+                r1.letterDrawable.setBounds(x, AndroidUtilities.dp(f3), x + maxPhotoWidth, AndroidUtilities.dp(62.0f));
+                if (hasPhoto2) {
+                    i = 0;
+                } else {
+                    currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(r1.message.photoThumbs, maxPhotoWidth, true);
+                    currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(r1.message.photoThumbs, 80);
+                    if (currentPhotoObjectThumb == currentPhotoObject) {
+                        currentPhotoObjectThumb = null;
+                    }
+                    currentPhotoObject.size = -1;
+                    if (currentPhotoObjectThumb != null) {
+                        currentPhotoObjectThumb.size = -1;
+                    }
+                    r1.linkImageView.setImageCoords(x, AndroidUtilities.dp(f3), maxPhotoWidth, maxPhotoWidth);
+                    description22 = FileLoader.getAttachFileName(currentPhotoObject);
+                    link = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)});
+                    imageReceiver = r1.linkImageView;
+                    tLObject = currentPhotoObject.location;
+                    if (currentPhotoObjectThumb != null) {
+                    }
+                    objArr = new Object[2];
+                    i = 0;
+                    objArr[0] = Integer.valueOf(maxPhotoWidth);
+                    objArr[1] = Integer.valueOf(maxPhotoWidth);
+                    imageReceiver.setImage(tLObject, link, fileLocation, String.format(Locale.US, "%d_%d_b", objArr), 0, null, 0);
+                    r1.drawLinkImageView = true;
+                }
+                height2 = 0;
+                height2 = 0 + r1.titleLayout.getLineBottom(r1.titleLayout.getLineCount() - 1);
+                height2 += r1.descriptionLayout.getLineBottom(r1.descriptionLayout.getLineCount() - 1);
+                height2 += r1.descriptionLayout2.getLineBottom(r1.descriptionLayout2.getLineCount() - 1);
+                if (r1.descriptionLayout != null) {
+                    height2 += AndroidUtilities.dp(10.0f);
+                }
+                while (true) {
+                    height = i;
+                    if (height < r1.linkLayout.size()) {
+                        break;
+                    }
+                    layout = (StaticLayout) r1.linkLayout.get(height);
+                    if (layout.getLineCount() <= 0) {
+                        height2 += layout.getLineBottom(layout.getLineCount() - 1);
+                    }
+                    i = height + 1;
+                }
+                if (hasPhoto2) {
+                    height2 = Math.max(AndroidUtilities.dp(48.0f), height2);
+                }
+                r1.checkBox.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM));
+                setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), Math.max(AndroidUtilities.dp(72.0f), AndroidUtilities.dp(16.0f) + height2) + r1.needDivider);
+            }
+            r1.letterDrawable.setTitle(title);
+        } else {
+            c = 32;
+        }
+        f = 1.0f;
+        if (description != null) {
+            r1.descriptionLayout = ChatMessageCell.generateStaticLayout(description, r1.descriptionTextPaint, maxWidth, maxWidth, 0, 3);
+            if (r1.descriptionLayout.getLineCount() > 0) {
+                r1.description2Y = (r1.descriptionY + r1.descriptionLayout.getLineBottom(r1.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(1.0f);
             }
         }
         if (description2 != null) {
-            try {
-                this.descriptionLayout2 = ChatMessageCell.generateStaticLayout(description2, this.descriptionTextPaint, maxWidth, maxWidth, 0, 3);
-                height = this.descriptionLayout2.getLineBottom(this.descriptionLayout2.getLineCount() - 1);
-                if (this.descriptionLayout != null) {
-                    this.description2Y += AndroidUtilities.dp(10.0f);
-                }
-            } catch (Throwable e222) {
-                FileLog.m3e(e222);
+            r1.descriptionLayout2 = ChatMessageCell.generateStaticLayout(description2, r1.descriptionTextPaint, maxWidth, maxWidth, 0, 3);
+            height = r1.descriptionLayout2.getLineBottom(r1.descriptionLayout2.getLineCount() - 1);
+            if (r1.descriptionLayout != null) {
+                r1.description2Y += AndroidUtilities.dp(10.0f);
             }
         }
-        if (!this.links.isEmpty()) {
-            for (a = 0; a < this.links.size(); a++) {
-                try {
-                    link = (String) this.links.get(a);
-                    StaticLayout layout = new StaticLayout(TextUtils.ellipsize(link.replace('\n', ' '), this.descriptionTextPaint, (float) Math.min((int) Math.ceil((double) this.descriptionTextPaint.measureText(link)), maxWidth), TruncateAt.MIDDLE), this.descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    this.linkY = this.description2Y;
-                    if (!(this.descriptionLayout2 == null || this.descriptionLayout2.getLineCount() == 0)) {
-                        this.linkY += this.descriptionLayout2.getLineBottom(this.descriptionLayout2.getLineCount() - 1) + AndroidUtilities.dp(1.0f);
-                    }
-                    this.linkLayout.add(layout);
-                } catch (Throwable e2222) {
-                    FileLog.m3e(e2222);
+        if (!r1.links.isEmpty()) {
+            height = 0;
+            while (true) {
+                width = height;
+                if (width < r1.links.size()) {
+                    break;
                 }
+                link = (String) r1.links.get(width);
+                width2 = (int) Math.ceil((double) r1.descriptionTextPaint.measureText(link));
+                staticLayout = staticLayout;
+                a = width;
+                title2 = title;
+                f2 = f;
+                staticLayout = new StaticLayout(TextUtils.ellipsize(link.replace('\n', c), r1.descriptionTextPaint, (float) Math.min(width2, maxWidth), TruncateAt.MIDDLE), r1.descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                r1.linkY = r1.description2Y;
+                if (!(r1.descriptionLayout2 == null || r1.descriptionLayout2.getLineCount() == 0)) {
+                    r1.linkY += r1.descriptionLayout2.getLineBottom(r1.descriptionLayout2.getLineCount() - 1) + AndroidUtilities.dp(f2);
+                }
+                r1.linkLayout.add(staticLayout);
+                height = a + 1;
+                f = f2;
+                title = title2;
+                c = ' ';
             }
         }
-        int maxPhotoWidth = AndroidUtilities.dp(52.0f);
+        maxPhotoWidth = AndroidUtilities.dp(NUM);
         if (LocaleController.isRTL) {
+            f3 = 10.0f;
             x = (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(10.0f)) - maxPhotoWidth;
         } else {
+            f3 = 10.0f;
             x = AndroidUtilities.dp(10.0f);
         }
-        this.letterDrawable.setBounds(x, AndroidUtilities.dp(10.0f), x + maxPhotoWidth, AndroidUtilities.dp(62.0f));
-        if (hasPhoto) {
-            PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(this.message.photoThumbs, maxPhotoWidth, true);
-            PhotoSize currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(this.message.photoThumbs, 80);
+        r1.letterDrawable.setBounds(x, AndroidUtilities.dp(f3), x + maxPhotoWidth, AndroidUtilities.dp(62.0f));
+        if (hasPhoto2) {
+            currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(r1.message.photoThumbs, maxPhotoWidth, true);
+            currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(r1.message.photoThumbs, 80);
             if (currentPhotoObjectThumb == currentPhotoObject) {
                 currentPhotoObjectThumb = null;
             }
@@ -239,35 +580,51 @@ public class SharedLinkCell extends FrameLayout {
             if (currentPhotoObjectThumb != null) {
                 currentPhotoObjectThumb.size = -1;
             }
-            this.linkImageView.setImageCoords(x, AndroidUtilities.dp(10.0f), maxPhotoWidth, maxPhotoWidth);
-            String fileName = FileLoader.getAttachFileName(currentPhotoObject);
-            this.linkImageView.setImage(currentPhotoObject.location, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)}), currentPhotoObjectThumb != null ? currentPhotoObjectThumb.location : null, String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)}), 0, null, 0);
-            this.drawLinkImageView = true;
+            r1.linkImageView.setImageCoords(x, AndroidUtilities.dp(f3), maxPhotoWidth, maxPhotoWidth);
+            description22 = FileLoader.getAttachFileName(currentPhotoObject);
+            link = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(maxPhotoWidth), Integer.valueOf(maxPhotoWidth)});
+            imageReceiver = r1.linkImageView;
+            tLObject = currentPhotoObject.location;
+            if (currentPhotoObjectThumb != null) {
+            }
+            objArr = new Object[2];
+            i = 0;
+            objArr[0] = Integer.valueOf(maxPhotoWidth);
+            objArr[1] = Integer.valueOf(maxPhotoWidth);
+            imageReceiver.setImage(tLObject, link, fileLocation, String.format(Locale.US, "%d_%d_b", objArr), 0, null, 0);
+            r1.drawLinkImageView = true;
+        } else {
+            i = 0;
         }
-        height = 0;
-        if (!(this.titleLayout == null || this.titleLayout.getLineCount() == 0)) {
-            height = 0 + this.titleLayout.getLineBottom(this.titleLayout.getLineCount() - 1);
+        height2 = 0;
+        if (!(r1.titleLayout == null || r1.titleLayout.getLineCount() == 0)) {
+            height2 = 0 + r1.titleLayout.getLineBottom(r1.titleLayout.getLineCount() - 1);
         }
-        if (!(this.descriptionLayout == null || this.descriptionLayout.getLineCount() == 0)) {
-            height += this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1);
+        if (!(r1.descriptionLayout == null || r1.descriptionLayout.getLineCount() == 0)) {
+            height2 += r1.descriptionLayout.getLineBottom(r1.descriptionLayout.getLineCount() - 1);
         }
-        if (!(this.descriptionLayout2 == null || this.descriptionLayout2.getLineCount() == 0)) {
-            height += this.descriptionLayout2.getLineBottom(this.descriptionLayout2.getLineCount() - 1);
-            if (this.descriptionLayout != null) {
-                height += AndroidUtilities.dp(10.0f);
+        if (!(r1.descriptionLayout2 == null || r1.descriptionLayout2.getLineCount() == 0)) {
+            height2 += r1.descriptionLayout2.getLineBottom(r1.descriptionLayout2.getLineCount() - 1);
+            if (r1.descriptionLayout != null) {
+                height2 += AndroidUtilities.dp(10.0f);
             }
         }
-        for (a = 0; a < this.linkLayout.size(); a++) {
-            layout = (StaticLayout) this.linkLayout.get(a);
-            if (layout.getLineCount() > 0) {
-                height += layout.getLineBottom(layout.getLineCount() - 1);
+        while (true) {
+            height = i;
+            if (height < r1.linkLayout.size()) {
+                break;
             }
+            layout = (StaticLayout) r1.linkLayout.get(height);
+            if (layout.getLineCount() <= 0) {
+                height2 += layout.getLineBottom(layout.getLineCount() - 1);
+            }
+            i = height + 1;
         }
-        if (hasPhoto) {
-            height = Math.max(AndroidUtilities.dp(48.0f), height);
+        if (hasPhoto2) {
+            height2 = Math.max(AndroidUtilities.dp(48.0f), height2);
         }
-        this.checkBox.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM));
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + Math.max(AndroidUtilities.dp(72.0f), AndroidUtilities.dp(16.0f) + height));
+        r1.checkBox.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM));
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), Math.max(AndroidUtilities.dp(72.0f), AndroidUtilities.dp(16.0f) + height2) + r1.needDivider);
     }
 
     public void setLink(MessageObject messageObject, boolean divider) {
@@ -301,72 +658,83 @@ public class SharedLinkCell extends FrameLayout {
 
     public boolean onTouchEvent(MotionEvent event) {
         boolean result = false;
-        if (this.message == null || this.linkLayout.isEmpty() || this.delegate == null || !this.delegate.canPerformActions()) {
+        boolean z = true;
+        if (this.message == null || r1.linkLayout.isEmpty() || r1.delegate == null || !r1.delegate.canPerformActions()) {
             resetPressedLink();
-        } else if (event.getAction() == 0 || (this.linkPreviewPressed && event.getAction() == 1)) {
+        } else {
+            if (event.getAction() != 0) {
+                if (!r1.linkPreviewPressed || event.getAction() != 1) {
+                    if (event.getAction() == 3) {
+                        resetPressedLink();
+                    }
+                }
+            }
             int x = (int) event.getX();
             int y = (int) event.getY();
-            int offset = 0;
             boolean ok = false;
-            for (int a = 0; a < this.linkLayout.size(); a++) {
-                StaticLayout layout = (StaticLayout) this.linkLayout.get(a);
+            int offset = 0;
+            int a = 0;
+            while (a < r1.linkLayout.size()) {
+                StaticLayout layout = (StaticLayout) r1.linkLayout.get(a);
                 if (layout.getLineCount() > 0) {
-                    int height = layout.getLineBottom(layout.getLineCount() - 1);
-                    int linkPosX = AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline);
-                    if (((float) x) < ((float) linkPosX) + layout.getLineLeft(0) || ((float) x) > ((float) linkPosX) + layout.getLineWidth(0) || y < this.linkY + offset || y > (this.linkY + offset) + height) {
+                    int height = layout.getLineBottom(layout.getLineCount() - z);
+                    int linkPosX = AndroidUtilities.dp(LocaleController.isRTL ? NUM : (float) AndroidUtilities.leftBaseline);
+                    if (((float) x) < ((float) linkPosX) + layout.getLineLeft(0) || ((float) x) > ((float) linkPosX) + layout.getLineWidth(0) || y < r1.linkY + offset || y > (r1.linkY + offset) + height) {
                         offset += height;
                     } else {
                         ok = true;
                         if (event.getAction() == 0) {
                             resetPressedLink();
-                            this.pressedLink = a;
-                            this.linkPreviewPressed = true;
+                            r1.pressedLink = a;
+                            r1.linkPreviewPressed = z;
                             try {
-                                this.urlPath.setCurrentLayout(layout, 0, 0.0f);
-                                layout.getSelectionPath(0, layout.getText().length(), this.urlPath);
+                                r1.urlPath.setCurrentLayout(layout, 0, 0.0f);
+                                layout.getSelectionPath(0, layout.getText().length(), r1.urlPath);
                             } catch (Throwable e) {
                                 FileLog.m3e(e);
                             }
                             result = true;
-                        } else if (this.linkPreviewPressed) {
+                        } else if (r1.linkPreviewPressed) {
                             try {
-                                WebPage webPage = (this.pressedLink != 0 || this.message.messageOwner.media == null) ? null : this.message.messageOwner.media.webpage;
+                                WebPage webPage = (r1.pressedLink != 0 || r1.message.messageOwner.media == null) ? null : r1.message.messageOwner.media.webpage;
                                 if (webPage == null || webPage.embed_url == null || webPage.embed_url.length() == 0) {
-                                    Browser.openUrl(getContext(), (String) this.links.get(this.pressedLink));
-                                    resetPressedLink();
-                                    result = true;
+                                    Browser.openUrl(getContext(), (String) r1.links.get(r1.pressedLink));
                                 } else {
-                                    this.delegate.needOpenWebView(webPage);
-                                    resetPressedLink();
-                                    result = true;
+                                    r1.delegate.needOpenWebView(webPage);
                                 }
                             } catch (Throwable e2) {
                                 FileLog.m3e(e2);
                             }
+                            resetPressedLink();
+                            result = true;
                         }
                         if (!ok) {
                             resetPressedLink();
                         }
                     }
                 }
+                a++;
+                z = true;
             }
             if (ok) {
                 resetPressedLink();
             }
-        } else if (event.getAction() == 3) {
-            resetPressedLink();
         }
-        if (result || super.onTouchEvent(event)) {
-            return true;
+        if (!result) {
+            if (!super.onTouchEvent(event)) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     public String getLink(int num) {
-        if (num < 0 || num >= this.links.size()) {
-            return null;
+        if (num >= 0) {
+            if (num < this.links.size()) {
+                return (String) this.links.get(num);
+            }
         }
-        return (String) this.links.get(num);
+        return null;
     }
 
     protected void resetPressedLink() {
@@ -383,7 +751,6 @@ public class SharedLinkCell extends FrameLayout {
     }
 
     protected void onDraw(Canvas canvas) {
-        float f;
         if (this.titleLayout != null) {
             canvas.save();
             canvas.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.titleY);
@@ -400,12 +767,7 @@ public class SharedLinkCell extends FrameLayout {
         if (this.descriptionLayout2 != null) {
             this.descriptionTextPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             canvas.save();
-            if (LocaleController.isRTL) {
-                f = 8.0f;
-            } else {
-                f = (float) AndroidUtilities.leftBaseline;
-            }
-            canvas.translate((float) AndroidUtilities.dp(f), (float) this.description2Y);
+            canvas.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.description2Y);
             this.descriptionLayout2.draw(canvas);
             canvas.restore();
         }
@@ -416,12 +778,7 @@ public class SharedLinkCell extends FrameLayout {
                 StaticLayout layout = (StaticLayout) this.linkLayout.get(a);
                 if (layout.getLineCount() > 0) {
                     canvas.save();
-                    if (LocaleController.isRTL) {
-                        f = 8.0f;
-                    } else {
-                        f = (float) AndroidUtilities.leftBaseline;
-                    }
-                    canvas.translate((float) AndroidUtilities.dp(f), (float) (this.linkY + offset));
+                    canvas.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) (this.linkY + offset));
                     if (this.pressedLink == a) {
                         canvas.drawPath(this.urlPath, Theme.linkSelectionPaint);
                     }

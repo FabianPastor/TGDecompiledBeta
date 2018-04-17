@@ -20,9 +20,6 @@ public class TextDetailSettingsCell extends FrameLayout {
     private TextView valueTextView;
 
     public TextDetailSettingsCell(Context context) {
-        int i;
-        int i2;
-        int i3 = 5;
         super(context);
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -31,47 +28,30 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
+        int i = 3;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        View view = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, 17.0f, 10.0f, 17.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 10.0f, 17.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
-        TextView textView = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        textView.setGravity(i2);
+        this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setPadding(0, 0, 0, 0);
-        view = this.valueTextView;
-        if (!LocaleController.isRTL) {
-            i3 = 3;
+        View view = this.valueTextView;
+        if (LocaleController.isRTL) {
+            i = 5;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, 17.0f, 35.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, 17.0f, 35.0f, 17.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int i = 0;
         if (this.multiline) {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
-            return;
+        } else {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + this.needDivider, NUM));
         }
-        int makeMeasureSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM);
-        int dp = AndroidUtilities.dp(64.0f);
-        if (this.needDivider) {
-            i = 1;
-        }
-        super.onMeasure(makeMeasureSpec, MeasureSpec.makeMeasureSpec(i + dp, NUM));
     }
 
     public void setMultilineDetail(boolean value) {
@@ -93,18 +73,14 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.textView.setText(text);
         this.valueTextView.setText(value);
         this.needDivider = divider;
-        setWillNotDraw(!divider);
+        setWillNotDraw(divider ^ 1);
     }
 
     public void setTextWithEmojiAndValue(String text, CharSequence value, boolean divider) {
-        boolean z = false;
         this.textView.setText(Emoji.replaceEmoji(text, this.textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
         this.valueTextView.setText(value);
         this.needDivider = divider;
-        if (!divider) {
-            z = true;
-        }
-        setWillNotDraw(z);
+        setWillNotDraw(divider ^ 1);
     }
 
     public void invalidate() {

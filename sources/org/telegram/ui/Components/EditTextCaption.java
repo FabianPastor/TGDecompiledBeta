@@ -36,7 +36,7 @@ public class EditTextCaption extends EditTextBoldCursor {
     }
 
     public void setCaption(String value) {
-        if ((this.caption != null && this.caption.length() != 0) || (value != null && value.length() != 0)) {
+        if (!((this.caption == null || this.caption.length() == 0) && (value == null || value.length() == 0))) {
             if (this.caption == null || value == null || !this.caption.equals(value)) {
                 this.caption = value;
                 if (this.caption != null) {
@@ -100,23 +100,25 @@ public class EditTextCaption extends EditTextBoldCursor {
             }
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                boolean z = true;
                 if (item.getItemId() == R.id.menu_regular) {
                     EditTextCaption.this.makeSelectedRegular();
                     mode.finish();
+                    return true;
                 } else if (item.getItemId() == R.id.menu_bold) {
                     EditTextCaption.this.makeSelectedBold();
                     mode.finish();
+                    return true;
                 } else if (item.getItemId() == R.id.menu_italic) {
                     EditTextCaption.this.makeSelectedItalic();
                     mode.finish();
+                    return true;
                 } else {
                     try {
-                        z = callback.onActionItemClicked(mode, item);
+                        return callback.onActionItemClicked(mode, item);
                     } catch (Exception e) {
+                        return true;
                     }
                 }
-                return z;
             }
 
             public void onDestroyActionMode(ActionMode mode) {
@@ -136,32 +138,34 @@ public class EditTextCaption extends EditTextBoldCursor {
 
     @SuppressLint({"DrawAllocation"})
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        EditTextCaption editTextCaption = this;
         try {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         } catch (Throwable e) {
+            Throwable e2 = e;
             setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(51.0f));
-            FileLog.m3e(e);
+            FileLog.m3e(e2);
         }
-        this.captionLayout = null;
-        if (this.caption != null && this.caption.length() > 0) {
+        editTextCaption.captionLayout = null;
+        if (editTextCaption.caption != null && editTextCaption.caption.length() > 0) {
             CharSequence text = getText();
             if (text.length() > 1 && text.charAt(0) == '@') {
-                int index = TextUtils.indexOf(text, ' ');
+                int index = TextUtils.indexOf(text, 32);
                 if (index != -1) {
                     TextPaint paint = getPaint();
                     int size = (int) Math.ceil((double) paint.measureText(text, 0, index + 1));
                     int width = (getMeasuredWidth() - getPaddingLeft()) - getPaddingRight();
-                    this.userNameLength = text.subSequence(0, index + 1).length();
-                    CharSequence captionFinal = TextUtils.ellipsize(this.caption, paint, (float) (width - size), TruncateAt.END);
-                    this.xOffset = size;
+                    editTextCaption.userNameLength = text.subSequence(0, index + 1).length();
+                    CharSequence captionFinal = TextUtils.ellipsize(editTextCaption.caption, paint, (float) (width - size), TruncateAt.END);
+                    editTextCaption.xOffset = size;
                     try {
-                        this.captionLayout = new StaticLayout(captionFinal, getPaint(), width - size, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                        if (this.captionLayout.getLineCount() > 0) {
-                            this.xOffset = (int) (((float) this.xOffset) + (-this.captionLayout.getLineLeft(0)));
+                        editTextCaption.captionLayout = new StaticLayout(captionFinal, getPaint(), width - size, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        if (editTextCaption.captionLayout.getLineCount() > 0) {
+                            editTextCaption.xOffset = (int) (((float) editTextCaption.xOffset) + (-editTextCaption.captionLayout.getLineLeft(0)));
                         }
-                        this.yOffset = ((getMeasuredHeight() - this.captionLayout.getLineBottom(0)) / 2) + AndroidUtilities.dp(0.5f);
-                    } catch (Throwable e2) {
-                        FileLog.m3e(e2);
+                        editTextCaption.yOffset = ((getMeasuredHeight() - editTextCaption.captionLayout.getLineBottom(0)) / 2) + AndroidUtilities.dp(0.5f);
+                    } catch (Throwable e3) {
+                        FileLog.m3e(e3);
                     }
                 }
             }

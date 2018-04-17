@@ -30,15 +30,15 @@ public class TelegramConnectionService extends ConnectionService {
             FileLog.m0d("onCreateIncomingConnection ");
         }
         Bundle extras = request.getExtras();
-        if (extras.getInt("call_type") != 1) {
-            return extras.getInt("call_type") == 2 ? null : null;
-        } else {
+        if (extras.getInt("call_type") == 1) {
             VoIPService svc = VoIPService.getSharedInstance();
             if (svc == null || svc.isOutgoing()) {
                 return null;
             }
             return svc.getConnectionAndStartCall();
         }
+        extras.getInt("call_type");
+        return null;
     }
 
     public void onCreateIncomingConnectionFailed(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
@@ -64,14 +64,14 @@ public class TelegramConnectionService extends ConnectionService {
             FileLog.m0d("onCreateOutgoingConnection ");
         }
         Bundle extras = request.getExtras();
-        if (extras.getInt("call_type") != 1) {
-            return extras.getInt("call_type") == 2 ? null : null;
-        } else {
+        if (extras.getInt("call_type") == 1) {
             VoIPService svc = VoIPService.getSharedInstance();
             if (svc == null) {
                 return null;
             }
             return svc.getConnectionAndStartCall();
         }
+        extras.getInt("call_type");
+        return null;
     }
 }

@@ -49,14 +49,15 @@ public abstract class SnapHelper extends OnFlingListener {
 
     public boolean onFling(int velocityX, int velocityY) {
         LayoutManager layoutManager = this.mRecyclerView.getLayoutManager();
+        boolean z = false;
         if (layoutManager == null || this.mRecyclerView.getAdapter() == null) {
             return false;
         }
         int minFlingVelocity = this.mRecyclerView.getMinFlingVelocity();
         if ((Math.abs(velocityY) > minFlingVelocity || Math.abs(velocityX) > minFlingVelocity) && snapFromFling(layoutManager, velocityX, velocityY)) {
-            return true;
+            z = true;
         }
-        return false;
+        return z;
     }
 
     public void attachToRecyclerView(RecyclerView recyclerView) throws IllegalStateException {
@@ -118,7 +119,7 @@ public abstract class SnapHelper extends OnFlingListener {
                 View snapView = findSnapView(layoutManager);
                 if (snapView != null) {
                     int[] snapDistance = calculateDistanceToFinalSnap(layoutManager, snapView);
-                    if (snapDistance[0] != 0 || snapDistance[1] != 0) {
+                    if (!(snapDistance[0] == 0 && snapDistance[1] == 0)) {
                         this.mRecyclerView.smoothScrollBy(snapDistance[0], snapDistance[1]);
                     }
                 }

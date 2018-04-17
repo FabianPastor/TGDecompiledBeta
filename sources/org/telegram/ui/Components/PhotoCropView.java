@@ -199,7 +199,7 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public float getBitmapY() {
-        return ((float) (this.bitmapY - AndroidUtilities.dp(14.0f))) - ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
+        return ((float) (this.bitmapY - AndroidUtilities.dp(14.0f))) - ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0.0f));
     }
 
     public float getLimitX() {
@@ -207,7 +207,7 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public float getLimitY() {
-        return this.rectY - Math.max(0.0f, (float) Math.ceil((double) (((((float) getHeight()) - (((float) this.bitmapHeight) * this.bitmapGlobalScale)) + ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) / 2.0f)));
+        return this.rectY - Math.max(0.0f, (float) Math.ceil((double) (((((float) getHeight()) - (((float) this.bitmapHeight) * this.bitmapGlobalScale)) + ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0.0f))) / 2.0f)));
     }
 
     public float getLimitWidth() {
@@ -215,7 +215,7 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public float getLimitHeight() {
-        float additionalY = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        float additionalY = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0.0f);
         return (((((float) (getHeight() - AndroidUtilities.dp(14.0f))) - additionalY) - this.rectY) - ((float) ((int) Math.max(0.0d, Math.ceil((double) (((((float) (getHeight() - AndroidUtilities.dp(28.0f))) - (((float) this.bitmapHeight) * this.bitmapGlobalScale)) - additionalY) / 2.0f)))))) - this.rectSizeY;
     }
 
@@ -268,27 +268,22 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public void moveToFill(boolean animated) {
-        float scaleTo;
         float scaleToX = ((float) this.bitmapWidth) / this.rectSizeX;
         float scaleToY = ((float) this.bitmapHeight) / this.rectSizeY;
-        if (scaleToX > scaleToY) {
-            scaleTo = scaleToY;
-        } else {
-            scaleTo = scaleToX;
+        float scaleTo = scaleToX > scaleToY ? scaleToY : scaleToX;
+        if (scaleTo > 1.0f && r0.bitmapGlobalScale * scaleTo > 3.0f) {
+            scaleTo = 3.0f / r0.bitmapGlobalScale;
+        } else if (scaleTo < 1.0f && r0.bitmapGlobalScale * scaleTo < 1.0f) {
+            scaleTo = 1.0f / r0.bitmapGlobalScale;
         }
-        if (scaleTo > 1.0f && this.bitmapGlobalScale * scaleTo > 3.0f) {
-            scaleTo = 3.0f / this.bitmapGlobalScale;
-        } else if (scaleTo < 1.0f && this.bitmapGlobalScale * scaleTo < 1.0f) {
-            scaleTo = 1.0f / this.bitmapGlobalScale;
-        }
-        float newSizeX = this.rectSizeX * scaleTo;
-        float newSizeY = this.rectSizeY * scaleTo;
-        float additionalY = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        float newSizeX = r0.rectSizeX * scaleTo;
+        float newSizeY = r0.rectSizeY * scaleTo;
+        float additionalY = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0.0f);
         float newX = (((float) getWidth()) - newSizeX) / 2.0f;
         float newY = ((((float) getHeight()) - newSizeY) + additionalY) / 2.0f;
-        this.animationStartValues = new RectF(this.rectX, this.rectY, this.rectSizeX, this.rectSizeY);
-        this.animationEndValues = new RectF(newX, newY, newSizeX, newSizeY);
-        this.delegate.needMoveImageTo(((((float) (getWidth() / 2)) * (scaleTo - 1.0f)) + newX) + ((this.bitmapGlobalX - this.rectX) * scaleTo), ((((((float) getHeight()) + additionalY) / 2.0f) * (scaleTo - 1.0f)) + newY) + ((this.bitmapGlobalY - this.rectY) * scaleTo), this.bitmapGlobalScale * scaleTo, animated);
+        r0.animationStartValues = new RectF(r0.rectX, r0.rectY, r0.rectSizeX, r0.rectSizeY);
+        r0.animationEndValues = new RectF(newX, newY, newSizeX, newSizeY);
+        r0.delegate.needMoveImageTo(((((float) (getWidth() / 2)) * (scaleTo - 1.0f)) + newX) + ((r0.bitmapGlobalX - r0.rectX) * scaleTo), ((((((float) getHeight()) + additionalY) / 2.0f) * (scaleTo - 1.0f)) + newY) + ((r0.bitmapGlobalY - r0.rectY) * scaleTo), r0.bitmapGlobalScale * scaleTo, animated);
     }
 
     public void setDelegate(PhotoCropViewDelegate delegate) {

@@ -50,13 +50,8 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
             } else if (timeline.getPeriod(0, new Period()).getPositionInWindowUs() != 0) {
                 throw new IllegalClippingException(1);
             } else {
-                long resolvedEndUs;
                 Window window = timeline.getWindow(0, new Window(), false);
-                if (endUs == Long.MIN_VALUE) {
-                    resolvedEndUs = window.durationUs;
-                } else {
-                    resolvedEndUs = endUs;
-                }
+                long resolvedEndUs = endUs == Long.MIN_VALUE ? window.durationUs : endUs;
                 if (window.durationUs != C0539C.TIME_UNSET) {
                     if (resolvedEndUs > window.durationUs) {
                         resolvedEndUs = window.durationUs;
@@ -73,10 +68,10 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
         }
 
         public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
+            long j;
             window = this.timeline.getWindow(0, window, setIds, defaultPositionProjectionUs);
             window.durationUs = this.endUs != C0539C.TIME_UNSET ? this.endUs - this.startUs : C0539C.TIME_UNSET;
             if (window.defaultPositionUs != C0539C.TIME_UNSET) {
-                long j;
                 window.defaultPositionUs = Math.max(window.defaultPositionUs, this.startUs);
                 if (this.endUs == C0539C.TIME_UNSET) {
                     j = window.defaultPositionUs;
@@ -86,23 +81,24 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
                 window.defaultPositionUs = j;
                 window.defaultPositionUs -= this.startUs;
             }
-            long startMs = C0539C.usToMs(this.startUs);
+            j = C0539C.usToMs(this.startUs);
             if (window.presentationStartTimeMs != C0539C.TIME_UNSET) {
-                window.presentationStartTimeMs += startMs;
+                window.presentationStartTimeMs += j;
             }
             if (window.windowStartTimeMs != C0539C.TIME_UNSET) {
-                window.windowStartTimeMs += startMs;
+                window.windowStartTimeMs += j;
             }
             return window;
         }
 
         public Period getPeriod(int periodIndex, Period period, boolean setIds) {
-            long j = C0539C.TIME_UNSET;
             period = this.timeline.getPeriod(0, period, setIds);
-            if (this.endUs != C0539C.TIME_UNSET) {
-                j = this.endUs - this.startUs;
+            long j = this.endUs;
+            long j2 = C0539C.TIME_UNSET;
+            if (j != C0539C.TIME_UNSET) {
+                j2 = this.endUs - this.startUs;
             }
-            period.durationUs = j;
+            period.durationUs = j2;
             return period;
         }
     }

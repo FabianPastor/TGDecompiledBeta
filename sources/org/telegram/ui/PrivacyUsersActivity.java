@@ -129,14 +129,16 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
 
         public boolean onItemClick(View view, int position) {
-            if (position < 0 || position >= PrivacyUsersActivity.this.uidArray.size() || PrivacyUsersActivity.this.getParentActivity() == null) {
-                return false;
+            if (position >= 0 && position < PrivacyUsersActivity.this.uidArray.size()) {
+                if (PrivacyUsersActivity.this.getParentActivity() != null) {
+                    PrivacyUsersActivity.this.selectedUserId = ((Integer) PrivacyUsersActivity.this.uidArray.get(position)).intValue();
+                    Builder builder = new Builder(PrivacyUsersActivity.this.getParentActivity());
+                    builder.setItems(new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)}, new C16321());
+                    PrivacyUsersActivity.this.showDialog(builder.create());
+                    return true;
+                }
             }
-            PrivacyUsersActivity.this.selectedUserId = ((Integer) PrivacyUsersActivity.this.uidArray.get(position)).intValue();
-            Builder builder = new Builder(PrivacyUsersActivity.this.getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)}, new C16321());
-            PrivacyUsersActivity.this.showDialog(builder.create());
-            return true;
+            return false;
         }
     }
 
@@ -178,23 +180,29 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view;
-            switch (viewType) {
-                case 0:
-                    view = new UserCell(this.mContext, 1, 0, false);
-                    break;
-                default:
-                    view = new TextInfoCell(this.mContext);
-                    ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", R.string.RemoveFromListText));
-                    break;
+            if (viewType != 0) {
+                view = new TextInfoCell(this.mContext);
+                ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", R.string.RemoveFromListText));
+            } else {
+                view = new UserCell(this.mContext, 1, 0, false);
             }
             return new Holder(view);
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             if (holder.getItemViewType() == 0) {
+                CharSequence string;
                 User user = MessagesController.getInstance(PrivacyUsersActivity.this.currentAccount).getUser((Integer) PrivacyUsersActivity.this.uidArray.get(position));
                 UserCell userCell = (UserCell) holder.itemView;
-                CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", R.string.NumberUnknown) : PhoneFormat.getInstance().format("+" + user.phone);
+                if (user.phone == null || user.phone.length() == 0) {
+                    string = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
+                } else {
+                    PhoneFormat instance = PhoneFormat.getInstance();
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("+");
+                    stringBuilder.append(user.phone);
+                    string = instance.format(stringBuilder.toString());
+                }
                 userCell.setData(user, null, string, 0);
             }
         }
@@ -225,8 +233,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public View createView(Context context) {
-        int i = 1;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        int i = 1;
         this.actionBar.setAllowOverlayTitle(true);
         if (this.isGroup) {
             if (this.isAlwaysShare) {
@@ -301,17 +309,22 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new C22484();
         r10 = new ThemeDescription[19];
+        r10[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r10[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r10[6] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r10[7] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
         r10[8] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText5);
         r10[9] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         r10[10] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteGrayText);
         r10[11] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
-        r10[12] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
-        r10[13] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
-        r10[14] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
-        r10[15] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
-        r10[16] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
-        r10[17] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
-        r10[18] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        ThemeDescriptionDelegate themeDescriptionDelegate = сellDelegate;
+        r10[12] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundRed);
+        r10[13] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundOrange);
+        r10[14] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundViolet);
+        r10[15] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundGreen);
+        r10[16] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundCyan);
+        r10[17] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundBlue);
+        r10[18] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundPink);
         return r10;
     }
 }

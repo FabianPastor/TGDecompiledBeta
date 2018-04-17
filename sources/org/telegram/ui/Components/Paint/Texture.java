@@ -28,7 +28,6 @@ public class Texture {
     }
 
     public int texture() {
-        int i = 9729;
         if (this.texture != 0) {
             return this.texture;
         }
@@ -41,6 +40,7 @@ public class Texture {
         GLES20.glBindTexture(3553, this.texture);
         GLES20.glTexParameteri(3553, 10242, 33071);
         GLES20.glTexParameteri(3553, 10243, 33071);
+        int i = 9729;
         GLES20.glTexParameteri(3553, 10240, 9729);
         if (null != null) {
             i = 9987;

@@ -5,6 +5,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.opengl.GLES20;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -239,7 +240,7 @@ public class Painting {
     private void restoreSlice(final Slice slice) {
         this.renderView.performInContext(new Runnable() {
             public void run() {
-                ByteBuffer buffer = slice.getData();
+                Buffer buffer = slice.getData();
                 GLES20.glBindTexture(3553, Painting.this.getTexture());
                 GLES20.glTexSubImage2D(3553, 0, slice.getX(), slice.getY(), slice.getWidth(), slice.getHeight(), 6408, 5121, buffer);
                 if (!(Painting.this.isSuppressingChanges() || Painting.this.delegate == null)) {
@@ -268,7 +269,7 @@ public class Painting {
         Shader shader = (Shader) this.shaders.get(this.brush.isLightSaber() ? "blitWithMaskLight" : "blitWithMask");
         if (shader != null) {
             GLES20.glUseProgram(shader.program);
-            GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false, FloatBuffer.wrap(this.renderProjection));
+            GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false, FloatBuffer.wrap(r0.renderProjection));
             GLES20.glUniform1i(shader.getUniform("texture"), 0);
             GLES20.glUniform1i(shader.getUniform("mask"), 1);
             Shader.SetColorUniform(shader.getUniform(TtmlNode.ATTR_TTS_COLOR), color);
@@ -277,9 +278,9 @@ public class Painting {
             GLES20.glActiveTexture(33985);
             GLES20.glBindTexture(3553, mask);
             GLES20.glBlendFunc(1, 771);
-            GLES20.glVertexAttribPointer(0, 2, 5126, false, 8, this.vertexBuffer);
+            GLES20.glVertexAttribPointer(0, 2, 5126, false, 8, r0.vertexBuffer);
             GLES20.glEnableVertexAttribArray(0);
-            GLES20.glVertexAttribPointer(1, 2, 5126, false, 8, this.textureBuffer);
+            GLES20.glVertexAttribPointer(1, 2, 5126, false, 8, r0.textureBuffer);
             GLES20.glEnableVertexAttribArray(1);
             GLES20.glDrawArrays(5, 0, 4);
             Utils.HasGLError();
@@ -290,14 +291,14 @@ public class Painting {
         Shader shader = (Shader) this.shaders.get("blit");
         if (shader != null) {
             GLES20.glUseProgram(shader.program);
-            GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false, FloatBuffer.wrap(this.renderProjection));
+            GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false, FloatBuffer.wrap(r0.renderProjection));
             GLES20.glUniform1i(shader.getUniform("texture"), 0);
             GLES20.glActiveTexture(33984);
             GLES20.glBindTexture(3553, getTexture());
             GLES20.glBlendFunc(1, 771);
-            GLES20.glVertexAttribPointer(0, 2, 5126, false, 8, this.vertexBuffer);
+            GLES20.glVertexAttribPointer(0, 2, 5126, false, 8, r0.vertexBuffer);
             GLES20.glEnableVertexAttribArray(0);
-            GLES20.glVertexAttribPointer(1, 2, 5126, false, 8, this.textureBuffer);
+            GLES20.glVertexAttribPointer(1, 2, 5126, false, 8, r0.textureBuffer);
             GLES20.glEnableVertexAttribArray(1);
             GLES20.glDrawArrays(5, 0, 4);
             Utils.HasGLError();
@@ -305,8 +306,9 @@ public class Painting {
     }
 
     public PaintingData getPaintingData(RectF rect, boolean undo) {
-        int minX = (int) rect.left;
-        int minY = (int) rect.top;
+        RectF rectF = rect;
+        int minX = (int) rectF.left;
+        int minY = (int) rectF.top;
         int width = (int) rect.width();
         int height = (int) rect.height();
         GLES20.glGenFramebuffers(1, this.buffers, 0);
@@ -319,13 +321,17 @@ public class Painting {
         GLES20.glTexParameteri(3553, 10240, 9729);
         GLES20.glTexParameteri(3553, 10242, 33071);
         GLES20.glTexParameteri(3553, 10243, 33071);
+        int texture2 = texture;
+        int framebuffer2 = framebuffer;
+        int i = 1;
         GLES20.glTexImage2D(3553, 0, 6408, width, height, 0, 6408, 5121, null);
-        GLES20.glFramebufferTexture2D(36160, 36064, 3553, texture, 0);
+        int texture3 = texture2;
+        GLES20.glFramebufferTexture2D(36160, 36064, 3553, texture3, 0);
         GLES20.glViewport(0, 0, (int) this.size.width, (int) this.size.height);
         if (this.shaders == null) {
             return null;
         }
-        Shader shader = (Shader) this.shaders.get(undo ? "nonPremultipliedBlit" : "blit");
+        Shader shader = (Shader) r0.shaders.get(undo ? "nonPremultipliedBlit" : "blit");
         if (shader == null) {
             return null;
         }
@@ -333,7 +339,9 @@ public class Painting {
         GLES20.glUseProgram(shader.program);
         Matrix translate = new Matrix();
         translate.preTranslate((float) (-minX), (float) (-minY));
-        GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false, FloatBuffer.wrap(GLMatrix.MultiplyMat4f(this.projection, GLMatrix.LoadGraphicsMatrix(translate))));
+        float[] effective = GLMatrix.LoadGraphicsMatrix(translate);
+        float[] finalProjection = GLMatrix.MultiplyMat4f(r0.projection, effective);
+        GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), i, false, FloatBuffer.wrap(finalProjection));
         if (undo) {
             GLES20.glUniform1i(shader.getUniform("texture"), 0);
             GLES20.glActiveTexture(33984);
@@ -341,31 +349,31 @@ public class Painting {
         } else {
             GLES20.glUniform1i(shader.getUniform("texture"), 0);
             GLES20.glActiveTexture(33984);
-            GLES20.glBindTexture(3553, this.bitmapTexture.texture());
+            GLES20.glBindTexture(3553, r0.bitmapTexture.texture());
             GLES20.glActiveTexture(33984);
             GLES20.glBindTexture(3553, getTexture());
         }
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GLES20.glClear(MessagesController.UPDATE_MASK_CHAT_ADMINS);
-        GLES20.glBlendFunc(1, 771);
-        GLES20.glVertexAttribPointer(0, 2, 5126, false, 8, this.vertexBuffer);
+        GLES20.glBlendFunc(i, 771);
+        GLES20.glVertexAttribPointer(0, 2, 5126, false, 8, r0.vertexBuffer);
         GLES20.glEnableVertexAttribArray(0);
-        GLES20.glVertexAttribPointer(1, 2, 5126, false, 8, this.textureBuffer);
-        GLES20.glEnableVertexAttribArray(1);
+        GLES20.glVertexAttribPointer(1, 2, 5126, false, 8, r0.textureBuffer);
+        GLES20.glEnableVertexAttribArray(i);
         GLES20.glDrawArrays(5, 0, 4);
-        this.dataBuffer.limit((width * height) * 4);
-        GLES20.glReadPixels(0, 0, width, height, 6408, 5121, this.dataBuffer);
+        r0.dataBuffer.limit((width * height) * 4);
+        GLES20.glReadPixels(0, 0, width, height, 6408, 5121, r0.dataBuffer);
         if (undo) {
-            data = new PaintingData(null, this.dataBuffer);
+            data = new PaintingData(null, r0.dataBuffer);
         } else {
             Bitmap bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
-            bitmap.copyPixelsFromBuffer(this.dataBuffer);
+            bitmap.copyPixelsFromBuffer(r0.dataBuffer);
             data = new PaintingData(bitmap, null);
         }
-        this.buffers[0] = framebuffer;
-        GLES20.glDeleteFramebuffers(1, this.buffers, 0);
-        this.buffers[0] = texture;
-        GLES20.glDeleteTextures(1, this.buffers, 0);
+        r0.buffers[0] = framebuffer2;
+        GLES20.glDeleteFramebuffers(1, r0.buffers, 0);
+        r0.buffers[0] = texture3;
+        GLES20.glDeleteTextures(1, r0.buffers, 0);
         return data;
     }
 

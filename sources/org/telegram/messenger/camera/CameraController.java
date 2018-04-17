@@ -111,31 +111,56 @@ public class CameraController implements OnInfoListener {
                     ArrayList<CameraInfo> result = new ArrayList();
                     CameraInfo info = new CameraInfo();
                     for (int cameraId = 0; cameraId < count; cameraId++) {
-                        int a;
-                        Size size;
+                        int i;
+                        int i2;
                         Camera.getCameraInfo(cameraId, info);
                         CameraInfo cameraInfo = new CameraInfo(cameraId, info);
                         Camera camera = Camera.open(cameraInfo.getCameraId());
                         Parameters params = camera.getParameters();
                         List<Size> list = params.getSupportedPreviewSizes();
-                        for (a = 0; a < list.size(); a++) {
-                            size = (Size) list.get(a);
-                            if ((size.width != 1280 || size.height == 720) && size.height < 2160 && size.width < 2160) {
-                                cameraInfo.previewSizes.add(new Size(size.width, size.height));
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m0d("preview size = " + size.width + " " + size.height);
+                        int a = 0;
+                        while (true) {
+                            i = 720;
+                            i2 = 1280;
+                            if (a >= list.size()) {
+                                break;
+                            }
+                            Size size = (Size) list.get(a);
+                            if (size.width != 1280 || size.height == 720) {
+                                if (size.height < 2160 && size.width < 2160) {
+                                    cameraInfo.previewSizes.add(new Size(size.width, size.height));
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        StringBuilder stringBuilder = new StringBuilder();
+                                        stringBuilder.append("preview size = ");
+                                        stringBuilder.append(size.width);
+                                        stringBuilder.append(" ");
+                                        stringBuilder.append(size.height);
+                                        FileLog.m0d(stringBuilder.toString());
+                                    }
                                 }
                             }
+                            a++;
                         }
-                        list = params.getSupportedPictureSizes();
-                        for (a = 0; a < list.size(); a++) {
-                            size = (Size) list.get(a);
-                            if ((size.width != 1280 || size.height == 720) && !("samsung".equals(Build.MANUFACTURER) && "jflteuc".equals(Build.PRODUCT) && size.width >= 2048)) {
-                                cameraInfo.pictureSizes.add(new Size(size.width, size.height));
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m0d("picture size = " + size.width + " " + size.height);
+                        List<Size> list2 = params.getSupportedPictureSizes();
+                        int a2 = 0;
+                        while (a2 < list2.size()) {
+                            Size size2 = (Size) list2.get(a2);
+                            if (size2.width != i2 || size2.height == r13) {
+                                if (!"samsung".equals(Build.MANUFACTURER) || !"jflteuc".equals(Build.PRODUCT) || size2.width < 2048) {
+                                    cameraInfo.pictureSizes.add(new Size(size2.width, size2.height));
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        StringBuilder stringBuilder2 = new StringBuilder();
+                                        stringBuilder2.append("picture size = ");
+                                        stringBuilder2.append(size2.width);
+                                        stringBuilder2.append(" ");
+                                        stringBuilder2.append(size2.height);
+                                        FileLog.m0d(stringBuilder2.toString());
+                                    }
                                 }
                             }
+                            a2++;
+                            i = 720;
+                            i2 = 1280;
                         }
                         camera.release();
                         result.add(cameraInfo);
@@ -147,8 +172,9 @@ public class CameraController implements OnInfoListener {
                 }
                 AndroidUtilities.runOnUIThread(new C05232());
             } catch (Throwable e) {
+                Throwable e2 = e;
                 AndroidUtilities.runOnUIThread(new C05243());
-                FileLog.m3e(e);
+                FileLog.m3e(e2);
             }
         }
     }
@@ -159,17 +185,19 @@ public class CameraController implements OnInfoListener {
         }
 
         public void run() {
-            if (CameraController.this.cameraInfos != null && !CameraController.this.cameraInfos.isEmpty()) {
-                for (int a = 0; a < CameraController.this.cameraInfos.size(); a++) {
-                    CameraInfo info = (CameraInfo) CameraController.this.cameraInfos.get(a);
-                    if (info.camera != null) {
-                        info.camera.stopPreview();
-                        info.camera.setPreviewCallbackWithBuffer(null);
-                        info.camera.release();
-                        info.camera = null;
+            if (CameraController.this.cameraInfos != null) {
+                if (!CameraController.this.cameraInfos.isEmpty()) {
+                    for (int a = 0; a < CameraController.this.cameraInfos.size(); a++) {
+                        CameraInfo info = (CameraInfo) CameraController.this.cameraInfos.get(a);
+                        if (info.camera != null) {
+                            info.camera.stopPreview();
+                            info.camera.setPreviewCallbackWithBuffer(null);
+                            info.camera.release();
+                            info.camera = null;
+                        }
                     }
+                    CameraController.this.cameraInfos = null;
                 }
-                CameraController.this.cameraInfos = null;
             }
         }
     }
@@ -191,22 +219,11 @@ public class CameraController implements OnInfoListener {
         CameraController localInstance = Instance;
         if (localInstance == null) {
             synchronized (CameraController.class) {
-                try {
-                    localInstance = Instance;
-                    if (localInstance == null) {
-                        CameraController localInstance2 = new CameraController();
-                        try {
-                            Instance = localInstance2;
-                            localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
-                            localInstance = localInstance2;
-                            throw th2;
-                        }
-                    }
-                } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                localInstance = Instance;
+                if (localInstance == null) {
+                    CameraController cameraController = new CameraController();
+                    localInstance = cameraController;
+                    Instance = cameraController;
                 }
             }
         }
@@ -214,9 +231,11 @@ public class CameraController implements OnInfoListener {
     }
 
     public void initCamera() {
-        if (!this.loadingCameras && !this.cameraInitied) {
-            this.loadingCameras = true;
-            this.threadPool.execute(new C05261());
+        if (!this.loadingCameras) {
+            if (!this.cameraInitied) {
+                this.loadingCameras = true;
+                this.threadPool.execute(new C05261());
+            }
         }
     }
 
@@ -268,82 +287,90 @@ public class CameraController implements OnInfoListener {
     }
 
     private static int getOrientation(byte[] jpeg) {
-        boolean littleEndian = true;
         if (jpeg == null) {
             return 0;
         }
-        int offset = 0;
+        int offset;
+        int offset2 = 0;
         int length = 0;
-        while (offset + 3 < jpeg.length) {
-            int offset2 = offset + 1;
-            if ((jpeg[offset] & 255) != 255) {
-                offset = offset2;
+        while (offset2 + 3 < jpeg.length) {
+            offset = offset2 + 1;
+            if ((jpeg[offset2] & 255) != 255) {
                 break;
             }
-            int marker = jpeg[offset2] & 255;
-            if (marker != 255) {
-                offset = offset2 + 1;
-                if (!(marker == 216 || marker == 1)) {
-                    if (marker != 217 && marker != 218) {
+            offset2 = jpeg[offset] & 255;
+            if (offset2 != 255) {
+                offset++;
+                if (offset2 == 216) {
+                    continue;
+                } else if (offset2 != 1) {
+                    if (offset2 == 217) {
+                        break;
+                    } else if (offset2 == 218) {
+                        break;
+                    } else {
                         length = pack(jpeg, offset, 2, false);
-                        if (length >= 2 && offset + length <= jpeg.length) {
-                            if (marker == 225 && length >= 8 && pack(jpeg, offset + 2, 4, false) == NUM && pack(jpeg, offset + 6, 2, false) == 0) {
-                                offset += 8;
-                                length -= 8;
-                                break;
+                        if (length >= 2) {
+                            if (offset + length <= jpeg.length) {
+                                if (offset2 == 225 && length >= 8 && pack(jpeg, offset + 2, 4, false) == NUM && pack(jpeg, offset + 6, 2, false) == 0) {
+                                    offset += 8;
+                                    length -= 8;
+                                    break;
+                                }
+                                offset += length;
+                                length = 0;
                             }
-                            offset += length;
-                            length = 0;
-                        } else {
-                            return 0;
                         }
+                        return 0;
                     }
-                    break;
                 }
             }
-            offset = offset2;
+            offset2 = offset;
         }
-        if (length <= 8) {
-            return 0;
-        }
-        int tag = pack(jpeg, offset, 4, false);
-        if (tag != NUM && tag != NUM) {
-            return 0;
-        }
-        if (tag != NUM) {
-            littleEndian = false;
-        }
-        int count = pack(jpeg, offset + 4, 4, littleEndian) + 2;
-        if (count < 10 || count > length) {
-            return 0;
-        }
-        offset += count;
-        length -= count;
-        int count2 = pack(jpeg, offset - 2, 2, littleEndian);
-        while (true) {
-            count = count2 - 1;
-            if (count2 <= 0 || length < 12) {
+        offset = offset2;
+        if (length > 8) {
+            offset2 = pack(jpeg, offset, 4, false);
+            if (offset2 != NUM && offset2 != NUM) {
                 return 0;
             }
-            if (pack(jpeg, offset, 2, littleEndian) == 274) {
-                break;
+            boolean littleEndian = offset2 == NUM;
+            int count = pack(jpeg, offset + 4, 4, littleEndian) + 2;
+            if (count >= 10) {
+                if (count <= length) {
+                    offset += count;
+                    length -= count;
+                    count = pack(jpeg, offset - 2, 2, littleEndian);
+                    while (true) {
+                        int count2 = count - 1;
+                        if (count <= 0 || length < 12) {
+                            break;
+                        } else if (pack(jpeg, offset, 2, littleEndian) == 274) {
+                            break;
+                        } else {
+                            offset += 12;
+                            length -= 12;
+                            count = count2;
+                        }
+                    }
+                    count = pack(jpeg, offset + 8, 2, littleEndian);
+                    if (count == 1) {
+                        return 0;
+                    }
+                    if (count == 3) {
+                        return 180;
+                    }
+                    if (count == 6) {
+                        return 90;
+                    }
+                    if (count != 8) {
+                        return 0;
+                    }
+                    return 270;
+                }
             }
-            offset += 12;
-            length -= 12;
-            count2 = count;
+            return 0;
         }
-        switch (pack(jpeg, offset + 8, 2, littleEndian)) {
-            case 1:
-                return 0;
-            case 3:
-                return 180;
-            case 6:
-                return 90;
-            case 8:
-                return 270;
-            default:
-                return 0;
-        }
+        return 0;
     }
 
     private static int pack(byte[] bytes, int offset, int length, boolean littleEndian) {
@@ -353,15 +380,14 @@ public class CameraController implements OnInfoListener {
             step = -1;
         }
         int value = 0;
-        int length2 = length;
         while (true) {
-            length = length2 - 1;
-            if (length2 <= 0) {
+            int length2 = length - 1;
+            if (length <= 0) {
                 return value;
             }
             value = (value << 8) | (bytes[offset] & 255);
             offset += step;
-            length2 = length;
+            length = length2;
         }
     }
 
@@ -392,7 +418,6 @@ public class CameraController implements OnInfoListener {
                         FileLog.m3e(e);
                     }
                     try {
-                        FileOutputStream outputStream;
                         if (info.frontCamera != 0) {
                             try {
                                 Matrix matrix = new Matrix();
@@ -402,7 +427,7 @@ public class CameraController implements OnInfoListener {
                                 if (scaled != bitmap) {
                                     bitmap.recycle();
                                 }
-                                outputStream = new FileOutputStream(path);
+                                FileOutputStream outputStream = new FileOutputStream(path);
                                 scaled.compress(CompressFormat.JPEG, 80, outputStream);
                                 outputStream.flush();
                                 outputStream.getFD().sync();
@@ -412,18 +437,17 @@ public class CameraController implements OnInfoListener {
                                 }
                                 if (callback != null) {
                                     callback.run();
-                                    return;
                                 }
                                 return;
                             } catch (Throwable e2) {
                                 FileLog.m3e(e2);
                             }
                         }
-                        outputStream = new FileOutputStream(path);
-                        outputStream.write(data);
-                        outputStream.flush();
-                        outputStream.getFD().sync();
-                        outputStream.close();
+                        FileOutputStream outputStream2 = new FileOutputStream(path);
+                        outputStream2.write(data);
+                        outputStream2.flush();
+                        outputStream2.getFD().sync();
+                        outputStream2.close();
                         if (bitmap != null) {
                             ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap), key);
                         }
@@ -451,9 +475,9 @@ public class CameraController implements OnInfoListener {
                     if (camera == null) {
                         try {
                             CameraInfo cameraInfo = session.cameraInfo;
-                            Camera camera2 = Camera.open(session.cameraInfo.cameraId);
-                            cameraInfo.camera = camera2;
-                            camera = camera2;
+                            Camera open = Camera.open(session.cameraInfo.cameraId);
+                            cameraInfo.camera = open;
+                            camera = open;
                         } catch (Throwable e) {
                             session.cameraInfo.camera = null;
                             if (camera != null) {
@@ -478,9 +502,9 @@ public class CameraController implements OnInfoListener {
                     if (camera == null) {
                         try {
                             CameraInfo cameraInfo = session.cameraInfo;
-                            Camera camera2 = Camera.open(session.cameraInfo.cameraId);
-                            cameraInfo.camera = camera2;
-                            camera = camera2;
+                            Camera open = Camera.open(session.cameraInfo.cameraId);
+                            cameraInfo.camera = open;
+                            camera = open;
                         } catch (Throwable e) {
                             session.cameraInfo.camera = null;
                             if (camera != null) {
@@ -497,108 +521,121 @@ public class CameraController implements OnInfoListener {
     }
 
     public void openRound(CameraSession session, SurfaceTexture texture, Runnable callback, Runnable configureCallback) {
-        if (session != null && texture != null) {
-            final CameraSession cameraSession = session;
-            final Runnable runnable = configureCallback;
-            final SurfaceTexture surfaceTexture = texture;
-            final Runnable runnable2 = callback;
-            this.threadPool.execute(new Runnable() {
-                @SuppressLint({"NewApi"})
-                public void run() {
-                    Camera camera = cameraSession.cameraInfo.camera;
-                    try {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("start creating round camera session");
-                        }
-                        if (camera == null) {
-                            CameraInfo cameraInfo = cameraSession.cameraInfo;
-                            Camera camera2 = Camera.open(cameraSession.cameraInfo.cameraId);
-                            cameraInfo.camera = camera2;
-                            camera = camera2;
-                        }
-                        Parameters params = camera.getParameters();
-                        cameraSession.configureRoundCamera();
-                        if (runnable != null) {
-                            runnable.run();
-                        }
-                        camera.setPreviewTexture(surfaceTexture);
-                        camera.startPreview();
-                        if (runnable2 != null) {
-                            AndroidUtilities.runOnUIThread(runnable2);
-                        }
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("round camera session created");
-                        }
-                    } catch (Throwable e) {
-                        cameraSession.cameraInfo.camera = null;
-                        if (camera != null) {
-                            camera.release();
-                        }
-                        FileLog.m3e(e);
-                    }
-                }
-            });
-        } else if (BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("failed to open round " + session + " tex = " + texture);
-        }
-    }
-
-    public void open(CameraSession session, SurfaceTexture texture, Runnable callback, Runnable prestartCallback) {
-        if (session != null && texture != null) {
-            final CameraSession cameraSession = session;
-            final Runnable runnable = prestartCallback;
-            final SurfaceTexture surfaceTexture = texture;
-            final Runnable runnable2 = callback;
-            this.threadPool.execute(new Runnable() {
-                @SuppressLint({"NewApi"})
-                public void run() {
-                    Camera camera = cameraSession.cameraInfo.camera;
-                    if (camera == null) {
+        if (session != null) {
+            if (texture != null) {
+                final CameraSession cameraSession = session;
+                final Runnable runnable = configureCallback;
+                final SurfaceTexture surfaceTexture = texture;
+                final Runnable runnable2 = callback;
+                this.threadPool.execute(new Runnable() {
+                    @SuppressLint({"NewApi"})
+                    public void run() {
+                        Camera camera = cameraSession.cameraInfo.camera;
                         try {
-                            CameraInfo cameraInfo = cameraSession.cameraInfo;
-                            Camera camera2 = Camera.open(cameraSession.cameraInfo.cameraId);
-                            cameraInfo.camera = camera2;
-                            camera = camera2;
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.m0d("start creating round camera session");
+                            }
+                            if (camera == null) {
+                                CameraInfo cameraInfo = cameraSession.cameraInfo;
+                                Camera open = Camera.open(cameraSession.cameraInfo.cameraId);
+                                cameraInfo.camera = open;
+                                camera = open;
+                            }
+                            Parameters params = camera.getParameters();
+                            cameraSession.configureRoundCamera();
+                            if (runnable != null) {
+                                runnable.run();
+                            }
+                            camera.setPreviewTexture(surfaceTexture);
+                            camera.startPreview();
+                            if (runnable2 != null) {
+                                AndroidUtilities.runOnUIThread(runnable2);
+                            }
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.m0d("round camera session created");
+                            }
                         } catch (Throwable e) {
                             cameraSession.cameraInfo.camera = null;
                             if (camera != null) {
                                 camera.release();
                             }
                             FileLog.m3e(e);
-                            return;
                         }
                     }
-                    List<String> rawFlashModes = camera.getParameters().getSupportedFlashModes();
-                    CameraController.this.availableFlashModes.clear();
-                    if (rawFlashModes != null) {
-                        for (int a = 0; a < rawFlashModes.size(); a++) {
-                            String rawFlashMode = (String) rawFlashModes.get(a);
-                            if (rawFlashMode.equals("off") || rawFlashMode.equals("on") || rawFlashMode.equals("auto")) {
-                                CameraController.this.availableFlashModes.add(rawFlashMode);
+                });
+                return;
+            }
+        }
+        if (BuildVars.LOGS_ENABLED) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("failed to open round ");
+            stringBuilder.append(session);
+            stringBuilder.append(" tex = ");
+            stringBuilder.append(texture);
+            FileLog.m0d(stringBuilder.toString());
+        }
+    }
+
+    public void open(CameraSession session, SurfaceTexture texture, Runnable callback, Runnable prestartCallback) {
+        if (session != null) {
+            if (texture != null) {
+                final CameraSession cameraSession = session;
+                final Runnable runnable = prestartCallback;
+                final SurfaceTexture surfaceTexture = texture;
+                final Runnable runnable2 = callback;
+                this.threadPool.execute(new Runnable() {
+                    @SuppressLint({"NewApi"})
+                    public void run() {
+                        Camera camera = cameraSession.cameraInfo.camera;
+                        if (camera == null) {
+                            try {
+                                CameraInfo cameraInfo = cameraSession.cameraInfo;
+                                Camera open = Camera.open(cameraSession.cameraInfo.cameraId);
+                                cameraInfo.camera = open;
+                                camera = open;
+                            } catch (Throwable e) {
+                                cameraSession.cameraInfo.camera = null;
+                                if (camera != null) {
+                                    camera.release();
+                                }
+                                FileLog.m3e(e);
+                                return;
                             }
                         }
-                        cameraSession.checkFlashMode((String) CameraController.this.availableFlashModes.get(0));
+                        List<String> rawFlashModes = camera.getParameters().getSupportedFlashModes();
+                        CameraController.this.availableFlashModes.clear();
+                        if (rawFlashModes != null) {
+                            for (int a = 0; a < rawFlashModes.size(); a++) {
+                                String rawFlashMode = (String) rawFlashModes.get(a);
+                                if (rawFlashMode.equals("off") || rawFlashMode.equals("on") || rawFlashMode.equals("auto")) {
+                                    CameraController.this.availableFlashModes.add(rawFlashMode);
+                                }
+                            }
+                            cameraSession.checkFlashMode((String) CameraController.this.availableFlashModes.get(0));
+                        }
+                        if (runnable != null) {
+                            runnable.run();
+                        }
+                        cameraSession.configurePhotoCamera();
+                        camera.setPreviewTexture(surfaceTexture);
+                        camera.startPreview();
+                        if (runnable2 != null) {
+                            AndroidUtilities.runOnUIThread(runnable2);
+                        }
                     }
-                    if (runnable != null) {
-                        runnable.run();
-                    }
-                    cameraSession.configurePhotoCamera();
-                    camera.setPreviewTexture(surfaceTexture);
-                    camera.startPreview();
-                    if (runnable2 != null) {
-                        AndroidUtilities.runOnUIThread(runnable2);
-                    }
-                }
-            });
+                });
+            }
         }
     }
 
     public void recordVideo(CameraSession session, File path, VideoTakeCallback callback, Runnable onVideoStartRecord) {
-        if (session != null) {
-            final CameraInfo info = session.cameraInfo;
+        CameraSession cameraSession = session;
+        if (cameraSession != null) {
+            CameraInfo info = cameraSession.cameraInfo;
             final Camera camera = info.camera;
-            final CameraSession cameraSession = session;
+            final CameraSession cameraSession2 = cameraSession;
             final File file = path;
+            final CameraInfo cameraInfo = info;
             final VideoTakeCallback videoTakeCallback = callback;
             final Runnable runnable = onVideoStartRecord;
             this.threadPool.execute(new Runnable() {
@@ -607,7 +644,7 @@ public class CameraController implements OnInfoListener {
                         if (camera != null) {
                             try {
                                 Parameters params = camera.getParameters();
-                                params.setFlashMode(cameraSession.getCurrentFlashMode().equals("on") ? "torch" : "off");
+                                params.setFlashMode(cameraSession2.getCurrentFlashMode().equals("on") ? "torch" : "off");
                                 camera.setParameters(params);
                             } catch (Throwable e) {
                                 FileLog.m3e(e);
@@ -618,12 +655,12 @@ public class CameraController implements OnInfoListener {
                                 CameraController.this.recorder.setCamera(camera);
                                 CameraController.this.recorder.setVideoSource(1);
                                 CameraController.this.recorder.setAudioSource(5);
-                                cameraSession.configureRecorder(1, CameraController.this.recorder);
+                                cameraSession2.configureRecorder(1, CameraController.this.recorder);
                                 CameraController.this.recorder.setOutputFile(file.getAbsolutePath());
                                 CameraController.this.recorder.setMaxFileSize(NUM);
                                 CameraController.this.recorder.setVideoFrameRate(30);
                                 CameraController.this.recorder.setMaxDuration(0);
-                                Size pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), 720, 480, new Size(16, 9));
+                                Size pictureSize = CameraController.chooseOptimalSize(cameraInfo.getPictureSizes(), 720, 480, new Size(16, 9));
                                 CameraController.this.recorder.setVideoEncodingBitRate(1800000);
                                 CameraController.this.recorder.setVideoSize(pictureSize.getWidth(), pictureSize.getHeight());
                                 CameraController.this.recorder.setOnInfoListener(CameraController.this);
@@ -650,99 +687,102 @@ public class CameraController implements OnInfoListener {
 
     private void finishRecordingVideo() {
         Throwable e;
-        final Bitmap bitmap;
-        final File cacheFile;
+        long duration;
+        Bitmap bitmap;
+        StringBuilder stringBuilder;
+        File cacheFile;
         final long durationFinal;
-        Throwable th;
+        final File file;
+        final Bitmap bitmap2;
         MediaMetadataRetriever mediaMetadataRetriever = null;
-        long duration = 0;
+        long duration2 = 0;
         try {
-            MediaMetadataRetriever mediaMetadataRetriever2 = new MediaMetadataRetriever();
-            try {
-                mediaMetadataRetriever2.setDataSource(this.recordedFile);
-                String d = mediaMetadataRetriever2.extractMetadata(9);
-                if (d != null) {
-                    duration = (long) ((int) Math.ceil((double) (((float) Long.parseLong(d)) / 1000.0f)));
-                }
-                if (mediaMetadataRetriever2 != null) {
-                    try {
-                        mediaMetadataRetriever2.release();
-                    } catch (Throwable e2) {
-                        FileLog.m3e(e2);
-                        mediaMetadataRetriever = mediaMetadataRetriever2;
-                    }
-                }
-                mediaMetadataRetriever = mediaMetadataRetriever2;
-            } catch (Exception e3) {
-                e2 = e3;
-                mediaMetadataRetriever = mediaMetadataRetriever2;
+            mediaMetadataRetriever = new MediaMetadataRetriever();
+            mediaMetadataRetriever.setDataSource(this.recordedFile);
+            String d = mediaMetadataRetriever.extractMetadata(9);
+            if (d != null) {
+                duration2 = (long) ((int) Math.ceil((double) (((float) Long.parseLong(d)) / 1000.0f)));
+            }
+            if (mediaMetadataRetriever != null) {
                 try {
-                    FileLog.m3e(e2);
-                    if (mediaMetadataRetriever != null) {
-                        try {
-                            mediaMetadataRetriever.release();
-                        } catch (Throwable e22) {
-                            FileLog.m3e(e22);
-                        }
-                    }
+                    mediaMetadataRetriever.release();
+                } catch (Exception e2) {
+                    e = e2;
+                    FileLog.m3e(e);
+                    duration = duration2;
                     bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
-                    cacheFile = new File(FileLoader.getDirectory(4), "-2147483648_" + SharedConfig.getLastLocalId() + ".jpg");
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("-2147483648_");
+                    stringBuilder.append(SharedConfig.getLastLocalId());
+                    stringBuilder.append(".jpg");
+                    cacheFile = new File(FileLoader.getDirectory(4), stringBuilder.toString());
                     bitmap.compress(CompressFormat.JPEG, 55, new FileOutputStream(cacheFile));
                     SharedConfig.saveConfig();
                     durationFinal = duration;
+                    file = cacheFile;
+                    bitmap2 = bitmap;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             if (CameraController.this.onVideoTakeCallback != null) {
-                                String path = cacheFile.getAbsolutePath();
-                                if (bitmap != null) {
-                                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap), Utilities.MD5(path));
+                                String path = file.getAbsolutePath();
+                                if (bitmap2 != null) {
+                                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap2), Utilities.MD5(path));
                                 }
                                 CameraController.this.onVideoTakeCallback.onFinishVideoRecording(path, durationFinal);
                                 CameraController.this.onVideoTakeCallback = null;
                             }
                         }
                     });
-                } catch (Throwable th2) {
-                    th = th2;
-                    if (mediaMetadataRetriever != null) {
-                        try {
-                            mediaMetadataRetriever.release();
-                        } catch (Throwable e222) {
-                            FileLog.m3e(e222);
-                        }
-                    }
-                    throw th;
                 }
-            } catch (Throwable th3) {
-                th = th3;
-                mediaMetadataRetriever = mediaMetadataRetriever2;
-                if (mediaMetadataRetriever != null) {
-                    mediaMetadataRetriever.release();
-                }
-                throw th;
             }
-        } catch (Exception e4) {
-            e222 = e4;
-            FileLog.m3e(e222);
+        } catch (Throwable e3) {
+            FileLog.m3e(e3);
             if (mediaMetadataRetriever != null) {
-                mediaMetadataRetriever.release();
+                try {
+                    mediaMetadataRetriever.release();
+                } catch (Exception e4) {
+                    e3 = e4;
+                    FileLog.m3e(e3);
+                    duration = duration2;
+                    bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("-2147483648_");
+                    stringBuilder.append(SharedConfig.getLastLocalId());
+                    stringBuilder.append(".jpg");
+                    cacheFile = new File(FileLoader.getDirectory(4), stringBuilder.toString());
+                    bitmap.compress(CompressFormat.JPEG, 55, new FileOutputStream(cacheFile));
+                    SharedConfig.saveConfig();
+                    durationFinal = duration;
+                    file = cacheFile;
+                    bitmap2 = bitmap;
+                    AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+                }
             }
-            bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
-            cacheFile = new File(FileLoader.getDirectory(4), "-2147483648_" + SharedConfig.getLastLocalId() + ".jpg");
-            bitmap.compress(CompressFormat.JPEG, 55, new FileOutputStream(cacheFile));
-            SharedConfig.saveConfig();
-            durationFinal = duration;
-            AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+        } catch (Throwable th) {
+            if (mediaMetadataRetriever != null) {
+                try {
+                    mediaMetadataRetriever.release();
+                } catch (Throwable e5) {
+                    FileLog.m3e(e5);
+                }
+            }
         }
+        duration = duration2;
         bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
-        cacheFile = new File(FileLoader.getDirectory(4), "-2147483648_" + SharedConfig.getLastLocalId() + ".jpg");
+        stringBuilder = new StringBuilder();
+        stringBuilder.append("-2147483648_");
+        stringBuilder.append(SharedConfig.getLastLocalId());
+        stringBuilder.append(".jpg");
+        cacheFile = new File(FileLoader.getDirectory(4), stringBuilder.toString());
         try {
             bitmap.compress(CompressFormat.JPEG, 55, new FileOutputStream(cacheFile));
-        } catch (Throwable e2222) {
-            FileLog.m3e(e2222);
+        } catch (Throwable e6) {
+            FileLog.m3e(e6);
         }
         SharedConfig.saveConfig();
         durationFinal = duration;
+        file = cacheFile;
+        bitmap2 = bitmap;
         AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
     }
 
@@ -794,8 +834,8 @@ public class CameraController implements OnInfoListener {
                         Parameters params = camera.getParameters();
                         params.setFlashMode("off");
                         camera.setParameters(params);
-                    } catch (Throwable e2222) {
-                        FileLog.m3e(e2222);
+                    } catch (Throwable e3) {
+                        FileLog.m3e(e3);
                     }
                     CameraController.this.threadPool.execute(new Runnable() {
                         public void run() {
@@ -813,7 +853,7 @@ public class CameraController implements OnInfoListener {
                     } else {
                         CameraController.this.finishRecordingVideo();
                     }
-                } catch (Exception e3) {
+                } catch (Exception e4) {
                 }
             }
         });

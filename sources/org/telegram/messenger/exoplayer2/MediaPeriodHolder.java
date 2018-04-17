@@ -49,7 +49,7 @@ final class MediaPeriodHolder {
     }
 
     public long toRendererTime(long periodTimeUs) {
-        return getRendererOffset() + periodTimeUs;
+        return periodTimeUs + getRendererOffset();
     }
 
     public long toPeriodTime(long rendererTimeUs) {
@@ -73,7 +73,8 @@ final class MediaPeriodHolder {
             return this.info.startPositionUs;
         }
         long bufferedPositionUs = this.mediaPeriod.getBufferedPositionUs();
-        return (bufferedPositionUs == Long.MIN_VALUE && convertEosToDuration) ? this.info.durationUs : bufferedPositionUs;
+        long j = (bufferedPositionUs == Long.MIN_VALUE && convertEosToDuration) ? this.info.durationUs : bufferedPositionUs;
+        return j;
     }
 
     public long getNextLoadPositionUs() {
@@ -100,8 +101,8 @@ final class MediaPeriodHolder {
     }
 
     public boolean selectTracks(float playbackSpeed) throws ExoPlaybackException {
-        int i = 0;
         TrackSelectorResult selectorResult = this.trackSelector.selectTracks(this.rendererCapabilities, this.mediaPeriod.getTrackGroups());
+        int i = 0;
         if (selectorResult.isEquivalent(this.periodTrackSelectorResult)) {
             return false;
         }
@@ -125,33 +126,34 @@ final class MediaPeriodHolder {
     public long applyTrackSelection(long positionUs, boolean forceRecreateStreams, boolean[] streamResetFlags) {
         TrackSelectionArray trackSelections = this.trackSelectorResult.selections;
         int i = 0;
-        while (i < trackSelections.length) {
-            boolean z;
-            boolean[] zArr = this.mayRetainStreamFlags;
-            if (forceRecreateStreams || !this.trackSelectorResult.isEquivalent(this.periodTrackSelectorResult, i)) {
+        while (true) {
+            boolean z = true;
+            if (i >= trackSelections.length) {
+                break;
+            }
+            boolean[] zArr = r0.mayRetainStreamFlags;
+            if (forceRecreateStreams || !r0.trackSelectorResult.isEquivalent(r0.periodTrackSelectorResult, i)) {
                 z = false;
-            } else {
-                z = true;
             }
             zArr[i] = z;
             i++;
         }
-        disassociateNoSampleRenderersWithEmptySampleStream(this.sampleStreams);
-        updatePeriodTrackSelectorResult(this.trackSelectorResult);
-        positionUs = this.mediaPeriod.selectTracks(trackSelections.getAll(), this.mayRetainStreamFlags, this.sampleStreams, streamResetFlags, positionUs);
-        associateNoSampleRenderersWithEmptySampleStream(this.sampleStreams);
-        this.hasEnabledTracks = false;
-        for (i = 0; i < this.sampleStreams.length; i++) {
-            if (this.sampleStreams[i] != null) {
-                Assertions.checkState(this.trackSelectorResult.renderersEnabled[i]);
-                if (this.rendererCapabilities[i].getTrackType() != 5) {
-                    this.hasEnabledTracks = true;
+        disassociateNoSampleRenderersWithEmptySampleStream(r0.sampleStreams);
+        updatePeriodTrackSelectorResult(r0.trackSelectorResult);
+        long positionUs2 = r0.mediaPeriod.selectTracks(trackSelections.getAll(), r0.mayRetainStreamFlags, r0.sampleStreams, streamResetFlags, positionUs);
+        associateNoSampleRenderersWithEmptySampleStream(r0.sampleStreams);
+        r0.hasEnabledTracks = false;
+        for (int i2 = 0; i2 < r0.sampleStreams.length; i2++) {
+            if (r0.sampleStreams[i2] != null) {
+                Assertions.checkState(r0.trackSelectorResult.renderersEnabled[i2]);
+                if (r0.rendererCapabilities[i2].getTrackType() != 5) {
+                    r0.hasEnabledTracks = true;
                 }
             } else {
-                Assertions.checkState(trackSelections.get(i) == null);
+                Assertions.checkState(trackSelections.get(i2) == null);
             }
         }
-        return positionUs;
+        return positionUs2;
     }
 
     public void release() {

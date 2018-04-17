@@ -110,7 +110,7 @@ public class SimpleTextView extends View implements Callback {
                     width = (width - this.rightDrawable.getIntrinsicWidth()) - this.drawablePadding;
                 }
                 CharSequence string = TextUtils.ellipsize(this.text, this.textPaint, (float) width, TruncateAt.END);
-                this.layout = new StaticLayout(string, 0, string.length(), this.textPaint, AndroidUtilities.dp(8.0f) + width, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.layout = new StaticLayout(string, 0, string.length(), this.textPaint, width + AndroidUtilities.dp(8.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 calcOffset(width);
             } catch (Exception e) {
             }
@@ -199,11 +199,9 @@ public class SimpleTextView extends View implements Callback {
     }
 
     public void setText(CharSequence value, boolean force) {
-        if (this.text != null || value != null) {
-            if (force || this.text == null || value == null || !this.text.equals(value)) {
-                this.text = value;
-                recreateLayoutMaybe();
-            }
+        if (!(this.text == null && value == null) && (force || this.text == null || value == null || !this.text.equals(value))) {
+            this.text = value;
+            recreateLayoutMaybe();
         }
     }
 
@@ -264,9 +262,9 @@ public class SimpleTextView extends View implements Callback {
             }
         }
         if (this.rightDrawable != null) {
-            int x = (this.textWidth + textOffsetX) + this.drawablePadding;
-            y = ((this.textHeight - this.rightDrawable.getIntrinsicHeight()) / 2) + this.rightDrawableTopPadding;
-            this.rightDrawable.setBounds(x, y, this.rightDrawable.getIntrinsicWidth() + x, this.rightDrawable.getIntrinsicHeight() + y);
+            y = (this.textWidth + textOffsetX) + this.drawablePadding;
+            int y2 = ((this.textHeight - this.rightDrawable.getIntrinsicHeight()) / 2) + this.rightDrawableTopPadding;
+            this.rightDrawable.setBounds(y, y2, this.rightDrawable.getIntrinsicWidth() + y, this.rightDrawable.getIntrinsicHeight() + y2);
             this.rightDrawable.draw(canvas);
         }
         if (this.layout != null) {

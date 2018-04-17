@@ -30,7 +30,7 @@ public class CheckableImageView extends ImageView implements Checkable {
     }
 
     public void toggle() {
-        setChecked(!this.mChecked);
+        setChecked(this.mChecked ^ 1);
     }
 
     public boolean isChecked() {

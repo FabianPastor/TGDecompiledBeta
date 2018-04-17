@@ -32,13 +32,16 @@ public final class AdPlaybackState {
         }
 
         private AdGroup(int count, int[] states, Uri[] uris, long[] durationsUs) {
+            int nextAdIndexToPlay = 0;
             Assertions.checkArgument(states.length == uris.length);
             this.count = count;
             this.states = states;
             this.uris = uris;
             this.durationsUs = durationsUs;
-            int nextAdIndexToPlay = 0;
-            while (nextAdIndexToPlay < states.length && states[nextAdIndexToPlay] != 0 && states[nextAdIndexToPlay] != 1) {
+            while (nextAdIndexToPlay < states.length && states[nextAdIndexToPlay] != 0) {
+                if (states[nextAdIndexToPlay] == 1) {
+                    break;
+                }
                 nextAdIndexToPlay++;
             }
             this.nextAdIndexToPlay = nextAdIndexToPlay;
@@ -52,25 +55,43 @@ public final class AdPlaybackState {
 
         public AdGroup withAdUri(Uri uri, int index) {
             boolean z;
+            int[] states;
             long[] durationsUs;
+            Uri[] uris;
             boolean z2 = false;
-            if (this.count == -1 || index < this.count) {
-                z = true;
-            } else {
-                z = false;
+            if (this.count != -1) {
+                if (index >= this.count) {
+                    z = false;
+                    Assertions.checkArgument(z);
+                    states = copyStatesWithSpaceForAdCount(this.states, index + 1);
+                    if (states[index] == 0) {
+                        z2 = true;
+                    }
+                    Assertions.checkArgument(z2);
+                    if (this.durationsUs.length != states.length) {
+                        durationsUs = this.durationsUs;
+                    } else {
+                        durationsUs = copyDurationsUsWithSpaceForAdCount(this.durationsUs, states.length);
+                    }
+                    uris = (Uri[]) Arrays.copyOf(this.uris, states.length);
+                    uris[index] = uri;
+                    states[index] = 1;
+                    return new AdGroup(this.count, states, uris, durationsUs);
+                }
             }
+            z = true;
             Assertions.checkArgument(z);
-            int[] states = copyStatesWithSpaceForAdCount(this.states, index + 1);
+            states = copyStatesWithSpaceForAdCount(this.states, index + 1);
             if (states[index] == 0) {
                 z2 = true;
             }
             Assertions.checkArgument(z2);
-            if (this.durationsUs.length == states.length) {
-                durationsUs = this.durationsUs;
-            } else {
+            if (this.durationsUs.length != states.length) {
                 durationsUs = copyDurationsUsWithSpaceForAdCount(this.durationsUs, states.length);
+            } else {
+                durationsUs = this.durationsUs;
             }
-            Uri[] uris = (Uri[]) Arrays.copyOf(this.uris, states.length);
+            uris = (Uri[]) Arrays.copyOf(this.uris, states.length);
             uris[index] = uri;
             states[index] = 1;
             return new AdGroup(this.count, states, uris, durationsUs);
@@ -78,36 +99,97 @@ public final class AdPlaybackState {
 
         public AdGroup withAdState(int state, int index) {
             boolean z;
+            int[] states;
             long[] durationsUs;
             Uri[] uris;
             boolean z2 = false;
-            if (this.count == -1 || index < this.count) {
-                z = true;
-            } else {
-                z = false;
+            if (this.count != -1) {
+                if (index >= this.count) {
+                    z = false;
+                    Assertions.checkArgument(z);
+                    states = copyStatesWithSpaceForAdCount(this.states, index + 1);
+                    if (states[index] != 0) {
+                        if (states[index] == 1) {
+                            Assertions.checkArgument(z2);
+                            if (this.durationsUs.length != states.length) {
+                                durationsUs = this.durationsUs;
+                            } else {
+                                durationsUs = copyDurationsUsWithSpaceForAdCount(this.durationsUs, states.length);
+                            }
+                            if (this.uris.length != states.length) {
+                                uris = this.uris;
+                            } else {
+                                uris = (Uri[]) Arrays.copyOf(this.uris, states.length);
+                            }
+                            states[index] = state;
+                            return new AdGroup(this.count, states, uris, durationsUs);
+                        }
+                    }
+                    z2 = true;
+                    Assertions.checkArgument(z2);
+                    if (this.durationsUs.length != states.length) {
+                        durationsUs = copyDurationsUsWithSpaceForAdCount(this.durationsUs, states.length);
+                    } else {
+                        durationsUs = this.durationsUs;
+                    }
+                    if (this.uris.length != states.length) {
+                        uris = (Uri[]) Arrays.copyOf(this.uris, states.length);
+                    } else {
+                        uris = this.uris;
+                    }
+                    states[index] = state;
+                    return new AdGroup(this.count, states, uris, durationsUs);
+                }
             }
+            z = true;
             Assertions.checkArgument(z);
-            int[] states = copyStatesWithSpaceForAdCount(this.states, index + 1);
-            if (states[index] == 0 || states[index] == 1) {
-                z2 = true;
+            states = copyStatesWithSpaceForAdCount(this.states, index + 1);
+            if (states[index] != 0) {
+                if (states[index] == 1) {
+                    Assertions.checkArgument(z2);
+                    if (this.durationsUs.length != states.length) {
+                        durationsUs = this.durationsUs;
+                    } else {
+                        durationsUs = copyDurationsUsWithSpaceForAdCount(this.durationsUs, states.length);
+                    }
+                    if (this.uris.length != states.length) {
+                        uris = this.uris;
+                    } else {
+                        uris = (Uri[]) Arrays.copyOf(this.uris, states.length);
+                    }
+                    states[index] = state;
+                    return new AdGroup(this.count, states, uris, durationsUs);
+                }
             }
+            z2 = true;
             Assertions.checkArgument(z2);
-            if (this.durationsUs.length == states.length) {
-                durationsUs = this.durationsUs;
-            } else {
+            if (this.durationsUs.length != states.length) {
                 durationsUs = copyDurationsUsWithSpaceForAdCount(this.durationsUs, states.length);
-            }
-            if (this.uris.length == states.length) {
-                uris = this.uris;
             } else {
+                durationsUs = this.durationsUs;
+            }
+            if (this.uris.length != states.length) {
                 uris = (Uri[]) Arrays.copyOf(this.uris, states.length);
+            } else {
+                uris = this.uris;
             }
             states[index] = state;
             return new AdGroup(this.count, states, uris, durationsUs);
         }
 
         public AdGroup withAdDurationsUs(long[] durationsUs) {
-            boolean z = this.count == -1 || durationsUs.length <= this.uris.length;
+            boolean z;
+            if (this.count != -1) {
+                if (durationsUs.length > this.uris.length) {
+                    z = false;
+                    Assertions.checkArgument(z);
+                    if (durationsUs.length < this.uris.length) {
+                        durationsUs = copyDurationsUsWithSpaceForAdCount(durationsUs, this.uris.length);
+                    }
+                    return new AdGroup(this.count, this.states, this.uris, durationsUs);
+                }
+            }
+            z = true;
             Assertions.checkArgument(z);
             if (durationsUs.length < this.uris.length) {
                 durationsUs = copyDurationsUsWithSpaceForAdCount(durationsUs, this.uris.length);
@@ -116,12 +198,12 @@ public final class AdPlaybackState {
         }
 
         public AdGroup withAllAdsSkipped() {
+            int i = 0;
             if (this.count == -1) {
                 return new AdGroup(0, new int[0], new Uri[0], new long[0]);
             }
             int count = this.states.length;
             int[] states = Arrays.copyOf(this.states, count);
-            int i = 0;
             while (i < count) {
                 if (states[i] == 1 || states[i] == 0) {
                     states[i] = 2;
@@ -207,11 +289,17 @@ public final class AdPlaybackState {
     }
 
     public AdPlaybackState withAdDurationsUs(long[][] adDurationUs) {
+        int adGroupIndex = 0;
         AdGroup[] adGroups = (AdGroup[]) Arrays.copyOf(this.adGroups, this.adGroups.length);
-        for (int adGroupIndex = 0; adGroupIndex < this.adGroupCount; adGroupIndex++) {
-            adGroups[adGroupIndex] = adGroups[adGroupIndex].withAdDurationsUs(adDurationUs[adGroupIndex]);
+        while (true) {
+            int adGroupIndex2 = adGroupIndex;
+            if (adGroupIndex2 < this.adGroupCount) {
+                adGroups[adGroupIndex2] = adGroups[adGroupIndex2].withAdDurationsUs(adDurationUs[adGroupIndex2]);
+                adGroupIndex = adGroupIndex2 + 1;
+            } else {
+                return new AdPlaybackState(this.adGroupTimesUs, adGroups, this.adResumePositionUs, this.contentDurationUs);
+            }
         }
-        return new AdPlaybackState(this.adGroupTimesUs, adGroups, this.adResumePositionUs, this.contentDurationUs);
     }
 
     public AdPlaybackState withAdResumePositionUs(long adResumePositionUs) {
@@ -222,6 +310,9 @@ public final class AdPlaybackState {
     }
 
     public AdPlaybackState withContentDurationUs(long contentDurationUs) {
-        return this.contentDurationUs == contentDurationUs ? this : new AdPlaybackState(this.adGroupTimesUs, this.adGroups, this.adResumePositionUs, contentDurationUs);
+        if (this.contentDurationUs == contentDurationUs) {
+            return this;
+        }
+        return new AdPlaybackState(this.adGroupTimesUs, this.adGroups, this.adResumePositionUs, contentDurationUs);
     }
 }

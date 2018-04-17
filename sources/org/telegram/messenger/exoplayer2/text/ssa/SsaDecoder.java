@@ -59,8 +59,9 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
     private void parseHeader(ParsableByteArray data) {
         String currentLine;
         do {
-            currentLine = data.readLine();
-            if (currentLine == null) {
+            String readLine = data.readLine();
+            currentLine = readLine;
+            if (readLine == null) {
                 return;
             }
         } while (!currentLine.startsWith("[Events]"));
@@ -68,8 +69,9 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
 
     private void parseEventBody(ParsableByteArray data, List<Cue> cues, LongArray cueTimesUs) {
         while (true) {
-            String currentLine = data.readLine();
-            if (currentLine == null) {
+            String readLine = data.readLine();
+            String currentLine = readLine;
+            if (readLine == null) {
                 return;
             }
             if (!this.haveInitializationData && currentLine.startsWith(FORMAT_LINE_PREFIX)) {
@@ -80,8 +82,6 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void parseFormatLine(String formatLine) {
         String[] values = TextUtils.split(formatLine.substring(FORMAT_LINE_PREFIX.length()), ",");
         this.formatKeyCount = values.length;
@@ -89,29 +89,62 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
         this.formatEndIndex = -1;
         this.formatTextIndex = -1;
         for (int i = 0; i < this.formatKeyCount; i++) {
-            int i2;
             String key = Util.toLowerInvariant(values[i].trim());
-            switch (key.hashCode()) {
-                case 100571:
-                    if (key.equals(TtmlNode.END)) {
-                        i2 = 1;
-                        break;
+            int hashCode = key.hashCode();
+            if (hashCode != 100571) {
+                if (hashCode != 3556653) {
+                    if (hashCode == 109757538) {
+                        if (key.equals(TtmlNode.START)) {
+                            hashCode = 0;
+                            switch (hashCode) {
+                                case 0:
+                                    this.formatStartIndex = i;
+                                    break;
+                                case 1:
+                                    this.formatEndIndex = i;
+                                    break;
+                                case 2:
+                                    this.formatTextIndex = i;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                     }
-                case 3556653:
-                    if (key.equals(MimeTypes.BASE_TYPE_TEXT)) {
-                        i2 = 2;
-                        break;
+                } else if (key.equals(MimeTypes.BASE_TYPE_TEXT)) {
+                    hashCode = 2;
+                    switch (hashCode) {
+                        case 0:
+                            this.formatStartIndex = i;
+                            break;
+                        case 1:
+                            this.formatEndIndex = i;
+                            break;
+                        case 2:
+                            this.formatTextIndex = i;
+                            break;
+                        default:
+                            break;
                     }
-                case 109757538:
-                    if (key.equals(TtmlNode.START)) {
-                        i2 = 0;
+                }
+            } else if (key.equals(TtmlNode.END)) {
+                hashCode = 1;
+                switch (hashCode) {
+                    case 0:
+                        this.formatStartIndex = i;
                         break;
-                    }
-                default:
-                    i2 = -1;
-                    break;
+                    case 1:
+                        this.formatEndIndex = i;
+                        break;
+                    case 2:
+                        this.formatTextIndex = i;
+                        break;
+                    default:
+                        break;
+                }
             }
-            switch (i2) {
+            hashCode = -1;
+            switch (hashCode) {
                 case 0:
                     this.formatStartIndex = i;
                     break;
@@ -132,17 +165,29 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
 
     private void parseDialogueLine(String dialogueLine, List<Cue> cues, LongArray cueTimesUs) {
         if (this.formatKeyCount == 0) {
-            Log.w(TAG, "Skipping dialogue line before complete format: " + dialogueLine);
+            String str = TAG;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Skipping dialogue line before complete format: ");
+            stringBuilder.append(dialogueLine);
+            Log.w(str, stringBuilder.toString());
             return;
         }
         String[] lineValues = dialogueLine.substring(DIALOGUE_LINE_PREFIX.length()).split(",", this.formatKeyCount);
         if (lineValues.length != this.formatKeyCount) {
-            Log.w(TAG, "Skipping dialogue line with fewer columns than format: " + dialogueLine);
+            String str2 = TAG;
+            StringBuilder stringBuilder2 = new StringBuilder();
+            stringBuilder2.append("Skipping dialogue line with fewer columns than format: ");
+            stringBuilder2.append(dialogueLine);
+            Log.w(str2, stringBuilder2.toString());
             return;
         }
         long startTimeUs = parseTimecodeUs(lineValues[this.formatStartIndex]);
         if (startTimeUs == C0539C.TIME_UNSET) {
-            Log.w(TAG, "Skipping invalid timing: " + dialogueLine);
+            String str3 = TAG;
+            StringBuilder stringBuilder3 = new StringBuilder();
+            stringBuilder3.append("Skipping invalid timing: ");
+            stringBuilder3.append(dialogueLine);
+            Log.w(str3, stringBuilder3.toString());
             return;
         }
         long endTimeUs = C0539C.TIME_UNSET;
@@ -150,7 +195,11 @@ public final class SsaDecoder extends SimpleSubtitleDecoder {
         if (!endTimeString.trim().isEmpty()) {
             endTimeUs = parseTimecodeUs(endTimeString);
             if (endTimeUs == C0539C.TIME_UNSET) {
-                Log.w(TAG, "Skipping invalid timing: " + dialogueLine);
+                str3 = TAG;
+                stringBuilder3 = new StringBuilder();
+                stringBuilder3.append("Skipping invalid timing: ");
+                stringBuilder3.append(dialogueLine);
+                Log.w(str3, stringBuilder3.toString());
                 return;
             }
         }

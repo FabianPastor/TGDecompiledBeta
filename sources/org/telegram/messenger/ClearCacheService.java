@@ -17,22 +17,32 @@ public class ClearCacheService extends IntentService {
             Utilities.globalQueue.postRunnable(new Runnable() {
                 public void run() {
                     int days;
+                    long currentTime;
+                    SparseArray<File> paths;
+                    int a;
                     if (keepMedia == 0) {
                         days = 7;
                     } else if (keepMedia == 1) {
                         days = 30;
                     } else {
                         days = 3;
-                    }
-                    long currentTime = (System.currentTimeMillis() / 1000) - ((long) (86400 * days));
-                    SparseArray<File> paths = ImageLoader.getInstance().createMediaPaths();
-                    for (int a = 0; a < paths.size(); a++) {
-                        if (paths.keyAt(a) != 4) {
-                            try {
-                                Utilities.clearDir(((File) paths.valueAt(a)).getAbsolutePath(), 0, currentTime);
-                            } catch (Throwable e) {
-                                FileLog.m3e(e);
+                        currentTime = (System.currentTimeMillis() / 1000) - ((long) (86400 * days));
+                        paths = ImageLoader.getInstance().createMediaPaths();
+                        for (a = 0; a < paths.size(); a++) {
+                            if (paths.keyAt(a) == 4) {
+                                try {
+                                    Utilities.clearDir(((File) paths.valueAt(a)).getAbsolutePath(), 0, currentTime);
+                                } catch (Throwable e) {
+                                    FileLog.m3e(e);
+                                }
                             }
+                        }
+                    }
+                    currentTime = (System.currentTimeMillis() / 1000) - ((long) (86400 * days));
+                    paths = ImageLoader.getInstance().createMediaPaths();
+                    for (a = 0; a < paths.size(); a++) {
+                        if (paths.keyAt(a) == 4) {
+                            Utilities.clearDir(((File) paths.valueAt(a)).getAbsolutePath(), 0, currentTime);
                         }
                     }
                 }

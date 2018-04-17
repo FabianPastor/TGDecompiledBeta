@@ -45,11 +45,13 @@ public class DividerItemDecoration extends ItemDecoration {
     }
 
     public void onDraw(Canvas c, RecyclerView parent, State state) {
-        if (parent.getLayoutManager() != null && this.mDivider != null) {
-            if (this.mOrientation == 1) {
-                drawVertical(c, parent);
-            } else {
-                drawHorizontal(c, parent);
+        if (parent.getLayoutManager() != null) {
+            if (this.mDivider != null) {
+                if (this.mOrientation == 1) {
+                    drawVertical(c, parent);
+                } else {
+                    drawHorizontal(c, parent);
+                }
             }
         }
     }
@@ -103,7 +105,9 @@ public class DividerItemDecoration extends ItemDecoration {
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
         if (this.mDivider == null) {
             outRect.set(0, 0, 0, 0);
-        } else if (this.mOrientation == 1) {
+            return;
+        }
+        if (this.mOrientation == 1) {
             outRect.set(0, 0, 0, this.mDivider.getIntrinsicHeight());
         } else {
             outRect.set(0, 0, this.mDivider.getIntrinsicWidth(), 0);

@@ -11,7 +11,7 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
     }
 
     public long getLength() {
-        return ((RangeInputStream) getInput()).getRemainingLength() + ((RangeInputStream) getInput()).getPosition();
+        return ((RangeInputStream) getInput()).getPosition() + ((RangeInputStream) getInput()).getRemainingLength();
     }
 
     public long getOffset() {
@@ -33,7 +33,10 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
                 return atom;
             }
         }
-        throw new IOException("atom type mismatch, not found: " + expectedTypeExpression);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("atom type mismatch, not found: ");
+        stringBuilder.append(expectedTypeExpression);
+        throw new IOException(stringBuilder.toString());
     }
 
     public boolean readBoolean() throws IOException {
@@ -67,11 +70,23 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
     }
 
     public BigDecimal readShortFixedPoint() throws IOException {
-        return new BigDecimal(String.valueOf(this.data.readByte()) + TtmlNode.ANONYMOUS_REGION_ID + String.valueOf(this.data.readUnsignedByte()));
+        int integer = this.data.readByte();
+        int decimal = this.data.readUnsignedByte();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(String.valueOf(integer));
+        stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
+        stringBuilder.append(String.valueOf(decimal));
+        return new BigDecimal(stringBuilder.toString());
     }
 
     public BigDecimal readIntegerFixedPoint() throws IOException {
-        return new BigDecimal(String.valueOf(this.data.readShort()) + TtmlNode.ANONYMOUS_REGION_ID + String.valueOf(this.data.readUnsignedShort()));
+        int integer = this.data.readShort();
+        int decimal = this.data.readUnsignedShort();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(String.valueOf(integer));
+        stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
+        stringBuilder.append(String.valueOf(decimal));
+        return new BigDecimal(stringBuilder.toString());
     }
 
     public String readString(int len, String enc) throws IOException {
@@ -109,7 +124,8 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
             appendPath(s, box.getParent());
             s.append("/");
         }
-        return s.append(box.getType());
+        s.append(box.getType());
+        return s;
     }
 
     public String getPath() {

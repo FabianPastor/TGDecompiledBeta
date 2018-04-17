@@ -43,49 +43,42 @@ public abstract class SegmentBase {
             }
             if (this.segmentTimeline == null) {
                 int segmentNum = this.startNumber + ((int) (timeUs / ((this.duration * C0539C.MICROS_PER_SECOND) / this.timescale)));
-                if (segmentNum < firstSegmentNum) {
-                    return firstSegmentNum;
-                }
-                if (segmentCount == -1) {
-                    return segmentNum;
-                }
-                return Math.min(segmentNum, (firstSegmentNum + segmentCount) - 1);
+                int min = segmentNum < firstSegmentNum ? firstSegmentNum : segmentCount == -1 ? segmentNum : Math.min(segmentNum, (firstSegmentNum + segmentCount) - 1);
+                return min;
             }
             int lowIndex = firstSegmentNum;
             int highIndex = (firstSegmentNum + segmentCount) - 1;
             while (lowIndex <= highIndex) {
-                int midIndex = lowIndex + ((highIndex - lowIndex) / 2);
-                long midTimeUs = getSegmentTimeUs(midIndex);
+                segmentNum = ((highIndex - lowIndex) / 2) + lowIndex;
+                long midTimeUs = getSegmentTimeUs(segmentNum);
                 if (midTimeUs < timeUs) {
-                    lowIndex = midIndex + 1;
+                    lowIndex = segmentNum + 1;
                 } else if (midTimeUs <= timeUs) {
-                    return midIndex;
+                    return segmentNum;
                 } else {
-                    highIndex = midIndex - 1;
+                    highIndex = segmentNum - 1;
                 }
             }
-            if (lowIndex != firstSegmentNum) {
-                lowIndex = highIndex;
-            }
-            return lowIndex;
+            return lowIndex == firstSegmentNum ? lowIndex : highIndex;
         }
 
         public final long getSegmentDurationUs(int sequenceNumber, long periodDurationUs) {
             if (this.segmentTimeline != null) {
-                return (((SegmentTimelineElement) this.segmentTimeline.get(sequenceNumber - this.startNumber)).duration * C0539C.MICROS_PER_SECOND) / this.timescale;
+                return (C0539C.MICROS_PER_SECOND * ((SegmentTimelineElement) this.segmentTimeline.get(sequenceNumber - this.startNumber)).duration) / this.timescale;
             }
             int segmentCount = getSegmentCount(periodDurationUs);
-            return (segmentCount == -1 || sequenceNumber != (getFirstSegmentNum() + segmentCount) - 1) ? (this.duration * C0539C.MICROS_PER_SECOND) / this.timescale : periodDurationUs - getSegmentTimeUs(sequenceNumber);
+            long segmentTimeUs = (segmentCount == -1 || sequenceNumber != (getFirstSegmentNum() + segmentCount) - 1) ? (this.duration * C0539C.MICROS_PER_SECOND) / this.timescale : periodDurationUs - getSegmentTimeUs(sequenceNumber);
+            return segmentTimeUs;
         }
 
         public final long getSegmentTimeUs(int sequenceNumber) {
-            long unscaledSegmentTime;
+            long j;
             if (this.segmentTimeline != null) {
-                unscaledSegmentTime = ((SegmentTimelineElement) this.segmentTimeline.get(sequenceNumber - this.startNumber)).startTime - this.presentationTimeOffset;
+                j = ((SegmentTimelineElement) this.segmentTimeline.get(sequenceNumber - this.startNumber)).startTime - this.presentationTimeOffset;
             } else {
-                unscaledSegmentTime = ((long) (sequenceNumber - this.startNumber)) * this.duration;
+                j = ((long) (sequenceNumber - this.startNumber)) * this.duration;
             }
-            return Util.scaleLargeTimestamp(unscaledSegmentTime, C0539C.MICROS_PER_SECOND, this.timescale);
+            return Util.scaleLargeTimestamp(j, C0539C.MICROS_PER_SECOND, this.timescale);
         }
 
         public int getFirstSegmentNum() {
@@ -155,13 +148,15 @@ public abstract class SegmentBase {
         }
 
         public RangedUri getSegmentUrl(Representation representation, int sequenceNumber) {
-            long time;
+            long j;
+            Representation representation2 = representation;
             if (this.segmentTimeline != null) {
-                time = ((SegmentTimelineElement) this.segmentTimeline.get(sequenceNumber - this.startNumber)).startTime;
+                j = ((SegmentTimelineElement) r0.segmentTimeline.get(sequenceNumber - r0.startNumber)).startTime;
             } else {
-                time = ((long) (sequenceNumber - this.startNumber)) * this.duration;
+                j = ((long) (sequenceNumber - r0.startNumber)) * r0.duration;
             }
-            return new RangedUri(this.mediaTemplate.buildUri(representation.format.id, sequenceNumber, representation.format.bitrate, time), 0, -1);
+            long time = j;
+            return new RangedUri(r0.mediaTemplate.buildUri(representation2.format.id, sequenceNumber, representation2.format.bitrate, time), 0, -1);
         }
 
         public int getSegmentCount(long periodDurationUs) {

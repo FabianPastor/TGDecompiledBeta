@@ -48,13 +48,7 @@ public final class MergingMediaSource implements MediaSource {
     }
 
     public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
-        boolean z;
-        if (this.listener == null) {
-            z = true;
-        } else {
-            z = false;
-        }
-        Assertions.checkState(z, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+        Assertions.checkState(this.listener == null, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
         this.listener = listener;
         for (int i = 0; i < this.mediaSources.length; i++) {
             final int sourceIndex = i;

@@ -54,8 +54,11 @@ public final class OfflineLicenseHelper<T extends ExoMediaCrypto> {
     public OfflineLicenseHelper(UUID uuid, ExoMediaDrm<T> mediaDrm, MediaDrmCallback callback, HashMap<String, String> optionalKeyRequestParameters) {
         this.handlerThread.start();
         this.conditionVariable = new ConditionVariable();
-        EventListener eventListener = new C18281();
-        this.drmSessionManager = new DefaultDrmSessionManager(uuid, mediaDrm, callback, optionalKeyRequestParameters, new Handler(this.handlerThread.getLooper()), eventListener);
+        UUID uuid2 = uuid;
+        ExoMediaDrm<T> exoMediaDrm = mediaDrm;
+        MediaDrmCallback mediaDrmCallback = callback;
+        HashMap<String, String> hashMap = optionalKeyRequestParameters;
+        this.drmSessionManager = new DefaultDrmSessionManager(uuid2, exoMediaDrm, mediaDrmCallback, hashMap, new Handler(this.handlerThread.getLooper()), new C18281());
     }
 
     public synchronized byte[] getPropertyByteArray(String key) {
@@ -90,20 +93,18 @@ public final class OfflineLicenseHelper<T extends ExoMediaCrypto> {
     }
 
     public synchronized Pair<Long, Long> getLicenseDurationRemainingSec(byte[] offlineLicenseKeySetId) throws DrmSessionException {
-        Pair<Long, Long> licenseDurationRemainingSec;
         Assertions.checkNotNull(offlineLicenseKeySetId);
         DrmSession<T> drmSession = openBlockingKeyRequest(1, offlineLicenseKeySetId, null);
         DrmSessionException error = drmSession.getError();
-        licenseDurationRemainingSec = WidevineUtil.getLicenseDurationRemainingSec(drmSession);
+        Pair<Long, Long> licenseDurationRemainingSec = WidevineUtil.getLicenseDurationRemainingSec(drmSession);
         this.drmSessionManager.releaseSession(drmSession);
-        if (error != null) {
-            if (error.getCause() instanceof KeysExpiredException) {
-                licenseDurationRemainingSec = Pair.create(Long.valueOf(0), Long.valueOf(0));
-            } else {
-                throw error;
-            }
+        if (error == null) {
+            return licenseDurationRemainingSec;
         }
-        return licenseDurationRemainingSec;
+        if (error.getCause() instanceof KeysExpiredException) {
+            return Pair.create(Long.valueOf(0), Long.valueOf(0));
+        }
+        throw error;
     }
 
     public void release() {

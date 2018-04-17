@@ -57,7 +57,7 @@ public class TextPaintView extends EntityView {
             float inset = radius + ((float) AndroidUtilities.dp(1.0f));
             float width = ((float) getWidth()) - (inset * 2.0f);
             float height = ((float) getHeight()) - (inset * 2.0f);
-            float middle = inset + (height / 2.0f);
+            float middle = (height / 2.0f) + inset;
             if (x > inset - radius && y > middle - radius && x < inset + radius && y < middle + radius) {
                 return 1;
             }
@@ -71,33 +71,69 @@ public class TextPaintView extends EntityView {
         }
 
         protected void onDraw(Canvas canvas) {
-            int i;
+            int xCount;
+            TextViewSelectionView textViewSelectionView = this;
+            Canvas canvas2 = canvas;
             super.onDraw(canvas);
             float space = (float) AndroidUtilities.dp(3.0f);
             float length = (float) AndroidUtilities.dp(3.0f);
             float thickness = (float) AndroidUtilities.dp(1.0f);
             float radius = (float) AndroidUtilities.dp(4.5f);
             float inset = (radius + thickness) + ((float) AndroidUtilities.dp(15.0f));
-            float width = ((float) getWidth()) - (2.0f * inset);
-            float height = ((float) getHeight()) - (2.0f * inset);
-            int xCount = (int) Math.floor((double) (width / (space + length)));
-            float xGap = (float) Math.ceil((double) (((width - (((float) xCount) * (space + length))) + space) / 2.0f));
-            for (i = 0; i < xCount; i++) {
-                float x = (xGap + inset) + (((float) i) * (length + space));
-                canvas.drawRect(x, inset - (thickness / 2.0f), x + length, inset + (thickness / 2.0f), this.paint);
-                canvas.drawRect(x, (inset + height) - (thickness / 2.0f), x + length, (inset + height) + (thickness / 2.0f), this.paint);
+            float width = ((float) getWidth()) - (inset * 2.0f);
+            float height = ((float) getHeight()) - (inset * 2.0f);
+            int xCount2 = (int) Math.floor((double) (width / (space + length)));
+            float xGap = (float) Math.ceil((double) (((width - (((float) xCount2) * (space + length))) + space) / 2.0f));
+            int i = 0;
+            int i2 = 0;
+            while (true) {
+                int i3 = i2;
+                if (i3 >= xCount2) {
+                    break;
+                }
+                float x = (xGap + inset) + (((float) i3) * (length + space));
+                float f = x + length;
+                float f2 = inset + (thickness / 2.0f);
+                int i4 = i3;
+                float f3 = f;
+                f = xGap;
+                xGap = f2;
+                xCount = xCount2;
+                canvas2.drawRect(x, inset - (thickness / 2.0f), f3, xGap, textViewSelectionView.paint);
+                canvas2.drawRect(x, (inset + height) - (thickness / 2.0f), x + length, (inset + height) + (thickness / 2.0f), textViewSelectionView.paint);
+                i2 = i4 + 1;
+                xGap = f;
+                xCount2 = xCount;
             }
-            int yCount = (int) Math.floor((double) (height / (space + length)));
-            float yGap = (float) Math.ceil((double) (((height - (((float) yCount) * (space + length))) + space) / 2.0f));
-            for (i = 0; i < yCount; i++) {
-                float y = (yGap + inset) + (((float) i) * (length + space));
-                canvas.drawRect(inset - (thickness / 2.0f), y, inset + (thickness / 2.0f), y + length, this.paint);
-                canvas.drawRect((inset + width) - (thickness / 2.0f), y, (inset + width) + (thickness / 2.0f), y + length, this.paint);
+            xCount = xCount2;
+            xCount2 = (int) Math.floor((double) (height / (space + length)));
+            xGap = (float) Math.ceil((double) (((height - (((float) xCount2) * (space + length))) + space) / 2.0f));
+            while (true) {
+                i3 = i;
+                int yCount;
+                if (i3 < xCount2) {
+                    float y = (xGap + inset) + (((float) i3) * (length + space));
+                    x = inset + (thickness / 2.0f);
+                    float f4 = y + length;
+                    int i5 = i3;
+                    f3 = x;
+                    x = xGap;
+                    xGap = f4;
+                    yCount = xCount2;
+                    canvas2.drawRect(inset - (thickness / 2.0f), y, f3, xGap, textViewSelectionView.paint);
+                    canvas2.drawRect((inset + width) - (thickness / 2.0f), y, (inset + width) + (thickness / 2.0f), y + length, textViewSelectionView.paint);
+                    i = i5 + 1;
+                    xGap = x;
+                    xCount2 = yCount;
+                } else {
+                    yCount = xCount2;
+                    canvas2.drawCircle(inset, (height / 2.0f) + inset, radius, textViewSelectionView.dotPaint);
+                    canvas2.drawCircle(inset, (height / 2.0f) + inset, radius, textViewSelectionView.dotStrokePaint);
+                    canvas2.drawCircle(inset + width, (height / 2.0f) + inset, radius, textViewSelectionView.dotPaint);
+                    canvas2.drawCircle(inset + width, (height / 2.0f) + inset, radius, textViewSelectionView.dotStrokePaint);
+                    return;
+                }
             }
-            canvas.drawCircle(inset, (height / 2.0f) + inset, radius, this.dotPaint);
-            canvas.drawCircle(inset, (height / 2.0f) + inset, radius, this.dotStrokePaint);
-            canvas.drawCircle(inset + width, (height / 2.0f) + inset, radius, this.dotPaint);
-            canvas.drawCircle(inset + width, (height / 2.0f) + inset, radius, this.dotStrokePaint);
         }
     }
 

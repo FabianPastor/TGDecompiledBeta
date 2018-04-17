@@ -83,22 +83,22 @@ public final class PsExtractor implements Extractor {
                 this.pesScratch.skipBits(4);
                 long pts = ((long) this.pesScratch.readBits(3)) << 30;
                 this.pesScratch.skipBits(1);
-                pts |= (long) (this.pesScratch.readBits(15) << 15);
+                long pts2 = pts | ((long) (this.pesScratch.readBits(15) << 15));
                 this.pesScratch.skipBits(1);
-                pts |= (long) this.pesScratch.readBits(15);
+                long pts3 = pts2 | ((long) this.pesScratch.readBits(15));
                 this.pesScratch.skipBits(1);
                 if (!this.seenFirstDts && this.dtsFlag) {
                     this.pesScratch.skipBits(4);
                     long dts = ((long) this.pesScratch.readBits(3)) << 30;
                     this.pesScratch.skipBits(1);
-                    dts |= (long) (this.pesScratch.readBits(15) << 15);
+                    long dts2 = dts | ((long) (this.pesScratch.readBits(15) << 15));
                     this.pesScratch.skipBits(1);
-                    dts |= (long) this.pesScratch.readBits(15);
+                    long dts3 = dts2 | ((long) this.pesScratch.readBits(15));
                     this.pesScratch.skipBits(1);
-                    this.timestampAdjuster.adjustTsTimestamp(dts);
+                    this.timestampAdjuster.adjustTsTimestamp(dts3);
                     this.seenFirstDts = true;
                 }
-                this.timeUs = this.timestampAdjuster.adjustTsTimestamp(pts);
+                this.timeUs = this.timestampAdjuster.adjustTsTimestamp(pts3);
             }
         }
     }
@@ -124,16 +124,16 @@ public final class PsExtractor implements Extractor {
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
-        boolean z = true;
         byte[] scratch = new byte[14];
+        boolean z = false;
         input.peekFully(scratch, 0, 14);
         if (PACK_START_CODE != (((((scratch[0] & 255) << 24) | ((scratch[1] & 255) << 16)) | ((scratch[2] & 255) << 8)) | (scratch[3] & 255)) || (scratch[4] & 196) != 68 || (scratch[6] & 4) != 4 || (scratch[8] & 4) != 4 || (scratch[9] & 1) != 1 || (scratch[12] & 3) != 3) {
             return false;
         }
         input.advancePeekPosition(scratch[13] & 7);
         input.peekFully(scratch, 0, 3);
-        if (1 != ((((scratch[0] & 255) << 16) | ((scratch[1] & 255) << 8)) | (scratch[2] & 255))) {
-            z = false;
+        if (1 == ((scratch[2] & 255) | (((scratch[0] & 255) << 16) | ((scratch[1] & 255) << 8)))) {
+            z = true;
         }
         return z;
     }

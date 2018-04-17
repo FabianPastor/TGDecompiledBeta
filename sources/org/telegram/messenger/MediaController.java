@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -22,7 +21,7 @@ import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
-import android.media.MediaCodec;
+import android.media.AudioTrack.OnPlaybackPositionUpdateListener;
 import android.media.MediaCodec.BufferInfo;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecInfo.CodecCapabilities;
@@ -30,7 +29,6 @@ import android.media.MediaCodecList;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Environment;
 import android.os.PowerManager;
@@ -48,6 +46,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
@@ -66,11 +65,7 @@ import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
-import org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSink;
-import org.telegram.messenger.video.InputSurface;
 import org.telegram.messenger.video.MP4Builder;
-import org.telegram.messenger.video.Mp4Movie;
-import org.telegram.messenger.video.OutputSurface;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Document;
@@ -233,37 +228,15 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private SparseArray<MessageObject> voiceMessagesPlaylistMap;
     private boolean voiceMessagesPlaylistUnread;
 
-    /* renamed from: org.telegram.messenger.MediaController$18 */
-    class AnonymousClass18 implements Runnable {
-        final /* synthetic */ File val$cacheFile;
-        final /* synthetic */ CountDownLatch val$countDownLatch;
-        final /* synthetic */ Boolean[] val$result;
-
-        AnonymousClass18(Boolean[] boolArr, File file, CountDownLatch countDownLatch) {
-            this.val$result = boolArr;
-            this.val$cacheFile = file;
-            this.val$countDownLatch = countDownLatch;
-        }
-
-        public void run() {
-            boolean z;
-            Boolean[] boolArr = this.val$result;
-            if (MediaController.this.openOpusFile(this.val$cacheFile.getAbsolutePath()) != 0) {
-                z = true;
-            } else {
-                z = false;
-            }
-            boolArr[0] = Boolean.valueOf(z);
-            this.val$countDownLatch.countDown();
-        }
-    }
-
     /* renamed from: org.telegram.messenger.MediaController$1 */
     class C02511 implements Runnable {
         C02511() {
         }
 
         public void run() {
+            Throwable e;
+            boolean flush;
+            final ByteBuffer finalBuffer;
             if (MediaController.this.audioRecorder != null) {
                 ByteBuffer buffer;
                 if (MediaController.this.recordBuffers.isEmpty()) {
@@ -276,13 +249,15 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 buffer.rewind();
                 int len = MediaController.this.audioRecorder.read(buffer, buffer.capacity());
                 if (len > 0) {
+                    double sum;
+                    double sum2;
                     buffer.limit(len);
-                    double d = 0.0d;
                     try {
                         float sampleStep;
+                        int newPart;
                         long newSamplesCount = MediaController.this.samplesCount + ((long) (len / 2));
                         int currentPart = (int) ((((double) MediaController.this.samplesCount) / ((double) newSamplesCount)) * ((double) MediaController.this.recordSamples.length));
-                        int newPart = MediaController.this.recordSamples.length - currentPart;
+                        int newPart2 = MediaController.this.recordSamples.length - currentPart;
                         if (currentPart != 0) {
                             sampleStep = ((float) MediaController.this.recordSamples.length) / ((float) currentPart);
                             float currentNum = 0.0f;
@@ -291,87 +266,108 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 currentNum += sampleStep;
                             }
                         }
-                        int currentNum2 = currentPart;
-                        float nextNum = 0.0f;
-                        sampleStep = (((float) len) / 2.0f) / ((float) newPart);
-                        for (int i = 0; i < len / 2; i++) {
-                            short peak = buffer.getShort();
-                            if (peak > (short) 2500) {
-                                d += (double) (peak * peak);
-                            }
-                            if (i == ((int) nextNum) && currentNum2 < MediaController.this.recordSamples.length) {
-                                MediaController.this.recordSamples[currentNum2] = peak;
-                                nextNum += sampleStep;
-                                currentNum2++;
+                        sampleStep = 0.0f;
+                        float sampleStep2 = (((float) len) / 2.0f) / ((float) newPart2);
+                        sum = 0.0d;
+                        sum2 = currentPart;
+                        int i = 0;
+                        while (i < len / 2) {
+                            try {
+                                int currentPart2;
+                                short peak = buffer.getShort();
+                                if (peak > (short) 2500) {
+                                    currentPart2 = currentPart;
+                                    newPart = newPart2;
+                                    sum += (double) (peak * peak);
+                                } else {
+                                    currentPart2 = currentPart;
+                                    newPart = newPart2;
+                                }
+                                if (i == ((int) sampleStep) && sum2 < MediaController.this.recordSamples.length) {
+                                    MediaController.this.recordSamples[sum2] = peak;
+                                    sampleStep += sampleStep2;
+                                    sum2++;
+                                }
+                                i++;
+                                currentPart = currentPart2;
+                                newPart2 = newPart;
+                            } catch (Throwable e2) {
+                                e = e2;
                             }
                         }
+                        newPart = newPart2;
                         MediaController.this.samplesCount = newSamplesCount;
-                    } catch (Throwable e) {
+                    } catch (Throwable e22) {
+                        e = e22;
+                        sum = 0.0d;
                         FileLog.m3e(e);
-                    }
-                    buffer.position(0);
-                    final double amplitude = Math.sqrt((d / ((double) len)) / 2.0d);
-                    final ByteBuffer finalBuffer = buffer;
-                    final boolean flush = len != buffer.capacity();
-                    if (len != 0) {
-                        MediaController.this.fileEncodingQueue.postRunnable(new Runnable() {
+                        flush = false;
+                        buffer.position(0);
+                        sum2 = Math.sqrt((sum / ((double) len)) / 2.0d);
+                        finalBuffer = buffer;
+                        if (len != buffer.capacity()) {
+                            flush = true;
+                        }
+                        if (len != 0) {
+                            MediaController.this.fileEncodingQueue.postRunnable(new Runnable() {
 
-                            /* renamed from: org.telegram.messenger.MediaController$1$1$1 */
-                            class C02451 implements Runnable {
-                                C02451() {
+                                /* renamed from: org.telegram.messenger.MediaController$1$1$1 */
+                                class C02451 implements Runnable {
+                                    C02451() {
+                                    }
+
+                                    public void run() {
+                                        MediaController.this.recordBuffers.add(finalBuffer);
+                                    }
                                 }
 
                                 public void run() {
-                                    MediaController.this.recordBuffers.add(finalBuffer);
-                                }
-                            }
-
-                            public void run() {
-                                while (finalBuffer.hasRemaining()) {
-                                    int oldLimit = -1;
-                                    if (finalBuffer.remaining() > MediaController.this.fileBuffer.remaining()) {
-                                        oldLimit = finalBuffer.limit();
-                                        finalBuffer.limit(MediaController.this.fileBuffer.remaining() + finalBuffer.position());
-                                    }
-                                    MediaController.this.fileBuffer.put(finalBuffer);
-                                    if (MediaController.this.fileBuffer.position() == MediaController.this.fileBuffer.limit() || flush) {
-                                        if (MediaController.this.writeFrame(MediaController.this.fileBuffer, !flush ? MediaController.this.fileBuffer.limit() : finalBuffer.position()) != 0) {
-                                            MediaController.this.fileBuffer.rewind();
-                                            MediaController.this.recordTimeCount = MediaController.this.recordTimeCount + ((long) ((MediaController.this.fileBuffer.limit() / 2) / 16));
+                                    while (finalBuffer.hasRemaining()) {
+                                        int oldLimit = -1;
+                                        if (finalBuffer.remaining() > MediaController.this.fileBuffer.remaining()) {
+                                            oldLimit = finalBuffer.limit();
+                                            finalBuffer.limit(MediaController.this.fileBuffer.remaining() + finalBuffer.position());
+                                        }
+                                        MediaController.this.fileBuffer.put(finalBuffer);
+                                        if (MediaController.this.fileBuffer.position() == MediaController.this.fileBuffer.limit() || flush) {
+                                            if (MediaController.this.writeFrame(MediaController.this.fileBuffer, !flush ? MediaController.this.fileBuffer.limit() : finalBuffer.position()) != 0) {
+                                                MediaController.this.fileBuffer.rewind();
+                                                MediaController.this.recordTimeCount = MediaController.this.recordTimeCount + ((long) ((MediaController.this.fileBuffer.limit() / 2) / 16));
+                                            }
+                                        }
+                                        if (oldLimit != -1) {
+                                            finalBuffer.limit(oldLimit);
                                         }
                                     }
-                                    if (oldLimit != -1) {
-                                        finalBuffer.limit(oldLimit);
-                                    }
+                                    MediaController.this.recordQueue.postRunnable(new C02451());
                                 }
-                                MediaController.this.recordQueue.postRunnable(new C02451());
+                            });
+                        }
+                        MediaController.this.recordQueue.postRunnable(MediaController.this.recordRunnable);
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                NotificationCenter.getInstance(MediaController.this.recordingCurrentAccount).postNotificationName(NotificationCenter.recordProgressChanged, Long.valueOf(System.currentTimeMillis() - MediaController.this.recordStartTime), Double.valueOf(sum2));
                             }
                         });
+                        return;
+                    }
+                    flush = false;
+                    buffer.position(0);
+                    sum2 = Math.sqrt((sum / ((double) len)) / 2.0d);
+                    finalBuffer = buffer;
+                    if (len != buffer.capacity()) {
+                        flush = true;
+                    }
+                    if (len != 0) {
+                        MediaController.this.fileEncodingQueue.postRunnable(/* anonymous class already generated */);
                     }
                     MediaController.this.recordQueue.postRunnable(MediaController.this.recordRunnable);
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            NotificationCenter.getInstance(MediaController.this.recordingCurrentAccount).postNotificationName(NotificationCenter.recordProgressChanged, Long.valueOf(System.currentTimeMillis() - MediaController.this.recordStartTime), Double.valueOf(amplitude));
-                        }
-                    });
+                    AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
                     return;
                 }
                 MediaController.this.recordBuffers.add(buffer);
                 MediaController.this.stopRecordingInternal(MediaController.this.sendAfterDone);
             }
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.MediaController$21 */
-    class AnonymousClass21 implements Runnable {
-        final /* synthetic */ MessageObject val$messageObject;
-
-        AnonymousClass21(MessageObject messageObject) {
-            this.val$messageObject = messageObject;
-        }
-
-        public void run() {
-            NotificationCenter.getInstance(this.val$messageObject.currentAccount).postNotificationName(NotificationCenter.FileDidLoaded, FileLoader.getAttachFileName(this.val$messageObject.getDocument()));
         }
     }
 
@@ -382,7 +378,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
         public void run() {
             try {
-                int a;
                 MediaController.this.recordBufferSize = AudioRecord.getMinBufferSize(16000, 16, 2);
                 if (MediaController.this.recordBufferSize <= 0) {
                     MediaController.this.recordBufferSize = 1280;
@@ -391,13 +386,15 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 if (MediaController.this.playerBufferSize <= 0) {
                     MediaController.this.playerBufferSize = 3840;
                 }
-                for (a = 0; a < 5; a++) {
+                int a = 0;
+                for (int a2 = 0; a2 < 5; a2++) {
                     ByteBuffer buffer = ByteBuffer.allocateDirect(4096);
                     buffer.order(ByteOrder.nativeOrder());
                     MediaController.this.recordBuffers.add(buffer);
                 }
-                for (a = 0; a < 3; a++) {
+                while (a < 3) {
                     MediaController.this.freePlayerBuffers.add(new AudioBuffer(MediaController.this.playerBufferSize));
+                    a++;
                 }
             } catch (Throwable e) {
                 FileLog.m3e(e);
@@ -808,7 +805,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         public int currentObserverToken;
 
         private StopMediaObserverRunnable() {
-            this.currentObserverToken = 0;
+            this.currentObserverToken = null;
         }
 
         public void run() {
@@ -859,51 +856,6 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
     }
 
-    /* renamed from: org.telegram.messenger.MediaController$20 */
-    class AnonymousClass20 implements VideoPlayerDelegate {
-        final /* synthetic */ MessageObject val$messageObject;
-
-        AnonymousClass20(MessageObject messageObject) {
-            this.val$messageObject = messageObject;
-        }
-
-        public void onStateChanged(boolean playWhenReady, int playbackState) {
-            if (playbackState == 4) {
-                if (MediaController.this.playlist.isEmpty() || MediaController.this.playlist.size() <= 1) {
-                    MediaController mediaController = MediaController.this;
-                    boolean z = this.val$messageObject != null && this.val$messageObject.isVoice();
-                    mediaController.cleanupPlayer(true, true, z);
-                    return;
-                }
-                MediaController.this.playNextMessageWithoutOrder(true);
-            } else if (MediaController.this.seekToProgressPending == 0.0f) {
-            } else {
-                if (playbackState == 3 || playbackState == 1) {
-                    int seekTo = (int) (((float) MediaController.this.audioPlayer.getDuration()) * MediaController.this.seekToProgressPending);
-                    MediaController.this.audioPlayer.seekTo((long) seekTo);
-                    MediaController.this.lastProgress = (long) seekTo;
-                    MediaController.this.seekToProgressPending = 0.0f;
-                }
-            }
-        }
-
-        public void onError(Exception e) {
-        }
-
-        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-        }
-
-        public void onRenderedFirstFrame() {
-        }
-
-        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-        }
-
-        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-            return false;
-        }
-    }
-
     private native void closeOpusFile();
 
     private native long getTotalPcmDuration();
@@ -930,52 +882,31 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     public static void checkGallery() {
-        if (VERSION.SDK_INT >= 24 && allPhotosAlbumEntry != null) {
-            final int prevSize = allPhotosAlbumEntry.photos.size();
-            Utilities.globalQueue.postRunnable(new Runnable() {
-                @SuppressLint({"NewApi"})
-                public void run() {
-                    int count = 0;
-                    Cursor cursor = null;
-                    try {
-                        if (ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
-                            cursor = Media.query(ApplicationLoader.applicationContext.getContentResolver(), Media.EXTERNAL_CONTENT_URI, new String[]{"COUNT(_id)"}, null, null, null);
-                            if (cursor != null && cursor.moveToNext()) {
-                                count = 0 + cursor.getInt(0);
+        if (VERSION.SDK_INT >= 24) {
+            if (allPhotosAlbumEntry != null) {
+                final int prevSize = allPhotosAlbumEntry.photos.size();
+                Utilities.globalQueue.postRunnable(new Runnable() {
+                    /* JADX WARNING: inconsistent code. */
+                    /* Code decompiled incorrectly, please refer to instructions dump. */
+                    @SuppressLint({"NewApi"})
+                    public void run() {
+                        int count = 0;
+                        Cursor cursor = null;
+                        try {
+                            if (ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
+                                cursor = Media.query(ApplicationLoader.applicationContext.getContentResolver(), Media.EXTERNAL_CONTENT_URI, new String[]{"COUNT(_id)"}, null, null, null);
+                                if (cursor != null && cursor.moveToNext()) {
+                                    count = 0 + cursor.getInt(0);
+                                }
+                            }
+                        } catch (Throwable th) {
+                            if (cursor != null) {
+                                cursor.close();
                             }
                         }
-                        if (cursor != null) {
-                            cursor.close();
-                        }
-                    } catch (Throwable th) {
-                        if (cursor != null) {
-                            cursor.close();
-                        }
                     }
-                    try {
-                        if (ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
-                            cursor = Media.query(ApplicationLoader.applicationContext.getContentResolver(), Video.Media.EXTERNAL_CONTENT_URI, new String[]{"COUNT(_id)"}, null, null, null);
-                            if (cursor != null && cursor.moveToNext()) {
-                                count += cursor.getInt(0);
-                            }
-                        }
-                        if (cursor != null) {
-                            cursor.close();
-                        }
-                    } catch (Throwable th2) {
-                        if (cursor != null) {
-                            cursor.close();
-                        }
-                    }
-                    if (prevSize != count) {
-                        if (MediaController.refreshGalleryRunnable != null) {
-                            AndroidUtilities.cancelRunOnUIThread(MediaController.refreshGalleryRunnable);
-                            MediaController.refreshGalleryRunnable = null;
-                        }
-                        MediaController.loadGalleryPhotosAlbums(0);
-                    }
-                }
-            }, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+                }, AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS);
+            }
         }
     }
 
@@ -983,22 +914,11 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         MediaController localInstance = Instance;
         if (localInstance == null) {
             synchronized (MediaController.class) {
-                try {
-                    localInstance = Instance;
-                    if (localInstance == null) {
-                        MediaController localInstance2 = new MediaController();
-                        try {
-                            Instance = localInstance2;
-                            localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
-                            localInstance = localInstance2;
-                            throw th2;
-                        }
-                    }
-                } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                localInstance = Instance;
+                if (localInstance == null) {
+                    MediaController mediaController = new MediaController();
+                    localInstance = mediaController;
+                    Instance = mediaController;
                 }
             }
         }
@@ -1106,10 +1026,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     }
 
                     public void run() {
-                        if (currentPlayingMessageObject == null) {
-                            return;
-                        }
-                        if ((MediaController.this.audioPlayer != null || MediaController.this.audioTrackPlayer != null || MediaController.this.videoPlayer != null) && !MediaController.this.isPaused) {
+                        if (!(currentPlayingMessageObject == null || ((MediaController.this.audioPlayer == null && MediaController.this.audioTrackPlayer == null && MediaController.this.videoPlayer == null) || MediaController.this.isPaused))) {
                             try {
                                 if (MediaController.this.ignoreFirstProgress != 0) {
                                     MediaController.this.ignoreFirstProgress = MediaController.this.ignoreFirstProgress - 1;
@@ -1118,15 +1035,13 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 long duration;
                                 long progress;
                                 float bufferedValue;
-                                float value;
+                                float f = 0.0f;
                                 if (MediaController.this.videoPlayer != null) {
                                     duration = MediaController.this.videoPlayer.getDuration();
                                     progress = MediaController.this.videoPlayer.getCurrentPosition();
                                     bufferedValue = ((float) MediaController.this.videoPlayer.getBufferedPosition()) / ((float) duration);
                                     if (duration >= 0) {
-                                        value = ((float) progress) / ((float) duration);
-                                    } else {
-                                        value = 0.0f;
+                                        f = ((float) progress) / ((float) duration);
                                     }
                                     if (progress < 0 || value >= MediaController.VOLUME_NORMAL) {
                                         return;
@@ -1134,22 +1049,19 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 } else if (MediaController.this.audioPlayer != null) {
                                     duration = MediaController.this.audioPlayer.getDuration();
                                     progress = MediaController.this.audioPlayer.getCurrentPosition();
-                                    if (duration == C0539C.TIME_UNSET || duration < 0) {
-                                        value = 0.0f;
-                                    } else {
-                                        value = ((float) progress) / ((float) duration);
-                                    }
-                                    bufferedValue = ((float) MediaController.this.audioPlayer.getBufferedPosition()) / ((float) duration);
+                                    bufferedValue = (duration == C0539C.TIME_UNSET || duration < 0) ? 0.0f : ((float) progress) / ((float) duration);
+                                    float bufferedValue2 = ((float) MediaController.this.audioPlayer.getBufferedPosition()) / ((float) duration);
                                     if (duration != C0539C.TIME_UNSET && progress >= 0) {
-                                        if (MediaController.this.seekToProgressPending != 0.0f) {
-                                            return;
+                                        if (MediaController.this.seekToProgressPending == 0.0f) {
+                                            f = bufferedValue;
+                                            bufferedValue = bufferedValue2;
                                         }
                                     }
                                     return;
                                 } else {
                                     duration = 0;
                                     progress = (long) ((int) (((float) MediaController.this.lastPlayPcm) / 48.0f));
-                                    value = ((float) MediaController.this.lastPlayPcm) / ((float) MediaController.this.currentTotalPcmDuration);
+                                    f = ((float) MediaController.this.lastPlayPcm) / ((float) MediaController.this.currentTotalPcmDuration);
                                     bufferedValue = 0.0f;
                                     if (progress == MediaController.this.lastProgress) {
                                         return;
@@ -1157,10 +1069,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                                 }
                                 MediaController.this.lastProgress = progress;
                                 currentPlayingMessageObject.audioPlayerDuration = (int) (duration / 1000);
-                                currentPlayingMessageObject.audioProgress = value;
+                                currentPlayingMessageObject.audioProgress = f;
                                 currentPlayingMessageObject.audioProgressSec = (int) (MediaController.this.lastProgress / 1000);
                                 currentPlayingMessageObject.bufferedProgress = bufferedValue;
-                                NotificationCenter.getInstance(currentPlayingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, Integer.valueOf(currentPlayingMessageObject.getId()), Float.valueOf(value));
+                                NotificationCenter.getInstance(currentPlayingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, Integer.valueOf(currentPlayingMessageObject.getId()), Float.valueOf(f));
                             } catch (Throwable e) {
                                 FileLog.m3e(e);
                             }
@@ -1191,11 +1103,13 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     public void cleanup() {
+        int a = 0;
         cleanupPlayer(false, true);
         this.audioInfo = null;
         this.playMusicAgain = false;
-        for (int a = 0; a < 3; a++) {
+        while (a < 3) {
             DownloadController.getInstance(a).cleanup();
+            a++;
         }
         this.videoConvertQueue.clear();
         this.playlist.clear();
@@ -1257,14 +1171,15 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     private void processMediaObserver(Uri uri) {
+        MediaController mediaController = this;
         try {
             android.graphics.Point size = AndroidUtilities.getRealScreenSize();
-            Cursor cursor = ApplicationLoader.applicationContext.getContentResolver().query(uri, this.mediaProjections, null, null, "date_added DESC LIMIT 1");
-            ArrayList<Long> screenshotDates = new ArrayList();
+            Cursor cursor = ApplicationLoader.applicationContext.getContentResolver().query(uri, mediaController.mediaProjections, null, null, "date_added DESC LIMIT 1");
+            final ArrayList<Long> screenshotDates = new ArrayList();
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     String val = TtmlNode.ANONYMOUS_REGION_ID;
-                    String data = cursor.getString(0);
+                    String data = cursor.getString(null);
                     String display_name = cursor.getString(1);
                     String album_name = cursor.getString(2);
                     long date = cursor.getLong(3);
@@ -1291,11 +1206,10 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 cursor.close();
             }
             if (!screenshotDates.isEmpty()) {
-                final ArrayList<Long> arrayList = screenshotDates;
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         NotificationCenter.getInstance(MediaController.this.lastChatAccount).postNotificationName(NotificationCenter.screenshotTook, new Object[0]);
-                        MediaController.this.checkScreenshots(arrayList);
+                        MediaController.this.checkScreenshots(screenshotDates);
                     }
                 });
             }
@@ -1305,23 +1219,24 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     private void checkScreenshots(ArrayList<Long> dates) {
-        if (dates != null && !dates.isEmpty() && this.lastChatEnterTime != 0) {
+        if (!(dates == null || dates.isEmpty() || this.lastChatEnterTime == 0)) {
             if (this.lastUser != null || (this.lastSecretChat instanceof TL_encryptedChat)) {
                 boolean send = false;
                 for (int a = 0; a < dates.size(); a++) {
                     Long date = (Long) dates.get(a);
-                    if ((this.lastMediaCheckTime == 0 || date.longValue() > this.lastMediaCheckTime) && date.longValue() >= this.lastChatEnterTime && (this.lastChatLeaveTime == 0 || date.longValue() <= this.lastChatLeaveTime + AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS)) {
-                        this.lastMediaCheckTime = Math.max(this.lastMediaCheckTime, date.longValue());
-                        send = true;
+                    if (this.lastMediaCheckTime == 0 || date.longValue() > this.lastMediaCheckTime) {
+                        if (date.longValue() >= this.lastChatEnterTime && (this.lastChatLeaveTime == 0 || date.longValue() <= this.lastChatLeaveTime + AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS)) {
+                            this.lastMediaCheckTime = Math.max(this.lastMediaCheckTime, date.longValue());
+                            send = true;
+                        }
                     }
                 }
-                if (!send) {
-                    return;
-                }
-                if (this.lastSecretChat != null) {
-                    SecretChatHelper.getInstance(this.lastChatAccount).sendScreenshotMessage(this.lastSecretChat, this.lastChatVisibleMessages, null);
-                } else {
-                    SendMessagesHelper.getInstance(this.lastChatAccount).sendScreenshotMessage(this.lastUser, this.lastMessageId, null);
+                if (send) {
+                    if (this.lastSecretChat != null) {
+                        SecretChatHelper.getInstance(this.lastChatAccount).sendScreenshotMessage(this.lastSecretChat, this.lastChatVisibleMessages, null);
+                    } else {
+                        SendMessagesHelper.getInstance(this.lastChatAccount).sendScreenshotMessage(this.lastUser, this.lastMessageId, null);
+                    }
                 }
             }
         }
@@ -1338,62 +1253,77 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.FileDidLoaded || id == NotificationCenter.httpFileDidLoaded) {
-            String fileName = args[0];
-            if (this.downloadingCurrentMessage && this.playingMessageObject != null && this.playingMessageObject.currentAccount == account && FileLoader.getAttachFileName(this.playingMessageObject.getDocument()).equals(fileName)) {
-                this.playMusicAgain = true;
-                playMessage(this.playingMessageObject);
-            }
-        } else if (id == NotificationCenter.messagesDeleted) {
-            int channelId = ((Integer) args[1]).intValue();
-            ArrayList<Integer> markAsDeletedMessages = args[0];
-            if (this.playingMessageObject != null && channelId == this.playingMessageObject.messageOwner.to_id.channel_id && markAsDeletedMessages.contains(Integer.valueOf(this.playingMessageObject.getId()))) {
-                cleanupPlayer(true, true);
-            }
-            if (this.voiceMessagesPlaylist != null && !this.voiceMessagesPlaylist.isEmpty() && channelId == ((MessageObject) this.voiceMessagesPlaylist.get(0)).messageOwner.to_id.channel_id) {
-                for (a = 0; a < markAsDeletedMessages.size(); a++) {
-                    Integer key = (Integer) markAsDeletedMessages.get(a);
-                    messageObject = (MessageObject) this.voiceMessagesPlaylistMap.get(key.intValue());
-                    this.voiceMessagesPlaylistMap.remove(key.intValue());
-                    if (messageObject != null) {
-                        this.voiceMessagesPlaylist.remove(messageObject);
+        int a = 0;
+        if (id != NotificationCenter.FileDidLoaded) {
+            if (id != NotificationCenter.httpFileDidLoaded) {
+                if (id == NotificationCenter.messagesDeleted) {
+                    int channelId = ((Integer) args[1]).intValue();
+                    ArrayList<Integer> markAsDeletedMessages = args[0];
+                    if (this.playingMessageObject != null && channelId == this.playingMessageObject.messageOwner.to_id.channel_id && markAsDeletedMessages.contains(Integer.valueOf(this.playingMessageObject.getId()))) {
+                        cleanupPlayer(true, true);
                     }
-                }
-            }
-        } else if (id == NotificationCenter.removeAllMessagesFromDialog) {
-            did = ((Long) args[0]).longValue();
-            if (this.playingMessageObject != null && this.playingMessageObject.getDialogId() == did) {
-                cleanupPlayer(false, true);
-            }
-        } else if (id == NotificationCenter.musicDidLoaded) {
-            did = ((Long) args[0]).longValue();
-            if (this.playingMessageObject != null && this.playingMessageObject.isMusic() && this.playingMessageObject.getDialogId() == did) {
-                ArrayList<MessageObject> arrayList = args[1];
-                this.playlist.addAll(0, arrayList);
-                if (SharedConfig.shuffleMusic) {
-                    buildShuffledPlayList();
-                    this.currentPlaylistNum = 0;
-                    return;
-                }
-                this.currentPlaylistNum += arrayList.size();
-            }
-        } else if (id == NotificationCenter.didReceivedNewMessages) {
-            if (this.voiceMessagesPlaylist != null && !this.voiceMessagesPlaylist.isEmpty()) {
-                if (((Long) args[0]).longValue() == ((MessageObject) this.voiceMessagesPlaylist.get(0)).getDialogId()) {
-                    ArrayList<MessageObject> arr = args[1];
-                    for (a = 0; a < arr.size(); a++) {
-                        messageObject = (MessageObject) arr.get(a);
-                        if ((messageObject.isVoice() || messageObject.isRoundVideo()) && (!this.voiceMessagesPlaylistUnread || (messageObject.isContentUnread() && !messageObject.isOut()))) {
-                            this.voiceMessagesPlaylist.add(messageObject);
-                            this.voiceMessagesPlaylistMap.put(messageObject.getId(), messageObject);
+                    if (!(this.voiceMessagesPlaylist == null || this.voiceMessagesPlaylist.isEmpty() || channelId != ((MessageObject) this.voiceMessagesPlaylist.get(0)).messageOwner.to_id.channel_id)) {
+                        while (a < markAsDeletedMessages.size()) {
+                            Integer key = (Integer) markAsDeletedMessages.get(a);
+                            MessageObject messageObject = (MessageObject) this.voiceMessagesPlaylistMap.get(key.intValue());
+                            this.voiceMessagesPlaylistMap.remove(key.intValue());
+                            if (messageObject != null) {
+                                this.voiceMessagesPlaylist.remove(messageObject);
+                            }
+                            a++;
                         }
                     }
+                    return;
+                } else if (id == NotificationCenter.removeAllMessagesFromDialog) {
+                    did = ((Long) args[0]).longValue();
+                    if (this.playingMessageObject != null && this.playingMessageObject.getDialogId() == did) {
+                        cleanupPlayer(false, true);
+                    }
+                    return;
+                } else if (id == NotificationCenter.musicDidLoaded) {
+                    did = ((Long) args[0]).longValue();
+                    if (this.playingMessageObject != null && this.playingMessageObject.isMusic() && this.playingMessageObject.getDialogId() == did) {
+                        ArrayList<MessageObject> arrayList = args[1];
+                        this.playlist.addAll(0, arrayList);
+                        if (SharedConfig.shuffleMusic) {
+                            buildShuffledPlayList();
+                            this.currentPlaylistNum = 0;
+                        } else {
+                            this.currentPlaylistNum += arrayList.size();
+                        }
+                    }
+                    return;
+                } else if (id == NotificationCenter.didReceivedNewMessages) {
+                    if (this.voiceMessagesPlaylist != null && !this.voiceMessagesPlaylist.isEmpty()) {
+                        if (((Long) args[0]).longValue() == ((MessageObject) this.voiceMessagesPlaylist.get(0)).getDialogId()) {
+                            ArrayList<MessageObject> arr = args[1];
+                            while (a < arr.size()) {
+                                MessageObject messageObject2 = (MessageObject) arr.get(a);
+                                if ((messageObject2.isVoice() || messageObject2.isRoundVideo()) && (!this.voiceMessagesPlaylistUnread || (messageObject2.isContentUnread() && !messageObject2.isOut()))) {
+                                    this.voiceMessagesPlaylist.add(messageObject2);
+                                    this.voiceMessagesPlaylistMap.put(messageObject2.getId(), messageObject2);
+                                }
+                                a++;
+                            }
+                        }
+                        return;
+                    }
+                    return;
+                } else if (id == NotificationCenter.playerDidStartPlaying) {
+                    if (!getInstance().isCurrentPlayer(args[0])) {
+                        getInstance().pauseMessage(getInstance().getPlayingMessageObject());
+                        return;
+                    }
+                    return;
+                } else {
+                    return;
                 }
             }
-        } else if (id == NotificationCenter.playerDidStartPlaying) {
-            if (!getInstance().isCurrentPlayer(args[0])) {
-                getInstance().pauseMessage(getInstance().getPlayingMessageObject());
-            }
+        }
+        String fileName = args[0];
+        if (this.downloadingCurrentMessage && this.playingMessageObject != null && this.playingMessageObject.currentAccount == account && FileLoader.getAttachFileName(this.playingMessageObject.getDocument()).equals(fileName)) {
+            this.playMusicAgain = true;
+            playMessage(this.playingMessageObject);
         }
     }
 
@@ -1407,22 +1337,26 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public void run() {
                 synchronized (MediaController.this.playerObjectSync) {
-                    if (MediaController.this.audioTrackPlayer == null || MediaController.this.audioTrackPlayer.getPlayState() != 3) {
+                    if (MediaController.this.audioTrackPlayer != null) {
+                        if (MediaController.this.audioTrackPlayer.getPlayState() != 3) {
+                        }
                     }
+                    return;
                 }
                 MediaController.this.buffersWrited = MediaController.this.buffersWrited + 1;
                 if (count > 0) {
-                    final long pcm = buffer.pcmOffset;
+                    long pcm = buffer.pcmOffset;
                     final int marker = buffer.finished == 1 ? count : -1;
-                    final int finalBuffersWrited = MediaController.this.buffersWrited;
+                    final long j = pcm;
+                    final int access$5400 = MediaController.this.buffersWrited;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            MediaController.this.lastPlayPcm = pcm;
+                            MediaController.this.lastPlayPcm = j;
                             if (marker != -1) {
                                 if (MediaController.this.audioTrackPlayer != null) {
                                     MediaController.this.audioTrackPlayer.setNotificationMarkerPosition(1);
                                 }
-                                if (finalBuffersWrited == 1) {
+                                if (access$5400 == 1) {
                                     MediaController.this.cleanupPlayer(true, true, true);
                                 }
                             }
@@ -1445,7 +1379,12 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     protected boolean isRecordingAudio() {
-        return (this.recordStartRunnable == null && this.recordingAudio == null) ? false : true;
+        if (this.recordStartRunnable == null) {
+            if (this.recordingAudio == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean isNearToSensor(float value) {
@@ -1457,193 +1396,194 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     public void onSensorChanged(SensorEvent event) {
-        if (this.sensorsStarted && VoIPService.getSharedInstance() == null) {
-            if (event.sensor == this.proximitySensor) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("proximity changed to " + event.values[0]);
+        SensorEvent sensorEvent = event;
+        if (this.sensorsStarted) {
+            if (VoIPService.getSharedInstance() == null) {
+                if (sensorEvent.sensor == r0.proximitySensor) {
+                    if (BuildVars.LOGS_ENABLED) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("proximity changed to ");
+                        stringBuilder.append(sensorEvent.values[0]);
+                        FileLog.m0d(stringBuilder.toString());
+                    }
+                    if (r0.lastProximityValue == -100.0f) {
+                        r0.lastProximityValue = sensorEvent.values[0];
+                    } else if (r0.lastProximityValue != sensorEvent.values[0]) {
+                        r0.proximityHasDifferentValues = true;
+                    }
+                    if (r0.proximityHasDifferentValues) {
+                        r0.proximityTouched = isNearToSensor(sensorEvent.values[0]);
+                    }
+                } else if (sensorEvent.sensor == r0.accelerometerSensor) {
+                    double alpha = r0.lastTimestamp == 0 ? 0.9800000190734863d : 1.0d / ((((double) (sensorEvent.timestamp - r0.lastTimestamp)) / 1.0E9d) + 1.0d);
+                    r0.lastTimestamp = sensorEvent.timestamp;
+                    r0.gravity[0] = (float) ((((double) r0.gravity[0]) * alpha) + ((1.0d - alpha) * ((double) sensorEvent.values[0])));
+                    r0.gravity[1] = (float) ((((double) r0.gravity[1]) * alpha) + ((1.0d - alpha) * ((double) sensorEvent.values[1])));
+                    r0.gravity[2] = (float) ((((double) r0.gravity[2]) * alpha) + ((1.0d - alpha) * ((double) sensorEvent.values[2])));
+                    r0.gravityFast[0] = (r0.gravity[0] * 0.8f) + (sensorEvent.values[0] * 0.19999999f);
+                    r0.gravityFast[1] = (r0.gravity[1] * 0.8f) + (sensorEvent.values[1] * 0.19999999f);
+                    r0.gravityFast[2] = (0.8f * r0.gravity[2]) + (0.19999999f * sensorEvent.values[2]);
+                    r0.linearAcceleration[0] = sensorEvent.values[0] - r0.gravity[0];
+                    r0.linearAcceleration[1] = sensorEvent.values[1] - r0.gravity[1];
+                    r0.linearAcceleration[2] = sensorEvent.values[2] - r0.gravity[2];
+                } else if (sensorEvent.sensor == r0.linearSensor) {
+                    r0.linearAcceleration[0] = sensorEvent.values[0];
+                    r0.linearAcceleration[1] = sensorEvent.values[1];
+                    r0.linearAcceleration[2] = sensorEvent.values[2];
+                } else if (sensorEvent.sensor == r0.gravitySensor) {
+                    float[] fArr = r0.gravityFast;
+                    float[] fArr2 = r0.gravity;
+                    float f = sensorEvent.values[0];
+                    fArr2[0] = f;
+                    fArr[0] = f;
+                    fArr = r0.gravityFast;
+                    fArr2 = r0.gravity;
+                    f = sensorEvent.values[1];
+                    fArr2[1] = f;
+                    fArr[1] = f;
+                    fArr = r0.gravityFast;
+                    fArr2 = r0.gravity;
+                    f = sensorEvent.values[2];
+                    fArr2[2] = f;
+                    fArr[2] = f;
                 }
-                if (this.lastProximityValue == -100.0f) {
-                    this.lastProximityValue = event.values[0];
-                } else if (this.lastProximityValue != event.values[0]) {
-                    this.proximityHasDifferentValues = true;
-                }
-                if (this.proximityHasDifferentValues) {
-                    this.proximityTouched = isNearToSensor(event.values[0]);
-                }
-            } else if (event.sensor == this.accelerometerSensor) {
-                double alpha;
-                if (this.lastTimestamp == 0) {
-                    alpha = 0.9800000190734863d;
-                } else {
-                    alpha = 1.0d / (1.0d + (((double) (event.timestamp - this.lastTimestamp)) / 1.0E9d));
-                }
-                this.lastTimestamp = event.timestamp;
-                this.gravity[0] = (float) ((((double) this.gravity[0]) * alpha) + ((1.0d - alpha) * ((double) event.values[0])));
-                this.gravity[1] = (float) ((((double) this.gravity[1]) * alpha) + ((1.0d - alpha) * ((double) event.values[1])));
-                this.gravity[2] = (float) ((((double) this.gravity[2]) * alpha) + ((1.0d - alpha) * ((double) event.values[2])));
-                this.gravityFast[0] = (0.8f * this.gravity[0]) + (0.19999999f * event.values[0]);
-                this.gravityFast[1] = (0.8f * this.gravity[1]) + (0.19999999f * event.values[1]);
-                this.gravityFast[2] = (0.8f * this.gravity[2]) + (0.19999999f * event.values[2]);
-                this.linearAcceleration[0] = event.values[0] - this.gravity[0];
-                this.linearAcceleration[1] = event.values[1] - this.gravity[1];
-                this.linearAcceleration[2] = event.values[2] - this.gravity[2];
-            } else if (event.sensor == this.linearSensor) {
-                this.linearAcceleration[0] = event.values[0];
-                this.linearAcceleration[1] = event.values[1];
-                this.linearAcceleration[2] = event.values[2];
-            } else if (event.sensor == this.gravitySensor) {
-                float[] fArr = this.gravityFast;
-                float[] fArr2 = this.gravity;
-                float f = event.values[0];
-                fArr2[0] = f;
-                fArr[0] = f;
-                fArr = this.gravityFast;
-                fArr2 = this.gravity;
-                f = event.values[1];
-                fArr2[1] = f;
-                fArr[1] = f;
-                fArr = this.gravityFast;
-                fArr2 = this.gravity;
-                f = event.values[2];
-                fArr2[2] = f;
-                fArr[2] = f;
-            }
-            if (event.sensor == this.linearSensor || event.sensor == this.gravitySensor || event.sensor == this.accelerometerSensor) {
-                float val = ((this.gravity[0] * this.linearAcceleration[0]) + (this.gravity[1] * this.linearAcceleration[1])) + (this.gravity[2] * this.linearAcceleration[2]);
-                if (this.raisedToBack != 6 && ((val > 0.0f && this.previousAccValue > 0.0f) || (val < 0.0f && this.previousAccValue < 0.0f))) {
+                if (sensorEvent.sensor == r0.linearSensor || sensorEvent.sensor == r0.gravitySensor || sensorEvent.sensor == r0.accelerometerSensor) {
                     boolean goodValue;
-                    int sign;
-                    if (val > 0.0f) {
-                        goodValue = val > 15.0f;
-                        sign = 1;
-                    } else {
-                        goodValue = val < -15.0f;
-                        sign = 2;
-                    }
-                    if (this.raisedToTopSign == 0 || this.raisedToTopSign == sign) {
-                        if (!goodValue || this.raisedToBack != 0 || (this.raisedToTopSign != 0 && this.raisedToTopSign != sign)) {
+                    float val = ((r0.gravity[0] * r0.linearAcceleration[0]) + (r0.gravity[1] * r0.linearAcceleration[1])) + (r0.gravity[2] * r0.linearAcceleration[2]);
+                    if (r0.raisedToBack != 6 && ((val > 0.0f && r0.previousAccValue > 0.0f) || (val < 0.0f && r0.previousAccValue < 0.0f))) {
+                        int sign;
+                        if (val > 0.0f) {
+                            goodValue = val > 15.0f;
+                            sign = 1;
+                        } else {
+                            goodValue = val < -15.0f;
+                            sign = 2;
+                        }
+                        if (r0.raisedToTopSign == 0 || r0.raisedToTopSign == sign) {
+                            if (!goodValue || r0.raisedToBack != 0 || (r0.raisedToTopSign != 0 && r0.raisedToTopSign != sign)) {
+                                if (!goodValue) {
+                                    r0.countLess++;
+                                }
+                                if (!(r0.raisedToTopSign == sign && r0.countLess != 10 && r0.raisedToTop == 6 && r0.raisedToBack == 0)) {
+                                    r0.raisedToBack = 0;
+                                    r0.raisedToTop = 0;
+                                    r0.raisedToTopSign = 0;
+                                    r0.countLess = 0;
+                                }
+                            } else if (r0.raisedToTop < 6 && !r0.proximityTouched) {
+                                r0.raisedToTopSign = sign;
+                                r0.raisedToTop++;
+                                if (r0.raisedToTop == 6) {
+                                    r0.countLess = 0;
+                                }
+                            }
+                        } else if (r0.raisedToTop != 6 || !goodValue) {
                             if (!goodValue) {
-                                this.countLess++;
+                                r0.countLess++;
                             }
-                            if (!(this.raisedToTopSign == sign && this.countLess != 10 && this.raisedToTop == 6 && this.raisedToBack == 0)) {
-                                this.raisedToBack = 0;
-                                this.raisedToTop = 0;
-                                this.raisedToTopSign = 0;
-                                this.countLess = 0;
+                            if (!(r0.countLess != 10 && r0.raisedToTop == 6 && r0.raisedToBack == 0)) {
+                                r0.raisedToTop = 0;
+                                r0.raisedToTopSign = 0;
+                                r0.raisedToBack = 0;
+                                r0.countLess = 0;
                             }
-                        } else if (this.raisedToTop < 6 && !this.proximityTouched) {
-                            this.raisedToTopSign = sign;
-                            this.raisedToTop++;
-                            if (this.raisedToTop == 6) {
-                                this.countLess = 0;
-                            }
-                        }
-                    } else if (this.raisedToTop != 6 || !goodValue) {
-                        if (!goodValue) {
-                            this.countLess++;
-                        }
-                        if (!(this.countLess != 10 && this.raisedToTop == 6 && this.raisedToBack == 0)) {
-                            this.raisedToTop = 0;
-                            this.raisedToTopSign = 0;
-                            this.raisedToBack = 0;
-                            this.countLess = 0;
-                        }
-                    } else if (this.raisedToBack < 6) {
-                        this.raisedToBack++;
-                        if (this.raisedToBack == 6) {
-                            this.raisedToTop = 0;
-                            this.raisedToTopSign = 0;
-                            this.countLess = 0;
-                            this.timeSinceRaise = System.currentTimeMillis();
-                            if (BuildVars.LOGS_ENABLED && BuildVars.DEBUG_PRIVATE_VERSION) {
-                                FileLog.m0d("motion detected");
+                        } else if (r0.raisedToBack < 6) {
+                            r0.raisedToBack++;
+                            if (r0.raisedToBack == 6) {
+                                r0.raisedToTop = 0;
+                                r0.raisedToTopSign = 0;
+                                r0.countLess = 0;
+                                r0.timeSinceRaise = System.currentTimeMillis();
+                                if (BuildVars.LOGS_ENABLED && BuildVars.DEBUG_PRIVATE_VERSION) {
+                                    FileLog.m0d("motion detected");
+                                }
                             }
                         }
                     }
+                    r0.previousAccValue = val;
+                    goodValue = r0.gravityFast[1] > 2.5f && Math.abs(r0.gravityFast[2]) < 4.0f && Math.abs(r0.gravityFast[0]) > 1.5f;
+                    r0.accelerometerVertical = goodValue;
                 }
-                this.previousAccValue = val;
-                boolean z = this.gravityFast[1] > 2.5f && Math.abs(this.gravityFast[2]) < 4.0f && Math.abs(this.gravityFast[0]) > 1.5f;
-                this.accelerometerVertical = z;
-            }
-            if (this.raisedToBack == 6 && this.accelerometerVertical && this.proximityTouched && !NotificationsController.audioManager.isWiredHeadsetOn()) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("sensor values reached");
-                }
-                if (this.playingMessageObject == null && this.recordStartRunnable == null && this.recordingAudio == null && !PhotoViewer.getInstance().isVisible() && ApplicationLoader.isScreenOn && !this.inputFieldHasText && this.allowStartRecord && this.raiseChat != null && !this.callInProgress) {
-                    if (!this.raiseToEarRecord) {
+                if (r0.raisedToBack == 6 && r0.accelerometerVertical && r0.proximityTouched && !NotificationsController.audioManager.isWiredHeadsetOn()) {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m0d("sensor values reached");
+                    }
+                    if (r0.playingMessageObject == null && r0.recordStartRunnable == null && r0.recordingAudio == null && !PhotoViewer.getInstance().isVisible() && ApplicationLoader.isScreenOn && !r0.inputFieldHasText && r0.allowStartRecord && r0.raiseChat != null && !r0.callInProgress) {
+                        if (!r0.raiseToEarRecord) {
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.m0d("start record");
+                            }
+                            r0.useFrontSpeaker = true;
+                            if (!r0.raiseChat.playFirstUnreadVoiceMessage()) {
+                                r0.raiseToEarRecord = true;
+                                r0.useFrontSpeaker = false;
+                                startRecording(r0.raiseChat.getCurrentAccount(), r0.raiseChat.getDialogId(), null);
+                            }
+                            if (r0.useFrontSpeaker) {
+                                setUseFrontSpeaker(true);
+                            }
+                            r0.ignoreOnPause = true;
+                            if (!(!r0.proximityHasDifferentValues || r0.proximityWakeLock == null || r0.proximityWakeLock.isHeld())) {
+                                r0.proximityWakeLock.acquire();
+                            }
+                        }
+                    } else if (r0.playingMessageObject != null && ((r0.playingMessageObject.isVoice() || r0.playingMessageObject.isRoundVideo()) && !r0.useFrontSpeaker)) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("start record");
+                            FileLog.m0d("start listen");
                         }
-                        this.useFrontSpeaker = true;
-                        if (!this.raiseChat.playFirstUnreadVoiceMessage()) {
-                            this.raiseToEarRecord = true;
-                            this.useFrontSpeaker = false;
-                            startRecording(this.raiseChat.getCurrentAccount(), this.raiseChat.getDialogId(), null);
+                        if (!(!r0.proximityHasDifferentValues || r0.proximityWakeLock == null || r0.proximityWakeLock.isHeld())) {
+                            r0.proximityWakeLock.acquire();
                         }
-                        if (this.useFrontSpeaker) {
-                            setUseFrontSpeaker(true);
+                        setUseFrontSpeaker(true);
+                        startAudioAgain(false);
+                        r0.ignoreOnPause = true;
+                    }
+                    r0.raisedToBack = 0;
+                    r0.raisedToTop = 0;
+                    r0.raisedToTopSign = 0;
+                    r0.countLess = 0;
+                } else if (r0.proximityTouched) {
+                    if (r0.playingMessageObject != null && ((r0.playingMessageObject.isVoice() || r0.playingMessageObject.isRoundVideo()) && !r0.useFrontSpeaker)) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.m0d("start listen by proximity only");
                         }
-                        this.ignoreOnPause = true;
-                        if (!(!this.proximityHasDifferentValues || this.proximityWakeLock == null || this.proximityWakeLock.isHeld())) {
-                            this.proximityWakeLock.acquire();
+                        if (!(!r0.proximityHasDifferentValues || r0.proximityWakeLock == null || r0.proximityWakeLock.isHeld())) {
+                            r0.proximityWakeLock.acquire();
                         }
+                        setUseFrontSpeaker(true);
+                        startAudioAgain(false);
+                        r0.ignoreOnPause = true;
                     }
-                } else if (this.playingMessageObject != null && ((this.playingMessageObject.isVoice() || this.playingMessageObject.isRoundVideo()) && !this.useFrontSpeaker)) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("start listen");
-                    }
-                    if (!(!this.proximityHasDifferentValues || this.proximityWakeLock == null || this.proximityWakeLock.isHeld())) {
-                        this.proximityWakeLock.acquire();
-                    }
-                    setUseFrontSpeaker(true);
-                    startAudioAgain(false);
-                    this.ignoreOnPause = true;
-                }
-                this.raisedToBack = 0;
-                this.raisedToTop = 0;
-                this.raisedToTopSign = 0;
-                this.countLess = 0;
-            } else if (this.proximityTouched) {
-                if (this.playingMessageObject != null && ((this.playingMessageObject.isVoice() || this.playingMessageObject.isRoundVideo()) && !this.useFrontSpeaker)) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("start listen by proximity only");
-                    }
-                    if (!(!this.proximityHasDifferentValues || this.proximityWakeLock == null || this.proximityWakeLock.isHeld())) {
-                        this.proximityWakeLock.acquire();
-                    }
-                    setUseFrontSpeaker(true);
-                    startAudioAgain(false);
-                    this.ignoreOnPause = true;
-                }
-            } else if (!this.proximityTouched) {
-                if (this.raiseToEarRecord) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("stop record");
-                    }
-                    stopRecording(2);
-                    this.raiseToEarRecord = false;
-                    this.ignoreOnPause = false;
-                    if (this.proximityHasDifferentValues && this.proximityWakeLock != null && this.proximityWakeLock.isHeld()) {
-                        this.proximityWakeLock.release();
-                    }
-                } else if (this.useFrontSpeaker) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("stop listen");
-                    }
-                    this.useFrontSpeaker = false;
-                    startAudioAgain(true);
-                    this.ignoreOnPause = false;
-                    if (this.proximityHasDifferentValues && this.proximityWakeLock != null && this.proximityWakeLock.isHeld()) {
-                        this.proximityWakeLock.release();
+                } else if (!r0.proximityTouched) {
+                    if (r0.raiseToEarRecord) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.m0d("stop record");
+                        }
+                        stopRecording(2);
+                        r0.raiseToEarRecord = false;
+                        r0.ignoreOnPause = false;
+                        if (r0.proximityHasDifferentValues && r0.proximityWakeLock != null && r0.proximityWakeLock.isHeld()) {
+                            r0.proximityWakeLock.release();
+                        }
+                    } else if (r0.useFrontSpeaker) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.m0d("stop listen");
+                        }
+                        r0.useFrontSpeaker = false;
+                        startAudioAgain(true);
+                        r0.ignoreOnPause = false;
+                        if (r0.proximityHasDifferentValues && r0.proximityWakeLock != null && r0.proximityWakeLock.isHeld()) {
+                            r0.proximityWakeLock.release();
+                        }
                     }
                 }
-            }
-            if (this.timeSinceRaise != 0 && this.raisedToBack == 6 && Math.abs(System.currentTimeMillis() - this.timeSinceRaise) > 1000) {
-                this.raisedToBack = 0;
-                this.raisedToTop = 0;
-                this.raisedToTopSign = 0;
-                this.countLess = 0;
-                this.timeSinceRaise = 0;
+                if (r0.timeSinceRaise != 0 && r0.raisedToBack == 6 && Math.abs(System.currentTimeMillis() - r0.timeSinceRaise) > 1000) {
+                    r0.raisedToBack = 0;
+                    r0.raisedToTop = 0;
+                    r0.raisedToTopSign = 0;
+                    r0.countLess = 0;
+                    r0.timeSinceRaise = 0;
+                }
             }
         }
     }
@@ -1660,53 +1600,52 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     public void startRecordingIfFromSpeaker() {
-        if (this.useFrontSpeaker && this.raiseChat != null && this.allowStartRecord) {
-            this.raiseToEarRecord = true;
-            startRecording(this.raiseChat.getCurrentAccount(), this.raiseChat.getDialogId(), null);
-            this.ignoreOnPause = true;
+        if (this.useFrontSpeaker && this.raiseChat != null) {
+            if (this.allowStartRecord) {
+                this.raiseToEarRecord = true;
+                startRecording(this.raiseChat.getCurrentAccount(), this.raiseChat.getDialogId(), null);
+                this.ignoreOnPause = true;
+            }
         }
     }
 
     private void startAudioAgain(boolean paused) {
-        int i = 0;
         if (this.playingMessageObject != null) {
-            NotificationCenter.getInstance(this.playingMessageObject.currentAccount).postNotificationName(NotificationCenter.audioRouteChanged, Boolean.valueOf(this.useFrontSpeaker));
+            NotificationCenter instance = NotificationCenter.getInstance(this.playingMessageObject.currentAccount);
+            int i = NotificationCenter.audioRouteChanged;
+            Object[] objArr = new Object[1];
+            int i2 = 0;
+            objArr[0] = Boolean.valueOf(this.useFrontSpeaker);
+            instance.postNotificationName(i, objArr);
             if (this.videoPlayer != null) {
                 VideoPlayer videoPlayer = this.videoPlayer;
                 if (!this.useFrontSpeaker) {
-                    i = 3;
+                    i2 = 3;
                 }
-                videoPlayer.setStreamType(i);
+                videoPlayer.setStreamType(i2);
                 if (paused) {
                     this.videoPlayer.pause();
-                    return;
                 } else {
                     this.videoPlayer.play();
-                    return;
                 }
-            }
-            boolean post;
-            if (this.audioPlayer != null) {
-                post = true;
             } else {
-                post = false;
-            }
-            final MessageObject currentMessageObject = this.playingMessageObject;
-            float progress = this.playingMessageObject.audioProgress;
-            cleanupPlayer(false, true);
-            currentMessageObject.audioProgress = progress;
-            playMessage(currentMessageObject);
-            if (!paused) {
-                return;
-            }
-            if (post) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        MediaController.this.pauseMessage(currentMessageObject);
+                boolean post = this.audioPlayer != null;
+                final MessageObject currentMessageObject = this.playingMessageObject;
+                float progress = this.playingMessageObject.audioProgress;
+                cleanupPlayer(false, true);
+                currentMessageObject.audioProgress = progress;
+                playMessage(currentMessageObject);
+                if (paused) {
+                    if (post) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                MediaController.this.pauseMessage(currentMessageObject);
+                            }
+                        }, 100);
+                    } else {
+                        pauseMessage(currentMessageObject);
                     }
-                }, 100);
-            } else {
-                pauseMessage(currentMessageObject);
+                }
             }
         }
     }
@@ -1722,57 +1661,50 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         this.allowStartRecord = value;
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void startRaiseToEarSensors(ChatActivity chatActivity) {
-        if (chatActivity == null) {
-            return;
-        }
-        if ((this.accelerometerSensor != null || (this.gravitySensor != null && this.linearAcceleration != null)) && this.proximitySensor != null) {
-            this.raiseChat = chatActivity;
-            if (!SharedConfig.raiseToSpeak) {
-                if (this.playingMessageObject == null) {
-                    return;
+        if (!(chatActivity == null || (this.accelerometerSensor == null && (this.gravitySensor == null || this.linearAcceleration == null)))) {
+            if (this.proximitySensor != null) {
+                this.raiseChat = chatActivity;
+                if ((SharedConfig.raiseToSpeak || (this.playingMessageObject != null && (this.playingMessageObject.isVoice() || this.playingMessageObject.isRoundVideo()))) && !this.sensorsStarted) {
+                    float[] fArr = this.gravity;
+                    float[] fArr2 = this.gravity;
+                    this.gravity[2] = 0.0f;
+                    fArr2[1] = 0.0f;
+                    fArr[0] = 0.0f;
+                    fArr = this.linearAcceleration;
+                    float[] fArr3 = this.linearAcceleration;
+                    this.linearAcceleration[2] = 0.0f;
+                    fArr3[1] = 0.0f;
+                    fArr[0] = 0.0f;
+                    fArr = this.gravityFast;
+                    fArr3 = this.gravityFast;
+                    this.gravityFast[2] = 0.0f;
+                    fArr3[1] = 0.0f;
+                    fArr[0] = 0.0f;
+                    this.lastTimestamp = 0;
+                    this.previousAccValue = 0.0f;
+                    this.raisedToTop = 0;
+                    this.raisedToTopSign = 0;
+                    this.countLess = 0;
+                    this.raisedToBack = 0;
+                    Utilities.globalQueue.postRunnable(new Runnable() {
+                        public void run() {
+                            if (MediaController.this.gravitySensor != null) {
+                                MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.gravitySensor, DefaultLoadControl.DEFAULT_MAX_BUFFER_MS);
+                            }
+                            if (MediaController.this.linearSensor != null) {
+                                MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.linearSensor, DefaultLoadControl.DEFAULT_MAX_BUFFER_MS);
+                            }
+                            if (MediaController.this.accelerometerSensor != null) {
+                                MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.accelerometerSensor, DefaultLoadControl.DEFAULT_MAX_BUFFER_MS);
+                            }
+                            MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.proximitySensor, 3);
+                        }
+                    });
+                    this.sensorsStarted = true;
                 }
-                if (!(this.playingMessageObject.isVoice() || this.playingMessageObject.isRoundVideo())) {
-                    return;
-                }
-            }
-            if (!this.sensorsStarted) {
-                float[] fArr = this.gravity;
-                float[] fArr2 = this.gravity;
-                this.gravity[2] = 0.0f;
-                fArr2[1] = 0.0f;
-                fArr[0] = 0.0f;
-                fArr = this.linearAcceleration;
-                fArr2 = this.linearAcceleration;
-                this.linearAcceleration[2] = 0.0f;
-                fArr2[1] = 0.0f;
-                fArr[0] = 0.0f;
-                fArr = this.gravityFast;
-                fArr2 = this.gravityFast;
-                this.gravityFast[2] = 0.0f;
-                fArr2[1] = 0.0f;
-                fArr[0] = 0.0f;
-                this.lastTimestamp = 0;
-                this.previousAccValue = 0.0f;
-                this.raisedToTop = 0;
-                this.raisedToTopSign = 0;
-                this.countLess = 0;
-                this.raisedToBack = 0;
-                Utilities.globalQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        if (MediaController.this.gravitySensor != null) {
-                            MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.gravitySensor, DefaultLoadControl.DEFAULT_MAX_BUFFER_MS);
-                        }
-                        if (MediaController.this.linearSensor != null) {
-                            MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.linearSensor, DefaultLoadControl.DEFAULT_MAX_BUFFER_MS);
-                        }
-                        if (MediaController.this.accelerometerSensor != null) {
-                            MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.accelerometerSensor, DefaultLoadControl.DEFAULT_MAX_BUFFER_MS);
-                        }
-                        MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.proximitySensor, 3);
-                    }
-                });
-                this.sensorsStarted = true;
             }
         }
     }
@@ -1783,8 +1715,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             return;
         }
         stopRecording(0);
-        if (this.sensorsStarted && !this.ignoreOnPause) {
-            if ((this.accelerometerSensor != null || (this.gravitySensor != null && this.linearAcceleration != null)) && this.proximitySensor != null && this.raiseChat == chatActivity) {
+        if (!(!this.sensorsStarted || this.ignoreOnPause || ((this.accelerometerSensor == null && (this.gravitySensor == null || this.linearAcceleration == null)) || this.proximitySensor == null))) {
+            if (this.raiseChat == chatActivity) {
                 this.raiseChat = null;
                 this.sensorsStarted = false;
                 this.accelerometerVertical = false;
@@ -1848,8 +1780,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             this.videoPlayer = null;
             try {
                 this.baseActivity.getWindow().clearFlags(128);
-            } catch (Throwable e222) {
-                FileLog.m3e(e222);
+            } catch (Throwable e3) {
+                FileLog.m3e(e3);
             }
         }
         stopProgressTimer();
@@ -1909,8 +1841,11 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             }
             if (stopService) {
                 ApplicationLoader.applicationContext.stopService(new Intent(ApplicationLoader.applicationContext, MusicPlayerService.class));
+                return;
             }
+            return;
         }
+        return;
     }
 
     private void seekOpusPlayer(final float progress) {
@@ -1952,38 +1887,38 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     private boolean isSamePlayingMessage(MessageObject messageObject) {
-        if (this.playingMessageObject != null && this.playingMessageObject.getDialogId() == messageObject.getDialogId() && this.playingMessageObject.getId() == messageObject.getId()) {
-            if ((this.playingMessageObject.eventId == 0) == (messageObject.eventId == 0)) {
-                return true;
-            }
+        if (this.playingMessageObject == null || this.playingMessageObject.getDialogId() != messageObject.getDialogId() || this.playingMessageObject.getId() != messageObject.getId()) {
+            return false;
         }
-        return false;
+        return ((this.playingMessageObject.eventId > 0 ? 1 : (this.playingMessageObject.eventId == 0 ? 0 : -1)) == 0) == ((messageObject.eventId > 0 ? 1 : (messageObject.eventId == 0 ? 0 : -1)) == 0);
     }
 
     public boolean seekToProgress(MessageObject messageObject, float progress) {
-        if ((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null || !isSamePlayingMessage(messageObject)) {
-            return false;
-        }
-        try {
-            if (this.audioPlayer != null) {
-                long duration = this.audioPlayer.getDuration();
-                if (duration == C0539C.TIME_UNSET) {
-                    this.seekToProgressPending = progress;
-                } else {
-                    int seekTo = (int) (((float) duration) * progress);
-                    this.audioPlayer.seekTo((long) seekTo);
-                    this.lastProgress = (long) seekTo;
+        if (!((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null)) {
+            if (isSamePlayingMessage(messageObject)) {
+                try {
+                    if (this.audioPlayer != null) {
+                        long duration = this.audioPlayer.getDuration();
+                        if (duration == C0539C.TIME_UNSET) {
+                            this.seekToProgressPending = progress;
+                        } else {
+                            int seekTo = (int) (((float) duration) * progress);
+                            this.audioPlayer.seekTo((long) seekTo);
+                            this.lastProgress = (long) seekTo;
+                        }
+                    } else if (this.audioTrackPlayer != null) {
+                        seekOpusPlayer(progress);
+                    } else if (this.videoPlayer != null) {
+                        this.videoPlayer.seekTo((long) (((float) this.videoPlayer.getDuration()) * progress));
+                    }
+                    return true;
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
+                    return false;
                 }
-            } else if (this.audioTrackPlayer != null) {
-                seekOpusPlayer(progress);
-            } else if (this.videoPlayer != null) {
-                this.videoPlayer.seekTo((long) (((float) this.videoPlayer.getDuration()) * progress));
             }
-            return true;
-        } catch (Throwable e) {
-            FileLog.m3e(e);
-            return false;
         }
+        return false;
     }
 
     public MessageObject getPlayingMessageObject() {
@@ -2015,21 +1950,11 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     public boolean setPlaylist(ArrayList<MessageObject> messageObjects, MessageObject current, boolean loadMusic) {
-        boolean z = true;
         if (this.playingMessageObject == current) {
             return playMessage(current);
         }
-        boolean z2;
-        if (loadMusic) {
-            z2 = false;
-        } else {
-            z2 = true;
-        }
-        this.forceLoopCurrentPlaylist = z2;
-        if (this.playlist.isEmpty()) {
-            z = false;
-        }
-        this.playMusicAgain = z;
+        this.forceLoopCurrentPlaylist = loadMusic ^ 1;
+        this.playMusicAgain = this.playlist.isEmpty() ^ 1;
         this.playlist.clear();
         for (int a = messageObjects.size() - 1; a >= 0; a--) {
             MessageObject messageObject = (MessageObject) messageObjects.get(a);
@@ -2070,13 +1995,15 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     public void playMessageAtIndex(int index) {
-        if (this.currentPlaylistNum >= 0 && this.currentPlaylistNum < this.playlist.size()) {
-            this.currentPlaylistNum = index;
-            this.playMusicAgain = true;
-            if (this.playingMessageObject != null) {
-                this.playingMessageObject.resetPlayingProgress();
+        if (this.currentPlaylistNum >= 0) {
+            if (this.currentPlaylistNum < this.playlist.size()) {
+                this.currentPlaylistNum = index;
+                this.playMusicAgain = true;
+                if (this.playingMessageObject != null) {
+                    this.playingMessageObject.resetPlayingProgress();
+                }
+                playMessage((MessageObject) this.playlist.get(this.currentPlaylistNum));
             }
-            playMessage((MessageObject) this.playlist.get(this.currentPlaylistNum));
         }
     }
 
@@ -2102,7 +2029,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
             }
         }
         if (last && byStop && SharedConfig.repeatMode == 0 && !this.forceLoopCurrentPlaylist) {
-            if (this.audioPlayer != null || this.audioTrackPlayer != null || this.videoPlayer != null) {
+            if (!(this.audioPlayer == null && this.audioTrackPlayer == null && this.videoPlayer == null)) {
                 if (this.audioPlayer != null) {
                     try {
                         this.audioPlayer.releasePlayer();
@@ -2134,8 +2061,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                     this.videoPlayer = null;
                     try {
                         this.baseActivity.getWindow().clearFlags(128);
-                    } catch (Throwable e222) {
-                        FileLog.m3e(e222);
+                    } catch (Throwable e3) {
+                        FileLog.m3e(e3);
                     }
                 }
                 stopProgressTimer();
@@ -2147,63 +2074,77 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
                 NotificationCenter.getInstance(this.playingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, Integer.valueOf(this.playingMessageObject.getId()), Integer.valueOf(0));
                 NotificationCenter.getInstance(this.playingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, Integer.valueOf(this.playingMessageObject.getId()));
             }
-        } else if (this.currentPlaylistNum >= 0 && this.currentPlaylistNum < currentPlayList.size()) {
-            if (this.playingMessageObject != null) {
-                this.playingMessageObject.resetPlayingProgress();
-            }
-            this.playMusicAgain = true;
-            playMessage((MessageObject) currentPlayList.get(this.currentPlaylistNum));
+            return;
         }
+        if (this.currentPlaylistNum >= 0) {
+            if (this.currentPlaylistNum < currentPlayList.size()) {
+                if (this.playingMessageObject != null) {
+                    this.playingMessageObject.resetPlayingProgress();
+                }
+                this.playMusicAgain = true;
+                playMessage((MessageObject) currentPlayList.get(this.currentPlaylistNum));
+                return;
+            }
+        }
+        return;
     }
 
     public void playPreviousMessage() {
         ArrayList<MessageObject> currentPlayList = SharedConfig.shuffleMusic ? this.shuffledPlaylist : this.playlist;
-        if (!currentPlayList.isEmpty() && this.currentPlaylistNum >= 0 && this.currentPlaylistNum < currentPlayList.size()) {
-            MessageObject currentSong = (MessageObject) currentPlayList.get(this.currentPlaylistNum);
-            if (currentSong.audioProgressSec > 10) {
-                seekToProgress(currentSong, 0.0f);
-                return;
-            }
-            if (SharedConfig.playOrderReversed) {
-                this.currentPlaylistNum--;
-                if (this.currentPlaylistNum < 0) {
-                    this.currentPlaylistNum = currentPlayList.size() - 1;
+        if (!currentPlayList.isEmpty() && this.currentPlaylistNum >= 0) {
+            if (this.currentPlaylistNum < currentPlayList.size()) {
+                MessageObject currentSong = (MessageObject) currentPlayList.get(this.currentPlaylistNum);
+                if (currentSong.audioProgressSec > 10) {
+                    seekToProgress(currentSong, 0.0f);
+                    return;
                 }
-            } else {
-                this.currentPlaylistNum++;
-                if (this.currentPlaylistNum >= currentPlayList.size()) {
-                    this.currentPlaylistNum = 0;
+                if (SharedConfig.playOrderReversed) {
+                    this.currentPlaylistNum--;
+                    if (this.currentPlaylistNum < 0) {
+                        this.currentPlaylistNum = currentPlayList.size() - 1;
+                    }
+                } else {
+                    this.currentPlaylistNum++;
+                    if (this.currentPlaylistNum >= currentPlayList.size()) {
+                        this.currentPlaylistNum = 0;
+                    }
                 }
-            }
-            if (this.currentPlaylistNum >= 0 && this.currentPlaylistNum < currentPlayList.size()) {
-                this.playMusicAgain = true;
-                playMessage((MessageObject) currentPlayList.get(this.currentPlaylistNum));
+                if (this.currentPlaylistNum >= 0) {
+                    if (this.currentPlaylistNum < currentPlayList.size()) {
+                        this.playMusicAgain = true;
+                        playMessage((MessageObject) currentPlayList.get(this.currentPlaylistNum));
+                    }
+                }
             }
         }
     }
 
     protected void checkIsNextMediaFileDownloaded() {
-        if (this.playingMessageObject != null && this.playingMessageObject.isMusic()) {
-            checkIsNextMusicFileDownloaded(this.playingMessageObject.currentAccount);
+        if (this.playingMessageObject != null) {
+            if (this.playingMessageObject.isMusic()) {
+                checkIsNextMusicFileDownloaded(this.playingMessageObject.currentAccount);
+            }
         }
     }
 
     private void checkIsNextVoiceFileDownloaded(int currentAccount) {
-        if (this.voiceMessagesPlaylist != null && this.voiceMessagesPlaylist.size() >= 2) {
-            MessageObject nextAudio = (MessageObject) this.voiceMessagesPlaylist.get(true);
-            File file = null;
-            if (nextAudio.messageOwner.attachPath != null && nextAudio.messageOwner.attachPath.length() > 0) {
-                file = new File(nextAudio.messageOwner.attachPath);
-                if (!file.exists()) {
-                    file = null;
+        if (this.voiceMessagesPlaylist != null) {
+            if (this.voiceMessagesPlaylist.size() >= 2) {
+                MessageObject nextAudio = (MessageObject) this.voiceMessagesPlaylist.get(1);
+                File file = null;
+                if (nextAudio.messageOwner.attachPath != null && nextAudio.messageOwner.attachPath.length() > 0) {
+                    file = new File(nextAudio.messageOwner.attachPath);
+                    if (!file.exists()) {
+                        file = null;
+                    }
                 }
-            }
-            File cacheFile = file != null ? file : FileLoader.getPathToMessage(nextAudio.messageOwner);
-            if (cacheFile == null || !cacheFile.exists()) {
-                int i = 0;
-            }
-            if (cacheFile != null && cacheFile != file && !cacheFile.exists()) {
-                FileLoader.getInstance(currentAccount).loadFile(nextAudio.getDocument(), false, 0);
+                File cacheFile = file != null ? file : FileLoader.getPathToMessage(nextAudio.messageOwner);
+                if (cacheFile == null || !cacheFile.exists()) {
+                    boolean exist = false;
+                }
+                if (!(cacheFile == null || cacheFile == file || cacheFile.exists())) {
+                    FileLoader.getInstance(currentAccount).loadFile(nextAudio.getDocument(), false, 0);
+                }
             }
         }
     }
@@ -2211,34 +2152,36 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     private void checkIsNextMusicFileDownloaded(int currentAccount) {
         if ((DownloadController.getInstance(currentAccount).getCurrentDownloadMask() & 16) != 0) {
             ArrayList<MessageObject> currentPlayList = SharedConfig.shuffleMusic ? this.shuffledPlaylist : this.playlist;
-            if (currentPlayList != null && currentPlayList.size() >= 2) {
-                int nextIndex;
-                if (SharedConfig.playOrderReversed) {
-                    nextIndex = this.currentPlaylistNum + 1;
-                    if (nextIndex >= currentPlayList.size()) {
-                        nextIndex = 0;
-                    }
-                } else {
-                    nextIndex = this.currentPlaylistNum - 1;
-                    if (nextIndex < 0) {
-                        nextIndex = currentPlayList.size() - 1;
-                    }
-                }
-                MessageObject nextAudio = (MessageObject) currentPlayList.get(nextIndex);
-                if (DownloadController.getInstance(currentAccount).canDownloadMedia(nextAudio)) {
-                    File file = null;
-                    if (!TextUtils.isEmpty(nextAudio.messageOwner.attachPath)) {
-                        file = new File(nextAudio.messageOwner.attachPath);
-                        if (!file.exists()) {
-                            file = null;
+            if (currentPlayList != null) {
+                if (currentPlayList.size() >= 2) {
+                    int nextIndex;
+                    if (SharedConfig.playOrderReversed) {
+                        nextIndex = this.currentPlaylistNum + 1;
+                        if (nextIndex >= currentPlayList.size()) {
+                            nextIndex = 0;
+                        }
+                    } else {
+                        nextIndex = this.currentPlaylistNum - 1;
+                        if (nextIndex < 0) {
+                            nextIndex = currentPlayList.size() - 1;
                         }
                     }
-                    File cacheFile = file != null ? file : FileLoader.getPathToMessage(nextAudio.messageOwner);
-                    if (cacheFile == null || !cacheFile.exists()) {
-                        int i = 0;
-                    }
-                    if (cacheFile != null && cacheFile != file && !cacheFile.exists() && nextAudio.isMusic()) {
-                        FileLoader.getInstance(currentAccount).loadFile(nextAudio.getDocument(), false, 0);
+                    MessageObject nextAudio = (MessageObject) currentPlayList.get(nextIndex);
+                    if (DownloadController.getInstance(currentAccount).canDownloadMedia(nextAudio)) {
+                        File file = null;
+                        if (!TextUtils.isEmpty(nextAudio.messageOwner.attachPath)) {
+                            file = new File(nextAudio.messageOwner.attachPath);
+                            if (!file.exists()) {
+                                file = null;
+                            }
+                        }
+                        File cacheFile = file != null ? file : FileLoader.getPathToMessage(nextAudio.messageOwner);
+                        if (cacheFile == null || !cacheFile.exists()) {
+                            boolean exist = false;
+                        }
+                        if (!(cacheFile == null || cacheFile == file || cacheFile.exists() || !nextAudio.isMusic())) {
+                            FileLoader.getInstance(currentAccount).loadFile(nextAudio.getDocument(), false, 0);
+                        }
                     }
                 }
             }
@@ -2259,20 +2202,36 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
 
     private void checkAudioFocus(MessageObject messageObject) {
         int neededAudioFocus;
-        if (!messageObject.isVoice() && !messageObject.isRoundVideo()) {
-            neededAudioFocus = 1;
-        } else if (this.useFrontSpeaker) {
+        int result;
+        if (!messageObject.isVoice()) {
+            if (!messageObject.isRoundVideo()) {
+                neededAudioFocus = 1;
+                if (this.hasAudioFocus != neededAudioFocus) {
+                    this.hasAudioFocus = neededAudioFocus;
+                    if (neededAudioFocus != 3) {
+                        result = NotificationsController.audioManager.requestAudioFocus(this, 0, 1);
+                    } else {
+                        result = NotificationsController.audioManager.requestAudioFocus(this, 3, neededAudioFocus != 2 ? 3 : 1);
+                    }
+                    if (result == 1) {
+                        this.audioFocus = 2;
+                    }
+                }
+            }
+        }
+        if (this.useFrontSpeaker) {
             neededAudioFocus = 3;
         } else {
             neededAudioFocus = 2;
         }
         if (this.hasAudioFocus != neededAudioFocus) {
-            int result;
             this.hasAudioFocus = neededAudioFocus;
-            if (neededAudioFocus == 3) {
-                result = NotificationsController.audioManager.requestAudioFocus(this, 0, 1);
+            if (neededAudioFocus != 3) {
+                if (neededAudioFocus != 2) {
+                }
+                result = NotificationsController.audioManager.requestAudioFocus(this, 3, neededAudioFocus != 2 ? 3 : 1);
             } else {
-                result = NotificationsController.audioManager.requestAudioFocus(this, 3, neededAudioFocus == 2 ? 3 : 1);
+                result = NotificationsController.audioManager.requestAudioFocus(this, 0, 1);
             }
             if (result == 1) {
                 this.audioFocus = 2;
@@ -2317,35 +2276,40 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     }
 
     public void setTextureView(TextureView textureView, AspectRatioFrameLayout aspectRatioFrameLayout, FrameLayout container, boolean set) {
-        boolean z = true;
         if (textureView != null) {
-            if (!set && this.currentTextureView == textureView) {
-                this.pipSwitchingState = 1;
-                this.currentTextureView = null;
-                this.currentAspectRatioFrameLayout = null;
-                this.currentTextureViewContainer = null;
-            } else if (this.videoPlayer != null && textureView != this.currentTextureView) {
-                if (aspectRatioFrameLayout == null || !aspectRatioFrameLayout.isDrawingReady()) {
-                    z = false;
-                }
-                this.isDrawingWasReady = z;
-                this.currentTextureView = textureView;
-                if (this.pipRoundVideoView != null) {
-                    this.videoPlayer.setTextureView(this.pipRoundVideoView.getTextureView());
-                } else {
-                    this.videoPlayer.setTextureView(this.currentTextureView);
-                }
-                this.currentAspectRatioFrameLayout = aspectRatioFrameLayout;
-                this.currentTextureViewContainer = container;
-                if (this.currentAspectRatioFrameLayoutReady && this.currentAspectRatioFrameLayout != null) {
-                    if (this.currentAspectRatioFrameLayout != null) {
-                        this.currentAspectRatioFrameLayout.setAspectRatio(this.currentAspectRatioFrameLayoutRatio, this.currentAspectRatioFrameLayoutRotation);
+            boolean z = true;
+            if (set || this.currentTextureView != textureView) {
+                if (this.videoPlayer != null) {
+                    if (textureView != this.currentTextureView) {
+                        if (aspectRatioFrameLayout == null || !aspectRatioFrameLayout.isDrawingReady()) {
+                            z = false;
+                        }
+                        this.isDrawingWasReady = z;
+                        this.currentTextureView = textureView;
+                        if (this.pipRoundVideoView != null) {
+                            this.videoPlayer.setTextureView(this.pipRoundVideoView.getTextureView());
+                        } else {
+                            this.videoPlayer.setTextureView(this.currentTextureView);
+                        }
+                        this.currentAspectRatioFrameLayout = aspectRatioFrameLayout;
+                        this.currentTextureViewContainer = container;
+                        if (this.currentAspectRatioFrameLayoutReady && this.currentAspectRatioFrameLayout != null) {
+                            if (this.currentAspectRatioFrameLayout != null) {
+                                this.currentAspectRatioFrameLayout.setAspectRatio(this.currentAspectRatioFrameLayoutRatio, this.currentAspectRatioFrameLayoutRotation);
+                            }
+                            if (this.currentTextureViewContainer.getVisibility() != 0) {
+                                this.currentTextureViewContainer.setVisibility(0);
+                            }
+                        }
+                        return;
                     }
-                    if (this.currentTextureViewContainer.getVisibility() != 0) {
-                        this.currentTextureViewContainer.setVisibility(0);
-                    }
                 }
+                return;
             }
+            this.pipSwitchingState = 1;
+            this.currentTextureView = null;
+            this.currentAspectRatioFrameLayout = null;
+            this.currentTextureViewContainer = null;
         }
     }
 
@@ -2381,887 +2345,523 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
     }
 
-    public boolean playMessage(org.telegram.messenger.MessageObject r27) {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r18_1 'file' java.io.File) in PHI: PHI: (r18_3 'file' java.io.File) = (r18_0 'file' java.io.File), (r18_0 'file' java.io.File), (r18_1 'file' java.io.File), (r18_2 'file' java.io.File) binds: {(r18_0 'file' java.io.File)=B:31:0x0086, (r18_0 'file' java.io.File)=B:33:0x0092, (r18_1 'file' java.io.File)=B:35:0x00a5, (r18_2 'file' java.io.File)=B:36:0x00a7}
-	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
-	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
-	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
-	at jadx.core.dex.visitors.ModVisitor.visit(ModVisitor.java:68)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r26 = this;
-        if (r27 != 0) goto L_0x0004;
-    L_0x0002:
-        r2 = 0;
-    L_0x0003:
-        return r2;
-    L_0x0004:
-        r0 = r26;
-        r2 = r0.audioTrackPlayer;
-        if (r2 != 0) goto L_0x0016;
-    L_0x000a:
-        r0 = r26;
-        r2 = r0.audioPlayer;
-        if (r2 != 0) goto L_0x0016;
-    L_0x0010:
-        r0 = r26;
-        r2 = r0.videoPlayer;
-        if (r2 == 0) goto L_0x0034;
-    L_0x0016:
-        r2 = r26.isSamePlayingMessage(r27);
-        if (r2 == 0) goto L_0x0034;
-    L_0x001c:
-        r0 = r26;
-        r2 = r0.isPaused;
-        if (r2 == 0) goto L_0x0025;
-    L_0x0022:
-        r26.resumeAudio(r27);
-    L_0x0025:
-        r2 = org.telegram.messenger.SharedConfig.raiseToSpeak;
-        if (r2 != 0) goto L_0x0032;
-    L_0x0029:
-        r0 = r26;
-        r2 = r0.raiseChat;
-        r0 = r26;
-        r0.startRaiseToEarSensors(r2);
-    L_0x0032:
-        r2 = 1;
-        goto L_0x0003;
-    L_0x0034:
-        r2 = r27.isOut();
-        if (r2 != 0) goto L_0x004d;
-    L_0x003a:
-        r2 = r27.isContentUnread();
-        if (r2 == 0) goto L_0x004d;
-    L_0x0040:
-        r0 = r27;
-        r2 = r0.currentAccount;
-        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
-        r0 = r27;
-        r2.markMessageContentAsRead(r0);
-    L_0x004d:
-        r0 = r26;
-        r2 = r0.playMusicAgain;
-        if (r2 != 0) goto L_0x013f;
-    L_0x0053:
-        r20 = 1;
-    L_0x0055:
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        if (r2 == 0) goto L_0x006a;
-    L_0x005b:
-        r20 = 0;
-        r0 = r26;
-        r2 = r0.playMusicAgain;
-        if (r2 != 0) goto L_0x006a;
-    L_0x0063:
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        r2.resetPlayingProgress();
-    L_0x006a:
-        r2 = 0;
-        r0 = r26;
-        r1 = r20;
-        r0.cleanupPlayer(r1, r2);
-        r2 = 0;
-        r0 = r26;
-        r0.playMusicAgain = r2;
-        r2 = 0;
-        r0 = r26;
-        r0.seekToProgressPending = r2;
-        r18 = 0;
-        r17 = 0;
-        r0 = r27;
-        r2 = r0.messageOwner;
-        r2 = r2.attachPath;
-        if (r2 == 0) goto L_0x00a9;
-    L_0x0088:
-        r0 = r27;
-        r2 = r0.messageOwner;
-        r2 = r2.attachPath;
-        r2 = r2.length();
-        if (r2 <= 0) goto L_0x00a9;
-    L_0x0094:
-        r18 = new java.io.File;
-        r0 = r27;
-        r2 = r0.messageOwner;
-        r2 = r2.attachPath;
-        r0 = r18;
-        r0.<init>(r2);
-        r17 = r18.exists();
-        if (r17 != 0) goto L_0x00a9;
-    L_0x00a7:
-        r18 = 0;
-    L_0x00a9:
-        if (r18 == 0) goto L_0x0143;
-    L_0x00ab:
-        r9 = r18;
-    L_0x00ad:
-        r2 = org.telegram.messenger.SharedConfig.streamMedia;
-        if (r2 == 0) goto L_0x014d;
-    L_0x00b1:
-        r2 = r27.isMusic();
-        if (r2 == 0) goto L_0x014d;
-    L_0x00b7:
-        r2 = r27.getDialogId();
-        r2 = (int) r2;
-        if (r2 == 0) goto L_0x014d;
-    L_0x00be:
-        r10 = 1;
-    L_0x00bf:
-        if (r9 == 0) goto L_0x0168;
-    L_0x00c1:
-        r0 = r18;
-        if (r9 == r0) goto L_0x0168;
-    L_0x00c5:
-        r17 = r9.exists();
-        if (r17 != 0) goto L_0x0168;
-    L_0x00cb:
-        if (r10 != 0) goto L_0x0168;
-    L_0x00cd:
-        r0 = r27;
-        r2 = r0.currentAccount;
-        r2 = org.telegram.messenger.FileLoader.getInstance(r2);
-        r3 = r27.getDocument();
-        r4 = 0;
-        r5 = 0;
-        r2.loadFile(r3, r4, r5);
-        r2 = 1;
-        r0 = r26;
-        r0.downloadingCurrentMessage = r2;
-        r2 = 0;
-        r0 = r26;
-        r0.isPaused = r2;
-        r2 = 0;
-        r0 = r26;
-        r0.lastProgress = r2;
-        r2 = 0;
-        r0 = r26;
-        r0.lastPlayPcm = r2;
-        r2 = 0;
-        r0 = r26;
-        r0.audioInfo = r2;
-        r0 = r27;
-        r1 = r26;
-        r1.playingMessageObject = r0;
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        r2 = r2.isMusic();
-        if (r2 == 0) goto L_0x0155;
-    L_0x0109:
-        r19 = new android.content.Intent;
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = org.telegram.messenger.MusicPlayerService.class;
-        r0 = r19;
-        r0.<init>(r2, r3);
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0150 }
-        r0 = r19;	 Catch:{ Throwable -> 0x0150 }
-        r2.startService(r0);	 Catch:{ Throwable -> 0x0150 }
-    L_0x011b:
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        r2 = r2.currentAccount;
-        r2 = org.telegram.messenger.NotificationCenter.getInstance(r2);
-        r3 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged;
-        r4 = 1;
-        r4 = new java.lang.Object[r4];
-        r5 = 0;
-        r0 = r26;
-        r6 = r0.playingMessageObject;
-        r6 = r6.getId();
-        r6 = java.lang.Integer.valueOf(r6);
-        r4[r5] = r6;
-        r2.postNotificationName(r3, r4);
-        r2 = 1;
-        goto L_0x0003;
-    L_0x013f:
-        r20 = 0;
-        goto L_0x0055;
-    L_0x0143:
-        r0 = r27;
-        r2 = r0.messageOwner;
-        r9 = org.telegram.messenger.FileLoader.getPathToMessage(r2);
-        goto L_0x00ad;
-    L_0x014d:
-        r10 = 0;
-        goto L_0x00bf;
-    L_0x0150:
-        r13 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r13);
-        goto L_0x011b;
-    L_0x0155:
-        r19 = new android.content.Intent;
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = org.telegram.messenger.MusicPlayerService.class;
-        r0 = r19;
-        r0.<init>(r2, r3);
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r0 = r19;
-        r2.stopService(r0);
-        goto L_0x011b;
-    L_0x0168:
-        r2 = 0;
-        r0 = r26;
-        r0.downloadingCurrentMessage = r2;
-        r2 = r27.isMusic();
-        if (r2 == 0) goto L_0x02d5;
-    L_0x0173:
-        r0 = r27;
-        r2 = r0.currentAccount;
-        r0 = r26;
-        r0.checkIsNextMusicFileDownloaded(r2);
-    L_0x017c:
-        r0 = r26;
-        r2 = r0.currentAspectRatioFrameLayout;
-        if (r2 == 0) goto L_0x018f;
-    L_0x0182:
-        r2 = 0;
-        r0 = r26;
-        r0.isDrawingWasReady = r2;
-        r0 = r26;
-        r2 = r0.currentAspectRatioFrameLayout;
-        r3 = 0;
-        r2.setDrawingReady(r3);
-    L_0x018f:
-        r2 = r27.isRoundVideo();
-        if (r2 == 0) goto L_0x02fe;
-    L_0x0195:
-        r0 = r26;
-        r2 = r0.playlist;
-        r2.clear();
-        r0 = r26;
-        r2 = r0.shuffledPlaylist;
-        r2.clear();
-        r2 = new org.telegram.ui.Components.VideoPlayer;
-        r2.<init>();
-        r0 = r26;
-        r0.videoPlayer = r2;
-        r0 = r26;
-        r2 = r0.videoPlayer;
-        r3 = new org.telegram.messenger.MediaController$16;
-        r0 = r26;
-        r3.<init>();
-        r2.setDelegate(r3);
-        r2 = 0;
-        r0 = r26;
-        r0.currentAspectRatioFrameLayoutReady = r2;
-        r0 = r26;
-        r2 = r0.pipRoundVideoView;
-        if (r2 != 0) goto L_0x01d7;
-    L_0x01c5:
-        r0 = r27;
-        r2 = r0.currentAccount;
-        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
-        r4 = r27.getDialogId();
-        r2 = r2.isDialogCreated(r4);
-        if (r2 != 0) goto L_0x02e8;
-    L_0x01d7:
-        r0 = r26;
-        r2 = r0.pipRoundVideoView;
-        if (r2 != 0) goto L_0x01f8;
-    L_0x01dd:
-        r2 = new org.telegram.ui.Components.PipRoundVideoView;	 Catch:{ Exception -> 0x02e0 }
-        r2.<init>();	 Catch:{ Exception -> 0x02e0 }
-        r0 = r26;	 Catch:{ Exception -> 0x02e0 }
-        r0.pipRoundVideoView = r2;	 Catch:{ Exception -> 0x02e0 }
-        r0 = r26;	 Catch:{ Exception -> 0x02e0 }
-        r2 = r0.pipRoundVideoView;	 Catch:{ Exception -> 0x02e0 }
-        r0 = r26;	 Catch:{ Exception -> 0x02e0 }
-        r3 = r0.baseActivity;	 Catch:{ Exception -> 0x02e0 }
-        r4 = new org.telegram.messenger.MediaController$17;	 Catch:{ Exception -> 0x02e0 }
-        r0 = r26;	 Catch:{ Exception -> 0x02e0 }
-        r4.<init>();	 Catch:{ Exception -> 0x02e0 }
-        r2.show(r3, r4);	 Catch:{ Exception -> 0x02e0 }
-    L_0x01f8:
-        r0 = r26;
-        r2 = r0.pipRoundVideoView;
-        if (r2 == 0) goto L_0x020d;
-    L_0x01fe:
-        r0 = r26;
-        r2 = r0.videoPlayer;
-        r0 = r26;
-        r3 = r0.pipRoundVideoView;
-        r3 = r3.getTextureView();
-        r2.setTextureView(r3);
-    L_0x020d:
-        r0 = r26;
-        r2 = r0.videoPlayer;
-        r3 = android.net.Uri.fromFile(r9);
-        r4 = "other";
-        r2.preparePlayer(r3, r4);
-        r0 = r26;
-        r3 = r0.videoPlayer;
-        r0 = r26;
-        r2 = r0.useFrontSpeaker;
-        if (r2 == 0) goto L_0x02fb;
-    L_0x0225:
-        r2 = 0;
-    L_0x0226:
-        r3.setStreamType(r2);
-        r0 = r26;
-        r2 = r0.videoPlayer;
-        r2.play();
-    L_0x0230:
-        r26.checkAudioFocus(r27);
-        r26.setPlayerVolume();
-        r2 = 0;
-        r0 = r26;
-        r0.isPaused = r2;
-        r2 = 0;
-        r0 = r26;
-        r0.lastProgress = r2;
-        r2 = 0;
-        r0 = r26;
-        r0.lastPlayPcm = r2;
-        r0 = r27;
-        r1 = r26;
-        r1.playingMessageObject = r0;
-        r2 = org.telegram.messenger.SharedConfig.raiseToSpeak;
-        if (r2 != 0) goto L_0x025a;
-    L_0x0251:
-        r0 = r26;
-        r2 = r0.raiseChat;
-        r0 = r26;
-        r0.startRaiseToEarSensors(r2);
-    L_0x025a:
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        r0 = r26;
-        r0.startProgressTimer(r2);
-        r0 = r27;
-        r2 = r0.currentAccount;
-        r2 = org.telegram.messenger.NotificationCenter.getInstance(r2);
-        r3 = org.telegram.messenger.NotificationCenter.messagePlayingDidStarted;
-        r4 = 1;
-        r4 = new java.lang.Object[r4];
-        r5 = 0;
-        r4[r5] = r27;
-        r2.postNotificationName(r3, r4);
-        r0 = r26;
-        r2 = r0.videoPlayer;
-        if (r2 == 0) goto L_0x05a4;
-    L_0x027c:
-        r0 = r26;	 Catch:{ Exception -> 0x0569 }
-        r2 = r0.playingMessageObject;	 Catch:{ Exception -> 0x0569 }
-        r2 = r2.audioProgress;	 Catch:{ Exception -> 0x0569 }
-        r3 = 0;	 Catch:{ Exception -> 0x0569 }
-        r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));	 Catch:{ Exception -> 0x0569 }
-        if (r2 == 0) goto L_0x02b6;	 Catch:{ Exception -> 0x0569 }
-    L_0x0287:
-        r0 = r26;	 Catch:{ Exception -> 0x0569 }
-        r2 = r0.audioPlayer;	 Catch:{ Exception -> 0x0569 }
-        r14 = r2.getDuration();	 Catch:{ Exception -> 0x0569 }
-        r2 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;	 Catch:{ Exception -> 0x0569 }
-        r2 = (r14 > r2 ? 1 : (r14 == r2 ? 0 : -1));	 Catch:{ Exception -> 0x0569 }
-        if (r2 != 0) goto L_0x02a1;	 Catch:{ Exception -> 0x0569 }
-    L_0x0298:
-        r0 = r26;	 Catch:{ Exception -> 0x0569 }
-        r2 = r0.playingMessageObject;	 Catch:{ Exception -> 0x0569 }
-        r2 = r2.getDuration();	 Catch:{ Exception -> 0x0569 }
-        r14 = (long) r2;	 Catch:{ Exception -> 0x0569 }
-    L_0x02a1:
-        r2 = (float) r14;	 Catch:{ Exception -> 0x0569 }
-        r0 = r26;	 Catch:{ Exception -> 0x0569 }
-        r3 = r0.playingMessageObject;	 Catch:{ Exception -> 0x0569 }
-        r3 = r3.audioProgress;	 Catch:{ Exception -> 0x0569 }
-        r2 = r2 * r3;	 Catch:{ Exception -> 0x0569 }
-        r0 = (int) r2;	 Catch:{ Exception -> 0x0569 }
-        r23 = r0;	 Catch:{ Exception -> 0x0569 }
-        r0 = r26;	 Catch:{ Exception -> 0x0569 }
-        r2 = r0.videoPlayer;	 Catch:{ Exception -> 0x0569 }
-        r0 = r23;	 Catch:{ Exception -> 0x0569 }
-        r4 = (long) r0;	 Catch:{ Exception -> 0x0569 }
-        r2.seekTo(r4);	 Catch:{ Exception -> 0x0569 }
-    L_0x02b6:
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        r2 = r2.isMusic();
-        if (r2 == 0) goto L_0x0649;
-    L_0x02c0:
-        r19 = new android.content.Intent;
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = org.telegram.messenger.MusicPlayerService.class;
-        r0 = r19;
-        r0.<init>(r2, r3);
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0643 }
-        r0 = r19;	 Catch:{ Throwable -> 0x0643 }
-        r2.startService(r0);	 Catch:{ Throwable -> 0x0643 }
-    L_0x02d2:
-        r2 = 1;
-        goto L_0x0003;
-    L_0x02d5:
-        r0 = r27;
-        r2 = r0.currentAccount;
-        r0 = r26;
-        r0.checkIsNextVoiceFileDownloaded(r2);
-        goto L_0x017c;
-    L_0x02e0:
-        r13 = move-exception;
-        r2 = 0;
-        r0 = r26;
-        r0.pipRoundVideoView = r2;
-        goto L_0x01f8;
-    L_0x02e8:
-        r0 = r26;
-        r2 = r0.currentTextureView;
-        if (r2 == 0) goto L_0x020d;
-    L_0x02ee:
-        r0 = r26;
-        r2 = r0.videoPlayer;
-        r0 = r26;
-        r3 = r0.currentTextureView;
-        r2.setTextureView(r3);
-        goto L_0x020d;
-    L_0x02fb:
-        r2 = 3;
-        goto L_0x0226;
-    L_0x02fe:
-        r2 = r27.isMusic();
-        if (r2 != 0) goto L_0x03da;
-    L_0x0304:
-        r2 = r9.getAbsolutePath();
-        r2 = isOpusFile(r2);
-        r3 = 1;
-        if (r2 != r3) goto L_0x03da;
-    L_0x030f:
-        r0 = r26;
-        r2 = r0.pipRoundVideoView;
-        if (r2 == 0) goto L_0x0322;
-    L_0x0315:
-        r0 = r26;
-        r2 = r0.pipRoundVideoView;
-        r3 = 1;
-        r2.close(r3);
-        r2 = 0;
-        r0 = r26;
-        r0.pipRoundVideoView = r2;
-    L_0x0322:
-        r0 = r26;
-        r2 = r0.playlist;
-        r2.clear();
-        r0 = r26;
-        r2 = r0.shuffledPlaylist;
-        r2.clear();
-        r0 = r26;
-        r0 = r0.playerObjectSync;
-        r25 = r0;
-        monitor-enter(r25);
-        r2 = 3;
-        r0 = r26;	 Catch:{ Exception -> 0x03b1 }
-        r0.ignoreFirstProgress = r2;	 Catch:{ Exception -> 0x03b1 }
-        r11 = new java.util.concurrent.CountDownLatch;	 Catch:{ Exception -> 0x03b1 }
-        r2 = 1;	 Catch:{ Exception -> 0x03b1 }
-        r11.<init>(r2);	 Catch:{ Exception -> 0x03b1 }
-        r2 = 1;	 Catch:{ Exception -> 0x03b1 }
-        r0 = new java.lang.Boolean[r2];	 Catch:{ Exception -> 0x03b1 }
-        r22 = r0;	 Catch:{ Exception -> 0x03b1 }
-        r0 = r26;	 Catch:{ Exception -> 0x03b1 }
-        r2 = r0.fileDecodingQueue;	 Catch:{ Exception -> 0x03b1 }
-        r3 = new org.telegram.messenger.MediaController$18;	 Catch:{ Exception -> 0x03b1 }
-        r0 = r26;	 Catch:{ Exception -> 0x03b1 }
-        r1 = r22;	 Catch:{ Exception -> 0x03b1 }
-        r3.<init>(r1, r9, r11);	 Catch:{ Exception -> 0x03b1 }
-        r2.postRunnable(r3);	 Catch:{ Exception -> 0x03b1 }
-        r11.await();	 Catch:{ Exception -> 0x03b1 }
-        r2 = 0;	 Catch:{ Exception -> 0x03b1 }
-        r2 = r22[r2];	 Catch:{ Exception -> 0x03b1 }
-        r2 = r2.booleanValue();	 Catch:{ Exception -> 0x03b1 }
-        if (r2 != 0) goto L_0x036a;
-    L_0x0363:
-        r2 = 0;
-        monitor-exit(r25);	 Catch:{ all -> 0x0367 }
-        goto L_0x0003;	 Catch:{ all -> 0x0367 }
-    L_0x0367:
-        r2 = move-exception;	 Catch:{ all -> 0x0367 }
-        monitor-exit(r25);	 Catch:{ all -> 0x0367 }
-        throw r2;
-    L_0x036a:
-        r2 = r26.getTotalPcmDuration();	 Catch:{ Exception -> 0x03b1 }
-        r0 = r26;	 Catch:{ Exception -> 0x03b1 }
-        r0.currentTotalPcmDuration = r2;	 Catch:{ Exception -> 0x03b1 }
-        r2 = new android.media.AudioTrack;	 Catch:{ Exception -> 0x03b1 }
-        r0 = r26;	 Catch:{ Exception -> 0x03b1 }
-        r3 = r0.useFrontSpeaker;	 Catch:{ Exception -> 0x03b1 }
-        if (r3 == 0) goto L_0x03af;	 Catch:{ Exception -> 0x03b1 }
-    L_0x037a:
-        r3 = 0;	 Catch:{ Exception -> 0x03b1 }
-    L_0x037b:
-        r4 = 48000; // 0xbb80 float:6.7262E-41 double:2.3715E-319;	 Catch:{ Exception -> 0x03b1 }
-        r5 = 4;	 Catch:{ Exception -> 0x03b1 }
-        r6 = 2;	 Catch:{ Exception -> 0x03b1 }
-        r0 = r26;	 Catch:{ Exception -> 0x03b1 }
-        r7 = r0.playerBufferSize;	 Catch:{ Exception -> 0x03b1 }
-        r8 = 1;	 Catch:{ Exception -> 0x03b1 }
-        r2.<init>(r3, r4, r5, r6, r7, r8);	 Catch:{ Exception -> 0x03b1 }
-        r0 = r26;	 Catch:{ Exception -> 0x03b1 }
-        r0.audioTrackPlayer = r2;	 Catch:{ Exception -> 0x03b1 }
-        r0 = r26;	 Catch:{ Exception -> 0x03b1 }
-        r2 = r0.audioTrackPlayer;	 Catch:{ Exception -> 0x03b1 }
-        r3 = NUM; // 0x3f800000 float:1.0 double:5.263544247E-315;	 Catch:{ Exception -> 0x03b1 }
-        r4 = NUM; // 0x3f800000 float:1.0 double:5.263544247E-315;	 Catch:{ Exception -> 0x03b1 }
-        r2.setStereoVolume(r3, r4);	 Catch:{ Exception -> 0x03b1 }
-        r0 = r26;	 Catch:{ Exception -> 0x03b1 }
-        r2 = r0.audioTrackPlayer;	 Catch:{ Exception -> 0x03b1 }
-        r3 = new org.telegram.messenger.MediaController$19;	 Catch:{ Exception -> 0x03b1 }
-        r0 = r26;	 Catch:{ Exception -> 0x03b1 }
-        r3.<init>();	 Catch:{ Exception -> 0x03b1 }
-        r2.setPlaybackPositionUpdateListener(r3);	 Catch:{ Exception -> 0x03b1 }
-        r0 = r26;	 Catch:{ Exception -> 0x03b1 }
-        r2 = r0.audioTrackPlayer;	 Catch:{ Exception -> 0x03b1 }
-        r2.play();	 Catch:{ Exception -> 0x03b1 }
-        monitor-exit(r25);	 Catch:{ all -> 0x0367 }
-        goto L_0x0230;	 Catch:{ all -> 0x0367 }
-    L_0x03af:
-        r3 = 3;	 Catch:{ all -> 0x0367 }
-        goto L_0x037b;	 Catch:{ all -> 0x0367 }
-    L_0x03b1:
-        r13 = move-exception;	 Catch:{ all -> 0x0367 }
-        org.telegram.messenger.FileLog.m3e(r13);	 Catch:{ all -> 0x0367 }
-        r0 = r26;	 Catch:{ all -> 0x0367 }
-        r2 = r0.audioTrackPlayer;	 Catch:{ all -> 0x0367 }
-        if (r2 == 0) goto L_0x03d6;	 Catch:{ all -> 0x0367 }
-    L_0x03bb:
-        r0 = r26;	 Catch:{ all -> 0x0367 }
-        r2 = r0.audioTrackPlayer;	 Catch:{ all -> 0x0367 }
-        r2.release();	 Catch:{ all -> 0x0367 }
-        r2 = 0;	 Catch:{ all -> 0x0367 }
-        r0 = r26;	 Catch:{ all -> 0x0367 }
-        r0.audioTrackPlayer = r2;	 Catch:{ all -> 0x0367 }
-        r2 = 0;	 Catch:{ all -> 0x0367 }
-        r0 = r26;	 Catch:{ all -> 0x0367 }
-        r0.isPaused = r2;	 Catch:{ all -> 0x0367 }
-        r2 = 0;	 Catch:{ all -> 0x0367 }
-        r0 = r26;	 Catch:{ all -> 0x0367 }
-        r0.playingMessageObject = r2;	 Catch:{ all -> 0x0367 }
-        r2 = 0;	 Catch:{ all -> 0x0367 }
-        r0 = r26;	 Catch:{ all -> 0x0367 }
-        r0.downloadingCurrentMessage = r2;	 Catch:{ all -> 0x0367 }
-    L_0x03d6:
-        r2 = 0;	 Catch:{ all -> 0x0367 }
-        monitor-exit(r25);	 Catch:{ all -> 0x0367 }
-        goto L_0x0003;
-    L_0x03da:
-        r0 = r26;
-        r2 = r0.pipRoundVideoView;
-        if (r2 == 0) goto L_0x03ed;
-    L_0x03e0:
-        r0 = r26;
-        r2 = r0.pipRoundVideoView;
-        r3 = 1;
-        r2.close(r3);
-        r2 = 0;
-        r0 = r26;
-        r0.pipRoundVideoView = r2;
-    L_0x03ed:
-        r2 = new org.telegram.ui.Components.VideoPlayer;	 Catch:{ Exception -> 0x045c }
-        r2.<init>();	 Catch:{ Exception -> 0x045c }
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r0.audioPlayer = r2;	 Catch:{ Exception -> 0x045c }
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r3 = r0.audioPlayer;	 Catch:{ Exception -> 0x045c }
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r2 = r0.useFrontSpeaker;	 Catch:{ Exception -> 0x045c }
-        if (r2 == 0) goto L_0x04a9;	 Catch:{ Exception -> 0x045c }
-    L_0x0400:
-        r2 = 0;	 Catch:{ Exception -> 0x045c }
-    L_0x0401:
-        r3.setStreamType(r2);	 Catch:{ Exception -> 0x045c }
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r2 = r0.audioPlayer;	 Catch:{ Exception -> 0x045c }
-        r3 = new org.telegram.messenger.MediaController$20;	 Catch:{ Exception -> 0x045c }
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r1 = r27;	 Catch:{ Exception -> 0x045c }
-        r3.<init>(r1);	 Catch:{ Exception -> 0x045c }
-        r2.setDelegate(r3);	 Catch:{ Exception -> 0x045c }
-        if (r17 == 0) goto L_0x04ac;	 Catch:{ Exception -> 0x045c }
-    L_0x0416:
-        r0 = r27;	 Catch:{ Exception -> 0x045c }
-        r2 = r0.mediaExists;	 Catch:{ Exception -> 0x045c }
-        if (r2 != 0) goto L_0x042c;	 Catch:{ Exception -> 0x045c }
-    L_0x041c:
-        r0 = r18;	 Catch:{ Exception -> 0x045c }
-        if (r9 == r0) goto L_0x042c;	 Catch:{ Exception -> 0x045c }
-    L_0x0420:
-        r2 = new org.telegram.messenger.MediaController$21;	 Catch:{ Exception -> 0x045c }
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r1 = r27;	 Catch:{ Exception -> 0x045c }
-        r2.<init>(r1);	 Catch:{ Exception -> 0x045c }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);	 Catch:{ Exception -> 0x045c }
-    L_0x042c:
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r2 = r0.audioPlayer;	 Catch:{ Exception -> 0x045c }
-        r3 = android.net.Uri.fromFile(r9);	 Catch:{ Exception -> 0x045c }
-        r4 = "other";	 Catch:{ Exception -> 0x045c }
-        r2.preparePlayer(r3, r4);	 Catch:{ Exception -> 0x045c }
-    L_0x043a:
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r2 = r0.audioPlayer;	 Catch:{ Exception -> 0x045c }
-        r2.play();	 Catch:{ Exception -> 0x045c }
-        r2 = r27.isVoice();	 Catch:{ Exception -> 0x045c }
-        if (r2 == 0) goto L_0x0556;	 Catch:{ Exception -> 0x045c }
-    L_0x0447:
-        r2 = 0;	 Catch:{ Exception -> 0x045c }
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r0.audioInfo = r2;	 Catch:{ Exception -> 0x045c }
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r2 = r0.playlist;	 Catch:{ Exception -> 0x045c }
-        r2.clear();	 Catch:{ Exception -> 0x045c }
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r2 = r0.shuffledPlaylist;	 Catch:{ Exception -> 0x045c }
-        r2.clear();	 Catch:{ Exception -> 0x045c }
-        goto L_0x0230;
-    L_0x045c:
-        r13 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r13);
-        r0 = r27;
-        r2 = r0.currentAccount;
-        r3 = org.telegram.messenger.NotificationCenter.getInstance(r2);
-        r4 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged;
-        r2 = 1;
-        r5 = new java.lang.Object[r2];
-        r6 = 0;
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        if (r2 == 0) goto L_0x0566;
-    L_0x0474:
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        r2 = r2.getId();
-    L_0x047c:
-        r2 = java.lang.Integer.valueOf(r2);
-        r5[r6] = r2;
-        r3.postNotificationName(r4, r5);
-        r0 = r26;
-        r2 = r0.audioPlayer;
-        if (r2 == 0) goto L_0x04a6;
-    L_0x048b:
-        r0 = r26;
-        r2 = r0.audioPlayer;
-        r2.releasePlayer();
-        r2 = 0;
-        r0 = r26;
-        r0.audioPlayer = r2;
-        r2 = 0;
-        r0 = r26;
-        r0.isPaused = r2;
-        r2 = 0;
-        r0 = r26;
-        r0.playingMessageObject = r2;
-        r2 = 0;
-        r0 = r26;
-        r0.downloadingCurrentMessage = r2;
-    L_0x04a6:
-        r2 = 0;
-        goto L_0x0003;
-    L_0x04a9:
-        r2 = 3;
-        goto L_0x0401;
-    L_0x04ac:
-        r12 = r27.getDocument();	 Catch:{ Exception -> 0x045c }
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x045c }
-        r2.<init>();	 Catch:{ Exception -> 0x045c }
-        r3 = "?account=";	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r0 = r27;	 Catch:{ Exception -> 0x045c }
-        r3 = r0.currentAccount;	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r3 = "&id=";	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r4 = r12.id;	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r4);	 Catch:{ Exception -> 0x045c }
-        r3 = "&hash=";	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r4 = r12.access_hash;	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r4);	 Catch:{ Exception -> 0x045c }
-        r3 = "&dc=";	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r3 = r12.dc_id;	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r3 = "&size=";	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r3 = r12.size;	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r3 = "&mime=";	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r3 = r12.mime_type;	 Catch:{ Exception -> 0x045c }
-        r4 = "UTF-8";	 Catch:{ Exception -> 0x045c }
-        r3 = java.net.URLEncoder.encode(r3, r4);	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r3 = "&name=";	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r3 = org.telegram.messenger.FileLoader.getDocumentFileName(r12);	 Catch:{ Exception -> 0x045c }
-        r4 = "UTF-8";	 Catch:{ Exception -> 0x045c }
-        r3 = java.net.URLEncoder.encode(r3, r4);	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r21 = r2.toString();	 Catch:{ Exception -> 0x045c }
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x045c }
-        r2.<init>();	 Catch:{ Exception -> 0x045c }
-        r3 = "tg://";	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r3 = r27.getFileName();	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x045c }
-        r0 = r21;	 Catch:{ Exception -> 0x045c }
-        r2 = r2.append(r0);	 Catch:{ Exception -> 0x045c }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x045c }
-        r24 = android.net.Uri.parse(r2);	 Catch:{ Exception -> 0x045c }
-        r0 = r26;	 Catch:{ Exception -> 0x045c }
-        r2 = r0.audioPlayer;	 Catch:{ Exception -> 0x045c }
-        r3 = "other";	 Catch:{ Exception -> 0x045c }
-        r0 = r24;	 Catch:{ Exception -> 0x045c }
-        r2.preparePlayer(r0, r3);	 Catch:{ Exception -> 0x045c }
-        goto L_0x043a;
-    L_0x0556:
-        r2 = org.telegram.messenger.audioinfo.AudioInfo.getAudioInfo(r9);	 Catch:{ Exception -> 0x0560 }
-        r0 = r26;	 Catch:{ Exception -> 0x0560 }
-        r0.audioInfo = r2;	 Catch:{ Exception -> 0x0560 }
-        goto L_0x0230;
-    L_0x0560:
-        r13 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r13);	 Catch:{ Exception -> 0x045c }
-        goto L_0x0230;
-    L_0x0566:
-        r2 = 0;
-        goto L_0x047c;
-    L_0x0569:
-        r16 = move-exception;
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        r3 = 0;
-        r2.audioProgress = r3;
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        r3 = 0;
-        r2.audioProgressSec = r3;
-        r0 = r27;
-        r2 = r0.currentAccount;
-        r2 = org.telegram.messenger.NotificationCenter.getInstance(r2);
-        r3 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged;
-        r4 = 2;
-        r4 = new java.lang.Object[r4];
-        r5 = 0;
-        r0 = r26;
-        r6 = r0.playingMessageObject;
-        r6 = r6.getId();
-        r6 = java.lang.Integer.valueOf(r6);
-        r4[r5] = r6;
-        r5 = 1;
-        r6 = 0;
-        r6 = java.lang.Integer.valueOf(r6);
-        r4[r5] = r6;
-        r2.postNotificationName(r3, r4);
-        org.telegram.messenger.FileLog.m3e(r16);
-        goto L_0x02b6;
-    L_0x05a4:
-        r0 = r26;
-        r2 = r0.audioPlayer;
-        if (r2 == 0) goto L_0x061a;
-    L_0x05aa:
-        r0 = r26;	 Catch:{ Exception -> 0x05e6 }
-        r2 = r0.playingMessageObject;	 Catch:{ Exception -> 0x05e6 }
-        r2 = r2.audioProgress;	 Catch:{ Exception -> 0x05e6 }
-        r3 = 0;	 Catch:{ Exception -> 0x05e6 }
-        r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));	 Catch:{ Exception -> 0x05e6 }
-        if (r2 == 0) goto L_0x02b6;	 Catch:{ Exception -> 0x05e6 }
-    L_0x05b5:
-        r0 = r26;	 Catch:{ Exception -> 0x05e6 }
-        r2 = r0.audioPlayer;	 Catch:{ Exception -> 0x05e6 }
-        r14 = r2.getDuration();	 Catch:{ Exception -> 0x05e6 }
-        r2 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;	 Catch:{ Exception -> 0x05e6 }
-        r2 = (r14 > r2 ? 1 : (r14 == r2 ? 0 : -1));	 Catch:{ Exception -> 0x05e6 }
-        if (r2 != 0) goto L_0x05cf;	 Catch:{ Exception -> 0x05e6 }
-    L_0x05c6:
-        r0 = r26;	 Catch:{ Exception -> 0x05e6 }
-        r2 = r0.playingMessageObject;	 Catch:{ Exception -> 0x05e6 }
-        r2 = r2.getDuration();	 Catch:{ Exception -> 0x05e6 }
-        r14 = (long) r2;	 Catch:{ Exception -> 0x05e6 }
-    L_0x05cf:
-        r2 = (float) r14;	 Catch:{ Exception -> 0x05e6 }
-        r0 = r26;	 Catch:{ Exception -> 0x05e6 }
-        r3 = r0.playingMessageObject;	 Catch:{ Exception -> 0x05e6 }
-        r3 = r3.audioProgress;	 Catch:{ Exception -> 0x05e6 }
-        r2 = r2 * r3;	 Catch:{ Exception -> 0x05e6 }
-        r0 = (int) r2;	 Catch:{ Exception -> 0x05e6 }
-        r23 = r0;	 Catch:{ Exception -> 0x05e6 }
-        r0 = r26;	 Catch:{ Exception -> 0x05e6 }
-        r2 = r0.audioPlayer;	 Catch:{ Exception -> 0x05e6 }
-        r0 = r23;	 Catch:{ Exception -> 0x05e6 }
-        r4 = (long) r0;	 Catch:{ Exception -> 0x05e6 }
-        r2.seekTo(r4);	 Catch:{ Exception -> 0x05e6 }
-        goto L_0x02b6;
-    L_0x05e6:
-        r16 = move-exception;
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        r2.resetPlayingProgress();
-        r0 = r27;
-        r2 = r0.currentAccount;
-        r2 = org.telegram.messenger.NotificationCenter.getInstance(r2);
-        r3 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged;
-        r4 = 2;
-        r4 = new java.lang.Object[r4];
-        r5 = 0;
-        r0 = r26;
-        r6 = r0.playingMessageObject;
-        r6 = r6.getId();
-        r6 = java.lang.Integer.valueOf(r6);
-        r4[r5] = r6;
-        r5 = 1;
-        r6 = 0;
-        r6 = java.lang.Integer.valueOf(r6);
-        r4[r5] = r6;
-        r2.postNotificationName(r3, r4);
-        org.telegram.messenger.FileLog.m3e(r16);
-        goto L_0x02b6;
-    L_0x061a:
-        r0 = r26;
-        r2 = r0.audioTrackPlayer;
-        if (r2 == 0) goto L_0x02b6;
-    L_0x0620:
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        r2 = r2.audioProgress;
-        r3 = NUM; // 0x3f800000 float:1.0 double:5.263544247E-315;
-        r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));
-        if (r2 != 0) goto L_0x0633;
-    L_0x062c:
-        r0 = r26;
-        r2 = r0.playingMessageObject;
-        r3 = 0;
-        r2.audioProgress = r3;
-    L_0x0633:
-        r0 = r26;
-        r2 = r0.fileDecodingQueue;
-        r3 = new org.telegram.messenger.MediaController$22;
-        r0 = r26;
-        r3.<init>();
-        r2.postRunnable(r3);
-        goto L_0x02b6;
-    L_0x0643:
-        r13 = move-exception;
-        org.telegram.messenger.FileLog.m3e(r13);
-        goto L_0x02d2;
-    L_0x0649:
-        r19 = new android.content.Intent;
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = org.telegram.messenger.MusicPlayerService.class;
-        r0 = r19;
-        r0.<init>(r2, r3);
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r0 = r19;
-        r2.stopService(r0);
-        goto L_0x02d2;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.playMessage(org.telegram.messenger.MessageObject):boolean");
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean playMessage(MessageObject messageObject) {
+        Throwable e;
+        NotificationCenter instance;
+        Object[] objArr;
+        Throwable e2;
+        MediaController mediaController = this;
+        final MessageObject messageObject2 = messageObject;
+        if (messageObject2 == null) {
+            return false;
+        }
+        if (!(mediaController.audioTrackPlayer == null && mediaController.audioPlayer == null && mediaController.videoPlayer == null) && isSamePlayingMessage(messageObject)) {
+            if (mediaController.isPaused) {
+                resumeAudio(messageObject);
+            }
+            if (!SharedConfig.raiseToSpeak) {
+                startRaiseToEarSensors(mediaController.raiseChat);
+            }
+            return true;
+        }
+        if (!messageObject.isOut() && messageObject.isContentUnread()) {
+            MessagesController.getInstance(messageObject2.currentAccount).markMessageContentAsRead(messageObject2);
+        }
+        boolean notify = mediaController.playMusicAgain ^ true;
+        if (mediaController.playingMessageObject != null) {
+            notify = false;
+            if (!mediaController.playMusicAgain) {
+                mediaController.playingMessageObject.resetPlayingProgress();
+            }
+        }
+        cleanupPlayer(notify, false);
+        mediaController.playMusicAgain = false;
+        mediaController.seekToProgressPending = 0.0f;
+        File file = null;
+        boolean exists = false;
+        if (messageObject2.messageOwner.attachPath != null && messageObject2.messageOwner.attachPath.length() > 0) {
+            file = new File(messageObject2.messageOwner.attachPath);
+            exists = file.exists();
+            if (!exists) {
+                file = null;
+            }
+        }
+        final File cacheFile = file != null ? file : FileLoader.getPathToMessage(messageObject2.messageOwner);
+        boolean canStream = SharedConfig.streamMedia && messageObject.isMusic() && ((int) messageObject.getDialogId()) != 0;
+        if (!(cacheFile == null || cacheFile == file)) {
+            boolean exists2 = cacheFile.exists();
+            exists = exists2;
+            if (!(exists2 || canStream)) {
+                FileLoader.getInstance(messageObject2.currentAccount).loadFile(messageObject.getDocument(), false, 0);
+                mediaController.downloadingCurrentMessage = true;
+                mediaController.isPaused = false;
+                mediaController.lastProgress = 0;
+                mediaController.lastPlayPcm = 0;
+                mediaController.audioInfo = null;
+                mediaController.playingMessageObject = messageObject2;
+                if (mediaController.playingMessageObject.isMusic()) {
+                    try {
+                        ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, MusicPlayerService.class));
+                    } catch (Throwable th) {
+                        FileLog.m3e(th);
+                    }
+                } else {
+                    ApplicationLoader.applicationContext.stopService(new Intent(ApplicationLoader.applicationContext, MusicPlayerService.class));
+                }
+                NotificationCenter.getInstance(mediaController.playingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, Integer.valueOf(mediaController.playingMessageObject.getId()));
+                return true;
+            }
+        }
+        mediaController.downloadingCurrentMessage = false;
+        if (messageObject.isMusic()) {
+            checkIsNextMusicFileDownloaded(messageObject2.currentAccount);
+        } else {
+            checkIsNextVoiceFileDownloaded(messageObject2.currentAccount);
+        }
+        if (mediaController.currentAspectRatioFrameLayout != null) {
+            mediaController.isDrawingWasReady = false;
+            mediaController.currentAspectRatioFrameLayout.setDrawingReady(false);
+        }
+        int i = 3;
+        if (messageObject.isRoundVideo()) {
+            VideoPlayer videoPlayer;
+            mediaController.playlist.clear();
+            mediaController.shuffledPlaylist.clear();
+            mediaController.videoPlayer = new VideoPlayer();
+            mediaController.videoPlayer.setDelegate(new VideoPlayerDelegate() {
+
+                /* renamed from: org.telegram.messenger.MediaController$16$1 */
+                class C02501 implements Runnable {
+                    C02501() {
+                    }
+
+                    public void run() {
+                        MediaController.this.cleanupPlayer(true, true);
+                    }
+                }
+
+                public void onStateChanged(boolean playWhenReady, int playbackState) {
+                    if (MediaController.this.videoPlayer != null) {
+                        if (playbackState == 4 || playbackState == 1) {
+                            try {
+                                MediaController.this.baseActivity.getWindow().clearFlags(128);
+                            } catch (Throwable e) {
+                                FileLog.m3e(e);
+                            }
+                        } else {
+                            try {
+                                MediaController.this.baseActivity.getWindow().addFlags(128);
+                            } catch (Throwable e2) {
+                                FileLog.m3e(e2);
+                            }
+                        }
+                        if (playbackState == 3) {
+                            MediaController.this.currentAspectRatioFrameLayoutReady = true;
+                            if (!(MediaController.this.currentTextureViewContainer == null || MediaController.this.currentTextureViewContainer.getVisibility() == 0)) {
+                                MediaController.this.currentTextureViewContainer.setVisibility(0);
+                            }
+                        } else if (MediaController.this.videoPlayer.isPlaying() && playbackState == 4) {
+                            MediaController.this.cleanupPlayer(true, true, true);
+                        }
+                    }
+                }
+
+                public void onError(Exception e) {
+                    FileLog.m3e((Throwable) e);
+                }
+
+                public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+                    MediaController.this.currentAspectRatioFrameLayoutRotation = unappliedRotationDegrees;
+                    if (unappliedRotationDegrees == 90 || unappliedRotationDegrees == 270) {
+                        int temp = width;
+                        width = height;
+                        height = temp;
+                    }
+                    MediaController.this.currentAspectRatioFrameLayoutRatio = height == 0 ? MediaController.VOLUME_NORMAL : (((float) width) * pixelWidthHeightRatio) / ((float) height);
+                    if (MediaController.this.currentAspectRatioFrameLayout != null) {
+                        MediaController.this.currentAspectRatioFrameLayout.setAspectRatio(MediaController.this.currentAspectRatioFrameLayoutRatio, MediaController.this.currentAspectRatioFrameLayoutRotation);
+                    }
+                }
+
+                public void onRenderedFirstFrame() {
+                    if (MediaController.this.currentAspectRatioFrameLayout != null && !MediaController.this.currentAspectRatioFrameLayout.isDrawingReady()) {
+                        MediaController.this.isDrawingWasReady = true;
+                        MediaController.this.currentAspectRatioFrameLayout.setDrawingReady(true);
+                        if (MediaController.this.currentTextureViewContainer != null && MediaController.this.currentTextureViewContainer.getVisibility() != 0) {
+                            MediaController.this.currentTextureViewContainer.setVisibility(0);
+                        }
+                    }
+                }
+
+                public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
+                    if (MediaController.this.videoPlayer == null) {
+                        return false;
+                    }
+                    if (MediaController.this.pipSwitchingState == 2) {
+                        if (MediaController.this.currentAspectRatioFrameLayout != null) {
+                            if (MediaController.this.isDrawingWasReady) {
+                                MediaController.this.currentAspectRatioFrameLayout.setDrawingReady(true);
+                            }
+                            if (MediaController.this.currentAspectRatioFrameLayout.getParent() == null) {
+                                MediaController.this.currentTextureViewContainer.addView(MediaController.this.currentAspectRatioFrameLayout);
+                            }
+                            if (MediaController.this.currentTextureView.getSurfaceTexture() != surfaceTexture) {
+                                MediaController.this.currentTextureView.setSurfaceTexture(surfaceTexture);
+                            }
+                            MediaController.this.videoPlayer.setTextureView(MediaController.this.currentTextureView);
+                        }
+                        MediaController.this.pipSwitchingState = 0;
+                        return true;
+                    } else if (MediaController.this.pipSwitchingState != 1) {
+                        return false;
+                    } else {
+                        if (MediaController.this.baseActivity != null) {
+                            if (MediaController.this.pipRoundVideoView == null) {
+                                try {
+                                    MediaController.this.pipRoundVideoView = new PipRoundVideoView();
+                                    MediaController.this.pipRoundVideoView.show(MediaController.this.baseActivity, new C02501());
+                                } catch (Exception e) {
+                                    MediaController.this.pipRoundVideoView = null;
+                                }
+                            }
+                            if (MediaController.this.pipRoundVideoView != null) {
+                                if (MediaController.this.pipRoundVideoView.getTextureView().getSurfaceTexture() != surfaceTexture) {
+                                    MediaController.this.pipRoundVideoView.getTextureView().setSurfaceTexture(surfaceTexture);
+                                }
+                                MediaController.this.videoPlayer.setTextureView(MediaController.this.pipRoundVideoView.getTextureView());
+                            }
+                        }
+                        MediaController.this.pipSwitchingState = 0;
+                        return true;
+                    }
+                }
+
+                public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+                }
+            });
+            mediaController.currentAspectRatioFrameLayoutReady = false;
+            if (mediaController.pipRoundVideoView == null) {
+                if (MessagesController.getInstance(messageObject2.currentAccount).isDialogCreated(messageObject.getDialogId())) {
+                    if (mediaController.currentTextureView != null) {
+                        mediaController.videoPlayer.setTextureView(mediaController.currentTextureView);
+                    }
+                    mediaController.videoPlayer.preparePlayer(Uri.fromFile(cacheFile), "other");
+                    videoPlayer = mediaController.videoPlayer;
+                    if (mediaController.useFrontSpeaker) {
+                        i = 0;
+                    }
+                    videoPlayer.setStreamType(i);
+                    mediaController.videoPlayer.play();
+                }
+            }
+            if (mediaController.pipRoundVideoView == null) {
+                try {
+                    mediaController.pipRoundVideoView = new PipRoundVideoView();
+                    mediaController.pipRoundVideoView.show(mediaController.baseActivity, new Runnable() {
+                        public void run() {
+                            MediaController.this.cleanupPlayer(true, true);
+                        }
+                    });
+                } catch (Exception e3) {
+                    mediaController.pipRoundVideoView = null;
+                }
+            }
+            if (mediaController.pipRoundVideoView != null) {
+                mediaController.videoPlayer.setTextureView(mediaController.pipRoundVideoView.getTextureView());
+            }
+            mediaController.videoPlayer.preparePlayer(Uri.fromFile(cacheFile), "other");
+            videoPlayer = mediaController.videoPlayer;
+            if (mediaController.useFrontSpeaker) {
+                i = 0;
+            }
+            videoPlayer.setStreamType(i);
+            mediaController.videoPlayer.play();
+        } else {
+            File file2;
+            if (messageObject.isMusic() || isOpusFile(cacheFile.getAbsolutePath()) != 1) {
+                file2 = file;
+                if (mediaController.pipRoundVideoView != null) {
+                    mediaController.pipRoundVideoView.close(true);
+                    mediaController.pipRoundVideoView = null;
+                }
+                try {
+                    mediaController.audioPlayer = new VideoPlayer();
+                    mediaController.audioPlayer.setStreamType(mediaController.useFrontSpeaker ? 0 : 3);
+                    mediaController.audioPlayer.setDelegate(new VideoPlayerDelegate() {
+                        public void onStateChanged(boolean playWhenReady, int playbackState) {
+                            if (playbackState == 4) {
+                                if (MediaController.this.playlist.isEmpty() || MediaController.this.playlist.size() <= 1) {
+                                    MediaController mediaController = MediaController.this;
+                                    boolean z = messageObject2 != null && messageObject2.isVoice();
+                                    mediaController.cleanupPlayer(true, true, z);
+                                    return;
+                                }
+                                MediaController.this.playNextMessageWithoutOrder(true);
+                            } else if (MediaController.this.seekToProgressPending == 0.0f) {
+                            } else {
+                                if (playbackState == 3 || playbackState == 1) {
+                                    int seekTo = (int) (((float) MediaController.this.audioPlayer.getDuration()) * MediaController.this.seekToProgressPending);
+                                    MediaController.this.audioPlayer.seekTo((long) seekTo);
+                                    MediaController.this.lastProgress = (long) seekTo;
+                                    MediaController.this.seekToProgressPending = 0.0f;
+                                }
+                            }
+                        }
+
+                        public void onError(Exception e) {
+                        }
+
+                        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+                        }
+
+                        public void onRenderedFirstFrame() {
+                        }
+
+                        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+                        }
+
+                        public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
+                            return false;
+                        }
+                    });
+                    if (exists) {
+                        if (messageObject2.mediaExists) {
+                        } else if (cacheFile != file2) {
+                            try {
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                    public void run() {
+                                        NotificationCenter.getInstance(messageObject2.currentAccount).postNotificationName(NotificationCenter.FileDidLoaded, FileLoader.getAttachFileName(messageObject2.getDocument()));
+                                    }
+                                });
+                            } catch (Throwable th2) {
+                                e = th2;
+                                FileLog.m3e(e);
+                                instance = NotificationCenter.getInstance(messageObject2.currentAccount);
+                                i = NotificationCenter.messagePlayingPlayStateChanged;
+                                objArr = new Object[1];
+                                objArr[0] = Integer.valueOf(mediaController.playingMessageObject == null ? 0 : mediaController.playingMessageObject.getId());
+                                instance.postNotificationName(i, objArr);
+                                if (mediaController.audioPlayer != null) {
+                                    mediaController.audioPlayer.releasePlayer();
+                                    mediaController.audioPlayer = null;
+                                    mediaController.isPaused = false;
+                                    mediaController.playingMessageObject = null;
+                                    mediaController.downloadingCurrentMessage = false;
+                                }
+                                return false;
+                            }
+                        }
+                        mediaController.audioPlayer.preparePlayer(Uri.fromFile(cacheFile), "other");
+                    } else {
+                        Document document = messageObject.getDocument();
+                        String params = new StringBuilder();
+                        params.append("?account=");
+                        params.append(messageObject2.currentAccount);
+                        params.append("&id=");
+                        params.append(document.id);
+                        params.append("&hash=");
+                        params.append(document.access_hash);
+                        params.append("&dc=");
+                        params.append(document.dc_id);
+                        params.append("&size=");
+                        params.append(document.size);
+                        params.append("&mime=");
+                        params.append(URLEncoder.encode(document.mime_type, C0539C.UTF8_NAME));
+                        params.append("&name=");
+                        params.append(URLEncoder.encode(FileLoader.getDocumentFileName(document), C0539C.UTF8_NAME));
+                        params = params.toString();
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("tg://");
+                        stringBuilder.append(messageObject.getFileName());
+                        stringBuilder.append(params);
+                        mediaController.audioPlayer.preparePlayer(Uri.parse(stringBuilder.toString()), "other");
+                    }
+                    mediaController.audioPlayer.play();
+                    if (messageObject.isVoice()) {
+                        mediaController.audioInfo = null;
+                        mediaController.playlist.clear();
+                        mediaController.shuffledPlaylist.clear();
+                    } else {
+                        try {
+                            mediaController.audioInfo = AudioInfo.getAudioInfo(cacheFile);
+                        } catch (Throwable th22) {
+                            FileLog.m3e(th22);
+                        }
+                    }
+                } catch (Throwable th222) {
+                    file = file2;
+                    e = th222;
+                    FileLog.m3e(e);
+                    instance = NotificationCenter.getInstance(messageObject2.currentAccount);
+                    i = NotificationCenter.messagePlayingPlayStateChanged;
+                    objArr = new Object[1];
+                    if (mediaController.playingMessageObject == null) {
+                    }
+                    objArr[0] = Integer.valueOf(mediaController.playingMessageObject == null ? 0 : mediaController.playingMessageObject.getId());
+                    instance.postNotificationName(i, objArr);
+                    if (mediaController.audioPlayer != null) {
+                        mediaController.audioPlayer.releasePlayer();
+                        mediaController.audioPlayer = null;
+                        mediaController.isPaused = false;
+                        mediaController.playingMessageObject = null;
+                        mediaController.downloadingCurrentMessage = false;
+                    }
+                    return false;
+                }
+            }
+            if (mediaController.pipRoundVideoView != null) {
+                mediaController.pipRoundVideoView.close(true);
+                mediaController.pipRoundVideoView = null;
+            }
+            mediaController.playlist.clear();
+            mediaController.shuffledPlaylist.clear();
+            synchronized (mediaController.playerObjectSync) {
+                try {
+                    mediaController.ignoreFirstProgress = 3;
+                    final CountDownLatch countDownLatch = new CountDownLatch(1);
+                    final Boolean[] result = new Boolean[1];
+                    mediaController.fileDecodingQueue.postRunnable(new Runnable() {
+                        public void run() {
+                            result[0] = Boolean.valueOf(MediaController.this.openOpusFile(cacheFile.getAbsolutePath()) != 0);
+                            countDownLatch.countDown();
+                        }
+                    });
+                    countDownLatch.await();
+                    if (result[0].booleanValue()) {
+                        file2 = file;
+                        try {
+                            mediaController.currentTotalPcmDuration = getTotalPcmDuration();
+                            mediaController.audioTrackPlayer = new AudioTrack(mediaController.useFrontSpeaker ? 0 : 3, 48000, 4, 2, mediaController.playerBufferSize, 1);
+                            mediaController.audioTrackPlayer.setStereoVolume(VOLUME_NORMAL, VOLUME_NORMAL);
+                            mediaController.audioTrackPlayer.setPlaybackPositionUpdateListener(new OnPlaybackPositionUpdateListener() {
+                                public void onMarkerReached(AudioTrack audioTrack) {
+                                    MediaController.this.cleanupPlayer(true, true, true);
+                                }
+
+                                public void onPeriodicNotification(AudioTrack audioTrack) {
+                                }
+                            });
+                            mediaController.audioTrackPlayer.play();
+                        } catch (Throwable th2222) {
+                            e2 = th2222;
+                            FileLog.m3e(e2);
+                            if (mediaController.audioTrackPlayer != null) {
+                                mediaController.audioTrackPlayer.release();
+                                mediaController.audioTrackPlayer = null;
+                                mediaController.isPaused = false;
+                                mediaController.playingMessageObject = null;
+                                mediaController.downloadingCurrentMessage = false;
+                            }
+                            return false;
+                        } catch (Throwable th22222) {
+                            e2 = th22222;
+                            throw e2;
+                        }
+                    }
+                    try {
+                        return false;
+                    } catch (Throwable th222222) {
+                        e2 = th222222;
+                        file2 = file;
+                        throw e2;
+                    }
+                } catch (Throwable th2222222) {
+                    file2 = file;
+                    e2 = th2222222;
+                    FileLog.m3e(e2);
+                    if (mediaController.audioTrackPlayer != null) {
+                        mediaController.audioTrackPlayer.release();
+                        mediaController.audioTrackPlayer = null;
+                        mediaController.isPaused = false;
+                        mediaController.playingMessageObject = null;
+                        mediaController.downloadingCurrentMessage = false;
+                    }
+                    return false;
+                } catch (Throwable th22222222) {
+                    file2 = file;
+                    e2 = th22222222;
+                    throw e2;
+                }
+            }
+        }
+        checkAudioFocus(messageObject);
+        setPlayerVolume();
+        mediaController.isPaused = false;
+        mediaController.lastProgress = 0;
+        mediaController.lastPlayPcm = 0;
+        mediaController.playingMessageObject = messageObject2;
+        if (!SharedConfig.raiseToSpeak) {
+            startRaiseToEarSensors(mediaController.raiseChat);
+        }
+        startProgressTimer(mediaController.playingMessageObject);
+        NotificationCenter.getInstance(messageObject2.currentAccount).postNotificationName(NotificationCenter.messagePlayingDidStarted, messageObject2);
+        long duration;
+        if (mediaController.videoPlayer != null) {
+            try {
+                if (mediaController.playingMessageObject.audioProgress != 0.0f) {
+                    duration = mediaController.audioPlayer.getDuration();
+                    if (duration == C0539C.TIME_UNSET) {
+                        duration = (long) mediaController.playingMessageObject.getDuration();
+                    }
+                    mediaController.videoPlayer.seekTo((long) ((int) (((float) duration) * mediaController.playingMessageObject.audioProgress)));
+                }
+            } catch (Throwable th222222222) {
+                e = th222222222;
+                mediaController.playingMessageObject.audioProgress = 0.0f;
+                mediaController.playingMessageObject.audioProgressSec = 0;
+                NotificationCenter.getInstance(messageObject2.currentAccount).postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, Integer.valueOf(mediaController.playingMessageObject.getId()), Integer.valueOf(0));
+                FileLog.m3e(e);
+            }
+        } else if (mediaController.audioPlayer != null) {
+            try {
+                if (mediaController.playingMessageObject.audioProgress != 0.0f) {
+                    duration = mediaController.audioPlayer.getDuration();
+                    if (duration == C0539C.TIME_UNSET) {
+                        duration = (long) mediaController.playingMessageObject.getDuration();
+                    }
+                    mediaController.audioPlayer.seekTo((long) ((int) (((float) duration) * mediaController.playingMessageObject.audioProgress)));
+                }
+            } catch (Throwable thNUM) {
+                e = thNUM;
+                mediaController.playingMessageObject.resetPlayingProgress();
+                NotificationCenter.getInstance(messageObject2.currentAccount).postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, Integer.valueOf(mediaController.playingMessageObject.getId()), Integer.valueOf(0));
+                FileLog.m3e(e);
+            }
+        } else if (mediaController.audioTrackPlayer != null) {
+            if (mediaController.playingMessageObject.audioProgress == VOLUME_NORMAL) {
+                mediaController.playingMessageObject.audioProgress = 0.0f;
+            }
+            mediaController.fileDecodingQueue.postRunnable(new Runnable() {
+                public void run() {
+                    try {
+                        if (!(MediaController.this.playingMessageObject == null || MediaController.this.playingMessageObject.audioProgress == 0.0f)) {
+                            MediaController.this.lastPlayPcm = (long) (((float) MediaController.this.currentTotalPcmDuration) * MediaController.this.playingMessageObject.audioProgress);
+                            MediaController.this.seekOpusFile(MediaController.this.playingMessageObject.audioProgress);
+                        }
+                    } catch (Throwable e) {
+                        FileLog.m3e(e);
+                    }
+                    synchronized (MediaController.this.playerSync) {
+                        MediaController.this.freePlayerBuffers.addAll(MediaController.this.usedPlayerBuffers);
+                        MediaController.this.usedPlayerBuffers.clear();
+                    }
+                    MediaController.this.decodingFinished = false;
+                    MediaController.this.checkPlayerQueue();
+                }
+            });
+        }
+        if (mediaController.playingMessageObject.isMusic()) {
+            try {
+                ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, MusicPlayerService.class));
+            } catch (Throwable th2NUM) {
+                FileLog.m3e(th2NUM);
+            }
+        } else {
+            ApplicationLoader.applicationContext.stopService(new Intent(ApplicationLoader.applicationContext, MusicPlayerService.class));
+        }
+        return true;
     }
 
     public void stopAudio() {
@@ -3335,54 +2935,63 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public boolean isCurrentPlayer(VideoPlayer player) {
-        return this.videoPlayer == player || this.audioPlayer == player;
+        if (this.videoPlayer != player) {
+            if (this.audioPlayer != player) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean pauseMessage(MessageObject messageObject) {
-        if ((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null || !isSamePlayingMessage(messageObject)) {
-            return false;
-        }
-        stopProgressTimer();
-        try {
-            if (this.audioPlayer != null) {
-                this.audioPlayer.pause();
-            } else if (this.audioTrackPlayer != null) {
-                this.audioTrackPlayer.pause();
-            } else if (this.videoPlayer != null) {
-                this.videoPlayer.pause();
+        if (!((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null)) {
+            if (isSamePlayingMessage(messageObject)) {
+                stopProgressTimer();
+                try {
+                    if (this.audioPlayer != null) {
+                        this.audioPlayer.pause();
+                    } else if (this.audioTrackPlayer != null) {
+                        this.audioTrackPlayer.pause();
+                    } else if (this.videoPlayer != null) {
+                        this.videoPlayer.pause();
+                    }
+                    this.isPaused = true;
+                    NotificationCenter.getInstance(this.playingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, Integer.valueOf(this.playingMessageObject.getId()));
+                    return true;
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
+                    this.isPaused = false;
+                    return false;
+                }
             }
-            this.isPaused = true;
-            NotificationCenter.getInstance(this.playingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, Integer.valueOf(this.playingMessageObject.getId()));
-            return true;
-        } catch (Throwable e) {
-            FileLog.m3e(e);
-            this.isPaused = false;
-            return false;
         }
+        return false;
     }
 
     public boolean resumeAudio(MessageObject messageObject) {
-        if ((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null || !isSamePlayingMessage(messageObject)) {
-            return false;
-        }
-        try {
-            startProgressTimer(this.playingMessageObject);
-            if (this.audioPlayer != null) {
-                this.audioPlayer.play();
-            } else if (this.audioTrackPlayer != null) {
-                this.audioTrackPlayer.play();
-                checkPlayerQueue();
-            } else if (this.videoPlayer != null) {
-                this.videoPlayer.play();
+        if (!((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null)) {
+            if (isSamePlayingMessage(messageObject)) {
+                try {
+                    startProgressTimer(this.playingMessageObject);
+                    if (this.audioPlayer != null) {
+                        this.audioPlayer.play();
+                    } else if (this.audioTrackPlayer != null) {
+                        this.audioTrackPlayer.play();
+                        checkPlayerQueue();
+                    } else if (this.videoPlayer != null) {
+                        this.videoPlayer.play();
+                    }
+                    checkAudioFocus(messageObject);
+                    this.isPaused = false;
+                    NotificationCenter.getInstance(this.playingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, Integer.valueOf(this.playingMessageObject.getId()));
+                    return true;
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
+                    return false;
+                }
             }
-            checkAudioFocus(messageObject);
-            this.isPaused = false;
-            NotificationCenter.getInstance(this.playingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, Integer.valueOf(this.playingMessageObject.getId()));
-            return true;
-        } catch (Throwable e) {
-            FileLog.m3e(e);
-            return false;
         }
+        return false;
     }
 
     public boolean isRoundVideoDrawingReady() {
@@ -3394,35 +3003,38 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public boolean isPlayingMessage(MessageObject messageObject) {
-        boolean z = true;
-        if ((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || messageObject == null || this.playingMessageObject == null) {
-            return false;
-        }
-        if (this.playingMessageObject.eventId != 0 && this.playingMessageObject.eventId == messageObject.eventId) {
-            if (this.downloadingCurrentMessage) {
-                z = false;
+        if (!((this.audioTrackPlayer == null && this.audioPlayer == null && this.videoPlayer == null) || messageObject == null)) {
+            if (this.playingMessageObject != null) {
+                if (this.playingMessageObject.eventId != 0 && this.playingMessageObject.eventId == messageObject.eventId) {
+                    return this.downloadingCurrentMessage ^ 1;
+                }
+                if (isSamePlayingMessage(messageObject)) {
+                    return this.downloadingCurrentMessage ^ 1;
+                }
+                return false;
             }
-            return z;
-        } else if (!isSamePlayingMessage(messageObject)) {
-            return false;
-        } else {
-            if (this.downloadingCurrentMessage) {
-                z = false;
-            }
-            return z;
         }
+        return false;
     }
 
     public boolean isMessagePaused() {
-        return this.isPaused || this.downloadingCurrentMessage;
+        if (!this.isPaused) {
+            if (!this.downloadingCurrentMessage) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean isDownloadingCurrentMessage() {
         return this.downloadingCurrentMessage;
     }
 
+    public void setReplyingMessage(MessageObject reply_to_msg) {
+        this.recordReplyingMessageObject = reply_to_msg;
+    }
+
     public void startRecording(int currentAccount, long dialog_id, MessageObject reply_to_msg) {
-        long j;
         boolean paused = false;
         if (!(this.playingMessageObject == null || !isPlayingMessage(this.playingMessageObject) || isMessagePaused())) {
             paused = true;
@@ -3434,7 +3046,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
         DispatchQueue dispatchQueue = this.recordQueue;
         final int i = currentAccount;
-        final long j2 = dialog_id;
+        final long j = dialog_id;
         final MessageObject messageObject = reply_to_msg;
         Runnable anonymousClass23 = new Runnable() {
 
@@ -3505,7 +3117,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     MediaController.this.recordStartTime = System.currentTimeMillis();
                     MediaController.this.recordTimeCount = 0;
                     MediaController.this.samplesCount = 0;
-                    MediaController.this.recordDialogId = j2;
+                    MediaController.this.recordDialogId = j;
                     MediaController.this.recordingCurrentAccount = i;
                     MediaController.this.recordReplyingMessageObject = messageObject;
                     MediaController.this.fileBuffer.rewind();
@@ -3529,16 +3141,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
         };
         this.recordStartRunnable = anonymousClass23;
-        if (paused) {
-            j = 500;
-        } else {
-            j = 50;
-        }
-        dispatchQueue.postRunnable(anonymousClass23, j);
+        dispatchQueue.postRunnable(anonymousClass23, paused ? 500 : 50);
     }
 
     public void generateWaveform(MessageObject messageObject) {
-        final String id = messageObject.getId() + "_" + messageObject.getDialogId();
+        String id = new StringBuilder();
+        id.append(messageObject.getId());
+        id.append("_");
+        id.append(messageObject.getDialogId());
+        id = id.toString();
         final String path = FileLoader.getPathToMessage(messageObject.messageOwner).getAbsolutePath();
         if (!this.generatingWaveform.containsKey(id)) {
             this.generatingWaveform.put(id, messageObject);
@@ -3548,7 +3159,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             MessageObject messageObject = (MessageObject) MediaController.this.generatingWaveform.remove(id);
-                            if (messageObject != null && waveform != null) {
+                            if (!(messageObject == null || waveform == null)) {
                                 for (int a = 0; a < messageObject.getDocument().attributes.size(); a++) {
                                     DocumentAttribute attribute = (DocumentAttribute) messageObject.getDocument().attributes.get(a);
                                     if (attribute instanceof TL_documentAttributeAudio) {
@@ -3600,8 +3211,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             NotificationCenter instance = NotificationCenter.getInstance(MediaController.this.recordingCurrentAccount);
                             int i = NotificationCenter.audioDidSent;
                             Object[] objArr = new Object[2];
+                            String str = null;
                             objArr[0] = send == 2 ? audioToSend : null;
-                            objArr[1] = send == 2 ? recordingAudioFileToSend.getAbsolutePath() : null;
+                            if (send == 2) {
+                                str = recordingAudioFileToSend.getAbsolutePath();
+                            }
+                            objArr[1] = str;
                             instance.postNotificationName(i, objArr);
                             return;
                         }
@@ -3640,15 +3255,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
 
                 public void run() {
-                    int i = 1;
                     NotificationCenter instance = NotificationCenter.getInstance(MediaController.this.recordingCurrentAccount);
-                    int i2 = NotificationCenter.recordStopped;
+                    int i = NotificationCenter.recordStopped;
+                    int i2 = 1;
                     Object[] objArr = new Object[1];
                     if (send != 2) {
-                        i = 0;
+                        i2 = 0;
                     }
-                    objArr[0] = Integer.valueOf(i);
-                    instance.postNotificationName(i2, objArr);
+                    objArr[0] = Integer.valueOf(i2);
+                    instance.postNotificationName(i, objArr);
                 }
             }
 
@@ -3677,205 +3292,400 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
-        Throwable e;
-        final AlertDialog finalProgress;
-        final int i;
-        final String str;
-        final String str2;
-        if (fullPath != null) {
+        String str = fullPath;
+        Context context2 = context;
+        if (str != null) {
             File file = null;
-            if (!(fullPath == null || fullPath.length() == 0)) {
-                file = new File(fullPath);
+            if (!(str == null || fullPath.length() == 0)) {
+                file = new File(str);
                 if (!file.exists()) {
                     file = null;
                 }
             }
             if (file != null) {
-                final File sourceFile = file;
+                File sourceFile = file;
                 final boolean[] cancelled = new boolean[]{false};
                 if (sourceFile.exists()) {
                     AlertDialog progressDialog = null;
-                    if (!(context == null || type == 0)) {
+                    if (!(context2 == null || type == 0)) {
                         try {
-                            AlertDialog progressDialog2 = new AlertDialog(context, 2);
+                            progressDialog = new AlertDialog(context2, 2);
+                            progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
+                            progressDialog.setCanceledOnTouchOutside(false);
+                            progressDialog.setCancelable(true);
+                            progressDialog.setOnCancelListener(new OnCancelListener() {
+                                public void onCancel(DialogInterface dialog) {
+                                    cancelled[0] = true;
+                                }
+                            });
+                            progressDialog.show();
+                        } catch (Throwable e) {
+                            FileLog.m3e(e);
+                        }
+                    }
+                    final AlertDialog finalProgress = progressDialog;
+                    final int i = type;
+                    final String str2 = name;
+                    final File file2 = sourceFile;
+                    final boolean[] zArr = cancelled;
+                    AnonymousClass28 anonymousClass28 = r4;
+                    final String str3 = mime;
+                    AnonymousClass28 anonymousClass282 = new Runnable() {
+
+                        /* renamed from: org.telegram.messenger.MediaController$28$2 */
+                        class C02602 implements Runnable {
+                            C02602() {
+                            }
+
+                            public void run() {
+                                try {
+                                    finalProgress.dismiss();
+                                } catch (Throwable e) {
+                                    FileLog.m3e(e);
+                                }
+                            }
+                        }
+
+                        public void run() {
+                            Throwable e;
+                            FileChannel fileChannel;
                             try {
-                                progressDialog2.setMessage(LocaleController.getString("Loading", R.string.Loading));
-                                progressDialog2.setCanceledOnTouchOutside(false);
-                                progressDialog2.setCancelable(true);
-                                progressDialog2.setOnCancelListener(new OnCancelListener() {
-                                    public void onCancel(DialogInterface dialog) {
-                                        cancelled[0] = true;
+                                File destFile;
+                                FileChannel fileChannel2;
+                                FileChannel destination;
+                                boolean result;
+                                long lastProgress;
+                                long size;
+                                long a;
+                                FileChannel source;
+                                long a2;
+                                long size2;
+                                final int progress;
+                                long a3;
+                                int i = 0;
+                                if (i == 0) {
+                                    destFile = AndroidUtilities.generatePicturePath();
+                                } else if (i == 1) {
+                                    destFile = AndroidUtilities.generateVideoPath();
+                                } else {
+                                    if (i == 2) {
+                                        destFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                                    } else {
+                                        destFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
                                     }
-                                });
-                                progressDialog2.show();
-                                progressDialog = progressDialog2;
-                            } catch (Exception e2) {
-                                e = e2;
-                                progressDialog = progressDialog2;
-                                FileLog.m3e(e);
-                                finalProgress = progressDialog;
-                                i = type;
-                                str = name;
-                                str2 = mime;
-                                new Thread(new Runnable() {
-
-                                    /* renamed from: org.telegram.messenger.MediaController$28$2 */
-                                    class C02602 implements Runnable {
-                                        C02602() {
-                                        }
-
-                                        public void run() {
-                                            try {
-                                                finalProgress.dismiss();
-                                            } catch (Throwable e) {
-                                                FileLog.m3e(e);
-                                            }
-                                        }
-                                    }
-
-                                    public void run() {
-                                        try {
-                                            File destFile;
-                                            long a;
-                                            if (i == 0) {
-                                                destFile = AndroidUtilities.generatePicturePath();
-                                            } else if (i == 1) {
-                                                destFile = AndroidUtilities.generateVideoPath();
+                                    destFile.mkdir();
+                                    File destFile2 = new File(destFile, str2);
+                                    if (destFile2.exists()) {
+                                        int idx = str2.lastIndexOf(46);
+                                        File destFile3 = destFile2;
+                                        for (destFile2 = null; destFile2 < 10; destFile2++) {
+                                            String newName;
+                                            if (idx != -1) {
+                                                newName = new StringBuilder();
+                                                newName.append(str2.substring(0, idx));
+                                                newName.append("(");
+                                                newName.append(destFile2 + 1);
+                                                newName.append(")");
+                                                newName.append(str2.substring(idx));
+                                                newName = newName.toString();
                                             } else {
-                                                File dir;
-                                                if (i == 2) {
-                                                    dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                                                } else {
-                                                    dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
-                                                }
-                                                dir.mkdir();
-                                                destFile = new File(dir, str);
-                                                if (destFile.exists()) {
-                                                    int idx = str.lastIndexOf(46);
-                                                    for (a = null; a < 10; a++) {
-                                                        String newName;
-                                                        if (idx != -1) {
-                                                            newName = str.substring(0, idx) + "(" + (a + 1) + ")" + str.substring(idx);
-                                                        } else {
-                                                            newName = str + "(" + (a + 1) + ")";
-                                                        }
-                                                        destFile = new File(dir, newName);
-                                                        if (!destFile.exists()) {
-                                                            break;
-                                                        }
-                                                    }
-                                                }
+                                                StringBuilder stringBuilder = new StringBuilder();
+                                                stringBuilder.append(str2);
+                                                stringBuilder.append("(");
+                                                stringBuilder.append(destFile2 + 1);
+                                                stringBuilder.append(")");
+                                                newName = stringBuilder.toString();
                                             }
-                                            if (!destFile.exists()) {
-                                                destFile.createNewFile();
+                                            destFile3 = new File(destFile, newName);
+                                            if (!destFile3.exists()) {
+                                                break;
                                             }
-                                            FileChannel source = null;
-                                            FileChannel destination = null;
-                                            boolean result = true;
-                                            long lastProgress = System.currentTimeMillis() - 500;
+                                        }
+                                        destFile = destFile3;
+                                    } else {
+                                        destFile = destFile2;
+                                    }
+                                    if (!destFile.exists()) {
+                                        destFile.createNewFile();
+                                    }
+                                    fileChannel2 = null;
+                                    destination = null;
+                                    result = true;
+                                    lastProgress = System.currentTimeMillis() - 500;
+                                    fileChannel2 = new FileInputStream(file2).getChannel();
+                                    destination = new FileOutputStream(destFile).getChannel();
+                                    size = fileChannel2.size();
+                                    a = 0;
+                                    while (a < size) {
+                                        try {
+                                            if (zArr[i]) {
+                                                source = fileChannel2;
+                                                break;
+                                            }
+                                            source = fileChannel2;
                                             try {
-                                                source = new FileInputStream(sourceFile).getChannel();
-                                                destination = new FileOutputStream(destFile).getChannel();
-                                                long size = source.size();
-                                                for (a = 0; a < size && !cancelled[0]; a += 4096) {
-                                                    destination.transferFrom(source, a, Math.min(4096, size - a));
-                                                    if (finalProgress != null && lastProgress <= System.currentTimeMillis() - 500) {
+                                                a2 = a;
+                                                size2 = size;
+                                                destination.transferFrom(source, a2, Math.min(4096, size - a));
+                                                if (finalProgress == null) {
+                                                    size = 500;
+                                                    if (lastProgress <= System.currentTimeMillis() - 500) {
                                                         lastProgress = System.currentTimeMillis();
-                                                        final int i = (int) ((((float) a) / ((float) size)) * 100.0f);
+                                                        progress = (int) ((((float) a2) / ((float) size2)) * NUM);
                                                         AndroidUtilities.runOnUIThread(new Runnable() {
                                                             public void run() {
                                                                 try {
-                                                                    finalProgress.setProgress(i);
+                                                                    finalProgress.setProgress(progress);
                                                                 } catch (Throwable e) {
                                                                     FileLog.m3e(e);
                                                                 }
                                                             }
                                                         });
                                                     }
+                                                } else {
+                                                    size = 500;
                                                 }
-                                                if (source != null) {
-                                                    try {
-                                                        source.close();
-                                                    } catch (Exception e) {
+                                                a3 = a2 + 4096;
+                                                a2 = size;
+                                                a = a3;
+                                                size = size2;
+                                                fileChannel2 = source;
+                                                i = 0;
+                                            } catch (Throwable e2) {
+                                                e = e2;
+                                                fileChannel2 = source;
+                                            } catch (Throwable e22) {
+                                                e = e22;
+                                                fileChannel2 = source;
+                                            }
+                                        } catch (Throwable e222) {
+                                            source = fileChannel2;
+                                            e = e222;
+                                        } catch (Throwable e2222) {
+                                            source = fileChannel2;
+                                            e = e2222;
+                                        }
+                                    }
+                                    source = fileChannel2;
+                                    if (source == null) {
+                                        try {
+                                            source.close();
+                                        } catch (Exception e3) {
+                                        }
+                                    }
+                                    if (destination != null) {
+                                        try {
+                                            destination.close();
+                                        } catch (Exception e4) {
+                                        }
+                                    }
+                                    if (zArr[0]) {
+                                        destFile.delete();
+                                        result = false;
+                                    }
+                                    if (result) {
+                                        if (i != 2) {
+                                            ((DownloadManager) ApplicationLoader.applicationContext.getSystemService("download")).addCompletedDownload(destFile.getName(), destFile.getName(), false, str3, destFile.getAbsolutePath(), destFile.length(), true);
+                                        } else {
+                                            AndroidUtilities.addMediaToGallery(Uri.fromFile(destFile));
+                                        }
+                                    }
+                                    if (finalProgress != null) {
+                                        AndroidUtilities.runOnUIThread(new C02602());
+                                    }
+                                }
+                                if (destFile.exists()) {
+                                    destFile.createNewFile();
+                                }
+                                fileChannel2 = null;
+                                destination = null;
+                                result = true;
+                                lastProgress = System.currentTimeMillis() - 500;
+                                try {
+                                    fileChannel2 = new FileInputStream(file2).getChannel();
+                                    try {
+                                        destination = new FileOutputStream(destFile).getChannel();
+                                        size = fileChannel2.size();
+                                        a = 0;
+                                        while (a < size) {
+                                            if (zArr[i]) {
+                                                source = fileChannel2;
+                                                break;
+                                            }
+                                            source = fileChannel2;
+                                            a2 = a;
+                                            size2 = size;
+                                            destination.transferFrom(source, a2, Math.min(4096, size - a));
+                                            if (finalProgress == null) {
+                                                size = 500;
+                                            } else {
+                                                size = 500;
+                                                if (lastProgress <= System.currentTimeMillis() - 500) {
+                                                    lastProgress = System.currentTimeMillis();
+                                                    progress = (int) ((((float) a2) / ((float) size2)) * NUM);
+                                                    AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
+                                                }
+                                            }
+                                            a3 = a2 + 4096;
+                                            a2 = size;
+                                            a = a3;
+                                            size = size2;
+                                            fileChannel2 = source;
+                                            i = 0;
+                                        }
+                                        source = fileChannel2;
+                                        if (source == null) {
+                                        } else {
+                                            source.close();
+                                        }
+                                        if (destination != null) {
+                                            destination.close();
+                                        }
+                                    } catch (Throwable e22222) {
+                                        fileChannel = fileChannel2;
+                                        e = e22222;
+                                        try {
+                                            FileLog.m3e(e);
+                                            result = false;
+                                            if (fileChannel2 != null) {
+                                                try {
+                                                    fileChannel2.close();
+                                                } catch (Exception e5) {
+                                                    if (destination != null) {
+                                                        try {
+                                                            destination.close();
+                                                        } catch (Exception e6) {
+                                                            if (zArr[0]) {
+                                                                destFile.delete();
+                                                                result = false;
+                                                            }
+                                                            if (result) {
+                                                                if (i != 2) {
+                                                                    ((DownloadManager) ApplicationLoader.applicationContext.getSystemService("download")).addCompletedDownload(destFile.getName(), destFile.getName(), false, str3, destFile.getAbsolutePath(), destFile.length(), true);
+                                                                } else {
+                                                                    AndroidUtilities.addMediaToGallery(Uri.fromFile(destFile));
+                                                                }
+                                                            }
+                                                            if (finalProgress != null) {
+                                                                AndroidUtilities.runOnUIThread(new C02602());
+                                                            }
+                                                        }
                                                     }
-                                                }
-                                                if (destination != null) {
-                                                    try {
-                                                        destination.close();
-                                                    } catch (Exception e2) {
+                                                    if (zArr[0]) {
+                                                        destFile.delete();
+                                                        result = false;
                                                     }
-                                                }
-                                            } catch (Throwable e3) {
-                                                FileLog.m3e(e3);
-                                                result = false;
-                                                if (source != null) {
-                                                    try {
-                                                        source.close();
-                                                    } catch (Exception e4) {
+                                                    if (result) {
+                                                        if (i != 2) {
+                                                            ((DownloadManager) ApplicationLoader.applicationContext.getSystemService("download")).addCompletedDownload(destFile.getName(), destFile.getName(), false, str3, destFile.getAbsolutePath(), destFile.length(), true);
+                                                        } else {
+                                                            AndroidUtilities.addMediaToGallery(Uri.fromFile(destFile));
+                                                        }
                                                     }
-                                                }
-                                                if (destination != null) {
-                                                    try {
-                                                        destination.close();
-                                                    } catch (Exception e5) {
-                                                    }
-                                                }
-                                            } catch (Throwable th) {
-                                                if (source != null) {
-                                                    try {
-                                                        source.close();
-                                                    } catch (Exception e6) {
-                                                    }
-                                                }
-                                                if (destination != null) {
-                                                    try {
-                                                        destination.close();
-                                                    } catch (Exception e7) {
+                                                    if (finalProgress != null) {
+                                                        AndroidUtilities.runOnUIThread(new C02602());
                                                     }
                                                 }
                                             }
-                                            if (cancelled[0]) {
+                                            if (destination != null) {
+                                                destination.close();
+                                            }
+                                            if (zArr[0]) {
                                                 destFile.delete();
                                                 result = false;
                                             }
                                             if (result) {
-                                                if (i == 2) {
-                                                    ((DownloadManager) ApplicationLoader.applicationContext.getSystemService("download")).addCompletedDownload(destFile.getName(), destFile.getName(), false, str2, destFile.getAbsolutePath(), destFile.length(), true);
-                                                } else {
+                                                if (i != 2) {
                                                     AndroidUtilities.addMediaToGallery(Uri.fromFile(destFile));
+                                                } else {
+                                                    ((DownloadManager) ApplicationLoader.applicationContext.getSystemService("download")).addCompletedDownload(destFile.getName(), destFile.getName(), false, str3, destFile.getAbsolutePath(), destFile.length(), true);
                                                 }
                                             }
-                                        } catch (Throwable e32) {
-                                            FileLog.m3e(e32);
+                                            if (finalProgress != null) {
+                                                AndroidUtilities.runOnUIThread(new C02602());
+                                            }
+                                        } catch (Throwable e222222) {
+                                            e = e222222;
+                                            if (fileChannel2 != null) {
+                                                try {
+                                                    fileChannel2.close();
+                                                } catch (Exception e7) {
+                                                    if (destination != null) {
+                                                        try {
+                                                            destination.close();
+                                                        } catch (Exception e8) {
+                                                        }
+                                                    }
+                                                    throw e;
+                                                }
+                                            }
+                                            if (destination != null) {
+                                                destination.close();
+                                            }
+                                            throw e;
                                         }
-                                        if (finalProgress != null) {
-                                            AndroidUtilities.runOnUIThread(new C02602());
+                                    } catch (Throwable e2222222) {
+                                        fileChannel = fileChannel2;
+                                        e = e2222222;
+                                        if (fileChannel2 != null) {
+                                            fileChannel2.close();
+                                        }
+                                        if (destination != null) {
+                                            destination.close();
+                                        }
+                                        throw e;
+                                    }
+                                } catch (Throwable e22222222) {
+                                    e = e22222222;
+                                    FileLog.m3e(e);
+                                    result = false;
+                                    if (fileChannel2 != null) {
+                                        fileChannel2.close();
+                                    }
+                                    if (destination != null) {
+                                        destination.close();
+                                    }
+                                    if (zArr[0]) {
+                                        destFile.delete();
+                                        result = false;
+                                    }
+                                    if (result) {
+                                        if (i != 2) {
+                                            AndroidUtilities.addMediaToGallery(Uri.fromFile(destFile));
+                                        } else {
+                                            ((DownloadManager) ApplicationLoader.applicationContext.getSystemService("download")).addCompletedDownload(destFile.getName(), destFile.getName(), false, str3, destFile.getAbsolutePath(), destFile.length(), true);
                                         }
                                     }
-                                }).start();
+                                    if (finalProgress != null) {
+                                        AndroidUtilities.runOnUIThread(new C02602());
+                                    }
+                                }
+                                if (zArr[0]) {
+                                    destFile.delete();
+                                    result = false;
+                                }
+                                if (result) {
+                                    if (i != 2) {
+                                        AndroidUtilities.addMediaToGallery(Uri.fromFile(destFile));
+                                    } else {
+                                        ((DownloadManager) ApplicationLoader.applicationContext.getSystemService("download")).addCompletedDownload(destFile.getName(), destFile.getName(), false, str3, destFile.getAbsolutePath(), destFile.length(), true);
+                                    }
+                                }
+                            } catch (Throwable e222222222) {
+                                FileLog.m3e(e222222222);
                             }
-                        } catch (Exception e3) {
-                            e = e3;
-                            FileLog.m3e(e);
-                            finalProgress = progressDialog;
-                            i = type;
-                            str = name;
-                            str2 = mime;
-                            new Thread(/* anonymous class already generated */).start();
+                            if (finalProgress != null) {
+                                AndroidUtilities.runOnUIThread(new C02602());
+                            }
                         }
-                    }
-                    finalProgress = progressDialog;
-                    i = type;
-                    str = name;
-                    str2 = mime;
-                    new Thread(/* anonymous class already generated */).start();
+                    };
+                    new Thread(anonymousClass28).start();
                 }
             }
         }
     }
 
     public static boolean isWebp(Uri uri) {
-        boolean z = false;
         InputStream inputStream = null;
         try {
             inputStream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
@@ -3885,7 +3695,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (str != null) {
                     str = str.toLowerCase();
                     if (str.startsWith("riff") && str.endsWith("webp")) {
-                        z = true;
                         if (inputStream != null) {
                             try {
                                 inputStream.close();
@@ -3893,7 +3702,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                 FileLog.m3e(e2);
                             }
                         }
-                        return z;
+                        return true;
                     }
                 }
             }
@@ -3904,14 +3713,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     FileLog.m3e(e22);
                 }
             }
-        } catch (Throwable e) {
-            FileLog.m3e(e);
+        } catch (Throwable e222) {
+            FileLog.m3e(e222);
             if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (Throwable e222) {
-                    FileLog.m3e(e222);
-                }
+                inputStream.close();
             }
         } catch (Throwable th) {
             if (inputStream != null) {
@@ -3922,11 +3727,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
             }
         }
-        return z;
+        return false;
     }
 
     public static boolean isGif(Uri uri) {
-        boolean z = false;
         InputStream inputStream = null;
         try {
             inputStream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
@@ -3934,7 +3738,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             if (inputStream.read(header, 0, 3) == 3) {
                 String str = new String(header);
                 if (str != null && str.equalsIgnoreCase("gif")) {
-                    z = true;
                     if (inputStream != null) {
                         try {
                             inputStream.close();
@@ -3942,7 +3745,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                             FileLog.m3e(e2);
                         }
                     }
-                    return z;
+                    return true;
                 }
             }
             if (inputStream != null) {
@@ -3952,14 +3755,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     FileLog.m3e(e22);
                 }
             }
-        } catch (Throwable e) {
-            FileLog.m3e(e);
+        } catch (Throwable e222) {
+            FileLog.m3e(e222);
             if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (Throwable e222) {
-                    FileLog.m3e(e222);
-                }
+                inputStream.close();
             }
         } catch (Throwable th) {
             if (inputStream != null) {
@@ -3970,9 +3769,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
             }
         }
-        return z;
+        return false;
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public static String getFileName(Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {
@@ -3981,9 +3782,6 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 cursor = ApplicationLoader.applicationContext.getContentResolver().query(uri, new String[]{"_display_name"}, null, null, null);
                 if (cursor.moveToFirst()) {
                     result = cursor.getString(cursor.getColumnIndex("_display_name"));
-                }
-                if (cursor != null) {
-                    cursor.close();
                 }
             } catch (Throwable e) {
                 FileLog.m3e(e);
@@ -4008,10 +3806,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public static String copyFileToCache(Uri uri, String ext) {
-        Throwable e;
-        Throwable th;
         InputStream inputStream = null;
-        FileOutputStream fileOutputStream = null;
+        FileOutputStream output = null;
         try {
             String name = FileLoader.fixFileName(getFileName(uri));
             if (name == null) {
@@ -4021,8 +3817,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
             File f = new File(FileLoader.getDirectory(4), "sharing/");
             f.mkdirs();
-            File f2 = new File(f, name);
-            if (AndroidUtilities.isInternalUri(Uri.fromFile(f2))) {
+            f = new File(f, name);
+            if (AndroidUtilities.isInternalUri(Uri.fromFile(f))) {
                 if (inputStream != null) {
                     try {
                         inputStream.close();
@@ -4030,104 +3826,82 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         FileLog.m3e(e2);
                     }
                 }
-                if (fileOutputStream == null) {
-                    return null;
-                }
-                try {
-                    fileOutputStream.close();
-                    return null;
-                } catch (Throwable e22) {
-                    FileLog.m3e(e22);
-                    return null;
-                }
-            }
-            inputStream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
-            FileOutputStream output = new FileOutputStream(f2);
-            try {
-                byte[] buffer = new byte[CacheDataSink.DEFAULT_BUFFER_SIZE];
-                while (true) {
-                    int len = inputStream.read(buffer);
-                    if (len == -1) {
-                        break;
-                    }
-                    output.write(buffer, 0, len);
-                }
-                String absolutePath = f2.getAbsolutePath();
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (Throwable e222) {
-                        FileLog.m3e(e222);
-                    }
-                }
                 if (output != null) {
                     try {
                         output.close();
-                    } catch (Throwable e2222) {
-                        FileLog.m3e(e2222);
+                    } catch (Throwable e22) {
+                        FileLog.m3e(e22);
                     }
                 }
-                fileOutputStream = output;
-                return absolutePath;
-            } catch (Exception e3) {
-                e = e3;
-                fileOutputStream = output;
+                return null;
+            }
+            inputStream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
+            output = new FileOutputStream(f);
+            byte[] buffer = new byte[20480];
+            while (true) {
+                int read = inputStream.read(buffer);
+                int len = read;
+                if (read == -1) {
+                    break;
+                }
+                output.write(buffer, 0, len);
+            }
+            String absolutePath = f.getAbsolutePath();
+            if (inputStream != null) {
                 try {
-                    FileLog.m3e(e);
-                    if (inputStream != null) {
+                    inputStream.close();
+                } catch (Throwable e23) {
+                    FileLog.m3e(e23);
+                }
+            }
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (Throwable e232) {
+                    FileLog.m3e(e232);
+                }
+            }
+            return absolutePath;
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (Throwable e3) {
+                    FileLog.m3e(e3);
+                    if (output != null) {
                         try {
-                            inputStream.close();
-                        } catch (Throwable e22222) {
-                            FileLog.m3e(e22222);
-                        }
-                    }
-                    if (fileOutputStream != null) {
-                        try {
-                            fileOutputStream.close();
-                        } catch (Throwable e222222) {
-                            FileLog.m3e(e222222);
+                            output.close();
+                        } catch (Throwable e32) {
+                            FileLog.m3e(e32);
+                            return null;
                         }
                     }
                     return null;
-                } catch (Throwable th2) {
-                    th = th2;
-                    if (inputStream != null) {
-                        try {
-                            inputStream.close();
-                        } catch (Throwable e2222222) {
-                            FileLog.m3e(e2222222);
-                        }
-                    }
-                    if (fileOutputStream != null) {
-                        try {
-                            fileOutputStream.close();
-                        } catch (Throwable e22222222) {
-                            FileLog.m3e(e22222222);
-                        }
-                    }
-                    throw th;
                 }
-            } catch (Throwable th3) {
-                th = th3;
-                fileOutputStream = output;
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-                if (fileOutputStream != null) {
-                    fileOutputStream.close();
-                }
-                throw th;
             }
-        } catch (Exception e4) {
-            e = e4;
-            FileLog.m3e(e);
-            if (inputStream != null) {
-                inputStream.close();
-            }
-            if (fileOutputStream != null) {
-                fileOutputStream.close();
+            if (output != null) {
+                output.close();
             }
             return null;
+        } catch (Throwable th) {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (Throwable e322) {
+                    FileLog.m3e(e322);
+                    if (output != null) {
+                        try {
+                            output.close();
+                        } catch (Throwable e3222) {
+                            FileLog.m3e(e3222);
+                        }
+                    }
+                }
+            }
+            if (output != null) {
+                output.close();
+            }
         }
     }
 
@@ -4150,17 +3924,765 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 }
             }
 
+            /* JADX WARNING: inconsistent code. */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
             public void run() {
-                /* JADX: method processing error */
+                AlbumEntry albumEntry;
+                AlbumEntry allMediaAlbum;
+                AlbumEntry albumEntry2;
+                int i;
+                Integer mediaCameraAlbumId;
+                Throwable th;
+                int bucketIdColumn;
+                int bucketNameColumn;
+                int dataColumn;
+                int dateColumn;
+                Cursor cursor;
+                int durationColumn;
+                int imageId;
+                int bucketId;
+                String bucketName;
+                String path;
+                long dateTaken;
+                long duration;
+                int imageIdColumn;
+                int durationColumn2;
+                int bucketIdColumn2;
+                int bucketNameColumn2;
+                AlbumEntry allMediaAlbum2;
+                AlbumEntry albumEntry3;
+                AlbumEntry allMediaAlbum3;
+                AlbumEntry albumEntry4;
+                String path2;
+                Object obj;
+                Cursor cursor2;
+                Object obj2;
+                AlbumEntry allPhotosAlbum;
+                AlbumEntry allMediaAlbum4;
+                AnonymousClass29 anonymousClass29 = this;
+                ArrayList<AlbumEntry> mediaAlbumsSorted = new ArrayList();
+                ArrayList<AlbumEntry> photoAlbumsSorted = new ArrayList();
+                SparseArray<AlbumEntry> mediaAlbums = new SparseArray();
+                SparseArray<AlbumEntry> photoAlbums = new SparseArray();
+                AlbumEntry allMediaAlbum5 = null;
+                Cursor cursor3 = null;
+                String cameraFolder = null;
+                try {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath());
+                    stringBuilder.append("/Camera/");
+                    cameraFolder = stringBuilder.toString();
+                } catch (Throwable e) {
+                    Throwable e2;
+                    FileLog.m3e(e2);
+                }
+                String cameraFolder2 = cameraFolder;
+                Integer num = 0;
+                Integer photoCameraAlbumId = null;
+                try {
+                    Integer num2;
+                    if (VERSION.SDK_INT >= 23) {
+                        try {
+                            if (VERSION.SDK_INT < 23 || ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0) {
+                                albumEntry = null;
+                                allMediaAlbum = null;
+                                if (cursor3 != null) {
+                                    try {
+                                        cursor3.close();
+                                    } catch (Throwable e22) {
+                                        FileLog.m3e(e22);
+                                    }
+                                }
+                                num2 = photoCameraAlbumId;
+                                allMediaAlbum5 = allMediaAlbum;
+                                if (VERSION.SDK_INT >= 23) {
+                                    try {
+                                        if (VERSION.SDK_INT >= 23 || ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0) {
+                                            albumEntry2 = allMediaAlbum5;
+                                            i = 0;
+                                            if (cursor3 != null) {
+                                                try {
+                                                    cursor3.close();
+                                                } catch (Throwable e222) {
+                                                    FileLog.m3e(e222);
+                                                }
+                                            }
+                                            mediaCameraAlbumId = num;
+                                            for (i = 
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r22_1 'allPhotosAlbum' org.telegram.messenger.MediaController$AlbumEntry) in PHI: PHI: (r22_2 'allPhotosAlbum' org.telegram.messenger.MediaController$AlbumEntry) = (r22_1 'allPhotosAlbum' org.telegram.messenger.MediaController$AlbumEntry), (r22_3 'allPhotosAlbum' org.telegram.messenger.MediaController$AlbumEntry) binds: {(r22_1 'allPhotosAlbum' org.telegram.messenger.MediaController$AlbumEntry)=B:28:?, (r22_3 'allPhotosAlbum' org.telegram.messenger.MediaController$AlbumEntry)=B:172:0x0397}
-	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
-	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
-	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
-	at jadx.core.dex.visitors.ModVisitor.visit(ModVisitor.java:68)
+Method generation error in method: org.telegram.messenger.MediaController.29.run():void, dex: classes.dex
+jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r3_86 'i' int) = (r3_80 'i' int), (r3_83 'i' int), (r3_85 'i' int) binds: {(r3_80 'i' int)=B:249:0x0465, (r3_83 'i' int)=B:261:0x047e, (r3_85 'i' int)=B:264:0x0483} in method: org.telegram.messenger.MediaController.29.run():void, dex: classes.dex
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:226)
+	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:184)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:61)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:87)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:53)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:93)
+	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:118)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:57)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:87)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:53)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:87)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:53)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:93)
+	at jadx.core.codegen.RegionGen.makeTryCatch(RegionGen.java:279)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:87)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:53)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:93)
+	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:118)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:57)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:87)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:53)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:93)
+	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:118)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:57)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:87)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:53)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:87)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:53)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:93)
+	at jadx.core.codegen.RegionGen.makeTryCatch(RegionGen.java:279)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:87)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:53)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:93)
+	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:118)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:57)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:87)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:53)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:93)
+	at jadx.core.codegen.RegionGen.makeTryCatch(RegionGen.java:279)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:87)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:53)
+	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:187)
+	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:320)
+	at jadx.core.codegen.ClassGen.addMethods(ClassGen.java:257)
+	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:220)
+	at jadx.core.codegen.InsnGen.inlineAnonymousConstr(InsnGen.java:608)
+	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:559)
+	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:334)
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:211)
+	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:101)
+	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:686)
+	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:574)
+	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:334)
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:220)
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:203)
+	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:100)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:50)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:87)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:53)
+	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:187)
+	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:320)
+	at jadx.core.codegen.ClassGen.addMethods(ClassGen.java:257)
+	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:220)
+	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:110)
+	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:75)
+	at jadx.core.codegen.CodeGen.visit(CodeGen.java:12)
+	at jadx.core.ProcessClass.process(ProcessClass.java:40)
+	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
+	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
+Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in fallback mode
+	at jadx.core.codegen.InsnGen.fallbackOnlyInsn(InsnGen.java:537)
+	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:509)
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:220)
+	... 72 more
+
+*/
+                                        });
+                                        thread.setPriority(1);
+                                        thread.start();
+                                    }
+
+                                    private static void broadcastNewPhotos(int guid, ArrayList<AlbumEntry> mediaAlbumsSorted, ArrayList<AlbumEntry> photoAlbumsSorted, Integer cameraAlbumIdFinal, AlbumEntry allMediaAlbumFinal, AlbumEntry allPhotosAlbumFinal, int delay) {
+                                        if (broadcastPhotosRunnable != null) {
+                                            AndroidUtilities.cancelRunOnUIThread(broadcastPhotosRunnable);
+                                        }
+                                        final int i = guid;
+                                        final ArrayList<AlbumEntry> arrayList = mediaAlbumsSorted;
+                                        final ArrayList<AlbumEntry> arrayList2 = photoAlbumsSorted;
+                                        final Integer num = cameraAlbumIdFinal;
+                                        final AlbumEntry albumEntry = allMediaAlbumFinal;
+                                        final AlbumEntry albumEntry2 = allPhotosAlbumFinal;
+                                        Runnable anonymousClass30 = new Runnable() {
+                                            public void run() {
+                                                if (PhotoViewer.getInstance().isVisible()) {
+                                                    MediaController.broadcastNewPhotos(i, arrayList, arrayList2, num, albumEntry, albumEntry2, 1000);
+                                                    return;
+                                                }
+                                                MediaController.broadcastPhotosRunnable = null;
+                                                MediaController.allPhotosAlbumEntry = albumEntry2;
+                                                MediaController.allMediaAlbumEntry = albumEntry;
+                                                for (int a = 0; a < 3; a++) {
+                                                    NotificationCenter.getInstance(a).postNotificationName(NotificationCenter.albumsDidLoaded, Integer.valueOf(i), arrayList, arrayList2, num);
+                                                }
+                                            }
+                                        };
+                                        broadcastPhotosRunnable = anonymousClass30;
+                                        AndroidUtilities.runOnUIThread(anonymousClass30, (long) delay);
+                                    }
+
+                                    public void scheduleVideoConvert(MessageObject messageObject) {
+                                        scheduleVideoConvert(messageObject, false);
+                                    }
+
+                                    public boolean scheduleVideoConvert(MessageObject messageObject, boolean isEmpty) {
+                                        if (messageObject != null) {
+                                            if (messageObject.videoEditedInfo != null) {
+                                                if (isEmpty && !this.videoConvertQueue.isEmpty()) {
+                                                    return false;
+                                                }
+                                                if (isEmpty) {
+                                                    new File(messageObject.messageOwner.attachPath).delete();
+                                                }
+                                                this.videoConvertQueue.add(messageObject);
+                                                if (this.videoConvertQueue.size() == 1) {
+                                                    startVideoConvertFromQueue();
+                                                }
+                                                return true;
+                                            }
+                                        }
+                                        return false;
+                                    }
+
+                                    public void cancelVideoConvert(MessageObject messageObject) {
+                                        if (messageObject == null) {
+                                            synchronized (this.videoConvertSync) {
+                                                this.cancelCurrentVideoConversion = true;
+                                            }
+                                        } else if (!this.videoConvertQueue.isEmpty()) {
+                                            int a = 0;
+                                            while (a < this.videoConvertQueue.size()) {
+                                                MessageObject object = (MessageObject) this.videoConvertQueue.get(a);
+                                                if (object.getId() != messageObject.getId() || object.currentAccount != messageObject.currentAccount) {
+                                                    a++;
+                                                } else if (a == 0) {
+                                                    synchronized (this.videoConvertSync) {
+                                                        this.cancelCurrentVideoConversion = true;
+                                                    }
+                                                    return;
+                                                } else {
+                                                    this.videoConvertQueue.remove(a);
+                                                    return;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    private boolean startVideoConvertFromQueue() {
+                                        int a = 0;
+                                        if (this.videoConvertQueue.isEmpty()) {
+                                            return false;
+                                        }
+                                        synchronized (this.videoConvertSync) {
+                                            this.cancelCurrentVideoConversion = false;
+                                        }
+                                        MessageObject messageObject = (MessageObject) this.videoConvertQueue.get(0);
+                                        Intent intent = new Intent(ApplicationLoader.applicationContext, VideoEncodingService.class);
+                                        intent.putExtra("path", messageObject.messageOwner.attachPath);
+                                        intent.putExtra("currentAccount", messageObject.currentAccount);
+                                        if (messageObject.messageOwner.media.document != null) {
+                                            while (a < messageObject.messageOwner.media.document.attributes.size()) {
+                                                if (((DocumentAttribute) messageObject.messageOwner.media.document.attributes.get(a)) instanceof TL_documentAttributeAnimated) {
+                                                    intent.putExtra("gif", true);
+                                                    break;
+                                                }
+                                                a++;
+                                            }
+                                        }
+                                        if (messageObject.getId() != 0) {
+                                            try {
+                                                ApplicationLoader.applicationContext.startService(intent);
+                                            } catch (Throwable e) {
+                                                FileLog.m3e(e);
+                                            }
+                                        }
+                                        VideoConvertRunnable.runConversion(messageObject);
+                                        return true;
+                                    }
+
+                                    @SuppressLint({"NewApi"})
+                                    public static MediaCodecInfo selectCodec(String mimeType) {
+                                        int numCodecs = MediaCodecList.getCodecCount();
+                                        MediaCodecInfo lastCodecInfo = null;
+                                        for (int i = 0; i < numCodecs; i++) {
+                                            MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
+                                            if (codecInfo.isEncoder()) {
+                                                MediaCodecInfo lastCodecInfo2 = lastCodecInfo;
+                                                for (String type : codecInfo.getSupportedTypes()) {
+                                                    if (type.equalsIgnoreCase(mimeType)) {
+                                                        lastCodecInfo2 = codecInfo;
+                                                        String name = lastCodecInfo2.getName();
+                                                        if (name != null && (!name.equals("OMX.SEC.avc.enc") || name.equals("OMX.SEC.AVC.Encoder"))) {
+                                                            return lastCodecInfo2;
+                                                        }
+                                                    }
+                                                }
+                                                lastCodecInfo = lastCodecInfo2;
+                                            }
+                                        }
+                                        return lastCodecInfo;
+                                    }
+
+                                    private static boolean isRecognizedFormat(int colorFormat) {
+                                        if (!(colorFormat == 39 || colorFormat == NUM)) {
+                                            switch (colorFormat) {
+                                                case 19:
+                                                case 20:
+                                                case 21:
+                                                    break;
+                                                default:
+                                                    return false;
+                                            }
+                                        }
+                                        return true;
+                                    }
+
+                                    @SuppressLint({"NewApi"})
+                                    public static int selectColorFormat(MediaCodecInfo codecInfo, String mimeType) {
+                                        CodecCapabilities capabilities = codecInfo.getCapabilitiesForType(mimeType);
+                                        int lastColorFormat = 0;
+                                        for (int colorFormat : capabilities.colorFormats) {
+                                            if (isRecognizedFormat(colorFormat)) {
+                                                lastColorFormat = colorFormat;
+                                                if (!codecInfo.getName().equals("OMX.SEC.AVC.Encoder") || colorFormat != 19) {
+                                                    return colorFormat;
+                                                }
+                                            }
+                                        }
+                                        return lastColorFormat;
+                                    }
+
+                                    private int findTrack(MediaExtractor extractor, boolean audio) {
+                                        int numTracks = extractor.getTrackCount();
+                                        for (int i = 0; i < numTracks; i++) {
+                                            String mime = extractor.getTrackFormat(i).getString("mime");
+                                            if (audio) {
+                                                if (mime.startsWith("audio/")) {
+                                                    return i;
+                                                }
+                                            } else if (mime.startsWith("video/")) {
+                                                return i;
+                                            }
+                                        }
+                                        return -5;
+                                    }
+
+                                    private void didWriteData(MessageObject messageObject, File file, boolean last, boolean error) {
+                                        boolean firstWrite = this.videoConvertFirstWrite;
+                                        if (firstWrite) {
+                                            this.videoConvertFirstWrite = false;
+                                        }
+                                        final boolean z = error;
+                                        final boolean z2 = last;
+                                        final MessageObject messageObject2 = messageObject;
+                                        final File file2 = file;
+                                        final boolean z3 = firstWrite;
+                                        AndroidUtilities.runOnUIThread(new Runnable() {
+                                            public void run() {
+                                                if (z || z2) {
+                                                    synchronized (MediaController.this.videoConvertSync) {
+                                                        MediaController.this.cancelCurrentVideoConversion = false;
+                                                    }
+                                                    MediaController.this.videoConvertQueue.remove(messageObject2);
+                                                    MediaController.this.startVideoConvertFromQueue();
+                                                }
+                                                if (z) {
+                                                    NotificationCenter.getInstance(messageObject2.currentAccount).postNotificationName(NotificationCenter.FilePreparingFailed, messageObject2, file2.toString());
+                                                    return;
+                                                }
+                                                if (z3) {
+                                                    NotificationCenter.getInstance(messageObject2.currentAccount).postNotificationName(NotificationCenter.FilePreparingStarted, messageObject2, file2.toString());
+                                                }
+                                                NotificationCenter instance = NotificationCenter.getInstance(messageObject2.currentAccount);
+                                                int i = NotificationCenter.FileNewChunkAvailable;
+                                                Object[] objArr = new Object[4];
+                                                objArr[0] = messageObject2;
+                                                objArr[1] = file2.toString();
+                                                objArr[2] = Long.valueOf(file2.length());
+                                                objArr[3] = Long.valueOf(z2 ? file2.length() : 0);
+                                                instance.postNotificationName(i, objArr);
+                                            }
+                                        });
+                                    }
+
+                                    private long readAndWriteTracks(MessageObject messageObject, MediaExtractor extractor, MP4Builder mediaMuxer, BufferInfo info, long start, long end, File file, boolean needAudio) throws Exception {
+                                        MediaController mediaController;
+                                        int videoTrackIndex;
+                                        int maxBufferSize;
+                                        int videoTrackIndex2;
+                                        int maxBufferSize2;
+                                        int muxerVideoTrackIndex;
+                                        int i;
+                                        int i2;
+                                        MediaController mediaController2;
+                                        MediaExtractor mediaExtractor = extractor;
+                                        MP4Builder mP4Builder = mediaMuxer;
+                                        BufferInfo bufferInfo = info;
+                                        long j = start;
+                                        int videoTrackIndex3 = findTrack(mediaExtractor, false);
+                                        int audioTrackIndex = needAudio ? findTrack(mediaExtractor, true) : -1;
+                                        int muxerVideoTrackIndex2 = -1;
+                                        int muxerAudioTrackIndex = -1;
+                                        boolean inputDone = false;
+                                        if (videoTrackIndex3 >= 0) {
+                                            mediaExtractor.selectTrack(videoTrackIndex3);
+                                            MediaFormat trackFormat = mediaExtractor.getTrackFormat(videoTrackIndex3);
+                                            muxerVideoTrackIndex2 = mP4Builder.addTrack(trackFormat, false);
+                                            int maxBufferSize3 = trackFormat.getInteger("max-input-size");
+                                            videoTrackIndex = videoTrackIndex3;
+                                            if (j > 0) {
+                                                mediaExtractor.seekTo(j, 0);
+                                            } else {
+                                                mediaExtractor.seekTo(0, 0);
+                                            }
+                                            maxBufferSize = maxBufferSize3;
+                                        } else {
+                                            videoTrackIndex = videoTrackIndex3;
+                                            maxBufferSize = 0;
+                                        }
+                                        if (audioTrackIndex >= 0) {
+                                            int i3;
+                                            mediaExtractor.selectTrack(audioTrackIndex);
+                                            MediaFormat trackFormat2 = mediaExtractor.getTrackFormat(audioTrackIndex);
+                                            muxerAudioTrackIndex = mP4Builder.addTrack(trackFormat2, true);
+                                            maxBufferSize = Math.max(trackFormat2.getInteger("max-input-size"), maxBufferSize);
+                                            if (j > 0) {
+                                                mediaExtractor.seekTo(j, 0);
+                                                i3 = maxBufferSize;
+                                            } else {
+                                                i3 = maxBufferSize;
+                                                MediaFormat mediaFormat = trackFormat2;
+                                                mediaExtractor.seekTo(0, 0);
+                                            }
+                                            maxBufferSize = i3;
+                                        }
+                                        ByteBuffer buffer = ByteBuffer.allocateDirect(maxBufferSize);
+                                        if (audioTrackIndex < 0) {
+                                            if (videoTrackIndex < 0) {
+                                                return -1;
+                                            }
+                                        }
+                                        long startTime = -1;
+                                        checkConversionCanceled();
+                                        while (!inputDone) {
+                                            byte[] array;
+                                            int a;
+                                            int i4;
+                                            MessageObject messageObject2;
+                                            checkConversionCanceled();
+                                            boolean eof = false;
+                                            bufferInfo.size = mediaExtractor.readSampleData(buffer, 0);
+                                            int index = extractor.getSampleTrackIndex();
+                                            videoTrackIndex2 = videoTrackIndex;
+                                            if (index == videoTrackIndex2) {
+                                                videoTrackIndex = muxerVideoTrackIndex2;
+                                            } else if (index == audioTrackIndex) {
+                                                videoTrackIndex = muxerAudioTrackIndex;
+                                            } else {
+                                                videoTrackIndex = -1;
+                                                maxBufferSize2 = maxBufferSize;
+                                                maxBufferSize = videoTrackIndex;
+                                                if (maxBufferSize == -1) {
+                                                    muxerVideoTrackIndex = muxerVideoTrackIndex2;
+                                                    if (VERSION.SDK_INT < 21) {
+                                                        buffer.position(0);
+                                                        buffer.limit(bufferInfo.size);
+                                                    }
+                                                    if (index != audioTrackIndex) {
+                                                        array = buffer.array();
+                                                        if (array != null) {
+                                                            muxerVideoTrackIndex2 = buffer.arrayOffset();
+                                                            videoTrackIndex = muxerVideoTrackIndex2 + buffer.limit();
+                                                            int offset = muxerVideoTrackIndex2;
+                                                            muxerVideoTrackIndex2 = -1;
+                                                            a = offset;
+                                                            while (true) {
+                                                                i = muxerAudioTrackIndex;
+                                                                i2 = audioTrackIndex;
+                                                                audioTrackIndex = a;
+                                                                if (audioTrackIndex <= videoTrackIndex - 4) {
+                                                                    break;
+                                                                }
+                                                                if (array[audioTrackIndex] != (byte) 0 && array[audioTrackIndex + 1] == (byte) 0 && array[audioTrackIndex + 2] == (byte) 0) {
+                                                                    if (array[audioTrackIndex + 3] != (byte) 1) {
+                                                                    }
+                                                                    if (muxerVideoTrackIndex2 != -1) {
+                                                                        muxerAudioTrackIndex = (audioTrackIndex - muxerVideoTrackIndex2) - (audioTrackIndex != videoTrackIndex + -4 ? 4 : 0);
+                                                                        array[muxerVideoTrackIndex2] = (byte) (muxerAudioTrackIndex >> 24);
+                                                                        array[muxerVideoTrackIndex2 + 1] = (byte) (muxerAudioTrackIndex >> 16);
+                                                                        array[muxerVideoTrackIndex2 + 2] = (byte) (muxerAudioTrackIndex >> 8);
+                                                                        array[muxerVideoTrackIndex2 + 3] = (byte) muxerAudioTrackIndex;
+                                                                        i4 = audioTrackIndex;
+                                                                    } else {
+                                                                        i4 = audioTrackIndex;
+                                                                    }
+                                                                    muxerVideoTrackIndex2 = i4;
+                                                                    a = audioTrackIndex + 1;
+                                                                    muxerAudioTrackIndex = i;
+                                                                    audioTrackIndex = i2;
+                                                                    mediaController = this;
+                                                                    mP4Builder = mediaMuxer;
+                                                                }
+                                                                if (audioTrackIndex != videoTrackIndex - 4) {
+                                                                    a = audioTrackIndex + 1;
+                                                                    muxerAudioTrackIndex = i;
+                                                                    audioTrackIndex = i2;
+                                                                    mediaController = this;
+                                                                    mP4Builder = mediaMuxer;
+                                                                }
+                                                                if (muxerVideoTrackIndex2 != -1) {
+                                                                    i4 = audioTrackIndex;
+                                                                } else {
+                                                                    if (audioTrackIndex != videoTrackIndex + -4) {
+                                                                    }
+                                                                    muxerAudioTrackIndex = (audioTrackIndex - muxerVideoTrackIndex2) - (audioTrackIndex != videoTrackIndex + -4 ? 4 : 0);
+                                                                    array[muxerVideoTrackIndex2] = (byte) (muxerAudioTrackIndex >> 24);
+                                                                    array[muxerVideoTrackIndex2 + 1] = (byte) (muxerAudioTrackIndex >> 16);
+                                                                    array[muxerVideoTrackIndex2 + 2] = (byte) (muxerAudioTrackIndex >> 8);
+                                                                    array[muxerVideoTrackIndex2 + 3] = (byte) muxerAudioTrackIndex;
+                                                                    i4 = audioTrackIndex;
+                                                                }
+                                                                muxerVideoTrackIndex2 = i4;
+                                                                a = audioTrackIndex + 1;
+                                                                muxerAudioTrackIndex = i;
+                                                                audioTrackIndex = i2;
+                                                                mediaController = this;
+                                                                mP4Builder = mediaMuxer;
+                                                            }
+                                                            if (bufferInfo.size < 0) {
+                                                                bufferInfo.presentationTimeUs = extractor.getSampleTime();
+                                                            } else {
+                                                                bufferInfo.size = 0;
+                                                                eof = true;
+                                                            }
+                                                            if (bufferInfo.size > 0 || eof) {
+                                                                messageObject2 = messageObject;
+                                                                muxerVideoTrackIndex2 = file;
+                                                            } else {
+                                                                File file2;
+                                                                if (index == videoTrackIndex2 && j > 0) {
+                                                                    if (startTime == -1) {
+                                                                        startTime = bufferInfo.presentationTimeUs;
+                                                                    }
+                                                                }
+                                                                if (end >= 0) {
+                                                                    if (bufferInfo.presentationTimeUs >= end) {
+                                                                        messageObject2 = messageObject;
+                                                                        file2 = file;
+                                                                        eof = true;
+                                                                    }
+                                                                }
+                                                                bufferInfo.offset = 0;
+                                                                bufferInfo.flags = extractor.getSampleFlags();
+                                                                if (mediaMuxer.writeSampleData(maxBufferSize, buffer, bufferInfo, false)) {
+                                                                    didWriteData(messageObject, file, false, false);
+                                                                    if (!eof) {
+                                                                        extractor.advance();
+                                                                    }
+                                                                } else {
+                                                                    messageObject2 = messageObject;
+                                                                    file2 = file;
+                                                                    mediaController2 = this;
+                                                                    if (eof) {
+                                                                        extractor.advance();
+                                                                    }
+                                                                }
+                                                            }
+                                                            mP4Builder = mediaMuxer;
+                                                            mediaController2 = this;
+                                                            if (eof) {
+                                                                extractor.advance();
+                                                            }
+                                                        }
+                                                    }
+                                                    i2 = audioTrackIndex;
+                                                    i = muxerAudioTrackIndex;
+                                                    if (bufferInfo.size < 0) {
+                                                        bufferInfo.size = 0;
+                                                        eof = true;
+                                                    } else {
+                                                        bufferInfo.presentationTimeUs = extractor.getSampleTime();
+                                                    }
+                                                    if (bufferInfo.size > 0) {
+                                                    }
+                                                    messageObject2 = messageObject;
+                                                    muxerVideoTrackIndex2 = file;
+                                                    mP4Builder = mediaMuxer;
+                                                    mediaController2 = this;
+                                                    if (eof) {
+                                                        extractor.advance();
+                                                    }
+                                                } else {
+                                                    mediaController2 = mediaController;
+                                                    i2 = audioTrackIndex;
+                                                    muxerVideoTrackIndex = muxerVideoTrackIndex2;
+                                                    i = muxerAudioTrackIndex;
+                                                    audioTrackIndex = messageObject;
+                                                    muxerVideoTrackIndex2 = file;
+                                                    if (index != -1) {
+                                                        eof = true;
+                                                    } else {
+                                                        extractor.advance();
+                                                    }
+                                                }
+                                                if (eof) {
+                                                    inputDone = true;
+                                                }
+                                                videoTrackIndex = videoTrackIndex2;
+                                                mediaController = mediaController2;
+                                                maxBufferSize = maxBufferSize2;
+                                                muxerVideoTrackIndex2 = muxerVideoTrackIndex;
+                                                muxerAudioTrackIndex = i;
+                                                audioTrackIndex = i2;
+                                            }
+                                            maxBufferSize2 = maxBufferSize;
+                                            maxBufferSize = videoTrackIndex;
+                                            if (maxBufferSize == -1) {
+                                                mediaController2 = mediaController;
+                                                i2 = audioTrackIndex;
+                                                muxerVideoTrackIndex = muxerVideoTrackIndex2;
+                                                i = muxerAudioTrackIndex;
+                                                audioTrackIndex = messageObject;
+                                                muxerVideoTrackIndex2 = file;
+                                                if (index != -1) {
+                                                    extractor.advance();
+                                                } else {
+                                                    eof = true;
+                                                }
+                                            } else {
+                                                muxerVideoTrackIndex = muxerVideoTrackIndex2;
+                                                if (VERSION.SDK_INT < 21) {
+                                                    buffer.position(0);
+                                                    buffer.limit(bufferInfo.size);
+                                                }
+                                                if (index != audioTrackIndex) {
+                                                    array = buffer.array();
+                                                    if (array != null) {
+                                                        muxerVideoTrackIndex2 = buffer.arrayOffset();
+                                                        videoTrackIndex = muxerVideoTrackIndex2 + buffer.limit();
+                                                        int offset2 = muxerVideoTrackIndex2;
+                                                        muxerVideoTrackIndex2 = -1;
+                                                        a = offset2;
+                                                        while (true) {
+                                                            i = muxerAudioTrackIndex;
+                                                            i2 = audioTrackIndex;
+                                                            audioTrackIndex = a;
+                                                            if (audioTrackIndex <= videoTrackIndex - 4) {
+                                                                break;
+                                                            }
+                                                            if (array[audioTrackIndex] != (byte) 0) {
+                                                            }
+                                                            if (audioTrackIndex != videoTrackIndex - 4) {
+                                                                a = audioTrackIndex + 1;
+                                                                muxerAudioTrackIndex = i;
+                                                                audioTrackIndex = i2;
+                                                                mediaController = this;
+                                                                mP4Builder = mediaMuxer;
+                                                            }
+                                                            if (muxerVideoTrackIndex2 != -1) {
+                                                                if (audioTrackIndex != videoTrackIndex + -4) {
+                                                                }
+                                                                muxerAudioTrackIndex = (audioTrackIndex - muxerVideoTrackIndex2) - (audioTrackIndex != videoTrackIndex + -4 ? 4 : 0);
+                                                                array[muxerVideoTrackIndex2] = (byte) (muxerAudioTrackIndex >> 24);
+                                                                array[muxerVideoTrackIndex2 + 1] = (byte) (muxerAudioTrackIndex >> 16);
+                                                                array[muxerVideoTrackIndex2 + 2] = (byte) (muxerAudioTrackIndex >> 8);
+                                                                array[muxerVideoTrackIndex2 + 3] = (byte) muxerAudioTrackIndex;
+                                                                i4 = audioTrackIndex;
+                                                            } else {
+                                                                i4 = audioTrackIndex;
+                                                            }
+                                                            muxerVideoTrackIndex2 = i4;
+                                                            a = audioTrackIndex + 1;
+                                                            muxerAudioTrackIndex = i;
+                                                            audioTrackIndex = i2;
+                                                            mediaController = this;
+                                                            mP4Builder = mediaMuxer;
+                                                        }
+                                                        if (bufferInfo.size < 0) {
+                                                            bufferInfo.presentationTimeUs = extractor.getSampleTime();
+                                                        } else {
+                                                            bufferInfo.size = 0;
+                                                            eof = true;
+                                                        }
+                                                        if (bufferInfo.size > 0) {
+                                                        }
+                                                        messageObject2 = messageObject;
+                                                        muxerVideoTrackIndex2 = file;
+                                                        mP4Builder = mediaMuxer;
+                                                        mediaController2 = this;
+                                                        if (eof) {
+                                                            extractor.advance();
+                                                        }
+                                                    }
+                                                }
+                                                i2 = audioTrackIndex;
+                                                i = muxerAudioTrackIndex;
+                                                if (bufferInfo.size < 0) {
+                                                    bufferInfo.size = 0;
+                                                    eof = true;
+                                                } else {
+                                                    bufferInfo.presentationTimeUs = extractor.getSampleTime();
+                                                }
+                                                if (bufferInfo.size > 0) {
+                                                }
+                                                messageObject2 = messageObject;
+                                                muxerVideoTrackIndex2 = file;
+                                                mP4Builder = mediaMuxer;
+                                                mediaController2 = this;
+                                                if (eof) {
+                                                    extractor.advance();
+                                                }
+                                            }
+                                            if (eof) {
+                                                inputDone = true;
+                                            }
+                                            videoTrackIndex = videoTrackIndex2;
+                                            mediaController = mediaController2;
+                                            maxBufferSize = maxBufferSize2;
+                                            muxerVideoTrackIndex2 = muxerVideoTrackIndex;
+                                            muxerAudioTrackIndex = i;
+                                            audioTrackIndex = i2;
+                                        }
+                                        mediaController2 = mediaController;
+                                        maxBufferSize2 = maxBufferSize;
+                                        i2 = audioTrackIndex;
+                                        muxerVideoTrackIndex = muxerVideoTrackIndex2;
+                                        i = muxerAudioTrackIndex;
+                                        videoTrackIndex2 = videoTrackIndex;
+                                        audioTrackIndex = messageObject;
+                                        muxerVideoTrackIndex2 = file;
+                                        if (videoTrackIndex2 >= 0) {
+                                            mediaExtractor.unselectTrack(videoTrackIndex2);
+                                        }
+                                        if (i2 >= 0) {
+                                            mediaExtractor.unselectTrack(i2);
+                                        }
+                                        return startTime;
+                                    }
+
+                                    private void checkConversionCanceled() throws Exception {
+                                        synchronized (this.videoConvertSync) {
+                                            boolean cancelConversion = this.cancelCurrentVideoConversion;
+                                        }
+                                        if (cancelConversion) {
+                                            throw new RuntimeException("canceled conversion");
+                                        }
+                                    }
+
+                                    private boolean convertVideo(org.telegram.messenger.MessageObject r116) {
+                                        /* JADX: method processing error */
+/*
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Exception block dominator not found, method:org.telegram.messenger.MediaController.convertVideo(org.telegram.messenger.MessageObject):boolean. bs: [B:62:0x0189, B:96:0x0295]
+	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.searchTryCatchDominators(ProcessTryCatchRegions.java:86)
+	at jadx.core.dex.visitors.regions.ProcessTryCatchRegions.process(ProcessTryCatchRegions.java:45)
+	at jadx.core.dex.visitors.regions.RegionMakerVisitor.postProcessRegions(RegionMakerVisitor.java:63)
+	at jadx.core.dex.visitors.regions.RegionMakerVisitor.visit(RegionMakerVisitor.java:58)
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
 	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
 	at jadx.core.ProcessClass.process(ProcessClass.java:34)
 	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
 	at jadx.core.ProcessClass.process(ProcessClass.java:39)
@@ -4168,1386 +4690,2958 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 	at jadx.api.JavaClass.decompile(JavaClass.java:62)
 	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
 */
-                /*
-                r43 = this;
-                r37 = new java.util.ArrayList;
-                r37.<init>();
-                r41 = new java.util.ArrayList;
-                r41.<init>();
-                r36 = new android.util.SparseArray;
-                r36.<init>();
-                r40 = new android.util.SparseArray;
-                r40.<init>();
-                r22 = 0;
-                r14 = 0;
-                r27 = 0;
-                r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0198 }
-                r2.<init>();	 Catch:{ Exception -> 0x0198 }
-                r10 = android.os.Environment.DIRECTORY_DCIM;	 Catch:{ Exception -> 0x0198 }
-                r10 = android.os.Environment.getExternalStoragePublicDirectory(r10);	 Catch:{ Exception -> 0x0198 }
-                r10 = r10.getAbsolutePath();	 Catch:{ Exception -> 0x0198 }
-                r2 = r2.append(r10);	 Catch:{ Exception -> 0x0198 }
-                r10 = "/Camera/";	 Catch:{ Exception -> 0x0198 }
-                r2 = r2.append(r10);	 Catch:{ Exception -> 0x0198 }
-                r27 = r2.toString();	 Catch:{ Exception -> 0x0198 }
-            L_0x0037:
-                r13 = 0;
-                r42 = 0;
-                r28 = 0;
-                r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x01a6 }
-                r10 = 23;	 Catch:{ Throwable -> 0x01a6 }
-                if (r2 < r10) goto L_0x0053;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0042:
-                r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x01a6 }
-                r10 = 23;	 Catch:{ Throwable -> 0x01a6 }
-                if (r2 < r10) goto L_0x02d3;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0048:
-                r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x01a6 }
-                r10 = "android.permission.READ_EXTERNAL_STORAGE";	 Catch:{ Throwable -> 0x01a6 }
-                r2 = r2.checkSelfPermission(r10);	 Catch:{ Throwable -> 0x01a6 }
-                if (r2 != 0) goto L_0x02d3;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0053:
-                r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x01a6 }
-                r2 = r2.getContentResolver();	 Catch:{ Throwable -> 0x01a6 }
-                r3 = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;	 Catch:{ Throwable -> 0x01a6 }
-                r4 = org.telegram.messenger.MediaController.projectionPhotos;	 Catch:{ Throwable -> 0x01a6 }
-                r5 = 0;	 Catch:{ Throwable -> 0x01a6 }
-                r6 = 0;	 Catch:{ Throwable -> 0x01a6 }
-                r7 = "datetaken DESC";	 Catch:{ Throwable -> 0x01a6 }
-                r28 = android.provider.MediaStore.Images.Media.query(r2, r3, r4, r5, r6, r7);	 Catch:{ Throwable -> 0x01a6 }
-                if (r28 == 0) goto L_0x02d3;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x006a:
-                r2 = "_id";	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r28;	 Catch:{ Throwable -> 0x01a6 }
-                r35 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x01a6 }
-                r2 = "bucket_id";	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r28;	 Catch:{ Throwable -> 0x01a6 }
-                r24 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x01a6 }
-                r2 = "bucket_display_name";	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r28;	 Catch:{ Throwable -> 0x01a6 }
-                r26 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x01a6 }
-                r2 = "_data";	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r28;	 Catch:{ Throwable -> 0x01a6 }
-                r29 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x01a6 }
-                r2 = "datetaken";	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r28;	 Catch:{ Throwable -> 0x01a6 }
-                r30 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x01a6 }
-                r2 = "orientation";	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r28;	 Catch:{ Throwable -> 0x01a6 }
-                r39 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x01a6 }
-                r21 = r14;
-                r23 = r22;
-            L_0x00a4:
-                r2 = r28.moveToNext();	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                if (r2 == 0) goto L_0x02cf;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-            L_0x00aa:
-                r0 = r28;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r1 = r35;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r5 = r0.getInt(r1);	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r0 = r28;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r1 = r24;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r4 = r0.getInt(r1);	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r0 = r28;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r1 = r26;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r25 = r0.getString(r1);	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r8 = r28.getString(r29);	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r0 = r28;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r1 = r30;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r6 = r0.getLong(r1);	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r0 = r28;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r1 = r39;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r9 = r0.getInt(r1);	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                if (r8 == 0) goto L_0x00a4;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-            L_0x00d8:
-                r2 = r8.length();	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                if (r2 == 0) goto L_0x00a4;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-            L_0x00de:
-                r3 = new org.telegram.messenger.MediaController$PhotoEntry;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r10 = 0;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r3.<init>(r4, r5, r6, r8, r9, r10);	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                if (r23 != 0) goto L_0x0397;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-            L_0x00e6:
-                r22 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r2 = 0;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r10 = "AllPhotos";	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r11 = NUM; // 0x7f0c0056 float:1.8609366E38 double:1.053097441E-314;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r10 = org.telegram.messenger.LocaleController.getString(r10, r11);	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r0 = r22;	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r0.<init>(r2, r10, r3);	 Catch:{ Throwable -> 0x037d, all -> 0x0371 }
-                r2 = 0;
-                r0 = r41;	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
-                r1 = r22;	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
-                r0.add(r2, r1);	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
-            L_0x0100:
-                if (r21 != 0) goto L_0x0393;	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
-            L_0x0102:
-                r14 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
-                r2 = 0;	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
-                r10 = "AllMedia";	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
-                r11 = NUM; // 0x7f0c0055 float:1.8609364E38 double:1.0530974405E-314;	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
-                r10 = org.telegram.messenger.LocaleController.getString(r10, r11);	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
-                r14.<init>(r2, r10, r3);	 Catch:{ Throwable -> 0x0384, all -> 0x0378 }
-                r2 = 0;
-                r0 = r37;	 Catch:{ Throwable -> 0x01a6 }
-                r0.add(r2, r14);	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0118:
-                r0 = r22;	 Catch:{ Throwable -> 0x01a6 }
-                r0.addPhoto(r3);	 Catch:{ Throwable -> 0x01a6 }
-                r14.addPhoto(r3);	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r36;	 Catch:{ Throwable -> 0x01a6 }
-                r20 = r0.get(r4);	 Catch:{ Throwable -> 0x01a6 }
-                r20 = (org.telegram.messenger.MediaController.AlbumEntry) r20;	 Catch:{ Throwable -> 0x01a6 }
-                if (r20 != 0) goto L_0x0154;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x012a:
-                r20 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r20;	 Catch:{ Throwable -> 0x01a6 }
-                r1 = r25;	 Catch:{ Throwable -> 0x01a6 }
-                r0.<init>(r4, r1, r3);	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r36;	 Catch:{ Throwable -> 0x01a6 }
-                r1 = r20;	 Catch:{ Throwable -> 0x01a6 }
-                r0.put(r4, r1);	 Catch:{ Throwable -> 0x01a6 }
-                if (r13 != 0) goto L_0x019e;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x013c:
-                if (r27 == 0) goto L_0x019e;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x013e:
-                if (r8 == 0) goto L_0x019e;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0140:
-                r0 = r27;	 Catch:{ Throwable -> 0x01a6 }
-                r2 = r8.startsWith(r0);	 Catch:{ Throwable -> 0x01a6 }
-                if (r2 == 0) goto L_0x019e;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0148:
-                r2 = 0;	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r37;	 Catch:{ Throwable -> 0x01a6 }
-                r1 = r20;	 Catch:{ Throwable -> 0x01a6 }
-                r0.add(r2, r1);	 Catch:{ Throwable -> 0x01a6 }
-                r13 = java.lang.Integer.valueOf(r4);	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0154:
-                r0 = r20;	 Catch:{ Throwable -> 0x01a6 }
-                r0.addPhoto(r3);	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r40;	 Catch:{ Throwable -> 0x01a6 }
-                r20 = r0.get(r4);	 Catch:{ Throwable -> 0x01a6 }
-                r20 = (org.telegram.messenger.MediaController.AlbumEntry) r20;	 Catch:{ Throwable -> 0x01a6 }
-                if (r20 != 0) goto L_0x018d;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0163:
-                r20 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r20;	 Catch:{ Throwable -> 0x01a6 }
-                r1 = r25;	 Catch:{ Throwable -> 0x01a6 }
-                r0.<init>(r4, r1, r3);	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r40;	 Catch:{ Throwable -> 0x01a6 }
-                r1 = r20;	 Catch:{ Throwable -> 0x01a6 }
-                r0.put(r4, r1);	 Catch:{ Throwable -> 0x01a6 }
-                if (r42 != 0) goto L_0x02bf;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0175:
-                if (r27 == 0) goto L_0x02bf;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0177:
-                if (r8 == 0) goto L_0x02bf;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0179:
-                r0 = r27;	 Catch:{ Throwable -> 0x01a6 }
-                r2 = r8.startsWith(r0);	 Catch:{ Throwable -> 0x01a6 }
-                if (r2 == 0) goto L_0x02bf;	 Catch:{ Throwable -> 0x01a6 }
-            L_0x0181:
-                r2 = 0;	 Catch:{ Throwable -> 0x01a6 }
-                r0 = r41;	 Catch:{ Throwable -> 0x01a6 }
-                r1 = r20;	 Catch:{ Throwable -> 0x01a6 }
-                r0.add(r2, r1);	 Catch:{ Throwable -> 0x01a6 }
-                r42 = java.lang.Integer.valueOf(r4);	 Catch:{ Throwable -> 0x01a6 }
-            L_0x018d:
-                r0 = r20;	 Catch:{ Throwable -> 0x01a6 }
-                r0.addPhoto(r3);	 Catch:{ Throwable -> 0x01a6 }
-                r21 = r14;
-                r23 = r22;
-                goto L_0x00a4;
-            L_0x0198:
-                r34 = move-exception;
-                org.telegram.messenger.FileLog.m3e(r34);
-                goto L_0x0037;
-            L_0x019e:
-                r0 = r37;	 Catch:{ Throwable -> 0x01a6 }
-                r1 = r20;	 Catch:{ Throwable -> 0x01a6 }
-                r0.add(r1);	 Catch:{ Throwable -> 0x01a6 }
-                goto L_0x0154;
-            L_0x01a6:
-                r34 = move-exception;
-            L_0x01a7:
-                org.telegram.messenger.FileLog.m3e(r34);	 Catch:{ all -> 0x02c8 }
-                if (r28 == 0) goto L_0x038d;
-            L_0x01ac:
-                r28.close();	 Catch:{ Exception -> 0x02e8 }
-                r38 = r13;
-                r21 = r14;
-            L_0x01b3:
-                r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r10 = 23;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                if (r2 < r10) goto L_0x01ca;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-            L_0x01b9:
-                r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r10 = 23;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                if (r2 < r10) goto L_0x0301;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-            L_0x01bf:
-                r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r10 = "android.permission.READ_EXTERNAL_STORAGE";	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r2 = r2.checkSelfPermission(r10);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                if (r2 != 0) goto L_0x0301;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-            L_0x01ca:
-                r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r10 = r2.getContentResolver();	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r11 = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r12 = org.telegram.messenger.MediaController.projectionVideo;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r13 = 0;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r14 = 0;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r15 = "datetaken DESC";	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r28 = android.provider.MediaStore.Images.Media.query(r10, r11, r12, r13, r14, r15);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                if (r28 == 0) goto L_0x0301;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-            L_0x01e1:
-                r2 = "_id";	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r0 = r28;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r35 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r2 = "bucket_id";	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r0 = r28;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r24 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r2 = "bucket_display_name";	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r0 = r28;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r26 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r2 = "_data";	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r0 = r28;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r29 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r2 = "datetaken";	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r0 = r28;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r30 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r2 = "duration";	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r0 = r28;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r31 = r0.getColumnIndex(r2);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-            L_0x0217:
-                r2 = r28.moveToNext();	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                if (r2 == 0) goto L_0x0301;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-            L_0x021d:
-                r0 = r28;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r1 = r35;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r5 = r0.getInt(r1);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r0 = r28;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r1 = r24;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r4 = r0.getInt(r1);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r0 = r28;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r1 = r26;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r25 = r0.getString(r1);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r8 = r28.getString(r29);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r0 = r28;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r1 = r30;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r6 = r0.getLong(r1);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r0 = r28;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r1 = r31;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r32 = r0.getLong(r1);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                if (r8 == 0) goto L_0x0217;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-            L_0x024b:
-                r2 = r8.length();	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                if (r2 == 0) goto L_0x0217;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-            L_0x0251:
-                r3 = new org.telegram.messenger.MediaController$PhotoEntry;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r10 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r10 = r32 / r10;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r0 = (int) r10;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r17 = r0;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r18 = 1;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r11 = r3;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r12 = r4;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r13 = r5;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r14 = r6;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r16 = r8;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r11.<init>(r12, r13, r14, r16, r17, r18);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                if (r21 != 0) goto L_0x0389;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-            L_0x0267:
-                r14 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r2 = 0;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r10 = "AllMedia";	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r11 = NUM; // 0x7f0c0055 float:1.8609364E38 double:1.0530974405E-314;	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r10 = org.telegram.messenger.LocaleController.getString(r10, r11);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r14.<init>(r2, r10, r3);	 Catch:{ Throwable -> 0x0332, all -> 0x0345 }
-                r2 = 0;
-                r0 = r37;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r0.add(r2, r14);	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-            L_0x027d:
-                r14.addPhoto(r3);	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r0 = r36;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r20 = r0.get(r4);	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r20 = (org.telegram.messenger.MediaController.AlbumEntry) r20;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                if (r20 != 0) goto L_0x02fe;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-            L_0x028a:
-                r20 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r0 = r20;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r1 = r25;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r0.<init>(r4, r1, r3);	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r0 = r36;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r1 = r20;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r0.put(r4, r1);	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                if (r38 != 0) goto L_0x02f7;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-            L_0x029c:
-                if (r27 == 0) goto L_0x02f7;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-            L_0x029e:
-                if (r8 == 0) goto L_0x02f7;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-            L_0x02a0:
-                r0 = r27;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r2 = r8.startsWith(r0);	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                if (r2 == 0) goto L_0x02f7;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-            L_0x02a8:
-                r2 = 0;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r0 = r37;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r1 = r20;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r0.add(r2, r1);	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r13 = java.lang.Integer.valueOf(r4);	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-            L_0x02b4:
-                r0 = r20;	 Catch:{ Throwable -> 0x036f }
-                r0.addPhoto(r3);	 Catch:{ Throwable -> 0x036f }
-                r38 = r13;
-                r21 = r14;
-                goto L_0x0217;
-            L_0x02bf:
-                r0 = r41;	 Catch:{ Throwable -> 0x01a6 }
-                r1 = r20;	 Catch:{ Throwable -> 0x01a6 }
-                r0.add(r1);	 Catch:{ Throwable -> 0x01a6 }
-                goto L_0x018d;
-            L_0x02c8:
-                r2 = move-exception;
-            L_0x02c9:
-                if (r28 == 0) goto L_0x02ce;
-            L_0x02cb:
-                r28.close();	 Catch:{ Exception -> 0x02f2 }
-            L_0x02ce:
-                throw r2;
-            L_0x02cf:
-                r14 = r21;
-                r22 = r23;
-            L_0x02d3:
-                if (r28 == 0) goto L_0x038d;
-            L_0x02d5:
-                r28.close();	 Catch:{ Exception -> 0x02de }
-                r38 = r13;
-                r21 = r14;
-                goto L_0x01b3;
-            L_0x02de:
-                r34 = move-exception;
-                org.telegram.messenger.FileLog.m3e(r34);
-                r38 = r13;
-                r21 = r14;
-                goto L_0x01b3;
-            L_0x02e8:
-                r34 = move-exception;
-                org.telegram.messenger.FileLog.m3e(r34);
-                r38 = r13;
-                r21 = r14;
-                goto L_0x01b3;
-            L_0x02f2:
-                r34 = move-exception;
-                org.telegram.messenger.FileLog.m3e(r34);
-                goto L_0x02ce;
-            L_0x02f7:
-                r0 = r37;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r1 = r20;	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-                r0.add(r1);	 Catch:{ Throwable -> 0x036b, all -> 0x0365 }
-            L_0x02fe:
-                r13 = r38;
-                goto L_0x02b4;
-            L_0x0301:
-                r13 = r38;
-                r14 = r21;
-                if (r28 == 0) goto L_0x030a;
-            L_0x0307:
-                r28.close();	 Catch:{ Exception -> 0x032d }
-            L_0x030a:
-                r19 = 0;
-            L_0x030c:
-                r2 = r37.size();
-                r0 = r19;
-                if (r0 >= r2) goto L_0x0355;
-            L_0x0314:
-                r0 = r37;
-                r1 = r19;
-                r2 = r0.get(r1);
-                r2 = (org.telegram.messenger.MediaController.AlbumEntry) r2;
-                r2 = r2.photos;
-                r10 = new org.telegram.messenger.MediaController$29$1;
-                r0 = r43;
-                r10.<init>();
-                java.util.Collections.sort(r2, r10);
-                r19 = r19 + 1;
-                goto L_0x030c;
-            L_0x032d:
-                r34 = move-exception;
-                org.telegram.messenger.FileLog.m3e(r34);
-                goto L_0x030a;
-            L_0x0332:
-                r34 = move-exception;
-                r13 = r38;
-                r14 = r21;
-            L_0x0337:
-                org.telegram.messenger.FileLog.m3e(r34);	 Catch:{ all -> 0x0369 }
-                if (r28 == 0) goto L_0x030a;
-            L_0x033c:
-                r28.close();	 Catch:{ Exception -> 0x0340 }
-                goto L_0x030a;
-            L_0x0340:
-                r34 = move-exception;
-                org.telegram.messenger.FileLog.m3e(r34);
-                goto L_0x030a;
-            L_0x0345:
-                r2 = move-exception;
-                r13 = r38;
-                r14 = r21;
-            L_0x034a:
-                if (r28 == 0) goto L_0x034f;
-            L_0x034c:
-                r28.close();	 Catch:{ Exception -> 0x0350 }
-            L_0x034f:
-                throw r2;
-            L_0x0350:
-                r34 = move-exception;
-                org.telegram.messenger.FileLog.m3e(r34);
-                goto L_0x034f;
-            L_0x0355:
-                r0 = r43;
-                r10 = r2;
-                r16 = 0;
-                r11 = r37;
-                r12 = r41;
-                r15 = r22;
-                org.telegram.messenger.MediaController.broadcastNewPhotos(r10, r11, r12, r13, r14, r15, r16);
-                return;
-            L_0x0365:
-                r2 = move-exception;
-                r13 = r38;
-                goto L_0x034a;
-            L_0x0369:
-                r2 = move-exception;
-                goto L_0x034a;
-            L_0x036b:
-                r34 = move-exception;
-                r13 = r38;
-                goto L_0x0337;
-            L_0x036f:
-                r34 = move-exception;
-                goto L_0x0337;
-            L_0x0371:
-                r2 = move-exception;
-                r14 = r21;
-                r22 = r23;
-                goto L_0x02c9;
-            L_0x0378:
-                r2 = move-exception;
-                r14 = r21;
-                goto L_0x02c9;
-            L_0x037d:
-                r34 = move-exception;
-                r14 = r21;
-                r22 = r23;
-                goto L_0x01a7;
-            L_0x0384:
-                r34 = move-exception;
-                r14 = r21;
-                goto L_0x01a7;
-            L_0x0389:
-                r14 = r21;
-                goto L_0x027d;
-            L_0x038d:
-                r38 = r13;
-                r21 = r14;
-                goto L_0x01b3;
-            L_0x0393:
-                r14 = r21;
-                goto L_0x0118;
-            L_0x0397:
-                r22 = r23;
-                goto L_0x0100;
-                */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.29.run():void");
-            }
-        });
-        thread.setPriority(1);
-        thread.start();
-    }
-
-    private static void broadcastNewPhotos(int guid, ArrayList<AlbumEntry> mediaAlbumsSorted, ArrayList<AlbumEntry> photoAlbumsSorted, Integer cameraAlbumIdFinal, AlbumEntry allMediaAlbumFinal, AlbumEntry allPhotosAlbumFinal, int delay) {
-        if (broadcastPhotosRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(broadcastPhotosRunnable);
-        }
-        final int i = guid;
-        final ArrayList<AlbumEntry> arrayList = mediaAlbumsSorted;
-        final ArrayList<AlbumEntry> arrayList2 = photoAlbumsSorted;
-        final Integer num = cameraAlbumIdFinal;
-        final AlbumEntry albumEntry = allMediaAlbumFinal;
-        final AlbumEntry albumEntry2 = allPhotosAlbumFinal;
-        Runnable anonymousClass30 = new Runnable() {
-            public void run() {
-                if (PhotoViewer.getInstance().isVisible()) {
-                    MediaController.broadcastNewPhotos(i, arrayList, arrayList2, num, albumEntry, albumEntry2, 1000);
-                    return;
-                }
-                MediaController.broadcastPhotosRunnable = null;
-                MediaController.allPhotosAlbumEntry = albumEntry2;
-                MediaController.allMediaAlbumEntry = albumEntry;
-                for (int a = 0; a < 3; a++) {
-                    NotificationCenter.getInstance(a).postNotificationName(NotificationCenter.albumsDidLoaded, Integer.valueOf(i), arrayList, arrayList2, num);
-                }
-            }
-        };
-        broadcastPhotosRunnable = anonymousClass30;
-        AndroidUtilities.runOnUIThread(anonymousClass30, (long) delay);
-    }
-
-    public void scheduleVideoConvert(MessageObject messageObject) {
-        scheduleVideoConvert(messageObject, false);
-    }
-
-    public boolean scheduleVideoConvert(MessageObject messageObject, boolean isEmpty) {
-        if (messageObject == null || messageObject.videoEditedInfo == null) {
-            return false;
-        }
-        if (isEmpty && !this.videoConvertQueue.isEmpty()) {
-            return false;
-        }
-        if (isEmpty) {
-            new File(messageObject.messageOwner.attachPath).delete();
-        }
-        this.videoConvertQueue.add(messageObject);
-        if (this.videoConvertQueue.size() == 1) {
-            startVideoConvertFromQueue();
-        }
-        return true;
-    }
-
-    public void cancelVideoConvert(MessageObject messageObject) {
-        if (messageObject == null) {
-            synchronized (this.videoConvertSync) {
-                this.cancelCurrentVideoConversion = true;
-            }
-        } else if (!this.videoConvertQueue.isEmpty()) {
-            int a = 0;
-            while (a < this.videoConvertQueue.size()) {
-                MessageObject object = (MessageObject) this.videoConvertQueue.get(a);
-                if (object.getId() != messageObject.getId() || object.currentAccount != messageObject.currentAccount) {
-                    a++;
-                } else if (a == 0) {
-                    synchronized (this.videoConvertSync) {
-                        this.cancelCurrentVideoConversion = true;
-                    }
-                    return;
-                } else {
-                    this.videoConvertQueue.remove(a);
-                    return;
-                }
-            }
-        }
-    }
-
-    private boolean startVideoConvertFromQueue() {
-        if (this.videoConvertQueue.isEmpty()) {
-            return false;
-        }
-        synchronized (this.videoConvertSync) {
-            this.cancelCurrentVideoConversion = false;
-        }
-        MessageObject messageObject = (MessageObject) this.videoConvertQueue.get(0);
-        Intent intent = new Intent(ApplicationLoader.applicationContext, VideoEncodingService.class);
-        intent.putExtra("path", messageObject.messageOwner.attachPath);
-        intent.putExtra("currentAccount", messageObject.currentAccount);
-        if (messageObject.messageOwner.media.document != null) {
-            for (int a = 0; a < messageObject.messageOwner.media.document.attributes.size(); a++) {
-                if (((DocumentAttribute) messageObject.messageOwner.media.document.attributes.get(a)) instanceof TL_documentAttributeAnimated) {
-                    intent.putExtra("gif", true);
-                    break;
-                }
-            }
-        }
-        if (messageObject.getId() != 0) {
-            try {
-                ApplicationLoader.applicationContext.startService(intent);
-            } catch (Throwable e) {
-                FileLog.m3e(e);
-            }
-        }
-        VideoConvertRunnable.runConversion(messageObject);
-        return true;
-    }
-
-    @SuppressLint({"NewApi"})
-    public static MediaCodecInfo selectCodec(String mimeType) {
-        int numCodecs = MediaCodecList.getCodecCount();
-        MediaCodecInfo lastCodecInfo = null;
-        for (int i = 0; i < numCodecs; i++) {
-            MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
-            if (codecInfo.isEncoder()) {
-                for (String type : codecInfo.getSupportedTypes()) {
-                    if (type.equalsIgnoreCase(mimeType)) {
-                        lastCodecInfo = codecInfo;
-                        String name = lastCodecInfo.getName();
-                        if (name == null) {
-                            continue;
-                        } else if (!name.equals("OMX.SEC.avc.enc")) {
-                            return lastCodecInfo;
-                        } else {
-                            if (name.equals("OMX.SEC.AVC.Encoder")) {
-                                return lastCodecInfo;
-                            }
-                        }
-                    }
-                }
-                continue;
-            }
-        }
-        return lastCodecInfo;
-    }
-
-    private static boolean isRecognizedFormat(int colorFormat) {
-        switch (colorFormat) {
-            case 19:
-            case 20:
-            case 21:
-            case 39:
-            case 2130706688:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    @SuppressLint({"NewApi"})
-    public static int selectColorFormat(MediaCodecInfo codecInfo, String mimeType) {
-        CodecCapabilities capabilities = codecInfo.getCapabilitiesForType(mimeType);
-        int lastColorFormat = 0;
-        for (int colorFormat : capabilities.colorFormats) {
-            if (isRecognizedFormat(colorFormat)) {
-                lastColorFormat = colorFormat;
-                if (!codecInfo.getName().equals("OMX.SEC.AVC.Encoder") || colorFormat != 19) {
-                    return colorFormat;
-                }
-            }
-        }
-        return lastColorFormat;
-    }
-
-    private int findTrack(MediaExtractor extractor, boolean audio) {
-        int numTracks = extractor.getTrackCount();
-        for (int i = 0; i < numTracks; i++) {
-            String mime = extractor.getTrackFormat(i).getString("mime");
-            if (audio) {
-                if (mime.startsWith("audio/")) {
-                    return i;
-                }
-            } else if (mime.startsWith("video/")) {
-                return i;
-            }
-        }
-        return -5;
-    }
-
-    private void didWriteData(MessageObject messageObject, File file, boolean last, boolean error) {
-        final boolean firstWrite = this.videoConvertFirstWrite;
-        if (firstWrite) {
-            this.videoConvertFirstWrite = false;
-        }
-        final boolean z = error;
-        final boolean z2 = last;
-        final MessageObject messageObject2 = messageObject;
-        final File file2 = file;
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                if (z || z2) {
-                    synchronized (MediaController.this.videoConvertSync) {
-                        MediaController.this.cancelCurrentVideoConversion = false;
-                    }
-                    MediaController.this.videoConvertQueue.remove(messageObject2);
-                    MediaController.this.startVideoConvertFromQueue();
-                }
-                if (z) {
-                    NotificationCenter.getInstance(messageObject2.currentAccount).postNotificationName(NotificationCenter.FilePreparingFailed, messageObject2, file2.toString());
-                    return;
-                }
-                if (firstWrite) {
-                    NotificationCenter.getInstance(messageObject2.currentAccount).postNotificationName(NotificationCenter.FilePreparingStarted, messageObject2, file2.toString());
-                }
-                NotificationCenter instance = NotificationCenter.getInstance(messageObject2.currentAccount);
-                int i = NotificationCenter.FileNewChunkAvailable;
-                Object[] objArr = new Object[4];
-                objArr[0] = messageObject2;
-                objArr[1] = file2.toString();
-                objArr[2] = Long.valueOf(file2.length());
-                objArr[3] = Long.valueOf(z2 ? file2.length() : 0);
-                instance.postNotificationName(i, objArr);
-            }
-        });
-    }
-
-    private long readAndWriteTracks(MessageObject messageObject, MediaExtractor extractor, MP4Builder mediaMuxer, BufferInfo info, long start, long end, File file, boolean needAudio) throws Exception {
-        int videoTrackIndex = findTrack(extractor, false);
-        int audioTrackIndex = needAudio ? findTrack(extractor, true) : -1;
-        int muxerVideoTrackIndex = -1;
-        int muxerAudioTrackIndex = -1;
-        boolean inputDone = false;
-        int maxBufferSize = 0;
-        if (videoTrackIndex >= 0) {
-            extractor.selectTrack(videoTrackIndex);
-            MediaFormat trackFormat = extractor.getTrackFormat(videoTrackIndex);
-            muxerVideoTrackIndex = mediaMuxer.addTrack(trackFormat, false);
-            maxBufferSize = trackFormat.getInteger("max-input-size");
-            if (start > 0) {
-                extractor.seekTo(start, 0);
-            } else {
-                extractor.seekTo(0, 0);
-            }
-        }
-        if (audioTrackIndex >= 0) {
-            extractor.selectTrack(audioTrackIndex);
-            trackFormat = extractor.getTrackFormat(audioTrackIndex);
-            muxerAudioTrackIndex = mediaMuxer.addTrack(trackFormat, true);
-            maxBufferSize = Math.max(trackFormat.getInteger("max-input-size"), maxBufferSize);
-            if (start > 0) {
-                extractor.seekTo(start, 0);
-            } else {
-                extractor.seekTo(0, 0);
-            }
-        }
-        ByteBuffer buffer = ByteBuffer.allocateDirect(maxBufferSize);
-        if (audioTrackIndex < 0 && videoTrackIndex < 0) {
-            return -1;
-        }
-        long startTime = -1;
-        checkConversionCanceled();
-        while (!inputDone) {
-            int muxerTrackIndex;
-            checkConversionCanceled();
-            boolean eof = false;
-            info.size = extractor.readSampleData(buffer, 0);
-            int index = extractor.getSampleTrackIndex();
-            if (index == videoTrackIndex) {
-                muxerTrackIndex = muxerVideoTrackIndex;
-            } else if (index == audioTrackIndex) {
-                muxerTrackIndex = muxerAudioTrackIndex;
-            } else {
-                muxerTrackIndex = -1;
-            }
-            if (muxerTrackIndex != -1) {
-                if (VERSION.SDK_INT < 21) {
-                    buffer.position(0);
-                    buffer.limit(info.size);
-                }
-                if (index != audioTrackIndex) {
-                    byte[] array = buffer.array();
-                    if (array != null) {
-                        int offset = buffer.arrayOffset();
-                        int len = offset + buffer.limit();
-                        int writeStart = -1;
-                        int a = offset;
-                        while (a <= len - 4) {
-                            if ((array[a] == (byte) 0 && array[a + 1] == (byte) 0 && array[a + 2] == (byte) 0 && array[a + 3] == (byte) 1) || a == len - 4) {
-                                if (writeStart != -1) {
-                                    int l = (a - writeStart) - (a != len + -4 ? 4 : 0);
-                                    array[writeStart] = (byte) (l >> 24);
-                                    array[writeStart + 1] = (byte) (l >> 16);
-                                    array[writeStart + 2] = (byte) (l >> 8);
-                                    array[writeStart + 3] = (byte) l;
-                                    writeStart = a;
-                                } else {
-                                    writeStart = a;
-                                }
-                            }
-                            a++;
-                        }
-                    }
-                }
-                if (info.size >= 0) {
-                    info.presentationTimeUs = extractor.getSampleTime();
-                } else {
-                    info.size = 0;
-                    eof = true;
-                }
-                if (info.size > 0 && !eof) {
-                    if (index == videoTrackIndex && start > 0 && startTime == -1) {
-                        startTime = info.presentationTimeUs;
-                    }
-                    if (end < 0 || info.presentationTimeUs < end) {
-                        info.offset = 0;
-                        info.flags = extractor.getSampleFlags();
-                        if (mediaMuxer.writeSampleData(muxerTrackIndex, buffer, info, false)) {
-                            didWriteData(messageObject, file, false, false);
-                        }
-                    } else {
-                        eof = true;
-                    }
-                }
-                if (!eof) {
-                    extractor.advance();
-                }
-            } else if (index == -1) {
-                eof = true;
-            } else {
-                extractor.advance();
-            }
-            if (eof) {
-                inputDone = true;
-            }
-        }
-        if (videoTrackIndex >= 0) {
-            extractor.unselectTrack(videoTrackIndex);
-        }
-        if (audioTrackIndex < 0) {
-            return startTime;
-        }
-        extractor.unselectTrack(audioTrackIndex);
-        return startTime;
-    }
-
-    private void checkConversionCanceled() throws Exception {
-        synchronized (this.videoConvertSync) {
-            boolean cancelConversion = this.cancelCurrentVideoConversion;
-        }
-        if (cancelConversion) {
-            throw new RuntimeException("canceled conversion");
-        }
-    }
-
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private boolean convertVideo(MessageObject messageObject) {
-        Throwable e;
-        Throwable th;
-        String videoPath = messageObject.videoEditedInfo.originalPath;
-        long startTime = messageObject.videoEditedInfo.startTime;
-        long endTime = messageObject.videoEditedInfo.endTime;
-        int resultWidth = messageObject.videoEditedInfo.resultWidth;
-        int resultHeight = messageObject.videoEditedInfo.resultHeight;
-        int rotationValue = messageObject.videoEditedInfo.rotationValue;
-        int originalWidth = messageObject.videoEditedInfo.originalWidth;
-        int originalHeight = messageObject.videoEditedInfo.originalHeight;
-        int bitrate = messageObject.videoEditedInfo.bitrate;
-        int rotateRender = 0;
-        boolean isSecret = ((int) messageObject.getDialogId()) == 0;
-        File file = new File(messageObject.messageOwner.attachPath);
-        int temp;
-        if (VERSION.SDK_INT < 18 && resultHeight > resultWidth && resultWidth != originalWidth && resultHeight != originalHeight) {
-            temp = resultHeight;
-            resultHeight = resultWidth;
-            resultWidth = temp;
-            rotationValue = 90;
-            rotateRender = 270;
-        } else if (VERSION.SDK_INT > 20) {
-            if (rotationValue == 90) {
-                temp = resultHeight;
-                resultHeight = resultWidth;
-                resultWidth = temp;
-                rotationValue = 0;
-                rotateRender = 270;
-            } else if (rotationValue == 180) {
-                rotateRender = 180;
-                rotationValue = 0;
-            } else if (rotationValue == 270) {
-                temp = resultHeight;
-                resultHeight = resultWidth;
-                resultWidth = temp;
-                rotationValue = 0;
-                rotateRender = 90;
-            }
-        }
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("videoconvert", 0);
-        file = new File(videoPath);
-        if (messageObject.getId() != 0) {
-            boolean isPreviousOk = preferences.getBoolean("isPreviousOk", true);
-            preferences.edit().putBoolean("isPreviousOk", false).commit();
-            if (!(file.canRead() && isPreviousOk)) {
-                didWriteData(messageObject, file, true, true);
-                preferences.edit().putBoolean("isPreviousOk", true).commit();
-                return false;
-            }
-        }
-        this.videoConvertFirstWrite = true;
-        boolean error = false;
-        long time = System.currentTimeMillis();
-        if (resultWidth == 0 || resultHeight == 0) {
-            preferences.edit().putBoolean("isPreviousOk", true).commit();
-            didWriteData(messageObject, file, true, true);
-            return false;
-        }
-        MP4Builder mP4Builder = null;
-        MediaExtractor extractor = null;
-        try {
-            BufferInfo info = new BufferInfo();
-            Mp4Movie movie = new Mp4Movie();
-            movie.setCacheFile(file);
-            movie.setRotation(rotationValue);
-            movie.setSize(resultWidth, resultHeight);
-            mP4Builder = new MP4Builder().createMovie(movie, isSecret);
-            MediaExtractor extractor2 = new MediaExtractor();
-            try {
-                extractor2.setDataSource(videoPath);
-                checkConversionCanceled();
-                if (resultWidth == originalWidth && resultHeight == originalHeight && rotateRender == 0 && !messageObject.videoEditedInfo.roundVideo) {
-                    readAndWriteTracks(messageObject, extractor2, mP4Builder, info, startTime, endTime, file, bitrate != -1);
-                } else {
-                    int videoIndex = findTrack(extractor2, false);
-                    int audioIndex = bitrate != -1 ? findTrack(extractor2, true) : -1;
-                    if (videoIndex >= 0) {
-                        int colorFormat;
-                        MediaCodec decoder = null;
-                        MediaCodec encoder = null;
-                        InputSurface inputSurface = null;
-                        OutputSurface outputSurface = null;
-                        long videoTime = -1;
-                        boolean outputDone = false;
-                        boolean z = false;
-                        boolean decoderDone = false;
-                        int swapUV = 0;
-                        int videoTrackIndex = -5;
-                        int audioTrackIndex = -5;
-                        int processorType = 0;
-                        String manufacturer = Build.MANUFACTURER.toLowerCase();
-                        if (VERSION.SDK_INT < 18) {
-                            MediaCodecInfo codecInfo = selectCodec("video/avc");
-                            colorFormat = selectColorFormat(codecInfo, "video/avc");
-                            if (colorFormat == 0) {
-                                throw new RuntimeException("no supported color format");
-                            }
-                            String codecName = codecInfo.getName();
-                            if (codecName.contains("OMX.qcom.")) {
-                                processorType = 1;
-                                if (VERSION.SDK_INT == 16) {
-                                    if (!manufacturer.equals("lge")) {
+                                        /*
+                                        r115 = this;
+                                        r12 = r115;
+                                        r13 = r116;
+                                        r1 = r13.videoEditedInfo;
+                                        r14 = r1.originalPath;
+                                        r1 = r13.videoEditedInfo;
+                                        r10 = r1.startTime;
+                                        r1 = r13.videoEditedInfo;
+                                        r8 = r1.endTime;
+                                        r1 = r13.videoEditedInfo;
+                                        r1 = r1.resultWidth;
+                                        r2 = r13.videoEditedInfo;
+                                        r2 = r2.resultHeight;
+                                        r3 = r13.videoEditedInfo;
+                                        r3 = r3.rotationValue;
+                                        r4 = r13.videoEditedInfo;
+                                        r15 = r4.originalWidth;
+                                        r4 = r13.videoEditedInfo;
+                                        r6 = r4.originalHeight;
+                                        r4 = r13.videoEditedInfo;
+                                        r7 = r4.bitrate;
+                                        r4 = 0;
+                                        r16 = r4;
+                                        r4 = r116.getDialogId();
+                                        r4 = (int) r4;
+                                        if (r4 != 0) goto L_0x0034;
+                                    L_0x0032:
+                                        r4 = 1;
+                                        goto L_0x0035;
+                                    L_0x0034:
+                                        r4 = 0;
+                                    L_0x0035:
+                                        r5 = new java.io.File;
+                                        r19 = r8;
+                                        r8 = r13.messageOwner;
+                                        r8 = r8.attachPath;
+                                        r5.<init>(r8);
+                                        r8 = r5;
+                                        r5 = android.os.Build.VERSION.SDK_INT;
+                                        r9 = 18;
+                                        if (r5 >= r9) goto L_0x0055;
+                                    L_0x0047:
+                                        if (r2 <= r1) goto L_0x0055;
+                                    L_0x0049:
+                                        if (r1 == r15) goto L_0x0055;
+                                    L_0x004b:
+                                        if (r2 == r6) goto L_0x0055;
+                                    L_0x004d:
+                                        r5 = r2;
+                                        r2 = r1;
+                                        r1 = r5;
+                                        r3 = 90;
+                                        r5 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+                                        goto L_0x0066;
+                                    L_0x0055:
+                                        r5 = android.os.Build.VERSION.SDK_INT;
+                                        r9 = 20;
+                                        if (r5 <= r9) goto L_0x0080;
+                                    L_0x005b:
+                                        r5 = 90;
+                                        if (r3 != r5) goto L_0x006d;
+                                    L_0x005f:
+                                        r5 = r2;
+                                        r2 = r1;
+                                        r1 = r5;
+                                        r3 = 0;
+                                        r5 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+                                    L_0x0066:
+                                        r9 = r1;
+                                        r114 = r5;
+                                        r5 = r2;
+                                        r2 = r114;
+                                        goto L_0x0084;
+                                    L_0x006d:
+                                        r5 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
+                                        if (r3 != r5) goto L_0x0075;
+                                    L_0x0071:
+                                        r5 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
+                                        r3 = 0;
+                                        goto L_0x0066;
+                                    L_0x0075:
+                                        r5 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+                                        if (r3 != r5) goto L_0x0080;
+                                    L_0x0079:
+                                        r5 = r2;
+                                        r2 = r1;
+                                        r1 = r5;
+                                        r3 = 0;
+                                        r5 = 90;
+                                        goto L_0x0066;
+                                    L_0x0080:
+                                        r9 = r1;
+                                        r5 = r2;
+                                        r2 = r16;
+                                    L_0x0084:
+                                        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;
+                                        r29 = r10;
+                                        r10 = "videoconvert";
+                                        r11 = 0;
+                                        r10 = r1.getSharedPreferences(r10, r11);
+                                        r1 = new java.io.File;
+                                        r1.<init>(r14);
+                                        r11 = r1;
+                                        r1 = r116.getId();
+                                        if (r1 == 0) goto L_0x00d4;
+                                    L_0x009b:
+                                        r1 = "isPreviousOk";
+                                        r31 = r7;
+                                        r7 = 1;
+                                        r1 = r10.getBoolean(r1, r7);
+                                        r7 = r10.edit();
+                                        r32 = r2;
+                                        r2 = "isPreviousOk";
+                                        r33 = r6;
+                                        r6 = 0;
+                                        r2 = r7.putBoolean(r2, r6);
+                                        r2.commit();
+                                        r2 = r11.canRead();
+                                        if (r2 == 0) goto L_0x00c1;
+                                    L_0x00bc:
+                                        if (r1 != 0) goto L_0x00bf;
+                                    L_0x00be:
+                                        goto L_0x00c1;
+                                    L_0x00bf:
+                                        r6 = 1;
+                                        goto L_0x00db;
+                                    L_0x00c1:
+                                        r6 = 1;
+                                        r12.didWriteData(r13, r8, r6, r6);
+                                        r2 = r10.edit();
+                                        r7 = "isPreviousOk";
+                                        r2 = r2.putBoolean(r7, r6);
+                                        r2.commit();
+                                        r2 = 0;
+                                        return r2;
+                                    L_0x00d4:
+                                        r32 = r2;
+                                        r33 = r6;
+                                        r31 = r7;
+                                        r6 = 1;
+                                    L_0x00db:
+                                        r12.videoConvertFirstWrite = r6;
+                                        r16 = 0;
+                                        r34 = java.lang.System.currentTimeMillis();
+                                        if (r9 == 0) goto L_0x12c9;
+                                    L_0x00e5:
+                                        if (r5 == 0) goto L_0x12c9;
+                                    L_0x00e7:
+                                        r1 = 0;
+                                        r2 = 0;
+                                        r7 = r2;
+                                        r6 = new android.media.MediaCodec$BufferInfo;	 Catch:{ Exception -> 0x121f, all -> 0x11f7 }
+                                        r6.<init>();	 Catch:{ Exception -> 0x121f, all -> 0x11f7 }
+                                        r2 = new org.telegram.messenger.video.Mp4Movie;	 Catch:{ Exception -> 0x121f, all -> 0x11f7 }
+                                        r2.<init>();	 Catch:{ Exception -> 0x121f, all -> 0x11f7 }
+                                        r2.setCacheFile(r8);	 Catch:{ Exception -> 0x121f, all -> 0x11f7 }
+                                        r2.setRotation(r3);	 Catch:{ Exception -> 0x121f, all -> 0x11f7 }
+                                        r2.setSize(r9, r5);	 Catch:{ Exception -> 0x121f, all -> 0x11f7 }
+                                        r36 = r1;
+                                        r1 = new org.telegram.messenger.video.MP4Builder;	 Catch:{ Exception -> 0x11d4, all -> 0x11ae }
+                                        r1.<init>();	 Catch:{ Exception -> 0x11d4, all -> 0x11ae }
+                                        r1 = r1.createMovie(r2, r4);	 Catch:{ Exception -> 0x11d4, all -> 0x11ae }
+                                        r37 = r1;
+                                        r1 = new android.media.MediaExtractor;	 Catch:{ Exception -> 0x118b, all -> 0x1164 }
+                                        r1.<init>();	 Catch:{ Exception -> 0x118b, all -> 0x1164 }
+                                        r7 = r1;
+                                        r7.setDataSource(r14);	 Catch:{ Exception -> 0x1142, all -> 0x111d }
+                                        r115.checkConversionCanceled();	 Catch:{ Exception -> 0x1142, all -> 0x111d }
+                                        if (r9 != r15) goto L_0x0211;
+                                    L_0x0118:
+                                        r1 = r33;
+                                        if (r5 != r1) goto L_0x01f0;
+                                    L_0x011c:
+                                        if (r32 != 0) goto L_0x01f0;
+                                    L_0x011e:
+                                        r38 = r1;
+                                        r1 = r13.videoEditedInfo;	 Catch:{ Exception -> 0x01c7, all -> 0x01a0 }
+                                        r1 = r1.roundVideo;	 Catch:{ Exception -> 0x01c7, all -> 0x01a0 }
+                                        if (r1 == 0) goto L_0x0148;
+                                    L_0x0126:
+                                        r33 = r4;
+                                        r42 = r5;
+                                        r44 = r6;
+                                        r13 = r7;
+                                        r45 = r8;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r47 = r29;
+                                        r15 = r31;
+                                        r46 = r32;
+                                        r41 = r37;
+                                        r17 = r38;
+                                        r31 = r2;
+                                        r32 = r3;
+                                        r14 = r9;
+                                        r29 = r11;
+                                        goto L_0x0231;
+                                    L_0x0148:
+                                        r39 = r2;
+                                        r1 = r31;
+                                        r2 = -1;
+                                        if (r1 == r2) goto L_0x0152;
+                                    L_0x014f:
+                                        r18 = 1;
+                                        goto L_0x0154;
+                                    L_0x0152:
+                                        r18 = 0;
+                                    L_0x0154:
+                                        r21 = r1;
+                                        r2 = r37;
+                                        r17 = r38;
+                                        r1 = r12;
+                                        r41 = r2;
+                                        r40 = r14;
+                                        r14 = r32;
+                                        r31 = r39;
+                                        r2 = r13;
+                                        r32 = r3;
+                                        r3 = r7;
+                                        r33 = r4;
+                                        r4 = r41;
+                                        r42 = r5;
+                                        r43 = r15;
+                                        r15 = 1;
+                                        r5 = r6;
+                                        r44 = r6;
+                                        r13 = r7;
+                                        r15 = r21;
+                                        r6 = r29;
+                                        r45 = r8;
+                                        r46 = r14;
+                                        r14 = r9;
+                                        r8 = r19;
+                                        r49 = r10;
+                                        r47 = r29;
+                                        r10 = r45;
+                                        r29 = r11;
+                                        r11 = r18;
+                                        r1.readAndWriteTracks(r2, r3, r4, r5, r6, r8, r10, r11);	 Catch:{ Exception -> 0x0257, all -> 0x0240 }
+                                        r5 = r12;
+                                        r1 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r14 = r42;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r9 = r47;
+                                        r15 = r116;
+                                        goto L_0x10b8;
+                                    L_0x01a0:
+                                        r0 = move-exception;
+                                        r33 = r4;
+                                        r13 = r7;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r47 = r29;
+                                        r46 = r32;
+                                        r41 = r37;
+                                        r17 = r38;
+                                        r32 = r3;
+                                        r29 = r11;
+                                        r1 = r0;
+                                        r14 = r5;
+                                        r4 = r8;
+                                        r110 = r9;
+                                        r3 = r10;
+                                        r5 = r12;
+                                        r82 = r31;
+                                        r11 = r41;
+                                        r81 = r46;
+                                        r9 = r47;
+                                        r15 = r116;
+                                        goto L_0x1295;
+                                    L_0x01c7:
+                                        r0 = move-exception;
+                                        r33 = r4;
+                                        r13 = r7;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r47 = r29;
+                                        r46 = r32;
+                                        r41 = r37;
+                                        r17 = r38;
+                                        r32 = r3;
+                                        r29 = r11;
+                                        r1 = r0;
+                                        r14 = r5;
+                                        r104 = r8;
+                                        r110 = r9;
+                                        r5 = r12;
+                                        r82 = r31;
+                                        r2 = r41;
+                                        r81 = r46;
+                                        r9 = r47;
+                                        r15 = r116;
+                                        goto L_0x1242;
+                                    L_0x01f0:
+                                        r17 = r1;
+                                        r33 = r4;
+                                        r42 = r5;
+                                        r44 = r6;
+                                        r13 = r7;
+                                        r45 = r8;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r47 = r29;
+                                        r15 = r31;
+                                        r46 = r32;
+                                        r41 = r37;
+                                        r31 = r2;
+                                        r32 = r3;
+                                        r14 = r9;
+                                        r29 = r11;
+                                        goto L_0x0231;
+                                    L_0x0211:
+                                        r42 = r5;
+                                        r44 = r6;
+                                        r13 = r7;
+                                        r45 = r8;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r47 = r29;
+                                        r15 = r31;
+                                        r46 = r32;
+                                        r17 = r33;
+                                        r41 = r37;
+                                        r31 = r2;
+                                        r32 = r3;
+                                        r33 = r4;
+                                        r14 = r9;
+                                        r29 = r11;
+                                    L_0x0231:
+                                        r1 = 0;
+                                        r2 = r12.findTrack(r13, r1);	 Catch:{ Exception -> 0x1106, all -> 0x10ed }
+                                        r1 = r2;
+                                        r2 = -1;
+                                        if (r15 == r2) goto L_0x026d;
+                                    L_0x023a:
+                                        r2 = 1;
+                                        r3 = r12.findTrack(r13, r2);	 Catch:{ Exception -> 0x0257, all -> 0x0240 }
+                                        goto L_0x026e;
+                                    L_0x0240:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r11 = r41;
+                                        r14 = r42;
+                                        r4 = r45;
+                                        r81 = r46;
+                                        r9 = r47;
+                                        r3 = r49;
+                                    L_0x0253:
+                                        r15 = r116;
+                                        goto L_0x1295;
+                                    L_0x0257:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r7 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r2 = r41;
+                                        r14 = r42;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r9 = r47;
+                                        r15 = r116;
+                                        goto L_0x1242;
+                                    L_0x026d:
+                                        r3 = -1;
+                                    L_0x026e:
+                                        r2 = r3;
+                                        if (r1 < 0) goto L_0x10a4;
+                                    L_0x0271:
+                                        r3 = 0;
+                                        r4 = 0;
+                                        r5 = 0;
+                                        r6 = 0;
+                                        r7 = r6;
+                                        r8 = -1;
+                                        r6 = 0;
+                                        r10 = 0;
+                                        r11 = 0;
+                                        r22 = 0;
+                                        r23 = -5;
+                                        r24 = -5;
+                                        r25 = 0;
+                                        r50 = r3;
+                                        r3 = android.os.Build.MANUFACTURER;	 Catch:{ Exception -> 0x0fed, all -> 0x0fd2 }
+                                        r3 = r3.toLowerCase();	 Catch:{ Exception -> 0x0fed, all -> 0x0fd2 }
+                                        r51 = r4;
+                                        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0fab, all -> 0x0fd2 }
+                                        r52 = r5;
+                                        r5 = 18;
+                                        if (r4 >= r5) goto L_0x0389;
+                                    L_0x0295:
+                                        r4 = "video/avc";	 Catch:{ Exception -> 0x0363, all -> 0x0240 }
+                                        r4 = selectCodec(r4);	 Catch:{ Exception -> 0x0363, all -> 0x0240 }
+                                        r5 = "video/avc";	 Catch:{ Exception -> 0x0363, all -> 0x0240 }
+                                        r5 = selectColorFormat(r4, r5);	 Catch:{ Exception -> 0x0363, all -> 0x0240 }
+                                        if (r5 != 0) goto L_0x02cf;
+                                    L_0x02a3:
+                                        r53 = r5;
+                                        r5 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x02af, all -> 0x0240 }
+                                        r54 = r6;	 Catch:{ Exception -> 0x02af, all -> 0x0240 }
+                                        r6 = "no supported color format";	 Catch:{ Exception -> 0x02af, all -> 0x0240 }
+                                        r5.<init>(r6);	 Catch:{ Exception -> 0x02af, all -> 0x0240 }
+                                        throw r5;	 Catch:{ Exception -> 0x02af, all -> 0x0240 }
+                                    L_0x02af:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r3 = r7;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r14 = r42;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r108 = r47;
+                                        r8 = r50;
+                                        r4 = r51;
+                                        r7 = r52;
+                                        goto L_0x03ce;
+                                    L_0x02cf:
+                                        r53 = r5;
+                                        r54 = r6;
+                                        r5 = r4.getName();	 Catch:{ Exception -> 0x0363, all -> 0x0240 }
+                                        r6 = "OMX.qcom.";	 Catch:{ Exception -> 0x0363, all -> 0x0240 }
+                                        r6 = r5.contains(r6);	 Catch:{ Exception -> 0x0363, all -> 0x0240 }
+                                        if (r6 == 0) goto L_0x02ff;	 Catch:{ Exception -> 0x0363, all -> 0x0240 }
+                                    L_0x02df:
+                                        r6 = 1;	 Catch:{ Exception -> 0x0363, all -> 0x0240 }
+                                        r55 = r6;	 Catch:{ Exception -> 0x0363, all -> 0x0240 }
+                                        r6 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0363, all -> 0x0240 }
+                                        r56 = r7;
+                                        r7 = 16;
+                                        if (r6 != r7) goto L_0x02fc;
+                                    L_0x02ea:
+                                        r6 = "lge";	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6 = r3.equals(r6);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        if (r6 != 0) goto L_0x02fa;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x02f2:
+                                        r6 = "nokia";	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6 = r3.equals(r6);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        if (r6 == 0) goto L_0x02fc;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x02fa:
+                                        r22 = 1;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x02fc:
+                                        r25 = r55;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        goto L_0x032d;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x02ff:
+                                        r56 = r7;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6 = "OMX.Intel.";	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6 = r5.contains(r6);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        if (r6 == 0) goto L_0x030d;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x0309:
+                                        r6 = 2;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x030a:
+                                        r25 = r6;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        goto L_0x032d;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x030d:
+                                        r6 = "OMX.MTK.VIDEO.ENCODER.AVC";	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6 = r5.equals(r6);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        if (r6 == 0) goto L_0x0317;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x0315:
+                                        r6 = 3;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        goto L_0x030a;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x0317:
+                                        r6 = "OMX.SEC.AVC.Encoder";	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6 = r5.equals(r6);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        if (r6 == 0) goto L_0x0323;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x031f:
+                                        r6 = 4;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r22 = 1;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        goto L_0x030a;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x0323:
+                                        r6 = "OMX.TI.DUCATI1.VIDEO.H264E";	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6 = r5.equals(r6);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        if (r6 == 0) goto L_0x032d;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x032b:
+                                        r6 = 5;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        goto L_0x030a;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x032d:
+                                        r6 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        if (r6 == 0) goto L_0x035b;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                    L_0x0331:
+                                        r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6.<init>();	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r7 = "codec = ";	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6.append(r7);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r7 = r4.getName();	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6.append(r7);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r7 = " manufacturer = ";	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6.append(r7);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6.append(r3);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r7 = "device = ";	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6.append(r7);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r7 = android.os.Build.MODEL;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6.append(r7);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r6 = r6.toString();	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        org.telegram.messenger.FileLog.m0d(r6);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r4 = r22;
+                                        r6 = r25;
+                                        r5 = r53;
+                                        goto L_0x0394;
+                                    L_0x0363:
+                                        r0 = move-exception;
+                                        r56 = r7;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r14 = r42;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r108 = r47;
+                                        r8 = r50;
+                                        r4 = r51;
+                                        r7 = r52;
+                                        r3 = r56;
+                                        r15 = r116;
+                                        r1 = r0;
+                                        goto L_0x1013;
+                                    L_0x0389:
+                                        r54 = r6;
+                                        r56 = r7;
+                                        r5 = NUM; // 0x7f000789 float:1.701803E38 double:1.0527098025E-314;
+                                        r4 = r22;
+                                        r6 = r25;
+                                    L_0x0394:
+                                        r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0f87, all -> 0x0fd2 }
+                                        if (r7 == 0) goto L_0x03d3;
+                                    L_0x0398:
+                                        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r7.<init>();	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r57 = r8;	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r8 = "colorFormat = ";	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r7.append(r8);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r7.append(r5);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        r7 = r7.toString();	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        org.telegram.messenger.FileLog.m0d(r7);	 Catch:{ Exception -> 0x03af, all -> 0x0240 }
+                                        goto L_0x03d5;
+                                    L_0x03af:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r14 = r42;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r108 = r47;
+                                        r8 = r50;
+                                        r4 = r51;
+                                        r7 = r52;
+                                        r3 = r56;
+                                    L_0x03ce:
+                                        r15 = r116;
+                                    L_0x03d0:
+                                        r1 = r0;
+                                        goto L_0x1013;
+                                    L_0x03d3:
+                                        r57 = r8;
+                                    L_0x03d5:
+                                        r7 = r42;
+                                        r8 = 0;
+                                        r9 = r42;
+                                        r22 = r14 * r9;
+                                        r59 = r8;
+                                        r8 = 3;
+                                        r22 = r22 * 3;
+                                        r22 = r22 / 2;	 Catch:{ Exception -> 0x0f64, all -> 0x0f4a }
+                                        if (r6 != 0) goto L_0x0440;
+                                    L_0x03e5:
+                                        r25 = r9 % 16;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        if (r25 == 0) goto L_0x0403;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x03e9:
+                                        r25 = r9 % 16;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r26 = 16;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r25 = 16 - r25;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r7 = r7 + r25;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r25 = r7 - r9;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r25 = r25 * r14;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r26 = r25 * 5;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r26 = r26 / 4;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r22 = r22 + r26;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r60 = r10;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r8 = r22;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r59 = r25;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        goto L_0x0489;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x0403:
+                                        r60 = r10;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        goto L_0x0487;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x0407:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r1 = r0;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r5 = r12;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r110 = r14;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r82 = r15;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r11 = r41;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x0410:
+                                        r4 = r45;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r81 = r46;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r3 = r49;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r15 = r116;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r14 = r9;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r9 = r47;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        goto L_0x1295;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x041d:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r97 = r1;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r91 = r2;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r98 = r13;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r110 = r14;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r82 = r15;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r107 = r41;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x042a:
+                                        r6 = r44;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r104 = r45;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r81 = r46;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r108 = r47;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r8 = r50;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r4 = r51;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r7 = r52;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r3 = r56;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x043a:
+                                        r15 = r116;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r1 = r0;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r14 = r9;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        goto L_0x1013;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x0440:
+                                        r8 = 1;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        if (r6 != r8) goto L_0x0463;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x0443:
+                                        r8 = r3.toLowerCase();	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r60 = r10;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r10 = "lge";	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r8 = r8.equals(r10);	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        if (r8 != 0) goto L_0x0487;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x0451:
+                                        r8 = r14 * r9;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r8 = r8 + 2047;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r8 = r8 & -2048;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r10 = r14 * r9;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r10 = r8 - r10;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r22 = r22 + r10;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r59 = r10;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x0460:
+                                        r8 = r22;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        goto L_0x0489;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x0463:
+                                        r60 = r10;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r8 = 5;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        if (r6 != r8) goto L_0x0469;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x0468:
+                                        goto L_0x0487;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x0469:
+                                        r8 = 3;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        if (r6 != r8) goto L_0x0487;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x046c:
+                                        r8 = "baidu";	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r8 = r3.equals(r8);	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        if (r8 == 0) goto L_0x0487;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                    L_0x0474:
+                                        r8 = r9 % 16;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r10 = 16;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r8 = 16 - r8;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r7 = r7 + r8;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r8 = r7 - r9;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r8 = r8 * r14;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r10 = r8 * 5;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r10 = r10 / 4;	 Catch:{ Exception -> 0x041d, all -> 0x0407 }
+                                        r22 = r22 + r10;
+                                        r59 = r8;
+                                        goto L_0x0460;
+                                    L_0x0487:
+                                        r8 = r22;
+                                    L_0x0489:
+                                        r13.selectTrack(r1);	 Catch:{ Exception -> 0x0f64, all -> 0x0f4a }
+                                        r10 = r13.getTrackFormat(r1);	 Catch:{ Exception -> 0x0f64, all -> 0x0f4a }
+                                        r22 = 0;
+                                        if (r2 < 0) goto L_0x0515;
+                                    L_0x0494:
+                                        r13.selectTrack(r2);	 Catch:{ Exception -> 0x04f2, all -> 0x04db }
+                                        r25 = r13.getTrackFormat(r2);	 Catch:{ Exception -> 0x04f2, all -> 0x04db }
+                                        r68 = r25;	 Catch:{ Exception -> 0x04f2, all -> 0x04db }
+                                        r69 = r3;	 Catch:{ Exception -> 0x04f2, all -> 0x04db }
+                                        r3 = "max-input-size";	 Catch:{ Exception -> 0x04f2, all -> 0x04db }
+                                        r70 = r6;	 Catch:{ Exception -> 0x04f2, all -> 0x04db }
+                                        r6 = r68;	 Catch:{ Exception -> 0x04f2, all -> 0x04db }
+                                        r3 = r6.getInteger(r3);	 Catch:{ Exception -> 0x04f2, all -> 0x04db }
+                                        r25 = java.nio.ByteBuffer.allocateDirect(r3);	 Catch:{ Exception -> 0x04f2, all -> 0x04db }
+                                        r22 = r25;
+                                        r71 = r3;
+                                        r72 = r7;
+                                        r3 = r41;
+                                        r7 = 1;
+                                        r25 = r3.addTrack(r6, r7);	 Catch:{ Exception -> 0x04cc, all -> 0x04c2 }
+                                        r24 = r25;
+                                        r6 = r22;
+                                        r7 = r24;
+                                        goto L_0x0521;
+                                    L_0x04c2:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r11 = r3;
+                                        r5 = r12;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        goto L_0x0410;
+                                    L_0x04cc:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r107 = r3;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        goto L_0x042a;
+                                    L_0x04db:
+                                        r0 = move-exception;
+                                        r3 = r41;
+                                        r1 = r0;
+                                        r11 = r3;
+                                        r5 = r12;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r4 = r45;
+                                        r81 = r46;
+                                        r3 = r49;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r9 = r47;
+                                        goto L_0x1295;
+                                    L_0x04f2:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r108 = r47;
+                                        r8 = r50;
+                                        r4 = r51;
+                                        r7 = r52;
+                                        r3 = r56;
+                                        r15 = r116;
+                                        r1 = r0;
+                                        r14 = r9;
+                                        goto L_0x1013;
+                                    L_0x0515:
+                                        r69 = r3;
+                                        r70 = r6;
+                                        r72 = r7;
+                                        r3 = r41;
+                                        r6 = r22;
+                                        r7 = r24;
+                                    L_0x0521:
+                                        r74 = r3;
+                                        r73 = r4;
+                                        r3 = 0;
+                                        r76 = r7;
+                                        r75 = r8;
+                                        r7 = r47;
+                                        r22 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1));
+                                        if (r22 <= 0) goto L_0x056c;
+                                    L_0x0531:
+                                        r3 = 0;
+                                        r13.seekTo(r7, r3);	 Catch:{ Exception -> 0x054d, all -> 0x0538 }
+                                        r77 = r7;
+                                        goto L_0x0574;
+                                    L_0x0538:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r4 = r45;
+                                        r81 = r46;
+                                        r3 = r49;
+                                        r11 = r74;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r9 = r7;
+                                        goto L_0x1295;
+                                    L_0x054d:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r108 = r7;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r8 = r50;
+                                        r4 = r51;
+                                        r7 = r52;
+                                        r3 = r56;
+                                        r107 = r74;
+                                        goto L_0x043a;
+                                    L_0x056c:
+                                        r3 = 0;
+                                        r77 = r7;
+                                        r7 = 0;
+                                        r13.seekTo(r7, r3);	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                    L_0x0574:
+                                        r3 = "video/avc";	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r3 = android.media.MediaFormat.createVideoFormat(r3, r14, r9);	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r4 = "color-format";	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r3.setInteger(r4, r5);	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r4 = "bitrate";	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        if (r15 <= 0) goto L_0x0585;	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                    L_0x0583:
+                                        r7 = r15;	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        goto L_0x0588;	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                    L_0x0585:
+                                        r7 = 921600; // 0xe1000 float:1.291437E-39 double:4.55331E-318;	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                    L_0x0588:
+                                        r3.setInteger(r4, r7);	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r4 = "frame-rate";	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r7 = 25;	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r3.setInteger(r4, r7);	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r4 = "i-frame-interval";	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r7 = 10;	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r3.setInteger(r4, r7);	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r7 = 18;
+                                        if (r4 >= r7) goto L_0x05e1;
+                                    L_0x059f:
+                                        r4 = "stride";	 Catch:{ Exception -> 0x05c2, all -> 0x05ac }
+                                        r7 = r14 + 32;	 Catch:{ Exception -> 0x05c2, all -> 0x05ac }
+                                        r3.setInteger(r4, r7);	 Catch:{ Exception -> 0x05c2, all -> 0x05ac }
+                                        r4 = "slice-height";	 Catch:{ Exception -> 0x05c2, all -> 0x05ac }
+                                        r3.setInteger(r4, r9);	 Catch:{ Exception -> 0x05c2, all -> 0x05ac }
+                                        goto L_0x05e1;
+                                    L_0x05ac:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r4 = r45;
+                                        r81 = r46;
+                                    L_0x05b7:
+                                        r3 = r49;
+                                        r11 = r74;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r9 = r77;
+                                        goto L_0x1295;
+                                    L_0x05c2:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r8 = r50;
+                                        r4 = r51;
+                                    L_0x05d7:
+                                        r7 = r52;
+                                    L_0x05d9:
+                                        r3 = r56;
+                                    L_0x05db:
+                                        r107 = r74;
+                                        r108 = r77;
+                                        goto L_0x043a;
+                                    L_0x05e1:
+                                        r4 = "video/avc";	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r4 = android.media.MediaCodec.createEncoderByType(r4);	 Catch:{ Exception -> 0x0f27, all -> 0x0f0d }
+                                        r7 = 1;
+                                        r8 = 0;
+                                        r4.configure(r3, r8, r8, r7);	 Catch:{ Exception -> 0x0ef1, all -> 0x0f0d }
+                                        r7 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0ef1, all -> 0x0f0d }
+                                        r8 = 18;
+                                        if (r7 < r8) goto L_0x0627;
+                                    L_0x05f2:
+                                        r7 = new org.telegram.messenger.video.InputSurface;	 Catch:{ Exception -> 0x0613, all -> 0x05ac }
+                                        r8 = r4.createInputSurface();	 Catch:{ Exception -> 0x0613, all -> 0x05ac }
+                                        r7.<init>(r8);	 Catch:{ Exception -> 0x0613, all -> 0x05ac }
+                                        r7.makeCurrent();	 Catch:{ Exception -> 0x05ff, all -> 0x05ac }
+                                        goto L_0x0629;
+                                    L_0x05ff:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r8 = r50;
+                                        goto L_0x05d9;
+                                    L_0x0613:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r8 = r50;
+                                        goto L_0x05d7;
+                                    L_0x0627:
+                                        r7 = r52;
+                                    L_0x0629:
+                                        r4.start();	 Catch:{ Exception -> 0x0ed4, all -> 0x0f0d }
+                                        r8 = "mime";	 Catch:{ Exception -> 0x0ed4, all -> 0x0f0d }
+                                        r8 = r10.getString(r8);	 Catch:{ Exception -> 0x0ed4, all -> 0x0f0d }
+                                        r8 = android.media.MediaCodec.createDecoderByType(r8);	 Catch:{ Exception -> 0x0ed4, all -> 0x0f0d }
+                                        r79 = r3;
+                                        r3 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0eb9, all -> 0x0f0d }
+                                        r80 = r11;
+                                        r11 = 18;
+                                        if (r3 < r11) goto L_0x065b;
+                                    L_0x0640:
+                                        r3 = new org.telegram.messenger.video.OutputSurface;	 Catch:{ Exception -> 0x0648, all -> 0x05ac }
+                                        r3.<init>();	 Catch:{ Exception -> 0x0648, all -> 0x05ac }
+                                        r11 = r46;
+                                        goto L_0x0662;
+                                    L_0x0648:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        goto L_0x05d9;
+                                    L_0x065b:
+                                        r3 = new org.telegram.messenger.video.OutputSurface;	 Catch:{ Exception -> 0x0eb9, all -> 0x0f0d }
+                                        r11 = r46;
+                                        r3.<init>(r14, r9, r11);	 Catch:{ Exception -> 0x0e9c, all -> 0x0e82 }
+                                    L_0x0662:
+                                        r81 = r11;
+                                        r11 = r3.getSurface();	 Catch:{ Exception -> 0x0e69, all -> 0x0e51 }
+                                        r83 = r5;
+                                        r82 = r15;
+                                        r5 = 0;
+                                        r15 = 0;
+                                        r8.configure(r10, r11, r5, r15);	 Catch:{ Exception -> 0x0e3a, all -> 0x0e24 }
+                                        r8.start();	 Catch:{ Exception -> 0x0e3a, all -> 0x0e24 }
+                                        r5 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;	 Catch:{ Exception -> 0x0e3a, all -> 0x0e24 }
+                                        r11 = 0;	 Catch:{ Exception -> 0x0e3a, all -> 0x0e24 }
+                                        r15 = 0;	 Catch:{ Exception -> 0x0e3a, all -> 0x0e24 }
+                                        r22 = 0;	 Catch:{ Exception -> 0x0e3a, all -> 0x0e24 }
+                                        r84 = r5;	 Catch:{ Exception -> 0x0e3a, all -> 0x0e24 }
+                                        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0e3a, all -> 0x0e24 }
+                                        r85 = r10;
+                                        r10 = 21;
+                                        if (r5 >= r10) goto L_0x06b3;
+                                    L_0x0684:
+                                        r5 = r8.getInputBuffers();	 Catch:{ Exception -> 0x06a4, all -> 0x069b }
+                                        r11 = r5;	 Catch:{ Exception -> 0x06a4, all -> 0x069b }
+                                        r5 = r4.getOutputBuffers();	 Catch:{ Exception -> 0x06a4, all -> 0x069b }
+                                        r15 = r5;	 Catch:{ Exception -> 0x06a4, all -> 0x069b }
+                                        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x06a4, all -> 0x069b }
+                                        r10 = 18;	 Catch:{ Exception -> 0x06a4, all -> 0x069b }
+                                        if (r5 >= r10) goto L_0x06b3;	 Catch:{ Exception -> 0x06a4, all -> 0x069b }
+                                    L_0x0694:
+                                        r5 = r4.getInputBuffers();	 Catch:{ Exception -> 0x06a4, all -> 0x069b }
+                                        r22 = r5;
+                                        goto L_0x06b5;
+                                    L_0x069b:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r110 = r14;
+                                        r4 = r45;
+                                        goto L_0x05b7;
+                                    L_0x06a4:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        goto L_0x05db;
+                                    L_0x06b3:
+                                        r5 = r22;
+                                    L_0x06b5:
+                                        r115.checkConversionCanceled();	 Catch:{ Exception -> 0x0e3a, all -> 0x0e24 }
+                                    L_0x06b8:
+                                        if (r54 != 0) goto L_0x0e0f;	 Catch:{ Exception -> 0x0e3a, all -> 0x0e24 }
+                                    L_0x06ba:
+                                        r115.checkConversionCanceled();	 Catch:{ Exception -> 0x0e3a, all -> 0x0e24 }
+                                        r86 = r9;
+                                        if (r60 != 0) goto L_0x08cd;
+                                    L_0x06c1:
+                                        r22 = 0;
+                                        r24 = r13.getSampleTrackIndex();	 Catch:{ Exception -> 0x08b5, all -> 0x08a2 }
+                                        r87 = r24;
+                                        r9 = r87;
+                                        if (r9 != r1) goto L_0x074e;
+                                    L_0x06cd:
+                                        r88 = r14;
+                                        r89 = r15;
+                                        r14 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
+                                        r10 = r8.dequeueInputBuffer(r14);	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        if (r10 < 0) goto L_0x0715;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                    L_0x06d9:
+                                        r14 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r15 = 21;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        if (r14 >= r15) goto L_0x06e2;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                    L_0x06df:
+                                        r14 = r11[r10];	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        goto L_0x06e6;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                    L_0x06e2:
+                                        r14 = r8.getInputBuffer(r10);	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                    L_0x06e6:
+                                        r15 = 0;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r24 = r13.readSampleData(r14, r15);	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r15 = r24;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        if (r15 >= 0) goto L_0x0701;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                    L_0x06ef:
+                                        r63 = 0;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r64 = 0;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r65 = 0;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r67 = 4;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r61 = r8;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r62 = r10;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r61.queueInputBuffer(r62, r63, r64, r65, r67);	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r60 = 1;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        goto L_0x0715;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                    L_0x0701:
+                                        r63 = 0;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r65 = r13.getSampleTime();	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r67 = 0;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r61 = r8;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r62 = r10;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r64 = r15;	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r61.queueInputBuffer(r62, r63, r64, r65, r67);	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r13.advance();	 Catch:{ Exception -> 0x0739, all -> 0x0728 }
+                                        r91 = r2;
+                                        r92 = r6;
+                                        r90 = r11;
+                                        r6 = r44;
+                                    L_0x071e:
+                                        r2 = r45;
+                                        r11 = r74;
+                                        r14 = r76;
+                                        r15 = r116;
+                                        goto L_0x0862;
+                                    L_0x0728:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r4 = r45;
+                                        r3 = r49;
+                                        r11 = r74;
+                                        r9 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        goto L_0x0253;
+                                    L_0x0739:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r6 = r44;
+                                    L_0x0742:
+                                        r104 = r45;
+                                        r107 = r74;
+                                        r108 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        goto L_0x03ce;
+                                    L_0x074e:
+                                        r88 = r14;
+                                        r89 = r15;
+                                        r10 = -1;
+                                        if (r2 == r10) goto L_0x084d;
+                                    L_0x0755:
+                                        if (r9 != r2) goto L_0x084d;
+                                    L_0x0757:
+                                        r10 = 0;
+                                        r14 = r13.readSampleData(r6, r10);	 Catch:{ Exception -> 0x0835, all -> 0x0822 }
+                                        r15 = r44;
+                                        r15.size = r14;	 Catch:{ Exception -> 0x080b, all -> 0x0822 }
+                                        r14 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x080b, all -> 0x0822 }
+                                        r10 = 21;
+                                        if (r14 >= r10) goto L_0x0779;
+                                    L_0x0766:
+                                        r10 = 0;
+                                        r6.position(r10);	 Catch:{ Exception -> 0x0770, all -> 0x0728 }
+                                        r10 = r15.size;	 Catch:{ Exception -> 0x0770, all -> 0x0728 }
+                                        r6.limit(r10);	 Catch:{ Exception -> 0x0770, all -> 0x0728 }
+                                        goto L_0x0779;
+                                    L_0x0770:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r6 = r15;
+                                        goto L_0x0742;
+                                    L_0x0779:
+                                        r10 = r15.size;	 Catch:{ Exception -> 0x080b, all -> 0x0822 }
+                                        if (r10 < 0) goto L_0x0789;
+                                    L_0x077d:
+                                        r90 = r11;
+                                        r10 = r13.getSampleTime();	 Catch:{ Exception -> 0x0770, all -> 0x0728 }
+                                        r15.presentationTimeUs = r10;	 Catch:{ Exception -> 0x0770, all -> 0x0728 }
+                                        r13.advance();	 Catch:{ Exception -> 0x0770, all -> 0x0728 }
+                                        goto L_0x0790;
+                                    L_0x0789:
+                                        r90 = r11;
+                                        r10 = 0;
+                                        r15.size = r10;	 Catch:{ Exception -> 0x080b, all -> 0x0822 }
+                                        r60 = 1;	 Catch:{ Exception -> 0x080b, all -> 0x0822 }
+                                    L_0x0790:
+                                        r10 = r15.size;	 Catch:{ Exception -> 0x080b, all -> 0x0822 }
+                                        if (r10 <= 0) goto L_0x07fc;
+                                    L_0x0794:
+                                        r10 = 0;
+                                        r14 = (r19 > r10 ? 1 : (r19 == r10 ? 0 : -1));
+                                        if (r14 < 0) goto L_0x07a8;
+                                    L_0x079a:
+                                        r10 = r15.presentationTimeUs;	 Catch:{ Exception -> 0x0770, all -> 0x0728 }
+                                        r14 = (r10 > r19 ? 1 : (r10 == r19 ? 0 : -1));
+                                        if (r14 >= 0) goto L_0x07a1;
+                                    L_0x07a0:
+                                        goto L_0x07a8;
+                                    L_0x07a1:
+                                        r91 = r2;
+                                        r92 = r6;
+                                        r6 = r15;
+                                        goto L_0x071e;
+                                    L_0x07a8:
+                                        r10 = 0;
+                                        r15.offset = r10;	 Catch:{ Exception -> 0x080b, all -> 0x0822 }
+                                        r11 = r13.getSampleFlags();	 Catch:{ Exception -> 0x080b, all -> 0x0822 }
+                                        r15.flags = r11;	 Catch:{ Exception -> 0x080b, all -> 0x0822 }
+                                        r11 = r74;
+                                        r14 = r76;
+                                        r18 = r11.writeSampleData(r14, r6, r15, r10);	 Catch:{ Exception -> 0x07e5, all -> 0x07d4 }
+                                        if (r18 == 0) goto L_0x07c9;
+                                    L_0x07bb:
+                                        r91 = r2;
+                                        r92 = r6;
+                                        r6 = r15;
+                                        r2 = r45;
+                                        r15 = r116;
+                                        r12.didWriteData(r15, r2, r10, r10);	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        goto L_0x0862;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x07c9:
+                                        r91 = r2;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r92 = r6;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r6 = r15;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r2 = r45;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r15 = r116;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        goto L_0x0862;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x07d4:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r15 = r116;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r1 = r0;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r5 = r12;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r4 = r45;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r3 = r49;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r9 = r77;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r14 = r86;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r110 = r88;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        goto L_0x1295;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x07e5:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r91 = r2;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r6 = r15;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r15 = r116;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r97 = r1;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r107 = r11;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r98 = r13;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r104 = r45;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r108 = r77;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r14 = r86;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r110 = r88;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r1 = r0;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        goto L_0x1013;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x07fc:
+                                        r91 = r2;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r92 = r6;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r6 = r15;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r2 = r45;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r11 = r74;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r14 = r76;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r15 = r116;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        goto L_0x0862;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x080b:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r91 = r2;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r6 = r15;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r15 = r116;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r97 = r1;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r98 = r13;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r104 = r45;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r107 = r74;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r108 = r77;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r14 = r86;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r110 = r88;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r1 = r0;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        goto L_0x1013;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x0822:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r11 = r74;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r15 = r116;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r1 = r0;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r5 = r12;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r4 = r45;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r3 = r49;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r9 = r77;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r14 = r86;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r110 = r88;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        goto L_0x1295;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x0835:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r91 = r2;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r6 = r44;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r15 = r116;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r97 = r1;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r98 = r13;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r104 = r45;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r107 = r74;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r108 = r77;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r14 = r86;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r110 = r88;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r1 = r0;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        goto L_0x1013;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x084d:
+                                        r91 = r2;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r92 = r6;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r90 = r11;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r6 = r44;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r2 = r45;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r11 = r74;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r14 = r76;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r15 = r116;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r10 = -1;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        if (r9 != r10) goto L_0x0862;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x0860:
+                                        r22 = 1;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x0862:
+                                        if (r22 == 0) goto L_0x08e1;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x0864:
+                                        r93 = r9;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r9 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r24 = r8.dequeueInputBuffer(r9);	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r9 = r24;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        if (r9 < 0) goto L_0x08e1;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                    L_0x0870:
+                                        r63 = 0;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r64 = 0;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r65 = 0;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r67 = 4;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r61 = r8;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r62 = r9;	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r61.queueInputBuffer(r62, r63, r64, r65, r67);	 Catch:{ Exception -> 0x0891, all -> 0x0883 }
+                                        r60 = 1;
+                                        goto L_0x08e1;
+                                    L_0x0883:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r4 = r2;
+                                        r5 = r12;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        goto L_0x1295;
+                                    L_0x0891:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r104 = r2;
+                                        r107 = r11;
+                                        r98 = r13;
+                                        r108 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        goto L_0x03d0;
+                                    L_0x08a2:
+                                        r0 = move-exception;
+                                        r11 = r74;
+                                        r15 = r116;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r110 = r14;
+                                        r4 = r45;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r14 = r86;
+                                        goto L_0x1295;
+                                    L_0x08b5:
+                                        r0 = move-exception;
+                                        r91 = r2;
+                                        r6 = r44;
+                                        r15 = r116;
+                                        r97 = r1;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r104 = r45;
+                                        r107 = r74;
+                                        r108 = r77;
+                                        r14 = r86;
+                                        r1 = r0;
+                                        goto L_0x1013;
+                                    L_0x08cd:
+                                        r91 = r2;
+                                        r92 = r6;
+                                        r90 = r11;
+                                        r88 = r14;
+                                        r89 = r15;
+                                        r6 = r44;
+                                        r2 = r45;
+                                        r11 = r74;
+                                        r14 = r76;
+                                        r15 = r116;
+                                    L_0x08e1:
+                                        if (r80 != 0) goto L_0x08e5;
+                                    L_0x08e3:
+                                        r9 = 1;
+                                        goto L_0x08e6;
+                                    L_0x08e5:
+                                        r9 = 0;
+                                    L_0x08e6:
+                                        r10 = r9;
+                                        r94 = r14;
+                                        r14 = r23;
+                                        r9 = 1;
+                                    L_0x08ec:
+                                        if (r10 != 0) goto L_0x090a;
+                                    L_0x08ee:
+                                        if (r9 == 0) goto L_0x08f1;
+                                    L_0x08f0:
+                                        goto L_0x090a;
+                                        r45 = r2;
+                                        r44 = r6;
+                                        r74 = r11;
+                                        r23 = r14;
+                                        r9 = r86;
+                                        r14 = r88;
+                                        r15 = r89;
+                                        r11 = r90;
+                                        r2 = r91;
+                                        r6 = r92;
+                                        r76 = r94;
+                                        goto L_0x06b8;
+                                    L_0x090a:
+                                        r115.checkConversionCanceled();	 Catch:{ Exception -> 0x0dfd, all -> 0x0deb }
+                                        r96 = r9;	 Catch:{ Exception -> 0x0dfd, all -> 0x0deb }
+                                        r95 = r10;	 Catch:{ Exception -> 0x0dfd, all -> 0x0deb }
+                                        r9 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;	 Catch:{ Exception -> 0x0dfd, all -> 0x0deb }
+                                        r22 = r4.dequeueOutputBuffer(r6, r9);	 Catch:{ Exception -> 0x0dfd, all -> 0x0deb }
+                                        r9 = r22;
+                                        r10 = -1;
+                                        if (r9 != r10) goto L_0x092e;
+                                    L_0x091c:
+                                        r10 = 0;
+                                        r97 = r1;
+                                        r104 = r2;
+                                        r99 = r5;
+                                        r96 = r10;
+                                    L_0x0925:
+                                        r98 = r13;
+                                        r1 = r14;
+                                        r14 = r86;
+                                        r2 = r88;
+                                        goto L_0x0b52;
+                                    L_0x092e:
+                                        r10 = -3;
+                                        if (r9 != r10) goto L_0x0956;
+                                    L_0x0931:
+                                        r10 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0944, all -> 0x0883 }
+                                        r97 = r1;
+                                        r1 = 21;
+                                        if (r10 >= r1) goto L_0x093f;
+                                    L_0x0939:
+                                        r1 = r4.getOutputBuffers();	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r89 = r1;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                    L_0x093f:
+                                        r104 = r2;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r99 = r5;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        goto L_0x0925;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                    L_0x0944:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r97 = r1;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r1 = r0;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r104 = r2;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r107 = r11;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r98 = r13;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r108 = r77;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r14 = r86;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r110 = r88;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        goto L_0x1013;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                    L_0x0956:
+                                        r97 = r1;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r1 = -2;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        if (r9 != r1) goto L_0x097b;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                    L_0x095b:
+                                        r1 = r4.getOutputFormat();	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r10 = -5;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        if (r14 != r10) goto L_0x096a;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                    L_0x0962:
+                                        r10 = 0;	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r22 = r11.addTrack(r1, r10);	 Catch:{ Exception -> 0x096b, all -> 0x0883 }
+                                        r1 = r22;
+                                        r14 = r1;
+                                    L_0x096a:
+                                        goto L_0x093f;
+                                    L_0x096b:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r104 = r2;
+                                        r107 = r11;
+                                        r98 = r13;
+                                    L_0x0973:
+                                        r108 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        goto L_0x1013;
+                                    L_0x097b:
+                                        if (r9 >= 0) goto L_0x09b6;
+                                    L_0x097d:
+                                        r1 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x09a6, all -> 0x0996 }
+                                        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x09a6, all -> 0x0996 }
+                                        r10.<init>();	 Catch:{ Exception -> 0x09a6, all -> 0x0996 }
+                                        r98 = r13;
+                                        r13 = "unexpected result from encoder.dequeueOutputBuffer: ";	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r10.append(r13);	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r10.append(r9);	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r10 = r10.toString();	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r1.<init>(r10);	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        throw r1;	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                    L_0x0996:
+                                        r0 = move-exception;
+                                        r98 = r13;
+                                        r1 = r0;
+                                        r4 = r2;
+                                        r5 = r12;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        goto L_0x1295;
+                                    L_0x09a6:
+                                        r0 = move-exception;
+                                        r98 = r13;
+                                        r1 = r0;
+                                        r104 = r2;
+                                        r107 = r11;
+                                        r108 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        goto L_0x1013;
+                                    L_0x09b6:
+                                        r98 = r13;
+                                        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0ddd, all -> 0x0dcb }
+                                        r10 = 21;
+                                        if (r1 >= r10) goto L_0x09d8;
+                                    L_0x09be:
+                                        r1 = r89[r9];	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        goto L_0x09dc;
+                                    L_0x09c1:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r4 = r2;
+                                        r5 = r12;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        r13 = r98;
+                                        goto L_0x1295;
+                                    L_0x09d1:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r104 = r2;
+                                    L_0x09d5:
+                                        r107 = r11;
+                                        goto L_0x0973;
+                                    L_0x09d8:
+                                        r1 = r4.getOutputBuffer(r9);	 Catch:{ Exception -> 0x0ddd, all -> 0x0dcb }
+                                    L_0x09dc:
+                                        if (r1 != 0) goto L_0x09fc;
+                                    L_0x09de:
+                                        r10 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r13 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r13.<init>();	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r99 = r5;	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r5 = "encoderOutputBuffer ";	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r13.append(r5);	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r13.append(r9);	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r5 = " was null";	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r13.append(r5);	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r5 = r13.toString();	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r10.<init>(r5);	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        throw r10;	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                    L_0x09fc:
+                                        r99 = r5;
+                                        r5 = r6.size;	 Catch:{ Exception -> 0x0ddd, all -> 0x0dcb }
+                                        r13 = 1;
+                                        if (r5 <= r13) goto L_0x0b37;
+                                    L_0x0a03:
+                                        r5 = r6.flags;	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r5 = r5 & 2;
+                                        if (r5 != 0) goto L_0x0a1f;
+                                    L_0x0a09:
+                                        r5 = r11.writeSampleData(r14, r1, r6, r13);	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        if (r5 == 0) goto L_0x0a13;	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                    L_0x0a0f:
+                                        r5 = 0;	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                        r12.didWriteData(r15, r2, r5, r5);	 Catch:{ Exception -> 0x09d1, all -> 0x09c1 }
+                                    L_0x0a13:
+                                        r100 = r1;
+                                        r104 = r2;
+                                        r103 = r14;
+                                        r14 = r86;
+                                        r2 = r88;
+                                        goto L_0x0b41;
+                                    L_0x0a1f:
+                                        r5 = -5;
+                                        if (r14 != r5) goto L_0x0b37;
+                                    L_0x0a22:
+                                        r5 = r6.size;	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r5 = new byte[r5];	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r13 = r6.offset;	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r10 = r6.size;	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r13 = r13 + r10;	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r1.limit(r13);	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r10 = r6.offset;	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r1.position(r10);	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r1.get(r5);	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r10 = 0;	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r13 = 0;	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r100 = r1;	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r1 = r6.size;	 Catch:{ Exception -> 0x0b29, all -> 0x0b16 }
+                                        r101 = r10;
+                                        r10 = 1;
+                                        r1 = r1 - r10;
+                                    L_0x0a40:
+                                        if (r1 < 0) goto L_0x0aca;
+                                    L_0x0a42:
+                                        r10 = 3;
+                                        if (r1 <= r10) goto L_0x0aca;
+                                    L_0x0a45:
+                                        r10 = r5[r1];	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        r102 = r13;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        r13 = 1;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        if (r10 != r13) goto L_0x0a9e;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                    L_0x0a4c:
+                                        r10 = r1 + -1;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        r10 = r5[r10];	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        if (r10 != 0) goto L_0x0a9e;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                    L_0x0a52:
+                                        r10 = r1 + -2;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        r10 = r5[r10];	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        if (r10 != 0) goto L_0x0a9e;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                    L_0x0a58:
+                                        r10 = r1 + -3;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        r10 = r5[r10];	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        if (r10 != 0) goto L_0x0a9e;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                    L_0x0a5e:
+                                        r10 = r1 + -3;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        r10 = java.nio.ByteBuffer.allocate(r10);	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        r13 = r6.size;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        r22 = r1 + -3;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        r13 = r13 - r22;	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        r13 = java.nio.ByteBuffer.allocate(r13);	 Catch:{ Exception -> 0x0abc, all -> 0x0aac }
+                                        r103 = r14;
+                                        r14 = r1 + -3;
+                                        r104 = r2;
+                                        r2 = 0;
+                                        r14 = r10.put(r5, r2, r14);	 Catch:{ Exception -> 0x0a9a, all -> 0x0a8d }
+                                        r14.position(r2);	 Catch:{ Exception -> 0x0a9a, all -> 0x0a8d }
+                                        r2 = r1 + -3;	 Catch:{ Exception -> 0x0a9a, all -> 0x0a8d }
+                                        r14 = r6.size;	 Catch:{ Exception -> 0x0a9a, all -> 0x0a8d }
+                                        r22 = r1 + -3;	 Catch:{ Exception -> 0x0a9a, all -> 0x0a8d }
+                                        r14 = r14 - r22;	 Catch:{ Exception -> 0x0a9a, all -> 0x0a8d }
+                                        r2 = r13.put(r5, r2, r14);	 Catch:{ Exception -> 0x0a9a, all -> 0x0a8d }
+                                        r14 = 0;	 Catch:{ Exception -> 0x0a9a, all -> 0x0a8d }
+                                        r2.position(r14);	 Catch:{ Exception -> 0x0a9a, all -> 0x0a8d }
+                                        goto L_0x0ad4;
+                                    L_0x0a8d:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        goto L_0x0bb7;
+                                    L_0x0a9a:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        goto L_0x09d5;
+                                    L_0x0a9e:
+                                        r104 = r2;
+                                        r103 = r14;
+                                        r1 = r1 + -1;
+                                        r13 = r102;
+                                        r14 = r103;
+                                        r2 = r104;
+                                        r10 = 1;
+                                        goto L_0x0a40;
+                                    L_0x0aac:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r4 = r2;
+                                        r5 = r12;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        r13 = r98;
+                                        goto L_0x1295;
+                                    L_0x0abc:
+                                        r0 = move-exception;
+                                        r104 = r2;
+                                        r1 = r0;
+                                        r107 = r11;
+                                        r108 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        goto L_0x1013;
+                                    L_0x0aca:
+                                        r104 = r2;
+                                        r102 = r13;
+                                        r103 = r14;
+                                        r10 = r101;
+                                        r13 = r102;
+                                    L_0x0ad4:
+                                        r1 = "video/avc";	 Catch:{ Exception -> 0x0b0a, all -> 0x0af9 }
+                                        r14 = r86;
+                                        r2 = r88;
+                                        r1 = android.media.MediaFormat.createVideoFormat(r1, r2, r14);	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        if (r10 == 0) goto L_0x0aef;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0ae0:
+                                        if (r13 == 0) goto L_0x0aef;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0ae2:
+                                        r105 = r5;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r5 = "csd-0";	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r1.setByteBuffer(r5, r10);	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r5 = "csd-1";	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r1.setByteBuffer(r5, r13);	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        goto L_0x0af1;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0aef:
+                                        r105 = r5;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0af1:
+                                        r5 = 0;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r22 = r11.addTrack(r1, r5);	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r1 = r22;
+                                        goto L_0x0b43;
+                                    L_0x0af9:
+                                        r0 = move-exception;
+                                        r14 = r86;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r110 = r88;
+                                        r13 = r98;
+                                        r4 = r104;
+                                        goto L_0x1295;
+                                    L_0x0b0a:
+                                        r0 = move-exception;
+                                        r14 = r86;
+                                        r1 = r0;
+                                        r107 = r11;
+                                        r108 = r77;
+                                        r110 = r88;
+                                        goto L_0x1013;
+                                    L_0x0b16:
+                                        r0 = move-exception;
+                                        r104 = r2;
+                                        r14 = r86;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r110 = r88;
+                                        r13 = r98;
+                                        r4 = r104;
+                                        goto L_0x1295;
+                                    L_0x0b29:
+                                        r0 = move-exception;
+                                        r104 = r2;
+                                        r14 = r86;
+                                        r1 = r0;
+                                        r107 = r11;
+                                        r108 = r77;
+                                        r110 = r88;
+                                        goto L_0x1013;
+                                    L_0x0b37:
+                                        r100 = r1;
+                                        r104 = r2;
+                                        r103 = r14;
+                                        r14 = r86;
+                                        r2 = r88;
+                                    L_0x0b41:
+                                        r1 = r103;
+                                    L_0x0b43:
+                                        r5 = r6.flags;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r5 = r5 & 4;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        if (r5 == 0) goto L_0x0b4b;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                    L_0x0b49:
+                                        r5 = 1;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        goto L_0x0b4c;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                    L_0x0b4b:
+                                        r5 = 0;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                    L_0x0b4c:
+                                        r54 = r5;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r5 = 0;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r4.releaseOutputBuffer(r9, r5);	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                    L_0x0b52:
+                                        r5 = -1;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        if (r9 == r5) goto L_0x0b69;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r88 = r2;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r86 = r14;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r10 = r95;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r9 = r96;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r13 = r98;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r5 = r99;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r2 = r104;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r14 = r1;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r1 = r97;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        goto L_0x08ec;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                    L_0x0b69:
+                                        if (r80 != 0) goto L_0x0da9;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                    L_0x0b6b:
+                                        r106 = r9;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r9 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r13 = r8.dequeueOutputBuffer(r6, r9);	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r9 = r13;
+                                        if (r9 != r5) goto L_0x0b81;
+                                    L_0x0b76:
+                                        r10 = 0;
+                                        r111 = r1;
+                                        r110 = r2;
+                                        r107 = r11;
+                                        r108 = r77;
+                                        goto L_0x0db3;
+                                    L_0x0b81:
+                                        r10 = -3;
+                                        if (r9 != r10) goto L_0x0b8e;
+                                    L_0x0b84:
+                                        r111 = r1;
+                                        r110 = r2;
+                                        r107 = r11;
+                                        r108 = r77;
+                                        goto L_0x0db1;
+                                    L_0x0b8e:
+                                        r10 = -2;
+                                        if (r9 != r10) goto L_0x0bc7;
+                                    L_0x0b91:
+                                        r10 = r8.getOutputFormat();	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r13 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        if (r13 == 0) goto L_0x0bad;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0b99:
+                                        r13 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r13.<init>();	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r5 = "newFormat = ";	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r13.append(r5);	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r13.append(r10);	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r5 = r13.toString();	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        org.telegram.messenger.FileLog.m0d(r5);	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0bad:
+                                        goto L_0x0b84;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0bae:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r1 = r0;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r110 = r2;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r5 = r12;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r3 = r49;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r9 = r77;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0bb7:
+                                        r13 = r98;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r4 = r104;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        goto L_0x1295;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0bbd:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r1 = r0;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r110 = r2;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r107 = r11;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0bc3:
+                                        r108 = r77;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        goto L_0x1013;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0bc7:
+                                        if (r9 >= 0) goto L_0x0be0;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0bc9:
+                                        r5 = new java.lang.RuntimeException;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r10.<init>();	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r13 = "unexpected result from decoder.dequeueOutputBuffer: ";	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r10.append(r13);	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r10.append(r9);	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r10 = r10.toString();	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        r5.<init>(r10);	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        throw r5;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                    L_0x0be0:
+                                        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        r10 = 18;
+                                        if (r5 < r10) goto L_0x0bf0;
+                                    L_0x0be6:
+                                        r5 = r6.size;	 Catch:{ Exception -> 0x0bbd, all -> 0x0bae }
+                                        if (r5 == 0) goto L_0x0bec;
+                                    L_0x0bea:
+                                        r5 = 1;
+                                        goto L_0x0bed;
+                                    L_0x0bec:
+                                        r5 = 0;
+                                    L_0x0bed:
+                                        r107 = r11;
+                                        goto L_0x0c1a;
+                                    L_0x0bf0:
+                                        r5 = r6.size;	 Catch:{ Exception -> 0x0d9f, all -> 0x0d8e }
+                                        if (r5 != 0) goto L_0x0c17;
+                                    L_0x0bf4:
+                                        r107 = r11;
+                                        r10 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r22 = 0;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r5 = (r10 > r22 ? 1 : (r10 == r22 ? 0 : -1));	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        if (r5 == 0) goto L_0x0bff;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                    L_0x0bfe:
+                                        goto L_0x0c19;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                    L_0x0bff:
+                                        r5 = 0;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        goto L_0x0c1a;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                    L_0x0c01:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r1 = r0;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r110 = r2;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r5 = r12;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r3 = r49;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r9 = r77;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r13 = r98;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r4 = r104;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r11 = r107;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        goto L_0x1295;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                    L_0x0c12:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r1 = r0;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r110 = r2;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        goto L_0x0bc3;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                    L_0x0c17:
+                                        r107 = r11;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                    L_0x0c19:
+                                        r5 = 1;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                    L_0x0c1a:
+                                        r10 = 0;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r13 = (r19 > r10 ? 1 : (r19 == r10 ? 0 : -1));	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        if (r13 <= 0) goto L_0x0c31;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                    L_0x0c20:
+                                        r10 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r13 = (r10 > r19 ? 1 : (r10 == r19 ? 0 : -1));	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        if (r13 < 0) goto L_0x0c31;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                    L_0x0c26:
+                                        r60 = 1;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r80 = 1;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r5 = 0;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r10 = r6.flags;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r10 = r10 | 4;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                        r6.flags = r10;	 Catch:{ Exception -> 0x0c12, all -> 0x0c01 }
+                                    L_0x0c31:
+                                        r10 = 0;
+                                        r13 = (r77 > r10 ? 1 : (r77 == r10 ? 0 : -1));
+                                        if (r13 <= 0) goto L_0x0c84;
+                                    L_0x0c37:
+                                        r22 = -1;
+                                        r13 = (r57 > r22 ? 1 : (r57 == r22 ? 0 : -1));
+                                        if (r13 != 0) goto L_0x0c84;
+                                    L_0x0c3d:
+                                        r10 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0cab, all -> 0x0c9a }
+                                        r13 = (r10 > r77 ? 1 : (r10 == r77 ? 0 : -1));	 Catch:{ Exception -> 0x0cab, all -> 0x0c9a }
+                                        if (r13 >= 0) goto L_0x0c87;	 Catch:{ Exception -> 0x0cab, all -> 0x0c9a }
+                                    L_0x0c43:
+                                        r5 = 0;	 Catch:{ Exception -> 0x0cab, all -> 0x0c9a }
+                                        r10 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0cab, all -> 0x0c9a }
+                                        if (r10 == 0) goto L_0x0c84;	 Catch:{ Exception -> 0x0cab, all -> 0x0c9a }
+                                    L_0x0c48:
+                                        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0cab, all -> 0x0c9a }
+                                        r10.<init>();	 Catch:{ Exception -> 0x0cab, all -> 0x0c9a }
+                                        r11 = "drop frame startTime = ";	 Catch:{ Exception -> 0x0cab, all -> 0x0c9a }
+                                        r10.append(r11);	 Catch:{ Exception -> 0x0cab, all -> 0x0c9a }
+                                        r11 = r77;
+                                        r10.append(r11);	 Catch:{ Exception -> 0x0c7c, all -> 0x0c6b }
+                                        r13 = " present time = ";	 Catch:{ Exception -> 0x0c7c, all -> 0x0c6b }
+                                        r10.append(r13);	 Catch:{ Exception -> 0x0c7c, all -> 0x0c6b }
+                                        r108 = r11;
+                                        r11 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r10.append(r11);	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r10 = r10.toString();	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        org.telegram.messenger.FileLog.m0d(r10);	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        goto L_0x0cb3;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                    L_0x0c6b:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r1 = r0;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r110 = r2;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r9 = r11;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r3 = r49;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r13 = r98;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r4 = r104;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r11 = r107;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r5 = r115;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        goto L_0x1295;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                    L_0x0c7c:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r108 = r11;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r1 = r0;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r110 = r2;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        goto L_0x1013;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                    L_0x0c84:
+                                        r108 = r77;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        goto L_0x0cb3;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                    L_0x0c87:
+                                        r108 = r77;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r10 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r57 = r10;
+                                        goto L_0x0cb3;
+                                    L_0x0c8e:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r110 = r2;
+                                        goto L_0x0d65;
+                                    L_0x0c94:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r110 = r2;
+                                        goto L_0x1013;
+                                    L_0x0c9a:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        r110 = r2;
+                                        r5 = r12;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r13 = r98;
+                                        r4 = r104;
+                                        r11 = r107;
+                                        goto L_0x1295;
+                                    L_0x0cab:
+                                        r0 = move-exception;
+                                        r108 = r77;
+                                        r1 = r0;
+                                        r110 = r2;
+                                        goto L_0x1013;
+                                    L_0x0cb3:
+                                        r8.releaseOutputBuffer(r9, r5);	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        if (r5 == 0) goto L_0x0d29;
+                                    L_0x0cb8:
+                                        r10 = 0;
+                                        r11 = r10;
+                                        r3.awaitNewImage();	 Catch:{ Exception -> 0x0cbe, all -> 0x0c8e }
+                                        goto L_0x0cc4;
+                                    L_0x0cbe:
+                                        r0 = move-exception;
+                                        r10 = r0;
+                                        r11 = 1;
+                                        org.telegram.messenger.FileLog.m3e(r10);	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                    L_0x0cc4:
+                                        if (r11 != 0) goto L_0x0d29;	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                    L_0x0cc6:
+                                        r10 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r12 = 18;
+                                        if (r10 < r12) goto L_0x0ce1;
+                                    L_0x0ccc:
+                                        r10 = 0;
+                                        r3.drawImage(r10);	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r12 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r22 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r12 = r12 * r22;	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r7.setPresentationTime(r12);	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r7.swapBuffers();	 Catch:{ Exception -> 0x0c94, all -> 0x0c8e }
+                                        r111 = r1;
+                                        r110 = r2;
+                                        goto L_0x0d2d;
+                                    L_0x0ce1:
+                                        r12 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;
+                                        r10 = r4.dequeueInputBuffer(r12);	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        if (r10 < 0) goto L_0x0d1b;	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                    L_0x0ce9:
+                                        r12 = 1;	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r3.drawImage(r12);	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r22 = r3.getFrame();	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r12 = r99[r10];	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r12.clear();	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r23 = r12;	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r24 = r83;	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r25 = r2;	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r26 = r14;	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r27 = r59;	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r28 = r73;	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        org.telegram.messenger.Utilities.convertVideoFrame(r22, r23, r24, r25, r26, r27, r28);	 Catch:{ Exception -> 0x0d88, all -> 0x0d76 }
+                                        r63 = 0;
+                                        r111 = r1;
+                                        r110 = r2;
+                                        r1 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r67 = 0;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r61 = r4;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r62 = r10;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r64 = r75;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r65 = r1;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r61.queueInputBuffer(r62, r63, r64, r65, r67);	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        goto L_0x0d2d;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                    L_0x0d1b:
+                                        r111 = r1;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r110 = r2;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        if (r1 == 0) goto L_0x0d2d;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                    L_0x0d23:
+                                        r1 = "input buffer not available";	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        org.telegram.messenger.FileLog.m0d(r1);	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        goto L_0x0d2d;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                    L_0x0d29:
+                                        r111 = r1;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r110 = r2;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                    L_0x0d2d:
+                                        r1 = r6.flags;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r1 = r1 & 4;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        if (r1 == 0) goto L_0x0db1;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                    L_0x0d33:
+                                        r1 = 0;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        if (r2 == 0) goto L_0x0d3d;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                    L_0x0d38:
+                                        r2 = "decoder stream end";	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        org.telegram.messenger.FileLog.m0d(r2);	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                    L_0x0d3d:
+                                        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r10 = 18;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        if (r2 < r10) goto L_0x0d47;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                    L_0x0d43:
+                                        r4.signalEndOfInputStream();	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        goto L_0x0d60;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                    L_0x0d47:
+                                        r11 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r2 = r4.dequeueInputBuffer(r11);	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        if (r2 < 0) goto L_0x0d60;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                    L_0x0d4f:
+                                        r63 = 0;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r64 = 1;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r10 = r6.presentationTimeUs;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r67 = 4;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r61 = r4;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r62 = r2;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r65 = r10;	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                        r61.queueInputBuffer(r62, r63, r64, r65, r67);	 Catch:{ Exception -> 0x0d73, all -> 0x0d63 }
+                                    L_0x0d60:
+                                        r10 = r1;
+                                        goto L_0x0db3;
+                                    L_0x0d63:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                    L_0x0d65:
+                                        r3 = r49;
+                                        r13 = r98;
+                                        r4 = r104;
+                                        r11 = r107;
+                                        r9 = r108;
+                                        r5 = r115;
+                                        goto L_0x1295;
+                                    L_0x0d73:
+                                        r0 = move-exception;
+                                        goto L_0x03d0;
+                                    L_0x0d76:
+                                        r0 = move-exception;
+                                        r110 = r2;
+                                        r1 = r0;
+                                        r3 = r49;
+                                        r13 = r98;
+                                        r4 = r104;
+                                        r11 = r107;
+                                        r9 = r108;
+                                        r5 = r115;
+                                        goto L_0x1295;
+                                    L_0x0d88:
+                                        r0 = move-exception;
+                                        r110 = r2;
+                                        r1 = r0;
+                                        goto L_0x1013;
+                                    L_0x0d8e:
+                                        r0 = move-exception;
+                                        r110 = r2;
+                                        r107 = r11;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r13 = r98;
+                                        r4 = r104;
+                                        goto L_0x1295;
+                                    L_0x0d9f:
+                                        r0 = move-exception;
+                                        r110 = r2;
+                                        r107 = r11;
+                                        r108 = r77;
+                                        r1 = r0;
+                                        goto L_0x1013;
+                                    L_0x0da9:
+                                        r111 = r1;
+                                        r110 = r2;
+                                        r107 = r11;
+                                        r108 = r77;
+                                    L_0x0db1:
+                                        r10 = r95;
+                                    L_0x0db3:
+                                        r86 = r14;
+                                        r9 = r96;
+                                        r1 = r97;
+                                        r13 = r98;
+                                        r5 = r99;
+                                        r2 = r104;
+                                        r11 = r107;
+                                        r77 = r108;
+                                        r88 = r110;
+                                        r14 = r111;
+                                        r12 = r115;
+                                        goto L_0x08ec;
+                                    L_0x0dcb:
+                                        r0 = move-exception;
+                                        r107 = r11;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        r1 = r0;
+                                        r4 = r2;
+                                        r5 = r12;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r13 = r98;
+                                        goto L_0x1295;
+                                    L_0x0ddd:
+                                        r0 = move-exception;
+                                        r104 = r2;
+                                        r107 = r11;
+                                        r108 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        r1 = r0;
+                                        goto L_0x1013;
+                                    L_0x0deb:
+                                        r0 = move-exception;
+                                        r107 = r11;
+                                        r98 = r13;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        r1 = r0;
+                                        r4 = r2;
+                                        r5 = r12;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        goto L_0x1295;
+                                    L_0x0dfd:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r104 = r2;
+                                        r107 = r11;
+                                        r98 = r13;
+                                        r108 = r77;
+                                        r14 = r86;
+                                        r110 = r88;
+                                        r1 = r0;
+                                        goto L_0x1013;
+                                    L_0x0e0f:
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r107 = r74;
+                                        r108 = r77;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        goto L_0x1019;
+                                    L_0x0e24:
+                                        r0 = move-exception;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r107 = r74;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r4 = r45;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r11 = r107;
+                                        goto L_0x1295;
+                                    L_0x0e3a:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r107 = r74;
+                                        r108 = r77;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        goto L_0x1013;
+                                    L_0x0e51:
+                                        r0 = move-exception;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r74;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r4 = r45;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r11 = r107;
+                                        goto L_0x1295;
+                                    L_0x0e69:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r107 = r74;
+                                        r108 = r77;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        goto L_0x1013;
+                                    L_0x0e82:
+                                        r0 = move-exception;
+                                        r81 = r11;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r74;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r4 = r45;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r11 = r107;
+                                        goto L_0x1295;
+                                    L_0x0e9c:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r81 = r11;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r107 = r74;
+                                        r108 = r77;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        r3 = r56;
+                                        goto L_0x1013;
+                                    L_0x0eb9:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r107 = r74;
+                                        r108 = r77;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        goto L_0x0f46;
+                                    L_0x0ed4:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r107 = r74;
+                                        r108 = r77;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        r8 = r50;
+                                        goto L_0x0f46;
+                                    L_0x0ef1:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r107 = r74;
+                                        r108 = r77;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        r8 = r50;
+                                        goto L_0x0f44;
+                                    L_0x0f0d:
+                                        r0 = move-exception;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r81 = r46;
+                                        r107 = r74;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r4 = r45;
+                                        r3 = r49;
+                                        r9 = r77;
+                                        r11 = r107;
+                                        goto L_0x1295;
+                                    L_0x0f27:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r107 = r74;
+                                        r108 = r77;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        r8 = r50;
+                                        r4 = r51;
+                                    L_0x0f44:
+                                        r7 = r52;
+                                    L_0x0f46:
+                                        r3 = r56;
+                                        goto L_0x1013;
+                                    L_0x0f4a:
+                                        r0 = move-exception;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r81 = r46;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r4 = r45;
+                                        r9 = r47;
+                                        r3 = r49;
+                                        r11 = r107;
+                                        goto L_0x1295;
+                                    L_0x0f64:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r108 = r47;
+                                        r15 = r116;
+                                        r14 = r9;
+                                        r1 = r0;
+                                        r8 = r50;
+                                        r4 = r51;
+                                        r7 = r52;
+                                        r3 = r56;
+                                        goto L_0x1013;
+                                    L_0x0f87:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r14 = r42;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r108 = r47;
+                                        r15 = r116;
+                                        r1 = r0;
+                                        r8 = r50;
+                                        r4 = r51;
+                                        r7 = r52;
+                                        r3 = r56;
+                                        goto L_0x1013;
+                                    L_0x0fab:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r52 = r5;
+                                        r56 = r7;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r14 = r42;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r108 = r47;
+                                        r15 = r116;
+                                        r1 = r0;
+                                        r8 = r50;
+                                        r4 = r51;
+                                        r7 = r52;
+                                        r3 = r56;
+                                        goto L_0x1013;
+                                    L_0x0fd2:
+                                        r0 = move-exception;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r14 = r42;
+                                        r81 = r46;
+                                        r15 = r116;
+                                        r1 = r0;
+                                        r5 = r12;
+                                        r4 = r45;
+                                        r9 = r47;
+                                        r3 = r49;
+                                        r11 = r107;
+                                        goto L_0x1295;
+                                    L_0x0fed:
+                                        r0 = move-exception;
+                                        r97 = r1;
+                                        r91 = r2;
+                                        r51 = r4;
+                                        r52 = r5;
+                                        r56 = r7;
+                                        r98 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r14 = r42;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r108 = r47;
+                                        r15 = r116;
+                                        r1 = r0;
+                                        r8 = r50;
+                                        r7 = r52;
+                                        r3 = r56;
+                                    L_0x1013:
+                                        org.telegram.messenger.FileLog.m3e(r1);	 Catch:{ Exception -> 0x1097, all -> 0x1086 }
+                                        r1 = 1;
+                                        r16 = r1;
+                                    L_0x1019:
+                                        r2 = r97;
+                                        r1 = r98;
+                                        r1.unselectTrack(r2);	 Catch:{ Exception -> 0x107b, all -> 0x106c }
+                                        if (r3 == 0) goto L_0x1040;
+                                    L_0x1022:
+                                        r3.release();	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        goto L_0x1040;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                    L_0x1026:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r13 = r1;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r3 = r49;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r4 = r104;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r11 = r107;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r9 = r108;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r5 = r115;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                    L_0x1032:
+                                        r1 = r0;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        goto L_0x1295;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                    L_0x1035:
+                                        r0 = move-exception;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r7 = r1;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r2 = r107;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r9 = r108;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r5 = r115;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                    L_0x103d:
+                                        r1 = r0;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        goto L_0x1242;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                    L_0x1040:
+                                        if (r7 == 0) goto L_0x1045;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                    L_0x1042:
+                                        r7.release();	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                    L_0x1045:
+                                        if (r8 == 0) goto L_0x104d;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                    L_0x1047:
+                                        r8.stop();	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r8.release();	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                    L_0x104d:
+                                        if (r4 == 0) goto L_0x1055;	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                    L_0x104f:
+                                        r4.stop();	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                        r4.release();	 Catch:{ Exception -> 0x1035, all -> 0x1026 }
+                                    L_0x1055:
+                                        r9 = r108;
+                                        r5 = r115;
+                                        r115.checkConversionCanceled();	 Catch:{ Exception -> 0x1067, all -> 0x105e }
+                                        goto L_0x10b8;
+                                    L_0x105e:
+                                        r0 = move-exception;
+                                        r13 = r1;
+                                        r3 = r49;
+                                        r4 = r104;
+                                        r11 = r107;
+                                        goto L_0x1032;
+                                    L_0x1067:
+                                        r0 = move-exception;
+                                        r7 = r1;
+                                        r2 = r107;
+                                        goto L_0x103d;
+                                    L_0x106c:
+                                        r0 = move-exception;
+                                        r9 = r108;
+                                        r5 = r115;
+                                        r13 = r1;
+                                        r3 = r49;
+                                        r4 = r104;
+                                        r11 = r107;
+                                        r1 = r0;
+                                        goto L_0x1295;
+                                    L_0x107b:
+                                        r0 = move-exception;
+                                        r9 = r108;
+                                        r5 = r115;
+                                        r7 = r1;
+                                        r2 = r107;
+                                        r1 = r0;
+                                        goto L_0x1242;
+                                    L_0x1086:
+                                        r0 = move-exception;
+                                        r1 = r98;
+                                        r9 = r108;
+                                        r5 = r115;
+                                        r13 = r1;
+                                        r3 = r49;
+                                        r4 = r104;
+                                        r11 = r107;
+                                        r1 = r0;
+                                        goto L_0x1295;
+                                    L_0x1097:
+                                        r0 = move-exception;
+                                        r1 = r98;
+                                        r9 = r108;
+                                        r5 = r115;
+                                        r7 = r1;
+                                        r2 = r107;
+                                        r1 = r0;
+                                        goto L_0x1242;
+                                    L_0x10a4:
+                                        r5 = r12;
+                                        r1 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r107 = r41;
+                                        r14 = r42;
+                                        r6 = r44;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r9 = r47;
+                                        r15 = r116;
+                                    L_0x10b8:
+                                        if (r1 == 0) goto L_0x10bd;
+                                    L_0x10ba:
+                                        r1.release();
+                                    L_0x10bd:
+                                        if (r107 == 0) goto L_0x10cb;
+                                    L_0x10bf:
+                                        r2 = r107;
+                                        r2.finishMovie();	 Catch:{ Exception -> 0x10c5 }
+                                        goto L_0x10cd;
+                                    L_0x10c5:
+                                        r0 = move-exception;
+                                        r3 = r0;
+                                        org.telegram.messenger.FileLog.m3e(r3);
+                                        goto L_0x10cd;
+                                    L_0x10cb:
+                                        r2 = r107;
+                                    L_0x10cd:
+                                        r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+                                        if (r3 == 0) goto L_0x1275;
+                                    L_0x10d1:
+                                        r3 = new java.lang.StringBuilder;
+                                        r3.<init>();
+                                        r4 = "time = ";
+                                        r3.append(r4);
+                                        r6 = java.lang.System.currentTimeMillis();
+                                        r11 = r6 - r34;
+                                        r3.append(r11);
+                                        r3 = r3.toString();
+                                        org.telegram.messenger.FileLog.m0d(r3);
+                                        goto L_0x1275;
+                                    L_0x10ed:
+                                        r0 = move-exception;
+                                        r5 = r12;
+                                        r1 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r2 = r41;
+                                        r14 = r42;
+                                        r81 = r46;
+                                        r9 = r47;
+                                        r15 = r116;
+                                        r11 = r2;
+                                        r4 = r45;
+                                        r3 = r49;
+                                        r1 = r0;
+                                        goto L_0x1295;
+                                    L_0x1106:
+                                        r0 = move-exception;
+                                        r5 = r12;
+                                        r1 = r13;
+                                        r110 = r14;
+                                        r82 = r15;
+                                        r2 = r41;
+                                        r14 = r42;
+                                        r104 = r45;
+                                        r81 = r46;
+                                        r9 = r47;
+                                        r15 = r116;
+                                        r7 = r1;
+                                        r1 = r0;
+                                        goto L_0x1242;
+                                    L_0x111d:
+                                        r0 = move-exception;
+                                        r1 = r7;
+                                        r110 = r9;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r9 = r29;
+                                        r82 = r31;
+                                        r81 = r32;
+                                        r17 = r33;
+                                        r2 = r37;
+                                        r32 = r3;
+                                        r33 = r4;
+                                        r14 = r5;
+                                        r29 = r11;
+                                        r5 = r12;
+                                        r15 = r13;
+                                        r13 = r1;
+                                        r11 = r2;
+                                        r4 = r8;
+                                        r3 = r49;
+                                        r1 = r0;
+                                        goto L_0x1295;
+                                    L_0x1142:
+                                        r0 = move-exception;
+                                        r1 = r7;
+                                        r104 = r8;
+                                        r110 = r9;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r9 = r29;
+                                        r82 = r31;
+                                        r81 = r32;
+                                        r17 = r33;
+                                        r2 = r37;
+                                        r32 = r3;
+                                        r33 = r4;
+                                        r14 = r5;
+                                        r29 = r11;
+                                        r5 = r12;
+                                        r15 = r13;
+                                        r1 = r0;
+                                        goto L_0x1242;
+                                    L_0x1164:
+                                        r0 = move-exception;
+                                        r98 = r7;
+                                        r110 = r9;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r9 = r29;
+                                        r82 = r31;
+                                        r81 = r32;
+                                        r17 = r33;
+                                        r2 = r37;
+                                        r32 = r3;
+                                        r33 = r4;
+                                        r14 = r5;
+                                        r29 = r11;
+                                        r5 = r12;
+                                        r15 = r13;
+                                        r1 = r0;
+                                        r11 = r2;
+                                        r4 = r8;
+                                        r3 = r49;
+                                        r13 = r98;
+                                        goto L_0x1295;
+                                    L_0x118b:
+                                        r0 = move-exception;
+                                        r98 = r7;
+                                        r104 = r8;
+                                        r110 = r9;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r9 = r29;
+                                        r82 = r31;
+                                        r81 = r32;
+                                        r17 = r33;
+                                        r2 = r37;
+                                        r32 = r3;
+                                        r33 = r4;
+                                        r14 = r5;
+                                        r29 = r11;
+                                        r5 = r12;
+                                        r15 = r13;
+                                        r1 = r0;
+                                        goto L_0x1242;
+                                    L_0x11ae:
+                                        r0 = move-exception;
+                                        r98 = r7;
+                                        r110 = r9;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r9 = r29;
+                                        r82 = r31;
+                                        r81 = r32;
+                                        r17 = r33;
+                                        r32 = r3;
+                                        r33 = r4;
+                                        r14 = r5;
+                                        r29 = r11;
+                                        r5 = r12;
+                                        r15 = r13;
+                                        r1 = r0;
+                                        r4 = r8;
+                                        r11 = r36;
+                                        r3 = r49;
+                                        r13 = r98;
+                                        goto L_0x1295;
+                                    L_0x11d4:
+                                        r0 = move-exception;
+                                        r98 = r7;
+                                        r104 = r8;
+                                        r110 = r9;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r9 = r29;
+                                        r82 = r31;
+                                        r81 = r32;
+                                        r17 = r33;
+                                        r32 = r3;
+                                        r33 = r4;
+                                        r14 = r5;
+                                        r29 = r11;
+                                        r5 = r12;
+                                        r15 = r13;
+                                        r1 = r0;
+                                        r2 = r36;
+                                        goto L_0x1242;
+                                    L_0x11f7:
+                                        r0 = move-exception;
+                                        r36 = r1;
+                                        r98 = r7;
+                                        r110 = r9;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r9 = r29;
+                                        r82 = r31;
+                                        r81 = r32;
+                                        r17 = r33;
+                                        r32 = r3;
+                                        r33 = r4;
+                                        r14 = r5;
+                                        r29 = r11;
+                                        r5 = r12;
+                                        r15 = r13;
+                                        r1 = r0;
+                                        r4 = r8;
+                                        r11 = r36;
+                                        r3 = r49;
+                                        r13 = r98;
+                                        goto L_0x1295;
+                                    L_0x121f:
+                                        r0 = move-exception;
+                                        r36 = r1;
+                                        r98 = r7;
+                                        r104 = r8;
+                                        r110 = r9;
+                                        r49 = r10;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r9 = r29;
+                                        r82 = r31;
+                                        r81 = r32;
+                                        r17 = r33;
+                                        r32 = r3;
+                                        r33 = r4;
+                                        r14 = r5;
+                                        r29 = r11;
+                                        r5 = r12;
+                                        r15 = r13;
+                                        r1 = r0;
+                                        r2 = r36;
+                                    L_0x1242:
+                                        r16 = 1;
+                                        org.telegram.messenger.FileLog.m3e(r1);	 Catch:{ all -> 0x128d }
+                                        if (r7 == 0) goto L_0x124c;
+                                    L_0x1249:
+                                        r7.release();
+                                    L_0x124c:
+                                        if (r2 == 0) goto L_0x1257;
+                                    L_0x124e:
+                                        r2.finishMovie();	 Catch:{ Exception -> 0x1252 }
+                                        goto L_0x1257;
+                                    L_0x1252:
+                                        r0 = move-exception;
+                                        r1 = r0;
+                                        org.telegram.messenger.FileLog.m3e(r1);
+                                    L_0x1257:
+                                        r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+                                        if (r1 == 0) goto L_0x1275;
+                                    L_0x125b:
+                                        r1 = new java.lang.StringBuilder;
+                                        r1.<init>();
+                                        r3 = "time = ";
+                                        r1.append(r3);
+                                        r3 = java.lang.System.currentTimeMillis();
+                                        r11 = r3 - r34;
+                                        r1.append(r11);
+                                        r1 = r1.toString();
+                                        org.telegram.messenger.FileLog.m0d(r1);
+                                    L_0x1275:
+                                        r1 = r16;
+                                        r3 = r49;
+                                        r2 = r3.edit();
+                                        r4 = "isPreviousOk";
+                                        r6 = 1;
+                                        r2 = r2.putBoolean(r4, r6);
+                                        r2.commit();
+                                        r4 = r104;
+                                        r5.didWriteData(r15, r4, r6, r1);
+                                        return r6;
+                                    L_0x128d:
+                                        r0 = move-exception;
+                                        r3 = r49;
+                                        r4 = r104;
+                                        r1 = r0;
+                                        r11 = r2;
+                                        r13 = r7;
+                                    L_0x1295:
+                                        if (r13 == 0) goto L_0x129a;
+                                    L_0x1297:
+                                        r13.release();
+                                    L_0x129a:
+                                        if (r11 == 0) goto L_0x12a5;
+                                    L_0x129c:
+                                        r11.finishMovie();	 Catch:{ Exception -> 0x12a0 }
+                                        goto L_0x12a5;
+                                    L_0x12a0:
+                                        r0 = move-exception;
+                                        r2 = r0;
+                                        org.telegram.messenger.FileLog.m3e(r2);
+                                    L_0x12a5:
+                                        r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+                                        if (r2 == 0) goto L_0x12c6;
+                                    L_0x12a9:
+                                        r2 = new java.lang.StringBuilder;
+                                        r2.<init>();
+                                        r6 = "time = ";
+                                        r2.append(r6);
+                                        r6 = java.lang.System.currentTimeMillis();
+                                        r112 = r9;
+                                        r8 = r6 - r34;
+                                        r2.append(r8);
+                                        r2 = r2.toString();
+                                        org.telegram.messenger.FileLog.m0d(r2);
+                                        goto L_0x12c8;
+                                    L_0x12c6:
+                                        r112 = r9;
+                                    L_0x12c8:
+                                        throw r1;
+                                    L_0x12c9:
+                                        r110 = r9;
+                                        r40 = r14;
+                                        r43 = r15;
+                                        r112 = r29;
+                                        r82 = r31;
+                                        r81 = r32;
+                                        r17 = r33;
+                                        r32 = r3;
+                                        r33 = r4;
+                                        r14 = r5;
+                                        r4 = r8;
+                                        r3 = r10;
+                                        r29 = r11;
+                                        r5 = r12;
+                                        r15 = r13;
+                                        r1 = r3.edit();
+                                        r2 = "isPreviousOk";
+                                        r6 = 1;
+                                        r1 = r1.putBoolean(r2, r6);
+                                        r1.commit();
+                                        r5.didWriteData(r15, r4, r6, r6);
+                                        r1 = 0;
+                                        return r1;
+                                        */
+                                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.convertVideo(org.telegram.messenger.MessageObject):boolean");
                                     }
-                                    swapUV = 1;
                                 }
-                            } else {
-                                if (codecName.contains("OMX.Intel.")) {
-                                    processorType = 2;
-                                } else {
-                                    if (codecName.equals("OMX.MTK.VIDEO.ENCODER.AVC")) {
-                                        processorType = 3;
-                                    } else {
-                                        if (codecName.equals("OMX.SEC.AVC.Encoder")) {
-                                            processorType = 4;
-                                            swapUV = 1;
-                                        } else {
-                                            if (codecName.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
-                                                processorType = 5;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m0d("codec = " + codecInfo.getName() + " manufacturer = " + manufacturer + "device = " + Build.MODEL);
-                            }
-                        } else {
-                            colorFormat = NUM;
-                        }
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("colorFormat = " + colorFormat);
-                        }
-                        int resultHeightAligned = resultHeight;
-                        int padding = 0;
-                        int bufferSize = ((resultWidth * resultHeight) * 3) / 2;
-                        if (processorType == 0) {
-                            if (resultHeight % 16 != 0) {
-                                padding = resultWidth * ((resultHeightAligned + (16 - (resultHeight % 16))) - resultHeight);
-                                bufferSize += (padding * 5) / 4;
-                            }
-                        } else if (processorType == 1) {
-                            if (!manufacturer.toLowerCase().equals("lge")) {
-                                padding = (((resultWidth * resultHeight) + 2047) & -2048) - (resultWidth * resultHeight);
-                                bufferSize += padding;
-                            }
-                        } else if (processorType != 5 && processorType == 3) {
-                            if (manufacturer.equals("baidu")) {
-                                padding = resultWidth * ((resultHeightAligned + (16 - (resultHeight % 16))) - resultHeight);
-                                bufferSize += (padding * 5) / 4;
-                            }
-                        }
-                        extractor2.selectTrack(videoIndex);
-                        MediaFormat videoFormat = extractor2.getTrackFormat(videoIndex);
-                        ByteBuffer audioBuffer = null;
-                        if (audioIndex >= 0) {
-                            extractor2.selectTrack(audioIndex);
-                            MediaFormat audioFormat = extractor2.getTrackFormat(audioIndex);
-                            audioBuffer = ByteBuffer.allocateDirect(audioFormat.getInteger("max-input-size"));
-                            audioTrackIndex = mP4Builder.addTrack(audioFormat, true);
-                        }
-                        if (startTime > 0) {
-                            extractor2.seekTo(startTime, 0);
-                        } else {
-                            extractor2.seekTo(0, 0);
-                        }
-                        MediaFormat outputFormat = MediaFormat.createVideoFormat("video/avc", resultWidth, resultHeight);
-                        outputFormat.setInteger("color-format", colorFormat);
-                        String str = "bitrate";
-                        if (bitrate <= 0) {
-                            bitrate = 921600;
-                        }
-                        outputFormat.setInteger(str, bitrate);
-                        outputFormat.setInteger("frame-rate", 25);
-                        outputFormat.setInteger("i-frame-interval", 10);
-                        if (VERSION.SDK_INT < 18) {
-                            outputFormat.setInteger("stride", resultWidth + 32);
-                            outputFormat.setInteger("slice-height", resultHeight);
-                        }
-                        encoder = MediaCodec.createEncoderByType("video/avc");
-                        encoder.configure(outputFormat, null, null, 1);
-                        if (VERSION.SDK_INT >= 18) {
-                            InputSurface inputSurface2 = new InputSurface(encoder.createInputSurface());
-                            try {
-                                inputSurface2.makeCurrent();
-                                inputSurface = inputSurface2;
-                            } catch (Exception e2) {
-                                e = e2;
-                                inputSurface = inputSurface2;
-                                FileLog.m3e(e);
-                                error = true;
-                                extractor2.unselectTrack(videoIndex);
-                                if (outputSurface != null) {
-                                    outputSurface.release();
-                                }
-                                if (inputSurface != null) {
-                                    inputSurface.release();
-                                }
-                                if (decoder != null) {
-                                    decoder.stop();
-                                    decoder.release();
-                                }
-                                if (encoder != null) {
-                                    encoder.stop();
-                                    encoder.release();
-                                }
-                                checkConversionCanceled();
-                                if (extractor2 != null) {
-                                    extractor2.release();
-                                }
-                                if (mP4Builder != null) {
-                                    try {
-                                        mP4Builder.finishMovie();
-                                    } catch (Throwable e3) {
-                                        FileLog.m3e(e3);
-                                    }
-                                }
-                                if (BuildVars.LOGS_ENABLED) {
-                                    FileLog.m0d("time = " + (System.currentTimeMillis() - time));
-                                    extractor = extractor2;
-                                } else {
-                                    extractor = extractor2;
-                                }
-                                preferences.edit().putBoolean("isPreviousOk", true).commit();
-                                didWriteData(messageObject, file, true, error);
-                                return true;
-                            } catch (Throwable th2) {
-                                th = th2;
-                                extractor = extractor2;
-                            }
-                        }
-                        try {
-                            encoder.start();
-                            decoder = MediaCodec.createDecoderByType(videoFormat.getString("mime"));
-                            if (VERSION.SDK_INT >= 18) {
-                                outputSurface = new OutputSurface();
-                            } else {
-                                outputSurface = new OutputSurface(resultWidth, resultHeight, rotateRender);
-                            }
-                            decoder.configure(videoFormat, outputSurface.getSurface(), null, 0);
-                            decoder.start();
-                            ByteBuffer[] decoderInputBuffers = null;
-                            ByteBuffer[] encoderOutputBuffers = null;
-                            ByteBuffer[] encoderInputBuffers = null;
-                            if (VERSION.SDK_INT < 21) {
-                                decoderInputBuffers = decoder.getInputBuffers();
-                                encoderOutputBuffers = encoder.getOutputBuffers();
-                                if (VERSION.SDK_INT < 18) {
-                                    encoderInputBuffers = encoder.getInputBuffers();
-                                }
-                            }
-                            checkConversionCanceled();
-                            while (!outputDone) {
-                                int inputBufIndex;
-                                checkConversionCanceled();
-                                if (!z) {
-                                    boolean eof = false;
-                                    int index = extractor2.getSampleTrackIndex();
-                                    if (index == videoIndex) {
-                                        inputBufIndex = decoder.dequeueInputBuffer(2500);
-                                        if (inputBufIndex >= 0) {
-                                            ByteBuffer inputBuf;
-                                            if (VERSION.SDK_INT < 21) {
-                                                inputBuf = decoderInputBuffers[inputBufIndex];
-                                            } else {
-                                                inputBuf = decoder.getInputBuffer(inputBufIndex);
-                                            }
-                                            int chunkSize = extractor2.readSampleData(inputBuf, 0);
-                                            if (chunkSize < 0) {
-                                                decoder.queueInputBuffer(inputBufIndex, 0, 0, 0, 4);
-                                                z = true;
-                                            } else {
-                                                decoder.queueInputBuffer(inputBufIndex, 0, chunkSize, extractor2.getSampleTime(), 0);
-                                                extractor2.advance();
-                                            }
-                                        }
-                                    } else if (audioIndex != -1 && index == audioIndex) {
-                                        info.size = extractor2.readSampleData(audioBuffer, 0);
-                                        if (VERSION.SDK_INT < 21) {
-                                            audioBuffer.position(0);
-                                            audioBuffer.limit(info.size);
-                                        }
-                                        if (info.size >= 0) {
-                                            info.presentationTimeUs = extractor2.getSampleTime();
-                                            extractor2.advance();
-                                        } else {
-                                            info.size = 0;
-                                            z = true;
-                                        }
-                                        if (info.size > 0 && (endTime < 0 || info.presentationTimeUs < endTime)) {
-                                            info.offset = 0;
-                                            info.flags = extractor2.getSampleFlags();
-                                            if (mP4Builder.writeSampleData(audioTrackIndex, audioBuffer, info, false)) {
-                                                didWriteData(messageObject, file, false, false);
-                                            }
-                                        }
-                                    } else if (index == -1) {
-                                        eof = true;
-                                    }
-                                    if (eof) {
-                                        inputBufIndex = decoder.dequeueInputBuffer(2500);
-                                        if (inputBufIndex >= 0) {
-                                            decoder.queueInputBuffer(inputBufIndex, 0, 0, 0, 4);
-                                            z = true;
-                                        }
-                                    }
-                                }
-                                boolean decoderOutputAvailable = !decoderDone;
-                                boolean encoderOutputAvailable = true;
-                                while (true) {
-                                    if (decoderOutputAvailable || encoderOutputAvailable) {
-                                        MediaFormat newFormat;
-                                        checkConversionCanceled();
-                                        int encoderStatus = encoder.dequeueOutputBuffer(info, 2500);
-                                        if (encoderStatus == -1) {
-                                            encoderOutputAvailable = false;
-                                        } else if (encoderStatus == -3) {
-                                            if (VERSION.SDK_INT < 21) {
-                                                encoderOutputBuffers = encoder.getOutputBuffers();
-                                            }
-                                        } else if (encoderStatus == -2) {
-                                            newFormat = encoder.getOutputFormat();
-                                            if (videoTrackIndex == -5) {
-                                                videoTrackIndex = mP4Builder.addTrack(newFormat, false);
-                                            }
-                                        } else if (encoderStatus < 0) {
-                                            throw new RuntimeException("unexpected result from encoder.dequeueOutputBuffer: " + encoderStatus);
-                                        } else {
-                                            ByteBuffer encodedData;
-                                            if (VERSION.SDK_INT < 21) {
-                                                encodedData = encoderOutputBuffers[encoderStatus];
-                                            } else {
-                                                encodedData = encoder.getOutputBuffer(encoderStatus);
-                                            }
-                                            if (encodedData == null) {
-                                                throw new RuntimeException("encoderOutputBuffer " + encoderStatus + " was null");
-                                            }
-                                            if (info.size > 1) {
-                                                if ((info.flags & 2) == 0) {
-                                                    if (mP4Builder.writeSampleData(videoTrackIndex, encodedData, info, true)) {
-                                                        didWriteData(messageObject, file, false, false);
-                                                    }
-                                                } else if (videoTrackIndex == -5) {
-                                                    byte[] csd = new byte[info.size];
-                                                    encodedData.limit(info.offset + info.size);
-                                                    encodedData.position(info.offset);
-                                                    encodedData.get(csd);
-                                                    ByteBuffer sps = null;
-                                                    ByteBuffer pps = null;
-                                                    int a = info.size - 1;
-                                                    while (a >= 0 && a > 3) {
-                                                        if (csd[a] == (byte) 1 && csd[a - 1] == (byte) 0 && csd[a - 2] == (byte) 0 && csd[a - 3] == (byte) 0) {
-                                                            sps = ByteBuffer.allocate(a - 3);
-                                                            pps = ByteBuffer.allocate(info.size - (a - 3));
-                                                            sps.put(csd, 0, a - 3).position(0);
-                                                            pps.put(csd, a - 3, info.size - (a - 3)).position(0);
-                                                            break;
-                                                        }
-                                                        a--;
-                                                    }
-                                                    newFormat = MediaFormat.createVideoFormat("video/avc", resultWidth, resultHeight);
-                                                    if (!(sps == null || pps == null)) {
-                                                        newFormat.setByteBuffer("csd-0", sps);
-                                                        newFormat.setByteBuffer("csd-1", pps);
-                                                    }
-                                                    videoTrackIndex = mP4Builder.addTrack(newFormat, false);
-                                                }
-                                            }
-                                            outputDone = (info.flags & 4) != 0;
-                                            encoder.releaseOutputBuffer(encoderStatus, false);
-                                        }
-                                        if (encoderStatus == -1 && !decoderDone) {
-                                            int decoderStatus = decoder.dequeueOutputBuffer(info, 2500);
-                                            if (decoderStatus == -1) {
-                                                decoderOutputAvailable = false;
-                                            } else if (decoderStatus == -3) {
-                                                continue;
-                                            } else if (decoderStatus == -2) {
-                                                newFormat = decoder.getOutputFormat();
-                                                if (BuildVars.LOGS_ENABLED) {
-                                                    FileLog.m0d("newFormat = " + newFormat);
-                                                }
-                                            } else if (decoderStatus < 0) {
-                                                throw new RuntimeException("unexpected result from decoder.dequeueOutputBuffer: " + decoderStatus);
-                                            } else {
-                                                boolean doRender = VERSION.SDK_INT >= 18 ? info.size != 0 : (info.size == 0 && info.presentationTimeUs == 0) ? false : true;
-                                                if (endTime > 0 && info.presentationTimeUs >= endTime) {
-                                                    z = true;
-                                                    decoderDone = true;
-                                                    doRender = false;
-                                                    info.flags |= 4;
-                                                }
-                                                if (startTime > 0 && videoTime == -1) {
-                                                    if (info.presentationTimeUs < startTime) {
-                                                        doRender = false;
-                                                        if (BuildVars.LOGS_ENABLED) {
-                                                            FileLog.m0d("drop frame startTime = " + startTime + " present time = " + info.presentationTimeUs);
-                                                        }
-                                                    } else {
-                                                        videoTime = info.presentationTimeUs;
-                                                    }
-                                                }
-                                                decoder.releaseOutputBuffer(decoderStatus, doRender);
-                                                if (doRender) {
-                                                    boolean errorWait = false;
-                                                    outputSurface.awaitNewImage();
-                                                    if (!errorWait) {
-                                                        if (VERSION.SDK_INT >= 18) {
-                                                            outputSurface.drawImage(false);
-                                                            inputSurface.setPresentationTime(info.presentationTimeUs * 1000);
-                                                            inputSurface.swapBuffers();
-                                                        } else {
-                                                            inputBufIndex = encoder.dequeueInputBuffer(2500);
-                                                            if (inputBufIndex >= 0) {
-                                                                outputSurface.drawImage(true);
-                                                                ByteBuffer rgbBuf = outputSurface.getFrame();
-                                                                ByteBuffer yuvBuf = encoderInputBuffers[inputBufIndex];
-                                                                yuvBuf.clear();
-                                                                Utilities.convertVideoFrame(rgbBuf, yuvBuf, colorFormat, resultWidth, resultHeight, padding, swapUV);
-                                                                encoder.queueInputBuffer(inputBufIndex, 0, bufferSize, info.presentationTimeUs, 0);
-                                                            } else if (BuildVars.LOGS_ENABLED) {
-                                                                FileLog.m0d("input buffer not available");
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                if ((info.flags & 4) != 0) {
-                                                    decoderOutputAvailable = false;
-                                                    if (BuildVars.LOGS_ENABLED) {
-                                                        FileLog.m0d("decoder stream end");
-                                                    }
-                                                    if (VERSION.SDK_INT >= 18) {
-                                                        encoder.signalEndOfInputStream();
-                                                    } else {
-                                                        inputBufIndex = encoder.dequeueInputBuffer(2500);
-                                                        if (inputBufIndex >= 0) {
-                                                            encoder.queueInputBuffer(inputBufIndex, 0, 1, info.presentationTimeUs, 4);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (Exception e4) {
-                            e3 = e4;
-                        } catch (Throwable th22) {
-                            th = th22;
-                            extractor = extractor2;
-                        }
-                        extractor2.unselectTrack(videoIndex);
-                        if (outputSurface != null) {
-                            outputSurface.release();
-                        }
-                        if (inputSurface != null) {
-                            inputSurface.release();
-                        }
-                        if (decoder != null) {
-                            decoder.stop();
-                            decoder.release();
-                        }
-                        if (encoder != null) {
-                            encoder.stop();
-                            encoder.release();
-                        }
-                        checkConversionCanceled();
-                    }
-                }
-                if (extractor2 != null) {
-                    extractor2.release();
-                }
-                if (mP4Builder != null) {
-                    mP4Builder.finishMovie();
-                }
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("time = " + (System.currentTimeMillis() - time));
-                    extractor = extractor2;
-                } else {
-                    extractor = extractor2;
-                }
-            } catch (Exception e5) {
-                e3 = e5;
-                extractor = extractor2;
-                error = true;
-                try {
-                    FileLog.m3e(e3);
-                    if (extractor != null) {
-                        extractor.release();
-                    }
-                    if (mP4Builder != null) {
-                        try {
-                            mP4Builder.finishMovie();
-                        } catch (Throwable e32) {
-                            FileLog.m3e(e32);
-                        }
-                    }
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("time = " + (System.currentTimeMillis() - time));
-                    }
-                    preferences.edit().putBoolean("isPreviousOk", true).commit();
-                    didWriteData(messageObject, file, true, error);
-                    return true;
-                } catch (Throwable th3) {
-                    th = th3;
-                    if (extractor != null) {
-                        extractor.release();
-                    }
-                    if (mP4Builder != null) {
-                        try {
-                            mP4Builder.finishMovie();
-                        } catch (Throwable e322) {
-                            FileLog.m3e(e322);
-                        }
-                    }
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("time = " + (System.currentTimeMillis() - time));
-                    }
-                    throw th;
-                }
-            } catch (Throwable th222) {
-                th = th222;
-                extractor = extractor2;
-            }
-        } catch (Exception e6) {
-            e322 = e6;
-            error = true;
-            FileLog.m3e(e322);
-            if (extractor != null) {
-                extractor.release();
-            }
-            if (mP4Builder != null) {
-                mP4Builder.finishMovie();
-            }
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("time = " + (System.currentTimeMillis() - time));
-            }
-            preferences.edit().putBoolean("isPreviousOk", true).commit();
-            didWriteData(messageObject, file, true, error);
-            return true;
-        }
-        preferences.edit().putBoolean("isPreviousOk", true).commit();
-        didWriteData(messageObject, file, true, error);
-        return true;
-    }
-}

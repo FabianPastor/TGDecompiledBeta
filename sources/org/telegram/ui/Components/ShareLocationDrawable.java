@@ -49,34 +49,50 @@ public class ShareLocationDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        int size = AndroidUtilities.dp(this.isSmall ? 30.0f : 120.0f);
-        int y = getBounds().top + ((getIntrinsicHeight() - size) / 2);
+        int y;
+        Canvas canvas2 = canvas;
+        int size = AndroidUtilities.dp(this.isSmall ? NUM : NUM);
+        int i = 2;
+        int y2 = getBounds().top + ((getIntrinsicHeight() - size) / 2);
         int x = getBounds().left + ((getIntrinsicWidth() - size) / 2);
-        this.drawable.setBounds(x, y, this.drawable.getIntrinsicWidth() + x, this.drawable.getIntrinsicHeight() + y);
-        this.drawable.draw(canvas);
-        for (int a = 0; a < 2; a++) {
-            if (this.progress[a] >= 0.0f) {
+        r0.drawable.setBounds(x, y2, r0.drawable.getIntrinsicWidth() + x, r0.drawable.getIntrinsicHeight() + y2);
+        r0.drawable.draw(canvas2);
+        int a = 0;
+        while (a < i) {
+            int size2;
+            if (r0.progress[a] < 0.0f) {
+                size2 = size;
+                y = y2;
+            } else {
                 float alpha;
-                float scale = 0.5f + (0.5f * this.progress[a]);
-                int w = AndroidUtilities.dp((this.isSmall ? 2.5f : 5.0f) * scale);
-                int h = AndroidUtilities.dp((this.isSmall ? 6.5f : 18.0f) * scale);
-                int tx = AndroidUtilities.dp((this.isSmall ? 6.0f : 15.0f) * this.progress[a]);
-                if (this.progress[a] < 0.5f) {
-                    alpha = this.progress[a] / 0.5f;
+                float scale = (r0.progress[a] * 0.5f) + 0.5f;
+                int w = AndroidUtilities.dp((r0.isSmall ? 2.5f : 5.0f) * scale);
+                int h = AndroidUtilities.dp((r0.isSmall ? 6.5f : 18.0f) * scale);
+                int tx = AndroidUtilities.dp((r0.isSmall ? 6.0f : 15.0f) * r0.progress[a]);
+                if (r0.progress[a] < 0.5f) {
+                    alpha = r0.progress[a] / 0.5f;
                 } else {
-                    alpha = 1.0f - ((this.progress[a] - 0.5f) / 0.5f);
+                    alpha = 1.0f - ((r0.progress[a] - 0.5f) / 0.5f);
                 }
-                int cx = (AndroidUtilities.dp(this.isSmall ? 7.0f : 42.0f) + x) - tx;
-                int cy = (y + (this.drawable.getIntrinsicHeight() / 2)) - (this.isSmall ? 0 : AndroidUtilities.dp(7.0f));
-                this.drawableLeft.setAlpha((int) (255.0f * alpha));
-                this.drawableLeft.setBounds(cx - w, cy - h, cx + w, cy + h);
-                this.drawableLeft.draw(canvas);
-                cx = ((x + this.drawable.getIntrinsicWidth()) - AndroidUtilities.dp(this.isSmall ? 7.0f : 42.0f)) + tx;
-                this.drawableRight.setAlpha((int) (255.0f * alpha));
-                this.drawableRight.setBounds(cx - w, cy - h, cx + w, cy + h);
-                this.drawableRight.draw(canvas);
+                float alpha2 = alpha;
+                int cx = (AndroidUtilities.dp(r0.isSmall ? 7.0f : 42.0f) + x) - tx;
+                int cy = ((r0.drawable.getIntrinsicHeight() / i) + y2) - (r0.isSmall ? 0 : AndroidUtilities.dp(7.0f));
+                r0.drawableLeft.setAlpha((int) (alpha2 * 255.0f));
+                size2 = size;
+                y = y2;
+                r0.drawableLeft.setBounds(cx - w, cy - h, cx + w, cy + h);
+                r0.drawableLeft.draw(canvas2);
+                size = ((r0.drawable.getIntrinsicWidth() + x) - AndroidUtilities.dp(r0.isSmall ? 7.0f : 42.0f)) + tx;
+                r0.drawableRight.setAlpha((int) (alpha2 * 255.0f));
+                r0.drawableRight.setBounds(size - w, cy - h, size + w, cy + h);
+                r0.drawableRight.draw(canvas2);
             }
+            a++;
+            size = size2;
+            y2 = y;
+            i = 2;
         }
+        y = y2;
         update();
     }
 

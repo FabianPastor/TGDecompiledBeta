@@ -38,15 +38,18 @@ public final class TrackGroupArray {
     }
 
     public boolean equals(Object obj) {
+        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        TrackGroupArray other = (TrackGroupArray) obj;
-        if (this.length == other.length && Arrays.equals(this.trackGroups, other.trackGroups)) {
-            return true;
+        if (obj != null) {
+            if (getClass() == obj.getClass()) {
+                TrackGroupArray other = (TrackGroupArray) obj;
+                if (this.length != other.length || !Arrays.equals(this.trackGroups, other.trackGroups)) {
+                    z = false;
+                }
+                return z;
+            }
         }
         return false;
     }

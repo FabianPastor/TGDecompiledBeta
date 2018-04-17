@@ -14,23 +14,16 @@ public class HeaderCell extends FrameLayout {
     private TextView textView = new TextView(getContext());
 
     public HeaderCell(Context context) {
-        int i;
-        int i2 = 5;
         super(context);
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        TextView textView = this.textView;
+        int i = 3;
+        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        View view = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
-        } else {
-            i = 3;
         }
-        textView.setGravity(i | 16);
-        View view = this.textView;
-        if (!LocaleController.isRTL) {
-            i2 = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 17.0f, 15.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 15.0f, 17.0f, 0.0f));
     }
 
     protected void onAttachedToWindow() {

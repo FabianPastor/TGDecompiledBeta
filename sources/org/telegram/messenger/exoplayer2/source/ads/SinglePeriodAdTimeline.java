@@ -11,19 +11,13 @@ final class SinglePeriodAdTimeline extends ForwardingTimeline {
     private final AdPlaybackState adPlaybackState;
 
     public SinglePeriodAdTimeline(Timeline contentTimeline, AdPlaybackState adPlaybackState) {
-        boolean z;
-        boolean z2 = true;
         super(contentTimeline);
-        if (contentTimeline.getPeriodCount() == 1) {
+        boolean z = false;
+        Assertions.checkState(contentTimeline.getPeriodCount() == 1);
+        if (contentTimeline.getWindowCount() == 1) {
             z = true;
-        } else {
-            z = false;
         }
         Assertions.checkState(z);
-        if (contentTimeline.getWindowCount() != 1) {
-            z2 = false;
-        }
-        Assertions.checkState(z2);
         this.adPlaybackState = adPlaybackState;
     }
 

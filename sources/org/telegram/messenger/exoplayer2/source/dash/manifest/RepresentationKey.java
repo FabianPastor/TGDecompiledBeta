@@ -31,7 +31,13 @@ public final class RepresentationKey implements Parcelable, Comparable<Represent
     }
 
     public String toString() {
-        return this.periodIndex + "." + this.adaptationSetIndex + "." + this.representationIndex;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.periodIndex);
+        stringBuilder.append(".");
+        stringBuilder.append(this.adaptationSetIndex);
+        stringBuilder.append(".");
+        stringBuilder.append(this.representationIndex);
+        return stringBuilder.toString();
     }
 
     public int describeContents() {
@@ -57,20 +63,23 @@ public final class RepresentationKey implements Parcelable, Comparable<Represent
     }
 
     public boolean equals(Object o) {
+        boolean z = true;
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        RepresentationKey that = (RepresentationKey) o;
-        if (this.periodIndex == that.periodIndex && this.adaptationSetIndex == that.adaptationSetIndex && this.representationIndex == that.representationIndex) {
-            return true;
+        if (o != null) {
+            if (getClass() == o.getClass()) {
+                RepresentationKey that = (RepresentationKey) o;
+                if (this.periodIndex != that.periodIndex || this.adaptationSetIndex != that.adaptationSetIndex || this.representationIndex != that.representationIndex) {
+                    z = false;
+                }
+                return z;
+            }
         }
         return false;
     }
 
     public int hashCode() {
-        return (((this.periodIndex * 31) + this.adaptationSetIndex) * 31) + this.representationIndex;
+        return (31 * ((31 * this.periodIndex) + this.adaptationSetIndex)) + this.representationIndex;
     }
 }

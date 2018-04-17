@@ -220,6 +220,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                 case 1:
                     view = new EmptyCell(this.context);
                     break;
+                default:
+                    break;
             }
             return new Holder(view);
         }
@@ -232,16 +234,17 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                 case 1:
                     if (position == this.totalItems) {
                         TL_messages_stickerSet pack = (TL_messages_stickerSet) this.rowStartPack.get((position - 1) / this.stickersPerRow);
+                        int i = 1;
                         if (pack == null) {
                             ((EmptyCell) holder.itemView).setHeight(1);
-                            return;
+                        } else {
+                            int height = StickerMasksView.this.stickersGridView.getMeasuredHeight() - (((int) Math.ceil((double) (((float) pack.documents.size()) / ((float) this.stickersPerRow)))) * AndroidUtilities.dp(82.0f));
+                            EmptyCell emptyCell = (EmptyCell) holder.itemView;
+                            if (height > 0) {
+                                i = height;
+                            }
+                            emptyCell.setHeight(i);
                         }
-                        int height = StickerMasksView.this.stickersGridView.getMeasuredHeight() - (((int) Math.ceil((double) (((float) pack.documents.size()) / ((float) this.stickersPerRow)))) * AndroidUtilities.dp(82.0f));
-                        EmptyCell emptyCell = (EmptyCell) holder.itemView;
-                        if (height <= 0) {
-                            height = 1;
-                        }
-                        emptyCell.setHeight(height);
                         return;
                     }
                     ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.dp(82.0f));
@@ -298,7 +301,13 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         DataQuery.getInstance(this.currentAccount).checkStickers(1);
         this.stickersGridView = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent event) {
-                return super.onInterceptTouchEvent(event) || StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), null);
+                boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), null);
+                if (!super.onInterceptTouchEvent(event)) {
+                    if (!result) {
+                        return false;
+                    }
+                }
+                return true;
             }
         };
         RecyclerListView recyclerListView = this.stickersGridView;
@@ -379,8 +388,10 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
             ArrayList<TL_messages_stickerSet> packs = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
             for (a = 0; a < packs.size(); a++) {
                 TL_messages_stickerSet pack = (TL_messages_stickerSet) packs.get(a);
-                if (!(pack.set.archived || pack.documents == null || pack.documents.isEmpty())) {
-                    this.stickerSets[this.currentType].add(pack);
+                if (!(pack.set.archived || pack.documents == null)) {
+                    if (!pack.documents.isEmpty()) {
+                        this.stickerSets[this.currentType].add(pack);
+                    }
                 }
             }
             for (a = 0; a < this.stickerSets[this.currentType].size(); a++) {

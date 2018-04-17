@@ -24,7 +24,7 @@ public class Point {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
+        boolean z = false;
         if (obj == null) {
             return false;
         }
@@ -35,8 +35,8 @@ public class Point {
             return false;
         }
         Point other = (Point) obj;
-        if (!(this.f20x == other.f20x && this.f21y == other.f21y && this.f22z == other.f22z)) {
-            z = false;
+        if (this.f20x == other.f20x && this.f21y == other.f21y && this.f22z == other.f22z) {
+            z = true;
         }
         return z;
     }

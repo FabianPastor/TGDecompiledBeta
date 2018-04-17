@@ -36,8 +36,8 @@
     <string name="common_signin_button_text">Prijavi me</string>
     <string name="common_signin_button_text_long">Пријави ме на Google</string>
     <string name="common_signin_button_text_long">Prijavi me na Google</string>
-    <string name="gcm_fallback_notification_channel_label">Разно</string>
-    <string name="gcm_fallback_notification_channel_label">Razno</string>
+    <string name="fcm_fallback_notification_channel_label">Разно</string>
+    <string name="fcm_fallback_notification_channel_label">Razno</string>
     <string name="status_bar_notification_info_overflow">&gt;999</string>
     <string name="status_bar_notification_info_overflow">&gt;999</string>
     <string name="wallet_buy_button_place_holder">Купи помоћу Google-а</string>

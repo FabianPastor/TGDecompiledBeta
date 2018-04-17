@@ -45,6 +45,7 @@ public final class Ac3Extractor implements Extractor {
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
+        int length;
         ParsableByteArray scratch = new ParsableByteArray(10);
         int startPosition = 0;
         while (true) {
@@ -54,13 +55,13 @@ public final class Ac3Extractor implements Extractor {
                 break;
             }
             scratch.skipBytes(3);
-            int length = scratch.readSynchSafeInt();
-            startPosition += length + 10;
+            length = scratch.readSynchSafeInt();
+            startPosition += 10 + length;
             input.advancePeekPosition(length);
         }
         input.resetPeekPosition();
         input.advancePeekPosition(startPosition);
-        int headerPosition = startPosition;
+        length = startPosition;
         int validFramesCount = 0;
         while (true) {
             input.peekFully(scratch.data, 0, 5);
@@ -68,11 +69,11 @@ public final class Ac3Extractor implements Extractor {
             if (scratch.readUnsignedShort() != AC3_SYNC_WORD) {
                 validFramesCount = 0;
                 input.resetPeekPosition();
-                headerPosition++;
-                if (headerPosition - startPosition >= 8192) {
+                length++;
+                if (length - startPosition >= 8192) {
                     return false;
                 }
-                input.advancePeekPosition(headerPosition);
+                input.advancePeekPosition(length);
             } else {
                 validFramesCount++;
                 if (validFramesCount >= 4) {

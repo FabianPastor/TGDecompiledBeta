@@ -26,7 +26,7 @@ public class EncryptionKeyEmojifier {
     public static String[] emojifyForCall(byte[] sha256) {
         String[] result = new String[4];
         for (int i = 0; i < 4; i++) {
-            result[i] = emojis[(int) (bytesToLong(sha256, i * 8) % ((long) emojis.length))];
+            result[i] = emojis[(int) (bytesToLong(sha256, 8 * i) % ((long) emojis.length))];
         }
         return result;
     }

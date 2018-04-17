@@ -20,20 +20,29 @@ public final class DataSchemeDataSource implements DataSource {
         if (SCHEME_DATA.equals(scheme)) {
             String[] uriParts = uri.getSchemeSpecificPart().split(",");
             if (uriParts.length > 2) {
-                throw new ParserException("Unexpected URI format: " + uri);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Unexpected URI format: ");
+                stringBuilder.append(uri);
+                throw new ParserException(stringBuilder.toString());
             }
             String dataString = uriParts[1];
             if (uriParts[0].contains(";base64")) {
                 try {
                     this.data = Base64.decode(dataString, 0);
                 } catch (IllegalArgumentException e) {
-                    throw new ParserException("Error while parsing Base64 encoded string: " + dataString, e);
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    stringBuilder2.append("Error while parsing Base64 encoded string: ");
+                    stringBuilder2.append(dataString);
+                    throw new ParserException(stringBuilder2.toString(), e);
                 }
             }
             this.data = URLDecoder.decode(dataString, C0539C.ASCII_NAME).getBytes();
             return (long) this.data.length;
         }
-        throw new ParserException("Unsupported scheme: " + scheme);
+        StringBuilder stringBuilder3 = new StringBuilder();
+        stringBuilder3.append("Unsupported scheme: ");
+        stringBuilder3.append(scheme);
+        throw new ParserException(stringBuilder3.toString());
     }
 
     public int read(byte[] buffer, int offset, int readLength) {

@@ -18,25 +18,42 @@ public interface SeekMap {
         }
 
         public String toString() {
-            return "[" + this.first + (this.first.equals(this.second) ? TtmlNode.ANONYMOUS_REGION_ID : ", " + this.second) + "]";
+            String str;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("[");
+            stringBuilder.append(this.first);
+            if (this.first.equals(this.second)) {
+                str = TtmlNode.ANONYMOUS_REGION_ID;
+            } else {
+                StringBuilder stringBuilder2 = new StringBuilder();
+                stringBuilder2.append(", ");
+                stringBuilder2.append(this.second);
+                str = stringBuilder2.toString();
+            }
+            stringBuilder.append(str);
+            stringBuilder.append("]");
+            return stringBuilder.toString();
         }
 
         public boolean equals(Object obj) {
+            boolean z = true;
             if (this == obj) {
                 return true;
             }
-            if (obj == null || getClass() != obj.getClass()) {
-                return false;
-            }
-            SeekPoints other = (SeekPoints) obj;
-            if (this.first.equals(other.first) && this.second.equals(other.second)) {
-                return true;
+            if (obj != null) {
+                if (getClass() == obj.getClass()) {
+                    SeekPoints other = (SeekPoints) obj;
+                    if (!this.first.equals(other.first) || !this.second.equals(other.second)) {
+                        z = false;
+                    }
+                    return z;
+                }
             }
             return false;
         }
 
         public int hashCode() {
-            return (this.first.hashCode() * 31) + this.second.hashCode();
+            return (31 * this.first.hashCode()) + this.second.hashCode();
         }
     }
 

@@ -39,7 +39,7 @@ public class PositionInputStream extends FilterInputStream {
         long p = this.position;
         int read = super.read(b, off, len);
         if (read > 0) {
-            this.position = ((long) read) + p;
+            this.position = p + ((long) read);
         }
         return read;
     }

@@ -16,38 +16,37 @@ public class RadioColorCell extends FrameLayout {
     private TextView textView;
 
     public RadioColorCell(Context context) {
-        int i;
-        int i2 = 0;
-        int i3 = 5;
         super(context);
         this.radioButton = new RadioButton(context);
         this.radioButton.setSize(AndroidUtilities.dp(20.0f));
         this.radioButton.setColor(Theme.getColor(Theme.key_dialogRadioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
         View view = this.radioButton;
-        int i4 = (LocaleController.isRTL ? 5 : 3) | 48;
+        int i = 3;
+        int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
+        int i3 = 18;
         float f = (float) (LocaleController.isRTL ? 0 : 18);
-        if (LocaleController.isRTL) {
-            i2 = 18;
+        if (!LocaleController.isRTL) {
+            i3 = 0;
         }
-        addView(view, LayoutHelper.createFrame(22, 22.0f, i4, f, 13.0f, (float) i2, 0.0f));
+        addView(view, LayoutHelper.createFrame(22, 22.0f, i2, f, 13.0f, (float) i3, 0.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        TextView textView = this.textView;
+        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        view = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
-        } else {
-            i = 3;
         }
-        textView.setGravity(i | 16);
-        view = this.textView;
+        i2 = i | 48;
+        i = 51;
+        f = (float) (LocaleController.isRTL ? 17 : 51);
         if (!LocaleController.isRTL) {
-            i3 = 3;
+            i = 17;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, (float) (LocaleController.isRTL ? 17 : 51), 12.0f, (float) (LocaleController.isRTL ? 51 : 17), 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i2, f, 12.0f, (float) i, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

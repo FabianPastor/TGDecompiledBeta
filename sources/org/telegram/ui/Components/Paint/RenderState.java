@@ -35,8 +35,10 @@ public class RenderState {
     }
 
     public void setPosition(int position) {
-        if (this.buffer != null && position >= 0 && position < this.allocatedCount) {
-            this.buffer.position((position * 5) * 4);
+        if (this.buffer != null && position >= 0) {
+            if (position < this.allocatedCount) {
+                this.buffer.position((position * 5) * 4);
+            }
         }
     }
 

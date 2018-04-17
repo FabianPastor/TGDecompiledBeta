@@ -100,54 +100,72 @@ public class DefaultHttpDataSource implements HttpDataSource {
     }
 
     public long open(DataSpec dataSpec) throws HttpDataSourceException {
+        StringBuilder stringBuilder;
         this.dataSpec = dataSpec;
+        long j = 0;
         this.bytesRead = 0;
         this.bytesSkipped = 0;
         try {
             this.connection = makeConnection(dataSpec);
             try {
                 int responseCode = this.connection.getResponseCode();
-                if (responseCode < Callback.DEFAULT_DRAG_ANIMATION_DURATION || responseCode > 299) {
-                    Map<String, List<String>> headers = this.connection.getHeaderFields();
-                    closeConnectionQuietly();
-                    InvalidResponseCodeException exception = new InvalidResponseCodeException(responseCode, headers, dataSpec);
-                    if (responseCode == 416) {
-                        exception.initCause(new DataSourceException(0));
-                    }
-                    throw exception;
-                }
-                String contentType = this.connection.getContentType();
-                if (this.contentTypePredicate == null || this.contentTypePredicate.evaluate(contentType)) {
-                    long j = (responseCode != Callback.DEFAULT_DRAG_ANIMATION_DURATION || dataSpec.position == 0) ? 0 : dataSpec.position;
-                    this.bytesToSkip = j;
-                    if (dataSpec.isFlagSet(1)) {
-                        this.bytesToRead = dataSpec.length;
-                    } else if (dataSpec.length != -1) {
-                        this.bytesToRead = dataSpec.length;
-                    } else {
-                        long contentLength = getContentLength(this.connection);
-                        this.bytesToRead = contentLength != -1 ? contentLength - this.bytesToSkip : -1;
-                    }
-                    try {
-                        this.inputStream = this.connection.getInputStream();
-                        this.opened = true;
-                        if (this.listener != null) {
-                            this.listener.onTransferStart(this, dataSpec);
+                if (responseCode >= Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+                    if (responseCode <= 299) {
+                        String contentType = this.connection.getContentType();
+                        if (this.contentTypePredicate == null || this.contentTypePredicate.evaluate(contentType)) {
+                            if (responseCode == Callback.DEFAULT_DRAG_ANIMATION_DURATION && dataSpec.position != 0) {
+                                j = dataSpec.position;
+                            }
+                            this.bytesToSkip = j;
+                            if (dataSpec.isFlagSet(1)) {
+                                this.bytesToRead = dataSpec.length;
+                            } else {
+                                long j2 = -1;
+                                if (dataSpec.length != -1) {
+                                    this.bytesToRead = dataSpec.length;
+                                } else {
+                                    j = getContentLength(this.connection);
+                                    if (j != -1) {
+                                        j2 = j - this.bytesToSkip;
+                                    }
+                                    this.bytesToRead = j2;
+                                }
+                            }
+                            try {
+                                this.inputStream = this.connection.getInputStream();
+                                this.opened = true;
+                                if (this.listener != null) {
+                                    this.listener.onTransferStart(this, dataSpec);
+                                }
+                                return this.bytesToRead;
+                            } catch (IOException e) {
+                                closeConnectionQuietly();
+                                throw new HttpDataSourceException(e, dataSpec, 1);
+                            }
                         }
-                        return this.bytesToRead;
-                    } catch (IOException e) {
                         closeConnectionQuietly();
-                        throw new HttpDataSourceException(e, dataSpec, 1);
+                        throw new InvalidContentTypeException(contentType, dataSpec);
                     }
                 }
+                Map<String, List<String>> headers = this.connection.getHeaderFields();
                 closeConnectionQuietly();
-                throw new InvalidContentTypeException(contentType, dataSpec);
+                InvalidResponseCodeException exception = new InvalidResponseCodeException(responseCode, headers, dataSpec);
+                if (responseCode == 416) {
+                    exception.initCause(new DataSourceException(0));
+                }
+                throw exception;
             } catch (IOException e2) {
                 closeConnectionQuietly();
-                throw new HttpDataSourceException("Unable to connect to " + dataSpec.uri.toString(), e2, dataSpec, 1);
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("Unable to connect to ");
+                stringBuilder.append(dataSpec.uri.toString());
+                throw new HttpDataSourceException(stringBuilder.toString(), e2, dataSpec, 1);
             }
         } catch (IOException e22) {
-            throw new HttpDataSourceException("Unable to connect to " + dataSpec.uri.toString(), e22, dataSpec, 1);
+            stringBuilder = new StringBuilder();
+            stringBuilder.append("Unable to connect to ");
+            stringBuilder.append(dataSpec.uri.toString());
+            throw new HttpDataSourceException(stringBuilder.toString(), e22, dataSpec, 1);
         }
     }
 
@@ -205,73 +223,101 @@ public class DefaultHttpDataSource implements HttpDataSource {
     }
 
     private HttpURLConnection makeConnection(DataSpec dataSpec) throws IOException {
-        URL url = new URL(dataSpec.uri.toString());
-        byte[] postBody = dataSpec.postBody;
-        long position = dataSpec.position;
-        long length = dataSpec.length;
-        boolean allowGzip = dataSpec.isFlagSet(1);
+        DataSpec dataSpec2 = dataSpec;
+        URL url = new URL(dataSpec2.uri.toString());
+        byte[] postBody = dataSpec2.postBody;
+        long position = dataSpec2.position;
+        long length = dataSpec2.length;
+        boolean allowGzip = dataSpec2.isFlagSet(1);
         if (!this.allowCrossProtocolRedirects) {
+            DefaultHttpDataSource defaultHttpDataSource;
             return makeConnection(url, postBody, position, length, allowGzip, true);
         }
-        int i = 0;
+        HttpURLConnection connection;
+        int redirectCount = 0;
         while (true) {
-            int redirectCount = i + 1;
-            if (i <= 20) {
-                HttpURLConnection connection = makeConnection(url, postBody, position, length, allowGzip, false);
+            int redirectCount2 = redirectCount + 1;
+            long position2;
+            if (redirectCount <= 20) {
+                long length2 = length;
+                position2 = position;
+                connection = makeConnection(url, postBody, position, length2, allowGzip, false);
                 int responseCode = connection.getResponseCode();
                 if (!(responseCode == 300 || responseCode == 301 || responseCode == 302 || responseCode == 303)) {
-                    if (postBody != null) {
-                        return connection;
-                    }
-                    if (!(responseCode == 307 || responseCode == 308)) {
-                        return connection;
+                    if (postBody == null) {
+                        if (responseCode != 307) {
+                            if (responseCode != 308) {
+                                break;
+                            }
+                        } else {
+                            continue;
+                        }
+                    } else {
+                        break;
                     }
                 }
                 postBody = null;
                 String location = connection.getHeaderField("Location");
                 connection.disconnect();
                 url = handleRedirect(url, location);
-                i = redirectCount;
+                defaultHttpDataSource = this;
+                redirectCount = redirectCount2;
+                length = length2;
+                position = position2;
             } else {
-                throw new NoRouteToHostException("Too many redirects: " + redirectCount);
+                position2 = position;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Too many redirects: ");
+                stringBuilder.append(redirectCount2);
+                throw new NoRouteToHostException(stringBuilder.toString());
             }
         }
+        return connection;
     }
 
     private HttpURLConnection makeConnection(URL url, byte[] postBody, long position, long length, boolean allowGzip, boolean followRedirects) throws IOException {
+        byte[] bArr = postBody;
+        long j = position;
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(this.connectTimeoutMillis);
         connection.setReadTimeout(this.readTimeoutMillis);
         if (this.defaultRequestProperties != null) {
-            for (Entry<String, String> property : this.defaultRequestProperties.getSnapshot().entrySet()) {
+            for (Entry<String, String> property : r0.defaultRequestProperties.getSnapshot().entrySet()) {
                 connection.setRequestProperty((String) property.getKey(), (String) property.getValue());
             }
         }
-        for (Entry<String, String> property2 : this.requestProperties.getSnapshot().entrySet()) {
+        for (Entry<String, String> property2 : r0.requestProperties.getSnapshot().entrySet()) {
             connection.setRequestProperty((String) property2.getKey(), (String) property2.getValue());
         }
-        if (!(position == 0 && length == -1)) {
-            String rangeRequest = "bytes=" + position + "-";
+        if (!(j == 0 && length == -1)) {
+            String rangeRequest = new StringBuilder();
+            rangeRequest.append("bytes=");
+            rangeRequest.append(j);
+            rangeRequest.append("-");
+            rangeRequest = rangeRequest.toString();
             if (length != -1) {
-                rangeRequest = rangeRequest + ((position + length) - 1);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(rangeRequest);
+                stringBuilder.append((j + length) - 1);
+                rangeRequest = stringBuilder.toString();
             }
             connection.setRequestProperty("Range", rangeRequest);
         }
-        connection.setRequestProperty("User-Agent", this.userAgent);
+        connection.setRequestProperty("User-Agent", r0.userAgent);
         if (!allowGzip) {
             connection.setRequestProperty("Accept-Encoding", "identity");
         }
         connection.setInstanceFollowRedirects(followRedirects);
-        connection.setDoOutput(postBody != null);
-        if (postBody != null) {
+        connection.setDoOutput(bArr != null);
+        if (bArr != null) {
             connection.setRequestMethod("POST");
-            if (postBody.length == 0) {
+            if (bArr.length == 0) {
                 connection.connect();
             } else {
-                connection.setFixedLengthStreamingMode(postBody.length);
+                connection.setFixedLengthStreamingMode(bArr.length);
                 connection.connect();
                 OutputStream os = connection.getOutputStream();
-                os.write(postBody);
+                os.write(bArr);
                 os.close();
             }
         } else {
@@ -289,7 +335,10 @@ public class DefaultHttpDataSource implements HttpDataSource {
         if ("https".equals(protocol) || "http".equals(protocol)) {
             return url;
         }
-        throw new ProtocolException("Unsupported protocol redirect: " + protocol);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Unsupported protocol redirect: ");
+        stringBuilder.append(protocol);
+        throw new ProtocolException(stringBuilder.toString());
     }
 
     private static long getContentLength(HttpURLConnection connection) {
@@ -299,31 +348,44 @@ public class DefaultHttpDataSource implements HttpDataSource {
             try {
                 contentLength = Long.parseLong(contentLengthHeader);
             } catch (NumberFormatException e) {
-                Log.e(TAG, "Unexpected Content-Length [" + contentLengthHeader + "]");
+                String str = TAG;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Unexpected Content-Length [");
+                stringBuilder.append(contentLengthHeader);
+                stringBuilder.append("]");
+                Log.e(str, stringBuilder.toString());
             }
         }
         String contentRangeHeader = connection.getHeaderField("Content-Range");
-        if (TextUtils.isEmpty(contentRangeHeader)) {
-            return contentLength;
-        }
-        Matcher matcher = CONTENT_RANGE_HEADER.matcher(contentRangeHeader);
-        if (!matcher.find()) {
-            return contentLength;
-        }
-        try {
-            long contentLengthFromRange = (Long.parseLong(matcher.group(2)) - Long.parseLong(matcher.group(1))) + 1;
-            if (contentLength < 0) {
-                return contentLengthFromRange;
+        if (!TextUtils.isEmpty(contentRangeHeader)) {
+            Matcher matcher = CONTENT_RANGE_HEADER.matcher(contentRangeHeader);
+            if (matcher.find()) {
+                try {
+                    long contentLengthFromRange = (Long.parseLong(matcher.group(2)) - Long.parseLong(matcher.group(1))) + 1;
+                    if (contentLength < 0) {
+                        contentLength = contentLengthFromRange;
+                    } else if (contentLength != contentLengthFromRange) {
+                        String str2 = TAG;
+                        StringBuilder stringBuilder2 = new StringBuilder();
+                        stringBuilder2.append("Inconsistent headers [");
+                        stringBuilder2.append(contentLengthHeader);
+                        stringBuilder2.append("] [");
+                        stringBuilder2.append(contentRangeHeader);
+                        stringBuilder2.append("]");
+                        Log.w(str2, stringBuilder2.toString());
+                        contentLength = Math.max(contentLength, contentLengthFromRange);
+                    }
+                } catch (NumberFormatException e2) {
+                    String str3 = TAG;
+                    StringBuilder stringBuilder3 = new StringBuilder();
+                    stringBuilder3.append("Unexpected Content-Range [");
+                    stringBuilder3.append(contentRangeHeader);
+                    stringBuilder3.append("]");
+                    Log.e(str3, stringBuilder3.toString());
+                }
             }
-            if (contentLength == contentLengthFromRange) {
-                return contentLength;
-            }
-            Log.w(TAG, "Inconsistent headers [" + contentLengthHeader + "] [" + contentRangeHeader + "]");
-            return Math.max(contentLength, contentLengthFromRange);
-        } catch (NumberFormatException e2) {
-            Log.e(TAG, "Unexpected Content-Range [" + contentRangeHeader + "]");
-            return contentLength;
         }
+        return contentLength;
     }
 
     private void skipInternal() throws IOException {
@@ -363,10 +425,9 @@ public class DefaultHttpDataSource implements HttpDataSource {
         int read = this.inputStream.read(buffer, offset, readLength);
         if (read != -1) {
             this.bytesRead += (long) read;
-            if (this.listener == null) {
-                return read;
+            if (this.listener != null) {
+                this.listener.onBytesTransferred(this, read);
             }
-            this.listener.onBytesTransferred(this, read);
             return read;
         } else if (this.bytesToRead == -1) {
             return -1;

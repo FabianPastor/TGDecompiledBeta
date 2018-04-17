@@ -18,7 +18,7 @@
     <string name="common_open_on_phone">ಫೋನ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ</string>
     <string name="common_signin_button_text">ಸೈನ್ ಇನ್</string>
     <string name="common_signin_button_text_long">Google ಮೂಲಕ ಸೈನ್ ಇನ್ ಮಾಡಿ</string>
-    <string name="gcm_fallback_notification_channel_label">ಇತರೆ</string>
+    <string name="fcm_fallback_notification_channel_label">ಇತರೆ</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google ನಲ್ಲಿ ಖರೀದಿಸಿ</string>
 </resources>

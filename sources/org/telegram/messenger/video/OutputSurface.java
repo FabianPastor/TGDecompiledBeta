@@ -30,17 +30,20 @@ public class OutputSurface implements OnFrameAvailableListener {
     private int rotateRender = 0;
 
     public OutputSurface(int width, int height, int rotate) {
-        if (width <= 0 || height <= 0) {
-            throw new IllegalArgumentException();
+        if (width > 0) {
+            if (height > 0) {
+                this.mWidth = width;
+                this.mHeight = height;
+                this.rotateRender = rotate;
+                this.mPixelBuf = ByteBuffer.allocateDirect((this.mWidth * this.mHeight) * 4);
+                this.mPixelBuf.order(ByteOrder.LITTLE_ENDIAN);
+                eglSetup(width, height);
+                makeCurrent();
+                setup();
+                return;
+            }
         }
-        this.mWidth = width;
-        this.mHeight = height;
-        this.rotateRender = rotate;
-        this.mPixelBuf = ByteBuffer.allocateDirect((this.mWidth * this.mHeight) * 4);
-        this.mPixelBuf.order(ByteOrder.LITTLE_ENDIAN);
-        eglSetup(width, height);
-        makeCurrent();
-        setup();
+        throw new IllegalArgumentException();
     }
 
     public OutputSurface() {
@@ -116,18 +119,17 @@ public class OutputSurface implements OnFrameAvailableListener {
 
     public void awaitNewImage() {
         synchronized (this.mFrameSyncObject) {
-            do {
-                if (this.mFrameAvailable) {
-                    this.mFrameAvailable = false;
-                } else {
-                    try {
-                        this.mFrameSyncObject.wait(2500);
-                    } catch (InterruptedException ie) {
-                        throw new RuntimeException(ie);
+            while (!this.mFrameAvailable) {
+                try {
+                    this.mFrameSyncObject.wait(2500);
+                    if (!this.mFrameAvailable) {
+                        throw new RuntimeException("Surface frame wait timed out");
                     }
+                } catch (InterruptedException ie) {
+                    throw new RuntimeException(ie);
                 }
-            } while (this.mFrameAvailable);
-            throw new RuntimeException("Surface frame wait timed out");
+            }
+            this.mFrameAvailable = false;
         }
         this.mTextureRender.checkGlError("before updateTexImage");
         this.mSurfaceTexture.updateTexImage();

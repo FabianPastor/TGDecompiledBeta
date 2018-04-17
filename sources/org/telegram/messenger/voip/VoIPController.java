@@ -1,5 +1,6 @@
 package org.telegram.messenger.voip;
 
+import android.content.SharedPreferences;
 import android.media.audiofx.AcousticEchoCanceler;
 import android.os.Build.VERSION;
 import android.os.SystemClock;
@@ -69,7 +70,17 @@ public class VoIPController {
         public long bytesSentWifi;
 
         public String toString() {
-            return "Stats{bytesRecvdMobile=" + this.bytesRecvdMobile + ", bytesSentWifi=" + this.bytesSentWifi + ", bytesRecvdWifi=" + this.bytesRecvdWifi + ", bytesSentMobile=" + this.bytesSentMobile + '}';
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Stats{bytesRecvdMobile=");
+            stringBuilder.append(this.bytesRecvdMobile);
+            stringBuilder.append(", bytesSentWifi=");
+            stringBuilder.append(this.bytesSentWifi);
+            stringBuilder.append(", bytesRecvdWifi=");
+            stringBuilder.append(this.bytesRecvdWifi);
+            stringBuilder.append(", bytesSentMobile=");
+            stringBuilder.append(this.bytesSentMobile);
+            stringBuilder.append('}');
+            return stringBuilder.toString();
         }
     }
 
@@ -140,14 +151,26 @@ public class VoIPController {
         }
         int a = 0;
         while (a < endpoints.length) {
+            StringBuilder stringBuilder;
             TL_phoneConnection endpoint = endpoints[a];
-            if (endpoint.ip == null || endpoint.ip.length() == 0) {
-                throw new IllegalArgumentException("endpoint " + endpoint + " has empty/null ipv4");
-            } else if (endpoint.peer_tag == null || endpoint.peer_tag.length == 16) {
-                a++;
-            } else {
-                throw new IllegalArgumentException("endpoint " + endpoint + " has peer_tag of wrong length");
+            if (endpoint.ip != null) {
+                if (endpoint.ip.length() != 0) {
+                    if (endpoint.peer_tag == null || endpoint.peer_tag.length == 16) {
+                        a++;
+                    } else {
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("endpoint ");
+                        stringBuilder.append(endpoint);
+                        stringBuilder.append(" has peer_tag of wrong length");
+                        throw new IllegalArgumentException(stringBuilder.toString());
+                    }
+                }
             }
+            stringBuilder = new StringBuilder();
+            stringBuilder.append("endpoint ");
+            stringBuilder.append(endpoint);
+            stringBuilder.append(" has empty/null ipv4");
+            throw new IllegalArgumentException(stringBuilder.toString());
         }
         ensureNativeInstance();
         nativeSetRemoteEndpoints(this.nativeInst, endpoints, allowP2p, tcp, connectionMaxLayer);
@@ -155,7 +178,10 @@ public class VoIPController {
 
     public void setEncryptionKey(byte[] key, boolean isOutgoing) {
         if (key.length != 256) {
-            throw new IllegalArgumentException("key length must be exactly 256 bytes but is " + key.length);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("key length must be exactly 256 bytes but is ");
+            stringBuilder.append(key.length);
+            throw new IllegalArgumentException(stringBuilder.toString());
         }
         ensureNativeInstance();
         nativeSetEncryptionKey(this.nativeInst, key, isOutgoing);
@@ -234,8 +260,12 @@ public class VoIPController {
     }
 
     public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption, long callID) {
+        boolean z;
+        boolean z2;
         String logFilePath;
-        String logFilePath2;
+        long j;
+        String str;
+        VoIPController voIPController = this;
         ensureNativeInstance();
         boolean sysAecAvailable = false;
         boolean sysNsAvailable = false;
@@ -246,21 +276,68 @@ public class VoIPController {
             } catch (Throwable th) {
             }
         }
-        boolean dump = MessagesController.getGlobalMainSettings().getBoolean("dbg_dump_call_stats", false);
-        long j = this.nativeInst;
-        boolean z = (sysAecAvailable && VoIPServerConfig.getBoolean("use_system_aec", true)) ? false : true;
-        boolean z2 = (sysNsAvailable && VoIPServerConfig.getBoolean("use_system_ns", true)) ? false : true;
+        boolean sysAecAvailable2 = sysAecAvailable;
+        boolean sysNsAvailable2 = sysNsAvailable;
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        boolean dump = preferences.getBoolean("dbg_dump_call_stats", false);
+        long j2 = voIPController.nativeInst;
+        if (sysAecAvailable2) {
+            if (VoIPServerConfig.getBoolean("use_system_aec", true)) {
+                z = false;
+                if (sysNsAvailable2) {
+                    if (!VoIPServerConfig.getBoolean("use_system_ns", true)) {
+                        z2 = false;
+                        if (BuildConfig.DEBUG) {
+                            logFilePath = getLogFilePath(callID);
+                        } else {
+                            logFilePath = getLogFilePath("voip");
+                            j = callID;
+                        }
+                        str = logFilePath;
+                        logFilePath = (BuildConfig.DEBUG || !dump) ? null : getLogFilePath("voipStats");
+                        nativeSetConfig(j2, recvTimeout, initTimeout, dataSavingOption, z, z2, true, str, logFilePath);
+                    }
+                }
+                z2 = true;
+                if (BuildConfig.DEBUG) {
+                    logFilePath = getLogFilePath(callID);
+                } else {
+                    logFilePath = getLogFilePath("voip");
+                    j = callID;
+                }
+                str = logFilePath;
+                if (BuildConfig.DEBUG) {
+                }
+                nativeSetConfig(j2, recvTimeout, initTimeout, dataSavingOption, z, z2, true, str, logFilePath);
+            }
+        }
+        z = true;
+        if (sysNsAvailable2) {
+            if (!VoIPServerConfig.getBoolean("use_system_ns", true)) {
+                z2 = false;
+                if (BuildConfig.DEBUG) {
+                    logFilePath = getLogFilePath("voip");
+                    j = callID;
+                } else {
+                    logFilePath = getLogFilePath(callID);
+                }
+                str = logFilePath;
+                if (BuildConfig.DEBUG) {
+                }
+                nativeSetConfig(j2, recvTimeout, initTimeout, dataSavingOption, z, z2, true, str, logFilePath);
+            }
+        }
+        z2 = true;
         if (BuildConfig.DEBUG) {
-            logFilePath = getLogFilePath("voip");
-        } else {
             logFilePath = getLogFilePath(callID);
-        }
-        if (BuildConfig.DEBUG && dump) {
-            logFilePath2 = getLogFilePath("voipStats");
         } else {
-            logFilePath2 = null;
+            logFilePath = getLogFilePath("voip");
+            j = callID;
         }
-        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, logFilePath, logFilePath2);
+        str = logFilePath;
+        if (BuildConfig.DEBUG) {
+        }
+        nativeSetConfig(j2, recvTimeout, initTimeout, dataSavingOption, z, z2, true, str, logFilePath);
     }
 
     public void debugCtl(int request, int param) {
@@ -314,7 +391,10 @@ public class VoIPController {
                 logs.remove(oldest);
             }
         }
-        return new File(dir, callID + ".log").getAbsolutePath();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(callID);
+        stringBuilder.append(".log");
+        return new File(dir, stringBuilder.toString()).getAbsolutePath();
     }
 
     public String getDebugLog() {
@@ -344,7 +424,10 @@ public class VoIPController {
         if (key == null) {
             throw new NullPointerException("key can not be null");
         } else if (key.length != 256) {
-            throw new IllegalArgumentException("key must be 256 bytes long, got " + key.length);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("key must be 256 bytes long, got ");
+            stringBuilder.append(key.length);
+            throw new IllegalArgumentException(stringBuilder.toString());
         } else {
             ensureNativeInstance();
             nativeSendGroupCallKey(this.nativeInst, key);

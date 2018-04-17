@@ -64,26 +64,26 @@ public class JoinGroupAlert extends BottomSheet {
                     }
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            if (JoinGroupAlert.this.fragment != null && JoinGroupAlert.this.fragment.getParentActivity() != null) {
-                                if (error == null) {
-                                    Updates updates = response;
-                                    if (!updates.chats.isEmpty()) {
-                                        Chat chat = (Chat) updates.chats.get(0);
-                                        chat.left = false;
-                                        chat.kicked = false;
-                                        MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putUsers(updates.users, false);
-                                        MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putChats(updates.chats, false);
-                                        Bundle args = new Bundle();
-                                        args.putInt("chat_id", chat.id);
-                                        if (MessagesController.getInstance(JoinGroupAlert.this.currentAccount).checkCanOpenChat(args, JoinGroupAlert.this.fragment)) {
-                                            JoinGroupAlert.this.fragment.presentFragment(new ChatActivity(args), JoinGroupAlert.this.fragment instanceof ChatActivity);
-                                            return;
+                            if (JoinGroupAlert.this.fragment != null) {
+                                if (JoinGroupAlert.this.fragment.getParentActivity() != null) {
+                                    if (error == null) {
+                                        Updates updates = response;
+                                        if (!updates.chats.isEmpty()) {
+                                            Chat chat = (Chat) updates.chats.get(0);
+                                            chat.left = false;
+                                            chat.kicked = false;
+                                            MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putUsers(updates.users, false);
+                                            MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putChats(updates.chats, false);
+                                            Bundle args = new Bundle();
+                                            args.putInt("chat_id", chat.id);
+                                            if (MessagesController.getInstance(JoinGroupAlert.this.currentAccount).checkCanOpenChat(args, JoinGroupAlert.this.fragment)) {
+                                                JoinGroupAlert.this.fragment.presentFragment(new ChatActivity(args), JoinGroupAlert.this.fragment instanceof ChatActivity);
+                                            }
                                         }
-                                        return;
+                                    } else {
+                                        AlertsCreator.processError(JoinGroupAlert.this.currentAccount, error, JoinGroupAlert.this.fragment, req, new Object[0]);
                                     }
-                                    return;
                                 }
-                                AlertsCreator.processError(JoinGroupAlert.this.currentAccount, error, JoinGroupAlert.this.fragment, req, new Object[0]);
                             }
                         }
                     });
@@ -151,38 +151,40 @@ public class JoinGroupAlert extends BottomSheet {
         Drawable avatarDrawable;
         String title;
         int participants_count;
-        super(context, false);
+        Context context2 = context;
+        ChatInvite chatInvite = invite;
+        super(context2, false);
         setApplyBottomPadding(false);
         setApplyTopPadding(false);
         this.fragment = parentFragment;
-        this.chatInvite = invite;
+        this.chatInvite = chatInvite;
         this.hash = group;
-        LinearLayout linearLayout = new LinearLayout(context);
+        LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(1);
         linearLayout.setClickable(true);
         setCustomView(linearLayout);
         TLObject photo = null;
-        if (invite.chat != null) {
-            avatarDrawable = new AvatarDrawable(invite.chat);
-            if (this.chatInvite.chat.photo != null) {
-                photo = this.chatInvite.chat.photo.photo_small;
+        if (chatInvite.chat != null) {
+            avatarDrawable = new AvatarDrawable(chatInvite.chat);
+            if (r0.chatInvite.chat.photo != null) {
+                photo = r0.chatInvite.chat.photo.photo_small;
             }
-            title = invite.chat.title;
-            participants_count = invite.chat.participants_count;
+            title = chatInvite.chat.title;
+            participants_count = chatInvite.chat.participants_count;
         } else {
             avatarDrawable = new AvatarDrawable();
-            avatarDrawable.setInfo(0, invite.title, null, false);
-            if (this.chatInvite.photo != null) {
-                photo = this.chatInvite.photo.photo_small;
+            avatarDrawable.setInfo(0, chatInvite.title, null, false);
+            if (r0.chatInvite.photo != null) {
+                photo = r0.chatInvite.photo.photo_small;
             }
-            title = invite.title;
-            participants_count = invite.participants_count;
+            title = chatInvite.title;
+            participants_count = chatInvite.participants_count;
         }
-        BackupImageView avatarImageView = new BackupImageView(context);
+        BackupImageView avatarImageView = new BackupImageView(context2);
         avatarImageView.setRoundRadius(AndroidUtilities.dp(35.0f));
         avatarImageView.setImage(photo, "50_50", avatarDrawable);
         linearLayout.addView(avatarImageView, LayoutHelper.createLinear(70, 70, 49, 0, 12, 0, 0));
-        View textView = new TextView(context);
+        TextView textView = new TextView(context2);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextSize(1, 17.0f);
         textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -191,7 +193,7 @@ public class JoinGroupAlert extends BottomSheet {
         textView.setEllipsize(TruncateAt.END);
         linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 10, 10, 10, participants_count > 0 ? 0 : 10));
         if (participants_count > 0) {
-            textView = new TextView(context);
+            textView = new TextView(context2);
             textView.setTextSize(1, 14.0f);
             textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
             textView.setSingleLine(true);
@@ -199,22 +201,22 @@ public class JoinGroupAlert extends BottomSheet {
             textView.setText(LocaleController.formatPluralString("Members", participants_count));
             linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 10, 4, 10, 10));
         }
-        if (!invite.participants.isEmpty()) {
-            RecyclerListView listView = new RecyclerListView(context);
+        if (!chatInvite.participants.isEmpty()) {
+            RecyclerListView listView = new RecyclerListView(context2);
             listView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
             listView.setNestedScrollingEnabled(false);
             listView.setClipToPadding(false);
             listView.setLayoutManager(new LinearLayoutManager(getContext(), 0, false));
             listView.setHorizontalScrollBarEnabled(false);
             listView.setVerticalScrollBarEnabled(false);
-            listView.setAdapter(new UsersAdapter(context));
+            listView.setAdapter(new UsersAdapter(context2));
             listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
             linearLayout.addView(listView, LayoutHelper.createLinear(-2, 90, 49, 0, 0, 0, 0));
         }
-        textView = new View(context);
-        textView.setBackgroundResource(R.drawable.header_shadow_reverse);
-        linearLayout.addView(textView, LayoutHelper.createLinear(-1, 3));
-        PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
+        View shadow = new View(context2);
+        shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
+        linearLayout.addView(shadow, LayoutHelper.createLinear(-1, 3));
+        PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context2, false);
         linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));

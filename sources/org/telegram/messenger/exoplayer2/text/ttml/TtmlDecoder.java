@@ -58,62 +58,96 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
     }
 
     protected TtmlSubtitle decode(byte[] bytes, int length, boolean reset) throws SubtitleDecoderException {
+        XmlPullParserException e;
+        IOException e2;
+        int i;
         try {
             XmlPullParser xmlParser = this.xmlParserFactory.newPullParser();
             Map<String, TtmlStyle> globalStyles = new HashMap();
             Map<String, TtmlRegion> regionMap = new HashMap();
             regionMap.put(TtmlNode.ANONYMOUS_REGION_ID, new TtmlRegion(null));
-            xmlParser.setInput(new ByteArrayInputStream(bytes, 0, length), null);
-            TtmlSubtitle ttmlSubtitle = null;
-            LinkedList<TtmlNode> nodeStack = new LinkedList();
-            int unsupportedNodeDepth = 0;
-            FrameAndTickRate frameAndTickRate = DEFAULT_FRAME_AND_TICK_RATE;
-            for (int eventType = xmlParser.getEventType(); eventType != 1; eventType = xmlParser.getEventType()) {
-                TtmlNode parent = (TtmlNode) nodeStack.peekLast();
-                if (unsupportedNodeDepth == 0) {
-                    String name = xmlParser.getName();
-                    if (eventType == 2) {
-                        if (TtmlNode.TAG_TT.equals(name)) {
-                            frameAndTickRate = parseFrameAndTickRates(xmlParser);
-                        }
-                        if (!isSupportedTag(name)) {
-                            Log.i(TAG, "Ignoring unsupported tag: " + xmlParser.getName());
-                            unsupportedNodeDepth++;
-                        } else if (TtmlNode.TAG_HEAD.equals(name)) {
-                            parseHeader(xmlParser, globalStyles, regionMap);
-                        } else {
-                            try {
-                                TtmlNode node = parseNode(xmlParser, parent, regionMap, frameAndTickRate);
-                                nodeStack.addLast(node);
-                                if (parent != null) {
-                                    parent.addChild(node);
+            try {
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes, 0, length);
+                xmlParser.setInput(inputStream, null);
+                TtmlSubtitle ttmlSubtitle = null;
+                LinkedList<TtmlNode> nodeStack = new LinkedList();
+                int unsupportedNodeDepth = 0;
+                int eventType = xmlParser.getEventType();
+                FrameAndTickRate frameAndTickRate = DEFAULT_FRAME_AND_TICK_RATE;
+                while (eventType != 1) {
+                    ByteArrayInputStream byteArrayInputStream;
+                    TtmlNode parent = (TtmlNode) nodeStack.peekLast();
+                    if (unsupportedNodeDepth == 0) {
+                        String name = xmlParser.getName();
+                        String name2;
+                        if (eventType == 2) {
+                            name2 = name;
+                            if (TtmlNode.TAG_TT.equals(name2)) {
+                                frameAndTickRate = parseFrameAndTickRates(xmlParser);
+                            }
+                            if (isSupportedTag(name2)) {
+                                byteArrayInputStream = inputStream;
+                                if (TtmlNode.TAG_HEAD.equals(name2) != null) {
+                                    parseHeader(xmlParser, globalStyles, regionMap);
+                                } else {
+                                    try {
+                                        inputStream = parseNode(xmlParser, parent, regionMap, frameAndTickRate);
+                                        nodeStack.addLast(inputStream);
+                                        if (parent != null) {
+                                            parent.addChild(inputStream);
+                                        }
+                                    } catch (SubtitleDecoderException e3) {
+                                        Log.w(TAG, "Suppressing parser error", e3);
+                                        unsupportedNodeDepth++;
+                                    }
                                 }
-                            } catch (SubtitleDecoderException e) {
-                                Log.w(TAG, "Suppressing parser error", e);
+                            } else {
+                                String str = TAG;
+                                byteArrayInputStream = inputStream;
+                                inputStream = new StringBuilder();
+                                inputStream.append("Ignoring unsupported tag: ");
+                                inputStream.append(xmlParser.getName());
+                                Log.i(str, inputStream.toString());
                                 unsupportedNodeDepth++;
                             }
+                        } else {
+                            byteArrayInputStream = inputStream;
+                            name2 = name;
+                            if (eventType == 4) {
+                                parent.addChild(TtmlNode.buildTextNode(xmlParser.getText()));
+                            } else if (eventType == 3) {
+                                if (xmlParser.getName().equals(TtmlNode.TAG_TT)) {
+                                    ttmlSubtitle = new TtmlSubtitle((TtmlNode) nodeStack.getLast(), globalStyles, regionMap);
+                                }
+                                nodeStack.removeLast();
+                            }
                         }
-                    } else if (eventType == 4) {
-                        parent.addChild(TtmlNode.buildTextNode(xmlParser.getText()));
-                    } else if (eventType == 3) {
-                        if (xmlParser.getName().equals(TtmlNode.TAG_TT)) {
-                            ttmlSubtitle = new TtmlSubtitle((TtmlNode) nodeStack.getLast(), globalStyles, regionMap);
-                        }
-                        nodeStack.removeLast();
                     } else {
-                        continue;
+                        byteArrayInputStream = inputStream;
+                        if (eventType == 2) {
+                            unsupportedNodeDepth++;
+                        } else if (eventType == 3) {
+                            unsupportedNodeDepth--;
+                        }
                     }
-                } else if (eventType == 2) {
-                    unsupportedNodeDepth++;
-                } else if (eventType == 3) {
-                    unsupportedNodeDepth--;
+                    xmlParser.next();
+                    eventType = xmlParser.getEventType();
+                    inputStream = byteArrayInputStream;
+                    byte[] bArr = bytes;
                 }
-                xmlParser.next();
+                return ttmlSubtitle;
+            } catch (XmlPullParserException e4) {
+                e = e4;
+            } catch (IOException e5) {
+                e2 = e5;
             }
-            return ttmlSubtitle;
-        } catch (Throwable xppe) {
-            throw new SubtitleDecoderException("Unable to decode source", xppe);
-        } catch (IOException e2) {
+        } catch (XmlPullParserException e6) {
+            e = e6;
+            i = length;
+            throw new SubtitleDecoderException("Unable to decode source", e);
+        } catch (IOException e7) {
+            e2 = e7;
+            i = length;
             throw new IllegalStateException("Unexpected error when reading input.", e2);
         }
     }
@@ -171,45 +205,70 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
     }
 
     private TtmlRegion parseRegionAttributes(XmlPullParser xmlParser) {
-        String regionId = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_ID);
+        String str;
+        StringBuilder stringBuilder;
+        XmlPullParser xmlPullParser = xmlParser;
+        String regionId = XmlPullParserUtil.getAttributeValue(xmlPullParser, TtmlNode.ATTR_ID);
         if (regionId == null) {
             return null;
         }
-        String regionOrigin = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_TTS_ORIGIN);
+        String regionOrigin = XmlPullParserUtil.getAttributeValue(xmlPullParser, TtmlNode.ATTR_TTS_ORIGIN);
         if (regionOrigin != null) {
             Matcher originMatcher = PERCENTAGE_COORDINATES.matcher(regionOrigin);
+            String str2;
+            StringBuilder stringBuilder2;
             if (originMatcher.matches()) {
+                int i = 1;
                 try {
                     float position = Float.parseFloat(originMatcher.group(1)) / 100.0f;
                     float line = Float.parseFloat(originMatcher.group(2)) / 100.0f;
-                    String regionExtent = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_TTS_EXTENT);
+                    String regionExtent = XmlPullParserUtil.getAttributeValue(xmlPullParser, TtmlNode.ATTR_TTS_EXTENT);
                     if (regionExtent != null) {
-                        Matcher extentMatcher = PERCENTAGE_COORDINATES.matcher(regionExtent);
-                        if (extentMatcher.matches()) {
+                        originMatcher = PERCENTAGE_COORDINATES.matcher(regionExtent);
+                        if (originMatcher.matches()) {
                             try {
-                                float width = Float.parseFloat(extentMatcher.group(1)) / 100.0f;
-                                float height = Float.parseFloat(extentMatcher.group(2)) / 100.0f;
+                                float width = Float.parseFloat(originMatcher.group(1)) / 100.0f;
+                                float height = Float.parseFloat(originMatcher.group(2)) / 100.0f;
                                 int lineAnchor = 0;
-                                String displayAlign = XmlPullParserUtil.getAttributeValue(xmlParser, TtmlNode.ATTR_TTS_DISPLAY_ALIGN);
+                                String displayAlign = XmlPullParserUtil.getAttributeValue(xmlPullParser, TtmlNode.ATTR_TTS_DISPLAY_ALIGN);
                                 if (displayAlign != null) {
                                     String toLowerInvariant = Util.toLowerInvariant(displayAlign);
-                                    Object obj = -1;
-                                    switch (toLowerInvariant.hashCode()) {
-                                        case -1364013995:
-                                            if (toLowerInvariant.equals(TtmlNode.CENTER)) {
-                                                obj = null;
-                                                break;
+                                    int hashCode = toLowerInvariant.hashCode();
+                                    if (hashCode == -NUM) {
+                                        if (toLowerInvariant.equals(TtmlNode.CENTER)) {
+                                            i = 0;
+                                            switch (i) {
+                                                case 0:
+                                                    lineAnchor = 1;
+                                                    line += height / 2.0f;
+                                                    break;
+                                                case 1:
+                                                    lineAnchor = 2;
+                                                    line += height;
+                                                    break;
+                                                default:
+                                                    break;
                                             }
-                                            break;
-                                        case 92734940:
-                                            if (toLowerInvariant.equals("after")) {
-                                                obj = 1;
-                                                break;
+                                        }
+                                    } else if (hashCode == 92734940) {
+                                        if (toLowerInvariant.equals("after")) {
+                                            switch (i) {
+                                                case 0:
+                                                    lineAnchor = 1;
+                                                    line += height / 2.0f;
+                                                    break;
+                                                case 1:
+                                                    lineAnchor = 2;
+                                                    line += height;
+                                                    break;
+                                                default:
+                                                    break;
                                             }
-                                            break;
+                                        }
                                     }
-                                    switch (obj) {
-                                        case null:
+                                    i = -1;
+                                    switch (i) {
+                                        case 0:
                                             lineAnchor = 1;
                                             line += height / 2.0f;
                                             break;
@@ -217,25 +276,44 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
                                             lineAnchor = 2;
                                             line += height;
                                             break;
+                                        default:
+                                            break;
                                     }
                                 }
                                 return new TtmlRegion(regionId, position, line, 0, lineAnchor, width);
                             } catch (NumberFormatException e) {
-                                Log.w(TAG, "Ignoring region with malformed extent: " + regionOrigin);
+                                str = TAG;
+                                stringBuilder = new StringBuilder();
+                                stringBuilder.append("Ignoring region with malformed extent: ");
+                                stringBuilder.append(regionOrigin);
+                                Log.w(str, stringBuilder.toString());
                                 return null;
                             }
                         }
-                        Log.w(TAG, "Ignoring region with unsupported extent: " + regionOrigin);
+                        str2 = TAG;
+                        stringBuilder2 = new StringBuilder();
+                        stringBuilder2.append("Ignoring region with unsupported extent: ");
+                        stringBuilder2.append(regionOrigin);
+                        Log.w(str2, stringBuilder2.toString());
                         return null;
                     }
                     Log.w(TAG, "Ignoring region without an extent");
                     return null;
                 } catch (NumberFormatException e2) {
-                    Log.w(TAG, "Ignoring region with malformed origin: " + regionOrigin);
+                    NumberFormatException numberFormatException = e2;
+                    str = TAG;
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("Ignoring region with malformed origin: ");
+                    stringBuilder.append(regionOrigin);
+                    Log.w(str, stringBuilder.toString());
                     return null;
                 }
             }
-            Log.w(TAG, "Ignoring region with unsupported origin: " + regionOrigin);
+            str2 = TAG;
+            stringBuilder2 = new StringBuilder();
+            stringBuilder2.append("Ignoring region with unsupported origin: ");
+            stringBuilder2.append(regionOrigin);
+            Log.w(str2, stringBuilder2.toString());
             return null;
         }
         Log.w(TAG, "Ignoring region without an origin");
@@ -249,11 +327,16 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private TtmlStyle parseStyleAttributes(XmlPullParser parser, TtmlStyle style) {
+        String str;
+        StringBuilder stringBuilder;
         int attributeCount = parser.getAttributeCount();
+        TtmlStyle style2 = style;
         for (int i = 0; i < attributeCount; i++) {
             boolean z;
             String attributeValue = parser.getAttributeValue(i);
             String attributeName = parser.getAttributeName(i);
+            boolean z2 = true;
+            boolean z3 = true;
             switch (attributeName.hashCode()) {
                 case -1550943582:
                     if (attributeName.equals(TtmlNode.ATTR_TTS_FONT_STYLE)) {
@@ -301,142 +384,210 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
                         break;
                     }
                 default:
-                    z = true;
-                    break;
             }
+            z = true;
             switch (z) {
                 case false:
                     if (!"style".equals(parser.getName())) {
                         break;
                     }
-                    style = createIfNull(style).setId(attributeValue);
+                    style2 = createIfNull(style2).setId(attributeValue);
                     break;
                 case true:
-                    style = createIfNull(style);
+                    style2 = createIfNull(style2);
                     try {
-                        style.setBackgroundColor(ColorParser.parseTtmlColor(attributeValue));
+                        style2.setBackgroundColor(ColorParser.parseTtmlColor(attributeValue));
                         break;
                     } catch (IllegalArgumentException e) {
-                        Log.w(TAG, "Failed parsing background value: " + attributeValue);
+                        str = TAG;
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("Failed parsing background value: ");
+                        stringBuilder.append(attributeValue);
+                        Log.w(str, stringBuilder.toString());
                         break;
                     }
                 case true:
-                    style = createIfNull(style);
+                    style2 = createIfNull(style2);
                     try {
-                        style.setFontColor(ColorParser.parseTtmlColor(attributeValue));
+                        style2.setFontColor(ColorParser.parseTtmlColor(attributeValue));
                         break;
                     } catch (IllegalArgumentException e2) {
-                        Log.w(TAG, "Failed parsing color value: " + attributeValue);
+                        str = TAG;
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("Failed parsing color value: ");
+                        stringBuilder.append(attributeValue);
+                        Log.w(str, stringBuilder.toString());
                         break;
                     }
                 case true:
-                    style = createIfNull(style).setFontFamily(attributeValue);
+                    style2 = createIfNull(style2).setFontFamily(attributeValue);
                     break;
                 case true:
                     try {
-                        style = createIfNull(style);
-                        parseFontSize(attributeValue, style);
+                        style2 = createIfNull(style2);
+                        parseFontSize(attributeValue, style2);
                         break;
                     } catch (SubtitleDecoderException e3) {
-                        Log.w(TAG, "Failed parsing fontSize value: " + attributeValue);
+                        str = TAG;
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("Failed parsing fontSize value: ");
+                        stringBuilder.append(attributeValue);
+                        Log.w(str, stringBuilder.toString());
                         break;
                     }
                 case true:
-                    style = createIfNull(style).setBold(TtmlNode.BOLD.equalsIgnoreCase(attributeValue));
+                    style2 = createIfNull(style2).setBold(TtmlNode.BOLD.equalsIgnoreCase(attributeValue));
                     break;
                 case true:
-                    style = createIfNull(style).setItalic(TtmlNode.ITALIC.equalsIgnoreCase(attributeValue));
+                    style2 = createIfNull(style2).setItalic(TtmlNode.ITALIC.equalsIgnoreCase(attributeValue));
                     break;
                 case true:
                     attributeName = Util.toLowerInvariant(attributeValue);
                     switch (attributeName.hashCode()) {
                         case -1364013995:
                             if (attributeName.equals(TtmlNode.CENTER)) {
-                                z = true;
                                 break;
                             }
                         case 100571:
                             if (attributeName.equals("end")) {
-                                z = true;
+                                z2 = true;
                                 break;
                             }
                         case 3317767:
                             if (attributeName.equals(TtmlNode.LEFT)) {
-                                z = false;
+                                z2 = false;
                                 break;
                             }
                         case 108511772:
                             if (attributeName.equals(TtmlNode.RIGHT)) {
-                                z = true;
+                                z2 = true;
                                 break;
                             }
                         case 109757538:
                             if (attributeName.equals(TtmlNode.START)) {
-                                z = true;
+                                z2 = true;
                                 break;
                             }
                         default:
-                            z = true;
-                            break;
                     }
-                    switch (z) {
+                    z2 = true;
+                    switch (z2) {
                         case false:
-                            style = createIfNull(style).setTextAlign(Alignment.ALIGN_NORMAL);
+                            style2 = createIfNull(style2).setTextAlign(Alignment.ALIGN_NORMAL);
                             break;
                         case true:
-                            style = createIfNull(style).setTextAlign(Alignment.ALIGN_NORMAL);
+                            style2 = createIfNull(style2).setTextAlign(Alignment.ALIGN_NORMAL);
                             break;
                         case true:
-                            style = createIfNull(style).setTextAlign(Alignment.ALIGN_OPPOSITE);
+                            style2 = createIfNull(style2).setTextAlign(Alignment.ALIGN_OPPOSITE);
                             break;
                         case true:
-                            style = createIfNull(style).setTextAlign(Alignment.ALIGN_OPPOSITE);
+                            style2 = createIfNull(style2).setTextAlign(Alignment.ALIGN_OPPOSITE);
                             break;
                         case true:
-                            style = createIfNull(style).setTextAlign(Alignment.ALIGN_CENTER);
+                            style2 = createIfNull(style2).setTextAlign(Alignment.ALIGN_CENTER);
                             break;
                         default:
                             break;
                     }
+                    break;
                 case true:
                     attributeName = Util.toLowerInvariant(attributeValue);
-                    switch (attributeName.hashCode()) {
-                        case -1461280213:
-                            if (attributeName.equals(TtmlNode.NO_UNDERLINE)) {
-                                z = true;
-                                break;
+                    int hashCode = attributeName.hashCode();
+                    if (hashCode == -NUM) {
+                        if (attributeName.equals(TtmlNode.NO_UNDERLINE)) {
+                            switch (z3) {
+                                case false:
+                                    style2 = createIfNull(style2).setLinethrough(true);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setLinethrough(false);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setUnderline(true);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setUnderline(false);
+                                    break;
+                                default:
+                                    break;
                             }
-                        case -1026963764:
-                            if (attributeName.equals(TtmlNode.UNDERLINE)) {
-                                z = true;
-                                break;
+                        }
+                    } else if (hashCode == -NUM) {
+                        if (attributeName.equals(TtmlNode.UNDERLINE)) {
+                            z3 = true;
+                            switch (z3) {
+                                case false:
+                                    style2 = createIfNull(style2).setLinethrough(true);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setLinethrough(false);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setUnderline(true);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setUnderline(false);
+                                    break;
+                                default:
+                                    break;
                             }
-                        case 913457136:
-                            if (attributeName.equals(TtmlNode.NO_LINETHROUGH)) {
-                                z = true;
-                                break;
+                        }
+                    } else if (hashCode == 913457136) {
+                        if (attributeName.equals(TtmlNode.NO_LINETHROUGH)) {
+                            z3 = true;
+                            switch (z3) {
+                                case false:
+                                    style2 = createIfNull(style2).setLinethrough(true);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setLinethrough(false);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setUnderline(true);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setUnderline(false);
+                                    break;
+                                default:
+                                    break;
                             }
-                        case 1679736913:
-                            if (attributeName.equals(TtmlNode.LINETHROUGH)) {
-                                z = false;
-                                break;
+                        }
+                    } else if (hashCode == NUM) {
+                        if (attributeName.equals(TtmlNode.LINETHROUGH)) {
+                            z3 = false;
+                            switch (z3) {
+                                case false:
+                                    style2 = createIfNull(style2).setLinethrough(true);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setLinethrough(false);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setUnderline(true);
+                                    break;
+                                case true:
+                                    style2 = createIfNull(style2).setUnderline(false);
+                                    break;
+                                default:
+                                    break;
                             }
-                        default:
-                            z = true;
                             break;
+                        }
                     }
-                    switch (z) {
+                    z3 = true;
+                    switch (z3) {
                         case false:
-                            style = createIfNull(style).setLinethrough(true);
+                            style2 = createIfNull(style2).setLinethrough(true);
                             break;
                         case true:
-                            style = createIfNull(style).setLinethrough(false);
+                            style2 = createIfNull(style2).setLinethrough(false);
                             break;
                         case true:
-                            style = createIfNull(style).setUnderline(true);
+                            style2 = createIfNull(style2).setUnderline(true);
                             break;
                         case true:
-                            style = createIfNull(style).setUnderline(false);
+                            style2 = createIfNull(style2).setUnderline(false);
                             break;
                         default:
                             break;
@@ -445,107 +596,130 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
                     break;
             }
         }
-        return style;
+        return style2;
     }
 
     private TtmlStyle createIfNull(TtmlStyle style) {
         return style == null ? new TtmlStyle() : style;
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private TtmlNode parseNode(XmlPullParser parser, TtmlNode parent, Map<String, TtmlRegion> regionMap, FrameAndTickRate frameAndTickRate) throws SubtitleDecoderException {
-        long duration = C0539C.TIME_UNSET;
+        long endTime;
+        XmlPullParser xmlPullParser = parser;
+        TtmlNode ttmlNode = parent;
+        FrameAndTickRate frameAndTickRate2 = frameAndTickRate;
         long startTime = C0539C.TIME_UNSET;
-        long endTime = C0539C.TIME_UNSET;
+        long endTime2 = C0539C.TIME_UNSET;
         String regionId = TtmlNode.ANONYMOUS_REGION_ID;
-        String[] styleIds = null;
         int attributeCount = parser.getAttributeCount();
-        TtmlStyle style = parseStyleAttributes(parser, null);
-        for (int i = 0; i < attributeCount; i++) {
-            String attr = parser.getAttributeName(i);
-            String value = parser.getAttributeValue(i);
-            Object obj = -1;
+        TtmlStyle style = parseStyleAttributes(xmlPullParser, null);
+        String regionId2 = regionId;
+        String[] styleIds = null;
+        long duration = C0539C.TIME_UNSET;
+        int i = 0;
+        while (i < attributeCount) {
+            int attributeCount2;
+            String attr = xmlPullParser.getAttributeName(i);
+            String value = xmlPullParser.getAttributeValue(i);
             switch (attr.hashCode()) {
                 case -934795532:
-                    if (attr.equals("region")) {
-                        obj = 4;
+                    attributeCount2 = attributeCount;
+                    if (attr.equals("region") != 0) {
+                        attributeCount = 4;
                         break;
                     }
-                    break;
                 case 99841:
-                    if (attr.equals(ATTR_DURATION)) {
-                        obj = 2;
+                    attributeCount2 = attributeCount;
+                    if (attr.equals(ATTR_DURATION) != 0) {
+                        attributeCount = 2;
                         break;
                     }
-                    break;
                 case 100571:
-                    if (attr.equals("end")) {
-                        obj = 1;
+                    attributeCount2 = attributeCount;
+                    if (attr.equals("end") != 0) {
+                        attributeCount = 1;
                         break;
                     }
-                    break;
                 case 93616297:
-                    if (attr.equals(ATTR_BEGIN)) {
-                        obj = null;
+                    attributeCount2 = attributeCount;
+                    if (attr.equals(ATTR_BEGIN) != 0) {
+                        attributeCount = 0;
                         break;
                     }
-                    break;
                 case 109780401:
-                    if (attr.equals("style")) {
-                        obj = 3;
+                    attributeCount2 = attributeCount;
+                    if (attr.equals("style") != 0) {
+                        attributeCount = 3;
                         break;
                     }
-                    break;
+                default:
+                    attributeCount2 = attributeCount;
             }
-            switch (obj) {
-                case null:
-                    startTime = parseTimeExpression(value, frameAndTickRate);
+            attributeCount = -1;
+            switch (attributeCount) {
+                case 0:
+                    startTime = parseTimeExpression(value, frameAndTickRate2);
                     break;
                 case 1:
-                    endTime = parseTimeExpression(value, frameAndTickRate);
+                    endTime2 = parseTimeExpression(value, frameAndTickRate2);
                     break;
                 case 2:
-                    duration = parseTimeExpression(value, frameAndTickRate);
+                    duration = parseTimeExpression(value, frameAndTickRate2);
                     break;
                 case 3:
-                    String[] ids = parseStyleIds(value);
-                    if (ids.length <= 0) {
+                    attributeCount = regionMap;
+                    attributeCount = r0.parseStyleIds(value);
+                    if (attributeCount.length <= 0) {
                         break;
                     }
-                    styleIds = ids;
+                    styleIds = attributeCount;
                     break;
                 case 4:
                     if (!regionMap.containsKey(value)) {
                         break;
                     }
-                    regionId = value;
+                    regionId2 = value;
                     break;
                 default:
                     break;
             }
+            i++;
+            attributeCount = attributeCount2;
+            TtmlDecoder ttmlDecoder = this;
         }
-        if (!(parent == null || parent.startTimeUs == C0539C.TIME_UNSET)) {
+        if (!(ttmlNode == null || ttmlNode.startTimeUs == C0539C.TIME_UNSET)) {
+            long startTime2;
             if (startTime != C0539C.TIME_UNSET) {
-                startTime += parent.startTimeUs;
+                startTime2 = startTime + ttmlNode.startTimeUs;
+            } else {
+                startTime2 = startTime;
             }
-            if (endTime != C0539C.TIME_UNSET) {
-                endTime += parent.startTimeUs;
+            if (endTime2 != C0539C.TIME_UNSET) {
+                endTime2 += ttmlNode.startTimeUs;
             }
+            startTime = startTime2;
         }
-        if (endTime == C0539C.TIME_UNSET) {
+        if (endTime2 == C0539C.TIME_UNSET) {
             if (duration != C0539C.TIME_UNSET) {
                 endTime = startTime + duration;
-            } else if (!(parent == null || parent.endTimeUs == C0539C.TIME_UNSET)) {
-                endTime = parent.endTimeUs;
+            } else if (!(ttmlNode == null || ttmlNode.endTimeUs == C0539C.TIME_UNSET)) {
+                endTime = ttmlNode.endTimeUs;
             }
+            return TtmlNode.buildNode(parser.getName(), startTime, endTime, style, styleIds, regionId2);
         }
-        return TtmlNode.buildNode(parser.getName(), startTime, endTime, style, styleIds, regionId);
+        endTime = endTime2;
+        return TtmlNode.buildNode(parser.getName(), startTime, endTime, style, styleIds, regionId2);
     }
 
     private static boolean isSupportedTag(String tag) {
-        if (tag.equals(TtmlNode.TAG_TT) || tag.equals(TtmlNode.TAG_HEAD) || tag.equals(TtmlNode.TAG_BODY) || tag.equals(TtmlNode.TAG_DIV) || tag.equals(TtmlNode.TAG_P) || tag.equals(TtmlNode.TAG_SPAN) || tag.equals(TtmlNode.TAG_BR) || tag.equals("style") || tag.equals(TtmlNode.TAG_STYLING) || tag.equals(TtmlNode.TAG_LAYOUT) || tag.equals("region") || tag.equals(TtmlNode.TAG_METADATA) || tag.equals(TtmlNode.TAG_SMPTE_IMAGE) || tag.equals(TtmlNode.TAG_SMPTE_DATA) || tag.equals(TtmlNode.TAG_SMPTE_INFORMATION)) {
-            return true;
+        if (!(tag.equals(TtmlNode.TAG_TT) || tag.equals(TtmlNode.TAG_HEAD) || tag.equals(TtmlNode.TAG_BODY) || tag.equals(TtmlNode.TAG_DIV) || tag.equals(TtmlNode.TAG_P) || tag.equals(TtmlNode.TAG_SPAN) || tag.equals(TtmlNode.TAG_BR) || tag.equals("style") || tag.equals(TtmlNode.TAG_STYLING) || tag.equals(TtmlNode.TAG_LAYOUT) || tag.equals("region") || tag.equals(TtmlNode.TAG_METADATA) || tag.equals(TtmlNode.TAG_SMPTE_IMAGE) || tag.equals(TtmlNode.TAG_SMPTE_DATA))) {
+            if (!tag.equals(TtmlNode.TAG_SMPTE_INFORMATION)) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     private static void parseFontSize(String expression, TtmlStyle out) throws SubtitleDecoderException {
@@ -557,30 +731,28 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
             matcher = FONT_SIZE.matcher(expressions[1]);
             Log.w(TAG, "Multiple values in fontSize attribute. Picking the second value for vertical font size and ignoring the first.");
         } else {
-            throw new SubtitleDecoderException("Invalid number of entries for fontSize: " + expressions.length + ".");
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Invalid number of entries for fontSize: ");
+            stringBuilder.append(expressions.length);
+            stringBuilder.append(".");
+            throw new SubtitleDecoderException(stringBuilder.toString());
         }
         if (matcher.matches()) {
             String unit = matcher.group(3);
             int i = -1;
-            switch (unit.hashCode()) {
-                case 37:
-                    if (unit.equals("%")) {
-                        i = 2;
-                        break;
+            int hashCode = unit.hashCode();
+            if (hashCode != 37) {
+                if (hashCode != 3240) {
+                    if (hashCode == 3592) {
+                        if (unit.equals("px")) {
+                            i = 0;
+                        }
                     }
-                    break;
-                case 3240:
-                    if (unit.equals("em")) {
-                        i = 1;
-                        break;
-                    }
-                    break;
-                case 3592:
-                    if (unit.equals("px")) {
-                        i = 0;
-                        break;
-                    }
-                    break;
+                } else if (unit.equals("em")) {
+                    i = 1;
+                }
+            } else if (unit.equals("%")) {
+                i = 2;
             }
             switch (i) {
                 case 0:
@@ -593,87 +765,190 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
                     out.setFontSizeUnit(3);
                     break;
                 default:
-                    throw new SubtitleDecoderException("Invalid unit for fontSize: '" + unit + "'.");
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("Invalid unit for fontSize: '");
+                    stringBuilder.append(unit);
+                    stringBuilder.append("'.");
+                    throw new SubtitleDecoderException(stringBuilder.toString());
             }
             out.setFontSize(Float.valueOf(matcher.group(1)).floatValue());
             return;
         }
-        throw new SubtitleDecoderException("Invalid expression for fontSize: '" + expression + "'.");
+        stringBuilder = new StringBuilder();
+        stringBuilder.append("Invalid expression for fontSize: '");
+        stringBuilder.append(expression);
+        stringBuilder.append("'.");
+        throw new SubtitleDecoderException(stringBuilder.toString());
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private static long parseTimeExpression(String time, FrameAndTickRate frameAndTickRate) throws SubtitleDecoderException {
-        Matcher matcher = CLOCK_TIME.matcher(time);
+        String str = time;
+        FrameAndTickRate frameAndTickRate2 = frameAndTickRate;
+        Matcher matcher = CLOCK_TIME.matcher(str);
+        int i = 5;
         if (matcher.matches()) {
             double durationSeconds = (((double) (Long.parseLong(matcher.group(1)) * 3600)) + ((double) (Long.parseLong(matcher.group(2)) * 60))) + ((double) Long.parseLong(matcher.group(3)));
             String fraction = matcher.group(4);
+            double d = 0.0d;
             durationSeconds += fraction != null ? Double.parseDouble(fraction) : 0.0d;
             String frames = matcher.group(5);
-            durationSeconds += frames != null ? (double) (((float) Long.parseLong(frames)) / frameAndTickRate.effectiveFrameRate) : 0.0d;
+            durationSeconds += frames != null ? (double) (((float) Long.parseLong(frames)) / frameAndTickRate2.effectiveFrameRate) : 0.0d;
             String subframes = matcher.group(6);
-            return (long) (1000000.0d * (durationSeconds + (subframes != null ? (((double) Long.parseLong(subframes)) / ((double) frameAndTickRate.subFrameRate)) / ((double) frameAndTickRate.effectiveFrameRate) : 0.0d)));
+            if (subframes != null) {
+                d = (((double) Long.parseLong(subframes)) / ((double) frameAndTickRate2.subFrameRate)) / ((double) frameAndTickRate2.effectiveFrameRate);
+            }
+            return (long) (1000000.0d * (durationSeconds + d));
         }
-        matcher = OFFSET_TIME.matcher(time);
+        matcher = OFFSET_TIME.matcher(str);
         if (matcher.matches()) {
             double offsetSeconds = Double.parseDouble(matcher.group(1));
             String unit = matcher.group(2);
-            Object obj = -1;
-            switch (unit.hashCode()) {
-                case 102:
-                    if (unit.equals("f")) {
-                        obj = 4;
-                        break;
+            int hashCode = unit.hashCode();
+            if (hashCode != 102) {
+                if (hashCode != 104) {
+                    if (hashCode != 109) {
+                        if (hashCode != 3494) {
+                            switch (hashCode) {
+                                case 115:
+                                    if (unit.equals("s")) {
+                                        i = 2;
+                                        break;
+                                    }
+                                case 116:
+                                    if (unit.equals("t")) {
+                                        break;
+                                    }
+                                default:
+                            }
+                        } else if (unit.equals("ms")) {
+                            i = 3;
+                            switch (i) {
+                                case 0:
+                                    offsetSeconds *= 3600.0d;
+                                    break;
+                                case 1:
+                                    offsetSeconds *= 60.0d;
+                                    break;
+                                case 2:
+                                    break;
+                                case 3:
+                                    offsetSeconds /= 1000.0d;
+                                    break;
+                                case 4:
+                                    offsetSeconds /= (double) frameAndTickRate2.effectiveFrameRate;
+                                    break;
+                                case 5:
+                                    offsetSeconds /= (double) frameAndTickRate2.tickRate;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            return (long) (1000000.0d * offsetSeconds);
+                        }
+                    } else if (unit.equals("m")) {
+                        i = 1;
+                        switch (i) {
+                            case 0:
+                                offsetSeconds *= 3600.0d;
+                                break;
+                            case 1:
+                                offsetSeconds *= 60.0d;
+                                break;
+                            case 2:
+                                break;
+                            case 3:
+                                offsetSeconds /= 1000.0d;
+                                break;
+                            case 4:
+                                offsetSeconds /= (double) frameAndTickRate2.effectiveFrameRate;
+                                break;
+                            case 5:
+                                offsetSeconds /= (double) frameAndTickRate2.tickRate;
+                                break;
+                            default:
+                                break;
+                        }
+                        return (long) (1000000.0d * offsetSeconds);
                     }
-                    break;
-                case 104:
-                    if (unit.equals("h")) {
-                        obj = null;
-                        break;
+                } else if (unit.equals("h")) {
+                    i = 0;
+                    switch (i) {
+                        case 0:
+                            offsetSeconds *= 3600.0d;
+                            break;
+                        case 1:
+                            offsetSeconds *= 60.0d;
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            offsetSeconds /= 1000.0d;
+                            break;
+                        case 4:
+                            offsetSeconds /= (double) frameAndTickRate2.effectiveFrameRate;
+                            break;
+                        case 5:
+                            offsetSeconds /= (double) frameAndTickRate2.tickRate;
+                            break;
+                        default:
+                            break;
                     }
-                    break;
-                case 109:
-                    if (unit.equals("m")) {
-                        obj = 1;
+                    return (long) (1000000.0d * offsetSeconds);
+                }
+            } else if (unit.equals("f")) {
+                i = 4;
+                switch (i) {
+                    case 0:
+                        offsetSeconds *= 3600.0d;
                         break;
-                    }
-                    break;
-                case 115:
-                    if (unit.equals("s")) {
-                        obj = 2;
+                    case 1:
+                        offsetSeconds *= 60.0d;
                         break;
-                    }
-                    break;
-                case 116:
-                    if (unit.equals("t")) {
-                        obj = 5;
+                    case 2:
                         break;
-                    }
-                    break;
-                case 3494:
-                    if (unit.equals("ms")) {
-                        obj = 3;
+                    case 3:
+                        offsetSeconds /= 1000.0d;
                         break;
-                    }
-                    break;
+                    case 4:
+                        offsetSeconds /= (double) frameAndTickRate2.effectiveFrameRate;
+                        break;
+                    case 5:
+                        offsetSeconds /= (double) frameAndTickRate2.tickRate;
+                        break;
+                    default:
+                        break;
+                }
+                return (long) (1000000.0d * offsetSeconds);
             }
-            switch (obj) {
-                case null:
+            i = -1;
+            switch (i) {
+                case 0:
                     offsetSeconds *= 3600.0d;
                     break;
                 case 1:
                     offsetSeconds *= 60.0d;
                     break;
+                case 2:
+                    break;
                 case 3:
                     offsetSeconds /= 1000.0d;
                     break;
                 case 4:
-                    offsetSeconds /= (double) frameAndTickRate.effectiveFrameRate;
+                    offsetSeconds /= (double) frameAndTickRate2.effectiveFrameRate;
                     break;
                 case 5:
-                    offsetSeconds /= (double) frameAndTickRate.tickRate;
+                    offsetSeconds /= (double) frameAndTickRate2.tickRate;
+                    break;
+                default:
                     break;
             }
             return (long) (1000000.0d * offsetSeconds);
         }
-        throw new SubtitleDecoderException("Malformed time expression: " + time);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Malformed time expression: ");
+        stringBuilder.append(str);
+        throw new SubtitleDecoderException(stringBuilder.toString());
     }
 }

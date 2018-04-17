@@ -30,21 +30,24 @@ public final class TrackGroup {
 
     public int hashCode() {
         if (this.hashCode == 0) {
-            this.hashCode = Arrays.hashCode(this.formats) + 527;
+            this.hashCode = (31 * 17) + Arrays.hashCode(this.formats);
         }
         return this.hashCode;
     }
 
     public boolean equals(Object obj) {
+        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        TrackGroup other = (TrackGroup) obj;
-        if (this.length == other.length && Arrays.equals(this.formats, other.formats)) {
-            return true;
+        if (obj != null) {
+            if (getClass() == obj.getClass()) {
+                TrackGroup other = (TrackGroup) obj;
+                if (this.length != other.length || !Arrays.equals(this.formats, other.formats)) {
+                    z = false;
+                }
+                return z;
+            }
         }
         return false;
     }

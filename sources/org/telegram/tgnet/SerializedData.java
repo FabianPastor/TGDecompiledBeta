@@ -83,8 +83,8 @@ public class SerializedData extends AbstractSerializedData {
                 this.out.close();
                 this.out = null;
             }
-        } catch (Throwable e222) {
-            FileLog.m3e(e222);
+        } catch (Throwable e3) {
+            FileLog.m3e(e3);
         }
     }
 
@@ -289,14 +289,14 @@ public class SerializedData extends AbstractSerializedData {
         } else {
             this.out.write(b, offset, count);
         }
-        int i = count <= 253 ? 1 : 4;
-        while ((count + i) % 4 != 0) {
+        Exception e2 = count <= 253 ? 1 : 4;
+        while ((count + e2) % 4 != 0) {
             if (this.justCalc) {
                 this.len++;
             } else {
                 this.out.write(0);
             }
-            i++;
+            e2++;
         }
     }
 
@@ -355,12 +355,11 @@ public class SerializedData extends AbstractSerializedData {
         }
         if (exception) {
             throw new RuntimeException("Not bool value!");
-        } else if (!BuildVars.LOGS_ENABLED) {
-            return false;
-        } else {
-            FileLog.m1e("Not bool value!");
-            return false;
         }
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.m1e("Not bool value!");
+        }
+        return false;
     }
 
     public void readBytes(byte[] b, boolean exception) {
@@ -421,14 +420,14 @@ public class SerializedData extends AbstractSerializedData {
                 this.len += 3;
                 sl = 4;
             }
-            byte[] bArr = new byte[l];
-            this.in.read(bArr);
+            byte[] b = new byte[l];
+            this.in.read(b);
             this.len++;
             for (int i = sl; (l + i) % 4 != 0; i++) {
                 this.in.read();
                 this.len++;
             }
-            return bArr;
+            return b;
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read byte array error", e);
@@ -480,12 +479,13 @@ public class SerializedData extends AbstractSerializedData {
         int j = 0;
         while (j < 8) {
             try {
-                i |= ((long) this.in.read()) << (j * 8);
+                long i2 = i | (((long) this.in.read()) << (j * 8));
                 this.len++;
                 j++;
-            } catch (Exception e) {
+                i = i2;
+            } catch (long i3) {
                 if (exception) {
-                    throw new RuntimeException("read int64 error", e);
+                    throw new RuntimeException("read int64 error", i3);
                 }
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.m1e("read int64 error");
@@ -493,7 +493,7 @@ public class SerializedData extends AbstractSerializedData {
                 return 0;
             }
         }
-        return i;
+        return i3;
     }
 
     public void writeByteBuffer(NativeByteBuffer buffer) {

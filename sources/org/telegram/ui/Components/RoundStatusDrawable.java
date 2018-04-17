@@ -45,7 +45,7 @@ public class RoundStatusDrawable extends StatusDrawable {
     }
 
     public void draw(Canvas canvas) {
-        Theme.chat_statusPaint.setAlpha(((int) (200.0f * this.progress)) + 55);
+        Theme.chat_statusPaint.setAlpha(55 + ((int) (200.0f * this.progress)));
         canvas.drawCircle((float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(this.isChat ? 8.0f : 9.0f), (float) AndroidUtilities.dp(4.0f), Theme.chat_statusPaint);
         if (this.started) {
             update();

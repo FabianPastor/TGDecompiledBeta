@@ -85,10 +85,10 @@ public class ID3v2FrameBody {
         }
         try {
             String string = new String(bytes, offset, length, encoding.getCharset().name());
-            if (string.length() <= 0 || string.charAt(0) != '\ufeff') {
-                return string;
+            if (string.length() > 0 && string.charAt(0) == '\ufeff') {
+                string = string.substring(1);
             }
-            return string.substring(1);
+            return string;
         } catch (Exception e) {
             return TtmlNode.ANONYMOUS_REGION_ID;
         }
@@ -99,25 +99,32 @@ public class ID3v2FrameBody {
         int length = Math.min(maxLength, (int) getRemainingLength());
         byte[] bytes = ((Buffer) textBuffer.get()).bytes(length);
         int i = 0;
-        while (i < length) {
-            byte readByte = this.data.readByte();
-            bytes[i] = readByte;
-            if (readByte != (byte) 0 || (encoding == ID3v2Encoding.UTF_16 && zeros == 0 && i % 2 != 0)) {
-                zeros = 0;
-            } else {
-                zeros++;
-                if (zeros == encoding.getZeroBytes()) {
-                    return extractString(bytes, 0, (i + 1) - encoding.getZeroBytes(), encoding, false);
+        while (true) {
+            int i2 = i;
+            if (i2 < length) {
+                byte readByte = this.data.readByte();
+                bytes[i2] = readByte;
+                if (readByte != (byte) 0 || (encoding == ID3v2Encoding.UTF_16 && zeros == 0 && i2 % 2 != 0)) {
+                    zeros = 0;
+                } else {
+                    zeros++;
+                    if (zeros == encoding.getZeroBytes()) {
+                        return extractString(bytes, 0, (i2 + 1) - encoding.getZeroBytes(), encoding, false);
+                    }
                 }
+                i = i2 + 1;
+            } else {
+                throw new ID3v2Exception("Could not read zero-termiated string");
             }
-            i++;
         }
-        throw new ID3v2Exception("Could not read zero-termiated string");
     }
 
     public String readFixedLengthString(int length, ID3v2Encoding encoding) throws IOException, ID3v2Exception {
         if (((long) length) > getRemainingLength()) {
-            throw new ID3v2Exception("Could not read fixed-length string of length: " + length);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Could not read fixed-length string of length: ");
+            stringBuilder.append(length);
+            throw new ID3v2Exception(stringBuilder.toString());
         }
         byte[] bytes = ((Buffer) textBuffer.get()).bytes(length);
         this.data.readFully(bytes, 0, length);
@@ -136,11 +143,20 @@ public class ID3v2FrameBody {
             case (byte) 3:
                 return ID3v2Encoding.UTF_8;
             default:
-                throw new ID3v2Exception("Invalid encoding: " + value);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Invalid encoding: ");
+                stringBuilder.append(value);
+                throw new ID3v2Exception(stringBuilder.toString());
         }
     }
 
     public String toString() {
-        return "id3v2frame[pos=" + getPosition() + ", " + getRemainingLength() + " left]";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("id3v2frame[pos=");
+        stringBuilder.append(getPosition());
+        stringBuilder.append(", ");
+        stringBuilder.append(getRemainingLength());
+        stringBuilder.append(" left]");
+        return stringBuilder.toString();
     }
 }

@@ -52,19 +52,22 @@ public final class MediaCodecUtil {
         }
 
         public int hashCode() {
-            return (((this.mimeType == null ? 0 : this.mimeType.hashCode()) + 31) * 31) + (this.secure ? 1231 : 1237);
+            return (31 * ((31 * 1) + (this.mimeType == null ? 0 : this.mimeType.hashCode()))) + (this.secure ? 1231 : 1237);
         }
 
         public boolean equals(Object obj) {
+            boolean z = true;
             if (this == obj) {
                 return true;
             }
-            if (obj == null || obj.getClass() != CodecKey.class) {
-                return false;
-            }
-            CodecKey other = (CodecKey) obj;
-            if (TextUtils.equals(this.mimeType, other.mimeType) && this.secure == other.secure) {
-                return true;
+            if (obj != null) {
+                if (obj.getClass() == CodecKey.class) {
+                    CodecKey other = (CodecKey) obj;
+                    if (!TextUtils.equals(this.mimeType, other.mimeType) || this.secure != other.secure) {
+                        z = false;
+                    }
+                    return z;
+                }
             }
             return false;
         }
@@ -113,7 +116,7 @@ public final class MediaCodecUtil {
         private MediaCodecInfo[] mediaCodecInfos;
 
         public MediaCodecListCompatV21(boolean includeSecure) {
-            this.codecKind = includeSecure ? 1 : 0;
+            this.codecKind = includeSecure;
         }
 
         public int getCodecCount() {
@@ -211,41 +214,41 @@ public final class MediaCodecUtil {
     }
 
     public static synchronized List<MediaCodecInfo> getDecoderInfos(String mimeType, boolean secure) throws DecoderQueryException {
-        List<MediaCodecInfo> cachedDecoderInfos;
         synchronized (MediaCodecUtil.class) {
             CodecKey key = new CodecKey(mimeType, secure);
-            cachedDecoderInfos = (List) decoderInfosCache.get(key);
-            if (cachedDecoderInfos == null) {
-                MediaCodecListCompat mediaCodecList;
-                if (Util.SDK_INT >= 21) {
-                    mediaCodecList = new MediaCodecListCompatV21(secure);
-                } else {
-                    mediaCodecList = new MediaCodecListCompatV16();
-                }
-                ArrayList<MediaCodecInfo> decoderInfos = getDecoderInfosInternal(key, mediaCodecList, mimeType);
-                if (secure && decoderInfos.isEmpty() && 21 <= Util.SDK_INT && Util.SDK_INT <= 23) {
-                    mediaCodecList = new MediaCodecListCompatV16();
-                    decoderInfos = getDecoderInfosInternal(key, mediaCodecList, mimeType);
-                    if (!decoderInfos.isEmpty()) {
-                        Log.w(TAG, "MediaCodecList API didn't list secure decoder for: " + mimeType + ". Assuming: " + ((MediaCodecInfo) decoderInfos.get(0)).name);
-                    }
-                }
-                if (MimeTypes.AUDIO_E_AC3_JOC.equals(mimeType)) {
-                    decoderInfos.addAll(getDecoderInfosInternal(new CodecKey(MimeTypes.AUDIO_E_AC3, key.secure), mediaCodecList, mimeType));
-                }
-                applyWorkarounds(decoderInfos);
-                List<MediaCodecInfo> unmodifiableDecoderInfos = Collections.unmodifiableList(decoderInfos);
-                decoderInfosCache.put(key, unmodifiableDecoderInfos);
-                cachedDecoderInfos = unmodifiableDecoderInfos;
+            List<MediaCodecInfo> cachedDecoderInfos = (List) decoderInfosCache.get(key);
+            if (cachedDecoderInfos != null) {
+                return cachedDecoderInfos;
             }
+            MediaCodecListCompat mediaCodecList = Util.SDK_INT >= 21 ? new MediaCodecListCompatV21(secure) : new MediaCodecListCompatV16();
+            ArrayList<MediaCodecInfo> decoderInfos = getDecoderInfosInternal(key, mediaCodecList, mimeType);
+            if (secure && decoderInfos.isEmpty() && 21 <= Util.SDK_INT && Util.SDK_INT <= 23) {
+                mediaCodecList = new MediaCodecListCompatV16();
+                decoderInfos = getDecoderInfosInternal(key, mediaCodecList, mimeType);
+                if (!decoderInfos.isEmpty()) {
+                    String str = TAG;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("MediaCodecList API didn't list secure decoder for: ");
+                    stringBuilder.append(mimeType);
+                    stringBuilder.append(". Assuming: ");
+                    stringBuilder.append(((MediaCodecInfo) decoderInfos.get(0)).name);
+                    Log.w(str, stringBuilder.toString());
+                }
+            }
+            if (MimeTypes.AUDIO_E_AC3_JOC.equals(mimeType)) {
+                decoderInfos.addAll(getDecoderInfosInternal(new CodecKey(MimeTypes.AUDIO_E_AC3, key.secure), mediaCodecList, mimeType));
+            }
+            applyWorkarounds(decoderInfos);
+            List<MediaCodecInfo> unmodifiableDecoderInfos = Collections.unmodifiableList(decoderInfos);
+            decoderInfosCache.put(key, unmodifiableDecoderInfos);
+            return unmodifiableDecoderInfos;
         }
-        return cachedDecoderInfos;
     }
 
     public static int maxH264DecodableFrameSize() throws DecoderQueryException {
-        int i = 0;
         if (maxH264DecodableFrameSize == -1) {
             int result = 0;
+            int i = 0;
             MediaCodecInfo decoderInfo = getDecoderInfo("video/avc", false);
             if (decoderInfo != null) {
                 CodecProfileLevel[] profileLevels = decoderInfo.getProfileLevels();
@@ -264,11 +267,11 @@ public final class MediaCodecUtil {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static Pair<Integer, Integer> getCodecProfileAndLevel(String codec) {
-        int i = 0;
         if (codec == null) {
             return null;
         }
         String[] parts = codec.split("\\.");
+        int i = 0;
         String str = parts[0];
         switch (str.hashCode()) {
             case 3006243:
@@ -291,9 +294,8 @@ public final class MediaCodecUtil {
                     break;
                 }
             default:
-                i = -1;
-                break;
         }
+        i = -1;
         switch (i) {
             case 0:
             case 1:
@@ -306,97 +308,218 @@ public final class MediaCodecUtil {
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private static ArrayList<MediaCodecInfo> getDecoderInfosInternal(CodecKey key, MediaCodecListCompat mediaCodecList, String requestedMimeType) throws DecoderQueryException {
-        String codecName;
+        int i;
+        MediaCodecInfo mediaCodecInfo;
+        Exception e;
+        Exception e2;
+        String str;
+        StringBuilder stringBuilder;
+        CodecKey codecKey = key;
+        MediaCodecListCompat mediaCodecListCompat = mediaCodecList;
+        String str2;
         try {
             ArrayList<MediaCodecInfo> decoderInfos = new ArrayList();
-            String mimeType = key.mimeType;
+            String mimeType = codecKey.mimeType;
             int numberOfCodecs = mediaCodecList.getCodecCount();
             boolean secureDecodersExplicit = mediaCodecList.secureDecodersExplicit();
-            loop0:
-            for (int i = 0; i < numberOfCodecs; i++) {
-                MediaCodecInfo codecInfo = mediaCodecList.getCodecInfoAt(i);
-                codecName = codecInfo.getName();
-                if (isCodecUsableDecoder(codecInfo, codecName, secureDecodersExplicit, requestedMimeType)) {
-                    for (String supportedType : codecInfo.getSupportedTypes()) {
-                        if (supportedType.equalsIgnoreCase(mimeType)) {
-                            CodecCapabilities capabilities = codecInfo.getCapabilitiesForType(supportedType);
-                            boolean secure = mediaCodecList.isSecurePlaybackSupported(mimeType, capabilities);
-                            boolean forceDisableAdaptive = codecNeedsDisableAdaptationWorkaround(codecName);
-                            if ((!secureDecodersExplicit || key.secure != secure) && (secureDecodersExplicit || key.secure)) {
-                                if (!secureDecodersExplicit && secure) {
-                                    decoderInfos.add(MediaCodecInfo.newInstance(codecName + ".secure", mimeType, capabilities, forceDisableAdaptive, true));
-                                    break loop0;
+            int i2 = 0;
+            while (i2 < numberOfCodecs) {
+                MediaCodecInfo codecInfo = mediaCodecListCompat.getCodecInfoAt(i2);
+                String codecName = codecInfo.getName();
+                try {
+                    if (isCodecUsableDecoder(codecInfo, codecName, secureDecodersExplicit, requestedMimeType)) {
+                        String[] supportedTypes = codecInfo.getSupportedTypes();
+                        int length = supportedTypes.length;
+                        int i3 = 0;
+                        while (i3 < length) {
+                            String supportedType = supportedTypes[i3];
+                            if (supportedType.equalsIgnoreCase(mimeType)) {
+                                try {
+                                    CodecCapabilities capabilities = codecInfo.getCapabilitiesForType(supportedType);
+                                    boolean secure = mediaCodecListCompat.isSecurePlaybackSupported(mimeType, capabilities);
+                                    boolean forceDisableAdaptive = codecNeedsDisableAdaptationWorkaround(codecName);
+                                    if (secureDecodersExplicit) {
+                                        try {
+                                            i = numberOfCodecs;
+                                            numberOfCodecs = secure;
+                                            if (codecKey.secure != numberOfCodecs) {
+                                            }
+                                            mediaCodecInfo = codecInfo;
+                                        } catch (Exception e22) {
+                                            i = numberOfCodecs;
+                                            e = e22;
+                                            mediaCodecInfo = codecInfo;
+                                            if (Util.SDK_INT <= 23) {
+                                            }
+                                            str = TAG;
+                                            stringBuilder = new StringBuilder();
+                                            stringBuilder.append("Failed to query codec ");
+                                            stringBuilder.append(codecName);
+                                            stringBuilder.append(" (");
+                                            stringBuilder.append(supportedType);
+                                            stringBuilder.append(")");
+                                            Log.e(str, stringBuilder.toString());
+                                            throw e;
+                                        }
+                                        try {
+                                            decoderInfos.add(MediaCodecInfo.newInstance(codecName, mimeType, capabilities, forceDisableAdaptive, false));
+                                        } catch (Exception e222) {
+                                            e = e222;
+                                            if (Util.SDK_INT <= 23 || decoderInfos.isEmpty()) {
+                                                str = TAG;
+                                                stringBuilder = new StringBuilder();
+                                                stringBuilder.append("Failed to query codec ");
+                                                stringBuilder.append(codecName);
+                                                stringBuilder.append(" (");
+                                                stringBuilder.append(supportedType);
+                                                stringBuilder.append(")");
+                                                Log.e(str, stringBuilder.toString());
+                                                throw e;
+                                            }
+                                            str = TAG;
+                                            stringBuilder = new StringBuilder();
+                                            stringBuilder.append("Skipping codec ");
+                                            stringBuilder.append(codecName);
+                                            stringBuilder.append(" (failed to query capabilities)");
+                                            Log.e(str, stringBuilder.toString());
+                                            i3++;
+                                            numberOfCodecs = i;
+                                            codecInfo = mediaCodecInfo;
+                                            codecKey = key;
+                                            mediaCodecListCompat = mediaCodecList;
+                                        }
+                                    } else {
+                                        i = numberOfCodecs;
+                                        numberOfCodecs = secure;
+                                    }
+                                    if (!secureDecodersExplicit) {
+                                        try {
+                                        } catch (Exception e2222) {
+                                            mediaCodecInfo = codecInfo;
+                                            e = e2222;
+                                            if (Util.SDK_INT <= 23) {
+                                            }
+                                            str = TAG;
+                                            stringBuilder = new StringBuilder();
+                                            stringBuilder.append("Failed to query codec ");
+                                            stringBuilder.append(codecName);
+                                            stringBuilder.append(" (");
+                                            stringBuilder.append(supportedType);
+                                            stringBuilder.append(")");
+                                            Log.e(str, stringBuilder.toString());
+                                            throw e;
+                                        }
+                                    }
+                                    mediaCodecInfo = codecInfo;
+                                    boolean forceDisableAdaptive2 = forceDisableAdaptive;
+                                    if (!(secureDecodersExplicit || numberOfCodecs == 0)) {
+                                        StringBuilder stringBuilder2 = new StringBuilder();
+                                        stringBuilder2.append(codecName);
+                                        stringBuilder2.append(".secure");
+                                        decoderInfos.add(MediaCodecInfo.newInstance(stringBuilder2.toString(), mimeType, capabilities, forceDisableAdaptive2, true));
+                                        return decoderInfos;
+                                    }
+                                } catch (Exception e22222) {
+                                    i = numberOfCodecs;
+                                    mediaCodecInfo = codecInfo;
+                                    e = e22222;
+                                    if (Util.SDK_INT <= 23) {
+                                    }
+                                    str = TAG;
+                                    stringBuilder = new StringBuilder();
+                                    stringBuilder.append("Failed to query codec ");
+                                    stringBuilder.append(codecName);
+                                    stringBuilder.append(" (");
+                                    stringBuilder.append(supportedType);
+                                    stringBuilder.append(")");
+                                    Log.e(str, stringBuilder.toString());
+                                    throw e;
                                 }
                             }
-                            decoderInfos.add(MediaCodecInfo.newInstance(codecName, mimeType, capabilities, forceDisableAdaptive, false));
+                            i = numberOfCodecs;
+                            mediaCodecInfo = codecInfo;
+                            i3++;
+                            numberOfCodecs = i;
+                            codecInfo = mediaCodecInfo;
+                            codecKey = key;
+                            mediaCodecListCompat = mediaCodecList;
                         }
+                        continue;
                     }
-                    continue;
+                    i2++;
+                    numberOfCodecs = numberOfCodecs;
+                    codecKey = key;
+                    mediaCodecListCompat = mediaCodecList;
+                } catch (Exception e3) {
+                    e22222 = e3;
                 }
             }
+            str2 = requestedMimeType;
+            i = numberOfCodecs;
             return decoderInfos;
-        } catch (Exception e) {
-            if (Util.SDK_INT > 23 || decoderInfos.isEmpty()) {
-                Log.e(TAG, "Failed to query codec " + codecName + " (" + supportedType + ")");
-                throw e;
-            }
-            Log.e(TAG, "Skipping codec " + codecName + " (failed to query capabilities)");
-        } catch (Exception e2) {
-            throw new DecoderQueryException(e2);
+        } catch (Exception e4) {
+            e22222 = e4;
+            str2 = requestedMimeType;
+            throw new DecoderQueryException(e22222);
         }
     }
 
     private static boolean isCodecUsableDecoder(MediaCodecInfo info, String name, boolean secureDecodersExplicit, String requestedMimeType) {
-        if (info.isEncoder()) {
-            return false;
-        }
-        if (!secureDecodersExplicit && name.endsWith(".secure")) {
-            return false;
-        }
-        if (Util.SDK_INT < 21 && ("CIPAACDecoder".equals(name) || "CIPMP3Decoder".equals(name) || "CIPVorbisDecoder".equals(name) || "CIPAMRNBDecoder".equals(name) || "AACDecoder".equals(name) || "MP3Decoder".equals(name))) {
-            return false;
-        }
-        if (Util.SDK_INT < 18 && "OMX.SEC.MP3.Decoder".equals(name)) {
-            return false;
-        }
-        if (Util.SDK_INT < 18 && "OMX.MTK.AUDIO.DECODER.AAC".equals(name)) {
-            if ("a70".equals(Util.DEVICE)) {
-                return false;
+        if (!info.isEncoder()) {
+            if (secureDecodersExplicit || !name.endsWith(".secure")) {
+                if (Util.SDK_INT < 21 && ("CIPAACDecoder".equals(name) || "CIPMP3Decoder".equals(name) || "CIPVorbisDecoder".equals(name) || "CIPAMRNBDecoder".equals(name) || "AACDecoder".equals(name) || "MP3Decoder".equals(name))) {
+                    return false;
+                }
+                if (Util.SDK_INT < 18 && "OMX.SEC.MP3.Decoder".equals(name)) {
+                    return false;
+                }
+                if (Util.SDK_INT < 18 && "OMX.MTK.AUDIO.DECODER.AAC".equals(name) && ("a70".equals(Util.DEVICE) || ("Xiaomi".equals(Util.MANUFACTURER) && Util.DEVICE.startsWith("HM")))) {
+                    return false;
+                }
+                if (Util.SDK_INT == 16 && "OMX.qcom.audio.decoder.mp3".equals(name) && ("dlxu".equals(Util.DEVICE) || "protou".equals(Util.DEVICE) || "ville".equals(Util.DEVICE) || "villeplus".equals(Util.DEVICE) || "villec2".equals(Util.DEVICE) || Util.DEVICE.startsWith("gee") || "C6602".equals(Util.DEVICE) || "C6603".equals(Util.DEVICE) || "C6606".equals(Util.DEVICE) || "C6616".equals(Util.DEVICE) || "L36h".equals(Util.DEVICE) || "SO-02E".equals(Util.DEVICE))) {
+                    return false;
+                }
+                if (Util.SDK_INT == 16 && "OMX.qcom.audio.decoder.aac".equals(name) && ("C1504".equals(Util.DEVICE) || "C1505".equals(Util.DEVICE) || "C1604".equals(Util.DEVICE) || "C1605".equals(Util.DEVICE))) {
+                    return false;
+                }
+                if (Util.SDK_INT < 24 && (("OMX.SEC.aac.dec".equals(name) || "OMX.Exynos.AAC.Decoder".equals(name)) && Util.MANUFACTURER.equals("samsung") && (Util.DEVICE.startsWith("zeroflte") || Util.DEVICE.startsWith("zerolte") || Util.DEVICE.startsWith("zenlte") || Util.DEVICE.equals("SC-05G") || Util.DEVICE.equals("marinelteatt") || Util.DEVICE.equals("404SC") || Util.DEVICE.equals("SC-04G") || Util.DEVICE.equals("SCV31")))) {
+                    return false;
+                }
+                if (Util.SDK_INT <= 19 && "OMX.SEC.vp8.dec".equals(name) && "samsung".equals(Util.MANUFACTURER) && (Util.DEVICE.startsWith("d2") || Util.DEVICE.startsWith("serrano") || Util.DEVICE.startsWith("jflte") || Util.DEVICE.startsWith("santos") || Util.DEVICE.startsWith("t0"))) {
+                    return false;
+                }
+                if (Util.SDK_INT <= 19 && Util.DEVICE.startsWith("jflte") && "OMX.qcom.video.decoder.vp8".equals(name)) {
+                    return false;
+                }
+                if (MimeTypes.AUDIO_E_AC3_JOC.equals(requestedMimeType) && "OMX.MTK.AUDIO.DECODER.DSPAC3".equals(name)) {
+                    return false;
+                }
+                return true;
             }
-            if ("Xiaomi".equals(Util.MANUFACTURER) && Util.DEVICE.startsWith("HM")) {
-                return false;
-            }
         }
-        if (Util.SDK_INT == 16 && "OMX.qcom.audio.decoder.mp3".equals(name) && ("dlxu".equals(Util.DEVICE) || "protou".equals(Util.DEVICE) || "ville".equals(Util.DEVICE) || "villeplus".equals(Util.DEVICE) || "villec2".equals(Util.DEVICE) || Util.DEVICE.startsWith("gee") || "C6602".equals(Util.DEVICE) || "C6603".equals(Util.DEVICE) || "C6606".equals(Util.DEVICE) || "C6616".equals(Util.DEVICE) || "L36h".equals(Util.DEVICE) || "SO-02E".equals(Util.DEVICE))) {
-            return false;
-        }
-        if (Util.SDK_INT == 16 && "OMX.qcom.audio.decoder.aac".equals(name) && ("C1504".equals(Util.DEVICE) || "C1505".equals(Util.DEVICE) || "C1604".equals(Util.DEVICE) || "C1605".equals(Util.DEVICE))) {
-            return false;
-        }
-        if (Util.SDK_INT < 24 && (("OMX.SEC.aac.dec".equals(name) || "OMX.Exynos.AAC.Decoder".equals(name)) && Util.MANUFACTURER.equals("samsung") && (Util.DEVICE.startsWith("zeroflte") || Util.DEVICE.startsWith("zerolte") || Util.DEVICE.startsWith("zenlte") || Util.DEVICE.equals("SC-05G") || Util.DEVICE.equals("marinelteatt") || Util.DEVICE.equals("404SC") || Util.DEVICE.equals("SC-04G") || Util.DEVICE.equals("SCV31")))) {
-            return false;
-        }
-        if (Util.SDK_INT <= 19 && "OMX.SEC.vp8.dec".equals(name) && "samsung".equals(Util.MANUFACTURER) && (Util.DEVICE.startsWith("d2") || Util.DEVICE.startsWith("serrano") || Util.DEVICE.startsWith("jflte") || Util.DEVICE.startsWith("santos") || Util.DEVICE.startsWith("t0"))) {
-            return false;
-        }
-        if (Util.SDK_INT <= 19 && Util.DEVICE.startsWith("jflte") && "OMX.qcom.video.decoder.vp8".equals(name)) {
-            return false;
-        }
-        if (MimeTypes.AUDIO_E_AC3_JOC.equals(requestedMimeType) && "OMX.MTK.AUDIO.DECODER.DSPAC3".equals(name)) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     private static void applyWorkarounds(List<MediaCodecInfo> decoderInfos) {
-        if (Util.SDK_INT < 26 && decoderInfos.size() > 1 && MTK_RAW_DECODER_NAME.equals(((MediaCodecInfo) decoderInfos.get(0)).name)) {
-            for (int i = 1; i < decoderInfos.size(); i++) {
-                MediaCodecInfo decoderInfo = (MediaCodecInfo) decoderInfos.get(i);
-                if (GOOGLE_RAW_DECODER_NAME.equals(decoderInfo.name)) {
-                    decoderInfos.remove(i);
-                    decoderInfos.add(0, decoderInfo);
-                    return;
+        if (Util.SDK_INT < 26) {
+            int i = 1;
+            if (decoderInfos.size() > 1 && MTK_RAW_DECODER_NAME.equals(((MediaCodecInfo) decoderInfos.get(0)).name)) {
+                while (true) {
+                    int i2 = i;
+                    if (i2 < decoderInfos.size()) {
+                        MediaCodecInfo decoderInfo = (MediaCodecInfo) decoderInfos.get(i2);
+                        if (GOOGLE_RAW_DECODER_NAME.equals(decoderInfo.name)) {
+                            decoderInfos.remove(i2);
+                            decoderInfos.add(0, decoderInfo);
+                            return;
+                        }
+                        i = i2 + 1;
+                    } else {
+                        return;
+                    }
                 }
             }
         }
@@ -408,7 +531,11 @@ public final class MediaCodecUtil {
 
     private static Pair<Integer, Integer> getHevcProfileAndLevel(String codec, String[] parts) {
         if (parts.length < 4) {
-            Log.w(TAG, "Ignoring malformed HEVC codec string: " + codec);
+            String str = TAG;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Ignoring malformed HEVC codec string: ");
+            stringBuilder.append(codec);
+            Log.w(str, stringBuilder.toString());
             return null;
         }
         Matcher matcher = PROFILE_PATTERN.matcher(parts[1]);
@@ -420,23 +547,39 @@ public final class MediaCodecUtil {
             } else if ("2".equals(profileString)) {
                 profile = 2;
             } else {
-                Log.w(TAG, "Unknown HEVC profile string: " + profileString);
+                String str2 = TAG;
+                StringBuilder stringBuilder2 = new StringBuilder();
+                stringBuilder2.append("Unknown HEVC profile string: ");
+                stringBuilder2.append(profileString);
+                Log.w(str2, stringBuilder2.toString());
                 return null;
             }
             Integer level = (Integer) HEVC_CODEC_STRING_TO_PROFILE_LEVEL.get(parts[3]);
             if (level != null) {
                 return new Pair(Integer.valueOf(profile), level);
             }
-            Log.w(TAG, "Unknown HEVC level string: " + matcher.group(1));
+            String str3 = TAG;
+            StringBuilder stringBuilder3 = new StringBuilder();
+            stringBuilder3.append("Unknown HEVC level string: ");
+            stringBuilder3.append(matcher.group(1));
+            Log.w(str3, stringBuilder3.toString());
             return null;
         }
-        Log.w(TAG, "Ignoring malformed HEVC codec string: " + codec);
+        str2 = TAG;
+        StringBuilder stringBuilder4 = new StringBuilder();
+        stringBuilder4.append("Ignoring malformed HEVC codec string: ");
+        stringBuilder4.append(codec);
+        Log.w(str2, stringBuilder4.toString());
         return null;
     }
 
     private static Pair<Integer, Integer> getAvcProfileAndLevel(String codec, String[] codecsParts) {
         if (codecsParts.length < 2) {
-            Log.w(TAG, "Ignoring malformed AVC codec string: " + codec);
+            String str = TAG;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Ignoring malformed AVC codec string: ");
+            stringBuilder.append(codec);
+            Log.w(str, stringBuilder.toString());
             return null;
         }
         try {
@@ -446,25 +589,42 @@ public final class MediaCodecUtil {
                 profileInteger = Integer.valueOf(Integer.parseInt(codecsParts[1].substring(0, 2), 16));
                 levelInteger = Integer.valueOf(Integer.parseInt(codecsParts[1].substring(4), 16));
             } else if (codecsParts.length >= 3) {
-                profileInteger = Integer.valueOf(Integer.parseInt(codecsParts[1]));
+                Integer valueOf = Integer.valueOf(Integer.parseInt(codecsParts[1]));
                 levelInteger = Integer.valueOf(Integer.parseInt(codecsParts[2]));
+                profileInteger = valueOf;
             } else {
-                Log.w(TAG, "Ignoring malformed AVC codec string: " + codec);
+                str = TAG;
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("Ignoring malformed AVC codec string: ");
+                stringBuilder.append(codec);
+                Log.w(str, stringBuilder.toString());
                 return null;
             }
             Integer profile = Integer.valueOf(AVC_PROFILE_NUMBER_TO_CONST.get(profileInteger.intValue()));
             if (profile == null) {
-                Log.w(TAG, "Unknown AVC profile: " + profileInteger);
+                String str2 = TAG;
+                StringBuilder stringBuilder2 = new StringBuilder();
+                stringBuilder2.append("Unknown AVC profile: ");
+                stringBuilder2.append(profileInteger);
+                Log.w(str2, stringBuilder2.toString());
                 return null;
             }
             Integer level = Integer.valueOf(AVC_LEVEL_NUMBER_TO_CONST.get(levelInteger.intValue()));
             if (level != null) {
                 return new Pair(profile, level);
             }
-            Log.w(TAG, "Unknown AVC level: " + levelInteger);
+            String str3 = TAG;
+            StringBuilder stringBuilder3 = new StringBuilder();
+            stringBuilder3.append("Unknown AVC level: ");
+            stringBuilder3.append(levelInteger);
+            Log.w(str3, stringBuilder3.toString());
             return null;
         } catch (NumberFormatException e) {
-            Log.w(TAG, "Ignoring malformed AVC codec string: " + codec);
+            String str4 = TAG;
+            StringBuilder stringBuilder4 = new StringBuilder();
+            stringBuilder4.append("Ignoring malformed AVC codec string: ");
+            stringBuilder4.append(codec);
+            Log.w(str4, stringBuilder4.toString());
             return null;
         }
     }
@@ -472,6 +632,7 @@ public final class MediaCodecUtil {
     private static int avcLevelToMaxFrameSize(int avcLevel) {
         switch (avcLevel) {
             case 1:
+                return 25344;
             case 2:
                 return 25344;
             case 8:

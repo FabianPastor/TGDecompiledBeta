@@ -33,32 +33,43 @@ public final class MpegAudioHeader {
             return -1;
         }
         int bitrateIndex = (header >>> 12) & 15;
-        if (bitrateIndex == 0 || bitrateIndex == 15) {
-            return -1;
+        if (bitrateIndex != 0) {
+            if (bitrateIndex != 15) {
+                int samplingRateIndex = (header >>> 10) & 3;
+                if (samplingRateIndex == 3) {
+                    return -1;
+                }
+                int samplingRate = SAMPLING_RATE_V1[samplingRateIndex];
+                if (version == 2) {
+                    samplingRate /= 2;
+                } else if (version == 0) {
+                    samplingRate /= 4;
+                }
+                int padding = (header >>> 9) & 1;
+                if (layer == 3) {
+                    return (((12000 * (version == 3 ? BITRATE_V1_L1[bitrateIndex - 1] : BITRATE_V2_L1[bitrateIndex - 1])) / samplingRate) + padding) * 4;
+                }
+                int bitrate;
+                if (version == 3) {
+                    bitrate = layer == 2 ? BITRATE_V1_L2[bitrateIndex - 1] : BITRATE_V1_L3[bitrateIndex - 1];
+                } else {
+                    bitrate = BITRATE_V2[bitrateIndex - 1];
+                }
+                int i = 144000;
+                if (version == 3) {
+                    return ((144000 * bitrate) / samplingRate) + padding;
+                }
+                if (layer == 1) {
+                    i = DefaultOggSeeker.MATCH_RANGE;
+                }
+                return ((i * bitrate) / samplingRate) + padding;
+            }
         }
-        int samplingRateIndex = (header >>> 10) & 3;
-        if (samplingRateIndex == 3) {
-            return -1;
-        }
-        int samplingRate = SAMPLING_RATE_V1[samplingRateIndex];
-        if (version == 2) {
-            samplingRate /= 2;
-        } else if (version == 0) {
-            samplingRate /= 4;
-        }
-        int padding = (header >>> 9) & 1;
-        if (layer == 3) {
-            return ((((version == 3 ? BITRATE_V1_L1[bitrateIndex - 1] : BITRATE_V2_L1[bitrateIndex - 1]) * 12000) / samplingRate) + padding) * 4;
-        }
-        int bitrate = version == 3 ? layer == 2 ? BITRATE_V1_L2[bitrateIndex - 1] : BITRATE_V1_L3[bitrateIndex - 1] : BITRATE_V2[bitrateIndex - 1];
-        if (version == 3) {
-            return ((144000 * bitrate) / samplingRate) + padding;
-        }
-        return (((layer == 1 ? DefaultOggSeeker.MATCH_RANGE : 144000) * bitrate) / samplingRate) + padding;
+        return -1;
     }
 
     public static boolean populateHeader(int headerData, MpegAudioHeader header) {
-        if ((-2097152 & headerData) != -2097152) {
+        if ((headerData & -2097152) != -2097152) {
             return false;
         }
         int version = (headerData >>> 19) & 3;
@@ -70,38 +81,52 @@ public final class MpegAudioHeader {
             return false;
         }
         int bitrateIndex = (headerData >>> 12) & 15;
-        if (bitrateIndex == 0 || bitrateIndex == 15) {
-            return false;
+        if (bitrateIndex != 0) {
+            if (bitrateIndex != 15) {
+                int samplingRateIndex = (headerData >>> 10) & 3;
+                if (samplingRateIndex == 3) {
+                    return false;
+                }
+                int bitrate;
+                int samplesPerFrame;
+                int frameSize;
+                int sampleRate = SAMPLING_RATE_V1[samplingRateIndex];
+                if (version == 2) {
+                    sampleRate /= 2;
+                } else if (version == 0) {
+                    sampleRate /= 4;
+                }
+                int padding = (headerData >>> 9) & 1;
+                int bitrate2;
+                if (layer == 3) {
+                    bitrate2 = version == 3 ? BITRATE_V1_L1[bitrateIndex - 1] : BITRATE_V2_L1[bitrateIndex - 1];
+                    bitrate = bitrate2;
+                    samplesPerFrame = 384;
+                    frameSize = (((12000 * bitrate2) / sampleRate) + padding) * 4;
+                } else {
+                    int bitrate3;
+                    bitrate2 = 144000;
+                    if (version == 3) {
+                        bitrate3 = layer == 2 ? BITRATE_V1_L2[bitrateIndex - 1] : BITRATE_V1_L3[bitrateIndex - 1];
+                        frameSize = 1152;
+                        bitrate2 = ((144000 * bitrate3) / sampleRate) + padding;
+                    } else {
+                        bitrate3 = BITRATE_V2[bitrateIndex - 1];
+                        frameSize = layer == 1 ? 576 : 1152;
+                        if (layer == 1) {
+                            bitrate2 = DefaultOggSeeker.MATCH_RANGE;
+                        }
+                        bitrate2 = ((bitrate2 * bitrate3) / sampleRate) + padding;
+                    }
+                    bitrate = bitrate3;
+                    samplesPerFrame = frameSize;
+                    frameSize = bitrate2;
+                }
+                header.setValues(version, MIME_TYPE_BY_LAYER[3 - layer], frameSize, sampleRate, ((headerData >> 6) & 3) == 3 ? 1 : 2, bitrate * 1000, samplesPerFrame);
+                return true;
+            }
         }
-        int samplingRateIndex = (headerData >>> 10) & 3;
-        if (samplingRateIndex == 3) {
-            return false;
-        }
-        int bitrate;
-        int frameSize;
-        int samplesPerFrame;
-        int sampleRate = SAMPLING_RATE_V1[samplingRateIndex];
-        if (version == 2) {
-            sampleRate /= 2;
-        } else if (version == 0) {
-            sampleRate /= 4;
-        }
-        int padding = (headerData >>> 9) & 1;
-        if (layer == 3) {
-            bitrate = version == 3 ? BITRATE_V1_L1[bitrateIndex - 1] : BITRATE_V2_L1[bitrateIndex - 1];
-            frameSize = (((bitrate * 12000) / sampleRate) + padding) * 4;
-            samplesPerFrame = 384;
-        } else if (version == 3) {
-            bitrate = layer == 2 ? BITRATE_V1_L2[bitrateIndex - 1] : BITRATE_V1_L3[bitrateIndex - 1];
-            samplesPerFrame = 1152;
-            frameSize = ((144000 * bitrate) / sampleRate) + padding;
-        } else {
-            bitrate = BITRATE_V2[bitrateIndex - 1];
-            samplesPerFrame = layer == 1 ? 576 : 1152;
-            frameSize = (((layer == 1 ? DefaultOggSeeker.MATCH_RANGE : 144000) * bitrate) / sampleRate) + padding;
-        }
-        header.setValues(version, MIME_TYPE_BY_LAYER[3 - layer], frameSize, sampleRate, ((headerData >> 6) & 3) == 3 ? 1 : 2, bitrate * 1000, samplesPerFrame);
-        return true;
+        return false;
     }
 
     private void setValues(int version, String mimeType, int frameSize, int sampleRate, int channels, int bitrate, int samplesPerFrame) {

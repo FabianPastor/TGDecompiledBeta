@@ -35,7 +35,7 @@ public abstract class CompositeMediaSource<T> implements MediaSource {
     }
 
     protected void prepareChildSource(final T id, final MediaSource mediaSource) {
-        Assertions.checkArgument(!this.childSources.containsKey(id));
+        Assertions.checkArgument(this.childSources.containsKey(id) ^ 1);
         this.childSources.put(id, mediaSource);
         mediaSource.prepareSource(this.player, false, new Listener() {
             public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {

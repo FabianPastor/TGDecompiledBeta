@@ -45,9 +45,13 @@ public class ID3v2FrameHeader {
                 unsynchronizationMask = 2;
                 dataLengthIndicatorMask = 1;
             }
+            boolean z = false;
             this.compression = (formatFlags & compressionMask) != 0;
             this.unsynchronization = (formatFlags & unsynchronizationMask) != 0;
-            this.encryption = (formatFlags & encryptionMask) != 0;
+            if ((formatFlags & encryptionMask) != 0) {
+                z = true;
+            }
+            this.encryption = z;
             if (input.getTagHeader().getVersion() == 3) {
                 if (this.compression) {
                     this.dataLengthIndicator = data.readInt();
@@ -108,29 +112,35 @@ public class ID3v2FrameHeader {
     }
 
     public boolean isValid() {
+        boolean z = false;
         int i = 0;
         while (i < this.frameId.length()) {
-            if ((this.frameId.charAt(i) < 'A' || this.frameId.charAt(i) > 'Z') && (this.frameId.charAt(i) < '0' || this.frameId.charAt(i) > '9')) {
+            if (this.frameId.charAt(i) < 'A' || this.frameId.charAt(i) > 'Z') {
+                if (this.frameId.charAt(i) >= '0') {
+                    if (this.frameId.charAt(i) > '9') {
+                    }
+                }
                 return false;
             }
             i++;
         }
         if (this.bodySize > 0) {
-            return true;
+            z = true;
         }
-        return false;
+        return z;
     }
 
     public boolean isPadding() {
+        boolean z = false;
         for (int i = 0; i < this.frameId.length(); i++) {
             if (this.frameId.charAt(0) != '\u0000') {
                 return false;
             }
         }
         if (this.bodySize == 0) {
-            return true;
+            z = true;
         }
-        return false;
+        return z;
     }
 
     public String toString() {

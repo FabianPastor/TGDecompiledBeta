@@ -98,7 +98,7 @@ public class MP4Builder {
         }
 
         private boolean isSmallBox(long contentSize) {
-            return 8 + contentSize < 4294967296L;
+            return contentSize + 8 < 4294967296L;
         }
 
         public void parse(DataSource dataSource, ByteBuffer header, long contentSize, BoxParser boxParser) throws IOException {
@@ -169,7 +169,7 @@ public class MP4Builder {
             this.writedSinceLastMdat -= 32768;
         }
         this.currentMp4Movie.addSample(trackIndex, this.dataOffset, bufferInfo);
-        byteBuf.position((!writeLength ? 0 : 4) + bufferInfo.offset);
+        byteBuf.position(bufferInfo.offset + (!writeLength ? 0 : 4));
         byteBuf.limit(bufferInfo.offset + bufferInfo.size);
         if (writeLength) {
             this.sizeBuffer.position(0);
@@ -221,7 +221,10 @@ public class MP4Builder {
     }
 
     public static long gcd(long a, long b) {
-        return b == 0 ? a : gcd(b, a % b);
+        if (b == 0) {
+            return a;
+        }
+        return gcd(b, a % b);
     }
 
     public long getTimescale(Mp4Movie mp4Movie) {
@@ -373,15 +376,19 @@ public class MP4Builder {
     }
 
     protected void createStsc(Track track, SampleTableBox stbl) {
+        int i;
+        int i2;
         SampleToChunkBox stsc = new SampleToChunkBox();
         stsc.setEntries(new LinkedList());
         int lastChunkNumber = 1;
         int lastSampleCount = 0;
         int previousWritedChunkCount = -1;
         int samplesCount = track.getSamples().size();
-        for (int a = 0; a < samplesCount; a++) {
+        int a = 0;
+        while (a < samplesCount) {
             Sample sample = (Sample) track.getSamples().get(a);
-            long lastOffset = sample.getOffset() + sample.getSize();
+            long offset = sample.getOffset();
+            long lastOffset = offset + sample.getSize();
             lastSampleCount++;
             boolean write = false;
             if (a == samplesCount - 1) {
@@ -391,13 +398,29 @@ public class MP4Builder {
             }
             if (write) {
                 if (previousWritedChunkCount != lastSampleCount) {
-                    stsc.getEntries().add(new SampleToChunkBox.Entry((long) lastChunkNumber, (long) lastSampleCount, 1));
+                    List entries = stsc.getEntries();
+                    i = samplesCount;
+                    SampleToChunkBox.Entry entry = r15;
+                    SampleToChunkBox.Entry entry2 = new SampleToChunkBox.Entry((long) lastChunkNumber, (long) lastSampleCount, 1);
+                    entries.add(entry);
                     previousWritedChunkCount = lastSampleCount;
+                } else {
+                    i2 = previousWritedChunkCount;
+                    i = samplesCount;
+                    Sample sample2 = sample;
+                    long j = offset;
                 }
                 lastSampleCount = 0;
                 lastChunkNumber++;
+            } else {
+                i2 = previousWritedChunkCount;
+                i = samplesCount;
             }
+            a++;
+            samplesCount = i;
         }
+        i2 = previousWritedChunkCount;
+        i = samplesCount;
         stbl.addBox(stsc);
     }
 

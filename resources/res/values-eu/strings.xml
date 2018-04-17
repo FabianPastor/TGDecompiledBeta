@@ -18,7 +18,7 @@
     <string name="common_open_on_phone">Ireki telefonoan</string>
     <string name="common_signin_button_text">Hasi saioa</string>
     <string name="common_signin_button_text_long">Hasi saioa Google-n</string>
-    <string name="gcm_fallback_notification_channel_label">Askotarikoak</string>
+    <string name="fcm_fallback_notification_channel_label">Askotarikoak</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Erosi Google erabilita</string>
 </resources>

@@ -28,43 +28,27 @@ public final class PsshAtomUtil {
     }
 
     public static byte[] buildPsshAtom(UUID systemId, UUID[] keyIds, byte[] data) {
-        boolean buildV1Atom;
-        int dataLength;
-        int i;
-        int i2 = 0;
-        if (keyIds != null) {
-            buildV1Atom = true;
-        } else {
-            buildV1Atom = false;
-        }
-        if (data != null) {
-            dataLength = data.length;
-        } else {
-            dataLength = 0;
-        }
-        int psshBoxLength = dataLength + 32;
+        int i = 0;
+        boolean buildV1Atom = keyIds != null;
+        int dataLength = data != null ? data.length : 0;
+        int psshBoxLength = 32 + dataLength;
         if (buildV1Atom) {
-            psshBoxLength += (keyIds.length * 16) + 4;
+            psshBoxLength += 4 + (keyIds.length * 16);
         }
         ByteBuffer psshBox = ByteBuffer.allocate(psshBoxLength);
         psshBox.putInt(psshBoxLength);
         psshBox.putInt(Atom.TYPE_pssh);
-        if (buildV1Atom) {
-            i = 16777216;
-        } else {
-            i = 0;
-        }
-        psshBox.putInt(i);
+        psshBox.putInt(buildV1Atom ? 16777216 : 0);
         psshBox.putLong(systemId.getMostSignificantBits());
         psshBox.putLong(systemId.getLeastSignificantBits());
         if (buildV1Atom) {
             psshBox.putInt(keyIds.length);
-            i = keyIds.length;
-            while (i2 < i) {
-                UUID keyId = keyIds[i2];
+            int length = keyIds.length;
+            while (i < length) {
+                UUID keyId = keyIds[i];
                 psshBox.putLong(keyId.getMostSignificantBits());
                 psshBox.putLong(keyId.getLeastSignificantBits());
-                i2++;
+                i++;
             }
         }
         if (dataLength != 0) {
@@ -98,7 +82,14 @@ public final class PsshAtomUtil {
         if (uuid == null || uuid.equals(parsedAtom.uuid)) {
             return parsedAtom.schemeData;
         }
-        Log.w(TAG, "UUID mismatch. Expected: " + uuid + ", got: " + parsedAtom.uuid + ".");
+        String str = TAG;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("UUID mismatch. Expected: ");
+        stringBuilder.append(uuid);
+        stringBuilder.append(", got: ");
+        stringBuilder.append(parsedAtom.uuid);
+        stringBuilder.append(".");
+        Log.w(str, stringBuilder.toString());
         return null;
     }
 
@@ -108,20 +99,21 @@ public final class PsshAtomUtil {
             return null;
         }
         atomData.setPosition(0);
-        if (atomData.readInt() != atomData.bytesLeft() + 4) {
-            return null;
-        }
-        if (atomData.readInt() != Atom.TYPE_pssh) {
+        if (atomData.readInt() != atomData.bytesLeft() + 4 || atomData.readInt() != Atom.TYPE_pssh) {
             return null;
         }
         int atomVersion = Atom.parseFullAtomVersion(atomData.readInt());
         if (atomVersion > 1) {
-            Log.w(TAG, "Unsupported pssh version: " + atomVersion);
+            String str = TAG;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Unsupported pssh version: ");
+            stringBuilder.append(atomVersion);
+            Log.w(str, stringBuilder.toString());
             return null;
         }
         UUID uuid = new UUID(atomData.readLong(), atomData.readLong());
         if (atomVersion == 1) {
-            atomData.skipBytes(atomData.readUnsignedIntToInt() * 16);
+            atomData.skipBytes(16 * atomData.readUnsignedIntToInt());
         }
         int dataSize = atomData.readUnsignedIntToInt();
         if (dataSize != atomData.bytesLeft()) {

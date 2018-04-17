@@ -136,14 +136,14 @@ public class ActionBarMenu extends LinearLayout {
             View view = getChildAt(a);
             if (view instanceof ActionBarMenuItem) {
                 ActionBarMenuItem item = (ActionBarMenuItem) view;
-                if (item.getVisibility() != 0) {
-                    continue;
-                } else if (item.hasSubMenu()) {
-                    item.toggleSubMenu();
-                    return;
-                } else if (item.overrideMenuClick) {
-                    onItemClick(((Integer) item.getTag()).intValue());
-                    return;
+                if (item.getVisibility() == 0) {
+                    if (item.hasSubMenu()) {
+                        item.toggleSubMenu();
+                        return;
+                    } else if (item.overrideMenuClick) {
+                        onItemClick(((Integer) item.getTag()).intValue());
+                        return;
+                    }
                 }
             }
         }

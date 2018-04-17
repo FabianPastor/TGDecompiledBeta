@@ -34,7 +34,7 @@ class ItemTouchUIUtilImpl {
 
         public void onDraw(Canvas c, RecyclerView recyclerView, View view, float dX, float dY, int actionState, boolean isCurrentlyActive) {
             if (isCurrentlyActive && view.getTag() == null) {
-                Float originalElevation = Float.valueOf(ViewCompat.getElevation(view));
+                Object originalElevation = Float.valueOf(ViewCompat.getElevation(view));
                 ViewCompat.setElevation(view, 1.0f + findMaxElevation(recyclerView, view));
                 view.setTag(originalElevation);
             }

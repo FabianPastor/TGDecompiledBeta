@@ -19,10 +19,12 @@ public final class AudioCapabilities {
 
     @SuppressLint({"InlinedApi"})
     static AudioCapabilities getCapabilities(Intent intent) {
-        if (intent == null || intent.getIntExtra("android.media.extra.AUDIO_PLUG_STATE", 0) == 0) {
-            return DEFAULT_AUDIO_CAPABILITIES;
+        if (intent != null) {
+            if (intent.getIntExtra("android.media.extra.AUDIO_PLUG_STATE", 0) != 0) {
+                return new AudioCapabilities(intent.getIntArrayExtra("android.media.extra.ENCODINGS"), intent.getIntExtra("android.media.extra.MAX_CHANNEL_COUNT", 0));
+            }
         }
-        return new AudioCapabilities(intent.getIntArrayExtra("android.media.extra.ENCODINGS"), intent.getIntExtra("android.media.extra.MAX_CHANNEL_COUNT", 0));
+        return DEFAULT_AUDIO_CAPABILITIES;
     }
 
     AudioCapabilities(int[] supportedEncodings, int maxChannelCount) {
@@ -44,6 +46,7 @@ public final class AudioCapabilities {
     }
 
     public boolean equals(Object other) {
+        boolean z = true;
         if (this == other) {
             return true;
         }
@@ -51,17 +54,23 @@ public final class AudioCapabilities {
             return false;
         }
         AudioCapabilities audioCapabilities = (AudioCapabilities) other;
-        if (Arrays.equals(this.supportedEncodings, audioCapabilities.supportedEncodings) && this.maxChannelCount == audioCapabilities.maxChannelCount) {
-            return true;
+        if (!Arrays.equals(this.supportedEncodings, audioCapabilities.supportedEncodings) || this.maxChannelCount != audioCapabilities.maxChannelCount) {
+            z = false;
         }
-        return false;
+        return z;
     }
 
     public int hashCode() {
-        return this.maxChannelCount + (Arrays.hashCode(this.supportedEncodings) * 31);
+        return this.maxChannelCount + (31 * Arrays.hashCode(this.supportedEncodings));
     }
 
     public String toString() {
-        return "AudioCapabilities[maxChannelCount=" + this.maxChannelCount + ", supportedEncodings=" + Arrays.toString(this.supportedEncodings) + "]";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("AudioCapabilities[maxChannelCount=");
+        stringBuilder.append(this.maxChannelCount);
+        stringBuilder.append(", supportedEncodings=");
+        stringBuilder.append(Arrays.toString(this.supportedEncodings));
+        stringBuilder.append("]");
+        return stringBuilder.toString();
     }
 }

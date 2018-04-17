@@ -26,7 +26,11 @@ public final class ExoPlayerLibraryInfo {
     public static synchronized void registerModule(String name) {
         synchronized (ExoPlayerLibraryInfo.class) {
             if (registeredModules.add(name)) {
-                registeredModulesString += ", " + name;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(registeredModulesString);
+                stringBuilder.append(", ");
+                stringBuilder.append(name);
+                registeredModulesString = stringBuilder.toString();
             }
         }
     }

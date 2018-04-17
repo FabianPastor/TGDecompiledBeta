@@ -66,8 +66,10 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     }
 
     public void selectTab(int num) {
-        if (num >= 0 && num < this.tabCount) {
-            this.tabsContainer.getChildAt(num).performClick();
+        if (num >= 0) {
+            if (num < this.tabCount) {
+                this.tabsContainer.getChildAt(num).performClick();
+            }
         }
     }
 
@@ -100,10 +102,10 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     }
 
     public void addIconTab(Drawable drawable) {
-        boolean z = true;
         final int position = this.tabCount;
         this.tabCount = position + 1;
         ImageView tab = new ImageView(getContext());
+        boolean z = true;
         tab.setFocusable(true);
         tab.setImageDrawable(drawable);
         tab.setScaleType(ScaleType.CENTER);
@@ -170,21 +172,22 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     }
 
     private void scrollToChild(int position) {
-        if (this.tabCount != 0 && this.tabsContainer.getChildAt(position) != null) {
-            int newScrollX = this.tabsContainer.getChildAt(position).getLeft();
-            if (position > 0) {
-                newScrollX -= this.scrollOffset;
-            }
-            int currentScrollX = getScrollX();
-            if (newScrollX == this.lastScrollX) {
-                return;
-            }
-            if (newScrollX < currentScrollX) {
-                this.lastScrollX = newScrollX;
-                smoothScrollTo(this.lastScrollX, 0);
-            } else if (this.scrollOffset + newScrollX > (getWidth() + currentScrollX) - (this.scrollOffset * 2)) {
-                this.lastScrollX = (newScrollX - getWidth()) + (this.scrollOffset * 3);
-                smoothScrollTo(this.lastScrollX, 0);
+        if (this.tabCount != 0) {
+            if (this.tabsContainer.getChildAt(position) != null) {
+                int newScrollX = this.tabsContainer.getChildAt(position).getLeft();
+                if (position > 0) {
+                    newScrollX -= this.scrollOffset;
+                }
+                int currentScrollX = getScrollX();
+                if (newScrollX != this.lastScrollX) {
+                    if (newScrollX < currentScrollX) {
+                        this.lastScrollX = newScrollX;
+                        smoothScrollTo(this.lastScrollX, 0);
+                    } else if (this.scrollOffset + newScrollX > (getWidth() + currentScrollX) - (this.scrollOffset * 2)) {
+                        this.lastScrollX = (newScrollX - getWidth()) + (this.scrollOffset * 3);
+                        smoothScrollTo(this.lastScrollX, 0);
+                    }
+                }
             }
         }
     }
@@ -195,7 +198,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     }
 
     public void setImages() {
-        int tabSize = AndroidUtilities.dp(52.0f);
+        int tabSize = AndroidUtilities.dp(NUM);
         int start = getScrollX() / tabSize;
         int end = Math.min(this.tabsContainer.getChildCount(), (((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) tabSize)))) + start) + 1);
         for (int a = start; a < end; a++) {
@@ -209,52 +212,58 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
 
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        int tabSize = AndroidUtilities.dp(52.0f);
+        int tabSize = AndroidUtilities.dp(NUM);
         int oldStart = oldl / tabSize;
         int newStart = l / tabSize;
         int count = ((int) Math.ceil((double) (((float) getMeasuredWidth()) / ((float) tabSize)))) + 1;
+        int i = 0;
         int start = Math.max(0, Math.min(oldStart, newStart));
         int end = Math.min(this.tabsContainer.getChildCount(), Math.max(oldStart, newStart) + count);
         int a = start;
         while (a < end) {
-            View child = this.tabsContainer.getChildAt(a);
+            View child = r0.tabsContainer.getChildAt(a);
             if (child != null) {
                 Document object = child.getTag();
                 if (object instanceof Document) {
-                    BackupImageView imageView = (BackupImageView) ((FrameLayout) child).getChildAt(0);
-                    if (a < newStart || a >= newStart + count) {
-                        imageView.setImageDrawable(null);
-                    } else {
-                        Document sticker = object;
-                        if (sticker.thumb != null) {
-                            imageView.setImage(sticker.thumb.location, null, "webp", null);
+                    BackupImageView imageView = (BackupImageView) ((FrameLayout) child).getChildAt(i);
+                    if (a >= newStart) {
+                        if (a < newStart + count) {
+                            Document sticker = object;
+                            if (sticker.thumb != null) {
+                                imageView.setImage(sticker.thumb.location, null, "webp", null);
+                            }
                         }
                     }
+                    imageView.setImageDrawable(null);
                 }
             }
             a++;
+            ScrollSlidingTabStrip scrollSlidingTabStrip = this;
+            i = 0;
         }
     }
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (!isInEditMode() && this.tabCount != 0) {
-            int height = getHeight();
-            this.rectPaint.setColor(this.underlineColor);
-            canvas.drawRect(0.0f, (float) (height - this.underlineHeight), (float) this.tabsContainer.getWidth(), (float) height, this.rectPaint);
-            View currentTab = this.tabsContainer.getChildAt(this.currentPosition);
-            float lineLeft = 0.0f;
-            float lineRight = 0.0f;
-            if (currentTab != null) {
-                lineLeft = (float) currentTab.getLeft();
-                lineRight = (float) currentTab.getRight();
+        if (!isInEditMode()) {
+            if (this.tabCount != 0) {
+                int height = getHeight();
+                this.rectPaint.setColor(this.underlineColor);
+                canvas.drawRect(0.0f, (float) (height - this.underlineHeight), (float) this.tabsContainer.getWidth(), (float) height, this.rectPaint);
+                View currentTab = this.tabsContainer.getChildAt(this.currentPosition);
+                float lineLeft = 0.0f;
+                float lineRight = 0.0f;
+                if (currentTab != null) {
+                    lineLeft = (float) currentTab.getLeft();
+                    lineRight = (float) currentTab.getRight();
+                }
+                this.rectPaint.setColor(this.indicatorColor);
+                if (this.indicatorHeight == 0) {
+                    canvas.drawRect(lineLeft, 0.0f, lineRight, (float) height, this.rectPaint);
+                } else {
+                    canvas.drawRect(lineLeft, (float) (height - this.indicatorHeight), lineRight, (float) height, this.rectPaint);
+                }
             }
-            this.rectPaint.setColor(this.indicatorColor);
-            if (this.indicatorHeight == 0) {
-                canvas.drawRect(lineLeft, 0.0f, lineRight, (float) height, this.rectPaint);
-                return;
-            }
-            canvas.drawRect(lineLeft, (float) (height - this.indicatorHeight), lineRight, (float) height, this.rectPaint);
         }
     }
 
@@ -267,8 +276,16 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             this.currentPosition = position;
             if (position < this.tabsContainer.getChildCount()) {
                 int a = 0;
-                while (a < this.tabsContainer.getChildCount()) {
-                    this.tabsContainer.getChildAt(a).setSelected(a == position);
+                while (true) {
+                    boolean z = true;
+                    if (a >= this.tabsContainer.getChildCount()) {
+                        break;
+                    }
+                    View childAt = this.tabsContainer.getChildAt(a);
+                    if (a != position) {
+                        z = false;
+                    }
+                    childAt.setSelected(z);
                     a++;
                 }
                 if (first != position || position <= 1) {

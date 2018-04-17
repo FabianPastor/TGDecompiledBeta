@@ -128,14 +128,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         }
 
         public void afterTextChanged(Editable s) {
-            String obj;
-            AvatarDrawable access$1500 = GroupCreateFinalActivity.this.avatarDrawable;
-            if (GroupCreateFinalActivity.this.editText.length() > 0) {
-                obj = GroupCreateFinalActivity.this.editText.getText().toString();
-            } else {
-                obj = null;
-            }
-            access$1500.setInfo(5, obj, null, false);
+            GroupCreateFinalActivity.this.avatarDrawable.setInfo(5, GroupCreateFinalActivity.this.editText.length() > 0 ? GroupCreateFinalActivity.this.editText.getText().toString() : null, null, false);
             GroupCreateFinalActivity.this.avatarImage.invalidate();
         }
     }
@@ -162,10 +155,10 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 GroupCreateFinalActivity.this.editText.setEnabled(false);
                 if (GroupCreateFinalActivity.this.avatarUpdater.uploadingAvatar != null) {
                     GroupCreateFinalActivity.this.createAfterUpload = true;
-                    return;
+                } else {
+                    GroupCreateFinalActivity.this.showEditDoneProgress(true);
+                    GroupCreateFinalActivity.this.reqId = MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).createChat(GroupCreateFinalActivity.this.editText.getText().toString(), GroupCreateFinalActivity.this.selectedContacts, null, GroupCreateFinalActivity.this.chatType, GroupCreateFinalActivity.this);
                 }
-                GroupCreateFinalActivity.this.showEditDoneProgress(true);
-                GroupCreateFinalActivity.this.reqId = MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).createChat(GroupCreateFinalActivity.this.editText.getText().toString(), GroupCreateFinalActivity.this.selectedContacts, null, GroupCreateFinalActivity.this.chatType, GroupCreateFinalActivity.this);
             }
         }
     }
@@ -189,7 +182,6 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
         public void didSetColor() {
             if (GroupCreateFinalActivity.this.listView != null) {
-                String obj;
                 int count = GroupCreateFinalActivity.this.listView.getChildCount();
                 for (int a = 0; a < count; a++) {
                     View child = GroupCreateFinalActivity.this.listView.getChildAt(a);
@@ -197,13 +189,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                         ((GroupCreateUserCell) child).update(0);
                     }
                 }
-                AvatarDrawable access$1500 = GroupCreateFinalActivity.this.avatarDrawable;
-                if (GroupCreateFinalActivity.this.editText.length() > 0) {
-                    obj = GroupCreateFinalActivity.this.editText.getText().toString();
-                } else {
-                    obj = null;
-                }
-                access$1500.setInfo(5, obj, null, false);
+                GroupCreateFinalActivity.this.avatarDrawable.setInfo(5, GroupCreateFinalActivity.this.editText.length() > 0 ? GroupCreateFinalActivity.this.editText.getText().toString() : null, null, false);
                 GroupCreateFinalActivity.this.avatarImage.invalidate();
             }
         }
@@ -217,7 +203,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         }
 
         public int getItemCount() {
-            return GroupCreateFinalActivity.this.selectedContacts.size() + 1;
+            return 1 + GroupCreateFinalActivity.this.selectedContacts.size();
         }
 
         public boolean isEnabled(ViewHolder holder) {
@@ -226,35 +212,27 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view;
-            switch (viewType) {
-                case 0:
-                    view = new GroupCreateSectionCell(this.context);
-                    break;
-                default:
-                    view = new GroupCreateUserCell(this.context, false);
-                    break;
+            if (viewType != 0) {
+                view = new GroupCreateUserCell(this.context, false);
+            } else {
+                view = new GroupCreateSectionCell(this.context);
             }
             return new Holder(view);
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            switch (holder.getItemViewType()) {
-                case 0:
-                    holder.itemView.setText(LocaleController.formatPluralString("Members", GroupCreateFinalActivity.this.selectedContacts.size()));
-                    return;
-                default:
-                    holder.itemView.setUser(MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).getUser((Integer) GroupCreateFinalActivity.this.selectedContacts.get(position - 1)), null, null);
-                    return;
+            if (holder.getItemViewType() != 0) {
+                holder.itemView.setUser(MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).getUser((Integer) GroupCreateFinalActivity.this.selectedContacts.get(position - 1)), null, null);
+            } else {
+                holder.itemView.setText(LocaleController.formatPluralString("Members", GroupCreateFinalActivity.this.selectedContacts.size()));
             }
         }
 
         public int getItemViewType(int position) {
-            switch (position) {
-                case 0:
-                    return 0;
-                default:
-                    return 1;
+            if (position != 0) {
+                return 1;
             }
+            return 0;
         }
 
         public void onViewRecycled(ViewHolder holder) {
@@ -328,17 +306,19 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     public View createView(Context context) {
-        float f;
-        float f2;
+        String str;
+        int i;
+        Context context2 = context;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        int i2 = 1;
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("NewGroup", R.string.NewGroup));
         this.actionBar.setActionBarMenuOnItemClick(new C21372());
         this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        this.progressView = new ContextProgressView(context, 1);
+        this.progressView = new ContextProgressView(context2, 1);
         this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.progressView.setVisibility(4);
-        this.fragmentView = new LinearLayout(context) {
+        this.fragmentView = new LinearLayout(context2) {
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 boolean result = super.drawChild(canvas, child, drawingTime);
                 if (child == GroupCreateFinalActivity.this.listView) {
@@ -349,70 +329,73 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         };
         LinearLayout linearLayout = this.fragmentView;
         linearLayout.setOrientation(1);
-        this.editTextContainer = new FrameLayout(context);
+        this.editTextContainer = new FrameLayout(context2);
         linearLayout.addView(this.editTextContainer, LayoutHelper.createLinear(-1, -2));
-        this.avatarImage = new BackupImageView(context);
+        this.avatarImage = new BackupImageView(context2);
         this.avatarImage.setRoundRadius(AndroidUtilities.dp(32.0f));
         this.avatarDrawable.setInfo(5, null, null, this.chatType == 1);
-        this.avatarImage.setImageDrawable(this.avatarDrawable);
-        FrameLayout frameLayout = this.editTextContainer;
-        View view = this.avatarImage;
-        int i = (LocaleController.isRTL ? 5 : 3) | 48;
-        if (LocaleController.isRTL) {
-            f = 0.0f;
+        r0.avatarImage.setImageDrawable(r0.avatarDrawable);
+        int i3 = 3;
+        float f = 16.0f;
+        r0.editTextContainer.addView(r0.avatarImage, LayoutHelper.createFrame(64, 64.0f, 48 | (LocaleController.isRTL ? 5 : 3), LocaleController.isRTL ? 0.0f : 16.0f, 16.0f, LocaleController.isRTL ? 16.0f : 0.0f, 16.0f));
+        r0.avatarDrawable.setDrawPhoto(true);
+        r0.avatarImage.setOnClickListener(new C14024());
+        r0.editText = new EditTextBoldCursor(context2);
+        EditTextBoldCursor editTextBoldCursor = r0.editText;
+        if (r0.chatType == 0) {
+            str = "EnterGroupNamePlaceholder";
+            i = R.string.EnterGroupNamePlaceholder;
         } else {
-            f = 16.0f;
+            str = "EnterListName";
+            i = R.string.EnterListName;
         }
+        editTextBoldCursor.setHint(LocaleController.getString(str, i));
+        if (r0.nameToSet != null) {
+            r0.editText.setText(r0.nameToSet);
+            r0.nameToSet = null;
+        }
+        r0.editText.setMaxLines(4);
+        EditTextBoldCursor editTextBoldCursor2 = r0.editText;
         if (LocaleController.isRTL) {
-            f2 = 16.0f;
-        } else {
-            f2 = 0.0f;
+            i3 = 5;
         }
-        frameLayout.addView(view, LayoutHelper.createFrame(64, 64.0f, i, f, 16.0f, f2, 16.0f));
-        this.avatarDrawable.setDrawPhoto(true);
-        this.avatarImage.setOnClickListener(new C14024());
-        this.editText = new EditTextBoldCursor(context);
-        this.editText.setHint(this.chatType == 0 ? LocaleController.getString("EnterGroupNamePlaceholder", R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", R.string.EnterListName));
-        if (this.nameToSet != null) {
-            this.editText.setText(this.nameToSet);
-            this.nameToSet = null;
-        }
-        this.editText.setMaxLines(4);
-        this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        this.editText.setTextSize(1, 18.0f);
-        this.editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-        this.editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.editText.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-        this.editText.setImeOptions(268435456);
-        this.editText.setInputType(MessagesController.UPDATE_MASK_CHAT_ADMINS);
-        this.editText.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
-        this.editText.setFilters(new InputFilter[]{new LengthFilter(100)});
-        this.editText.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.editText.setCursorSize(AndroidUtilities.dp(20.0f));
-        this.editText.setCursorWidth(1.5f);
-        frameLayout = this.editTextContainer;
-        view = this.editText;
-        f = LocaleController.isRTL ? 16.0f : 96.0f;
+        editTextBoldCursor2.setGravity(16 | i3);
+        r0.editText.setTextSize(1, 18.0f);
+        r0.editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        r0.editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.editText.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        r0.editText.setImeOptions(268435456);
+        r0.editText.setInputType(MessagesController.UPDATE_MASK_CHAT_ADMINS);
+        r0.editText.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
+        r0.editText.setFilters(new InputFilter[]{new LengthFilter(100)});
+        r0.editText.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.editText.setCursorSize(AndroidUtilities.dp(20.0f));
+        r0.editText.setCursorWidth(1.5f);
+        FrameLayout frameLayout = r0.editTextContainer;
+        View view = r0.editText;
+        float f2 = LocaleController.isRTL ? 16.0f : 96.0f;
         if (LocaleController.isRTL) {
-            f2 = 96.0f;
-        } else {
-            f2 = 16.0f;
+            f = 96.0f;
         }
-        frameLayout.addView(view, LayoutHelper.createFrame(-1, -2.0f, 16, f, 0.0f, f2, 0.0f));
-        this.editText.addTextChangedListener(new C14035());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
-        this.listView = new RecyclerListView(context);
-        RecyclerView recyclerView = this.listView;
-        Adapter groupCreateAdapter = new GroupCreateAdapter(context);
-        this.adapter = groupCreateAdapter;
+        frameLayout.addView(view, LayoutHelper.createFrame(-1, -2.0f, 16, f2, 0.0f, f, 0.0f));
+        r0.editText.addTextChangedListener(new C14035());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2, 1, false);
+        r0.listView = new RecyclerListView(context2);
+        RecyclerView recyclerView = r0.listView;
+        Adapter groupCreateAdapter = new GroupCreateAdapter(context2);
+        r0.adapter = groupCreateAdapter;
         recyclerView.setAdapter(groupCreateAdapter);
-        this.listView.setLayoutManager(linearLayoutManager);
-        this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-        this.listView.addItemDecoration(new GroupCreateDividerItemDecoration());
-        linearLayout.addView(this.listView, LayoutHelper.createLinear(-1, -1));
-        this.listView.setOnScrollListener(new C21386());
-        return this.fragmentView;
+        r0.listView.setLayoutManager(linearLayoutManager);
+        r0.listView.setVerticalScrollBarEnabled(false);
+        recyclerView = r0.listView;
+        if (!LocaleController.isRTL) {
+            i2 = 2;
+        }
+        recyclerView.setVerticalScrollbarPosition(i2);
+        r0.listView.addItemDecoration(new GroupCreateDividerItemDecoration());
+        linearLayout.addView(r0.listView, LayoutHelper.createLinear(-1, -1));
+        r0.listView.setOnScrollListener(new C21386());
+        return r0.fragmentView;
     }
 
     public void didUploadedPhoto(final InputFile file, final PhotoSize small, PhotoSize big) {
@@ -467,16 +450,19 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
+        int a = 0;
+        int mask;
         if (id == NotificationCenter.updateInterfaces) {
             if (this.listView != null) {
-                int mask = ((Integer) args[0]).intValue();
-                if ((mask & 2) != 0 || (mask & 1) != 0 || (mask & 4) != 0) {
+                mask = ((Integer) args[0]).intValue();
+                if (!((mask & 2) == 0 && (mask & 1) == 0 && (mask & 4) == 0)) {
                     int count = this.listView.getChildCount();
-                    for (int a = 0; a < count; a++) {
+                    while (a < count) {
                         View child = this.listView.getChildAt(a);
                         if (child instanceof GroupCreateUserCell) {
                             ((GroupCreateUserCell) child).update(mask);
                         }
+                        a++;
                     }
                 }
             }
@@ -489,13 +475,13 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             }
         } else if (id == NotificationCenter.chatDidCreated) {
             this.reqId = 0;
-            int chat_id = ((Integer) args[0]).intValue();
+            mask = ((Integer) args[0]).intValue();
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
             Bundle args2 = new Bundle();
-            args2.putInt("chat_id", chat_id);
+            args2.putInt("chat_id", mask);
             presentFragment(new ChatActivity(args2), true);
             if (this.uploadedAvatar != null) {
-                MessagesController.getInstance(this.currentAccount).changeChatAvatar(chat_id, this.uploadedAvatar);
+                MessagesController.getInstance(this.currentAccount).changeChatAvatar(mask, this.uploadedAvatar);
             }
         }
     }
@@ -557,31 +543,32 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate сellDelegate = new C21399();
-        r10 = new ThemeDescription[34];
-        r10[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        r10[11] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r10[12] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_groupcreate_hintText);
-        r10[13] = new ThemeDescription(this.editText, ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, Theme.key_groupcreate_cursor);
-        r10[14] = new ThemeDescription(this.editText, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
-        r10[15] = new ThemeDescription(this.editText, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
-        r10[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GroupCreateSectionCell.class}, null, null, null, Theme.key_graySection);
-        r10[17] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateSectionCell.class}, new String[]{"drawable"}, null, null, null, Theme.key_groupcreate_sectionShadow);
-        r10[18] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateSectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_groupcreate_sectionText);
-        r10[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"textView"}, null, null, null, Theme.key_groupcreate_sectionText);
-        r10[20] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_onlineText);
-        r10[21] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_offlineText);
-        r10[22] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, сellDelegate, Theme.key_avatar_text);
-        r10[23] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
-        r10[24] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
-        r10[25] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
-        r10[26] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
-        r10[27] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
-        r10[28] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
-        r10[29] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
-        r10[30] = new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressInner2);
-        r10[31] = new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressOuter2);
-        r10[32] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r10[33] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
-        return r10;
+        r9 = new ThemeDescription[34];
+        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r9[11] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[12] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_groupcreate_hintText);
+        r9[13] = new ThemeDescription(this.editText, ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, Theme.key_groupcreate_cursor);
+        r9[14] = new ThemeDescription(this.editText, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
+        r9[15] = new ThemeDescription(this.editText, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
+        r9[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GroupCreateSectionCell.class}, null, null, null, Theme.key_graySection);
+        r9[17] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateSectionCell.class}, new String[]{"drawable"}, null, null, null, Theme.key_groupcreate_sectionShadow);
+        r9[18] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateSectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_groupcreate_sectionText);
+        r9[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"textView"}, null, null, null, Theme.key_groupcreate_sectionText);
+        r9[20] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_onlineText);
+        r9[21] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_offlineText);
+        r9[22] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, сellDelegate, Theme.key_avatar_text);
+        r9[23] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
+        ThemeDescriptionDelegate themeDescriptionDelegate = сellDelegate;
+        r9[24] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundOrange);
+        r9[25] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundViolet);
+        r9[26] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundGreen);
+        r9[27] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundCyan);
+        r9[28] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundBlue);
+        r9[29] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundPink);
+        r9[30] = new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressInner2);
+        r9[31] = new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressOuter2);
+        r9[32] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[33] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        return r9;
     }
 }

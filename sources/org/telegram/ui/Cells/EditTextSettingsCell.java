@@ -21,7 +21,6 @@ public class EditTextSettingsCell extends FrameLayout {
     private EditText textView;
 
     public EditTextSettingsCell(Context context) {
-        int i = 3;
         super(context);
         this.textView = new EditText(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -31,6 +30,7 @@ public class EditTextSettingsCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
+        int i = 3;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setBackgroundDrawable(null);
         this.textView.setPadding(0, 0, 0, 0);
@@ -43,7 +43,7 @@ public class EditTextSettingsCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.dp(48.0f));
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(48.0f) + this.needDivider);
         int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
         int i = availableWidth / 2;
         this.textView.measure(MeasureSpec.makeMeasureSpec(availableWidth, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
@@ -60,14 +60,14 @@ public class EditTextSettingsCell extends FrameLayout {
     public void setText(String text, boolean divider) {
         this.textView.setText(text);
         this.needDivider = divider;
-        setWillNotDraw(!divider);
+        setWillNotDraw(divider ^ 1);
     }
 
     public void setTextAndHint(String text, String hint, boolean divider) {
         this.textView.setText(text);
         this.textView.setHint(hint);
         this.needDivider = divider;
-        setWillNotDraw(!divider);
+        setWillNotDraw(divider ^ 1);
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> arrayList) {

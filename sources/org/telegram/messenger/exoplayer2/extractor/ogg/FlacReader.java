@@ -69,13 +69,16 @@ final class FlacReader extends StreamReader {
         }
 
         public SeekPoints getSeekPoints(long timeUs) {
-            int index = Util.binarySearchFloor(this.seekPointGranules, FlacReader.this.convertTimeToGranule(timeUs), true, true);
+            long j = timeUs;
+            int index = Util.binarySearchFloor(this.seekPointGranules, FlacReader.this.convertTimeToGranule(j), true, true);
             long seekTimeUs = FlacReader.this.convertGranuleToTime(this.seekPointGranules[index]);
             SeekPoint seekPoint = new SeekPoint(seekTimeUs, this.firstFrameOffset + this.seekPointOffsets[index]);
-            if (seekTimeUs >= timeUs || index == this.seekPointGranules.length - 1) {
-                return new SeekPoints(seekPoint);
+            if (seekTimeUs < j) {
+                if (index != r0.seekPointGranules.length - 1) {
+                    return new SeekPoints(seekPoint, new SeekPoint(FlacReader.this.convertGranuleToTime(r0.seekPointGranules[index + 1]), r0.firstFrameOffset + r0.seekPointOffsets[index + 1]));
+                }
             }
-            return new SeekPoints(seekPoint, new SeekPoint(FlacReader.this.convertGranuleToTime(this.seekPointGranules[index + 1]), this.firstFrameOffset + this.seekPointOffsets[index + 1]));
+            return new SeekPoints(seekPoint);
         }
 
         public long getDurationUs() {
@@ -110,22 +113,28 @@ final class FlacReader extends StreamReader {
     }
 
     protected boolean readHeaders(ParsableByteArray packet, long position, SetupData setupData) throws IOException, InterruptedException {
-        byte[] data = packet.data;
+        long j;
+        ParsableByteArray parsableByteArray = packet;
+        SetupData setupData2 = setupData;
+        byte[] data = parsableByteArray.data;
         if (this.streamInfo == null) {
-            this.streamInfo = new FlacStreamInfo(data, 17);
+            r0.streamInfo = new FlacStreamInfo(data, 17);
             byte[] metadata = Arrays.copyOfRange(data, 9, packet.limit());
             metadata[4] = Byte.MIN_VALUE;
-            setupData.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_FLAC, null, -1, this.streamInfo.bitRate(), this.streamInfo.channels, this.streamInfo.sampleRate, Collections.singletonList(metadata), null, 0, null);
+            setupData2.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_FLAC, null, -1, r0.streamInfo.bitRate(), r0.streamInfo.channels, r0.streamInfo.sampleRate, Collections.singletonList(metadata), null, 0, null);
         } else if ((data[0] & 127) == 3) {
-            this.flacOggSeeker = new FlacOggSeeker();
-            this.flacOggSeeker.parseSeekTable(packet);
+            r0.flacOggSeeker = new FlacOggSeeker();
+            r0.flacOggSeeker.parseSeekTable(parsableByteArray);
         } else if (isAudioPacket(data)) {
-            if (this.flacOggSeeker != null) {
-                this.flacOggSeeker.setFirstFrameOffset(position);
-                setupData.oggSeeker = this.flacOggSeeker;
+            if (r0.flacOggSeeker != null) {
+                r0.flacOggSeeker.setFirstFrameOffset(position);
+                setupData2.oggSeeker = r0.flacOggSeeker;
+            } else {
+                j = position;
             }
             return false;
         }
+        j = position;
         return true;
     }
 

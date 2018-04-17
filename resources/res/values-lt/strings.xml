@@ -18,7 +18,7 @@
     <string name="common_open_on_phone">Atidaryti telefone</string>
     <string name="common_signin_button_text">Prisijungti</string>
     <string name="common_signin_button_text_long">Prisijungti naudojant „Google“</string>
-    <string name="gcm_fallback_notification_channel_label">Įvairūs</string>
+    <string name="fcm_fallback_notification_channel_label">Įvairūs</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Pirkti naudojant „Google“</string>
 </resources>

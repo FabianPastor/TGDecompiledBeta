@@ -219,65 +219,94 @@ final class DvbParser {
     }
 
     public List<Cue> decode(byte[] data, int limit) {
-        ParsableBitArray parsableBitArray = new ParsableBitArray(data, limit);
-        while (parsableBitArray.bitsLeft() >= 48 && parsableBitArray.readBits(8) == 15) {
-            parseSubtitlingSegment(parsableBitArray, this.subtitleService);
+        DvbParser dvbParser = this;
+        ParsableBitArray dataBitArray = new ParsableBitArray(data, limit);
+        while (dataBitArray.bitsLeft() >= 48 && dataBitArray.readBits(8) == 15) {
+            parseSubtitlingSegment(dataBitArray, dvbParser.subtitleService);
         }
-        if (this.subtitleService.pageComposition == null) {
+        if (dvbParser.subtitleService.pageComposition == null) {
             return Collections.emptyList();
         }
-        DisplayDefinition displayDefinition;
-        if (this.subtitleService.displayDefinition != null) {
-            displayDefinition = this.subtitleService.displayDefinition;
-        } else {
-            displayDefinition = this.defaultDisplayDefinition;
-        }
-        if (!(this.bitmap != null && displayDefinition.width + 1 == this.bitmap.getWidth() && displayDefinition.height + 1 == this.bitmap.getHeight())) {
-            this.bitmap = Bitmap.createBitmap(displayDefinition.width + 1, displayDefinition.height + 1, Config.ARGB_8888);
-            this.canvas.setBitmap(this.bitmap);
+        SparseArray<PageRegion> pageRegions;
+        DisplayDefinition displayDefinition = dvbParser.subtitleService.displayDefinition != null ? dvbParser.subtitleService.displayDefinition : dvbParser.defaultDisplayDefinition;
+        if (!(dvbParser.bitmap != null && displayDefinition.width + 1 == dvbParser.bitmap.getWidth() && displayDefinition.height + 1 == dvbParser.bitmap.getHeight())) {
+            dvbParser.bitmap = Bitmap.createBitmap(displayDefinition.width + 1, displayDefinition.height + 1, Config.ARGB_8888);
+            dvbParser.canvas.setBitmap(dvbParser.bitmap);
         }
         List<Cue> cues = new ArrayList();
-        SparseArray<PageRegion> pageRegions = this.subtitleService.pageComposition.regions;
-        for (int i = 0; i < pageRegions.size(); i++) {
-            PageRegion pageRegion = (PageRegion) pageRegions.valueAt(i);
-            RegionComposition regionComposition = (RegionComposition) this.subtitleService.regions.get(pageRegions.keyAt(i));
+        SparseArray<PageRegion> pageRegions2 = dvbParser.subtitleService.pageComposition.regions;
+        int i = 0;
+        while (i < pageRegions2.size()) {
+            int clipBottom;
+            PageRegion pageRegion = (PageRegion) pageRegions2.valueAt(i);
+            RegionComposition regionComposition = (RegionComposition) dvbParser.subtitleService.regions.get(pageRegions2.keyAt(i));
             int baseHorizontalAddress = pageRegion.horizontalAddress + displayDefinition.horizontalPositionMinimum;
             int baseVerticalAddress = pageRegion.verticalAddress + displayDefinition.verticalPositionMinimum;
-            this.canvas.clipRect((float) baseHorizontalAddress, (float) baseVerticalAddress, (float) Math.min(regionComposition.width + baseHorizontalAddress, displayDefinition.horizontalPositionMaximum), (float) Math.min(regionComposition.height + baseVerticalAddress, displayDefinition.verticalPositionMaximum), Op.REPLACE);
-            ClutDefinition clutDefinition = (ClutDefinition) this.subtitleService.cluts.get(regionComposition.clutId);
-            if (clutDefinition == null) {
-                clutDefinition = (ClutDefinition) this.subtitleService.ancillaryCluts.get(regionComposition.clutId);
-                if (clutDefinition == null) {
-                    clutDefinition = this.defaultClutDefinition;
+            int clipRight = Math.min(regionComposition.width + baseHorizontalAddress, displayDefinition.horizontalPositionMaximum);
+            int clipBottom2 = Math.min(regionComposition.height + baseVerticalAddress, displayDefinition.verticalPositionMaximum);
+            ParsableBitArray dataBitArray2 = dataBitArray;
+            pageRegions = pageRegions2;
+            dvbParser.canvas.clipRect((float) baseHorizontalAddress, (float) baseVerticalAddress, (float) clipRight, (float) clipBottom2, Op.REPLACE);
+            dataBitArray = (ClutDefinition) dvbParser.subtitleService.cluts.get(regionComposition.clutId);
+            if (dataBitArray == null) {
+                dataBitArray = (ClutDefinition) dvbParser.subtitleService.ancillaryCluts.get(regionComposition.clutId);
+                if (dataBitArray == null) {
+                    dataBitArray = dvbParser.defaultClutDefinition;
                 }
             }
             SparseArray<RegionObject> regionObjects = regionComposition.regionObjects;
-            for (int j = 0; j < regionObjects.size(); j++) {
+            int j = 0;
+            while (j < regionObjects.size()) {
                 int objectId = regionObjects.keyAt(j);
                 RegionObject regionObject = (RegionObject) regionObjects.valueAt(j);
-                ObjectData objectData = (ObjectData) this.subtitleService.objects.get(objectId);
-                if (objectData == null) {
-                    objectData = (ObjectData) this.subtitleService.ancillaryObjects.get(objectId);
+                SparseArray<RegionObject> regionObjects2 = regionObjects;
+                regionObjects = (ObjectData) dvbParser.subtitleService.objects.get(objectId);
+                ObjectData objectData;
+                if (regionObjects == null) {
+                    objectData = regionObjects;
+                    regionObjects = (ObjectData) dvbParser.subtitleService.ancillaryObjects.get(objectId);
+                } else {
+                    objectData = regionObjects;
                 }
-                if (objectData != null) {
-                    paintPixelDataSubBlocks(objectData, clutDefinition, regionComposition.depth, regionObject.horizontalPosition + baseHorizontalAddress, regionObject.verticalPosition + baseVerticalAddress, objectData.nonModifyingColorFlag ? null : this.defaultPaint, this.canvas);
+                if (regionObjects != null) {
+                    clipBottom = clipBottom2;
+                    paintPixelDataSubBlocks(regionObjects, dataBitArray, regionComposition.depth, baseHorizontalAddress + regionObject.horizontalPosition, baseVerticalAddress + regionObject.verticalPosition, regionObjects.nonModifyingColorFlag != 0 ? null : dvbParser.defaultPaint, dvbParser.canvas);
+                } else {
+                    clipBottom = clipBottom2;
                 }
+                j++;
+                regionObjects = regionObjects2;
+                clipBottom2 = clipBottom;
             }
+            clipBottom = clipBottom2;
+            ParsableBitArray clutDefinition;
             if (regionComposition.fillFlag) {
                 int color;
                 if (regionComposition.depth == 3) {
-                    color = clutDefinition.clutEntries8Bit[regionComposition.pixelCode8Bit];
+                    color = dataBitArray.clutEntries8Bit[regionComposition.pixelCode8Bit];
                 } else if (regionComposition.depth == 2) {
-                    color = clutDefinition.clutEntries4Bit[regionComposition.pixelCode4Bit];
+                    color = dataBitArray.clutEntries4Bit[regionComposition.pixelCode4Bit];
                 } else {
-                    color = clutDefinition.clutEntries2Bit[regionComposition.pixelCode2Bit];
+                    color = dataBitArray.clutEntries2Bit[regionComposition.pixelCode2Bit];
+                    dvbParser.fillRegionPaint.setColor(color);
+                    clutDefinition = dataBitArray;
+                    dvbParser.canvas.drawRect((float) baseHorizontalAddress, (float) baseVerticalAddress, (float) (regionComposition.width + baseHorizontalAddress), (float) (regionComposition.height + baseVerticalAddress), dvbParser.fillRegionPaint);
                 }
-                this.fillRegionPaint.setColor(color);
-                this.canvas.drawRect((float) baseHorizontalAddress, (float) baseVerticalAddress, (float) (regionComposition.width + baseHorizontalAddress), (float) (regionComposition.height + baseVerticalAddress), this.fillRegionPaint);
+                dvbParser.fillRegionPaint.setColor(color);
+                clutDefinition = dataBitArray;
+                dvbParser.canvas.drawRect((float) baseHorizontalAddress, (float) baseVerticalAddress, (float) (regionComposition.width + baseHorizontalAddress), (float) (regionComposition.height + baseVerticalAddress), dvbParser.fillRegionPaint);
+            } else {
+                clutDefinition = dataBitArray;
             }
-            cues.add(new Cue(Bitmap.createBitmap(this.bitmap, baseHorizontalAddress, baseVerticalAddress, regionComposition.width, regionComposition.height), ((float) baseHorizontalAddress) / ((float) displayDefinition.width), 0, ((float) baseVerticalAddress) / ((float) displayDefinition.height), 0, ((float) regionComposition.width) / ((float) displayDefinition.width), ((float) regionComposition.height) / ((float) displayDefinition.height)));
-            this.canvas.drawColor(0, Mode.CLEAR);
+            cues.add(new Cue(Bitmap.createBitmap(dvbParser.bitmap, baseHorizontalAddress, baseVerticalAddress, regionComposition.width, regionComposition.height), ((float) baseHorizontalAddress) / ((float) displayDefinition.width), 0, ((float) baseVerticalAddress) / ((float) displayDefinition.height), 0, ((float) regionComposition.width) / ((float) displayDefinition.width), ((float) regionComposition.height) / ((float) displayDefinition.height)));
+            dvbParser.canvas.drawColor(0, Mode.CLEAR);
+            i++;
+            dataBitArray = dataBitArray2;
+            pageRegions2 = pageRegions;
+            byte[] bArr = data;
+            j = limit;
         }
+        pageRegions = pageRegions2;
         return cues;
     }
 
@@ -291,30 +320,28 @@ final class DvbParser {
             data.skipBits(data.bitsLeft());
             return;
         }
-        PageComposition pageComposition;
+        PageComposition current;
         switch (segmentType) {
             case 16:
                 if (pageId == service.subtitlePageId) {
-                    PageComposition current = service.pageComposition;
-                    pageComposition = parsePageComposition(data, dataFieldLength);
-                    if (pageComposition.state == 0) {
-                        if (!(current == null || current.version == pageComposition.version)) {
-                            service.pageComposition = pageComposition;
-                            break;
-                        }
+                    current = service.pageComposition;
+                    PageComposition pageComposition = parsePageComposition(data, dataFieldLength);
+                    if (pageComposition.state != 0) {
+                        service.pageComposition = pageComposition;
+                        service.regions.clear();
+                        service.cluts.clear();
+                        service.objects.clear();
+                    } else if (!(current == null || current.version == pageComposition.version)) {
+                        service.pageComposition = pageComposition;
                     }
-                    service.pageComposition = pageComposition;
-                    service.regions.clear();
-                    service.cluts.clear();
-                    service.objects.clear();
                     break;
                 }
                 break;
             case 17:
-                pageComposition = service.pageComposition;
-                if (pageId == service.subtitlePageId && pageComposition != null) {
+                current = service.pageComposition;
+                if (pageId == service.subtitlePageId && current != null) {
                     RegionComposition regionComposition = parseRegionComposition(data, dataFieldLength);
-                    if (pageComposition.state == 0) {
+                    if (current.state == 0) {
                         regionComposition.mergeFrom((RegionComposition) service.regions.get(regionComposition.id));
                     }
                     service.regions.put(regionComposition.id, regionComposition);
@@ -352,25 +379,30 @@ final class DvbParser {
                     break;
                 }
                 break;
+            default:
+                break;
         }
         data.skipBytes(dataFieldLimit - data.getBytePosition());
     }
 
     private static DisplayDefinition parseDisplayDefinition(ParsableBitArray data) {
+        int verticalPositionMaximum;
         int horizontalPositionMinimum;
         int horizontalPositionMaximum;
         int verticalPositionMinimum;
-        int verticalPositionMaximum;
         data.skipBits(4);
         boolean displayWindowFlag = data.readBit();
         data.skipBits(3);
         int width = data.readBits(16);
         int height = data.readBits(16);
         if (displayWindowFlag) {
-            horizontalPositionMinimum = data.readBits(16);
-            horizontalPositionMaximum = data.readBits(16);
-            verticalPositionMinimum = data.readBits(16);
+            int horizontalPositionMinimum2 = data.readBits(16);
+            int horizontalPositionMaximum2 = data.readBits(16);
+            int verticalPositionMinimum2 = data.readBits(16);
             verticalPositionMaximum = data.readBits(16);
+            horizontalPositionMinimum = horizontalPositionMinimum2;
+            horizontalPositionMaximum = horizontalPositionMaximum2;
+            verticalPositionMinimum = verticalPositionMinimum2;
         } else {
             horizontalPositionMinimum = 0;
             horizontalPositionMaximum = width;
@@ -397,57 +429,88 @@ final class DvbParser {
     }
 
     private static RegionComposition parseRegionComposition(ParsableBitArray data, int length) {
-        int id = data.readBits(8);
-        data.skipBits(4);
+        ParsableBitArray parsableBitArray = data;
+        int i = 8;
+        int id = parsableBitArray.readBits(8);
+        parsableBitArray.skipBits(4);
         boolean fillFlag = data.readBit();
-        data.skipBits(3);
-        int width = data.readBits(16);
-        int height = data.readBits(16);
-        int levelOfCompatibility = data.readBits(3);
-        int depth = data.readBits(3);
-        data.skipBits(2);
-        int clutId = data.readBits(8);
-        int pixelCode8Bit = data.readBits(8);
-        int pixelCode4Bit = data.readBits(4);
-        int pixelCode2Bit = data.readBits(2);
-        data.skipBits(2);
+        parsableBitArray.skipBits(3);
+        int width = parsableBitArray.readBits(16);
+        int height = parsableBitArray.readBits(16);
+        int levelOfCompatibility = parsableBitArray.readBits(3);
+        int depth = parsableBitArray.readBits(3);
+        parsableBitArray.skipBits(2);
+        int clutId = parsableBitArray.readBits(8);
+        int pixelCode8Bit = parsableBitArray.readBits(8);
+        int pixelCode4Bit = parsableBitArray.readBits(4);
+        int pixelCode2Bit = parsableBitArray.readBits(2);
+        parsableBitArray.skipBits(2);
         int remainingLength = length - 10;
         SparseArray<RegionObject> regionObjects = new SparseArray();
-        while (remainingLength > 0) {
-            int objectId = data.readBits(16);
-            int objectType = data.readBits(2);
-            int objectProvider = data.readBits(2);
-            int objectHorizontalPosition = data.readBits(12);
-            data.skipBits(4);
-            int objectVerticalPosition = data.readBits(12);
-            remainingLength -= 6;
-            int foregroundPixelCode = 0;
-            int backgroundPixelCode = 0;
-            if (objectType == 1 || objectType == 2) {
-                foregroundPixelCode = data.readBits(8);
-                backgroundPixelCode = data.readBits(8);
-                remainingLength -= 2;
+        int foregroundPixelCode = remainingLength;
+        while (true) {
+            SparseArray<RegionObject> regionObjects2 = regionObjects;
+            if (foregroundPixelCode > 0) {
+                int remainingLength2;
+                RegionObject regionObject;
+                RegionObject regionObject2;
+                remainingLength = parsableBitArray.readBits(16);
+                int objectType = parsableBitArray.readBits(2);
+                int objectProvider = parsableBitArray.readBits(2);
+                int objectHorizontalPosition = parsableBitArray.readBits(12);
+                parsableBitArray.skipBits(4);
+                int objectVerticalPosition = parsableBitArray.readBits(12);
+                foregroundPixelCode -= 6;
+                int foregroundPixelCode2 = 0;
+                int backgroundPixelCode = 0;
+                if (objectType != 1) {
+                    if (objectType == 2) {
+                    }
+                    remainingLength2 = foregroundPixelCode;
+                    regionObject = regionObject2;
+                    regionObject2 = new RegionObject(objectType, objectProvider, objectHorizontalPosition, objectVerticalPosition, foregroundPixelCode2, backgroundPixelCode);
+                    regionObjects2.put(remainingLength, regionObject);
+                    regionObjects = regionObjects2;
+                    foregroundPixelCode = remainingLength2;
+                    i = 8;
+                }
+                foregroundPixelCode2 = parsableBitArray.readBits(i);
+                backgroundPixelCode = parsableBitArray.readBits(i);
+                foregroundPixelCode -= 2;
+                remainingLength2 = foregroundPixelCode;
+                regionObject = regionObject2;
+                regionObject2 = new RegionObject(objectType, objectProvider, objectHorizontalPosition, objectVerticalPosition, foregroundPixelCode2, backgroundPixelCode);
+                regionObjects2.put(remainingLength, regionObject);
+                regionObjects = regionObjects2;
+                foregroundPixelCode = remainingLength2;
+                i = 8;
+            } else {
+                return new RegionComposition(id, fillFlag, width, height, levelOfCompatibility, depth, clutId, pixelCode8Bit, pixelCode4Bit, pixelCode2Bit, regionObjects2);
             }
-            regionObjects.put(objectId, new RegionObject(objectType, objectProvider, objectHorizontalPosition, objectVerticalPosition, foregroundPixelCode, backgroundPixelCode));
         }
-        return new RegionComposition(id, fillFlag, width, height, levelOfCompatibility, depth, clutId, pixelCode8Bit, pixelCode4Bit, pixelCode2Bit, regionObjects);
     }
 
     private static ClutDefinition parseClutDefinition(ParsableBitArray data, int length) {
-        int clutId = data.readBits(8);
-        data.skipBits(8);
+        ParsableBitArray parsableBitArray = data;
+        int i = 8;
+        int clutId = parsableBitArray.readBits(8);
+        parsableBitArray.skipBits(8);
         int remainingLength = length - 2;
         int[] clutEntries2Bit = generateDefault2BitClutEntries();
         int[] clutEntries4Bit = generateDefault4BitClutEntries();
         int[] clutEntries8Bit = generateDefault8BitClutEntries();
         while (remainingLength > 0) {
             int[] clutEntries;
-            int y;
             int cr;
-            int cb;
-            int t;
-            int entryId = data.readBits(8);
-            int entryFlags = data.readBits(8);
+            int readBits;
+            int readBits2;
+            int i2;
+            int clutId2;
+            int remainingLength2;
+            int[] clutEntries2Bit2;
+            int[] clutEntries4Bit2;
+            int entryId = parsableBitArray.readBits(i);
+            int entryFlags = parsableBitArray.readBits(i);
             remainingLength -= 2;
             if ((entryFlags & 128) != 0) {
                 clutEntries = clutEntries2Bit;
@@ -455,28 +518,69 @@ final class DvbParser {
                 clutEntries = clutEntries4Bit;
             } else {
                 clutEntries = clutEntries8Bit;
+                if ((entryFlags & 1) == 0) {
+                    int y = parsableBitArray.readBits(i);
+                    cr = parsableBitArray.readBits(i);
+                    readBits = parsableBitArray.readBits(i);
+                    readBits2 = parsableBitArray.readBits(i);
+                    remainingLength -= 4;
+                    i2 = cr;
+                    cr = y;
+                } else {
+                    cr = parsableBitArray.readBits(6) << 2;
+                    i2 = parsableBitArray.readBits(4) << 4;
+                    remainingLength -= 2;
+                    readBits = parsableBitArray.readBits(4) << 4;
+                    readBits2 = parsableBitArray.readBits(2) << 6;
+                }
+                if (cr == 0) {
+                    i2 = 0;
+                    readBits = 0;
+                    readBits2 = 255;
+                }
+                clutId2 = clutId;
+                remainingLength2 = remainingLength;
+                clutEntries2Bit2 = clutEntries2Bit;
+                clutEntries4Bit2 = clutEntries4Bit;
+                clutEntries[entryId] = getColor((byte) (255 - (readBits2 & 255)), Util.constrainValue((int) (((double) cr) + (1.402d * ((double) (i2 - 128)))), 0, 255), Util.constrainValue((int) ((((double) cr) - (0.34414d * ((double) (readBits - 128)))) - (0.71414d * ((double) (i2 - 128)))), 0, 255), Util.constrainValue((int) (((double) cr) + (1.772d * ((double) (readBits - 128)))), 0, 255));
+                clutId = clutId2;
+                remainingLength = remainingLength2;
+                clutEntries2Bit = clutEntries2Bit2;
+                clutEntries4Bit = clutEntries4Bit2;
+                parsableBitArray = data;
+                i = 8;
             }
-            if ((entryFlags & 1) != 0) {
-                y = data.readBits(8);
-                cr = data.readBits(8);
-                cb = data.readBits(8);
-                t = data.readBits(8);
-                remainingLength -= 4;
-            } else {
-                y = data.readBits(6) << 2;
-                cr = data.readBits(4) << 4;
-                cb = data.readBits(4) << 4;
-                t = data.readBits(2) << 6;
+            if ((entryFlags & 1) == 0) {
+                cr = parsableBitArray.readBits(6) << 2;
+                i2 = parsableBitArray.readBits(4) << 4;
                 remainingLength -= 2;
+                readBits = parsableBitArray.readBits(4) << 4;
+                readBits2 = parsableBitArray.readBits(2) << 6;
+            } else {
+                int y2 = parsableBitArray.readBits(i);
+                cr = parsableBitArray.readBits(i);
+                readBits = parsableBitArray.readBits(i);
+                readBits2 = parsableBitArray.readBits(i);
+                remainingLength -= 4;
+                i2 = cr;
+                cr = y2;
             }
-            if (y == 0) {
-                cr = 0;
-                cb = 0;
-                t = 255;
+            if (cr == 0) {
+                i2 = 0;
+                readBits = 0;
+                readBits2 = 255;
             }
-            int g = (int) ((((double) y) - (0.34414d * ((double) (cb - 128)))) - (0.71414d * ((double) (cr - 128))));
-            int b = (int) (((double) y) + (1.772d * ((double) (cb - 128))));
-            clutEntries[entryId] = getColor((byte) (255 - (t & 255)), Util.constrainValue((int) (((double) y) + (1.402d * ((double) (cr - 128)))), 0, 255), Util.constrainValue(g, 0, 255), Util.constrainValue(b, 0, 255));
+            clutId2 = clutId;
+            remainingLength2 = remainingLength;
+            clutEntries2Bit2 = clutEntries2Bit;
+            clutEntries4Bit2 = clutEntries4Bit;
+            clutEntries[entryId] = getColor((byte) (255 - (readBits2 & 255)), Util.constrainValue((int) (((double) cr) + (1.402d * ((double) (i2 - 128)))), 0, 255), Util.constrainValue((int) ((((double) cr) - (0.34414d * ((double) (readBits - 128)))) - (0.71414d * ((double) (i2 - 128)))), 0, 255), Util.constrainValue((int) (((double) cr) + (1.772d * ((double) (readBits - 128)))), 0, 255));
+            clutId = clutId2;
+            remainingLength = remainingLength2;
+            clutEntries2Bit = clutEntries2Bit2;
+            clutEntries4Bit = clutEntries4Bit2;
+            parsableBitArray = data;
+            i = 8;
         }
         return new ClutDefinition(clutId, clutEntries2Bit, clutEntries4Bit, clutEntries8Bit);
     }
@@ -517,15 +621,15 @@ final class DvbParser {
         entries[0] = 0;
         for (int i = 1; i < entries.length; i++) {
             if (i < 8) {
-                int i2;
-                if ((i & 1) != 0) {
-                    i2 = 255;
-                } else {
+                entries[i] = getColor(255, (i & 1) != 0 ? 255 : 0, (i & 2) != 0 ? 255 : 0, (i & 4) != 0 ? 255 : 0);
+            } else {
+                int i2 = 127;
+                int i3 = (i & 1) != 0 ? 127 : 0;
+                int i4 = (i & 2) != 0 ? 127 : 0;
+                if ((i & 4) == 0) {
                     i2 = 0;
                 }
-                entries[i] = getColor(255, i2, (i & 2) != 0 ? 255 : 0, (i & 4) != 0 ? 255 : 0);
-            } else {
-                entries[i] = getColor(255, (i & 1) != 0 ? 127 : 0, (i & 2) != 0 ? 127 : 0, (i & 4) != 0 ? 127 : 0);
+                entries[i] = getColor(255, i3, i4, i2);
             }
         }
         return entries;
@@ -535,31 +639,67 @@ final class DvbParser {
         int[] entries = new int[256];
         entries[0] = 0;
         for (int i = 0; i < entries.length; i++) {
-            if (i >= 8) {
-                switch (i & 136) {
-                    case 0:
-                        entries[i] = getColor(255, ((i & 1) != 0 ? 85 : 0) + ((i & 16) != 0 ? 170 : 0), ((i & 2) != 0 ? 85 : 0) + ((i & 32) != 0 ? 170 : 0), ((i & 64) != 0 ? 170 : 0) + ((i & 4) != 0 ? 85 : 0));
-                        break;
-                    case 8:
-                        entries[i] = getColor(127, ((i & 1) != 0 ? 85 : 0) + ((i & 16) != 0 ? 170 : 0), ((i & 2) != 0 ? 85 : 0) + ((i & 32) != 0 ? 170 : 0), ((i & 64) != 0 ? 170 : 0) + ((i & 4) != 0 ? 85 : 0));
-                        break;
-                    case 128:
-                        entries[i] = getColor(255, (((i & 1) != 0 ? 43 : 0) + 127) + ((i & 16) != 0 ? 85 : 0), (((i & 2) != 0 ? 43 : 0) + 127) + ((i & 32) != 0 ? 85 : 0), ((i & 64) != 0 ? 85 : 0) + (((i & 4) != 0 ? 43 : 0) + 127));
-                        break;
-                    case 136:
-                        entries[i] = getColor(255, ((i & 1) != 0 ? 43 : 0) + ((i & 16) != 0 ? 85 : 0), ((i & 2) != 0 ? 43 : 0) + ((i & 32) != 0 ? 85 : 0), ((i & 64) != 0 ? 85 : 0) + ((i & 4) != 0 ? 43 : 0));
-                        break;
-                    default:
-                        break;
+            int i2 = 255;
+            int i3;
+            int i4;
+            if (i < 8) {
+                i3 = (i & 1) != 0 ? 255 : 0;
+                i4 = (i & 2) != 0 ? 255 : 0;
+                if ((i & 4) == 0) {
+                    i2 = 0;
+                }
+                entries[i] = getColor(63, i3, i4, i2);
+            } else {
+                i3 = i & 136;
+                i4 = 170;
+                int i5 = 85;
+                int i6;
+                if (i3 == 0) {
+                    i6 = ((i & 1) != 0 ? 85 : 0) + ((i & 16) != 0 ? 170 : 0);
+                    i3 = ((i & 2) != 0 ? 85 : 0) + ((i & 32) != 0 ? 170 : 0);
+                    if ((i & 4) == 0) {
+                        i5 = 0;
+                    }
+                    if ((i & 64) == 0) {
+                        i4 = 0;
+                    }
+                    entries[i] = getColor(255, i6, i3, i5 + i4);
+                } else if (i3 != 8) {
+                    i4 = 43;
+                    if (i3 == 128) {
+                        i6 = (((i & 1) != 0 ? 43 : 0) + 127) + ((i & 16) != 0 ? 85 : 0);
+                        i3 = (((i & 2) != 0 ? 43 : 0) + 127) + ((i & 32) != 0 ? 85 : 0);
+                        if ((i & 4) == 0) {
+                            i4 = 0;
+                        }
+                        int i7 = 127 + i4;
+                        if ((i & 64) == 0) {
+                            i5 = 0;
+                        }
+                        entries[i] = getColor(255, i6, i3, i7 + i5);
+                    } else if (i3 == 136) {
+                        i6 = ((i & 1) != 0 ? 43 : 0) + ((i & 16) != 0 ? 85 : 0);
+                        i3 = ((i & 2) != 0 ? 43 : 0) + ((i & 32) != 0 ? 85 : 0);
+                        if ((i & 4) == 0) {
+                            i4 = 0;
+                        }
+                        if ((i & 64) == 0) {
+                            i5 = 0;
+                        }
+                        entries[i] = getColor(255, i6, i3, i4 + i5);
+                    }
+                } else {
+                    i6 = ((i & 1) != 0 ? 85 : 0) + ((i & 16) != 0 ? 170 : 0);
+                    i2 = ((i & 2) != 0 ? 85 : 0) + ((i & 32) != 0 ? 170 : 0);
+                    if ((i & 4) == 0) {
+                        i5 = 0;
+                    }
+                    if ((i & 64) == 0) {
+                        i4 = 0;
+                    }
+                    entries[i] = getColor(127, i6, i2, i5 + i4);
                 }
             }
-            int i2;
-            if ((i & 1) != 0) {
-                i2 = 255;
-            } else {
-                i2 = 0;
-            }
-            entries[i] = getColor(63, i2, (i & 2) != 0 ? 255 : 0, (i & 4) != 0 ? 255 : 0);
         }
         return entries;
     }
@@ -569,86 +709,105 @@ final class DvbParser {
     }
 
     private static void paintPixelDataSubBlocks(ObjectData objectData, ClutDefinition clutDefinition, int regionDepth, int horizontalAddress, int verticalAddress, Paint paint, Canvas canvas) {
-        int[] clutEntries;
-        if (regionDepth == 3) {
-            clutEntries = clutDefinition.clutEntries8Bit;
-        } else if (regionDepth == 2) {
-            clutEntries = clutDefinition.clutEntries4Bit;
+        int[] iArr;
+        ObjectData objectData2 = objectData;
+        ClutDefinition clutDefinition2 = clutDefinition;
+        int i = regionDepth;
+        if (i == 3) {
+            iArr = clutDefinition2.clutEntries8Bit;
+        } else if (i == 2) {
+            iArr = clutDefinition2.clutEntries4Bit;
         } else {
-            clutEntries = clutDefinition.clutEntries2Bit;
+            iArr = clutDefinition2.clutEntries2Bit;
         }
-        paintPixelDataSubBlock(objectData.topFieldData, clutEntries, regionDepth, horizontalAddress, verticalAddress, paint, canvas);
-        paintPixelDataSubBlock(objectData.bottomFieldData, clutEntries, regionDepth, horizontalAddress, verticalAddress + 1, paint, canvas);
+        int[] clutEntries = iArr;
+        paintPixelDataSubBlock(objectData2.topFieldData, clutEntries, i, horizontalAddress, verticalAddress, paint, canvas);
+        paintPixelDataSubBlock(objectData2.bottomFieldData, clutEntries, i, horizontalAddress, verticalAddress + 1, paint, canvas);
     }
 
     private static void paintPixelDataSubBlock(byte[] pixelData, int[] clutEntries, int regionDepth, int horizontalAddress, int verticalAddress, Paint paint, Canvas canvas) {
+        int i = regionDepth;
         ParsableBitArray data = new ParsableBitArray(pixelData);
         int column = horizontalAddress;
         int line = verticalAddress;
         byte[] clutMapTable2To4 = null;
         byte[] clutMapTable2To8 = null;
-        while (data.bitsLeft() != 0) {
-            switch (data.readBits(8)) {
-                case 16:
+        byte[] clutMapTable4To8 = null;
+        while (true) {
+            byte[] clutMapTable4To82 = clutMapTable4To8;
+            if (data.bitsLeft() != 0) {
+                int dataType = data.readBits(8);
+                if (dataType != 240) {
                     byte[] clutMapTable2ToX;
-                    if (regionDepth == 3) {
-                        if (clutMapTable2To8 == null) {
-                            clutMapTable2ToX = defaultMap2To8;
-                        } else {
-                            clutMapTable2ToX = clutMapTable2To8;
-                        }
-                    } else if (regionDepth == 2) {
-                        clutMapTable2ToX = clutMapTable2To4 == null ? defaultMap2To4 : clutMapTable2To4;
-                    } else {
-                        clutMapTable2ToX = null;
+                    switch (dataType) {
+                        case 16:
+                            if (i != 3) {
+                                if (i != 2) {
+                                    clutMapTable2ToX = null;
+                                    column = paint2BitPixelCodeString(data, clutEntries, clutMapTable2ToX, column, line, paint, canvas);
+                                    data.byteAlign();
+                                    break;
+                                }
+                                clutMapTable4To8 = clutMapTable2To4 == null ? defaultMap2To4 : clutMapTable2To4;
+                            } else {
+                                clutMapTable4To8 = clutMapTable2To8 == null ? defaultMap2To8 : clutMapTable2To8;
+                            }
+                            clutMapTable2ToX = clutMapTable4To8;
+                            column = paint2BitPixelCodeString(data, clutEntries, clutMapTable2ToX, column, line, paint, canvas);
+                            data.byteAlign();
+                        case 17:
+                            if (i == 3) {
+                                clutMapTable2ToX = clutMapTable4To82 == null ? defaultMap4To8 : clutMapTable4To82;
+                            } else {
+                                clutMapTable2ToX = null;
+                            }
+                            column = paint4BitPixelCodeString(data, clutEntries, clutMapTable2ToX, column, line, paint, canvas);
+                            data.byteAlign();
+                            break;
+                        case 18:
+                            column = paint8BitPixelCodeString(data, clutEntries, null, column, line, paint, canvas);
+                            break;
+                        default:
+                            switch (dataType) {
+                                case 32:
+                                    clutMapTable2To4 = buildClutMapTable(4, 4, data);
+                                    continue;
+                                case DATA_TYPE_28_TABLE_DATA /*33*/:
+                                    clutMapTable4To8 = buildClutMapTable(4, 8, data);
+                                    break;
+                                case DATA_TYPE_48_TABLE_DATA /*34*/:
+                                    clutMapTable4To8 = buildClutMapTable(16, 8, data);
+                                    break;
+                                default:
+                                    continue;
+                            }
+                            clutMapTable2To8 = clutMapTable4To8;
+                            break;
                     }
-                    column = paint2BitPixelCodeString(data, clutEntries, clutMapTable2ToX, column, line, paint, canvas);
-                    data.byteAlign();
-                    break;
-                case 17:
-                    byte[] clutMapTable4ToX;
-                    if (regionDepth != 3) {
-                        clutMapTable4ToX = null;
-                    } else if (null == null) {
-                        clutMapTable4ToX = defaultMap4To8;
-                    } else {
-                        clutMapTable4ToX = null;
-                    }
-                    column = paint4BitPixelCodeString(data, clutEntries, clutMapTable4ToX, column, line, paint, canvas);
-                    data.byteAlign();
-                    break;
-                case 18:
-                    column = paint8BitPixelCodeString(data, clutEntries, null, column, line, paint, canvas);
-                    break;
-                case 32:
-                    clutMapTable2To4 = buildClutMapTable(4, 4, data);
-                    break;
-                case DATA_TYPE_28_TABLE_DATA /*33*/:
-                    clutMapTable2To8 = buildClutMapTable(4, 8, data);
-                    break;
-                case DATA_TYPE_48_TABLE_DATA /*34*/:
-                    clutMapTable2To8 = buildClutMapTable(16, 8, data);
-                    break;
-                case 240:
-                    column = horizontalAddress;
-                    line += 2;
-                    break;
-                default:
-                    break;
+                }
+                column = horizontalAddress;
+                line += 2;
+                clutMapTable4To8 = clutMapTable4To82;
+            } else {
+                return;
             }
         }
     }
 
     private static int paint2BitPixelCodeString(ParsableBitArray data, int[] clutEntries, byte[] clutMapTable, int column, int line, Paint paint, Canvas canvas) {
+        ParsableBitArray parsableBitArray = data;
+        int i = line;
+        Paint paint2 = paint;
         boolean endOfPixelCodeString = false;
-        do {
+        int column2 = column;
+        while (true) {
             int runLength = 0;
             int clutIndex = 0;
-            int peek = data.readBits(2);
+            int peek = parsableBitArray.readBits(2);
             if (peek == 0) {
-                if (!data.readBit()) {
-                    if (!data.readBit()) {
-                        switch (data.readBits(2)) {
+                if (!parsableBitArray.readBit()) {
+                    if (!parsableBitArray.readBit()) {
+                        switch (parsableBitArray.readBits(2)) {
                             case 0:
                                 endOfPixelCodeString = true;
                                 break;
@@ -656,12 +815,12 @@ final class DvbParser {
                                 runLength = 2;
                                 break;
                             case 2:
-                                runLength = data.readBits(4) + 12;
-                                clutIndex = data.readBits(2);
+                                runLength = 12 + parsableBitArray.readBits(4);
+                                clutIndex = parsableBitArray.readBits(2);
                                 break;
                             case 3:
-                                runLength = data.readBits(8) + 29;
-                                clutIndex = data.readBits(2);
+                                runLength = 29 + parsableBitArray.readBits(8);
+                                clutIndex = parsableBitArray.readBits(2);
                                 break;
                             default:
                                 break;
@@ -669,36 +828,42 @@ final class DvbParser {
                     }
                     runLength = 1;
                 } else {
-                    runLength = data.readBits(3) + 3;
-                    clutIndex = data.readBits(2);
+                    runLength = 3 + parsableBitArray.readBits(3);
+                    clutIndex = parsableBitArray.readBits(2);
                 }
             } else {
                 runLength = 1;
                 clutIndex = peek;
             }
-            if (!(runLength == 0 || paint == null)) {
-                if (clutMapTable != null) {
-                    clutIndex = clutMapTable[clutIndex];
-                }
-                paint.setColor(clutEntries[clutIndex]);
-                Canvas canvas2 = canvas;
-                canvas2.drawRect((float) column, (float) line, (float) (column + runLength), (float) (line + 1), paint);
+            boolean endOfPixelCodeString2 = endOfPixelCodeString;
+            int runLength2 = runLength;
+            int clutIndex2 = clutIndex;
+            if (!(runLength2 == 0 || paint2 == null)) {
+                paint2.setColor(clutEntries[clutMapTable != null ? clutMapTable[clutIndex2] : clutIndex2]);
+                canvas.drawRect((float) column2, (float) i, (float) (column2 + runLength2), (float) (i + 1), paint2);
             }
-            column += runLength;
-        } while (!endOfPixelCodeString);
-        return column;
+            column2 += runLength2;
+            if (endOfPixelCodeString2) {
+                return column2;
+            }
+            endOfPixelCodeString = endOfPixelCodeString2;
+        }
     }
 
     private static int paint4BitPixelCodeString(ParsableBitArray data, int[] clutEntries, byte[] clutMapTable, int column, int line, Paint paint, Canvas canvas) {
+        ParsableBitArray parsableBitArray = data;
+        int i = line;
+        Paint paint2 = paint;
         boolean endOfPixelCodeString = false;
-        do {
+        int column2 = column;
+        while (true) {
             int runLength = 0;
             int clutIndex = 0;
-            int peek = data.readBits(4);
+            int peek = parsableBitArray.readBits(4);
             if (peek == 0) {
-                if (data.readBit()) {
-                    if (data.readBit()) {
-                        switch (data.readBits(2)) {
+                if (parsableBitArray.readBit()) {
+                    if (parsableBitArray.readBit()) {
+                        switch (parsableBitArray.readBits(2)) {
                             case 0:
                                 runLength = 1;
                                 break;
@@ -706,23 +871,23 @@ final class DvbParser {
                                 runLength = 2;
                                 break;
                             case 2:
-                                runLength = data.readBits(4) + 9;
-                                clutIndex = data.readBits(4);
+                                runLength = 9 + parsableBitArray.readBits(4);
+                                clutIndex = parsableBitArray.readBits(4);
                                 break;
                             case 3:
-                                runLength = data.readBits(8) + 25;
-                                clutIndex = data.readBits(4);
+                                runLength = 25 + parsableBitArray.readBits(8);
+                                clutIndex = parsableBitArray.readBits(4);
                                 break;
                             default:
                                 break;
                         }
                     }
-                    runLength = data.readBits(2) + 4;
-                    clutIndex = data.readBits(4);
+                    runLength = 4 + parsableBitArray.readBits(2);
+                    clutIndex = parsableBitArray.readBits(4);
                 } else {
-                    peek = data.readBits(3);
+                    peek = parsableBitArray.readBits(3);
                     if (peek != 0) {
-                        runLength = peek + 2;
+                        runLength = 2 + peek;
                         clutIndex = 0;
                     } else {
                         endOfPixelCodeString = true;
@@ -732,33 +897,40 @@ final class DvbParser {
                 runLength = 1;
                 clutIndex = peek;
             }
-            if (!(runLength == 0 || paint == null)) {
-                if (clutMapTable != null) {
-                    clutIndex = clutMapTable[clutIndex];
-                }
-                paint.setColor(clutEntries[clutIndex]);
-                Canvas canvas2 = canvas;
-                canvas2.drawRect((float) column, (float) line, (float) (column + runLength), (float) (line + 1), paint);
+            boolean endOfPixelCodeString2 = endOfPixelCodeString;
+            int runLength2 = runLength;
+            int clutIndex2 = clutIndex;
+            int peek2 = peek;
+            if (!(runLength2 == 0 || paint2 == null)) {
+                paint2.setColor(clutEntries[clutMapTable != null ? clutMapTable[clutIndex2] : clutIndex2]);
+                canvas.drawRect((float) column2, (float) i, (float) (column2 + runLength2), (float) (i + 1), paint2);
             }
-            column += runLength;
-        } while (!endOfPixelCodeString);
-        return column;
+            column2 += runLength2;
+            if (endOfPixelCodeString2) {
+                return column2;
+            }
+            endOfPixelCodeString = endOfPixelCodeString2;
+        }
     }
 
     private static int paint8BitPixelCodeString(ParsableBitArray data, int[] clutEntries, byte[] clutMapTable, int column, int line, Paint paint, Canvas canvas) {
+        ParsableBitArray parsableBitArray = data;
+        int i = line;
+        Paint paint2 = paint;
         boolean endOfPixelCodeString = false;
-        do {
+        int column2 = column;
+        while (true) {
             int runLength = 0;
             int clutIndex = 0;
-            int peek = data.readBits(8);
+            int peek = parsableBitArray.readBits(8);
             if (peek != 0) {
                 runLength = 1;
                 clutIndex = peek;
-            } else if (data.readBit()) {
-                runLength = data.readBits(7);
-                clutIndex = data.readBits(8);
+            } else if (parsableBitArray.readBit()) {
+                runLength = parsableBitArray.readBits(7);
+                clutIndex = parsableBitArray.readBits(8);
             } else {
-                peek = data.readBits(7);
+                peek = parsableBitArray.readBits(7);
                 if (peek != 0) {
                     runLength = peek;
                     clutIndex = 0;
@@ -766,17 +938,20 @@ final class DvbParser {
                     endOfPixelCodeString = true;
                 }
             }
-            if (!(runLength == 0 || paint == null)) {
-                if (clutMapTable != null) {
-                    clutIndex = clutMapTable[clutIndex];
-                }
-                paint.setColor(clutEntries[clutIndex]);
-                Canvas canvas2 = canvas;
-                canvas2.drawRect((float) column, (float) line, (float) (column + runLength), (float) (line + 1), paint);
+            boolean endOfPixelCodeString2 = endOfPixelCodeString;
+            int runLength2 = runLength;
+            int clutIndex2 = clutIndex;
+            int peek2 = peek;
+            if (!(runLength2 == 0 || paint2 == null)) {
+                paint2.setColor(clutEntries[clutMapTable != null ? clutMapTable[clutIndex2] : clutIndex2]);
+                canvas.drawRect((float) column2, (float) i, (float) (column2 + runLength2), (float) (i + 1), paint2);
             }
-            column += runLength;
-        } while (!endOfPixelCodeString);
-        return column;
+            column2 += runLength2;
+            if (endOfPixelCodeString2) {
+                return column2;
+            }
+            endOfPixelCodeString = endOfPixelCodeString2;
+        }
     }
 
     private static byte[] buildClutMapTable(int length, int bitsPerEntry, ParsableBitArray data) {

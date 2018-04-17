@@ -125,24 +125,35 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
 
         public void onClick(View v) {
+            int a = 0;
             if (ShareAlert.this.selectedDialogs.size() != 0 || (!ShareAlert.this.isPublicChannel && ShareAlert.this.linkToCopy == null)) {
-                int a;
+                int a2;
                 long key;
                 if (ShareAlert.this.sendingMessageObjects != null) {
-                    for (a = 0; a < ShareAlert.this.selectedDialogs.size(); a++) {
-                        key = ShareAlert.this.selectedDialogs.keyAt(a);
+                    while (true) {
+                        a2 = a;
+                        if (a2 >= ShareAlert.this.selectedDialogs.size()) {
+                            break;
+                        }
+                        key = ShareAlert.this.selectedDialogs.keyAt(a2);
                         if (ShareAlert.this.frameLayout2.getTag() != null && ShareAlert.this.commentTextView.length() > 0) {
                             SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.commentTextView.getText().toString(), key, null, null, true, null, null, null);
                         }
                         SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.sendingMessageObjects, key);
+                        a = a2 + 1;
                     }
                 } else if (ShareAlert.this.sendingText != null) {
-                    for (a = 0; a < ShareAlert.this.selectedDialogs.size(); a++) {
-                        key = ShareAlert.this.selectedDialogs.keyAt(a);
+                    while (true) {
+                        a2 = a;
+                        if (a2 >= ShareAlert.this.selectedDialogs.size()) {
+                            break;
+                        }
+                        key = ShareAlert.this.selectedDialogs.keyAt(a2);
                         if (ShareAlert.this.frameLayout2.getTag() != null && ShareAlert.this.commentTextView.length() > 0) {
                             SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.commentTextView.getText().toString(), key, null, null, true, null, null, null);
                         }
                         SendMessagesHelper.getInstance(ShareAlert.this.currentAccount).sendMessage(ShareAlert.this.sendingText, key, null, null, true, null, null, null);
+                        a = a2 + 1;
                     }
                 }
                 ShareAlert.this.dismiss();
@@ -211,10 +222,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
-            int i = 0;
             Holder holder = (Holder) parent.getChildViewHolder(view);
             if (holder != null) {
                 int pos = holder.getAdapterPosition();
+                int i = 0;
                 outRect.left = pos % 4 == 0 ? 0 : AndroidUtilities.dp(4.0f);
                 if (pos % 4 != 3) {
                     i = AndroidUtilities.dp(4.0f);
@@ -300,10 +311,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
 
         public TL_dialog getItem(int i) {
-            if (i < 0 || i >= this.dialogs.size()) {
-                return null;
+            if (i >= 0) {
+                if (i < this.dialogs.size()) {
+                    return (TL_dialog) this.dialogs.get(i);
+                }
             }
-            return (TL_dialog) this.dialogs.get(i);
+            return null;
         }
 
         public boolean isEnabled(ViewHolder holder) {
@@ -378,26 +391,27 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                             ShareSearchAdapter.this.updateSearchResults(new ArrayList(), ShareSearchAdapter.this.lastSearchId);
                             return;
                         }
-                        DialogSearchResult dialogSearchResult;
-                        String name;
+                        int lower_id;
+                        String[] search;
+                        String[] search2;
                         String tName;
                         String username;
-                        int usernamePos;
                         int found;
-                        int length;
-                        int i;
-                        String q;
+                        int found2;
+                        int found3;
                         NativeByteBuffer data;
-                        TLObject user;
-                        int a;
-                        String search2 = LocaleController.getInstance().getTranslitString(search1);
-                        if (search1.equals(search2) || search2.length() == 0) {
-                            search2 = null;
+                        DialogSearchResult tName2;
+                        StringBuilder stringBuilder;
+                        String stringBuilder2;
+                        String search22 = LocaleController.getInstance().getTranslitString(search1);
+                        if (search1.equals(search22) || search22.length() == 0) {
+                            search22 = null;
                         }
-                        String[] search = new String[((search2 != null ? 1 : 0) + 1)];
-                        search[0] = search1;
-                        if (search2 != null) {
-                            search[1] = search2;
+                        int i = 0;
+                        String[] search3 = new String[((search22 != null ? 1 : 0) + 1)];
+                        search3[0] = search1;
+                        if (search22 != null) {
+                            search3[1] = search22;
                         }
                         ArrayList<Integer> usersToLoad = new ArrayList();
                         ArrayList<Integer> chatsToLoad = new ArrayList();
@@ -405,13 +419,15 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         LongSparseArray<DialogSearchResult> dialogsResult = new LongSparseArray();
                         SQLiteCursor cursor = MessagesStorage.getInstance(ShareAlert.this.currentAccount).getDatabase().queryFinalized("SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 400", new Object[0]);
                         while (cursor.next()) {
-                            long id = cursor.longValue(0);
-                            dialogSearchResult = new DialogSearchResult();
+                            long id = cursor.longValue(i);
+                            DialogSearchResult dialogSearchResult = new DialogSearchResult();
                             dialogSearchResult.date = cursor.intValue(1);
-                            dialogsResult.put(id, dialogSearchResult);
-                            int lower_id = (int) id;
-                            int high_id = (int) (id >> 32);
-                            if (!(lower_id == 0 || high_id == 1)) {
+                            long id2 = id;
+                            dialogsResult.put(id2, dialogSearchResult);
+                            lower_id = (int) id2;
+                            search = search3;
+                            i = (int) (id2 >> 32);
+                            if (!(lower_id == 0 || i == 1)) {
                                 if (lower_id > 0) {
                                     if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
                                         usersToLoad.add(Integer.valueOf(lower_id));
@@ -420,146 +436,379 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                                     chatsToLoad.add(Integer.valueOf(-lower_id));
                                 }
                             }
+                            search3 = search;
+                            i = 0;
                         }
+                        search = search3;
                         cursor.dispose();
-                        if (!usersToLoad.isEmpty()) {
+                        i = 2;
+                        String str;
+                        ArrayList<Integer> arrayList;
+                        if (usersToLoad.isEmpty()) {
+                            str = search22;
+                            arrayList = usersToLoad;
+                            search2 = search;
+                        } else {
                             cursor = MessagesStorage.getInstance(ShareAlert.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, status, name FROM users WHERE uid IN(%s)", new Object[]{TextUtils.join(",", usersToLoad)}), new Object[0]);
                             while (cursor.next()) {
-                                name = cursor.stringValue(2);
+                                String search12;
+                                String name = cursor.stringValue(i);
                                 tName = LocaleController.getInstance().getTranslitString(name);
                                 if (name.equals(tName)) {
                                     tName = null;
                                 }
                                 username = null;
-                                usernamePos = name.lastIndexOf(";;;");
+                                int usernamePos = name.lastIndexOf(";;;");
                                 if (usernamePos != -1) {
                                     username = name.substring(usernamePos + 3);
                                 }
+                                search2 = search;
+                                i = search2.length;
                                 found = 0;
-                                length = search.length;
-                                i = 0;
-                                while (i < length) {
-                                    q = search[i];
-                                    if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
-                                        found = 1;
-                                    } else if (username != null && username.startsWith(q)) {
-                                        found = 2;
-                                    }
-                                    if (found != 0) {
-                                        data = cursor.byteBufferValue(0);
-                                        if (data != null) {
-                                            user = User.TLdeserialize(data, data.readInt32(false), false);
-                                            data.reuse();
-                                            dialogSearchResult = (DialogSearchResult) dialogsResult.get((long) user.id);
-                                            if (user.status != null) {
-                                                user.status.expires = cursor.intValue(1);
+                                found2 = 0;
+                                while (found2 < i) {
+                                    int i2;
+                                    StringBuilder stringBuilder3;
+                                    String str2;
+                                    String str3;
+                                    String str4;
+                                    search12 = search1;
+                                    search1 = search2[found2];
+                                    if (name.startsWith(search1)) {
+                                        str = search22;
+                                        i2 = i;
+                                    } else {
+                                        str = search22;
+                                        StringBuilder stringBuilder4 = new StringBuilder();
+                                        i2 = i;
+                                        stringBuilder4.append(" ");
+                                        stringBuilder4.append(search1);
+                                        if (!name.contains(stringBuilder4.toString())) {
+                                            if (tName != null) {
+                                                if (!tName.startsWith(search1)) {
+                                                    stringBuilder4 = new StringBuilder();
+                                                    stringBuilder4.append(" ");
+                                                    stringBuilder4.append(search1);
+                                                    if (tName.contains(stringBuilder4.toString())) {
+                                                    }
+                                                }
                                             }
-                                            if (found == 1) {
-                                                dialogSearchResult.name = AndroidUtilities.generateSearchName(user.first_name, user.last_name, q);
+                                            if (username == null || !username.startsWith(search1)) {
+                                                found3 = found;
                                             } else {
-                                                dialogSearchResult.name = AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q);
+                                                found3 = 2;
                                             }
-                                            dialogSearchResult.object = user;
-                                            dialogSearchResult.dialog.id = (long) user.id;
+                                            if (found3 == 0) {
+                                                data = cursor.byteBufferValue(0);
+                                                if (data == null) {
+                                                    name = User.TLdeserialize(data, data.readInt32(false), false);
+                                                    data.reuse();
+                                                    tName2 = (DialogSearchResult) dialogsResult.get((long) name.id);
+                                                    if (name.status == null) {
+                                                        arrayList = usersToLoad;
+                                                        name.status.expires = cursor.intValue(1);
+                                                    } else {
+                                                        arrayList = usersToLoad;
+                                                    }
+                                                    if (found3 != 1) {
+                                                        tName2.name = AndroidUtilities.generateSearchName(name.first_name, name.last_name, search1);
+                                                    } else {
+                                                        stringBuilder = new StringBuilder();
+                                                        stringBuilder.append("@");
+                                                        stringBuilder.append(name.username);
+                                                        stringBuilder2 = stringBuilder.toString();
+                                                        stringBuilder3 = new StringBuilder();
+                                                        stringBuilder3.append("@");
+                                                        stringBuilder3.append(search1);
+                                                        tName2.name = AndroidUtilities.generateSearchName(stringBuilder2, null, stringBuilder3.toString());
+                                                    }
+                                                    tName2.object = name;
+                                                    tName2.dialog.id = (long) name.id;
+                                                    resultCount++;
+                                                } else {
+                                                    arrayList = usersToLoad;
+                                                }
+                                                search = search2;
+                                                search1 = search12;
+                                                search22 = str;
+                                                usersToLoad = arrayList;
+                                                i = 2;
+                                            } else {
+                                                str2 = name;
+                                                str3 = tName;
+                                                str4 = username;
+                                                arrayList = usersToLoad;
+                                                found2++;
+                                                found = found3;
+                                                search1 = search12;
+                                                search22 = str;
+                                                i = i2;
+                                            }
+                                        }
+                                    }
+                                    found3 = 1;
+                                    if (found3 == 0) {
+                                        str2 = name;
+                                        str3 = tName;
+                                        str4 = username;
+                                        arrayList = usersToLoad;
+                                        found2++;
+                                        found = found3;
+                                        search1 = search12;
+                                        search22 = str;
+                                        i = i2;
+                                    } else {
+                                        data = cursor.byteBufferValue(0);
+                                        if (data == null) {
+                                            arrayList = usersToLoad;
+                                        } else {
+                                            name = User.TLdeserialize(data, data.readInt32(false), false);
+                                            data.reuse();
+                                            tName2 = (DialogSearchResult) dialogsResult.get((long) name.id);
+                                            if (name.status == null) {
+                                                arrayList = usersToLoad;
+                                            } else {
+                                                arrayList = usersToLoad;
+                                                name.status.expires = cursor.intValue(1);
+                                            }
+                                            if (found3 != 1) {
+                                                stringBuilder = new StringBuilder();
+                                                stringBuilder.append("@");
+                                                stringBuilder.append(name.username);
+                                                stringBuilder2 = stringBuilder.toString();
+                                                stringBuilder3 = new StringBuilder();
+                                                stringBuilder3.append("@");
+                                                stringBuilder3.append(search1);
+                                                tName2.name = AndroidUtilities.generateSearchName(stringBuilder2, null, stringBuilder3.toString());
+                                            } else {
+                                                tName2.name = AndroidUtilities.generateSearchName(name.first_name, name.last_name, search1);
+                                            }
+                                            tName2.object = name;
+                                            tName2.dialog.id = (long) name.id;
                                             resultCount++;
                                         }
-                                    } else {
-                                        i++;
+                                        search = search2;
+                                        search1 = search12;
+                                        search22 = str;
+                                        usersToLoad = arrayList;
+                                        i = 2;
                                     }
                                 }
+                                search12 = search1;
+                                str = search22;
+                                arrayList = usersToLoad;
+                                search = search2;
+                                search1 = search12;
+                                search22 = str;
+                                usersToLoad = arrayList;
+                                i = 2;
                             }
+                            str = search22;
+                            arrayList = usersToLoad;
+                            search2 = search;
                             cursor.dispose();
                         }
                         if (!chatsToLoad.isEmpty()) {
                             cursor = MessagesStorage.getInstance(ShareAlert.this.currentAccount).getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, name FROM chats WHERE uid IN(%s)", new Object[]{TextUtils.join(",", chatsToLoad)}), new Object[0]);
                             while (cursor.next()) {
-                                name = cursor.stringValue(1);
-                                tName = LocaleController.getInstance().getTranslitString(name);
-                                if (name.equals(tName)) {
-                                    tName = null;
+                                search1 = cursor.stringValue(1);
+                                search22 = LocaleController.getInstance().getTranslitString(search1);
+                                if (search1.equals(search22)) {
+                                    search22 = null;
                                 }
-                                a = 0;
-                                while (a < search.length) {
-                                    q = search[a];
-                                    if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
-                                        data = cursor.byteBufferValue(0);
-                                        if (data != null) {
-                                            Chat chat = Chat.TLdeserialize(data, data.readInt32(false), false);
-                                            data.reuse();
-                                            if (!(chat == null || ChatObject.isNotInChat(chat))) {
-                                                if (!ChatObject.isChannel(chat) || chat.creator || ((chat.admin_rights != null && chat.admin_rights.post_messages) || chat.megagroup)) {
-                                                    dialogSearchResult = (DialogSearchResult) dialogsResult.get(-((long) chat.id));
-                                                    dialogSearchResult.name = AndroidUtilities.generateSearchName(chat.title, null, q);
-                                                    dialogSearchResult.object = chat;
-                                                    dialogSearchResult.dialog.id = (long) (-chat.id);
-                                                    resultCount++;
+                                lower_id = 0;
+                                while (lower_id < search2.length) {
+                                    tName = search2[lower_id];
+                                    if (!search1.startsWith(tName)) {
+                                        stringBuilder = new StringBuilder();
+                                        stringBuilder.append(" ");
+                                        stringBuilder.append(tName);
+                                        if (!search1.contains(stringBuilder.toString())) {
+                                            if (search22 != null) {
+                                                if (!search22.startsWith(tName)) {
+                                                    stringBuilder = new StringBuilder();
+                                                    stringBuilder.append(" ");
+                                                    stringBuilder.append(tName);
+                                                    if (search22.contains(stringBuilder.toString())) {
+                                                    }
                                                 }
                                             }
+                                            lower_id++;
                                         }
-                                    } else {
-                                        a++;
+                                    }
+                                    NativeByteBuffer data2 = cursor.byteBufferValue(0);
+                                    if (data2 != null) {
+                                        Chat chat = Chat.TLdeserialize(data2, data2.readInt32(false), false);
+                                        data2.reuse();
+                                        String str5;
+                                        if (chat == null || ChatObject.isNotInChat(chat)) {
+                                            str5 = search22;
+                                        } else {
+                                            if (ChatObject.isChannel(chat) && !chat.creator && (chat.admin_rights == null || !chat.admin_rights.post_messages)) {
+                                                if (!chat.megagroup) {
+                                                    String str6 = search1;
+                                                    str5 = search22;
+                                                }
+                                            }
+                                            DialogSearchResult dialogSearchResult2 = (DialogSearchResult) dialogsResult.get(-((long) chat.id));
+                                            dialogSearchResult2.name = AndroidUtilities.generateSearchName(chat.title, null, tName);
+                                            dialogSearchResult2.object = chat;
+                                            dialogSearchResult2.dialog.id = (long) (-chat.id);
+                                            resultCount++;
+                                        }
                                     }
                                 }
                             }
                             cursor.dispose();
                         }
-                        ArrayList<DialogSearchResult> arrayList = new ArrayList(resultCount);
-                        for (a = 0; a < dialogsResult.size(); a++) {
-                            dialogSearchResult = (DialogSearchResult) dialogsResult.valueAt(a);
-                            if (!(dialogSearchResult.object == null || dialogSearchResult.name == null)) {
-                                arrayList.add(dialogSearchResult);
+                        ArrayList<DialogSearchResult> searchResults = new ArrayList(resultCount);
+                        for (found3 = 0; found3 < dialogsResult.size(); found3++) {
+                            DialogSearchResult dialogSearchResult3 = (DialogSearchResult) dialogsResult.valueAt(found3);
+                            if (!(dialogSearchResult3.object == null || dialogSearchResult3.name == null)) {
+                                searchResults.add(dialogSearchResult3);
                             }
                         }
-                        cursor = MessagesStorage.getInstance(ShareAlert.this.currentAccount).getDatabase().queryFinalized("SELECT u.data, u.status, u.name, u.uid FROM users as u INNER JOIN contacts as c ON u.uid = c.uid", new Object[0]);
-                        while (cursor.next()) {
-                            if (dialogsResult.indexOfKey((long) cursor.intValue(3)) < 0) {
-                                name = cursor.stringValue(2);
-                                tName = LocaleController.getInstance().getTranslitString(name);
-                                if (name.equals(tName)) {
-                                    tName = null;
+                        SQLiteCursor cursor2 = MessagesStorage.getInstance(ShareAlert.this.currentAccount).getDatabase().queryFinalized("SELECT u.data, u.status, u.name, u.uid FROM users as u INNER JOIN contacts as c ON u.uid = c.uid", new Object[0]);
+                        while (cursor2.next()) {
+                            lower_id = cursor2.intValue(3);
+                            if (dialogsResult.indexOfKey((long) lower_id) < 0) {
+                                ArrayList<Integer> arrayList2;
+                                stringBuilder2 = cursor2.stringValue(2);
+                                username = LocaleController.getInstance().getTranslitString(stringBuilder2);
+                                if (stringBuilder2.equals(username)) {
+                                    username = null;
                                 }
-                                username = null;
-                                usernamePos = name.lastIndexOf(";;;");
-                                if (usernamePos != -1) {
-                                    username = name.substring(usernamePos + 3);
+                                String username2 = null;
+                                int usernamePos2 = stringBuilder2.lastIndexOf(";;;");
+                                if (usernamePos2 != -1) {
+                                    username2 = stringBuilder2.substring(usernamePos2 + 3);
                                 }
+                                int length = search2.length;
                                 found = 0;
-                                length = search.length;
-                                i = 0;
-                                while (i < length) {
-                                    q = search[i];
-                                    if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
-                                        found = 1;
-                                    } else if (username != null && username.startsWith(q)) {
-                                        found = 2;
-                                    }
-                                    if (found != 0) {
-                                        data = cursor.byteBufferValue(0);
-                                        if (data != null) {
-                                            user = User.TLdeserialize(data, data.readInt32(false), false);
-                                            data.reuse();
-                                            dialogSearchResult = new DialogSearchResult();
-                                            if (user.status != null) {
-                                                user.status.expires = cursor.intValue(1);
-                                            }
-                                            dialogSearchResult.dialog.id = (long) user.id;
-                                            dialogSearchResult.object = user;
-                                            if (found == 1) {
-                                                dialogSearchResult.name = AndroidUtilities.generateSearchName(user.first_name, user.last_name, q);
-                                            } else {
-                                                dialogSearchResult.name = AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q);
-                                            }
-                                            arrayList.add(dialogSearchResult);
-                                        }
+                                found2 = 0;
+                                while (found2 < length) {
+                                    int uid;
+                                    int i3;
+                                    StringBuilder stringBuilder5;
+                                    StringBuilder stringBuilder6;
+                                    String str7;
+                                    String str8;
+                                    String q = search2[found2];
+                                    if (stringBuilder2.startsWith(q)) {
+                                        uid = lower_id;
+                                        i3 = length;
                                     } else {
-                                        i++;
+                                        uid = lower_id;
+                                        StringBuilder stringBuilder7 = new StringBuilder();
+                                        i3 = length;
+                                        stringBuilder7.append(" ");
+                                        stringBuilder7.append(q);
+                                        if (!stringBuilder2.contains(stringBuilder7.toString())) {
+                                            if (username != null) {
+                                                if (!username.startsWith(q)) {
+                                                    stringBuilder7 = new StringBuilder();
+                                                    stringBuilder7.append(" ");
+                                                    stringBuilder7.append(q);
+                                                    if (username.contains(stringBuilder7.toString())) {
+                                                    }
+                                                }
+                                            }
+                                            if (username2 == null || !username2.startsWith(q)) {
+                                                lower_id = found;
+                                            } else {
+                                                lower_id = 2;
+                                            }
+                                            if (lower_id == 0) {
+                                                data = cursor2.byteBufferValue(0);
+                                                if (data != null) {
+                                                    stringBuilder2 = User.TLdeserialize(data, data.readInt32(false), false);
+                                                    data.reuse();
+                                                    tName2 = new DialogSearchResult();
+                                                    if (stringBuilder2.status == null) {
+                                                        arrayList2 = chatsToLoad;
+                                                        stringBuilder2.status.expires = cursor2.intValue(1);
+                                                    } else {
+                                                        arrayList2 = chatsToLoad;
+                                                    }
+                                                    tName2.dialog.id = (long) stringBuilder2.id;
+                                                    tName2.object = stringBuilder2;
+                                                    if (lower_id != 1) {
+                                                        tName2.name = AndroidUtilities.generateSearchName(stringBuilder2.first_name, stringBuilder2.last_name, q);
+                                                    } else {
+                                                        stringBuilder5 = new StringBuilder();
+                                                        stringBuilder5.append("@");
+                                                        stringBuilder5.append(stringBuilder2.username);
+                                                        username2 = stringBuilder5.toString();
+                                                        stringBuilder6 = new StringBuilder();
+                                                        stringBuilder6.append("@");
+                                                        stringBuilder6.append(q);
+                                                        tName2.name = AndroidUtilities.generateSearchName(username2, null, stringBuilder6.toString());
+                                                    }
+                                                    searchResults.add(tName2);
+                                                    chatsToLoad = arrayList2;
+                                                }
+                                                arrayList2 = chatsToLoad;
+                                                chatsToLoad = arrayList2;
+                                            } else {
+                                                str7 = username;
+                                                str8 = username2;
+                                                found2++;
+                                                found = lower_id;
+                                                lower_id = uid;
+                                                length = i3;
+                                                chatsToLoad = chatsToLoad;
+                                            }
+                                        }
+                                    }
+                                    lower_id = 1;
+                                    if (lower_id == 0) {
+                                        str7 = username;
+                                        str8 = username2;
+                                        found2++;
+                                        found = lower_id;
+                                        lower_id = uid;
+                                        length = i3;
+                                        chatsToLoad = chatsToLoad;
+                                    } else {
+                                        data = cursor2.byteBufferValue(0);
+                                        if (data != null) {
+                                            stringBuilder2 = User.TLdeserialize(data, data.readInt32(false), false);
+                                            data.reuse();
+                                            tName2 = new DialogSearchResult();
+                                            if (stringBuilder2.status == null) {
+                                                arrayList2 = chatsToLoad;
+                                            } else {
+                                                arrayList2 = chatsToLoad;
+                                                stringBuilder2.status.expires = cursor2.intValue(1);
+                                            }
+                                            tName2.dialog.id = (long) stringBuilder2.id;
+                                            tName2.object = stringBuilder2;
+                                            if (lower_id != 1) {
+                                                stringBuilder5 = new StringBuilder();
+                                                stringBuilder5.append("@");
+                                                stringBuilder5.append(stringBuilder2.username);
+                                                username2 = stringBuilder5.toString();
+                                                stringBuilder6 = new StringBuilder();
+                                                stringBuilder6.append("@");
+                                                stringBuilder6.append(q);
+                                                tName2.name = AndroidUtilities.generateSearchName(username2, null, stringBuilder6.toString());
+                                            } else {
+                                                tName2.name = AndroidUtilities.generateSearchName(stringBuilder2.first_name, stringBuilder2.last_name, q);
+                                            }
+                                            searchResults.add(tName2);
+                                            chatsToLoad = arrayList2;
+                                        }
+                                        arrayList2 = chatsToLoad;
+                                        chatsToLoad = arrayList2;
                                     }
                                 }
+                                arrayList2 = chatsToLoad;
+                                chatsToLoad = arrayList2;
                             }
                         }
-                        cursor.dispose();
-                        Collections.sort(arrayList, new C12901());
-                        ShareSearchAdapter.this.updateSearchResults(arrayList, searchId);
+                        cursor2.dispose();
+                        Collections.sort(searchResults, new C12901());
+                        ShareSearchAdapter.this.updateSearchResults(searchResults, searchId);
                     } catch (Throwable e) {
                         FileLog.m3e(e);
                     }
@@ -571,32 +820,32 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     if (searchId == ShareSearchAdapter.this.lastSearchId) {
-                        boolean becomeEmpty;
-                        boolean isEmpty;
-                        for (int a = 0; a < result.size(); a++) {
+                        boolean z;
+                        int a = 0;
+                        while (true) {
+                            z = true;
+                            if (a >= result.size()) {
+                                break;
+                            }
                             DialogSearchResult obj = (DialogSearchResult) result.get(a);
                             if (obj.object instanceof User) {
                                 MessagesController.getInstance(ShareAlert.this.currentAccount).putUser(obj.object, true);
                             } else if (obj.object instanceof Chat) {
                                 MessagesController.getInstance(ShareAlert.this.currentAccount).putChat(obj.object, true);
                             }
+                            a++;
                         }
-                        if (ShareSearchAdapter.this.searchResult.isEmpty() || !result.isEmpty()) {
-                            becomeEmpty = false;
-                        } else {
-                            becomeEmpty = true;
+                        boolean becomeEmpty = !ShareSearchAdapter.this.searchResult.isEmpty() && result.isEmpty();
+                        if (!ShareSearchAdapter.this.searchResult.isEmpty() || !result.isEmpty()) {
+                            z = false;
                         }
-                        if (ShareSearchAdapter.this.searchResult.isEmpty() && result.isEmpty()) {
-                            isEmpty = true;
-                        } else {
-                            isEmpty = false;
-                        }
+                        boolean isEmpty = z;
                         if (becomeEmpty) {
                             ShareAlert.this.topBeforeSwitch = ShareAlert.this.getCurrentTop();
                         }
                         ShareSearchAdapter.this.searchResult = result;
                         ShareSearchAdapter.this.notifyDataSetChanged();
-                        if (!isEmpty && !becomeEmpty && ShareAlert.this.topBeforeSwitch > 0) {
+                        if (!(isEmpty || becomeEmpty || ShareAlert.this.topBeforeSwitch <= 0)) {
                             ShareAlert.this.layoutManager.scrollToPositionWithOffset(0, -ShareAlert.this.topBeforeSwitch);
                             ShareAlert.this.topBeforeSwitch = C0539C.PRIORITY_DOWNLOAD;
                         }
@@ -616,27 +865,28 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
-                if (query == null || query.length() == 0) {
-                    this.searchResult.clear();
-                    ShareAlert.this.topBeforeSwitch = ShareAlert.this.getCurrentTop();
-                    notifyDataSetChanged();
-                    return;
-                }
-                final int searchId = this.lastSearchId + 1;
-                this.lastSearchId = searchId;
-                this.searchTimer = new Timer();
-                this.searchTimer.schedule(new TimerTask() {
-                    public void run() {
-                        try {
-                            cancel();
-                            ShareSearchAdapter.this.searchTimer.cancel();
-                            ShareSearchAdapter.this.searchTimer = null;
-                        } catch (Throwable e) {
-                            FileLog.m3e(e);
-                        }
-                        ShareSearchAdapter.this.searchDialogsInternal(query, searchId);
+                if (query != null) {
+                    if (query.length() != 0) {
+                        final int searchId = this.lastSearchId + 1;
+                        this.lastSearchId = searchId;
+                        this.searchTimer = new Timer();
+                        this.searchTimer.schedule(new TimerTask() {
+                            public void run() {
+                                try {
+                                    cancel();
+                                    ShareSearchAdapter.this.searchTimer.cancel();
+                                    ShareSearchAdapter.this.searchTimer = null;
+                                } catch (Throwable e) {
+                                    FileLog.m3e(e);
+                                }
+                                ShareSearchAdapter.this.searchDialogsInternal(query, searchId);
+                            }
+                        }, 200, 300);
                     }
-                }, 200, 300);
+                }
+                this.searchResult.clear();
+                ShareAlert.this.topBeforeSwitch = ShareAlert.this.getCurrentTop();
+                notifyDataSetChanged();
             }
         }
 
@@ -645,10 +895,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
 
         public TL_dialog getItem(int i) {
-            if (i < 0 || i >= this.searchResult.size()) {
-                return null;
+            if (i >= 0) {
+                if (i < this.searchResult.size()) {
+                    return ((DialogSearchResult) this.searchResult.get(i)).dialog;
+                }
             }
-            return ((DialogSearchResult) this.searchResult.get(i)).dialog;
+            return null;
         }
 
         public long getItemId(int i) {
@@ -686,28 +938,31 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         return new ShareAlert(context, arrayList, text, publicChannel, copyLink, fullScreen);
     }
 
-    public ShareAlert(final Context context, ArrayList<MessageObject> messages, String text, boolean publicChannel, String copyLink, boolean fullScreen) {
-        super(context, true);
+    public ShareAlert(Context context, ArrayList<MessageObject> messages, String text, boolean publicChannel, String copyLink, boolean fullScreen) {
+        final Context context2 = context;
+        ArrayList<MessageObject> arrayList = messages;
+        boolean z = publicChannel;
+        super(context2, true);
         this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.linkToCopy = copyLink;
-        this.sendingMessageObjects = messages;
-        this.searchAdapter = new ShareSearchAdapter(context);
-        this.isPublicChannel = publicChannel;
+        this.sendingMessageObjects = arrayList;
+        this.searchAdapter = new ShareSearchAdapter(context2);
+        this.isPublicChannel = z;
         this.sendingText = text;
-        if (publicChannel) {
-            this.loadingLink = true;
+        if (z) {
+            r0.loadingLink = true;
             TL_channels_exportMessageLink req = new TL_channels_exportMessageLink();
-            req.id = ((MessageObject) messages.get(0)).getId();
-            req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(((MessageObject) messages.get(0)).messageOwner.to_id.channel_id);
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
+            req.id = ((MessageObject) arrayList.get(0)).getId();
+            req.channel = MessagesController.getInstance(r0.currentAccount).getInputChannel(((MessageObject) arrayList.get(0)).messageOwner.to_id.channel_id);
+            ConnectionsManager.getInstance(r0.currentAccount).sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             if (response != null) {
                                 ShareAlert.this.exportedMessageLink = (TL_exportedMessageLink) response;
                                 if (ShareAlert.this.copyLinkOnEnd) {
-                                    ShareAlert.this.copyLink(context);
+                                    ShareAlert.this.copyLink(context2);
                                 }
                             }
                             ShareAlert.this.loadingLink = false;
@@ -716,7 +971,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 }
             });
         }
-        this.containerView = new FrameLayout(context) {
+        r0.containerView = new FrameLayout(context2) {
             private boolean ignoreLayout = false;
 
             public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -732,12 +987,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             }
 
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                float f = 8.0f;
                 int height = MeasureSpec.getSize(heightMeasureSpec);
                 if (VERSION.SDK_INT >= 21) {
                     height -= AndroidUtilities.statusBarHeight;
                 }
                 int contentSize = (AndroidUtilities.dp(48.0f) + (Math.max(3, (int) Math.ceil((double) (((float) Math.max(ShareAlert.this.searchAdapter.getItemCount(), ShareAlert.this.listAdapter.getItemCount())) / 4.0f))) * AndroidUtilities.dp(100.0f))) + ShareAlert.backgroundPaddingTop;
+                float f = 8.0f;
                 int padding = contentSize < height ? 0 : (height - ((height / 5) * 3)) + AndroidUtilities.dp(8.0f);
                 if (ShareAlert.this.gridView.getPaddingTop() != padding) {
                     this.ignoreLayout = true;
@@ -767,121 +1022,121 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 ShareAlert.this.shadowDrawable.draw(canvas);
             }
         };
-        this.containerView.setWillNotDraw(false);
-        this.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
-        this.frameLayout = new FrameLayout(context);
-        this.frameLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
-        this.frameLayout.setOnTouchListener(new C12863());
-        this.doneButton = new LinearLayout(context);
-        this.doneButton.setOrientation(0);
-        this.doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
-        this.doneButton.setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), 0);
-        this.frameLayout.addView(this.doneButton, LayoutHelper.createFrame(-2, -1, 53));
-        this.doneButton.setOnClickListener(new C12874());
-        this.doneButtonBadgeTextView = new TextView(context);
-        this.doneButtonBadgeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.doneButtonBadgeTextView.setTextSize(1, 13.0f);
-        this.doneButtonBadgeTextView.setTextColor(Theme.getColor(Theme.key_dialogBadgeText));
-        this.doneButtonBadgeTextView.setGravity(17);
-        this.doneButtonBadgeTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(12.5f), Theme.getColor(Theme.key_dialogBadgeBackground)));
-        this.doneButtonBadgeTextView.setMinWidth(AndroidUtilities.dp(23.0f));
-        this.doneButtonBadgeTextView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(1.0f));
-        this.doneButton.addView(this.doneButtonBadgeTextView, LayoutHelper.createLinear(-2, 23, 16, 0, 0, 10, 0));
-        this.doneButtonTextView = new TextView(context);
-        this.doneButtonTextView.setTextSize(1, 14.0f);
-        this.doneButtonTextView.setGravity(17);
-        this.doneButtonTextView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
-        this.doneButtonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.doneButton.addView(this.doneButtonTextView, LayoutHelper.createLinear(-2, -2, 16));
-        ImageView imageView = new ImageView(context);
+        r0.containerView.setWillNotDraw(false);
+        r0.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
+        r0.frameLayout = new FrameLayout(context2);
+        r0.frameLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
+        r0.frameLayout.setOnTouchListener(new C12863());
+        r0.doneButton = new LinearLayout(context2);
+        r0.doneButton.setOrientation(0);
+        r0.doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
+        r0.doneButton.setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), 0);
+        r0.frameLayout.addView(r0.doneButton, LayoutHelper.createFrame(-2, -1, 53));
+        r0.doneButton.setOnClickListener(new C12874());
+        r0.doneButtonBadgeTextView = new TextView(context2);
+        r0.doneButtonBadgeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        r0.doneButtonBadgeTextView.setTextSize(1, 13.0f);
+        r0.doneButtonBadgeTextView.setTextColor(Theme.getColor(Theme.key_dialogBadgeText));
+        r0.doneButtonBadgeTextView.setGravity(17);
+        r0.doneButtonBadgeTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(12.5f), Theme.getColor(Theme.key_dialogBadgeBackground)));
+        r0.doneButtonBadgeTextView.setMinWidth(AndroidUtilities.dp(23.0f));
+        r0.doneButtonBadgeTextView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(1.0f));
+        r0.doneButton.addView(r0.doneButtonBadgeTextView, LayoutHelper.createLinear(-2, 23, 16, 0, 0, 10, 0));
+        r0.doneButtonTextView = new TextView(context2);
+        r0.doneButtonTextView.setTextSize(1, 14.0f);
+        r0.doneButtonTextView.setGravity(17);
+        r0.doneButtonTextView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
+        r0.doneButtonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        r0.doneButton.addView(r0.doneButtonTextView, LayoutHelper.createLinear(-2, -2, 16));
+        ImageView imageView = new ImageView(context2);
         imageView.setImageResource(R.drawable.ic_ab_search);
         imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), Mode.MULTIPLY));
         imageView.setScaleType(ScaleType.CENTER);
         imageView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
-        this.frameLayout.addView(imageView, LayoutHelper.createFrame(48, 48, 19));
-        this.nameTextView = new EditTextBoldCursor(context);
-        this.nameTextView.setHint(LocaleController.getString("ShareSendTo", R.string.ShareSendTo));
-        this.nameTextView.setMaxLines(1);
-        this.nameTextView.setSingleLine(true);
-        this.nameTextView.setGravity(19);
-        this.nameTextView.setTextSize(1, 16.0f);
-        this.nameTextView.setBackgroundDrawable(null);
-        this.nameTextView.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
-        this.nameTextView.setImeOptions(268435456);
-        this.nameTextView.setInputType(16385);
-        this.nameTextView.setCursorColor(Theme.getColor(Theme.key_dialogTextBlack));
-        this.nameTextView.setCursorSize(AndroidUtilities.dp(20.0f));
-        this.nameTextView.setCursorWidth(1.5f);
-        this.nameTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        this.frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 48.0f, 2.0f, 96.0f, 0.0f));
-        this.nameTextView.addTextChangedListener(new C12885());
-        this.gridView = new RecyclerListView(context);
-        this.gridView.setTag(Integer.valueOf(13));
-        this.gridView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
-        this.gridView.setClipToPadding(false);
-        RecyclerListView recyclerListView = this.gridView;
+        r0.frameLayout.addView(imageView, LayoutHelper.createFrame(48, 48, 19));
+        r0.nameTextView = new EditTextBoldCursor(context2);
+        r0.nameTextView.setHint(LocaleController.getString("ShareSendTo", R.string.ShareSendTo));
+        r0.nameTextView.setMaxLines(1);
+        r0.nameTextView.setSingleLine(true);
+        r0.nameTextView.setGravity(19);
+        r0.nameTextView.setTextSize(1, 16.0f);
+        r0.nameTextView.setBackgroundDrawable(null);
+        r0.nameTextView.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
+        r0.nameTextView.setImeOptions(268435456);
+        r0.nameTextView.setInputType(16385);
+        r0.nameTextView.setCursorColor(Theme.getColor(Theme.key_dialogTextBlack));
+        r0.nameTextView.setCursorSize(AndroidUtilities.dp(20.0f));
+        r0.nameTextView.setCursorWidth(1.5f);
+        r0.nameTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        r0.frameLayout.addView(r0.nameTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 48.0f, 2.0f, 96.0f, 0.0f));
+        r0.nameTextView.addTextChangedListener(new C12885());
+        r0.gridView = new RecyclerListView(context2);
+        r0.gridView.setTag(Integer.valueOf(13));
+        r0.gridView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
+        r0.gridView.setClipToPadding(false);
+        RecyclerListView recyclerListView = r0.gridView;
         LayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 4);
-        this.layoutManager = gridLayoutManager;
+        r0.layoutManager = gridLayoutManager;
         recyclerListView.setLayoutManager(gridLayoutManager);
-        this.gridView.setHorizontalScrollBarEnabled(false);
-        this.gridView.setVerticalScrollBarEnabled(false);
-        this.gridView.addItemDecoration(new C20756());
-        this.containerView.addView(this.gridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
-        recyclerListView = this.gridView;
-        Adapter shareDialogsAdapter = new ShareDialogsAdapter(context);
-        this.listAdapter = shareDialogsAdapter;
+        r0.gridView.setHorizontalScrollBarEnabled(false);
+        r0.gridView.setVerticalScrollBarEnabled(false);
+        r0.gridView.addItemDecoration(new C20756());
+        r0.containerView.addView(r0.gridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
+        recyclerListView = r0.gridView;
+        Adapter shareDialogsAdapter = new ShareDialogsAdapter(context2);
+        r0.listAdapter = shareDialogsAdapter;
         recyclerListView.setAdapter(shareDialogsAdapter);
-        this.gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.gridView.setOnItemClickListener(new C20767());
-        this.gridView.setOnScrollListener(new C20778());
-        this.searchEmptyView = new EmptyTextProgressView(context);
-        this.searchEmptyView.setShowAtCenter(true);
-        this.searchEmptyView.showTextView();
-        this.searchEmptyView.setText(LocaleController.getString("NoChats", R.string.NoChats));
-        this.gridView.setEmptyView(this.searchEmptyView);
-        this.containerView.addView(this.searchEmptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
-        this.containerView.addView(this.frameLayout, LayoutHelper.createFrame(-1, 48, 51));
-        this.shadow = new View(context);
-        this.shadow.setBackgroundResource(R.drawable.header_shadow);
-        this.containerView.addView(this.shadow, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
-        this.frameLayout2 = new FrameLayout(context);
-        this.frameLayout2.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
-        this.frameLayout2.setTranslationY((float) AndroidUtilities.dp(53.0f));
-        this.containerView.addView(this.frameLayout2, LayoutHelper.createFrame(-1, 48, 83));
-        this.frameLayout2.setOnTouchListener(new C12899());
-        this.commentTextView = new EditTextBoldCursor(context);
-        this.commentTextView.setHint(LocaleController.getString("ShareComment", R.string.ShareComment));
-        this.commentTextView.setMaxLines(1);
-        this.commentTextView.setSingleLine(true);
-        this.commentTextView.setGravity(19);
-        this.commentTextView.setTextSize(1, 16.0f);
-        this.commentTextView.setBackgroundDrawable(null);
-        this.commentTextView.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
-        this.commentTextView.setImeOptions(268435456);
-        this.commentTextView.setInputType(16385);
-        this.commentTextView.setCursorColor(Theme.getColor(Theme.key_dialogTextBlack));
-        this.commentTextView.setCursorSize(AndroidUtilities.dp(20.0f));
-        this.commentTextView.setCursorWidth(1.5f);
-        this.commentTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        this.frameLayout2.addView(this.commentTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 8.0f, 1.0f, 8.0f, 0.0f));
-        this.shadow2 = new View(context);
-        this.shadow2.setBackgroundResource(R.drawable.header_shadow_reverse);
-        this.shadow2.setTranslationY((float) AndroidUtilities.dp(53.0f));
-        this.containerView.addView(this.shadow2, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
+        r0.gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
+        r0.gridView.setOnItemClickListener(new C20767());
+        r0.gridView.setOnScrollListener(new C20778());
+        r0.searchEmptyView = new EmptyTextProgressView(context2);
+        r0.searchEmptyView.setShowAtCenter(true);
+        r0.searchEmptyView.showTextView();
+        r0.searchEmptyView.setText(LocaleController.getString("NoChats", R.string.NoChats));
+        r0.gridView.setEmptyView(r0.searchEmptyView);
+        r0.containerView.addView(r0.searchEmptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
+        r0.containerView.addView(r0.frameLayout, LayoutHelper.createFrame(-1, 48, 51));
+        r0.shadow = new View(context2);
+        r0.shadow.setBackgroundResource(R.drawable.header_shadow);
+        r0.containerView.addView(r0.shadow, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
+        r0.frameLayout2 = new FrameLayout(context2);
+        r0.frameLayout2.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
+        r0.frameLayout2.setTranslationY((float) AndroidUtilities.dp(53.0f));
+        r0.containerView.addView(r0.frameLayout2, LayoutHelper.createFrame(-1, 48, 83));
+        r0.frameLayout2.setOnTouchListener(new C12899());
+        r0.commentTextView = new EditTextBoldCursor(context2);
+        r0.commentTextView.setHint(LocaleController.getString("ShareComment", R.string.ShareComment));
+        r0.commentTextView.setMaxLines(1);
+        r0.commentTextView.setSingleLine(true);
+        r0.commentTextView.setGravity(19);
+        r0.commentTextView.setTextSize(1, 16.0f);
+        r0.commentTextView.setBackgroundDrawable(null);
+        r0.commentTextView.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
+        r0.commentTextView.setImeOptions(268435456);
+        r0.commentTextView.setInputType(16385);
+        r0.commentTextView.setCursorColor(Theme.getColor(Theme.key_dialogTextBlack));
+        r0.commentTextView.setCursorSize(AndroidUtilities.dp(20.0f));
+        r0.commentTextView.setCursorWidth(1.5f);
+        r0.commentTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        r0.frameLayout2.addView(r0.commentTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 8.0f, 1.0f, 8.0f, 0.0f));
+        r0.shadow2 = new View(context2);
+        r0.shadow2.setBackgroundResource(R.drawable.header_shadow_reverse);
+        r0.shadow2.setTranslationY((float) AndroidUtilities.dp(53.0f));
+        r0.containerView.addView(r0.shadow2, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         updateSelectedCount();
-        if (!DialogsActivity.dialogsLoaded[this.currentAccount]) {
-            MessagesController.getInstance(this.currentAccount).loadDialogs(0, 100, true);
-            ContactsController.getInstance(this.currentAccount).checkInviteText();
-            DialogsActivity.dialogsLoaded[this.currentAccount] = true;
+        if (!DialogsActivity.dialogsLoaded[r0.currentAccount]) {
+            MessagesController.getInstance(r0.currentAccount).loadDialogs(0, 100, true);
+            ContactsController.getInstance(r0.currentAccount).checkInviteText();
+            DialogsActivity.dialogsLoaded[r0.currentAccount] = true;
         }
-        if (this.listAdapter.dialogs.isEmpty()) {
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.dialogsNeedReload);
+        if (r0.listAdapter.dialogs.isEmpty()) {
+            NotificationCenter.getInstance(r0.currentAccount).addObserver(r0, NotificationCenter.dialogsNeedReload);
         }
     }
 
     private int getCurrentTop() {
-        int i = 0;
         if (this.gridView.getChildCount() != 0) {
+            int i = 0;
             View child = this.gridView.getChildAt(0);
             Holder holder = (Holder) this.gridView.findContainingViewHolder(child);
             if (holder != null) {
@@ -910,8 +1165,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
 
     @SuppressLint({"NewApi"})
     private void updateLayout() {
-        int newOffset = 0;
         if (this.gridView.getChildCount() > 0) {
+            int newOffset = 0;
             View child = this.gridView.getChildAt(0);
             Holder holder = (Holder) this.gridView.findContainingViewHolder(child);
             int top = child.getTop() - AndroidUtilities.dp(8.0f);
@@ -942,15 +1197,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     }
 
     private void showCommentTextView(final boolean show) {
-        boolean z;
-        float f = 0.0f;
-        if (this.frameLayout2.getTag() != null) {
-            z = true;
-        } else {
-            z = false;
-        }
-        if (show != z) {
-            float f2;
+        if (show != (this.frameLayout2.getTag() != null)) {
             if (this.animatorSet != null) {
                 this.animatorSet.cancel();
             }
@@ -962,21 +1209,17 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             View view = this.shadow2;
             String str = "translationY";
             float[] fArr = new float[1];
-            if (show) {
-                f2 = 0.0f;
-            } else {
-                f2 = 53.0f;
-            }
-            fArr[0] = (float) AndroidUtilities.dp(f2);
+            float f = 53.0f;
+            fArr[0] = (float) AndroidUtilities.dp(show ? 0.0f : 53.0f);
             animatorArr[0] = ObjectAnimator.ofFloat(view, str, fArr);
             FrameLayout frameLayout = this.frameLayout2;
-            String str2 = "translationY";
-            float[] fArr2 = new float[1];
-            if (!show) {
-                f = 53.0f;
+            str = "translationY";
+            fArr = new float[1];
+            if (show) {
+                f = 0.0f;
             }
-            fArr2[0] = (float) AndroidUtilities.dp(f);
-            animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str2, fArr2);
+            fArr[0] = (float) AndroidUtilities.dp(f);
+            animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
             animatorSet.playTogether(animatorArr);
             this.animatorSet.setInterpolator(new DecelerateInterpolator());
             this.animatorSet.setDuration(180);

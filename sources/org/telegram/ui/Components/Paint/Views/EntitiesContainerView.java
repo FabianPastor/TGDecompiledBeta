@@ -60,10 +60,9 @@ public class EntitiesContainerView extends FrameLayout implements OnScaleGesture
             if (action == 0) {
                 this.hasTransformed = false;
             } else if (action == 1 || action == 2) {
-                if (this.hasTransformed || this.delegate == null) {
-                    return false;
+                if (!(this.hasTransformed || this.delegate == null)) {
+                    this.delegate.onEntityDeselect();
                 }
-                this.delegate.onEntityDeselect();
                 return false;
             }
         }

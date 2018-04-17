@@ -110,19 +110,28 @@ public final class Ac3Reader implements ElementaryStreamReader {
     }
 
     private boolean skipToNextSync(ParsableByteArray pesBuffer) {
-        while (pesBuffer.bytesLeft() > 0) {
+        while (true) {
+            boolean z = false;
+            if (pesBuffer.bytesLeft() <= 0) {
+                return false;
+            }
             if (this.lastByteWas0B) {
                 int secondByte = pesBuffer.readUnsignedByte();
                 if (secondByte == 119) {
                     this.lastByteWas0B = false;
                     return true;
                 }
-                this.lastByteWas0B = secondByte == 11;
+                if (secondByte == 11) {
+                    z = true;
+                }
+                this.lastByteWas0B = z;
             } else {
-                this.lastByteWas0B = pesBuffer.readUnsignedByte() == 11;
+                if (pesBuffer.readUnsignedByte() == 11) {
+                    z = true;
+                }
+                this.lastByteWas0B = z;
             }
         }
-        return false;
     }
 
     private void parseHeader() {

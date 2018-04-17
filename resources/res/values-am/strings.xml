@@ -18,7 +18,7 @@
     <string name="common_open_on_phone">ስልክ ላይ ክፈት</string>
     <string name="common_signin_button_text">ግባ</string>
     <string name="common_signin_button_text_long">በGoogle ይግቡ</string>
-    <string name="gcm_fallback_notification_channel_label">የተለያዩ</string>
+    <string name="fcm_fallback_notification_channel_label">የተለያዩ</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">በGoogle ይግዙ</string>
 </resources>

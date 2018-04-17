@@ -99,20 +99,22 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         }
 
         public void onItemClick(View view, int position) {
-            if (LanguageSelectActivity.this.getParentActivity() != null && LanguageSelectActivity.this.parentLayout != null) {
-                LocaleInfo localeInfo = null;
-                if (LanguageSelectActivity.this.searching && LanguageSelectActivity.this.searchWas) {
-                    if (position >= 0 && position < LanguageSelectActivity.this.searchResult.size()) {
-                        localeInfo = (LocaleInfo) LanguageSelectActivity.this.searchResult.get(position);
+            if (LanguageSelectActivity.this.getParentActivity() != null) {
+                if (LanguageSelectActivity.this.parentLayout != null) {
+                    LocaleInfo localeInfo = null;
+                    if (LanguageSelectActivity.this.searching && LanguageSelectActivity.this.searchWas) {
+                        if (position >= 0 && position < LanguageSelectActivity.this.searchResult.size()) {
+                            localeInfo = (LocaleInfo) LanguageSelectActivity.this.searchResult.get(position);
+                        }
+                    } else if (position >= 0 && position < LanguageSelectActivity.this.sortedLanguages.size()) {
+                        localeInfo = (LocaleInfo) LanguageSelectActivity.this.sortedLanguages.get(position);
                     }
-                } else if (position >= 0 && position < LanguageSelectActivity.this.sortedLanguages.size()) {
-                    localeInfo = (LocaleInfo) LanguageSelectActivity.this.sortedLanguages.get(position);
+                    if (localeInfo != null) {
+                        LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, LanguageSelectActivity.this.currentAccount);
+                        LanguageSelectActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
+                    }
+                    LanguageSelectActivity.this.finishFragment();
                 }
-                if (localeInfo != null) {
-                    LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, LanguageSelectActivity.this.currentAccount);
-                    LanguageSelectActivity.this.parentLayout.rebuildAllFragmentViews(false, false);
-                }
-                LanguageSelectActivity.this.finishFragment();
             }
         }
     }
@@ -131,32 +133,34 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             } else if (position >= 0 && position < LanguageSelectActivity.this.sortedLanguages.size()) {
                 localeInfo = (LocaleInfo) LanguageSelectActivity.this.sortedLanguages.get(position);
             }
-            if (localeInfo == null || localeInfo.pathToFile == null || LanguageSelectActivity.this.getParentActivity() == null || localeInfo.isRemote()) {
-                return false;
-            }
-            final LocaleInfo finalLocaleInfo = localeInfo;
-            Builder builder = new Builder(LanguageSelectActivity.this.getParentActivity());
-            builder.setMessage(LocaleController.getString("DeleteLocalization", R.string.DeleteLocalization));
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (LocaleController.getInstance().deleteLanguage(finalLocaleInfo, LanguageSelectActivity.this.currentAccount)) {
-                        LanguageSelectActivity.this.fillLanguages();
-                        if (LanguageSelectActivity.this.searchResult != null) {
-                            LanguageSelectActivity.this.searchResult.remove(finalLocaleInfo);
+            if (!(localeInfo == null || localeInfo.pathToFile == null || LanguageSelectActivity.this.getParentActivity() == null)) {
+                if (!localeInfo.isRemote()) {
+                    final LocaleInfo finalLocaleInfo = localeInfo;
+                    Builder builder = new Builder(LanguageSelectActivity.this.getParentActivity());
+                    builder.setMessage(LocaleController.getString("DeleteLocalization", R.string.DeleteLocalization));
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (LocaleController.getInstance().deleteLanguage(finalLocaleInfo, LanguageSelectActivity.this.currentAccount)) {
+                                LanguageSelectActivity.this.fillLanguages();
+                                if (LanguageSelectActivity.this.searchResult != null) {
+                                    LanguageSelectActivity.this.searchResult.remove(finalLocaleInfo);
+                                }
+                                if (LanguageSelectActivity.this.listAdapter != null) {
+                                    LanguageSelectActivity.this.listAdapter.notifyDataSetChanged();
+                                }
+                                if (LanguageSelectActivity.this.searchListViewAdapter != null) {
+                                    LanguageSelectActivity.this.searchListViewAdapter.notifyDataSetChanged();
+                                }
+                            }
                         }
-                        if (LanguageSelectActivity.this.listAdapter != null) {
-                            LanguageSelectActivity.this.listAdapter.notifyDataSetChanged();
-                        }
-                        if (LanguageSelectActivity.this.searchListViewAdapter != null) {
-                            LanguageSelectActivity.this.searchListViewAdapter.notifyDataSetChanged();
-                        }
-                    }
+                    });
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    LanguageSelectActivity.this.showDialog(builder.create());
+                    return true;
                 }
-            });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-            LanguageSelectActivity.this.showDialog(builder.create());
-            return true;
+            }
+            return false;
         }
     }
 
@@ -202,33 +206,22 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         public void onBindViewHolder(ViewHolder holder, int position) {
             LocaleInfo localeInfo;
             boolean last;
-            boolean z = true;
             LanguageCell textSettingsCell = holder.itemView;
+            boolean z = false;
             if (this.search) {
                 localeInfo = (LocaleInfo) LanguageSelectActivity.this.searchResult.get(position);
-                if (position == LanguageSelectActivity.this.searchResult.size() - 1) {
-                    last = true;
-                } else {
-                    last = false;
-                }
+                last = position == LanguageSelectActivity.this.searchResult.size() - 1;
             } else {
                 localeInfo = (LocaleInfo) LanguageSelectActivity.this.sortedLanguages.get(position);
-                last = position == LanguageSelectActivity.this.sortedLanguages.size() + -1;
+                last = position == LanguageSelectActivity.this.sortedLanguages.size() - 1;
             }
             if (localeInfo.isLocal()) {
-                boolean z2;
-                String format = String.format("%1$s (%2$s)", new Object[]{localeInfo.name, LocaleController.getString("LanguageCustom", R.string.LanguageCustom)});
-                if (last) {
-                    z2 = false;
-                } else {
-                    z2 = true;
-                }
-                textSettingsCell.setLanguage(localeInfo, format, z2);
+                textSettingsCell.setLanguage(localeInfo, String.format("%1$s (%2$s)", new Object[]{localeInfo.name, LocaleController.getString("LanguageCustom", R.string.LanguageCustom)}), !last);
             } else {
                 textSettingsCell.setLanguage(localeInfo, null, !last);
             }
-            if (localeInfo != LocaleController.getInstance().getCurrentLocaleInfo()) {
-                z = false;
+            if (localeInfo == LocaleController.getInstance().getCurrentLocaleInfo()) {
+                z = true;
             }
             textSettingsCell.setLanguageSelected(z);
         }
@@ -365,11 +358,11 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r9 = new ThemeDescription[14];
-        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        r9[11] = new ThemeDescription(this.listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r9[12] = new ThemeDescription(this.listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView2"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
-        r9[13] = new ThemeDescription(this.listView, 0, new Class[]{LanguageCell.class}, new String[]{"checkImage"}, null, null, null, Theme.key_featuredStickers_addedIcon);
-        return r9;
+        r1 = new ThemeDescription[14];
+        r1[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r1[11] = new ThemeDescription(this.listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r1[12] = new ThemeDescription(this.listView, 0, new Class[]{LanguageCell.class}, new String[]{"textView2"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        r1[13] = new ThemeDescription(this.listView, 0, new Class[]{LanguageCell.class}, new String[]{"checkImage"}, null, null, null, Theme.key_featuredStickers_addedIcon);
+        return r1;
     }
 }

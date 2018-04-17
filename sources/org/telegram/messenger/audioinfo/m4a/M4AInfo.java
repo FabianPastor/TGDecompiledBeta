@@ -53,10 +53,24 @@ public class M4AInfo extends AudioInfo {
             LOGGER.log(this.debugLevel, atom.toString());
         }
         this.brand = atom.readString(4, ASCII).trim();
+        Logger logger;
+        StringBuilder stringBuilder;
         if (this.brand.matches("M4V|MP4|mp42|isom")) {
-            LOGGER.warning(atom.getPath() + ": brand=" + this.brand + " (experimental)");
+            logger = LOGGER;
+            stringBuilder = new StringBuilder();
+            stringBuilder.append(atom.getPath());
+            stringBuilder.append(": brand=");
+            stringBuilder.append(this.brand);
+            stringBuilder.append(" (experimental)");
+            logger.warning(stringBuilder.toString());
         } else if (!this.brand.matches("M4A|M4P")) {
-            LOGGER.warning(atom.getPath() + ": brand=" + this.brand + " (expected M4A or M4P)");
+            logger = LOGGER;
+            stringBuilder = new StringBuilder();
+            stringBuilder.append(atom.getPath());
+            stringBuilder.append(": brand=");
+            stringBuilder.append(this.brand);
+            stringBuilder.append(" (expected M4A or M4P)");
+            logger.warning(stringBuilder.toString());
         }
         this.version = String.valueOf(atom.readInt());
     }
@@ -69,25 +83,19 @@ public class M4AInfo extends AudioInfo {
             MP4Atom child = atom.nextChild();
             String type = child.getType();
             Object obj = -1;
-            switch (type.hashCode()) {
-                case 3363941:
-                    if (type.equals(MovieHeaderBox.TYPE)) {
-                        obj = null;
-                        break;
+            int hashCode = type.hashCode();
+            if (hashCode != 3363941) {
+                if (hashCode != 3568424) {
+                    if (hashCode == 3585340) {
+                        if (type.equals(UserDataBox.TYPE)) {
+                            obj = 2;
+                        }
                     }
-                    break;
-                case 3568424:
-                    if (type.equals(TrackBox.TYPE)) {
-                        obj = 1;
-                        break;
-                    }
-                    break;
-                case 3585340:
-                    if (type.equals(UserDataBox.TYPE)) {
-                        obj = 2;
-                        break;
-                    }
-                    break;
+                } else if (type.equals(TrackBox.TYPE)) {
+                    obj = 1;
+                }
+            } else if (type.equals(MovieHeaderBox.TYPE)) {
+                obj = null;
             }
             switch (obj) {
                 case null:
@@ -117,7 +125,14 @@ public class M4AInfo extends AudioInfo {
         if (this.duration == 0) {
             this.duration = (1000 * units) / ((long) scale);
         } else if (LOGGER.isLoggable(this.debugLevel) && Math.abs(this.duration - ((1000 * units) / ((long) scale))) > 2) {
-            LOGGER.log(this.debugLevel, "mvhd: duration " + this.duration + " -> " + ((1000 * units) / ((long) scale)));
+            Logger logger = LOGGER;
+            Level level = this.debugLevel;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("mvhd: duration ");
+            stringBuilder.append(this.duration);
+            stringBuilder.append(" -> ");
+            stringBuilder.append((1000 * units) / ((long) scale));
+            logger.log(level, stringBuilder.toString());
         }
         this.speed = atom.readIntegerFixedPoint();
         this.volume = atom.readShortFixedPoint();
@@ -149,7 +164,14 @@ public class M4AInfo extends AudioInfo {
         if (this.duration == 0) {
             this.duration = (1000 * samples) / ((long) sampleRate);
         } else if (LOGGER.isLoggable(this.debugLevel) && Math.abs(this.duration - ((1000 * samples) / ((long) sampleRate))) > 2) {
-            LOGGER.log(this.debugLevel, "mdhd: duration " + this.duration + " -> " + ((1000 * samples) / ((long) sampleRate)));
+            Logger logger = LOGGER;
+            Level level = this.debugLevel;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("mdhd: duration ");
+            stringBuilder.append(this.duration);
+            stringBuilder.append(" -> ");
+            stringBuilder.append((1000 * samples) / ((long) sampleRate));
+            logger.log(level, stringBuilder.toString());
         }
     }
 
@@ -192,143 +214,132 @@ public class M4AInfo extends AudioInfo {
             if (child.getRemaining() != 0) {
                 data(child.nextChildUpTo(DataSchemeDataSource.SCHEME_DATA));
             } else if (LOGGER.isLoggable(this.debugLevel)) {
-                LOGGER.log(this.debugLevel, child.getPath() + ": contains no value");
+                Logger logger = LOGGER;
+                Level level = this.debugLevel;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(child.getPath());
+                stringBuilder.append(": contains no value");
+                logger.log(level, stringBuilder.toString());
             }
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     void data(MP4Atom atom) throws IOException {
+        int i;
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
         atom.skip(4);
         atom.skip(4);
         String type = atom.getParent().getType();
-        Object obj = -1;
         switch (type.hashCode()) {
             case 2954818:
                 if (type.equals("aART")) {
-                    obj = 1;
+                    i = true;
                     break;
                 }
-                break;
             case 3059752:
                 if (type.equals("covr")) {
-                    obj = 6;
+                    i = 6;
                     break;
                 }
-                break;
             case 3060304:
                 if (type.equals("cpil")) {
-                    obj = 7;
+                    i = 7;
                     break;
                 }
-                break;
             case 3060591:
                 if (type.equals(CopyrightBox.TYPE)) {
-                    obj = 8;
+                    i = 8;
                     break;
                 }
-                break;
             case 3083677:
                 if (type.equals("disk")) {
-                    obj = 11;
+                    i = 11;
                     break;
                 }
-                break;
             case 3177818:
                 if (type.equals(GenreBox.TYPE)) {
-                    obj = 12;
+                    i = 12;
                     break;
                 }
-                break;
             case 3511163:
                 if (type.equals(RatingBox.TYPE)) {
-                    obj = 17;
+                    i = 17;
                     break;
                 }
-                break;
             case 3564088:
                 if (type.equals("tmpo")) {
-                    obj = 18;
+                    i = 18;
                     break;
                 }
-                break;
             case 3568737:
                 if (type.equals("trkn")) {
-                    obj = 19;
+                    i = 19;
                     break;
                 }
-                break;
             case 5099770:
                 if (type.equals("\u00a9ART")) {
-                    obj = 2;
+                    i = 2;
                     break;
                 }
-                break;
             case 5131342:
                 if (type.equals("\u00a9alb")) {
-                    obj = null;
+                    i = false;
                     break;
                 }
-                break;
             case 5133313:
                 if (type.equals("\u00a9cmt")) {
-                    obj = 3;
+                    i = 3;
                     break;
                 }
-                break;
             case 5133368:
                 if (type.equals("\u00a9com")) {
-                    obj = 4;
+                    i = 4;
                     break;
                 }
-                break;
             case 5133411:
                 if (type.equals("\u00a9cpy")) {
-                    obj = 9;
+                    i = 9;
                     break;
                 }
-                break;
             case 5133907:
                 if (type.equals("\u00a9day")) {
-                    obj = 10;
+                    i = 10;
                     break;
                 }
-                break;
             case 5136903:
                 if (type.equals("\u00a9gen")) {
-                    obj = 13;
+                    i = 13;
                     break;
                 }
-                break;
             case 5137308:
                 if (type.equals("\u00a9grp")) {
-                    obj = 14;
+                    i = 14;
                     break;
                 }
-                break;
             case 5142332:
                 if (type.equals("\u00a9lyr")) {
-                    obj = 15;
+                    i = 15;
                     break;
                 }
-                break;
             case 5143505:
                 if (type.equals("\u00a9nam")) {
-                    obj = 16;
+                    i = 16;
                     break;
                 }
-                break;
             case 5152688:
                 if (type.equals("\u00a9wrt")) {
-                    obj = 5;
+                    i = 5;
                     break;
                 }
-                break;
+            default:
         }
-        switch (obj) {
-            case null:
+        i = -1;
+        switch (i) {
+            case 0:
                 this.album = atom.readString("UTF-8");
                 return;
             case 1:
@@ -370,9 +381,7 @@ public class M4AInfo extends AudioInfo {
                         }
                         if (this.smallCover == null) {
                             this.smallCover = this.cover;
-                            return;
                         }
-                        return;
                     }
                     return;
                 } catch (Exception e) {
@@ -390,14 +399,13 @@ public class M4AInfo extends AudioInfo {
                 }
                 return;
             case 10:
-                String day = atom.readString("UTF-8").trim();
-                if (day.length() >= 4) {
+                type = atom.readString("UTF-8").trim();
+                if (type.length() >= 4) {
                     try {
-                        this.year = Short.valueOf(day.substring(0, 4)).shortValue();
-                        return;
+                        this.year = Short.valueOf(type.substring(0, 4)).shortValue();
                     } catch (NumberFormatException e2) {
-                        return;
                     }
+                    return;
                 }
                 return;
             case 11:
@@ -413,7 +421,6 @@ public class M4AInfo extends AudioInfo {
                     ID3v1Genre id3v1Genre = ID3v1Genre.getGenre(atom.readShort() - 1);
                     if (id3v1Genre != null) {
                         this.genre = id3v1Genre.getDescription();
-                        return;
                     }
                     return;
                 }

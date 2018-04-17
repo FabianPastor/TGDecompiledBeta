@@ -67,25 +67,28 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
             if (this.streamState == 2) {
                 buffer.addFlag(4);
                 return -4;
-            } else if (requireFormat || this.streamState == 0) {
-                formatHolder.format = SingleSampleMediaPeriod.this.format;
-                this.streamState = 1;
-                return -5;
-            } else if (!SingleSampleMediaPeriod.this.loadingFinished) {
-                return -3;
-            } else {
-                if (SingleSampleMediaPeriod.this.loadingSucceeded) {
-                    buffer.timeUs = 0;
-                    buffer.addFlag(1);
-                    buffer.ensureSpaceForWrite(SingleSampleMediaPeriod.this.sampleSize);
-                    buffer.data.put(SingleSampleMediaPeriod.this.sampleData, 0, SingleSampleMediaPeriod.this.sampleSize);
-                    sendFormat();
-                } else {
-                    buffer.addFlag(4);
-                }
-                this.streamState = 2;
-                return -4;
             }
+            if (!requireFormat) {
+                if (this.streamState != 0) {
+                    if (!SingleSampleMediaPeriod.this.loadingFinished) {
+                        return -3;
+                    }
+                    if (SingleSampleMediaPeriod.this.loadingSucceeded) {
+                        buffer.timeUs = 0;
+                        buffer.addFlag(1);
+                        buffer.ensureSpaceForWrite(SingleSampleMediaPeriod.this.sampleSize);
+                        buffer.data.put(SingleSampleMediaPeriod.this.sampleData, 0, SingleSampleMediaPeriod.this.sampleSize);
+                        sendFormat();
+                    } else {
+                        buffer.addFlag(4);
+                    }
+                    this.streamState = 2;
+                    return -4;
+                }
+            }
+            formatHolder.format = SingleSampleMediaPeriod.this.format;
+            this.streamState = 1;
+            return -5;
         }
 
         public int skipData(long positionUs) {
@@ -124,10 +127,10 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
         }
 
         public void load() throws IOException, InterruptedException {
+            int result = 0;
             this.sampleSize = 0;
             try {
                 this.dataSource.open(this.dataSpec);
-                int result = 0;
                 while (result != -1) {
                     this.sampleSize += result;
                     if (this.sampleData == null) {
@@ -196,11 +199,13 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
     }
 
     public boolean continueLoading(long positionUs) {
-        if (this.loadingFinished || this.loader.isLoading()) {
-            return false;
+        if (!this.loadingFinished) {
+            if (!r0.loader.isLoading()) {
+                r0.eventDispatcher.loadStarted(r0.dataSpec, 1, -1, r0.format, 0, null, 0, r0.durationUs, r0.loader.startLoading(new SourceLoadable(r0.dataSpec, r0.dataSourceFactory.createDataSource()), r0, r0.minLoadableRetryCount));
+                return true;
+            }
         }
-        this.eventDispatcher.loadStarted(this.dataSpec, 1, -1, this.format, 0, null, 0, this.durationUs, this.loader.startLoading(new SourceLoadable(this.dataSpec, this.dataSourceFactory.createDataSource()), this, this.minLoadableRetryCount));
-        return true;
+        return false;
     }
 
     public long readDiscontinuity() {
@@ -208,7 +213,12 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
     }
 
     public long getNextLoadPositionUs() {
-        return (this.loadingFinished || this.loader.isLoading()) ? Long.MIN_VALUE : 0;
+        if (!this.loadingFinished) {
+            if (!this.loader.isLoading()) {
+                return 0;
+            }
+        }
+        return Long.MIN_VALUE;
     }
 
     public long getBufferedPositionUs() {
@@ -240,12 +250,12 @@ final class SingleSampleMediaPeriod implements MediaPeriod, Callback<SourceLoada
 
     public int onLoadError(SourceLoadable loadable, long elapsedRealtimeMs, long loadDurationMs, IOException error) {
         this.errorCount++;
-        boolean cancel = this.treatLoadErrorsAsEndOfStream && this.errorCount >= this.minLoadableRetryCount;
-        this.eventDispatcher.loadError(loadable.dataSpec, 1, -1, this.format, 0, null, 0, this.durationUs, elapsedRealtimeMs, loadDurationMs, (long) loadable.sampleSize, error, cancel);
+        boolean cancel = this.treatLoadErrorsAsEndOfStream && r0.errorCount >= r0.minLoadableRetryCount;
+        r0.eventDispatcher.loadError(loadable.dataSpec, 1, -1, r0.format, 0, null, 0, r0.durationUs, elapsedRealtimeMs, loadDurationMs, (long) loadable.sampleSize, error, cancel);
         if (!cancel) {
             return 0;
         }
-        this.loadingFinished = true;
+        r0.loadingFinished = true;
         return 2;
     }
 }

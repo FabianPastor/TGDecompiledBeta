@@ -22,14 +22,14 @@ class PositionMap<E> implements Cloneable {
             int lo = 0;
             int hi = size - 1;
             while (lo <= hi) {
-                int i = (lo + hi) >>> 1;
-                int midVal = array[i];
+                int mid = (lo + hi) >>> 1;
+                int midVal = array[mid];
                 if (midVal < value) {
-                    lo = i + 1;
+                    lo = mid + 1;
                 } else if (midVal <= value) {
-                    return i;
+                    return mid;
                 } else {
-                    hi = i - 1;
+                    hi = mid - 1;
                 }
             }
             return lo ^ -1;
@@ -59,10 +59,9 @@ class PositionMap<E> implements Cloneable {
             clone = (PositionMap) super.clone();
             clone.mKeys = (int[]) this.mKeys.clone();
             clone.mValues = (Object[]) this.mValues.clone();
-            return clone;
         } catch (CloneNotSupportedException e) {
-            return clone;
         }
+        return clone;
     }
 
     public E get(int key) {
@@ -71,7 +70,12 @@ class PositionMap<E> implements Cloneable {
 
     public E get(int key, E valueIfKeyNotFound) {
         int i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, key);
-        return (i < 0 || this.mValues[i] == DELETED) ? valueIfKeyNotFound : this.mValues[i];
+        if (i >= 0) {
+            if (this.mValues[i] != DELETED) {
+                return this.mValues[i];
+            }
+        }
+        return valueIfKeyNotFound;
     }
 
     public void delete(int key) {
@@ -108,9 +112,9 @@ class PositionMap<E> implements Cloneable {
 
     private void gc() {
         int n = this.mSize;
-        int o = 0;
         int[] keys = this.mKeys;
         Object[] values = this.mValues;
+        int o = 0;
         for (int i = 0; i < n; i++) {
             Object val = values[i];
             if (val != DELETED) {
@@ -130,34 +134,34 @@ class PositionMap<E> implements Cloneable {
         int i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, key);
         if (i >= 0) {
             this.mValues[i] = value;
-            return;
+        } else {
+            i ^= -1;
+            if (i >= this.mSize || this.mValues[i] != DELETED) {
+                if (this.mGarbage && this.mSize >= this.mKeys.length) {
+                    gc();
+                    i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, key) ^ -1;
+                }
+                if (this.mSize >= this.mKeys.length) {
+                    int n = idealIntArraySize(this.mSize + 1);
+                    int[] nkeys = new int[n];
+                    Object[] nvalues = new Object[n];
+                    System.arraycopy(this.mKeys, 0, nkeys, 0, this.mKeys.length);
+                    System.arraycopy(this.mValues, 0, nvalues, 0, this.mValues.length);
+                    this.mKeys = nkeys;
+                    this.mValues = nvalues;
+                }
+                if (this.mSize - i != 0) {
+                    System.arraycopy(this.mKeys, i, this.mKeys, i + 1, this.mSize - i);
+                    System.arraycopy(this.mValues, i, this.mValues, i + 1, this.mSize - i);
+                }
+                this.mKeys[i] = key;
+                this.mValues[i] = value;
+                this.mSize++;
+            } else {
+                this.mKeys[i] = key;
+                this.mValues[i] = value;
+            }
         }
-        i ^= -1;
-        if (i >= this.mSize || this.mValues[i] != DELETED) {
-            if (this.mGarbage && this.mSize >= this.mKeys.length) {
-                gc();
-                i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, key) ^ -1;
-            }
-            if (this.mSize >= this.mKeys.length) {
-                int n = idealIntArraySize(this.mSize + 1);
-                int[] nkeys = new int[n];
-                Object[] nvalues = new Object[n];
-                System.arraycopy(this.mKeys, 0, nkeys, 0, this.mKeys.length);
-                System.arraycopy(this.mValues, 0, nvalues, 0, this.mValues.length);
-                this.mKeys = nkeys;
-                this.mValues = nvalues;
-            }
-            if (this.mSize - i != 0) {
-                System.arraycopy(this.mKeys, i, this.mKeys, i + 1, this.mSize - i);
-                System.arraycopy(this.mValues, i, this.mValues, i + 1, this.mSize - i);
-            }
-            this.mKeys[i] = key;
-            this.mValues[i] = value;
-            this.mSize++;
-            return;
-        }
-        this.mKeys[i] = key;
-        this.mValues[i] = value;
     }
 
     public int size() {

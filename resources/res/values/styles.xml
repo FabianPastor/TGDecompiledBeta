@@ -147,4 +147,7 @@
     </style>
     <style name="Widget.Compat.NotificationActionText">
     </style>
+    <style name="Widget.Support.CoordinatorLayout">
+        <item name="statusBarBackground">#000000</item>
+    </style>
 </resources>

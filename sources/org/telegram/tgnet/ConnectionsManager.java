@@ -13,8 +13,13 @@ import android.net.NetworkInfo.State;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings.Builder;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
@@ -29,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,6 +42,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
@@ -80,6 +87,7 @@ public class ConnectionsManager {
     public static final int RequestFlagTryDifferentDc = 16;
     public static final int RequestFlagWithoutLogin = 8;
     private static AsyncTask currentTask;
+    private static ThreadLocal<HashMap<String, ResolvedDomain>> dnsCache = new C06891();
     private static final int dnsConfigVersion = 0;
     private static int lastClassGuid = 1;
     private static long lastDnsRequestTime;
@@ -91,9 +99,19 @@ public class ConnectionsManager {
     private long lastPauseTime = System.currentTimeMillis();
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
 
-    /* renamed from: org.telegram.tgnet.ConnectionsManager$2 */
-    class C06902 extends BroadcastReceiver {
-        C06902() {
+    /* renamed from: org.telegram.tgnet.ConnectionsManager$1 */
+    static class C06891 extends ThreadLocal<HashMap<String, ResolvedDomain>> {
+        C06891() {
+        }
+
+        protected HashMap<String, ResolvedDomain> initialValue() {
+            return new HashMap();
+        }
+    }
+
+    /* renamed from: org.telegram.tgnet.ConnectionsManager$3 */
+    class C06913 extends BroadcastReceiver {
+        C06913() {
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -109,12 +127,12 @@ public class ConnectionsManager {
         }
 
         protected NativeByteBuffer doInBackground(Void... voids) {
-            Throwable e;
-            Throwable th;
-            ByteArrayOutputStream byteArrayOutputStream = null;
+            ByteArrayOutputStream outbuf = null;
             InputStream httpConnectionStream = null;
             try {
                 URL downloadUrl;
+                byte[] bytes;
+                NativeByteBuffer buffer;
                 if (ConnectionsManager.native_isTestBackend(this.currentAccount) != 0) {
                     downloadUrl = new URL("https://software-download.microsoft.com/test/config.txt");
                 } else {
@@ -127,104 +145,70 @@ public class ConnectionsManager {
                 httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                 httpConnection.connect();
                 httpConnectionStream = httpConnection.getInputStream();
-                ByteArrayOutputStream outbuf = new ByteArrayOutputStream();
-                try {
-                    byte[] bytes;
-                    NativeByteBuffer buffer;
-                    byte[] data = new byte[32768];
-                    while (!isCancelled()) {
-                        int read = httpConnectionStream.read(data);
-                        if (read > 0) {
-                            outbuf.write(data, 0, read);
-                        } else {
-                            if (read == -1) {
-                            }
-                            bytes = Base64.decode(outbuf.toByteArray(), 0);
-                            buffer = new NativeByteBuffer(bytes.length);
-                            buffer.writeBytes(bytes);
-                            if (httpConnectionStream != null) {
-                                try {
-                                    httpConnectionStream.close();
-                                } catch (Throwable e2) {
-                                    FileLog.m3e(e2);
-                                }
-                            }
-                            if (outbuf != null) {
-                                try {
-                                    outbuf.close();
-                                } catch (Exception e3) {
-                                }
-                            }
-                            byteArrayOutputStream = outbuf;
-                            return buffer;
+                outbuf = new ByteArrayOutputStream();
+                byte[] data = new byte[32768];
+                while (!isCancelled()) {
+                    int read = httpConnectionStream.read(data);
+                    if (read > 0) {
+                        outbuf.write(data, 0, read);
+                    } else {
+                        if (read == -1) {
                         }
+                        bytes = Base64.decode(outbuf.toByteArray(), 0);
+                        buffer = new NativeByteBuffer(bytes.length);
+                        buffer.writeBytes(bytes);
+                        if (httpConnectionStream != null) {
+                            try {
+                                httpConnectionStream.close();
+                            } catch (Throwable e) {
+                                FileLog.m3e(e);
+                            }
+                        }
+                        if (outbuf != null) {
+                            try {
+                                outbuf.close();
+                            } catch (Exception e2) {
+                            }
+                        }
+                        return buffer;
                     }
-                    bytes = Base64.decode(outbuf.toByteArray(), 0);
-                    buffer = new NativeByteBuffer(bytes.length);
-                    buffer.writeBytes(bytes);
-                    if (httpConnectionStream != null) {
-                        httpConnectionStream.close();
-                    }
-                    if (outbuf != null) {
-                        outbuf.close();
-                    }
-                    byteArrayOutputStream = outbuf;
-                    return buffer;
-                } catch (Throwable th2) {
-                    th = th2;
-                    byteArrayOutputStream = outbuf;
                 }
-            } catch (Throwable th3) {
-                e2 = th3;
-                try {
-                    FileLog.m3e(e2);
-                    if (httpConnectionStream != null) {
-                        try {
-                            httpConnectionStream.close();
-                        } catch (Throwable e22) {
-                            FileLog.m3e(e22);
-                        }
-                    }
-                    if (byteArrayOutputStream != null) {
-                        try {
-                            byteArrayOutputStream.close();
-                        } catch (Exception e4) {
-                        }
-                    }
-                    return null;
-                } catch (Throwable th4) {
-                    th = th4;
-                    if (httpConnectionStream != null) {
-                        try {
-                            httpConnectionStream.close();
-                        } catch (Throwable e222) {
-                            FileLog.m3e(e222);
-                        }
-                    }
-                    if (byteArrayOutputStream != null) {
-                        try {
-                            byteArrayOutputStream.close();
-                        } catch (Exception e5) {
-                        }
-                    }
-                    throw th;
+                bytes = Base64.decode(outbuf.toByteArray(), 0);
+                buffer = new NativeByteBuffer(bytes.length);
+                buffer.writeBytes(bytes);
+                if (httpConnectionStream != null) {
+                    httpConnectionStream.close();
                 }
+                if (outbuf != null) {
+                    outbuf.close();
+                }
+                return buffer;
+            } catch (Throwable e3) {
+                FileLog.m3e(e3);
+                if (outbuf != null) {
+                    outbuf.close();
+                }
+                return null;
             }
         }
 
-        protected void onPostExecute(NativeByteBuffer result) {
-            if (result != null) {
-                ConnectionsManager.currentTask = null;
-                ConnectionsManager.native_applyDnsConfig(this.currentAccount, result.address);
-                return;
-            }
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("failed to get azure result");
-                FileLog.m0d("start dns txt task");
-            }
-            DnsTxtLoadTask task = new DnsTxtLoadTask(this.currentAccount);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-            ConnectionsManager.currentTask = task;
+        protected void onPostExecute(final NativeByteBuffer result) {
+            Utilities.stageQueue.postRunnable(new Runnable() {
+                public void run() {
+                    if (result != null) {
+                        ConnectionsManager.currentTask = null;
+                        ConnectionsManager.native_applyDnsConfig(AzureLoadTask.this.currentAccount, result.address);
+                        return;
+                    }
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m0d("failed to get azure result");
+                        FileLog.m0d("start dns txt task");
+                    }
+                    DnsTxtLoadTask task = new DnsTxtLoadTask(AzureLoadTask.this.currentAccount);
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                    ConnectionsManager.currentTask = task;
+                }
+            });
         }
     }
 
@@ -254,137 +238,194 @@ public class ConnectionsManager {
         }
 
         protected NativeByteBuffer doInBackground(Void... voids) {
-            Throwable e;
-            Throwable th;
-            ByteArrayOutputStream byteArrayOutputStream = null;
+            ByteArrayOutputStream outbuf = null;
             InputStream httpConnectionStream = null;
             try {
-                URLConnection httpConnection = new URL("https://google.com/resolve?name=" + String.format(Locale.US, ConnectionsManager.native_isTestBackend(this.currentAccount) != 0 ? "tap%1$s.stel.com" : "ap%1$s.stel.com", new Object[]{TtmlNode.ANONYMOUS_REGION_ID}) + "&type=16").openConnection();
+                JSONArray array;
+                int len;
+                ArrayList<String> arrayList;
+                int a;
+                DnsTxtLoadTask dnsTxtLoadTask;
+                StringBuilder builder;
+                byte[] bytes;
+                NativeByteBuffer buffer;
+                String domain = String.format(Locale.US, ConnectionsManager.native_isTestBackend(this.currentAccount) != 0 ? "tap%1$s.stel.com" : "ap%1$s.stel.com", new Object[]{TtmlNode.ANONYMOUS_REGION_ID});
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("https://google.com/resolve?name=");
+                stringBuilder.append(domain);
+                stringBuilder.append("&type=16");
+                URLConnection httpConnection = new URL(stringBuilder.toString()).openConnection();
                 httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
                 httpConnection.addRequestProperty("Host", "dns.google.com");
                 httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                 httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                 httpConnection.connect();
                 httpConnectionStream = httpConnection.getInputStream();
-                ByteArrayOutputStream outbuf = new ByteArrayOutputStream();
-                try {
-                    JSONArray array;
-                    int len;
-                    ArrayList<String> arrayList;
-                    int a;
-                    StringBuilder builder;
-                    byte[] bytes;
-                    NativeByteBuffer buffer;
-                    byte[] data = new byte[32768];
-                    while (!isCancelled()) {
-                        int read = httpConnectionStream.read(data);
-                        if (read > 0) {
-                            outbuf.write(data, 0, read);
-                        } else {
-                            if (read == -1) {
-                            }
-                            array = new JSONObject(new String(outbuf.toByteArray(), C0539C.UTF8_NAME)).getJSONArray("Answer");
-                            len = array.length();
-                            arrayList = new ArrayList(len);
-                            for (a = 0; a < len; a++) {
-                                arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
-                            }
-                            Collections.sort(arrayList, new C06981());
-                            builder = new StringBuilder();
-                            for (a = 0; a < arrayList.size(); a++) {
-                                builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
-                            }
-                            bytes = Base64.decode(builder.toString(), 0);
-                            buffer = new NativeByteBuffer(bytes.length);
-                            buffer.writeBytes(bytes);
-                            if (httpConnectionStream != null) {
-                                try {
-                                    httpConnectionStream.close();
-                                } catch (Throwable e2) {
-                                    FileLog.m3e(e2);
-                                }
-                            }
-                            if (outbuf != null) {
-                                try {
-                                    outbuf.close();
-                                } catch (Exception e3) {
-                                }
-                            }
-                            byteArrayOutputStream = outbuf;
-                            return buffer;
+                outbuf = new ByteArrayOutputStream();
+                byte[] data = new byte[32768];
+                while (!isCancelled()) {
+                    int read = httpConnectionStream.read(data);
+                    if (read > 0) {
+                        outbuf.write(data, 0, read);
+                    } else {
+                        if (read == -1) {
                         }
+                        array = new JSONObject(new String(outbuf.toByteArray(), C0539C.UTF8_NAME)).getJSONArray("Answer");
+                        len = array.length();
+                        arrayList = new ArrayList(len);
+                        for (a = 0; a < len; a++) {
+                            arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
+                        }
+                        Collections.sort(arrayList, new C06981());
+                        builder = new StringBuilder();
+                        a = 0;
+                        while (a < arrayList.size()) {
+                            builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
+                            a++;
+                            dnsTxtLoadTask = this;
+                        }
+                        bytes = Base64.decode(builder.toString(), 0);
+                        buffer = new NativeByteBuffer(bytes.length);
+                        buffer.writeBytes(bytes);
+                        if (httpConnectionStream != null) {
+                            try {
+                                httpConnectionStream.close();
+                            } catch (Throwable th) {
+                                FileLog.m3e(th);
+                            }
+                        }
+                        if (outbuf != null) {
+                            try {
+                                outbuf.close();
+                            } catch (Exception e) {
+                            }
+                        }
+                        return buffer;
                     }
-                    array = new JSONObject(new String(outbuf.toByteArray(), C0539C.UTF8_NAME)).getJSONArray("Answer");
-                    len = array.length();
-                    arrayList = new ArrayList(len);
-                    for (a = 0; a < len; a++) {
-                        arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
-                    }
-                    Collections.sort(arrayList, new C06981());
-                    builder = new StringBuilder();
-                    for (a = 0; a < arrayList.size(); a++) {
-                        builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
-                    }
-                    bytes = Base64.decode(builder.toString(), 0);
-                    buffer = new NativeByteBuffer(bytes.length);
-                    buffer.writeBytes(bytes);
-                    if (httpConnectionStream != null) {
-                        httpConnectionStream.close();
-                    }
-                    if (outbuf != null) {
-                        outbuf.close();
-                    }
-                    byteArrayOutputStream = outbuf;
-                    return buffer;
-                } catch (Throwable th2) {
-                    th = th2;
-                    byteArrayOutputStream = outbuf;
                 }
-            } catch (Throwable th3) {
-                e2 = th3;
-                try {
-                    FileLog.m3e(e2);
-                    if (httpConnectionStream != null) {
-                        try {
-                            httpConnectionStream.close();
-                        } catch (Throwable e22) {
-                            FileLog.m3e(e22);
-                        }
-                    }
-                    if (byteArrayOutputStream != null) {
-                        try {
-                            byteArrayOutputStream.close();
-                        } catch (Exception e4) {
-                        }
-                    }
-                    return null;
-                } catch (Throwable th4) {
-                    th = th4;
-                    if (httpConnectionStream != null) {
-                        try {
-                            httpConnectionStream.close();
-                        } catch (Throwable e222) {
-                            FileLog.m3e(e222);
-                        }
-                    }
-                    if (byteArrayOutputStream != null) {
-                        try {
-                            byteArrayOutputStream.close();
-                        } catch (Exception e5) {
-                        }
-                    }
-                    throw th;
+                array = new JSONObject(new String(outbuf.toByteArray(), C0539C.UTF8_NAME)).getJSONArray("Answer");
+                len = array.length();
+                arrayList = new ArrayList(len);
+                for (a = 0; a < len; a++) {
+                    arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
                 }
+                Collections.sort(arrayList, new C06981());
+                builder = new StringBuilder();
+                a = 0;
+                while (a < arrayList.size()) {
+                    builder.append(((String) arrayList.get(a)).replace("\"", TtmlNode.ANONYMOUS_REGION_ID));
+                    a++;
+                    dnsTxtLoadTask = this;
+                }
+                bytes = Base64.decode(builder.toString(), 0);
+                buffer = new NativeByteBuffer(bytes.length);
+                buffer.writeBytes(bytes);
+                if (httpConnectionStream != null) {
+                    httpConnectionStream.close();
+                }
+                if (outbuf != null) {
+                    outbuf.close();
+                }
+                return buffer;
+            } catch (Throwable th2) {
+                FileLog.m3e(th2);
+                if (outbuf != null) {
+                    outbuf.close();
+                }
+                return null;
             }
         }
 
-        protected void onPostExecute(NativeByteBuffer result) {
-            if (result != null) {
-                ConnectionsManager.native_applyDnsConfig(this.currentAccount, result.address);
-            } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("failed to get dns txt result");
+        protected void onPostExecute(final NativeByteBuffer result) {
+            Utilities.stageQueue.postRunnable(new Runnable() {
+                public void run() {
+                    if (result != null) {
+                        ConnectionsManager.native_applyDnsConfig(DnsTxtLoadTask.this.currentAccount, result.address);
+                    } else if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m0d("failed to get dns txt result");
+                    }
+                    ConnectionsManager.currentTask = null;
+                }
+            });
+        }
+    }
+
+    private static class FirebaseTask extends AsyncTask<Void, Void, NativeByteBuffer> {
+        private int currentAccount;
+        private FirebaseRemoteConfig firebaseRemoteConfig;
+
+        /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$1 */
+        class C24221 implements OnCompleteListener<Void> {
+            C24221() {
             }
-            ConnectionsManager.currentTask = null;
+
+            public void onComplete(Task<Void> finishedTask) {
+                final boolean success = finishedTask.isSuccessful();
+                Utilities.stageQueue.postRunnable(new Runnable() {
+                    public void run() {
+                        ConnectionsManager.currentTask = null;
+                        String config = null;
+                        if (success) {
+                            FirebaseTask.this.firebaseRemoteConfig.activateFetched();
+                            config = FirebaseTask.this.firebaseRemoteConfig.getString("ipconfig");
+                        }
+                        if (TextUtils.isEmpty(config)) {
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.m0d("failed to get firebase result");
+                                FileLog.m0d("start azure task");
+                            }
+                            AzureLoadTask task = new AzureLoadTask(FirebaseTask.this.currentAccount);
+                            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                            ConnectionsManager.currentTask = task;
+                            return;
+                        }
+                        byte[] bytes = Base64.decode(config, 0);
+                        try {
+                            NativeByteBuffer buffer = new NativeByteBuffer(bytes.length);
+                            buffer.writeBytes(bytes);
+                            ConnectionsManager.native_applyDnsConfig(FirebaseTask.this.currentAccount, buffer.address);
+                        } catch (Throwable e) {
+                            ConnectionsManager.currentTask = null;
+                            FileLog.m3e(e);
+                        }
+                    }
+                });
+            }
+        }
+
+        public FirebaseTask(int instance) {
+            this.currentAccount = instance;
+        }
+
+        protected NativeByteBuffer doInBackground(Void... voids) {
+            try {
+                this.firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+                this.firebaseRemoteConfig.setConfigSettings(new Builder().setDeveloperModeEnabled(BuildConfig.DEBUG).build());
+                String currentValue = this.firebaseRemoteConfig.getString("ipconfig");
+                if (BuildVars.LOGS_ENABLED) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("current firebase value = ");
+                    stringBuilder.append(currentValue);
+                    FileLog.m0d(stringBuilder.toString());
+                }
+                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new C24221());
+            } catch (Throwable e) {
+                FileLog.m3e(e);
+            }
+            return null;
+        }
+
+        protected void onPostExecute(NativeByteBuffer result) {
+        }
+    }
+
+    private static class ResolvedDomain {
+        public String address;
+        long ttl;
+
+        public ResolvedDomain(String a, long t) {
+            this.address = a;
+            this.ttl = t;
         }
     }
 
@@ -440,23 +481,12 @@ public class ConnectionsManager {
         ConnectionsManager localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (ConnectionsManager.class) {
-                try {
-                    localInstance = Instance[num];
-                    if (localInstance == null) {
-                        ConnectionsManager[] connectionsManagerArr = Instance;
-                        ConnectionsManager localInstance2 = new ConnectionsManager(num);
-                        try {
-                            connectionsManagerArr[num] = localInstance2;
-                            localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
-                            localInstance = localInstance2;
-                            throw th2;
-                        }
-                    }
-                } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                localInstance = Instance[num];
+                if (localInstance == null) {
+                    ConnectionsManager[] connectionsManagerArr = Instance;
+                    ConnectionsManager connectionsManager = new ConnectionsManager(num);
+                    localInstance = connectionsManager;
+                    connectionsManagerArr[num] = connectionsManager;
                 }
             }
         }
@@ -468,48 +498,80 @@ public class ConnectionsManager {
         String langCode;
         String deviceModel;
         String appVersion;
-        String systemVersion;
-        if (instance == 0) {
-            new AzureLoadTask(this.currentAccount).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-        }
-        this.currentAccount = instance;
+        String langCode2;
+        String deviceModel2;
+        String appVersion2;
+        int i = instance;
+        this.currentAccount = i;
         this.connectionState = native_getConnectionState(this.currentAccount);
         File config = ApplicationLoader.getFilesDirFixed();
-        if (instance != 0) {
-            File file = new File(config, "account" + instance);
-            file.mkdirs();
-            config = file;
+        if (i != 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("account");
+            stringBuilder.append(i);
+            config = new File(config, stringBuilder.toString());
+            config.mkdirs();
         }
-        String configPath = config.toString();
-        boolean enablePushConnection = MessagesController.getGlobalNotificationsSettings().getBoolean("pushConnection", true);
+        File config2 = config;
+        String configPath = config2.toString();
+        SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
+        boolean enablePushConnection = preferences.getBoolean("pushConnection", true);
+        StringBuilder stringBuilder2;
         try {
             systemLangCode = LocaleController.getSystemLocaleStringIso639().toLowerCase();
             langCode = LocaleController.getLocaleStringIso639().toLowerCase();
-            deviceModel = Build.MANUFACTURER + Build.MODEL;
+            deviceModel = new StringBuilder();
+            deviceModel.append(Build.MANUFACTURER);
+            deviceModel.append(Build.MODEL);
+            deviceModel = deviceModel.toString();
             PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-            appVersion = pInfo.versionName + " (" + pInfo.versionCode + ")";
-            systemVersion = "SDK " + VERSION.SDK_INT;
+            appVersion = new StringBuilder();
+            appVersion.append(pInfo.versionName);
+            appVersion.append(" (");
+            appVersion.append(pInfo.versionCode);
+            appVersion.append(")");
+            appVersion = appVersion.toString();
+            stringBuilder2 = new StringBuilder();
+            stringBuilder2.append("SDK ");
+            stringBuilder2.append(VERSION.SDK_INT);
+            langCode2 = langCode;
+            langCode = systemLangCode;
+            systemLangCode = stringBuilder2.toString();
         } catch (Exception e) {
-            systemLangCode = "en";
-            langCode = TtmlNode.ANONYMOUS_REGION_ID;
-            deviceModel = "Android unknown";
+            langCode = "en";
+            deviceModel = TtmlNode.ANONYMOUS_REGION_ID;
             appVersion = "App version unknown";
-            systemVersion = "SDK " + VERSION.SDK_INT;
-        }
-        if (systemLangCode.trim().length() == 0) {
-            systemLangCode = "en";
-        }
-        if (deviceModel.trim().length() == 0) {
+            stringBuilder2 = new StringBuilder();
+            stringBuilder2.append("SDK ");
+            stringBuilder2.append(VERSION.SDK_INT);
+            systemLangCode = stringBuilder2.toString();
+            langCode2 = deviceModel;
             deviceModel = "Android unknown";
+        }
+        if (langCode.trim().length() == 0) {
+            langCode = "en";
+        }
+        String systemLangCode2 = langCode;
+        if (deviceModel.trim().length() == 0) {
+            deviceModel2 = "Android unknown";
+        } else {
+            deviceModel2 = deviceModel;
         }
         if (appVersion.trim().length() == 0) {
-            appVersion = "App version unknown";
+            appVersion2 = "App version unknown";
+        } else {
+            appVersion2 = appVersion;
         }
-        if (systemVersion.trim().length() == 0) {
-            systemVersion = "SDK Unknown";
+        if (systemLangCode.trim().length() == 0) {
+            systemLangCode = "SDK Unknown";
         }
-        UserConfig.getInstance(this.currentAccount).loadConfig();
-        init(BuildVars.BUILD_VERSION, 76, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getInstance(this.currentAccount).getClientUserId(), enablePushConnection);
+        String systemVersion = systemLangCode;
+        UserConfig.getInstance(r14.currentAccount).loadConfig();
+        int i2 = BuildVars.BUILD_VERSION;
+        int i3 = BuildVars.APP_ID;
+        String networkLogPath = FileLog.getNetworkLogPath();
+        String str = networkLogPath;
+        init(i2, 76, i3, deviceModel2, systemVersion, appVersion2, langCode2, systemLangCode2, configPath, str, UserConfig.getInstance(r14.currentAccount).getClientUserId(), enablePushConnection);
     }
 
     public long getCurrentTimeMillis() {
@@ -541,59 +603,61 @@ public class ConnectionsManager {
     }
 
     public int sendRequest(TLObject object, RequestDelegate onComplete, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connetionType, boolean immediate) {
-        final int requestToken = this.lastRequestToken.getAndIncrement();
+        int requestToken = this.lastRequestToken.getAndIncrement();
         final TLObject tLObject = object;
+        final int i = requestToken;
         final RequestDelegate requestDelegate = onComplete;
         final QuickAckDelegate quickAckDelegate = onQuickAck;
         final WriteToSocketDelegate writeToSocketDelegate = onWriteToSocket;
-        final int i = flags;
-        final int i2 = datacenterId;
-        final int i3 = connetionType;
+        final int i2 = flags;
+        final int i3 = datacenterId;
+        final int i4 = connetionType;
         final boolean z = immediate;
         Utilities.stageQueue.postRunnable(new Runnable() {
 
-            /* renamed from: org.telegram.tgnet.ConnectionsManager$1$1 */
-            class C18821 implements RequestDelegateInternal {
-                C18821() {
+            /* renamed from: org.telegram.tgnet.ConnectionsManager$2$1 */
+            class C24211 implements RequestDelegateInternal {
+                C24211() {
                 }
 
                 public void run(long response, int errorCode, String errorText, int networkType) {
-                    Throwable e;
-                    TLObject resp = null;
+                    Exception e = null;
                     TL_error error = null;
                     if (response != 0) {
                         try {
                             NativeByteBuffer buff = NativeByteBuffer.wrap(response);
                             buff.reused = true;
-                            resp = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
-                        } catch (Exception e2) {
-                            e = e2;
-                            FileLog.m3e(e);
+                            e = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
+                        } catch (Throwable e2) {
+                            FileLog.m3e(e2);
                             return;
                         }
                     } else if (errorText != null) {
-                        TL_error error2 = new TL_error();
-                        try {
-                            error2.code = errorCode;
-                            error2.text = errorText;
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m1e(tLObject + " got error " + error2.code + " " + error2.text);
-                            }
-                            error = error2;
-                        } catch (Exception e3) {
-                            e = e3;
-                            error = error2;
-                            FileLog.m3e(e);
-                            return;
+                        error = new TL_error();
+                        error.code = errorCode;
+                        error.text = errorText;
+                        if (BuildVars.LOGS_ENABLED) {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append(tLObject);
+                            stringBuilder.append(" got error ");
+                            stringBuilder.append(error.code);
+                            stringBuilder.append(" ");
+                            stringBuilder.append(error.text);
+                            FileLog.m1e(stringBuilder.toString());
                         }
                     }
-                    if (resp != null) {
-                        resp.networkType = networkType;
+                    if (e != null) {
+                        e.networkType = networkType;
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("java received " + resp + " error = " + error);
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("java received ");
+                        stringBuilder.append(e);
+                        stringBuilder.append(" error = ");
+                        stringBuilder.append(error);
+                        FileLog.m0d(stringBuilder.toString());
                     }
-                    final TLObject finalResponse = resp;
+                    final Exception finalResponse = e;
                     final TL_error finalError = error;
                     Utilities.stageQueue.postRunnable(new Runnable() {
                         public void run() {
@@ -608,13 +672,18 @@ public class ConnectionsManager {
 
             public void run() {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("send request " + tLObject + " with token = " + requestToken);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("send request ");
+                    stringBuilder.append(tLObject);
+                    stringBuilder.append(" with token = ");
+                    stringBuilder.append(i);
+                    FileLog.m0d(stringBuilder.toString());
                 }
                 try {
                     NativeByteBuffer buffer = new NativeByteBuffer(tLObject.getObjectSize());
                     tLObject.serializeToStream(buffer);
                     tLObject.freeResources();
-                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new C18821(), quickAckDelegate, writeToSocketDelegate, i, i2, i3, z, requestToken);
+                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new C24211(), quickAckDelegate, writeToSocketDelegate, i2, i3, i4, z, i);
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
@@ -664,17 +733,18 @@ public class ConnectionsManager {
     }
 
     public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String systemLangCode, String configPath, String logPath, int userId, boolean enablePushConnection) {
+        ConnectionsManager connectionsManager = this;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
         String proxyAddress = preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID);
         String proxyUsername = preferences.getString("proxy_user", TtmlNode.ANONYMOUS_REGION_ID);
         String proxyPassword = preferences.getString("proxy_pass", TtmlNode.ANONYMOUS_REGION_ID);
         int proxyPort = preferences.getInt("proxy_port", 1080);
         if (preferences.getBoolean("proxy_enabled", false) && !TextUtils.isEmpty(proxyAddress)) {
-            native_setProxySettings(this.currentAccount, proxyAddress, proxyPort, proxyUsername, proxyPassword);
+            native_setProxySettings(connectionsManager.currentAccount, proxyAddress, proxyPort, proxyUsername, proxyPassword);
         }
-        native_init(this.currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
+        native_init(connectionsManager.currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
         checkConnection();
-        ApplicationLoader.applicationContext.registerReceiver(new C06902(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        ApplicationLoader.applicationContext.registerReceiver(new C06913(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
     }
 
     public static void setLangCode(String langCode) {
@@ -703,9 +773,13 @@ public class ConnectionsManager {
 
     public void setAppPaused(boolean value, boolean byScreenState) {
         if (!byScreenState) {
+            StringBuilder stringBuilder;
             this.appPaused = value;
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("app paused = " + value);
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("app paused = ");
+                stringBuilder.append(value);
+                FileLog.m0d(stringBuilder.toString());
             }
             if (value) {
                 this.appResumeCount--;
@@ -713,7 +787,10 @@ public class ConnectionsManager {
                 this.appResumeCount++;
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("app resume count " + this.appResumeCount);
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("app resume count ");
+                stringBuilder.append(this.appResumeCount);
+                FileLog.m0d(stringBuilder.toString());
             }
             if (this.appResumeCount < 0) {
                 this.appResumeCount = 0;
@@ -743,7 +820,10 @@ public class ConnectionsManager {
             final TLObject message = TLClassStore.Instance().TLdeserialize(buff, buff.readInt32(true), true);
             if (message instanceof Updates) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("java received " + message);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("java received ");
+                    stringBuilder.append(message);
+                    FileLog.m0d(stringBuilder.toString());
                 }
                 KeepAliveJob.finishJob();
                 Utilities.stageQueue.postRunnable(new Runnable() {
@@ -811,26 +891,124 @@ public class ConnectionsManager {
         }
     }
 
-    public static void onRequestNewServerIpAndPort(int second, int currentAccount) {
-        if (currentTask == null && ((second == 1 || Math.abs(lastDnsRequestTime - System.currentTimeMillis()) >= 10000) && isNetworkOnline())) {
-            lastDnsRequestTime = System.currentTimeMillis();
-            if (second == 1) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("start dns txt task");
+    public static void onRequestNewServerIpAndPort(final int second, final int currentAccount) {
+        Utilities.stageQueue.postRunnable(new Runnable() {
+            public void run() {
+                if (ConnectionsManager.currentTask == null && (second != 0 || Math.abs(ConnectionsManager.lastDnsRequestTime - System.currentTimeMillis()) >= 10000)) {
+                    if (ConnectionsManager.isNetworkOnline()) {
+                        ConnectionsManager.lastDnsRequestTime = System.currentTimeMillis();
+                        if (second == 2) {
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.m0d("start dns txt task");
+                            }
+                            DnsTxtLoadTask task = new DnsTxtLoadTask(currentAccount);
+                            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                            ConnectionsManager.currentTask = task;
+                        } else if (second == 1) {
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.m0d("start azure dns task");
+                            }
+                            AzureLoadTask task2 = new AzureLoadTask(currentAccount);
+                            task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                            ConnectionsManager.currentTask = task2;
+                        } else {
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.m0d("start firebase task");
+                            }
+                            FirebaseTask task3 = new FirebaseTask(currentAccount);
+                            task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                            ConnectionsManager.currentTask = task3;
+                        }
+                        return;
+                    }
                 }
-                DnsTxtLoadTask task = new DnsTxtLoadTask(currentAccount);
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                currentTask = task;
-                return;
+                if (BuildVars.LOGS_ENABLED) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("don't start task, current task = ");
+                    stringBuilder.append(ConnectionsManager.currentTask);
+                    stringBuilder.append(" next task = ");
+                    stringBuilder.append(second);
+                    stringBuilder.append(" time diff = ");
+                    stringBuilder.append(Math.abs(ConnectionsManager.lastDnsRequestTime - System.currentTimeMillis()));
+                    stringBuilder.append(" network = ");
+                    stringBuilder.append(ConnectionsManager.isNetworkOnline());
+                    FileLog.m0d(stringBuilder.toString());
+                }
             }
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("start azure dns task");
+        });
+    }
+
+    public static String getHostByName(String domain, int currentAccount) {
+        HashMap<String, ResolvedDomain> cache = (HashMap) dnsCache.get();
+        ResolvedDomain resolvedDomain = (ResolvedDomain) cache.get(domain);
+        if (resolvedDomain != null && SystemClock.uptimeMillis() - resolvedDomain.ttl < 300000) {
+            return resolvedDomain.address;
+        }
+        ByteArrayOutputStream outbuf = null;
+        InputStream httpConnectionStream = null;
+        try {
+            int read;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("https://google.com/resolve?name=");
+            stringBuilder.append(domain);
+            stringBuilder.append("&type=A");
+            URLConnection httpConnection = new URL(stringBuilder.toString()).openConnection();
+            httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
+            httpConnection.addRequestProperty("Host", "dns.google.com");
+            httpConnection.setConnectTimeout(1000);
+            httpConnection.setReadTimeout(2000);
+            httpConnection.connect();
+            httpConnectionStream = httpConnection.getInputStream();
+            outbuf = new ByteArrayOutputStream();
+            byte[] data = new byte[32768];
+            while (true) {
+                read = httpConnectionStream.read(data);
+                if (read <= 0) {
+                    break;
+                }
+                outbuf.write(data, 0, read);
             }
-            AzureLoadTask task2 = new AzureLoadTask(currentAccount);
-            task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-            currentTask = task2;
-        } else if (BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("don't start task, current task = " + currentTask + " second = " + second + " time diff = " + Math.abs(lastDnsRequestTime - System.currentTimeMillis()) + " network = " + isNetworkOnline());
+            if (read == -1) {
+            }
+            JSONArray array = new JSONObject(new String(outbuf.toByteArray())).getJSONArray("Answer");
+            if (array.length() > 0) {
+                String ip = array.getJSONObject(Utilities.random.nextInt(array.length())).getString(DataSchemeDataSource.SCHEME_DATA);
+                cache.put(domain, new ResolvedDomain(ip, SystemClock.uptimeMillis()));
+                if (httpConnectionStream != null) {
+                    try {
+                        httpConnectionStream.close();
+                    } catch (Throwable e) {
+                        FileLog.m3e(e);
+                    }
+                }
+                if (outbuf != null) {
+                    try {
+                        outbuf.close();
+                    } catch (Exception e2) {
+                    }
+                }
+                return ip;
+            }
+            if (httpConnectionStream != null) {
+                try {
+                    httpConnectionStream.close();
+                } catch (Throwable e3) {
+                    FileLog.m3e(e3);
+                }
+            }
+            if (outbuf != null) {
+                try {
+                    outbuf.close();
+                } catch (Exception e4) {
+                }
+            }
+            return TtmlNode.ANONYMOUS_REGION_ID;
+        } catch (Throwable e32) {
+            FileLog.m3e(e32);
+            if (outbuf != null) {
+                outbuf.close();
+            }
+            return TtmlNode.ANONYMOUS_REGION_ID;
         }
     }
 
@@ -875,35 +1053,35 @@ public class ConnectionsManager {
             if (netInfo != null) {
                 return netInfo.isRoaming();
             }
+            return false;
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
-        return false;
     }
 
     public static boolean isConnectedOrConnectingToWiFi() {
         try {
             NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
             State state = netInfo.getState();
-            if (netInfo != null && (state == State.CONNECTED || state == State.CONNECTING || state == State.SUSPENDED)) {
-                return true;
+            if (netInfo == null || (state != State.CONNECTED && state != State.CONNECTING && state != State.SUSPENDED)) {
+                return false;
             }
+            return true;
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
-        return false;
     }
 
     public static boolean isConnectedToWiFi() {
         try {
             NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
-            if (netInfo != null && netInfo.getState() == State.CONNECTED) {
-                return true;
+            if (netInfo == null || netInfo.getState() != State.CONNECTED) {
+                return false;
             }
+            return true;
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
-        return false;
     }
 
     public void setIsUpdating(final boolean value) {
@@ -925,27 +1103,35 @@ public class ConnectionsManager {
             return false;
         }
         Enumeration<NetworkInterface> networkInterfaces;
-        NetworkInterface networkInterface;
-        List<InterfaceAddress> interfaceAddresses;
-        int a;
-        InetAddress inetAddress;
         if (BuildVars.LOGS_ENABLED) {
             try {
                 networkInterfaces = NetworkInterface.getNetworkInterfaces();
                 while (networkInterfaces.hasMoreElements()) {
-                    networkInterface = (NetworkInterface) networkInterfaces.nextElement();
-                    if (!(!networkInterface.isUp() || networkInterface.isLoopback() || networkInterface.getInterfaceAddresses().isEmpty())) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("valid interface: " + networkInterface);
-                        }
-                        interfaceAddresses = networkInterface.getInterfaceAddresses();
-                        for (a = 0; a < interfaceAddresses.size(); a++) {
-                            inetAddress = ((InterfaceAddress) interfaceAddresses.get(a)).getAddress();
+                    NetworkInterface networkInterface = (NetworkInterface) networkInterfaces.nextElement();
+                    if (networkInterface.isUp() && !networkInterface.isLoopback()) {
+                        if (!networkInterface.getInterfaceAddresses().isEmpty()) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m0d("address: " + inetAddress.getHostAddress());
+                                StringBuilder stringBuilder = new StringBuilder();
+                                stringBuilder.append("valid interface: ");
+                                stringBuilder.append(networkInterface);
+                                FileLog.m0d(stringBuilder.toString());
                             }
-                            if (!(inetAddress.isLinkLocalAddress() || inetAddress.isLoopbackAddress() || inetAddress.isMulticastAddress() || !BuildVars.LOGS_ENABLED)) {
-                                FileLog.m0d("address is good");
+                            List<InterfaceAddress> interfaceAddresses = networkInterface.getInterfaceAddresses();
+                            for (int a = 0; a < interfaceAddresses.size(); a++) {
+                                InetAddress inetAddress = ((InterfaceAddress) interfaceAddresses.get(a)).getAddress();
+                                if (BuildVars.LOGS_ENABLED) {
+                                    StringBuilder stringBuilder2 = new StringBuilder();
+                                    stringBuilder2.append("address: ");
+                                    stringBuilder2.append(inetAddress.getHostAddress());
+                                    FileLog.m0d(stringBuilder2.toString());
+                                }
+                                if (!(inetAddress.isLinkLocalAddress() || inetAddress.isLoopbackAddress())) {
+                                    if (!inetAddress.isMulticastAddress()) {
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.m0d("address is good");
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -959,18 +1145,24 @@ public class ConnectionsManager {
             boolean hasIpv4 = false;
             boolean hasIpv6 = false;
             while (networkInterfaces.hasMoreElements()) {
-                networkInterface = (NetworkInterface) networkInterfaces.nextElement();
-                if (networkInterface.isUp() && !networkInterface.isLoopback()) {
-                    interfaceAddresses = networkInterface.getInterfaceAddresses();
-                    for (a = 0; a < interfaceAddresses.size(); a++) {
-                        inetAddress = ((InterfaceAddress) interfaceAddresses.get(a)).getAddress();
-                        if (!(inetAddress.isLinkLocalAddress() || inetAddress.isLoopbackAddress() || inetAddress.isMulticastAddress())) {
-                            if (inetAddress instanceof Inet6Address) {
-                                hasIpv6 = true;
-                            } else if ((inetAddress instanceof Inet4Address) && !inetAddress.getHostAddress().startsWith("192.0.0.")) {
-                                hasIpv4 = true;
+                NetworkInterface networkInterface2 = (NetworkInterface) networkInterfaces.nextElement();
+                if (networkInterface2.isUp()) {
+                    if (!networkInterface2.isLoopback()) {
+                        List<InterfaceAddress> interfaceAddresses2 = networkInterface2.getInterfaceAddresses();
+                        boolean hasIpv62 = hasIpv6;
+                        for (int a2 = 0; a2 < interfaceAddresses2.size(); a2++) {
+                            InetAddress inetAddress2 = ((InterfaceAddress) interfaceAddresses2.get(a2)).getAddress();
+                            if (!(inetAddress2.isLinkLocalAddress() || inetAddress2.isLoopbackAddress())) {
+                                if (!inetAddress2.isMulticastAddress()) {
+                                    if (inetAddress2 instanceof Inet6Address) {
+                                        hasIpv62 = true;
+                                    } else if ((inetAddress2 instanceof Inet4Address) && !inetAddress2.getHostAddress().startsWith("192.0.0.")) {
+                                        hasIpv4 = true;
+                                    }
+                                }
                             }
                         }
+                        hasIpv6 = hasIpv62;
                     }
                 }
             }
@@ -980,7 +1172,6 @@ public class ConnectionsManager {
             return true;
         } catch (Throwable e2) {
             FileLog.m3e(e2);
-            return false;
         }
     }
 

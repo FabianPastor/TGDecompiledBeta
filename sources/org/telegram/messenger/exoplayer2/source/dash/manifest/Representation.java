@@ -75,20 +75,42 @@ public abstract class Representation {
         public final Uri uri;
 
         public static SingleSegmentRepresentation newInstance(String contentId, long revisionId, Format format, String uri, long initializationStart, long initializationEnd, long indexStart, long indexEnd, List<Descriptor> inbandEventStreams, String customCacheKey, long contentLength) {
-            long j = 1 + (indexEnd - indexStart);
-            return new SingleSegmentRepresentation(contentId, revisionId, format, uri, new SingleSegmentBase(new RangedUri(null, initializationStart, (initializationEnd - initializationStart) + 1), 1, 0, indexStart, j), inbandEventStreams, customCacheKey, contentLength);
+            return new SingleSegmentRepresentation(contentId, revisionId, format, uri, new SingleSegmentBase(new RangedUri(null, initializationStart, (initializationEnd - initializationStart) + 1), 1, 0, indexStart, (indexEnd - indexStart) + 1), inbandEventStreams, customCacheKey, contentLength);
         }
 
         public SingleSegmentRepresentation(String contentId, long revisionId, Format format, String baseUrl, SingleSegmentBase segmentBase, List<Descriptor> inbandEventStreams, String customCacheKey, long contentLength) {
-            super(contentId, revisionId, format, baseUrl, segmentBase, inbandEventStreams);
+            String str;
+            String str2 = contentId;
+            super(str2, revisionId, format, baseUrl, segmentBase, inbandEventStreams);
             this.uri = Uri.parse(baseUrl);
             this.indexUri = segmentBase.getIndex();
-            if (customCacheKey == null) {
-                customCacheKey = contentId != null ? contentId + "." + format.id + "." + revisionId : null;
+            SingleSegmentIndex singleSegmentIndex = null;
+            long j;
+            Format format2;
+            if (customCacheKey != null) {
+                j = revisionId;
+                format2 = format;
+                str = customCacheKey;
+            } else if (str2 != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(str2);
+                stringBuilder.append(".");
+                stringBuilder.append(format.id);
+                stringBuilder.append(".");
+                stringBuilder.append(revisionId);
+                str = stringBuilder.toString();
+            } else {
+                j = revisionId;
+                format2 = format;
+                str = null;
             }
-            this.cacheKey = customCacheKey;
-            this.contentLength = contentLength;
-            this.segmentIndex = this.indexUri != null ? null : new SingleSegmentIndex(new RangedUri(null, 0, contentLength));
+            r9.cacheKey = str;
+            long j2 = contentLength;
+            r9.contentLength = j2;
+            if (r9.indexUri == null) {
+                singleSegmentIndex = new SingleSegmentIndex(new RangedUri(null, 0, j2));
+            }
+            r9.segmentIndex = singleSegmentIndex;
         }
 
         public RangedUri getIndexUri() {
@@ -119,10 +141,11 @@ public abstract class Representation {
     }
 
     public static Representation newInstance(String contentId, long revisionId, Format format, String baseUrl, SegmentBase segmentBase, List<Descriptor> inbandEventStreams, String customCacheKey) {
-        if (segmentBase instanceof SingleSegmentBase) {
-            return new SingleSegmentRepresentation(contentId, revisionId, format, baseUrl, (SingleSegmentBase) segmentBase, inbandEventStreams, customCacheKey, -1);
-        } else if (segmentBase instanceof MultiSegmentBase) {
-            return new MultiSegmentRepresentation(contentId, revisionId, format, baseUrl, (MultiSegmentBase) segmentBase, inbandEventStreams);
+        SegmentBase segmentBase2 = segmentBase;
+        if (segmentBase2 instanceof SingleSegmentBase) {
+            return new SingleSegmentRepresentation(contentId, revisionId, format, baseUrl, (SingleSegmentBase) segmentBase2, inbandEventStreams, customCacheKey, -1);
+        } else if (segmentBase2 instanceof MultiSegmentBase) {
+            return new MultiSegmentRepresentation(contentId, revisionId, format, baseUrl, (MultiSegmentBase) segmentBase2, inbandEventStreams);
         } else {
             throw new IllegalArgumentException("segmentBase must be of type SingleSegmentBase or MultiSegmentBase");
         }

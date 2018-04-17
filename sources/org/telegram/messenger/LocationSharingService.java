@@ -103,19 +103,21 @@ public class LocationSharingService extends Service implements NotificationCente
             String param;
             ArrayList<SharingLocationInfo> infos = getInfos();
             if (infos.size() == 1) {
+                String param2;
                 SharingLocationInfo info = (SharingLocationInfo) infos.get(0);
                 int lower_id = (int) info.messageObject.getDialogId();
                 int currentAccount = info.messageObject.currentAccount;
                 if (lower_id > 0) {
-                    param = UserObject.getFirstName(MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(lower_id)));
+                    param2 = UserObject.getFirstName(MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(lower_id)));
                 } else {
                     Chat chat = MessagesController.getInstance(currentAccount).getChat(Integer.valueOf(-lower_id));
                     if (chat != null) {
-                        param = chat.title;
+                        param2 = chat.title;
                     } else {
-                        param = TtmlNode.ANONYMOUS_REGION_ID;
+                        param2 = TtmlNode.ANONYMOUS_REGION_ID;
                     }
                 }
+                param = param2;
             } else {
                 param = LocaleController.formatPluralString("Chats", infos.size());
             }

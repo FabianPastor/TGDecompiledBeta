@@ -18,6 +18,6 @@
     <string name="common_open_on_phone">Адкрыць на тэлефоне</string>
     <string name="common_signin_button_text">Увайсцi</string>
     <string name="common_signin_button_text_long">Увайсці праз Google</string>
-    <string name="gcm_fallback_notification_channel_label">Рознае</string>
+    <string name="fcm_fallback_notification_channel_label">Рознае</string>
     <string name="status_bar_notification_info_overflow">больш за 999</string>
 </resources>

@@ -29,7 +29,7 @@ public class UndoStore {
     }
 
     public boolean canUndo() {
-        return !this.operations.isEmpty();
+        return this.operations.isEmpty() ^ 1;
     }
 
     public void setDelegate(UndoStoreDelegate undoStoreDelegate) {

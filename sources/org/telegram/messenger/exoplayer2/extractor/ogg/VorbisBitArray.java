@@ -28,15 +28,15 @@ final class VorbisBitArray {
         int tempByteOffset = this.byteOffset;
         int bitsRead = Math.min(numBits, 8 - this.bitOffset);
         int tempByteOffset2 = tempByteOffset + 1;
-        int returnValue = ((this.data[tempByteOffset] & 255) >> this.bitOffset) & (255 >> (8 - bitsRead));
+        tempByteOffset = ((this.data[tempByteOffset] & 255) >> this.bitOffset) & (255 >> (8 - bitsRead));
         while (bitsRead < numBits) {
-            returnValue |= (this.data[tempByteOffset2] & 255) << bitsRead;
+            tempByteOffset |= (this.data[tempByteOffset2] & 255) << bitsRead;
             bitsRead += 8;
             tempByteOffset2++;
         }
-        returnValue &= -1 >>> (32 - numBits);
+        tempByteOffset &= -1 >>> (32 - numBits);
         skipBits(numBits);
-        return returnValue;
+        return tempByteOffset;
     }
 
     public void skipBits(int numBits) {

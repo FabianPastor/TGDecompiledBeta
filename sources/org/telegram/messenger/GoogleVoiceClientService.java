@@ -12,6 +12,7 @@ public class GoogleVoiceClientService extends SearchActionVerificationClientServ
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
+                C01821 c01821 = this;
                 try {
                     int currentAccount = UserConfig.selectedAccount;
                     ApplicationLoader.postInitApplication();
@@ -26,9 +27,10 @@ public class GoogleVoiceClientService extends SearchActionVerificationClientServ
                                 MessagesController.getInstance(currentAccount).putUser(user, true);
                             }
                         }
-                        if (user != null) {
+                        User user2 = user;
+                        if (user2 != null) {
                             ContactsController.getInstance(currentAccount).markAsContacted(contactUri);
-                            SendMessagesHelper.getInstance(currentAccount).sendMessage(text, (long) user.id, null, null, true, null, null, null);
+                            SendMessagesHelper.getInstance(currentAccount).sendMessage(text, (long) user2.id, null, null, true, null, null, null);
                         }
                     }
                 } catch (Throwable e) {

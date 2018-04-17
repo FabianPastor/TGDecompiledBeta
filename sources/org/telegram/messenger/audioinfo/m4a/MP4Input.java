@@ -10,14 +10,19 @@ public final class MP4Input extends MP4Box<PositionInputStream> {
     }
 
     public MP4Atom nextChildUpTo(String expectedTypeExpression) throws IOException {
-        MP4Atom atom;
-        do {
-            atom = nextChild();
-        } while (!atom.getType().matches(expectedTypeExpression));
-        return atom;
+        while (true) {
+            MP4Atom atom = nextChild();
+            if (atom.getType().matches(expectedTypeExpression)) {
+                return atom;
+            }
+        }
     }
 
     public String toString() {
-        return "mp4[pos=" + getPosition() + "]";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("mp4[pos=");
+        stringBuilder.append(getPosition());
+        stringBuilder.append("]");
+        return stringBuilder.toString();
     }
 }

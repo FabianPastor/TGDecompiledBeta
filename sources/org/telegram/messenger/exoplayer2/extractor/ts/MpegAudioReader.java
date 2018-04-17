@@ -79,15 +79,9 @@ public final class MpegAudioReader implements ElementaryStreamReader {
         byte[] data = source.data;
         int startOffset = source.getPosition();
         int endOffset = source.limit();
-        int i = startOffset;
-        while (i < endOffset) {
-            boolean found;
+        for (int i = startOffset; i < endOffset; i++) {
             boolean byteIsFF = (data[i] & 255) == 255;
-            if (this.lastByteWasFF && (data[i] & 224) == 224) {
-                found = true;
-            } else {
-                found = false;
-            }
+            boolean found = this.lastByteWasFF && (data[i] & 224) == 224;
             this.lastByteWasFF = byteIsFF;
             if (found) {
                 source.setPosition(i + 1);
@@ -97,7 +91,6 @@ public final class MpegAudioReader implements ElementaryStreamReader {
                 this.state = 1;
                 return;
             }
-            i++;
         }
         source.setPosition(endOffset);
     }
@@ -107,21 +100,21 @@ public final class MpegAudioReader implements ElementaryStreamReader {
         source.readBytes(this.headerScratch.data, this.frameBytesRead, bytesToRead);
         this.frameBytesRead += bytesToRead;
         if (this.frameBytesRead >= 4) {
-            this.headerScratch.setPosition(0);
-            if (MpegAudioHeader.populateHeader(this.headerScratch.readInt(), this.header)) {
-                this.frameSize = this.header.frameSize;
-                if (!this.hasOutputFormat) {
-                    this.frameDurationUs = (C0539C.MICROS_PER_SECOND * ((long) this.header.samplesPerFrame)) / ((long) this.header.sampleRate);
-                    this.output.format(Format.createAudioSampleFormat(this.formatId, this.header.mimeType, null, -1, 4096, this.header.channels, this.header.sampleRate, null, null, 0, this.language));
-                    this.hasOutputFormat = true;
+            r0.headerScratch.setPosition(0);
+            if (MpegAudioHeader.populateHeader(r0.headerScratch.readInt(), r0.header)) {
+                r0.frameSize = r0.header.frameSize;
+                if (!r0.hasOutputFormat) {
+                    r0.frameDurationUs = (C0539C.MICROS_PER_SECOND * ((long) r0.header.samplesPerFrame)) / ((long) r0.header.sampleRate);
+                    r0.output.format(Format.createAudioSampleFormat(r0.formatId, r0.header.mimeType, null, -1, 4096, r0.header.channels, r0.header.sampleRate, null, null, 0, r0.language));
+                    r0.hasOutputFormat = true;
                 }
-                this.headerScratch.setPosition(0);
-                this.output.sampleData(this.headerScratch, 4);
-                this.state = 2;
+                r0.headerScratch.setPosition(0);
+                r0.output.sampleData(r0.headerScratch, 4);
+                r0.state = 2;
                 return;
             }
-            this.frameBytesRead = 0;
-            this.state = 1;
+            r0.frameBytesRead = 0;
+            r0.state = 1;
         }
     }
 

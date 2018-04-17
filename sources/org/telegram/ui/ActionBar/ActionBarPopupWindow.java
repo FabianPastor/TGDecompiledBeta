@@ -30,7 +30,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarPopupWindow extends PopupWindow {
     private static final OnScrollChangedListener NOP = new C07221();
-    private static final boolean allowAnimation;
+    private static final boolean allowAnimation = (VERSION.SDK_INT >= 18);
     private static DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     private static final Field superListenerField;
     private boolean animationEnabled = allowAnimation;
@@ -155,37 +155,44 @@ public class ActionBarPopupWindow extends PopupWindow {
         public void setBackScaleY(float value) {
             this.backScaleY = value;
             if (this.animationEnabled) {
-                int a;
                 int count = getItemsCount();
                 int visibleCount = 0;
-                for (a = 0; a < count; a++) {
-                    visibleCount += getItemAt(a).getVisibility() == 0 ? 1 : 0;
+                int a = 0;
+                while (true) {
+                    int i = 1;
+                    if (a >= count) {
+                        break;
+                    }
+                    if (getItemAt(a).getVisibility() != 0) {
+                        i = 0;
+                    }
+                    visibleCount += i;
+                    a++;
                 }
-                int height = getMeasuredHeight() - AndroidUtilities.dp(16.0f);
-                View child;
-                Integer position;
+                a = getMeasuredHeight() - AndroidUtilities.dp(16.0f);
+                int a2;
                 if (this.showedFromBotton) {
-                    for (a = this.lastStartedChild; a >= 0; a--) {
-                        child = getItemAt(a);
+                    for (a2 = this.lastStartedChild; a2 >= 0; a2--) {
+                        View child = getItemAt(a2);
                         if (child.getVisibility() == 0) {
-                            position = (Integer) this.positions.get(child);
-                            if (position != null && ((float) (height - ((position.intValue() * AndroidUtilities.dp(48.0f)) + AndroidUtilities.dp(32.0f)))) > ((float) height) * value) {
+                            Integer position = (Integer) this.positions.get(child);
+                            if (position != null && ((float) (a - ((position.intValue() * AndroidUtilities.dp(48.0f)) + AndroidUtilities.dp(32.0f)))) > ((float) a) * value) {
                                 break;
                             }
-                            this.lastStartedChild = a - 1;
+                            this.lastStartedChild = a2 - 1;
                             startChildAnimation(child);
                         }
                     }
                 } else {
-                    for (a = this.lastStartedChild; a < count; a++) {
-                        child = getItemAt(a);
-                        if (child.getVisibility() == 0) {
-                            position = (Integer) this.positions.get(child);
-                            if (position != null && ((float) (((position.intValue() + 1) * AndroidUtilities.dp(48.0f)) - AndroidUtilities.dp(24.0f))) > ((float) height) * value) {
+                    for (a2 = this.lastStartedChild; a2 < count; a2++) {
+                        View child2 = getItemAt(a2);
+                        if (child2.getVisibility() == 0) {
+                            Integer position2 = (Integer) this.positions.get(child2);
+                            if (position2 != null && ((float) (((position2.intValue() + 1) * AndroidUtilities.dp(48.0f)) - AndroidUtilities.dp(24.0f))) > ((float) a) * value) {
                                 break;
                             }
-                            this.lastStartedChild = a + 1;
-                            startChildAnimation(child);
+                            this.lastStartedChild = a2 + 1;
+                            startChildAnimation(child2);
                         }
                     }
                 }
@@ -274,18 +281,13 @@ public class ActionBarPopupWindow extends PopupWindow {
     }
 
     static {
-        boolean z = true;
-        if (VERSION.SDK_INT < 18) {
-            z = false;
-        }
-        allowAnimation = z;
-        Field field = null;
+        Field f = null;
         try {
-            field = PopupWindow.class.getDeclaredField("mOnScrollChangedListener");
-            field.setAccessible(true);
+            f = PopupWindow.class.getDeclaredField("mOnScrollChangedListener");
+            f.setAccessible(true);
         } catch (NoSuchFieldException e) {
         }
-        superListenerField = field;
+        superListenerField = f;
     }
 
     public ActionBarPopupWindow() {
@@ -390,7 +392,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             }
             this.windowAnimatorSet = new AnimatorSet();
             this.windowAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(content, "backScaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(content, "backAlpha", new int[]{0, 255})});
-            this.windowAnimatorSet.setDuration((long) ((visibleCount * 16) + 150));
+            this.windowAnimatorSet.setDuration((long) (150 + (16 * visibleCount)));
             this.windowAnimatorSet.addListener(new C07232());
             this.windowAnimatorSet.start();
         }

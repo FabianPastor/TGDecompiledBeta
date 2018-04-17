@@ -1,7 +1,7 @@
 package org.telegram.ui;
 
 import android.content.Context;
-import android.graphics.Paint;
+import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils.TruncateAt;
@@ -100,7 +100,11 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 user.last_name = ContactAddActivity.this.lastNameField.getText().toString();
                 ContactsController.getInstance(ContactAddActivity.this.currentAccount).addContact(user);
                 ContactAddActivity.this.finishFragment();
-                MessagesController.getNotificationsSettings(ContactAddActivity.this.currentAccount).edit().putInt("spam3_" + ContactAddActivity.this.user_id, 1).commit();
+                Editor edit = MessagesController.getNotificationsSettings(ContactAddActivity.this.currentAccount).edit();
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("spam3_");
+                stringBuilder.append(ContactAddActivity.this.user_id);
+                edit.putInt(stringBuilder.toString(), 1).commit();
                 NotificationCenter.getInstance(ContactAddActivity.this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
                 NotificationCenter.getInstance(ContactAddActivity.this.currentAccount).postNotificationName(NotificationCenter.peerSettingsDidLoaded, Long.valueOf((long) ContactAddActivity.this.user_id));
             }
@@ -144,95 +148,106 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     public View createView(Context context) {
+        Context context2 = context;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.addContact) {
-            this.actionBar.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
+            r0.actionBar.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
+            r0.actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C21011());
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        this.fragmentView = new ScrollView(context);
-        LinearLayout linearLayout = new LinearLayout(context);
+        r0.actionBar.setActionBarMenuOnItemClick(new C21011());
+        r0.doneButton = r0.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        r0.fragmentView = new ScrollView(context2);
+        LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(1);
-        ((ScrollView) this.fragmentView).addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
+        ((ScrollView) r0.fragmentView).addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         linearLayout.setOnTouchListener(new C13542());
-        FrameLayout frameLayout = new FrameLayout(context);
+        FrameLayout frameLayout = new FrameLayout(context2);
         linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 24.0f, 0.0f));
-        this.avatarImage = new BackupImageView(context);
-        this.avatarImage.setRoundRadius(AndroidUtilities.dp(30.0f));
-        frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(60, 60, (LocaleController.isRTL ? 5 : 3) | 48));
-        this.nameTextView = new TextView(context);
-        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.nameTextView.setTextSize(1, 20.0f);
-        this.nameTextView.setLines(1);
-        this.nameTextView.setMaxLines(1);
-        this.nameTextView.setSingleLine(true);
-        this.nameTextView.setEllipsize(TruncateAt.END);
-        this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 80.0f, 3.0f, LocaleController.isRTL ? 80.0f : 0.0f, 0.0f));
-        this.onlineTextView = new TextView(context);
-        this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-        this.onlineTextView.setTextSize(1, 14.0f);
-        this.onlineTextView.setLines(1);
-        this.onlineTextView.setMaxLines(1);
-        this.onlineTextView.setSingleLine(true);
-        this.onlineTextView.setEllipsize(TruncateAt.END);
-        this.onlineTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        frameLayout.addView(this.onlineTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 80.0f, 32.0f, LocaleController.isRTL ? 80.0f : 0.0f, 0.0f));
-        this.firstNameField = new EditTextBoldCursor(context);
-        this.firstNameField.setTextSize(1, 18.0f);
-        this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-        this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-        this.firstNameField.setMaxLines(1);
-        this.firstNameField.setLines(1);
-        this.firstNameField.setSingleLine(true);
-        this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.firstNameField.setInputType(49152);
-        this.firstNameField.setImeOptions(5);
-        this.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
-        this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
-        this.firstNameField.setCursorWidth(1.5f);
-        linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
-        this.firstNameField.setOnEditorActionListener(new C13553());
-        this.lastNameField = new EditTextBoldCursor(context);
-        this.lastNameField.setTextSize(1, 18.0f);
-        this.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-        this.lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.lastNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-        this.lastNameField.setMaxLines(1);
-        this.lastNameField.setLines(1);
-        this.lastNameField.setSingleLine(true);
-        this.lastNameField.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.lastNameField.setInputType(49152);
-        this.lastNameField.setImeOptions(6);
-        this.lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
-        this.lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
-        this.lastNameField.setCursorWidth(1.5f);
-        linearLayout.addView(this.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
-        this.lastNameField.setOnEditorActionListener(new C13564());
-        User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id));
-        if (user != null) {
-            if (user.phone == null && this.phone != null) {
-                user.phone = PhoneFormat.stripExceptNumbers(this.phone);
-            }
-            this.firstNameField.setText(user.first_name);
-            this.firstNameField.setSelection(this.firstNameField.length());
-            this.lastNameField.setText(user.last_name);
+        r0.avatarImage = new BackupImageView(context2);
+        r0.avatarImage.setRoundRadius(AndroidUtilities.dp(30.0f));
+        int i = 3;
+        frameLayout.addView(r0.avatarImage, LayoutHelper.createFrame(60, 60, (LocaleController.isRTL ? 5 : 3) | 48));
+        r0.nameTextView = new TextView(context2);
+        r0.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.nameTextView.setTextSize(1, 20.0f);
+        r0.nameTextView.setLines(1);
+        r0.nameTextView.setMaxLines(1);
+        r0.nameTextView.setSingleLine(true);
+        r0.nameTextView.setEllipsize(TruncateAt.END);
+        r0.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        r0.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        frameLayout.addView(r0.nameTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 80.0f, 3.0f, LocaleController.isRTL ? 80.0f : 0.0f, 0.0f));
+        r0.onlineTextView = new TextView(context2);
+        r0.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+        r0.onlineTextView.setTextSize(1, 14.0f);
+        r0.onlineTextView.setLines(1);
+        r0.onlineTextView.setMaxLines(1);
+        r0.onlineTextView.setSingleLine(true);
+        r0.onlineTextView.setEllipsize(TruncateAt.END);
+        r0.onlineTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        frameLayout.addView(r0.onlineTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 80.0f, 32.0f, LocaleController.isRTL ? 80.0f : 0.0f, 0.0f));
+        r0.firstNameField = new EditTextBoldCursor(context2);
+        r0.firstNameField.setTextSize(1, 18.0f);
+        r0.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        r0.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        r0.firstNameField.setMaxLines(1);
+        r0.firstNameField.setLines(1);
+        r0.firstNameField.setSingleLine(true);
+        r0.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
+        r0.firstNameField.setInputType(49152);
+        r0.firstNameField.setImeOptions(5);
+        r0.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
+        r0.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
+        r0.firstNameField.setCursorWidth(1.5f);
+        linearLayout.addView(r0.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
+        r0.firstNameField.setOnEditorActionListener(new C13553());
+        r0.lastNameField = new EditTextBoldCursor(context2);
+        r0.lastNameField.setTextSize(1, 18.0f);
+        r0.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        r0.lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.lastNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        r0.lastNameField.setMaxLines(1);
+        r0.lastNameField.setLines(1);
+        r0.lastNameField.setSingleLine(true);
+        EditTextBoldCursor editTextBoldCursor = r0.lastNameField;
+        if (LocaleController.isRTL) {
+            i = 5;
         }
-        return this.fragmentView;
+        editTextBoldCursor.setGravity(i);
+        r0.lastNameField.setInputType(49152);
+        r0.lastNameField.setImeOptions(6);
+        r0.lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
+        r0.lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
+        r0.lastNameField.setCursorWidth(1.5f);
+        linearLayout.addView(r0.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
+        r0.lastNameField.setOnEditorActionListener(new C13564());
+        User user = MessagesController.getInstance(r0.currentAccount).getUser(Integer.valueOf(r0.user_id));
+        if (user != null) {
+            if (user.phone == null && r0.phone != null) {
+                user.phone = PhoneFormat.stripExceptNumbers(r0.phone);
+            }
+            r0.firstNameField.setText(user.first_name);
+            r0.firstNameField.setSelection(r0.firstNameField.length());
+            r0.lastNameField.setText(user.last_name);
+        }
+        return r0.fragmentView;
     }
 
     private void updateAvatarLayout() {
         if (this.nameTextView != null) {
             User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.user_id));
             if (user != null) {
-                this.nameTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
+                TextView textView = this.nameTextView;
+                PhoneFormat instance = PhoneFormat.getInstance();
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("+");
+                stringBuilder.append(user.phone);
+                textView.setText(instance.format(stringBuilder.toString()));
                 this.onlineTextView.setText(LocaleController.formatUserStatus(this.currentAccount, user));
                 TLObject photo = null;
                 if (user.photo != null) {
@@ -288,17 +303,15 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         themeDescriptionArr[12] = new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
         themeDescriptionArr[13] = new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
         themeDescriptionArr[14] = new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
-        int i = 0;
-        Class[] clsArr = null;
-        Paint paint = null;
-        themeDescriptionArr[15] = new ThemeDescription(null, i, clsArr, paint, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, сellDelegate, Theme.key_avatar_text);
+        themeDescriptionArr[15] = new ThemeDescription(null, 0, null, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, сellDelegate, Theme.key_avatar_text);
         themeDescriptionArr[16] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
-        themeDescriptionArr[17] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
-        themeDescriptionArr[18] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
-        themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
-        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
-        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
-        themeDescriptionArr[22] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        ThemeDescriptionDelegate themeDescriptionDelegate = сellDelegate;
+        themeDescriptionArr[17] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundOrange);
+        themeDescriptionArr[18] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundViolet);
+        themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundGreen);
+        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundCyan);
+        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundBlue);
+        themeDescriptionArr[22] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundPink);
         return themeDescriptionArr;
     }
 }

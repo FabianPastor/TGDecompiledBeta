@@ -54,14 +54,12 @@ public final class FileDataSource implements DataSource {
         }
         try {
             int bytesRead = this.file.read(buffer, offset, (int) Math.min(this.bytesRemaining, (long) readLength));
-            if (bytesRead <= 0) {
-                return bytesRead;
+            if (bytesRead > 0) {
+                this.bytesRemaining -= (long) bytesRead;
+                if (this.listener != null) {
+                    this.listener.onBytesTransferred(this, bytesRead);
+                }
             }
-            this.bytesRemaining -= (long) bytesRead;
-            if (this.listener == null) {
-                return bytesRead;
-            }
-            this.listener.onBytesTransferred(this, bytesRead);
             return bytesRead;
         } catch (IOException e) {
             throw new FileDataSourceException(e);

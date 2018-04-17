@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="12420" android:versionName="4.8.5" android:installLocation="auto" package="org.telegram.messenger.beta">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="12470" android:versionName="4.8.6" android:installLocation="auto" package="org.telegram.messenger.beta">
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="27"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <uses-feature android:name="android.hardware.location.network" android:required="false"/>
@@ -7,7 +7,6 @@
     <uses-feature android:name="android.hardware.LOCATION" android:required="false"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <uses-permission android:name="org.telegram.messenger.permission.MAPS_RECEIVE"/>
-    <uses-permission android:name="org.telegram.messenger.permission.C2D_MESSAGE"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -16,7 +15,6 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
     <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
     <permission android:name="org.telegram.messenger.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
-    <permission android:name="org.telegram.messenger.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
     <supports-screens android:anyDensity="true" android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:resizeable="true" android:xlargeScreens="true"/>
     <uses-feature android:glEsVersion="20000" android:required="true"/>
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
@@ -70,28 +68,21 @@
     <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_WRITE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"/>
     <permission android:name="org.telegram.messenger.beta.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
     <uses-permission android:name="org.telegram.messenger.beta.permission.C2D_MESSAGE"/>
     <application android:theme="@style/Theme_TMessages_Start" android:label="@string/AppNameBeta" android:icon="@drawable/ic_launcher" android:name="org.telegram.messenger.ApplicationLoader" android:manageSpaceActivity="org.telegram.ui.ManageSpaceActivity" android:debuggable="true" android:allowBackup="false" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:largeHeap="true" android:supportsRtl="false" android:roundIcon="@drawable/ic_launcher">
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k"/>
-        <receiver android:name="com.google.android.gms.gcm.GcmReceiver" android:permission="com.google.android.c2dm.permission.SEND" android:exported="true">
+        <service android:name="org.telegram.messenger.GcmPushListenerService">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
-                <category android:name="org.telegram.messenger"/>
-            </intent-filter>
-        </receiver>
-        <service android:name="org.telegram.messenger.GcmPushListenerService" android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name="org.telegram.messenger.GcmInstanceIDListenerService" android:exported="false">
+        <service android:name="org.telegram.messenger.GcmInstanceIDListenerService">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name="org.telegram.messenger.GcmRegistrationIntentService" android:exported="false"/>
         <uses-library android:name="com.google.android.maps" android:required="false"/>
         <receiver android:name="com.google.android.gms.measurement.AppMeasurementReceiver" android:enabled="false" android:exported="false">
             <intent-filter>
@@ -301,18 +292,16 @@
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES" android:value="face"/>
         <meta-data android:name="com.samsung.android.icon_container.has_icon_container" android:value="true"/>
         <meta-data android:name="android.max_aspect" android:value="2.5"/>
+        <service android:name="com.google.firebase.messaging.FirebaseMessagingService" android:exported="true">
+            <intent-filter android:priority="-500">
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
         <activity android:name="net.hockeyapp.android.UpdateActivity"/>
         <activity android:name="net.hockeyapp.android.FeedbackActivity" android:windowSoftInputMode="adjustUnspecified|stateVisible|adjustResize"/>
         <activity android:name="net.hockeyapp.android.PaintActivity"/>
         <activity android:name="net.hockeyapp.android.LoginActivity"/>
         <activity android:name="net.hockeyapp.android.ExpiryInfoActivity"/>
-        <activity android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false"/>
-        <receiver android:name="com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver" android:permission="android.permission.INSTALL_PACKAGES" android:enabled="true" android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER"/>
-            </intent-filter>
-        </receiver>
-        <service android:name="com.google.android.gms.measurement.AppMeasurementJobService" android:permission="android.permission.BIND_JOB_SERVICE" android:enabled="true" android:exported="false"/>
         <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver" android:permission="com.google.android.c2dm.permission.SEND" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
@@ -325,6 +314,7 @@
             </intent-filter>
         </service>
         <provider android:name="com.google.firebase.provider.FirebaseInitProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.firebaseinitprovider" android:initOrder="100"/>
+        <activity android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false"/>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
     </application>
 </manifest>

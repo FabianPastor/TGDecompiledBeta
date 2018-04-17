@@ -45,24 +45,29 @@ public final class SectionReader implements TsPayloadReader {
             }
         }
         while (data.bytesLeft() > 0) {
+            boolean z = true;
+            int tableId;
             if (this.bytesRead < 3) {
                 if (this.bytesRead == 0) {
-                    int tableId = data.readUnsignedByte();
+                    tableId = data.readUnsignedByte();
                     data.setPosition(data.getPosition() - 1);
                     if (tableId == 255) {
                         this.waitingForPayloadStart = true;
                         return;
                     }
                 }
-                int headerBytesToRead = Math.min(data.bytesLeft(), 3 - this.bytesRead);
-                data.readBytes(this.sectionData.data, this.bytesRead, headerBytesToRead);
-                this.bytesRead += headerBytesToRead;
+                tableId = Math.min(data.bytesLeft(), 3 - this.bytesRead);
+                data.readBytes(this.sectionData.data, this.bytesRead, tableId);
+                this.bytesRead += tableId;
                 if (this.bytesRead == 3) {
                     this.sectionData.reset(3);
                     this.sectionData.skipBytes(1);
                     int secondHeaderByte = this.sectionData.readUnsignedByte();
                     int thirdHeaderByte = this.sectionData.readUnsignedByte();
-                    this.sectionSyntaxIndicator = (secondHeaderByte & 128) != 0;
+                    if ((secondHeaderByte & 128) == 0) {
+                        z = false;
+                    }
+                    this.sectionSyntaxIndicator = z;
                     this.totalSectionLength = (((secondHeaderByte & 15) << 8) | thirdHeaderByte) + 3;
                     if (this.sectionData.capacity() < this.totalSectionLength) {
                         byte[] bytes = this.sectionData.data;
@@ -71,12 +76,10 @@ public final class SectionReader implements TsPayloadReader {
                     }
                 }
             } else {
-                int bodyBytesToRead = Math.min(data.bytesLeft(), this.totalSectionLength - this.bytesRead);
-                data.readBytes(this.sectionData.data, this.bytesRead, bodyBytesToRead);
-                this.bytesRead += bodyBytesToRead;
-                if (this.bytesRead != this.totalSectionLength) {
-                    continue;
-                } else {
+                tableId = Math.min(data.bytesLeft(), this.totalSectionLength - this.bytesRead);
+                data.readBytes(this.sectionData.data, this.bytesRead, tableId);
+                this.bytesRead += tableId;
+                if (this.bytesRead == this.totalSectionLength) {
                     if (!this.sectionSyntaxIndicator) {
                         this.sectionData.reset(this.totalSectionLength);
                     } else if (Util.crc(this.sectionData.data, 0, this.totalSectionLength, -1) != 0) {

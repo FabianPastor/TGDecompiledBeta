@@ -70,10 +70,14 @@ public class BackupImageView extends View {
     }
 
     public void setImage(TLObject path, String httpUrl, String filter, Drawable thumb, Bitmap thumbBitmap, FileLocation thumbLocation, String thumbFilter, String ext, int size) {
-        if (thumbBitmap != null) {
-            thumb = new BitmapDrawable(null, thumbBitmap);
+        Drawable thumb2;
+        Bitmap bitmap = thumbBitmap;
+        if (bitmap != null) {
+            thumb2 = new BitmapDrawable(null, bitmap);
+        } else {
+            thumb2 = thumb;
         }
-        this.imageReceiver.setImage(path, httpUrl, filter, thumb, thumbLocation, thumbFilter, size, ext, 0);
+        this.imageReceiver.setImage(path, httpUrl, filter, thumb2, thumbLocation, thumbFilter, size, ext, 0);
     }
 
     public void setImageBitmap(Bitmap bitmap) {

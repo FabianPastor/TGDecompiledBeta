@@ -296,14 +296,15 @@ public class SimpleExoPlayer implements ExoPlayer, TextComponent, VideoComponent
     public void setVideoSurfaceHolder(SurfaceHolder surfaceHolder) {
         removeSurfaceCallbacks();
         this.surfaceHolder = surfaceHolder;
+        Surface surface = null;
         if (surfaceHolder == null) {
             setVideoSurfaceInternal(null, false);
             return;
         }
         surfaceHolder.addCallback(this.componentListener);
-        Surface surface = surfaceHolder.getSurface();
-        if (surface == null || !surface.isValid()) {
-            surface = null;
+        Surface surface2 = surfaceHolder.getSurface();
+        if (surface2 != null && surface2.isValid()) {
+            surface = surface2;
         }
         setVideoSurfaceInternal(surface, false);
     }
@@ -323,29 +324,24 @@ public class SimpleExoPlayer implements ExoPlayer, TextComponent, VideoComponent
     }
 
     public void setVideoTextureView(TextureView textureView) {
-        Surface surface = null;
         if (this.textureView != textureView) {
             removeSurfaceCallbacks();
             this.textureView = textureView;
             this.needSetSurface = true;
+            Surface surface = null;
             if (textureView == null) {
                 setVideoSurfaceInternal(null, true);
-                return;
-            }
-            SurfaceTexture surfaceTexture;
-            if (textureView.getSurfaceTextureListener() != null) {
-                Log.w(TAG, "Replacing existing SurfaceTextureListener.");
-            }
-            textureView.setSurfaceTextureListener(this.componentListener);
-            if (textureView.isAvailable()) {
-                surfaceTexture = textureView.getSurfaceTexture();
             } else {
-                surfaceTexture = null;
+                if (textureView.getSurfaceTextureListener() != null) {
+                    Log.w(TAG, "Replacing existing SurfaceTextureListener.");
+                }
+                textureView.setSurfaceTextureListener(this.componentListener);
+                SurfaceTexture surfaceTexture = textureView.isAvailable() ? textureView.getSurfaceTexture() : null;
+                if (surfaceTexture != null) {
+                    surface = new Surface(surfaceTexture);
+                }
+                setVideoSurfaceInternal(surface, true);
             }
-            if (surfaceTexture != null) {
-                surface = new Surface(surfaceTexture);
-            }
-            setVideoSurfaceInternal(surface, true);
         }
     }
 

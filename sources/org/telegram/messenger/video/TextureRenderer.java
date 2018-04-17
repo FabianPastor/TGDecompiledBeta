@@ -108,7 +108,10 @@ public class TextureRenderer {
 
     private int loadShader(int shaderType, String source) {
         int shader = GLES20.glCreateShader(shaderType);
-        checkGlError("glCreateShader type=" + shaderType);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("glCreateShader type=");
+        stringBuilder.append(shaderType);
+        checkGlError(stringBuilder.toString());
         GLES20.glShaderSource(shader, source);
         GLES20.glCompileShader(shader);
         int[] compiled = new int[1];
@@ -141,17 +144,22 @@ public class TextureRenderer {
         GLES20.glLinkProgram(program);
         int[] linkStatus = new int[1];
         GLES20.glGetProgramiv(program, 35714, linkStatus, 0);
-        if (linkStatus[0] == 1) {
-            return program;
+        if (linkStatus[0] != 1) {
+            GLES20.glDeleteProgram(program);
+            program = 0;
         }
-        GLES20.glDeleteProgram(program);
-        return 0;
+        return program;
     }
 
     public void checkGlError(String op) {
-        int error = GLES20.glGetError();
-        if (error != 0) {
-            throw new RuntimeException(op + ": glError " + error);
+        int glGetError = GLES20.glGetError();
+        int error = glGetError;
+        if (glGetError != 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(op);
+            stringBuilder.append(": glError ");
+            stringBuilder.append(error);
+            throw new RuntimeException(stringBuilder.toString());
         }
     }
 }

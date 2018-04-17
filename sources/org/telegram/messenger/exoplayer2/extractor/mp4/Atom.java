@@ -193,24 +193,35 @@ abstract class Atom {
 
         public int getChildAtomOfTypeCount(int type) {
             int i;
-            int count = 0;
             int size = this.leafChildren.size();
+            int i2 = 0;
+            int count = 0;
             for (i = 0; i < size; i++) {
                 if (((LeafAtom) this.leafChildren.get(i)).type == type) {
                     count++;
                 }
             }
-            size = this.containerChildren.size();
-            for (i = 0; i < size; i++) {
-                if (((ContainerAtom) this.containerChildren.get(i)).type == type) {
+            i = this.containerChildren.size();
+            while (true) {
+                size = i2;
+                if (size >= i) {
+                    return count;
+                }
+                if (((ContainerAtom) this.containerChildren.get(size)).type == type) {
                     count++;
                 }
+                i2 = size + 1;
             }
-            return count;
         }
 
         public String toString() {
-            return Atom.getAtomTypeString(this.type) + " leaves: " + Arrays.toString(this.leafChildren.toArray()) + " containers: " + Arrays.toString(this.containerChildren.toArray());
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(Atom.getAtomTypeString(this.type));
+            stringBuilder.append(" leaves: ");
+            stringBuilder.append(Arrays.toString(this.leafChildren.toArray()));
+            stringBuilder.append(" containers: ");
+            stringBuilder.append(Arrays.toString(this.containerChildren.toArray()));
+            return stringBuilder.toString();
         }
     }
 
@@ -240,6 +251,12 @@ abstract class Atom {
     }
 
     public static String getAtomTypeString(int type) {
-        return TtmlNode.ANONYMOUS_REGION_ID + ((char) ((type >> 24) & 255)) + ((char) ((type >> 16) & 255)) + ((char) ((type >> 8) & 255)) + ((char) (type & 255));
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
+        stringBuilder.append((char) ((type >> 24) & 255));
+        stringBuilder.append((char) ((type >> 16) & 255));
+        stringBuilder.append((char) ((type >> 8) & 255));
+        stringBuilder.append((char) (type & 255));
+        return stringBuilder.toString();
     }
 }

@@ -8,6 +8,8 @@ import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.upstream.cache.Cache.CacheException;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.PriorityTaskManager;
+import org.telegram.messenger.exoplayer2.util.PriorityTaskManager.PriorityTooLowException;
+import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class CacheUtil {
     public static final int DEFAULT_BUFFER_SIZE_BYTES = 131072;
@@ -31,27 +33,36 @@ public final class CacheUtil {
     }
 
     public static void getCached(DataSpec dataSpec, Cache cache, CachingCounters counters) {
+        long left;
+        Cache cache2;
+        DataSpec dataSpec2 = dataSpec;
+        CachingCounters cachingCounters = counters;
         String key = getKey(dataSpec);
-        long start = dataSpec.absoluteStreamPosition;
-        long left = dataSpec.length != -1 ? dataSpec.length : cache.getContentLength(key);
-        counters.contentLength = left;
-        counters.alreadyCachedBytes = 0;
-        counters.newlyCachedBytes = 0;
-        while (left != 0) {
-            long blockLength = cache.getCachedLength(key, start, left != -1 ? left : Long.MAX_VALUE);
-            if (blockLength > 0) {
-                counters.alreadyCachedBytes += blockLength;
+        long start = dataSpec2.absoluteStreamPosition;
+        if (dataSpec2.length != -1) {
+            left = dataSpec2.length;
+            cache2 = cache;
+        } else {
+            cache2 = cache;
+            left = cache2.getContentLength(key);
+        }
+        cachingCounters.contentLength = left;
+        cachingCounters.alreadyCachedBytes = 0;
+        cachingCounters.newlyCachedBytes = 0;
+        long start2 = start;
+        long left2 = left;
+        while (left2 != 0) {
+            start = cache2.getCachedLength(key, start2, left2 != -1 ? left2 : Long.MAX_VALUE);
+            if (start > 0) {
+                cachingCounters.alreadyCachedBytes += start;
             } else {
-                blockLength = -blockLength;
-                if (blockLength == Long.MAX_VALUE) {
+                start = -start;
+                if (start == Long.MAX_VALUE) {
                     return;
                 }
             }
-            start += blockLength;
-            if (left == -1) {
-                blockLength = 0;
-            }
-            left -= blockLength;
+            left2 -= left2 == -1 ? 0 : start;
+            start2 += start;
         }
     }
 
@@ -60,176 +71,120 @@ public final class CacheUtil {
     }
 
     public static void cache(DataSpec dataSpec, Cache cache, CacheDataSource dataSource, byte[] buffer, PriorityTaskManager priorityTaskManager, int priority, CachingCounters counters, boolean enableEOFException) throws IOException, InterruptedException {
+        DataSpec dataSpec2 = dataSpec;
+        Cache cache2 = cache;
+        CachingCounters cachingCounters = counters;
         Assertions.checkNotNull(dataSource);
         Assertions.checkNotNull(buffer);
-        if (counters != null) {
-            getCached(dataSpec, cache, counters);
+        if (cachingCounters != null) {
+            getCached(dataSpec2, cache2, cachingCounters);
         } else {
-            counters = new CachingCounters();
+            cachingCounters = new CachingCounters();
         }
+        CachingCounters counters2 = cachingCounters;
         String key = getKey(dataSpec);
-        long start = dataSpec.absoluteStreamPosition;
-        long left = dataSpec.length != -1 ? dataSpec.length : cache.getContentLength(key);
-        while (left != 0) {
-            long blockLength = cache.getCachedLength(key, start, left != -1 ? left : Long.MAX_VALUE);
-            if (blockLength <= 0) {
-                blockLength = -blockLength;
-                if (readAndDiscard(dataSpec, start, blockLength, dataSource, buffer, priorityTaskManager, priority, counters) < blockLength) {
-                    if (enableEOFException && left != -1) {
-                        throw new EOFException();
+        long start = dataSpec2.absoluteStreamPosition;
+        long left = dataSpec2.length != -1 ? dataSpec2.length : cache2.getContentLength(key);
+        long start2 = start;
+        while (true) {
+            long left2 = left;
+            long j = 0;
+            if (left2 != 0) {
+                long blockLength;
+                start = cache2.getCachedLength(key, start2, left2 != -1 ? left2 : Long.MAX_VALUE);
+                if (start <= 0) {
+                    long blockLength2 = -start;
+                    blockLength = blockLength2;
+                    if (readAndDiscard(dataSpec2, start2, blockLength2, dataSource, buffer, priorityTaskManager, priority, counters2) < blockLength) {
+                        break;
                     }
-                    return;
                 }
+                blockLength = start;
+                start = start2 + blockLength;
+                if (left2 != -1) {
+                    j = blockLength;
+                }
+                start2 = start;
+                left = left2 - j;
+            } else {
+                return;
             }
-            start += blockLength;
-            if (left == -1) {
-                blockLength = 0;
-            }
-            left -= blockLength;
+        }
+        if (enableEOFException && left2 != -1) {
+            throw new EOFException();
         }
     }
 
-    private static long readAndDiscard(org.telegram.messenger.exoplayer2.upstream.DataSpec r21, long r22, long r24, org.telegram.messenger.exoplayer2.upstream.DataSource r26, byte[] r27, org.telegram.messenger.exoplayer2.util.PriorityTaskManager r28, int r29, org.telegram.messenger.exoplayer2.upstream.cache.CacheUtil.CachingCounters r30) throws java.io.IOException, java.lang.InterruptedException {
-        /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r21_1 'dataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec) in PHI: PHI: (r21_3 'dataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec) = (r21_1 'dataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec), (r21_2 'dataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec) binds: {(r21_1 'dataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec)=B:57:0x0016, (r21_2 'dataSpec' org.telegram.messenger.exoplayer2.upstream.DataSpec)=B:56:0x0016}
-	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
-	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
-	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
-	at jadx.core.dex.visitors.ModVisitor.visit(ModVisitor.java:68)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-        /*
-        r2 = r21;
-    L_0x0002:
-        if (r28 == 0) goto L_0x0007;
-    L_0x0004:
-        r28.proceed(r29);
-    L_0x0007:
-        r3 = java.lang.Thread.interrupted();	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        if (r3 == 0) goto L_0x001c;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-    L_0x000d:
-        r3 = new java.lang.InterruptedException;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r3.<init>();	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        throw r3;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-    L_0x0013:
-        r3 = move-exception;
-        r21 = r2;
-    L_0x0016:
-        org.telegram.messenger.exoplayer2.util.Util.closeQuietly(r26);
-        r2 = r21;
-        goto L_0x0002;
-    L_0x001c:
-        r21 = new org.telegram.messenger.exoplayer2.upstream.DataSpec;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r4 = r2.uri;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r5 = r2.postBody;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r6 = r2.position;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r6 = r6 + r22;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r8 = r2.absoluteStreamPosition;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r8 = r6 - r8;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r10 = -1;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r12 = r2.key;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r3 = r2.flags;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r13 = r3 | 2;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r3 = r21;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r6 = r22;	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r3.<init>(r4, r5, r6, r8, r10, r12, r13);	 Catch:{ PriorityTooLowException -> 0x0013, all -> 0x00bb }
-        r0 = r26;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r1 = r21;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r16 = r0.open(r1);	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r0 = r30;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r4 = r0.contentLength;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r6 = -1;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r3 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        if (r3 != 0) goto L_0x005b;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x004b:
-        r4 = -1;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r3 = (r16 > r4 ? 1 : (r16 == r4 ? 0 : -1));	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        if (r3 == 0) goto L_0x005b;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x0051:
-        r0 = r21;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r4 = r0.absoluteStreamPosition;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r4 = r4 + r16;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r0 = r30;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r0.contentLength = r4;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x005b:
-        r18 = 0;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x005d:
-        r3 = (r18 > r24 ? 1 : (r18 == r24 ? 0 : -1));	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        if (r3 == 0) goto L_0x00a0;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x0061:
-        r3 = java.lang.Thread.interrupted();	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        if (r3 == 0) goto L_0x006f;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x0067:
-        r3 = new java.lang.InterruptedException;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r3.<init>();	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        throw r3;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x006d:
-        r3 = move-exception;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        goto L_0x0016;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x006f:
-        r4 = 0;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r6 = -1;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r3 = (r24 > r6 ? 1 : (r24 == r6 ? 0 : -1));	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        if (r3 == 0) goto L_0x00a4;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x0076:
-        r0 = r27;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r3 = r0.length;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r6 = (long) r3;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r8 = r24 - r18;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r6 = java.lang.Math.min(r6, r8);	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r3 = (int) r6;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x0081:
-        r0 = r26;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r1 = r27;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r14 = r0.read(r1, r4, r3);	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r3 = -1;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        if (r14 != r3) goto L_0x00a8;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x008c:
-        r0 = r30;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r4 = r0.contentLength;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r6 = -1;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r3 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        if (r3 != 0) goto L_0x00a0;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x0096:
-        r0 = r21;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r4 = r0.absoluteStreamPosition;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r4 = r4 + r18;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r0 = r30;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r0.contentLength = r4;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x00a0:
-        org.telegram.messenger.exoplayer2.util.Util.closeQuietly(r26);
-        return r18;
-    L_0x00a4:
-        r0 = r27;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r3 = r0.length;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        goto L_0x0081;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-    L_0x00a8:
-        r4 = (long) r14;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r18 = r18 + r4;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r0 = r30;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r4 = r0.newlyCachedBytes;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r6 = (long) r14;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r4 = r4 + r6;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r0 = r30;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        r0.newlyCachedBytes = r4;	 Catch:{ PriorityTooLowException -> 0x006d, all -> 0x00b6 }
-        goto L_0x005d;
-    L_0x00b6:
-        r3 = move-exception;
-    L_0x00b7:
-        org.telegram.messenger.exoplayer2.util.Util.closeQuietly(r26);
-        throw r3;
-    L_0x00bb:
-        r3 = move-exception;
-        r21 = r2;
-        goto L_0x00b7;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.upstream.cache.CacheUtil.readAndDiscard(org.telegram.messenger.exoplayer2.upstream.DataSpec, long, long, org.telegram.messenger.exoplayer2.upstream.DataSource, byte[], org.telegram.messenger.exoplayer2.util.PriorityTaskManager, int, org.telegram.messenger.exoplayer2.upstream.cache.CacheUtil$CachingCounters):long");
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private static long readAndDiscard(DataSpec dataSpec, long absoluteStreamPosition, long length, DataSource dataSource, byte[] buffer, PriorityTaskManager priorityTaskManager, int priority, CachingCounters counters) throws IOException, InterruptedException {
+        long totalRead;
+        DataSpec dataSpec2;
+        Throwable th;
+        DataSource dataSource2 = dataSource;
+        byte[] bArr = buffer;
+        CachingCounters cachingCounters = counters;
+        DataSpec dataSpec3 = dataSpec;
+        loop0:
+        while (true) {
+            if (priorityTaskManager != null) {
+                priorityTaskManager.proceed(priority);
+            }
+            try {
+                if (Thread.interrupted()) {
+                    throw new InterruptedException();
+                }
+                dataSpec3 = new DataSpec(dataSpec3.uri, dataSpec3.postBody, absoluteStreamPosition, (dataSpec3.position + absoluteStreamPosition) - dataSpec3.absoluteStreamPosition, -1, dataSpec3.key, dataSpec3.flags | 2);
+                try {
+                    long resolvedLength = dataSource2.open(dataSpec3);
+                    long j = -1;
+                    if (cachingCounters.contentLength == -1 && resolvedLength != -1) {
+                        cachingCounters.contentLength = dataSpec3.absoluteStreamPosition + resolvedLength;
+                    }
+                    totalRead = 0;
+                    while (totalRead != length) {
+                        if (Thread.interrupted()) {
+                            throw new InterruptedException();
+                        }
+                        int read = dataSource2.read(bArr, 0, length != j ? (int) Math.min((long) bArr.length, length - totalRead) : bArr.length);
+                        if (read == -1) {
+                            break;
+                        }
+                        long totalRead2 = totalRead + ((long) read);
+                        dataSpec2 = dataSpec3;
+                        try {
+                            cachingCounters.newlyCachedBytes += (long) read;
+                            totalRead = totalRead2;
+                            j = -1;
+                            dataSpec3 = dataSpec2;
+                        } catch (PriorityTooLowException e) {
+                            dataSpec3 = dataSpec2;
+                        } catch (Throwable th2) {
+                            th = th2;
+                            dataSpec3 = dataSpec2;
+                        }
+                    }
+                    break loop0;
+                } catch (PriorityTooLowException e2) {
+                    dataSpec2 = dataSpec3;
+                } catch (Throwable th22) {
+                    dataSpec2 = dataSpec3;
+                    th = th22;
+                }
+            } catch (PriorityTooLowException e3) {
+            } catch (Throwable th222) {
+                th = th222;
+            }
+            Util.closeQuietly(dataSource);
+        }
+        if (cachingCounters.contentLength == -1) {
+            cachingCounters.contentLength = dataSpec3.absoluteStreamPosition + totalRead;
+        }
+        dataSpec2 = dataSpec3;
+        Util.closeQuietly(dataSource);
+        return totalRead;
+        Util.closeQuietly(dataSource);
+        throw th;
     }
 
     public static void remove(Cache cache, String key) {

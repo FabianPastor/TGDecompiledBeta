@@ -49,33 +49,30 @@ public final class EventMessage implements Entry {
     }
 
     public int hashCode() {
-        int i = 0;
         if (this.hashCode == 0) {
-            int hashCode;
-            if (this.schemeIdUri != null) {
-                hashCode = this.schemeIdUri.hashCode();
-            } else {
-                hashCode = 0;
-            }
-            hashCode = (hashCode + 527) * 31;
+            int i = 0;
+            int hashCode = 31 * ((31 * 17) + (this.schemeIdUri != null ? this.schemeIdUri.hashCode() : 0));
             if (this.value != null) {
                 i = this.value.hashCode();
             }
-            this.hashCode = ((((((((hashCode + i) * 31) + ((int) (this.presentationTimeUs ^ (this.presentationTimeUs >>> 32)))) * 31) + ((int) (this.durationMs ^ (this.durationMs >>> 32)))) * 31) + ((int) (this.id ^ (this.id >>> 32)))) * 31) + Arrays.hashCode(this.messageData);
+            this.hashCode = (31 * ((31 * ((31 * ((31 * (hashCode + i)) + ((int) (this.presentationTimeUs ^ (this.presentationTimeUs >>> 32))))) + ((int) (this.durationMs ^ (this.durationMs >>> 32))))) + ((int) (this.id ^ (this.id >>> 32))))) + Arrays.hashCode(this.messageData);
         }
         return this.hashCode;
     }
 
     public boolean equals(Object obj) {
+        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        EventMessage other = (EventMessage) obj;
-        if (this.presentationTimeUs == other.presentationTimeUs && this.durationMs == other.durationMs && this.id == other.id && Util.areEqual(this.schemeIdUri, other.schemeIdUri) && Util.areEqual(this.value, other.value) && Arrays.equals(this.messageData, other.messageData)) {
-            return true;
+        if (obj != null) {
+            if (getClass() == obj.getClass()) {
+                EventMessage other = (EventMessage) obj;
+                if (this.presentationTimeUs != other.presentationTimeUs || this.durationMs != other.durationMs || this.id != other.id || !Util.areEqual(this.schemeIdUri, other.schemeIdUri) || !Util.areEqual(this.value, other.value) || !Arrays.equals(this.messageData, other.messageData)) {
+                    z = false;
+                }
+                return z;
+            }
         }
         return false;
     }

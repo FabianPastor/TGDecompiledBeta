@@ -23,83 +23,95 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
 
     private void prepareLayout(float viewPortAvailableSize) {
         int a;
+        int preferredRowSize;
         this.itemSpans.clear();
         this.itemsToRow.clear();
-        int preferredRowSize = AndroidUtilities.dp(100.0f);
-        float totalItemSize = 0.0f;
+        int preferredRowSize2 = AndroidUtilities.dp(100.0f);
         int itemsCount = getFlowItemCount();
         int[] weights = new int[itemsCount];
+        int a2 = 0;
+        float totalItemSize = 0.0f;
         for (a = 0; a < itemsCount; a++) {
             Size size = sizeForItem(a);
-            totalItemSize += (size.width / size.height) * ((float) preferredRowSize);
+            totalItemSize += (size.width / size.height) * ((float) preferredRowSize2);
             weights[a] = Math.round((size.width / size.height) * 100.0f);
         }
-        this.rows = getLinearPartitionForSequence(weights, Math.max(Math.round(totalItemSize / viewPortAvailableSize), 1));
+        int numberOfRows = Math.max(Math.round(totalItemSize / viewPortAvailableSize), 1);
+        r0.rows = getLinearPartitionForSequence(weights, numberOfRows);
         int i = 0;
-        a = 0;
-        while (a < this.rows.size()) {
-            int j;
-            ArrayList<Integer> row = (ArrayList) this.rows.get(a);
+        while (a2 < r0.rows.size()) {
+            int rowSize;
+            ArrayList<Integer> row = (ArrayList) r0.rows.get(a2);
             float summedRatios = 0.0f;
-            int n = i + row.size();
-            for (j = i; j < n; j++) {
+            int j = i;
+            int n = row.size() + i;
+            while (j < n) {
                 Size preferredSize = sizeForItem(j);
                 summedRatios += preferredSize.width / preferredSize.height;
-            }
-            float rowSize = viewPortAvailableSize;
-            if (this.rows.size() == 1 && a == this.rows.size() - 1) {
-                if (row.size() < 2) {
-                    rowSize = (float) Math.floor((double) (viewPortAvailableSize / 3.0f));
-                } else if (row.size() < 3) {
-                    rowSize = (float) Math.floor((double) ((2.0f * viewPortAvailableSize) / 3.0f));
-                }
-            }
-            int spanLeft = getSpanCount();
-            j = i;
-            n = i + row.size();
-            while (j < n) {
-                int itemSpan;
-                preferredSize = sizeForItem(j);
-                int width = Math.round((rowSize / summedRatios) * (preferredSize.width / preferredSize.height));
-                if (itemsCount < 3 || j != n - 1) {
-                    itemSpan = (int) ((((float) width) / viewPortAvailableSize) * ((float) getSpanCount()));
-                    spanLeft -= itemSpan;
-                } else {
-                    this.itemsToRow.put(j, a);
-                    itemSpan = spanLeft;
-                }
-                this.itemSpans.put(j, itemSpan);
                 j++;
+                numberOfRows = numberOfRows;
             }
+            int numberOfRows2 = numberOfRows;
+            numberOfRows = viewPortAvailableSize;
+            if (r0.rows.size() == 1 && a2 == r0.rows.size() - 1) {
+                if (row.size() < 2) {
+                    numberOfRows = (float) Math.floor((double) (viewPortAvailableSize / 3.0f));
+                } else if (row.size() < 3) {
+                    numberOfRows = (float) Math.floor((double) ((2.0f * viewPortAvailableSize) / 3.0f));
+                }
+            }
+            a = getSpanCount();
+            n = i;
+            int n2 = row.size() + i;
+            while (n < n2) {
+                int itemSpan;
+                Size preferredSize2 = sizeForItem(n);
+                rowSize = numberOfRows;
+                preferredRowSize = preferredRowSize2;
+                numberOfRows = Math.round((preferredSize2.width / preferredSize2.height) * (numberOfRows / summedRatios));
+                if (itemsCount >= 3) {
+                    if (n == n2 - 1) {
+                        r0.itemsToRow.put(n, a2);
+                        itemSpan = a;
+                        r0.itemSpans.put(n, itemSpan);
+                        n++;
+                        numberOfRows = rowSize;
+                        preferredRowSize2 = preferredRowSize;
+                    }
+                }
+                itemSpan = (int) ((((float) numberOfRows) / viewPortAvailableSize) * ((float) getSpanCount()));
+                a -= itemSpan;
+                r0.itemSpans.put(n, itemSpan);
+                n++;
+                numberOfRows = rowSize;
+                preferredRowSize2 = preferredRowSize;
+            }
+            rowSize = numberOfRows;
+            preferredRowSize = preferredRowSize2;
             i += row.size();
-            a++;
+            a2++;
+            numberOfRows = numberOfRows2;
         }
+        preferredRowSize = preferredRowSize2;
     }
 
     private int[] getLinearPartitionTable(int[] sequence, int numPartitions) {
-        int i;
         int j;
         int n = sequence.length;
         int[] tmpTable = new int[(n * numPartitions)];
         int[] solution = new int[((n - 1) * (numPartitions - 1))];
-        for (i = 0; i < n; i++) {
-            int i2;
-            int i3 = i * numPartitions;
-            int i4 = sequence[i];
-            if (i != 0) {
-                i2 = tmpTable[(i - 1) * numPartitions];
-            } else {
-                i2 = 0;
-            }
-            tmpTable[i3] = i2 + i4;
+        int i = 0;
+        while (i < n) {
+            tmpTable[i * numPartitions] = sequence[i] + (i != 0 ? tmpTable[(i - 1) * numPartitions] : 0);
+            i++;
         }
         for (j = 0; j < numPartitions; j++) {
             tmpTable[j] = sequence[0];
         }
         for (i = 1; i < n; i++) {
             for (j = 1; j < numPartitions; j++) {
-                int currentMin = 0;
                 int minX = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                int currentMin = 0;
                 for (int x = 0; x < i; x++) {
                     int cost = Math.max(tmpTable[(x * numPartitions) + (j - 1)], tmpTable[i * numPartitions] - tmpTable[x * numPartitions]);
                     if (x == 0 || cost < currentMin) {
@@ -120,42 +132,44 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
         if (k <= 0) {
             return new ArrayList();
         }
-        int i;
-        if (k >= n || n == 1) {
-            ArrayList<ArrayList<Integer>> partition = new ArrayList(sequence.length);
-            for (int valueOf : sequence) {
-                ArrayList<Integer> arrayList = new ArrayList(1);
-                arrayList.add(Integer.valueOf(valueOf));
-                partition.add(arrayList);
-            }
-            return partition;
-        }
-        ArrayList<Integer> currentAnswer;
-        int range;
-        int[] solution = getLinearPartitionTable(sequence, numberOfPartitions);
-        int solutionRowSize = numberOfPartitions - 1;
-        n--;
-        ArrayList<ArrayList<Integer>> answer = new ArrayList();
-        for (k -= 2; k >= 0; k--) {
-            if (n < 1) {
-                answer.add(0, new ArrayList());
-            } else {
-                currentAnswer = new ArrayList();
-                range = n + 1;
-                for (i = solution[((n - 1) * solutionRowSize) + k] + 1; i < range; i++) {
-                    currentAnswer.add(Integer.valueOf(sequence[i]));
+        int i = 0;
+        if (k < n) {
+            if (n != 1) {
+                int i2;
+                int[] solution = getLinearPartitionTable(sequence, numberOfPartitions);
+                int solutionRowSize = numberOfPartitions - 1;
+                n--;
+                ArrayList<ArrayList<Integer>> answer = new ArrayList();
+                for (k -= 2; k >= 0; k--) {
+                    if (n < 1) {
+                        answer.add(0, new ArrayList());
+                    } else {
+                        ArrayList<Integer> currentAnswer = new ArrayList();
+                        int range = n + 1;
+                        for (i2 = solution[((n - 1) * solutionRowSize) + k] + 1; i2 < range; i2++) {
+                            currentAnswer.add(Integer.valueOf(sequence[i2]));
+                        }
+                        answer.add(0, currentAnswer);
+                        n = solution[((n - 1) * solutionRowSize) + k];
+                    }
                 }
-                answer.add(0, currentAnswer);
-                n = solution[((n - 1) * solutionRowSize) + k];
+                ArrayList<Integer> currentAnswer2 = new ArrayList();
+                i2 = n + 1;
+                for (int i3 = 0; i3 < i2; i3++) {
+                    currentAnswer2.add(Integer.valueOf(sequence[i3]));
+                }
+                answer.add(0, currentAnswer2);
+                return answer;
             }
         }
-        currentAnswer = new ArrayList();
-        range = n + 1;
-        for (i = 0; i < range; i++) {
-            currentAnswer.add(Integer.valueOf(sequence[i]));
+        ArrayList<ArrayList<Integer>> partition = new ArrayList(sequence.length);
+        while (i < sequence.length) {
+            ArrayList<Integer> arrayList = new ArrayList(1);
+            arrayList.add(Integer.valueOf(sequence[i]));
+            partition.add(arrayList);
+            i++;
         }
-        answer.add(0, currentAnswer);
-        return answer;
+        return partition;
     }
 
     private Size sizeForItem(int i) {

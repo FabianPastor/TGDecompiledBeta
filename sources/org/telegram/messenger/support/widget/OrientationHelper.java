@@ -49,6 +49,10 @@ public abstract class OrientationHelper {
         this.mLayoutManager = layoutManager;
     }
 
+    public LayoutManager getLayoutManager() {
+        return this.mLayoutManager;
+    }
+
     public void onLayoutComplete() {
         this.mLastTotalSpace = getTotalSpace();
     }

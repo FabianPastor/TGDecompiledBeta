@@ -37,8 +37,8 @@ public final class TimeSignalCommand extends SpliceCommand {
 
     static long parseSpliceTime(ParsableByteArray sectionData, long ptsAdjustment) {
         long firstByte = (long) sectionData.readUnsignedByte();
-        if ((128 & firstByte) != 0) {
-            return ((((1 & firstByte) << 32) | sectionData.readUnsignedInt()) + ptsAdjustment) & 8589934591L;
+        if ((firstByte & 128) != 0) {
+            return ((((firstByte & 1) << 32) | sectionData.readUnsignedInt()) + ptsAdjustment) & 8589934591L;
         }
         return C0539C.TIME_UNSET;
     }

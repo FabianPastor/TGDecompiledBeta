@@ -52,13 +52,12 @@ public class RotationGestureDetector {
                 float nsY = event.getY(0);
                 this.angle = angleBetweenLines(this.fX, this.fY, this.sX, this.sY, event.getX(1), event.getY(1), nsX, nsY);
                 if (this.mListener != null) {
-                    if (!Float.isNaN(this.startAngle)) {
+                    if (Float.isNaN(this.startAngle)) {
+                        this.startAngle = this.angle;
+                        this.mListener.onRotationBegin(this);
+                    } else {
                         this.mListener.onRotation(this);
-                        break;
                     }
-                    this.startAngle = this.angle;
-                    this.mListener.onRotationBegin(this);
-                    break;
                 }
                 break;
             case 6:
@@ -67,6 +66,8 @@ public class RotationGestureDetector {
                     this.mListener.onRotationEnd(this);
                     break;
                 }
+                break;
+            default:
                 break;
         }
         return true;

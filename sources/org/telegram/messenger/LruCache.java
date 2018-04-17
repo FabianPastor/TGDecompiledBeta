@@ -43,39 +43,44 @@ public class LruCache {
     }
 
     public BitmapDrawable put(String key, BitmapDrawable value) {
-        if (key == null || value == null) {
-            throw new NullPointerException("key == null || value == null");
-        }
-        BitmapDrawable previous;
-        synchronized (this) {
-            this.size += safeSizeOf(key, value);
-            previous = (BitmapDrawable) this.map.put(key, value);
-            if (previous != null) {
-                this.size -= safeSizeOf(key, previous);
+        if (key != null) {
+            if (value != null) {
+                BitmapDrawable previous;
+                synchronized (this) {
+                    this.size += safeSizeOf(key, value);
+                    previous = (BitmapDrawable) this.map.put(key, value);
+                    if (previous != null) {
+                        this.size -= safeSizeOf(key, previous);
+                    }
+                }
+                String[] args = key.split("@");
+                if (args.length > 1) {
+                    ArrayList<String> arr = (ArrayList) this.mapFilters.get(args[0]);
+                    if (arr == null) {
+                        arr = new ArrayList();
+                        this.mapFilters.put(args[0], arr);
+                    }
+                    if (!arr.contains(args[1])) {
+                        arr.add(args[1]);
+                    }
+                }
+                if (previous != null) {
+                    entryRemoved(false, key, previous, value);
+                }
+                trimToSize(this.maxSize, key);
+                return previous;
             }
         }
-        String[] args = key.split("@");
-        if (args.length > 1) {
-            ArrayList<String> arr = (ArrayList) this.mapFilters.get(args[0]);
-            if (arr == null) {
-                arr = new ArrayList();
-                this.mapFilters.put(args[0], arr);
-            }
-            if (!arr.contains(args[1])) {
-                arr.add(args[1]);
-            }
-        }
-        if (previous != null) {
-            entryRemoved(false, key, previous, value);
-        }
-        trimToSize(this.maxSize, key);
-        return previous;
+        throw new NullPointerException("key == null || value == null");
     }
 
     private void trimToSize(int maxSize, String justAdded) {
         synchronized (this) {
             Iterator<Entry<String, BitmapDrawable>> iterator = this.map.entrySet().iterator();
-            while (iterator.hasNext() && this.size > maxSize && !this.map.isEmpty()) {
+            while (iterator.hasNext() && this.size > maxSize) {
+                if (this.map.isEmpty()) {
+                    break;
+                }
                 Entry<String, BitmapDrawable> entry = (Entry) iterator.next();
                 String key = (String) entry.getKey();
                 if (justAdded == null || !justAdded.equals(key)) {
@@ -137,7 +142,12 @@ public class LruCache {
         if (result >= 0) {
             return result;
         }
-        throw new IllegalStateException("Negative size: " + key + "=" + value);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Negative size: ");
+        stringBuilder.append(key);
+        stringBuilder.append("=");
+        stringBuilder.append(value);
+        throw new IllegalStateException(stringBuilder.toString());
     }
 
     protected int sizeOf(String key, BitmapDrawable value) {

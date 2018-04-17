@@ -15,7 +15,7 @@ final class Sonic {
     private final int inputSampleRateHz;
     private int maxDiff;
     private final int maxPeriod;
-    private final int maxRequired = (this.maxPeriod * 2);
+    private final int maxRequired = (2 * this.maxPeriod);
     private int minDiff;
     private final int minPeriod;
     private int newRatePosition;
@@ -77,7 +77,7 @@ final class Sonic {
         for (int xSample = 0; xSample < (this.maxRequired * 2) * this.numChannels; xSample++) {
             this.inputBuffer[(this.numChannels * remainingSamples) + xSample] = (short) 0;
         }
-        this.numInputSamples += this.maxRequired * 2;
+        this.numInputSamples += 2 * this.maxRequired;
         processStreamInput();
         if (this.numOutputSamples > expectedOutputSamples) {
             this.numOutputSamples = expectedOutputSamples;
@@ -138,11 +138,11 @@ final class Sonic {
     }
 
     private int findPitchPeriodInRange(short[] samples, int position, int minPeriod, int maxPeriod) {
-        int bestPeriod = 0;
-        int worstPeriod = 255;
         int minDiff = 1;
         int maxDiff = 0;
         position *= this.numChannels;
+        int worstPeriod = 255;
+        int bestPeriod = 0;
         for (int period = minPeriod; period <= maxPeriod; period++) {
             int diff = 0;
             for (int i = 0; i < period; i++) {
@@ -163,28 +163,25 @@ final class Sonic {
     }
 
     private boolean previousPeriodBetter(int minDiff, int maxDiff, boolean preferNewPeriod) {
-        if (minDiff == 0 || this.prevPeriod == 0) {
-            return false;
-        }
-        if (preferNewPeriod) {
-            if (maxDiff > minDiff * 3 || minDiff * 2 <= this.prevMinDiff * 3) {
-                return false;
+        if (minDiff != 0) {
+            if (this.prevPeriod != 0) {
+                if (preferNewPeriod) {
+                    if (maxDiff > minDiff * 3 || minDiff * 2 <= this.prevMinDiff * 3) {
+                        return false;
+                    }
+                } else if (minDiff <= this.prevMinDiff) {
+                    return false;
+                }
+                return true;
             }
-        } else if (minDiff <= this.prevMinDiff) {
-            return false;
         }
-        return true;
+        return false;
     }
 
     private int findPitchPeriod(short[] samples, int position, boolean preferNewPeriod) {
-        int skip;
         int period;
         int retPeriod;
-        if (this.inputSampleRateHz > AMDF_FREQUENCY) {
-            skip = this.inputSampleRateHz / AMDF_FREQUENCY;
-        } else {
-            skip = 1;
-        }
+        int skip = this.inputSampleRateHz > AMDF_FREQUENCY ? this.inputSampleRateHz / AMDF_FREQUENCY : 1;
         if (this.numChannels == 1 && skip == 1) {
             period = findPitchPeriodInRange(samples, position, this.minPeriod, this.maxPeriod);
         } else {
@@ -193,7 +190,7 @@ final class Sonic {
             if (skip != 1) {
                 period *= skip;
                 int minP = period - (skip * 4);
-                int maxP = period + (skip * 4);
+                int maxP = (skip * 4) + period;
                 if (minP < this.minPeriod) {
                     minP = this.minPeriod;
                 }
@@ -248,30 +245,42 @@ final class Sonic {
             int newSampleRate = (int) (((float) this.inputSampleRateHz) / rate);
             int oldSampleRate = this.inputSampleRateHz;
             while (true) {
-                if (newSampleRate <= MessagesController.UPDATE_MASK_CHAT_ADMINS && oldSampleRate <= MessagesController.UPDATE_MASK_CHAT_ADMINS) {
-                    break;
+                if (newSampleRate <= MessagesController.UPDATE_MASK_CHAT_ADMINS) {
+                    if (oldSampleRate <= MessagesController.UPDATE_MASK_CHAT_ADMINS) {
+                        break;
+                    }
                 }
                 newSampleRate /= 2;
                 oldSampleRate /= 2;
             }
             moveNewSamplesToPitchBuffer(originalNumOutputSamples);
-            for (int position = 0; position < this.numPitchSamples - 1; position++) {
-                while ((this.oldRatePosition + 1) * newSampleRate > this.newRatePosition * oldSampleRate) {
-                    enlargeOutputBufferIfNeeded(1);
-                    for (int i = 0; i < this.numChannels; i++) {
-                        this.outputBuffer[(this.numOutputSamples * this.numChannels) + i] = interpolate(this.pitchBuffer, (this.numChannels * position) + i, oldSampleRate, newSampleRate);
+            int position = 0;
+            while (true) {
+                boolean z = true;
+                if (position < this.numPitchSamples - 1) {
+                    while ((this.oldRatePosition + 1) * newSampleRate > this.newRatePosition * oldSampleRate) {
+                        enlargeOutputBufferIfNeeded(1);
+                        for (int i = 0; i < this.numChannels; i++) {
+                            this.outputBuffer[(this.numOutputSamples * this.numChannels) + i] = interpolate(this.pitchBuffer, (this.numChannels * position) + i, oldSampleRate, newSampleRate);
+                        }
+                        this.newRatePosition++;
+                        this.numOutputSamples++;
                     }
-                    this.newRatePosition++;
-                    this.numOutputSamples++;
-                }
-                this.oldRatePosition++;
-                if (this.oldRatePosition == oldSampleRate) {
-                    this.oldRatePosition = 0;
-                    Assertions.checkState(this.newRatePosition == newSampleRate);
-                    this.newRatePosition = 0;
+                    this.oldRatePosition++;
+                    if (this.oldRatePosition == oldSampleRate) {
+                        this.oldRatePosition = 0;
+                        if (this.newRatePosition != newSampleRate) {
+                            z = false;
+                        }
+                        Assertions.checkState(z);
+                        this.newRatePosition = 0;
+                    }
+                    position++;
+                } else {
+                    removePitchSamples(this.numPitchSamples - 1);
+                    return;
                 }
             }
-            removePitchSamples(this.numPitchSamples - 1);
         }
     }
 
@@ -280,8 +289,9 @@ final class Sonic {
         if (speed >= 2.0f) {
             newSamples = (int) (((float) period) / (speed - 1.0f));
         } else {
-            newSamples = period;
+            int newSamples2 = period;
             this.remainingInputToCopy = (int) ((((float) period) * (2.0f - speed)) / (speed - 1.0f));
+            newSamples = newSamples2;
         }
         enlargeOutputBufferIfNeeded(newSamples);
         overlapAdd(newSamples, this.numChannels, this.outputBuffer, this.numOutputSamples, samples, position, samples, position + period);
@@ -328,12 +338,16 @@ final class Sonic {
         int originalNumOutputSamples = this.numOutputSamples;
         float s = this.speed / this.pitch;
         float r = this.rate * this.pitch;
-        if (((double) s) > 1.00001d || ((double) s) < 0.99999d) {
-            changeSpeed(s);
-        } else {
-            copyToOutput(this.inputBuffer, 0, this.numInputSamples);
-            this.numInputSamples = 0;
+        if (((double) s) <= 1.00001d) {
+            if (((double) s) >= 0.99999d) {
+                copyToOutput(this.inputBuffer, 0, this.numInputSamples);
+                this.numInputSamples = 0;
+                if (r != 1.0f) {
+                    adjustRate(r, originalNumOutputSamples);
+                }
+            }
         }
+        changeSpeed(s);
         if (r != 1.0f) {
             adjustRate(r, originalNumOutputSamples);
         }
@@ -341,9 +355,9 @@ final class Sonic {
 
     private static void overlapAdd(int numSamples, int numChannels, short[] out, int outPos, short[] rampDown, int rampDownPos, short[] rampUp, int rampUpPos) {
         for (int i = 0; i < numChannels; i++) {
-            int o = (outPos * numChannels) + i;
-            int u = (rampUpPos * numChannels) + i;
             int d = (rampDownPos * numChannels) + i;
+            int u = (rampUpPos * numChannels) + i;
+            int o = (outPos * numChannels) + i;
             for (int t = 0; t < numSamples; t++) {
                 out[o] = (short) (((rampDown[d] * (numSamples - t)) + (rampUp[u] * t)) / numSamples);
                 o += numChannels;

@@ -26,22 +26,11 @@ public class PhoneFormat {
         PhoneFormat localInstance = Instance;
         if (localInstance == null) {
             synchronized (PhoneFormat.class) {
-                try {
-                    localInstance = Instance;
-                    if (localInstance == null) {
-                        PhoneFormat localInstance2 = new PhoneFormat();
-                        try {
-                            Instance = localInstance2;
-                            localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
-                            localInstance = localInstance2;
-                            throw th2;
-                        }
-                    }
-                } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                localInstance = Instance;
+                if (localInstance == null) {
+                    PhoneFormat phoneFormat = new PhoneFormat();
+                    localInstance = phoneFormat;
+                    Instance = phoneFormat;
                 }
             }
         }
@@ -66,7 +55,10 @@ public class PhoneFormat {
         StringBuilder res = new StringBuilder(str);
         String phoneChars = "0123456789";
         if (includePlus) {
-            phoneChars = phoneChars + "+";
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(phoneChars);
+            stringBuilder.append("+");
+            phoneChars = stringBuilder.toString();
         }
         for (int i = res.length() - 1; i >= 0; i--) {
             if (!phoneChars.contains(res.substring(i, i + 1))) {
@@ -89,104 +81,81 @@ public class PhoneFormat {
     }
 
     public void init(String countryCode) {
-        Exception e;
-        Throwable th;
         InputStream stream = null;
-        ByteArrayOutputStream byteArrayOutputStream = null;
+        ByteArrayOutputStream bos = null;
         try {
             stream = ApplicationLoader.applicationContext.getAssets().open("PhoneFormats.dat");
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            try {
-                byte[] buf = new byte[1024];
-                while (true) {
-                    int len = stream.read(buf, 0, 1024);
-                    if (len == -1) {
-                        break;
-                    }
-                    bos.write(buf, 0, len);
+            bos = new ByteArrayOutputStream();
+            byte[] buf = new byte[1024];
+            while (true) {
+                int read = stream.read(buf, 0, 1024);
+                int len = read;
+                if (read == -1) {
+                    break;
                 }
-                this.data = bos.toByteArray();
-                this.buffer = ByteBuffer.wrap(this.data);
-                this.buffer.order(ByteOrder.LITTLE_ENDIAN);
-                if (bos != null) {
-                    try {
-                        bos.close();
-                    } catch (Throwable e2) {
-                        FileLog.m3e(e2);
-                    }
-                }
-                if (stream != null) {
-                    try {
-                        stream.close();
-                    } catch (Throwable e22) {
-                        FileLog.m3e(e22);
-                    }
-                }
-                if (countryCode == null || countryCode.length() == 0) {
-                    this.defaultCountry = Locale.getDefault().getCountry().toLowerCase();
-                } else {
-                    this.defaultCountry = countryCode;
-                }
-                this.callingCodeOffsets = new HashMap(255);
-                this.callingCodeCountries = new HashMap(255);
-                this.callingCodeData = new HashMap(10);
-                this.countryCallingCode = new HashMap(255);
-                parseDataHeader();
-                this.initialzed = true;
-                byteArrayOutputStream = bos;
-            } catch (Exception e3) {
-                e = e3;
-                byteArrayOutputStream = bos;
-                try {
-                    e.printStackTrace();
-                    if (byteArrayOutputStream != null) {
-                        try {
-                            byteArrayOutputStream.close();
-                        } catch (Throwable e222) {
-                            FileLog.m3e(e222);
-                        }
-                    }
-                    if (stream != null) {
-                        try {
-                            stream.close();
-                        } catch (Throwable e2222) {
-                            FileLog.m3e(e2222);
-                        }
-                    }
-                } catch (Throwable th2) {
-                    th = th2;
-                    if (byteArrayOutputStream != null) {
-                        try {
-                            byteArrayOutputStream.close();
-                        } catch (Throwable e22222) {
-                            FileLog.m3e(e22222);
-                        }
-                    }
-                    if (stream != null) {
-                        try {
-                            stream.close();
-                        } catch (Throwable e222222) {
-                            FileLog.m3e(e222222);
-                        }
-                    }
-                    throw th;
-                }
-            } catch (Throwable th3) {
-                th = th3;
-                byteArrayOutputStream = bos;
-                if (byteArrayOutputStream != null) {
-                    byteArrayOutputStream.close();
-                }
-                if (stream != null) {
-                    stream.close();
-                }
-                throw th;
+                bos.write(buf, 0, len);
             }
-        } catch (Exception e4) {
-            e = e4;
-            e.printStackTrace();
-            if (byteArrayOutputStream != null) {
-                byteArrayOutputStream.close();
+            this.data = bos.toByteArray();
+            this.buffer = ByteBuffer.wrap(this.data);
+            this.buffer.order(ByteOrder.LITTLE_ENDIAN);
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
+                }
+            }
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (Throwable e2) {
+                    FileLog.m3e(e2);
+                }
+            }
+            if (countryCode == null || countryCode.length() == 0) {
+                this.defaultCountry = Locale.getDefault().getCountry().toLowerCase();
+            } else {
+                this.defaultCountry = countryCode;
+            }
+            this.callingCodeOffsets = new HashMap(255);
+            this.callingCodeCountries = new HashMap(255);
+            this.callingCodeData = new HashMap(10);
+            this.countryCallingCode = new HashMap(255);
+            parseDataHeader();
+            this.initialzed = true;
+        } catch (Exception e3) {
+            e3.printStackTrace();
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (Throwable e4) {
+                    FileLog.m3e(e4);
+                    if (stream != null) {
+                        try {
+                            stream.close();
+                        } catch (Throwable e42) {
+                            FileLog.m3e(e42);
+                        }
+                    }
+                }
+            }
+            if (stream != null) {
+                stream.close();
+            }
+        } catch (Throwable th) {
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (Throwable e422) {
+                    FileLog.m3e(e422);
+                    if (stream != null) {
+                        try {
+                            stream.close();
+                        } catch (Throwable e4222) {
+                            FileLog.m3e(e4222);
+                        }
+                    }
+                }
             }
             if (stream != null) {
                 stream.close();
@@ -228,34 +197,37 @@ public class PhoneFormat {
         }
         try {
             String str = strip(orig);
-            String rest;
-            CallingCodeInfo info;
+            String phone;
             if (str.startsWith("+")) {
-                rest = str.substring(1);
-                info = findCallingCodeInfo(rest);
+                String rest = str.substring(1);
+                CallingCodeInfo info = findCallingCodeInfo(rest);
                 if (info == null) {
                     return orig;
                 }
-                return "+" + info.format(rest);
+                phone = info.format(rest);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("+");
+                stringBuilder.append(phone);
+                return stringBuilder.toString();
             }
-            info = callingCodeInfo(this.defaultCallingCode);
-            if (info == null) {
+            CallingCodeInfo info2 = callingCodeInfo(this.defaultCallingCode);
+            if (info2 == null) {
                 return orig;
             }
-            String accessCode = info.matchingAccessCode(str);
-            if (accessCode == null) {
-                return info.format(str);
+            phone = info2.matchingAccessCode(str);
+            if (phone == null) {
+                return info2.format(str);
             }
-            rest = str.substring(accessCode.length());
-            String phone = rest;
-            CallingCodeInfo info2 = findCallingCodeInfo(rest);
-            if (info2 != null) {
-                phone = info2.format(rest);
+            String rest2 = str.substring(phone.length());
+            String phone2 = rest2;
+            CallingCodeInfo info22 = findCallingCodeInfo(rest2);
+            if (info22 != null) {
+                phone2 = info22.format(rest2);
             }
-            if (phone.length() == 0) {
-                return accessCode;
+            if (phone2.length() == 0) {
+                return phone;
             }
-            return String.format("%s %s", new Object[]{accessCode, phone});
+            return String.format("%s %s", new Object[]{phone, phone2});
         } catch (Throwable e) {
             FileLog.m3e(e);
             return orig;
@@ -263,36 +235,36 @@ public class PhoneFormat {
     }
 
     public boolean isPhoneNumberValid(String phoneNumber) {
+        boolean z = true;
         if (!this.initialzed) {
             return true;
         }
         String str = strip(phoneNumber);
-        CallingCodeInfo info;
         if (str.startsWith("+")) {
             String rest = str.substring(1);
-            info = findCallingCodeInfo(rest);
+            CallingCodeInfo info = findCallingCodeInfo(rest);
             if (info == null || !info.isValidPhoneNumber(rest)) {
-                return false;
+                z = false;
             }
-            return true;
+            return z;
         }
-        info = callingCodeInfo(this.defaultCallingCode);
-        if (info == null) {
+        CallingCodeInfo info2 = callingCodeInfo(this.defaultCallingCode);
+        if (info2 == null) {
             return false;
         }
-        String accessCode = info.matchingAccessCode(str);
+        String accessCode = info2.matchingAccessCode(str);
         if (accessCode == null) {
-            return info.isValidPhoneNumber(str);
+            return info2.isValidPhoneNumber(str);
         }
-        rest = str.substring(accessCode.length());
-        if (rest.length() == 0) {
+        String rest2 = str.substring(accessCode.length());
+        if (rest2.length() == 0) {
             return false;
         }
-        CallingCodeInfo info2 = findCallingCodeInfo(rest);
-        if (info2 == null || !info2.isValidPhoneNumber(rest)) {
-            return false;
+        CallingCodeInfo info22 = findCallingCodeInfo(rest2);
+        if (info22 == null || !info22.isValidPhoneNumber(rest2)) {
+            z = false;
         }
-        return true;
+        return z;
     }
 
     int value32(int offset) {
@@ -331,90 +303,146 @@ public class PhoneFormat {
     }
 
     public CallingCodeInfo callingCodeInfo(String callingCode) {
-        CallingCodeInfo res = (CallingCodeInfo) this.callingCodeData.get(callingCode);
+        String str = callingCode;
+        CallingCodeInfo res = (CallingCodeInfo) this.callingCodeData.get(str);
         if (res == null) {
-            Integer num = (Integer) this.callingCodeOffsets.get(callingCode);
+            PhoneFormat phoneFormat;
+            Integer num = (Integer) phoneFormat.callingCodeOffsets.get(str);
             if (num != null) {
-                String str;
-                byte[] bytes = this.data;
-                int start = num.intValue();
-                int offset = start;
+                String str2;
+                int setCnt;
+                byte[] bytes;
+                int start;
+                int block1Len;
+                int block2Len;
+                byte[] bytes2 = phoneFormat.data;
+                int start2 = num.intValue();
+                int offset = start2;
                 res = new CallingCodeInfo();
-                res.callingCode = callingCode;
-                res.countries = (ArrayList) this.callingCodeCountries.get(callingCode);
-                this.callingCodeData.put(callingCode, res);
-                int block1Len = value16(offset);
+                res.callingCode = str;
+                res.countries = (ArrayList) phoneFormat.callingCodeCountries.get(str);
+                phoneFormat.callingCodeData.put(str, res);
+                int block1Len2 = value16(offset);
                 offset = (offset + 2) + 2;
-                int block2Len = value16(offset);
+                int block2Len2 = value16(offset);
                 offset = (offset + 2) + 2;
-                int setCnt = value16(offset);
+                int setCnt2 = value16(offset);
                 offset = (offset + 2) + 2;
                 ArrayList<String> strs = new ArrayList(5);
                 while (true) {
-                    str = valueString(offset);
-                    if (str.length() == 0) {
+                    String valueString = valueString(offset);
+                    str2 = valueString;
+                    if (valueString.length() == 0) {
                         break;
                     }
-                    strs.add(str);
-                    offset += str.length() + 1;
+                    strs.add(str2);
+                    offset += str2.length() + 1;
                 }
                 res.trunkPrefixes = strs;
                 offset++;
                 strs = new ArrayList(5);
                 while (true) {
-                    str = valueString(offset);
-                    if (str.length() == 0) {
+                    String valueString2 = valueString(offset);
+                    str2 = valueString2;
+                    if (valueString2.length() == 0) {
                         break;
                     }
-                    strs.add(str);
-                    offset += str.length() + 1;
+                    strs.add(str2);
+                    offset += str2.length() + 1;
                 }
                 res.intlPrefixes = strs;
-                ArrayList<RuleSet> ruleSets = new ArrayList(setCnt);
-                offset = start + block1Len;
-                for (int s = 0; s < setCnt; s++) {
+                ArrayList<RuleSet> ruleSets = new ArrayList(setCnt2);
+                int offset2 = start2 + block1Len2;
+                offset = 0;
+                while (offset < setCnt2) {
+                    int ruleCnt;
                     RuleSet ruleSet = new RuleSet();
-                    ruleSet.matchLen = value16(offset);
-                    offset += 2;
-                    int ruleCnt = value16(offset);
-                    offset += 2;
-                    ArrayList<PhoneRule> arrayList = new ArrayList(ruleCnt);
-                    for (int r = 0; r < ruleCnt; r++) {
+                    ruleSet.matchLen = phoneFormat.value16(offset2);
+                    offset2 += 2;
+                    int ruleCnt2 = phoneFormat.value16(offset2);
+                    offset2 += 2;
+                    ArrayList<PhoneRule> rules = new ArrayList(ruleCnt2);
+                    Integer num2 = num;
+                    num = offset2;
+                    offset2 = 0;
+                    while (offset2 < ruleCnt2) {
+                        boolean z;
+                        ruleCnt = ruleCnt2;
                         PhoneRule rule = new PhoneRule();
-                        rule.minVal = value32(offset);
-                        offset += 4;
-                        rule.maxVal = value32(offset);
-                        offset += 4;
-                        int offset2 = offset + 1;
-                        rule.byte8 = bytes[offset];
-                        offset = offset2 + 1;
-                        rule.maxLen = bytes[offset2];
-                        offset2 = offset + 1;
-                        rule.otherFlag = bytes[offset];
-                        offset = offset2 + 1;
-                        rule.prefixLen = bytes[offset2];
-                        offset2 = offset + 1;
-                        rule.flag12 = bytes[offset];
-                        offset = offset2 + 1;
-                        rule.flag13 = bytes[offset2];
-                        int strOffset = value16(offset);
-                        offset += 2;
-                        rule.format = valueString(((start + block1Len) + block2Len) + strOffset);
-                        if (rule.format.indexOf("[[") != -1) {
-                            int closePos = rule.format.indexOf("]]");
-                            rule.format = String.format("%s%s", new Object[]{rule.format.substring(0, openPos), rule.format.substring(closePos + 2)});
+                        setCnt = setCnt2;
+                        rule.minVal = phoneFormat.value32(num);
+                        num += 4;
+                        rule.maxVal = phoneFormat.value32(num);
+                        num += 4;
+                        setCnt2 = num + 1;
+                        rule.byte8 = bytes2[num];
+                        num = setCnt2 + 1;
+                        rule.maxLen = bytes2[setCnt2];
+                        setCnt2 = num + 1;
+                        rule.otherFlag = bytes2[num];
+                        num = setCnt2 + 1;
+                        rule.prefixLen = bytes2[setCnt2];
+                        setCnt2 = num + 1;
+                        rule.flag12 = bytes2[num];
+                        num = setCnt2 + 1;
+                        rule.flag13 = bytes2[setCnt2];
+                        int offset3 = num + 2;
+                        rule.format = phoneFormat.valueString(((start2 + block1Len2) + block2Len2) + phoneFormat.value16(num));
+                        int openPos = rule.format.indexOf("[[");
+                        if (openPos != -1) {
+                            bytes = bytes2;
+                            num = rule.format.indexOf("]]");
+                            start = start2;
+                            block1Len = block1Len2;
+                            r7 = new Object[2];
+                            block2Len = block2Len2;
+                            r7[0] = rule.format.substring(0, openPos);
+                            z = true;
+                            r7[1] = rule.format.substring(num + 2);
+                            rule.format = String.format("%s%s", r7);
+                        } else {
+                            bytes = bytes2;
+                            start = start2;
+                            block1Len = block1Len2;
+                            block2Len = block2Len2;
+                            z = true;
                         }
-                        arrayList.add(rule);
-                        if (rule.hasIntlPrefix) {
-                            ruleSet.hasRuleWithIntlPrefix = true;
+                        rules.add(rule);
+                        if (rule.hasIntlPrefix != null) {
+                            ruleSet.hasRuleWithIntlPrefix = z;
                         }
-                        if (rule.hasTrunkPrefix) {
-                            ruleSet.hasRuleWithTrunkPrefix = true;
+                        if (rule.hasTrunkPrefix != null) {
+                            ruleSet.hasRuleWithTrunkPrefix = z;
                         }
+                        offset2++;
+                        ruleCnt2 = ruleCnt;
+                        setCnt2 = setCnt;
+                        num = offset3;
+                        bytes2 = bytes;
+                        start2 = start;
+                        block1Len2 = block1Len;
+                        block2Len2 = block2Len;
+                        phoneFormat = this;
                     }
-                    ruleSet.rules = arrayList;
+                    start = start2;
+                    block1Len = block1Len2;
+                    ruleCnt = ruleCnt2;
+                    block2Len = block2Len2;
+                    setCnt = setCnt2;
+                    ruleSet.rules = rules;
                     ruleSets.add(ruleSet);
+                    offset++;
+                    offset2 = num;
+                    num = num2;
+                    block2Len2 = block2Len;
+                    phoneFormat = this;
+                    str = callingCode;
                 }
+                bytes = bytes2;
+                start = start2;
+                block1Len = block1Len2;
+                block2Len = block2Len2;
+                setCnt = setCnt2;
                 res.ruleSets = ruleSets;
             }
         }
@@ -422,10 +450,11 @@ public class PhoneFormat {
     }
 
     public void parseDataHeader() {
+        int i = 0;
         int count = value32(0);
         int base = (count * 12) + 4;
         int spot = 4;
-        for (int i = 0; i < count; i++) {
+        while (i < count) {
             String callingCode = valueString(spot);
             spot += 4;
             String country = valueString(spot);
@@ -443,6 +472,7 @@ public class PhoneFormat {
                 this.callingCodeCountries.put(callingCode, countries);
             }
             countries.add(country);
+            i++;
         }
         if (this.defaultCallingCode != null) {
             callingCodeInfo(this.defaultCallingCode);

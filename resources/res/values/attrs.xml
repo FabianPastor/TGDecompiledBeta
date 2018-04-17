@@ -60,6 +60,12 @@
         <enum name="dark" value="0" />
         <enum name="light" value="1" />
     </attr>
+    <attr name="coordinatorLayoutStyle" format="reference">
+    </attr>
+    <attr name="customThemeStyle">
+        <enum name="googleMaterial2" value="2" />
+        <enum name="material" value="1" />
+    </attr>
     <attr name="environment">
         <enum name="production" value="1" />
         <enum name="sandbox" value="0" />
@@ -102,6 +108,8 @@
         <enum name="adjust_width" value="1" />
         <enum name="none" value="0" />
     </attr>
+    <attr name="keylines" format="reference">
+    </attr>
     <attr name="latLngBoundsNorthEastLatitude" format="float">
     </attr>
     <attr name="latLngBoundsNorthEastLongitude" format="float">
@@ -109,6 +117,47 @@
     <attr name="latLngBoundsSouthWestLatitude" format="float">
     </attr>
     <attr name="latLngBoundsSouthWestLongitude" format="float">
+    </attr>
+    <attr name="layout_anchor" format="reference">
+    </attr>
+    <attr name="layout_anchorGravity">
+        <flag name="bottom" value="80" />
+        <flag name="center" value="17" />
+        <flag name="center_horizontal" value="1" />
+        <flag name="center_vertical" value="16" />
+        <flag name="clip_horizontal" value="8" />
+        <flag name="clip_vertical" value="128" />
+        <flag name="end" value="8388613" />
+        <flag name="fill" value="119" />
+        <flag name="fill_horizontal" value="7" />
+        <flag name="fill_vertical" value="112" />
+        <flag name="left" value="3" />
+        <flag name="right" value="5" />
+        <flag name="start" value="8388611" />
+        <flag name="top" value="48" />
+    </attr>
+    <attr name="layout_behavior" format="string">
+    </attr>
+    <attr name="layout_dodgeInsetEdges">
+        <flag name="all" value="119" />
+        <flag name="bottom" value="80" />
+        <flag name="end" value="8388613" />
+        <flag name="left" value="3" />
+        <flag name="none" value="0" />
+        <flag name="right" value="5" />
+        <flag name="start" value="8388611" />
+        <flag name="top" value="48" />
+    </attr>
+    <attr name="layout_insetEdge">
+        <enum name="bottom" value="80" />
+        <enum name="end" value="8388613" />
+        <enum name="left" value="3" />
+        <enum name="none" value="0" />
+        <enum name="right" value="5" />
+        <enum name="start" value="8388611" />
+        <enum name="top" value="48" />
+    </attr>
+    <attr name="layout_keyline" format="integer">
     </attr>
     <attr name="liteMode" format="boolean">
     </attr>
@@ -139,6 +188,8 @@
     <attr name="maskedWalletDetailsTextAppearance" format="reference">
     </attr>
     <attr name="scopeUris" format="reference|string">
+    </attr>
+    <attr name="statusBarBackground" format="reference|color">
     </attr>
     <attr name="toolbarTextColorStyle">
         <enum name="dark" value="2" />

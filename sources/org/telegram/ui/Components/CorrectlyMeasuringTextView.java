@@ -15,10 +15,16 @@ public class CorrectlyMeasuringTextView extends TextView {
             Layout l = getLayout();
             if (l.getLineCount() > 1) {
                 int maxw = 0;
-                for (int i = l.getLineCount() - 1; i >= 0; i--) {
-                    maxw = Math.max(maxw, Math.round(l.getPaint().measureText(getText(), l.getLineStart(i), l.getLineEnd(i))));
+                int i = l.getLineCount() - 1;
+                while (true) {
+                    int i2 = i;
+                    if (i2 < 0) {
+                        break;
+                    }
+                    maxw = Math.max(maxw, Math.round(l.getPaint().measureText(getText(), l.getLineStart(i2), l.getLineEnd(i2))));
+                    i = i2 - 1;
                 }
-                super.onMeasure(Math.min((getPaddingLeft() + maxw) + getPaddingRight(), getMeasuredWidth()) | NUM, getMeasuredHeight() | NUM);
+                super.onMeasure(Math.min((getPaddingLeft() + maxw) + getPaddingRight(), getMeasuredWidth()) | NUM, NUM | getMeasuredHeight());
             }
         } catch (Exception e) {
         }

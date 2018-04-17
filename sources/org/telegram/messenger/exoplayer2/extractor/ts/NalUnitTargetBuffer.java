@@ -12,7 +12,7 @@ final class NalUnitTargetBuffer {
 
     public NalUnitTargetBuffer(int targetType, int initialCapacity) {
         this.targetType = targetType;
-        this.nalData = new byte[(initialCapacity + 3)];
+        this.nalData = new byte[(3 + initialCapacity)];
         this.nalData[2] = (byte) 1;
     }
 
@@ -27,7 +27,7 @@ final class NalUnitTargetBuffer {
 
     public void startNalUnit(int type) {
         boolean z = true;
-        Assertions.checkState(!this.isFilling);
+        Assertions.checkState(this.isFilling ^ true);
         if (type != this.targetType) {
             z = false;
         }

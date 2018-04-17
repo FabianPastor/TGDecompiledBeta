@@ -119,10 +119,10 @@ public class GroupCreateCheckBox extends View {
             this.isChecked = checked;
             if (this.attachedToWindow && animated) {
                 animateToCheckedState(checked);
-                return;
+            } else {
+                cancelCheckAnimator();
+                setProgress(checked ? 1.0f : 0.0f);
             }
-            cancelCheckAnimator();
-            setProgress(checked ? 1.0f : 0.0f);
         }
     }
 
@@ -135,38 +135,71 @@ public class GroupCreateCheckBox extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        if (getVisibility() == 0 && this.progress != 0.0f) {
+        GroupCreateCheckBox groupCreateCheckBox = this;
+        Canvas canvas2 = canvas;
+        if (getVisibility() == 0 && groupCreateCheckBox.progress != 0.0f) {
             float radDiff;
+            float radDiff2;
+            float innerRad;
+            float checkSide;
+            float smallCheckSide;
+            int x;
+            int y;
+            float side;
+            int x2;
+            float side2;
             int cx = getMeasuredWidth() / 2;
             int cy = getMeasuredHeight() / 2;
             eraser2.setStrokeWidth((float) AndroidUtilities.dp(30.0f));
-            this.drawBitmap.eraseColor(0);
-            float roundProgress = this.progress >= 0.5f ? 1.0f : this.progress / 0.5f;
-            float checkProgress = this.progress < 0.5f ? 0.0f : (this.progress - 0.5f) / 0.5f;
-            float roundProgressCheckState = this.isCheckAnimation ? this.progress : 1.0f - this.progress;
+            groupCreateCheckBox.drawBitmap.eraseColor(0);
+            float roundProgress = groupCreateCheckBox.progress >= 0.5f ? 1.0f : groupCreateCheckBox.progress / 0.5f;
+            float checkProgress = groupCreateCheckBox.progress < 0.5f ? 0.0f : (groupCreateCheckBox.progress - 0.5f) / 0.5f;
+            float roundProgressCheckState = groupCreateCheckBox.isCheckAnimation ? groupCreateCheckBox.progress : 1.0f - groupCreateCheckBox.progress;
             if (roundProgressCheckState < progressBounceDiff) {
                 radDiff = (((float) AndroidUtilities.dp(2.0f)) * roundProgressCheckState) / progressBounceDiff;
             } else if (roundProgressCheckState < 0.4f) {
                 radDiff = ((float) AndroidUtilities.dp(2.0f)) - ((((float) AndroidUtilities.dp(2.0f)) * (roundProgressCheckState - progressBounceDiff)) / progressBounceDiff);
             } else {
                 radDiff = 0.0f;
+                radDiff2 = radDiff;
+                if (checkProgress != 0.0f) {
+                    canvas2.drawCircle((float) cx, (float) cy, (((float) (cx - AndroidUtilities.dp(2.0f))) + (((float) AndroidUtilities.dp(2.0f)) * checkProgress)) - radDiff2, groupCreateCheckBox.backgroundPaint);
+                }
+                innerRad = ((float) (cx - groupCreateCheckBox.innerRadDiff)) - radDiff2;
+                groupCreateCheckBox.bitmapCanvas.drawCircle((float) cx, (float) cy, innerRad, groupCreateCheckBox.backgroundInnerPaint);
+                groupCreateCheckBox.bitmapCanvas.drawCircle((float) cx, (float) cy, (1.0f - roundProgress) * innerRad, eraser);
+                canvas2.drawBitmap(groupCreateCheckBox.drawBitmap, 0.0f, 0.0f, null);
+                checkSide = (((float) AndroidUtilities.dp(10.0f)) * checkProgress) * groupCreateCheckBox.checkScale;
+                smallCheckSide = (((float) AndroidUtilities.dp(5.0f)) * checkProgress) * groupCreateCheckBox.checkScale;
+                x = cx - AndroidUtilities.dp(1.0f);
+                y = cy + AndroidUtilities.dp(4.0f);
+                side = (float) Math.sqrt((double) ((smallCheckSide * smallCheckSide) / 2.0f));
+                cx = y;
+                x2 = x;
+                canvas2.drawLine((float) x, (float) y, ((float) x) - side, ((float) y) - side, groupCreateCheckBox.checkPaint);
+                side2 = (float) Math.sqrt((double) ((checkSide * checkSide) / 2.0f));
+                y = x2 - AndroidUtilities.dp(1.2f);
+                canvas2.drawLine((float) y, (float) cx, ((float) y) + side2, ((float) cx) - side2, groupCreateCheckBox.checkPaint);
             }
+            radDiff2 = radDiff;
             if (checkProgress != 0.0f) {
-                canvas.drawCircle((float) cx, (float) cy, (((float) (cx - AndroidUtilities.dp(2.0f))) + (((float) AndroidUtilities.dp(2.0f)) * checkProgress)) - radDiff, this.backgroundPaint);
+                canvas2.drawCircle((float) cx, (float) cy, (((float) (cx - AndroidUtilities.dp(2.0f))) + (((float) AndroidUtilities.dp(2.0f)) * checkProgress)) - radDiff2, groupCreateCheckBox.backgroundPaint);
             }
-            float innerRad = ((float) (cx - this.innerRadDiff)) - radDiff;
-            this.bitmapCanvas.drawCircle((float) cx, (float) cy, innerRad, this.backgroundInnerPaint);
-            this.bitmapCanvas.drawCircle((float) cx, (float) cy, (1.0f - roundProgress) * innerRad, eraser);
-            canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);
-            float checkSide = (((float) AndroidUtilities.dp(10.0f)) * checkProgress) * this.checkScale;
-            float smallCheckSide = (((float) AndroidUtilities.dp(5.0f)) * checkProgress) * this.checkScale;
-            int x = cx - AndroidUtilities.dp(1.0f);
-            int y = cy + AndroidUtilities.dp(4.0f);
-            float side = (float) Math.sqrt((double) ((smallCheckSide * smallCheckSide) / 2.0f));
-            canvas.drawLine((float) x, (float) y, ((float) x) - side, ((float) y) - side, this.checkPaint);
-            side = (float) Math.sqrt((double) ((checkSide * checkSide) / 2.0f));
-            x -= AndroidUtilities.dp(1.2f);
-            canvas.drawLine((float) x, (float) y, ((float) x) + side, ((float) y) - side, this.checkPaint);
+            innerRad = ((float) (cx - groupCreateCheckBox.innerRadDiff)) - radDiff2;
+            groupCreateCheckBox.bitmapCanvas.drawCircle((float) cx, (float) cy, innerRad, groupCreateCheckBox.backgroundInnerPaint);
+            groupCreateCheckBox.bitmapCanvas.drawCircle((float) cx, (float) cy, (1.0f - roundProgress) * innerRad, eraser);
+            canvas2.drawBitmap(groupCreateCheckBox.drawBitmap, 0.0f, 0.0f, null);
+            checkSide = (((float) AndroidUtilities.dp(10.0f)) * checkProgress) * groupCreateCheckBox.checkScale;
+            smallCheckSide = (((float) AndroidUtilities.dp(5.0f)) * checkProgress) * groupCreateCheckBox.checkScale;
+            x = cx - AndroidUtilities.dp(1.0f);
+            y = cy + AndroidUtilities.dp(4.0f);
+            side = (float) Math.sqrt((double) ((smallCheckSide * smallCheckSide) / 2.0f));
+            cx = y;
+            x2 = x;
+            canvas2.drawLine((float) x, (float) y, ((float) x) - side, ((float) y) - side, groupCreateCheckBox.checkPaint);
+            side2 = (float) Math.sqrt((double) ((checkSide * checkSide) / 2.0f));
+            y = x2 - AndroidUtilities.dp(1.2f);
+            canvas2.drawLine((float) y, (float) cx, ((float) y) + side2, ((float) cx) - side2, groupCreateCheckBox.checkPaint);
         }
     }
 }

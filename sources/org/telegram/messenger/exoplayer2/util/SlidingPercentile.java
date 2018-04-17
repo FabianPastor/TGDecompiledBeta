@@ -56,45 +56,46 @@ public class SlidingPercentile {
     }
 
     public void addSample(int weight, float value) {
+        int i;
         Sample newSample;
         ensureSortedByIndex();
         if (this.recycledSampleCount > 0) {
             Sample[] sampleArr = this.recycledSamples;
-            int i = this.recycledSampleCount - 1;
+            i = this.recycledSampleCount - 1;
             this.recycledSampleCount = i;
             newSample = sampleArr[i];
         } else {
             newSample = new Sample();
         }
-        int i2 = this.nextSampleIndex;
-        this.nextSampleIndex = i2 + 1;
-        newSample.index = i2;
+        i = this.nextSampleIndex;
+        this.nextSampleIndex = i + 1;
+        newSample.index = i;
         newSample.weight = weight;
         newSample.value = value;
         this.samples.add(newSample);
         this.totalWeight += weight;
         while (this.totalWeight > this.maxWeight) {
-            int excessWeight = this.totalWeight - this.maxWeight;
+            i = this.totalWeight - this.maxWeight;
             Sample oldestSample = (Sample) this.samples.get(0);
-            if (oldestSample.weight <= excessWeight) {
+            if (oldestSample.weight <= i) {
                 this.totalWeight -= oldestSample.weight;
                 this.samples.remove(0);
                 if (this.recycledSampleCount < 5) {
-                    sampleArr = this.recycledSamples;
-                    i = this.recycledSampleCount;
-                    this.recycledSampleCount = i + 1;
-                    sampleArr[i] = oldestSample;
+                    Sample[] sampleArr2 = this.recycledSamples;
+                    int i2 = this.recycledSampleCount;
+                    this.recycledSampleCount = i2 + 1;
+                    sampleArr2[i2] = oldestSample;
                 }
             } else {
-                oldestSample.weight -= excessWeight;
-                this.totalWeight -= excessWeight;
+                oldestSample.weight -= i;
+                this.totalWeight -= i;
             }
         }
     }
 
     public float getPercentile(float percentile) {
         ensureSortedByValue();
-        float desiredWeight = percentile * ((float) this.totalWeight);
+        float desiredWeight = ((float) this.totalWeight) * percentile;
         int accumulatedWeight = 0;
         for (int i = 0; i < this.samples.size(); i++) {
             Sample currentSample = (Sample) this.samples.get(i);

@@ -18,6 +18,6 @@
     <string name="common_open_on_phone">Телефонда ашу</string>
     <string name="common_signin_button_text">Кіру</string>
     <string name="common_signin_button_text_long">Google арқылы кіру</string>
-    <string name="gcm_fallback_notification_channel_label">Өзге</string>
+    <string name="fcm_fallback_notification_channel_label">Өзге</string>
     <string name="status_bar_notification_info_overflow">999+</string>
 </resources>

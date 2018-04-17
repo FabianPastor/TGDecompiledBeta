@@ -28,29 +28,29 @@ public class DownloadController implements NotificationCenterDelegate {
     public static final int AUTODOWNLOAD_MASK_VIDEO = 4;
     public static final int AUTODOWNLOAD_MASK_VIDEOMESSAGE = 64;
     private static volatile DownloadController[] Instance = new DownloadController[3];
-    private HashMap<String, FileDownloadProgressListener> addLaterArray = new HashMap();
-    private ArrayList<DownloadObject> audioDownloadQueue = new ArrayList();
+    private HashMap<String, FileDownloadProgressListener> addLaterArray;
+    private ArrayList<DownloadObject> audioDownloadQueue;
     private int currentAccount;
-    private ArrayList<FileDownloadProgressListener> deleteLaterArray = new ArrayList();
-    private ArrayList<DownloadObject> documentDownloadQueue = new ArrayList();
-    private HashMap<String, DownloadObject> downloadQueueKeys = new HashMap();
-    private ArrayList<DownloadObject> gifDownloadQueue = new ArrayList();
+    private ArrayList<FileDownloadProgressListener> deleteLaterArray;
+    private ArrayList<DownloadObject> documentDownloadQueue;
+    private HashMap<String, DownloadObject> downloadQueueKeys;
+    private ArrayList<DownloadObject> gifDownloadQueue;
     public boolean globalAutodownloadEnabled;
-    private int lastCheckMask = 0;
-    private int lastTag = 0;
-    private boolean listenerInProgress = false;
-    private HashMap<String, ArrayList<MessageObject>> loadingFileMessagesObservers = new HashMap();
-    private HashMap<String, ArrayList<WeakReference<FileDownloadProgressListener>>> loadingFileObservers = new HashMap();
+    private int lastCheckMask;
+    private int lastTag;
+    private boolean listenerInProgress;
+    private HashMap<String, ArrayList<MessageObject>> loadingFileMessagesObservers;
+    private HashMap<String, ArrayList<WeakReference<FileDownloadProgressListener>>> loadingFileObservers;
     public int[] mobileDataDownloadMask = new int[4];
     public int[] mobileMaxFileSize = new int[7];
-    private ArrayList<DownloadObject> musicDownloadQueue = new ArrayList();
-    private SparseArray<String> observersByTag = new SparseArray();
-    private ArrayList<DownloadObject> photoDownloadQueue = new ArrayList();
+    private ArrayList<DownloadObject> musicDownloadQueue;
+    private SparseArray<String> observersByTag;
+    private ArrayList<DownloadObject> photoDownloadQueue;
     public int[] roamingDownloadMask = new int[4];
     public int[] roamingMaxFileSize = new int[7];
-    private LongSparseArray<Long> typingTimes = new LongSparseArray();
-    private ArrayList<DownloadObject> videoDownloadQueue = new ArrayList();
-    private ArrayList<DownloadObject> videoMessageDownloadQueue = new ArrayList();
+    private LongSparseArray<Long> typingTimes;
+    private ArrayList<DownloadObject> videoDownloadQueue;
+    private ArrayList<DownloadObject> videoMessageDownloadQueue;
     public int[] wifiDownloadMask = new int[4];
     public int[] wifiMaxFileSize = new int[7];
 
@@ -95,23 +95,12 @@ public class DownloadController implements NotificationCenterDelegate {
         DownloadController localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (DownloadController.class) {
-                try {
-                    localInstance = Instance[num];
-                    if (localInstance == null) {
-                        DownloadController[] downloadControllerArr = Instance;
-                        DownloadController localInstance2 = new DownloadController(num);
-                        try {
-                            downloadControllerArr[num] = localInstance2;
-                            localInstance = localInstance2;
-                        } catch (Throwable th) {
-                            Throwable th2 = th;
-                            localInstance = localInstance2;
-                            throw th2;
-                        }
-                    }
-                } catch (Throwable th3) {
-                    th2 = th3;
-                    throw th2;
+                localInstance = Instance[num];
+                if (localInstance == null) {
+                    DownloadController[] downloadControllerArr = Instance;
+                    DownloadController downloadController = new DownloadController(num);
+                    localInstance = downloadController;
+                    downloadControllerArr[num] = downloadController;
                 }
             }
         }
@@ -119,42 +108,99 @@ public class DownloadController implements NotificationCenterDelegate {
     }
 
     public DownloadController(int instance) {
+        int a = 0;
+        this.lastCheckMask = 0;
+        this.photoDownloadQueue = new ArrayList();
+        this.audioDownloadQueue = new ArrayList();
+        this.videoMessageDownloadQueue = new ArrayList();
+        this.documentDownloadQueue = new ArrayList();
+        this.musicDownloadQueue = new ArrayList();
+        this.gifDownloadQueue = new ArrayList();
+        this.videoDownloadQueue = new ArrayList();
+        this.downloadQueueKeys = new HashMap();
+        this.loadingFileObservers = new HashMap();
+        this.loadingFileMessagesObservers = new HashMap();
+        this.observersByTag = new SparseArray();
+        this.listenerInProgress = false;
+        this.addLaterArray = new HashMap();
+        this.deleteLaterArray = new ArrayList();
+        this.lastTag = 0;
+        this.typingTimes = new LongSparseArray();
         this.currentAccount = instance;
         SharedPreferences preferences = MessagesController.getMainSettings(this.currentAccount);
-        int a = 0;
-        while (a < 4) {
-            String key = "mobileDataDownloadMask" + (a == 0 ? TtmlNode.ANONYMOUS_REGION_ID : Integer.valueOf(a));
-            if (a == 0 || preferences.contains(key)) {
-                Object obj;
-                this.mobileDataDownloadMask[a] = preferences.getInt(key, 115);
-                this.wifiDownloadMask[a] = preferences.getInt("wifiDownloadMask" + (a == 0 ? TtmlNode.ANONYMOUS_REGION_ID : Integer.valueOf(a)), 115);
-                int[] iArr = this.roamingDownloadMask;
-                StringBuilder append = new StringBuilder().append("roamingDownloadMask");
-                if (a == 0) {
-                    obj = TtmlNode.ANONYMOUS_REGION_ID;
-                } else {
-                    obj = Integer.valueOf(a);
+        int a2 = 0;
+        while (a2 < 4) {
+            String key = new StringBuilder();
+            key.append("mobileDataDownloadMask");
+            key.append(a2 == 0 ? TtmlNode.ANONYMOUS_REGION_ID : Integer.valueOf(a2));
+            key = key.toString();
+            if (a2 != 0) {
+                if (!preferences.contains(key)) {
+                    this.mobileDataDownloadMask[a2] = this.mobileDataDownloadMask[0];
+                    this.wifiDownloadMask[a2] = this.wifiDownloadMask[0];
+                    this.roamingDownloadMask[a2] = this.roamingDownloadMask[0];
+                    a2++;
                 }
-                iArr[a] = preferences.getInt(append.append(obj).toString(), 0);
-            } else {
-                this.mobileDataDownloadMask[a] = this.mobileDataDownloadMask[0];
-                this.wifiDownloadMask[a] = this.wifiDownloadMask[0];
-                this.roamingDownloadMask[a] = this.roamingDownloadMask[0];
             }
-            a++;
+            this.mobileDataDownloadMask[a2] = preferences.getInt(key, 115);
+            int[] iArr = this.wifiDownloadMask;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("wifiDownloadMask");
+            stringBuilder.append(a2 == 0 ? TtmlNode.ANONYMOUS_REGION_ID : Integer.valueOf(a2));
+            iArr[a2] = preferences.getInt(stringBuilder.toString(), 115);
+            iArr = this.roamingDownloadMask;
+            StringBuilder stringBuilder2 = new StringBuilder();
+            stringBuilder2.append("roamingDownloadMask");
+            stringBuilder2.append(a2 == 0 ? TtmlNode.ANONYMOUS_REGION_ID : Integer.valueOf(a2));
+            iArr[a2] = preferences.getInt(stringBuilder2.toString(), 0);
+            a2++;
         }
-        for (a = 0; a < 7; a++) {
-            int sdefault;
-            if (a == 1) {
-                sdefault = 2097152;
-            } else if (a == 6) {
-                sdefault = 5242880;
-            } else {
-                sdefault = 10485760;
+        while (true) {
+            int a3 = a;
+            if (a3 >= 7) {
+                break;
             }
-            this.mobileMaxFileSize[a] = preferences.getInt("mobileMaxDownloadSize" + a, sdefault);
-            this.wifiMaxFileSize[a] = preferences.getInt("wifiMaxDownloadSize" + a, sdefault);
-            this.roamingMaxFileSize[a] = preferences.getInt("roamingMaxDownloadSize" + a, sdefault);
+            int[] iArr2;
+            StringBuilder stringBuilder3;
+            if (a3 == 1) {
+                a = 2097152;
+            } else if (a3 == 6) {
+                a = 5242880;
+            } else {
+                a = 10485760;
+                iArr2 = this.mobileMaxFileSize;
+                stringBuilder3 = new StringBuilder();
+                stringBuilder3.append("mobileMaxDownloadSize");
+                stringBuilder3.append(a3);
+                iArr2[a3] = preferences.getInt(stringBuilder3.toString(), a);
+                iArr2 = this.wifiMaxFileSize;
+                stringBuilder3 = new StringBuilder();
+                stringBuilder3.append("wifiMaxDownloadSize");
+                stringBuilder3.append(a3);
+                iArr2[a3] = preferences.getInt(stringBuilder3.toString(), a);
+                iArr2 = this.roamingMaxFileSize;
+                stringBuilder3 = new StringBuilder();
+                stringBuilder3.append("roamingMaxDownloadSize");
+                stringBuilder3.append(a3);
+                iArr2[a3] = preferences.getInt(stringBuilder3.toString(), a);
+                a = a3 + 1;
+            }
+            iArr2 = this.mobileMaxFileSize;
+            stringBuilder3 = new StringBuilder();
+            stringBuilder3.append("mobileMaxDownloadSize");
+            stringBuilder3.append(a3);
+            iArr2[a3] = preferences.getInt(stringBuilder3.toString(), a);
+            iArr2 = this.wifiMaxFileSize;
+            stringBuilder3 = new StringBuilder();
+            stringBuilder3.append("wifiMaxDownloadSize");
+            stringBuilder3.append(a3);
+            iArr2[a3] = preferences.getInt(stringBuilder3.toString(), a);
+            iArr2 = this.roamingMaxFileSize;
+            stringBuilder3 = new StringBuilder();
+            stringBuilder3.append("roamingMaxDownloadSize");
+            stringBuilder3.append(a3);
+            iArr2[a3] = preferences.getInt(stringBuilder3.toString(), a);
+            a = a3 + 1;
         }
         this.globalAutodownloadEnabled = preferences.getBoolean("globalAutodownloadEnabled", true);
         AndroidUtilities.runOnUIThread(new C01411());
@@ -202,10 +248,12 @@ public class DownloadController implements NotificationCenterDelegate {
     }
 
     protected int getAutodownloadMask() {
+        int a = 0;
         if (!this.globalAutodownloadEnabled) {
             return 0;
         }
         int[] masksArray;
+        int mask;
         int result = 0;
         if (ConnectionsManager.isConnectedToWiFi()) {
             masksArray = this.wifiDownloadMask;
@@ -213,9 +261,36 @@ public class DownloadController implements NotificationCenterDelegate {
             masksArray = this.roamingDownloadMask;
         } else {
             masksArray = this.mobileDataDownloadMask;
+            while (a < 4) {
+                mask = 0;
+                if ((masksArray[a] & 1) != 0) {
+                    mask = 0 | 1;
+                }
+                if ((masksArray[a] & 2) != 0) {
+                    mask |= 2;
+                }
+                if ((masksArray[a] & 64) != 0) {
+                    mask |= 64;
+                }
+                if ((4 & masksArray[a]) != 0) {
+                    mask |= 4;
+                }
+                if ((masksArray[a] & 8) != 0) {
+                    mask |= 8;
+                }
+                if ((masksArray[a] & 16) != 0) {
+                    mask |= 16;
+                }
+                if ((masksArray[a] & 32) != 0) {
+                    mask |= 32;
+                }
+                result |= mask << (a * 8);
+                a++;
+            }
+            return result;
         }
-        for (int a = 0; a < 4; a++) {
-            int mask = 0;
+        while (a < 4) {
+            mask = 0;
             if ((masksArray[a] & 1) != 0) {
                 mask = 0 | 1;
             }
@@ -225,7 +300,7 @@ public class DownloadController implements NotificationCenterDelegate {
             if ((masksArray[a] & 64) != 0) {
                 mask |= 64;
             }
-            if ((masksArray[a] & 4) != 0) {
+            if ((4 & masksArray[a]) != 0) {
                 mask |= 4;
             }
             if ((masksArray[a] & 8) != 0) {
@@ -238,16 +313,17 @@ public class DownloadController implements NotificationCenterDelegate {
                 mask |= 32;
             }
             result |= mask << (a * 8);
+            a++;
         }
         return result;
     }
 
     protected int getAutodownloadMaskAll() {
+        int a = 0;
         if (!this.globalAutodownloadEnabled) {
             return 0;
         }
         int mask = 0;
-        int a = 0;
         while (a < 4) {
             if (!((this.mobileDataDownloadMask[a] & 1) == 0 && (this.wifiDownloadMask[a] & 1) == 0 && (this.roamingDownloadMask[a] & 1) == 0)) {
                 mask |= 1;
@@ -258,7 +334,7 @@ public class DownloadController implements NotificationCenterDelegate {
             if (!((this.mobileDataDownloadMask[a] & 64) == 0 && (this.wifiDownloadMask[a] & 64) == 0 && (this.roamingDownloadMask[a] & 64) == 0)) {
                 mask |= 64;
             }
-            if (!((this.mobileDataDownloadMask[a] & 4) == 0 && (this.wifiDownloadMask[a] & 4) == 0 && (this.roamingDownloadMask[a] & 4) == 0)) {
+            if (!((this.mobileDataDownloadMask[a] & 4) == 0 && (this.wifiDownloadMask[a] & 4) == 0 && (4 & this.roamingDownloadMask[a]) == 0)) {
                 mask |= 4;
             }
             if (!((this.mobileDataDownloadMask[a] & 8) == 0 && (this.wifiDownloadMask[a] & 8) == 0 && (this.roamingDownloadMask[a] & 8) == 0)) {
@@ -322,7 +398,7 @@ public class DownloadController implements NotificationCenterDelegate {
             }
             if ((currentMask & 16) == 0) {
                 for (a = 0; a < this.musicDownloadQueue.size(); a++) {
-                    FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) ((DownloadObject) this.musicDownloadQueue.get(a)).object);
+                    FileLoader.getInstance(this.currentAccount).cancelLoadFile(((DownloadObject) this.musicDownloadQueue.get(a)).object);
                 }
                 this.musicDownloadQueue.clear();
             } else if (this.musicDownloadQueue.isEmpty()) {
@@ -330,37 +406,37 @@ public class DownloadController implements NotificationCenterDelegate {
             }
             if ((currentMask & 32) == 0) {
                 for (a = 0; a < this.gifDownloadQueue.size(); a++) {
-                    FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) ((DownloadObject) this.gifDownloadQueue.get(a)).object);
+                    FileLoader.getInstance(this.currentAccount).cancelLoadFile(((DownloadObject) this.gifDownloadQueue.get(a)).object);
                 }
                 this.gifDownloadQueue.clear();
             } else if (this.gifDownloadQueue.isEmpty()) {
                 newDownloadObjectsAvailable(32);
             }
-            int mask = getAutodownloadMaskAll();
-            if (mask == 0) {
+            a = getAutodownloadMaskAll();
+            if (a == 0) {
                 MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(0);
-                return;
-            }
-            if ((mask & 1) == 0) {
-                MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(1);
-            }
-            if ((mask & 2) == 0) {
-                MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(2);
-            }
-            if ((mask & 64) == 0) {
-                MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(64);
-            }
-            if ((mask & 4) == 0) {
-                MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(4);
-            }
-            if ((mask & 8) == 0) {
-                MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(8);
-            }
-            if ((mask & 16) == 0) {
-                MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(16);
-            }
-            if ((mask & 32) == 0) {
-                MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(32);
+            } else {
+                if ((a & 1) == 0) {
+                    MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(1);
+                }
+                if ((a & 2) == 0) {
+                    MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(2);
+                }
+                if ((a & 64) == 0) {
+                    MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(64);
+                }
+                if ((a & 4) == 0) {
+                    MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(4);
+                }
+                if ((a & 8) == 0) {
+                    MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(8);
+                }
+                if ((a & 16) == 0) {
+                    MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(16);
+                }
+                if ((a & 32) == 0) {
+                    MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(32);
+                }
             }
         }
     }
@@ -370,11 +446,15 @@ public class DownloadController implements NotificationCenterDelegate {
     }
 
     public boolean canDownloadMedia(Message message) {
+        boolean z = false;
         if (!this.globalAutodownloadEnabled) {
             return false;
         }
         int type;
+        Peer peer;
         int index;
+        int mask;
+        int maxSize;
         if (MessageObject.isPhoto(message)) {
             type = 1;
         } else if (MessageObject.isVoiceMessage(message)) {
@@ -389,63 +469,96 @@ public class DownloadController implements NotificationCenterDelegate {
             type = 32;
         } else {
             type = 8;
-        }
-        Peer peer = message.to_id;
-        if (peer == null) {
-            index = 1;
-        } else if (peer.user_id != 0) {
-            if (ContactsController.getInstance(this.currentAccount).contactsDict.containsKey(Integer.valueOf(peer.user_id))) {
-                index = 0;
-            } else {
+            peer = message.to_id;
+            if (peer != null) {
                 index = 1;
+            } else if (peer.user_id == 0) {
+                if (ContactsController.getInstance(this.currentAccount).contactsDict.containsKey(Integer.valueOf(peer.user_id))) {
+                    index = 1;
+                } else {
+                    index = 0;
+                }
+            } else if (peer.chat_id != 0) {
+                index = 2;
+            } else if (MessageObject.isMegagroup(message)) {
+                index = 3;
+            } else {
+                index = 2;
             }
-        } else if (peer.chat_id != 0) {
-            index = 2;
-        } else if (MessageObject.isMegagroup(message)) {
-            index = 2;
-        } else {
-            index = 3;
+            if (ConnectionsManager.isConnectedToWiFi()) {
+                mask = this.wifiDownloadMask[index];
+                maxSize = this.wifiMaxFileSize[maskToIndex(type)];
+            } else if (ConnectionsManager.isRoaming()) {
+                mask = this.mobileDataDownloadMask[index];
+                maxSize = this.mobileMaxFileSize[maskToIndex(type)];
+                if ((type == 1 || MessageObject.getMessageSize(message) <= maxSize) && (mask & type) != 0) {
+                    z = true;
+                }
+                return z;
+            } else {
+                mask = this.roamingDownloadMask[index];
+                maxSize = this.roamingMaxFileSize[maskToIndex(type)];
+            }
+            z = true;
+            return z;
         }
-        int mask;
-        int maxSize;
+        peer = message.to_id;
+        if (peer != null) {
+            index = 1;
+        } else if (peer.user_id == 0) {
+            if (peer.chat_id != 0) {
+                index = 2;
+            } else if (MessageObject.isMegagroup(message)) {
+                index = 3;
+            } else {
+                index = 2;
+            }
+        } else if (ContactsController.getInstance(this.currentAccount).contactsDict.containsKey(Integer.valueOf(peer.user_id))) {
+            index = 1;
+        } else {
+            index = 0;
+        }
         if (ConnectionsManager.isConnectedToWiFi()) {
             mask = this.wifiDownloadMask[index];
             maxSize = this.wifiMaxFileSize[maskToIndex(type)];
         } else if (ConnectionsManager.isRoaming()) {
-            mask = this.roamingDownloadMask[index];
-            maxSize = this.roamingMaxFileSize[maskToIndex(type)];
-        } else {
             mask = this.mobileDataDownloadMask[index];
             maxSize = this.mobileMaxFileSize[maskToIndex(type)];
+            z = true;
+            return z;
+        } else {
+            mask = this.roamingDownloadMask[index];
+            maxSize = this.roamingMaxFileSize[maskToIndex(type)];
         }
-        if ((type == 1 || MessageObject.getMessageSize(message) <= maxSize) && (mask & type) != 0) {
-            return true;
-        }
-        return false;
+        z = true;
+        return z;
     }
 
     protected int getCurrentDownloadMask() {
+        int a = 0;
         if (!this.globalAutodownloadEnabled) {
             return 0;
         }
         int mask;
-        int a;
         if (ConnectionsManager.isConnectedToWiFi()) {
             mask = 0;
-            for (a = 0; a < 4; a++) {
+            while (a < 4) {
                 mask |= this.wifiDownloadMask[a];
+                a++;
             }
             return mask;
         } else if (ConnectionsManager.isRoaming()) {
             mask = 0;
-            for (a = 0; a < 4; a++) {
+            while (a < 4) {
                 mask |= this.roamingDownloadMask[a];
+                a++;
             }
             return mask;
         } else {
             mask = 0;
-            for (a = 0; a < 4; a++) {
+            while (a < 4) {
                 mask |= this.mobileDataDownloadMask[a];
+                a++;
             }
             return mask;
         }
@@ -473,7 +586,7 @@ public class DownloadController implements NotificationCenterDelegate {
                 String path;
                 DownloadObject downloadObject = (DownloadObject) objects.get(a);
                 if (downloadObject.object instanceof Document) {
-                    path = FileLoader.getAttachFileName(downloadObject.object);
+                    path = FileLoader.getAttachFileName((Document) downloadObject.object);
                 } else {
                     path = FileLoader.getAttachFileName(downloadObject.object);
                 }
@@ -482,7 +595,7 @@ public class DownloadController implements NotificationCenterDelegate {
                     if (downloadObject.object instanceof PhotoSize) {
                         FileLoader.getInstance(this.currentAccount).loadFile((PhotoSize) downloadObject.object, null, downloadObject.secret ? 2 : 0);
                     } else if (downloadObject.object instanceof Document) {
-                        FileLoader.getInstance(this.currentAccount).loadFile((Document) downloadObject.object, false, downloadObject.secret ? 2 : 0);
+                        FileLoader.getInstance(this.currentAccount).loadFile(downloadObject.object, false, downloadObject.secret ? 2 : 0);
                     } else {
                         added = false;
                     }
@@ -639,130 +752,150 @@ public class DownloadController implements NotificationCenterDelegate {
 
     public void didReceivedNotification(int id, int account, Object... args) {
         String fileName;
-        ArrayList<WeakReference<FileDownloadProgressListener>> arrayList;
-        int size;
         int a;
+        int a2;
         WeakReference<FileDownloadProgressListener> reference;
-        if (id == NotificationCenter.FileDidFailedLoad || id == NotificationCenter.httpFileDidFailedLoad) {
-            this.listenerInProgress = true;
-            fileName = args[0];
-            arrayList = (ArrayList) this.loadingFileObservers.get(fileName);
-            if (arrayList != null) {
-                size = arrayList.size();
-                for (a = 0; a < size; a++) {
-                    reference = (WeakReference) arrayList.get(a);
-                    if (reference.get() != null) {
-                        ((FileDownloadProgressListener) reference.get()).onFailedDownload(fileName);
-                        this.observersByTag.remove(((FileDownloadProgressListener) reference.get()).getObserverTag());
-                    }
-                }
-                this.loadingFileObservers.remove(fileName);
-            }
-            this.listenerInProgress = false;
-            processLaterArrays();
-            checkDownloadFinished(fileName, ((Integer) args[1]).intValue());
-        } else if (id == NotificationCenter.FileDidLoaded || id == NotificationCenter.httpFileDidLoaded) {
-            this.listenerInProgress = true;
-            fileName = (String) args[0];
-            ArrayList<MessageObject> messageObjects = (ArrayList) this.loadingFileMessagesObservers.get(fileName);
-            if (messageObjects != null) {
-                size = messageObjects.size();
-                for (a = 0; a < size; a++) {
-                    ((MessageObject) messageObjects.get(a)).mediaExists = true;
-                }
-                this.loadingFileMessagesObservers.remove(fileName);
-            }
-            arrayList = (ArrayList) this.loadingFileObservers.get(fileName);
-            if (arrayList != null) {
-                size = arrayList.size();
-                for (a = 0; a < size; a++) {
-                    reference = (WeakReference) arrayList.get(a);
-                    if (reference.get() != null) {
-                        ((FileDownloadProgressListener) reference.get()).onSuccessDownload(fileName);
-                        this.observersByTag.remove(((FileDownloadProgressListener) reference.get()).getObserverTag());
-                    }
-                }
-                this.loadingFileObservers.remove(fileName);
-            }
-            this.listenerInProgress = false;
-            processLaterArrays();
-            checkDownloadFinished(fileName, 0);
-        } else if (id == NotificationCenter.FileLoadProgressChanged) {
-            this.listenerInProgress = true;
-            fileName = (String) args[0];
-            arrayList = (ArrayList) this.loadingFileObservers.get(fileName);
-            if (arrayList != null) {
-                progress = args[1];
-                size = arrayList.size();
-                for (a = 0; a < size; a++) {
-                    reference = (WeakReference) arrayList.get(a);
-                    if (reference.get() != null) {
-                        ((FileDownloadProgressListener) reference.get()).onProgressDownload(fileName, progress.floatValue());
-                    }
-                }
-            }
-            this.listenerInProgress = false;
-            processLaterArrays();
-        } else if (id == NotificationCenter.FileUploadProgressChanged) {
-            this.listenerInProgress = true;
-            fileName = (String) args[0];
-            arrayList = (ArrayList) this.loadingFileObservers.get(fileName);
-            if (arrayList != null) {
-                progress = (Float) args[1];
-                Boolean enc = args[2];
-                size = arrayList.size();
-                for (a = 0; a < size; a++) {
-                    reference = (WeakReference) arrayList.get(a);
-                    if (reference.get() != null) {
-                        ((FileDownloadProgressListener) reference.get()).onProgressUpload(fileName, progress.floatValue(), enc.booleanValue());
-                    }
-                }
-            }
-            this.listenerInProgress = false;
-            processLaterArrays();
-            try {
-                ArrayList<DelayedMessage> delayedMessages = SendMessagesHelper.getInstance(this.currentAccount).getDelayedMessages(fileName);
-                if (delayedMessages != null) {
-                    for (a = 0; a < delayedMessages.size(); a++) {
-                        DelayedMessage delayedMessage = (DelayedMessage) delayedMessages.get(a);
-                        if (delayedMessage.encryptedChat == null) {
-                            long dialog_id = delayedMessage.peer;
-                            Long lastTime;
-                            if (delayedMessage.type == 4) {
-                                lastTime = (Long) this.typingTimes.get(dialog_id);
-                                if (lastTime == null || lastTime.longValue() + 4000 < System.currentTimeMillis()) {
-                                    MessageObject messageObject = (MessageObject) delayedMessage.extraHashMap.get(fileName + "_i");
-                                    if (messageObject == null || !messageObject.isVideo()) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 4, 0);
-                                    } else {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 5, 0);
+        DownloadController downloadController = this;
+        int i = id;
+        if (i != NotificationCenter.FileDidFailedLoad) {
+            if (i != NotificationCenter.httpFileDidFailedLoad) {
+                if (i != NotificationCenter.FileDidLoaded) {
+                    if (i != NotificationCenter.httpFileDidLoaded) {
+                        ArrayList<WeakReference<FileDownloadProgressListener>> arrayList;
+                        Float progress;
+                        int size;
+                        if (i == NotificationCenter.FileLoadProgressChanged) {
+                            downloadController.listenerInProgress = true;
+                            fileName = args[0];
+                            arrayList = (ArrayList) downloadController.loadingFileObservers.get(fileName);
+                            if (arrayList != null) {
+                                progress = args[1];
+                                size = arrayList.size();
+                                for (a = 0; a < size; a++) {
+                                    WeakReference<FileDownloadProgressListener> reference2 = (WeakReference) arrayList.get(a);
+                                    if (reference2.get() != null) {
+                                        ((FileDownloadProgressListener) reference2.get()).onProgressDownload(fileName, progress.floatValue());
                                     }
-                                    this.typingTimes.put(dialog_id, Long.valueOf(System.currentTimeMillis()));
-                                }
-                            } else {
-                                lastTime = (Long) this.typingTimes.get(dialog_id);
-                                Document document = delayedMessage.obj.getDocument();
-                                if (lastTime == null || lastTime.longValue() + 4000 < System.currentTimeMillis()) {
-                                    if (delayedMessage.obj.isRoundVideo()) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 8, 0);
-                                    } else if (delayedMessage.obj.isVideo()) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 5, 0);
-                                    } else if (delayedMessage.obj.isVoice()) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 9, 0);
-                                    } else if (delayedMessage.obj.getDocument() != null) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 3, 0);
-                                    } else if (delayedMessage.location != null) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(dialog_id, 4, 0);
-                                    }
-                                    this.typingTimes.put(dialog_id, Long.valueOf(System.currentTimeMillis()));
                                 }
                             }
+                            downloadController.listenerInProgress = false;
+                            processLaterArrays();
+                            return;
+                        } else if (i == NotificationCenter.FileUploadProgressChanged) {
+                            downloadController.listenerInProgress = true;
+                            fileName = (String) args[0];
+                            arrayList = (ArrayList) downloadController.loadingFileObservers.get(fileName);
+                            if (arrayList != null) {
+                                progress = (Float) args[1];
+                                Boolean enc = args[2];
+                                int size2 = arrayList.size();
+                                for (size = 0; size < size2; size++) {
+                                    WeakReference<FileDownloadProgressListener> reference3 = (WeakReference) arrayList.get(size);
+                                    if (reference3.get() != null) {
+                                        ((FileDownloadProgressListener) reference3.get()).onProgressUpload(fileName, progress.floatValue(), enc.booleanValue());
+                                    }
+                                }
+                            }
+                            downloadController.listenerInProgress = false;
+                            processLaterArrays();
+                            try {
+                                ArrayList<DelayedMessage> delayedMessages = SendMessagesHelper.getInstance(downloadController.currentAccount).getDelayedMessages(fileName);
+                                if (delayedMessages != null) {
+                                    for (a = 0; a < delayedMessages.size(); a++) {
+                                        DelayedMessage delayedMessage = (DelayedMessage) delayedMessages.get(a);
+                                        if (delayedMessage.encryptedChat == null) {
+                                            long dialog_id = delayedMessage.peer;
+                                            if (delayedMessage.type == 4) {
+                                                Long lastTime = (Long) downloadController.typingTimes.get(dialog_id);
+                                                if (lastTime == null || lastTime.longValue() + 4000 < System.currentTimeMillis()) {
+                                                    HashMap hashMap = delayedMessage.extraHashMap;
+                                                    StringBuilder stringBuilder = new StringBuilder();
+                                                    stringBuilder.append(fileName);
+                                                    stringBuilder.append("_i");
+                                                    MessageObject messageObject = (MessageObject) hashMap.get(stringBuilder.toString());
+                                                    if (messageObject == null || !messageObject.isVideo()) {
+                                                        MessagesController.getInstance(downloadController.currentAccount).sendTyping(dialog_id, 4, 0);
+                                                    } else {
+                                                        MessagesController.getInstance(downloadController.currentAccount).sendTyping(dialog_id, 5, 0);
+                                                    }
+                                                    downloadController.typingTimes.put(dialog_id, Long.valueOf(System.currentTimeMillis()));
+                                                }
+                                            } else {
+                                                Long lastTime2 = (Long) downloadController.typingTimes.get(dialog_id);
+                                                Document document = delayedMessage.obj.getDocument();
+                                                if (lastTime2 == null || lastTime2.longValue() + 4000 < System.currentTimeMillis()) {
+                                                    if (delayedMessage.obj.isRoundVideo()) {
+                                                        MessagesController.getInstance(downloadController.currentAccount).sendTyping(dialog_id, 8, 0);
+                                                    } else if (delayedMessage.obj.isVideo()) {
+                                                        MessagesController.getInstance(downloadController.currentAccount).sendTyping(dialog_id, 5, 0);
+                                                    } else if (delayedMessage.obj.isVoice()) {
+                                                        MessagesController.getInstance(downloadController.currentAccount).sendTyping(dialog_id, 9, 0);
+                                                    } else if (delayedMessage.obj.getDocument() != null) {
+                                                        MessagesController.getInstance(downloadController.currentAccount).sendTyping(dialog_id, 3, 0);
+                                                    } else if (delayedMessage.location != null) {
+                                                        MessagesController.getInstance(downloadController.currentAccount).sendTyping(dialog_id, 4, 0);
+                                                    }
+                                                    downloadController.typingTimes.put(dialog_id, Long.valueOf(System.currentTimeMillis()));
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                return;
+                            } catch (Throwable e) {
+                                FileLog.m3e(e);
+                                return;
+                            }
+                        } else {
+                            return;
                         }
                     }
                 }
-            } catch (Throwable e) {
-                FileLog.m3e(e);
+                downloadController.listenerInProgress = true;
+                fileName = (String) args[0];
+                ArrayList<MessageObject> messageObjects = (ArrayList) downloadController.loadingFileMessagesObservers.get(fileName);
+                if (messageObjects != null) {
+                    a = messageObjects.size();
+                    for (a2 = 0; a2 < a; a2++) {
+                        ((MessageObject) messageObjects.get(a2)).mediaExists = true;
+                    }
+                    downloadController.loadingFileMessagesObservers.remove(fileName);
+                }
+                ArrayList<WeakReference<FileDownloadProgressListener>> arrayList2 = (ArrayList) downloadController.loadingFileObservers.get(fileName);
+                if (arrayList2 != null) {
+                    a = arrayList2.size();
+                    for (a2 = 0; a2 < a; a2++) {
+                        reference = (WeakReference) arrayList2.get(a2);
+                        if (reference.get() != null) {
+                            ((FileDownloadProgressListener) reference.get()).onSuccessDownload(fileName);
+                            downloadController.observersByTag.remove(((FileDownloadProgressListener) reference.get()).getObserverTag());
+                        }
+                    }
+                    downloadController.loadingFileObservers.remove(fileName);
+                }
+                downloadController.listenerInProgress = false;
+                processLaterArrays();
+                checkDownloadFinished(fileName, 0);
+                return;
             }
         }
+        a2 = 0;
+        downloadController.listenerInProgress = true;
+        fileName = (String) args[a2];
+        ArrayList<WeakReference<FileDownloadProgressListener>> arrayList3 = (ArrayList) downloadController.loadingFileObservers.get(fileName);
+        if (arrayList3 != null) {
+            a = arrayList3.size();
+            for (a2 = 0; a2 < a; a2++) {
+                reference = (WeakReference) arrayList3.get(a2);
+                if (reference.get() != null) {
+                    ((FileDownloadProgressListener) reference.get()).onFailedDownload(fileName);
+                    downloadController.observersByTag.remove(((FileDownloadProgressListener) reference.get()).getObserverTag());
+                }
+            }
+            downloadController.loadingFileObservers.remove(fileName);
+        }
+        downloadController.listenerInProgress = false;
+        processLaterArrays();
+        checkDownloadFinished(fileName, ((Integer) args[1]).intValue());
     }
 }

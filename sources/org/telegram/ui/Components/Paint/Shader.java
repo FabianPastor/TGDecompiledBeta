@@ -24,8 +24,8 @@ public class Shader {
     }
 
     public Shader(String vertexShader, String fragmentShader, String[] attributes, String[] uniforms) {
-        int i = 0;
         CompilationResult vResult = compileShader(35633, vertexShader);
+        int i = 0;
         if (vResult.status == 0) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m1e("Vertex shader compilation failed");
@@ -41,17 +41,18 @@ public class Shader {
             destroyShader(vResult.shader, fResult.shader, this.program);
             return;
         }
+        int i2;
         GLES20.glAttachShader(this.program, vResult.shader);
         GLES20.glAttachShader(this.program, fResult.shader);
-        for (int i2 = 0; i2 < attributes.length; i2++) {
+        for (i2 = 0; i2 < attributes.length; i2++) {
             GLES20.glBindAttribLocation(this.program, i2, attributes[i2]);
         }
         if (linkProgram(this.program) == 0) {
             destroyShader(vResult.shader, fResult.shader, this.program);
             return;
         }
-        int length = uniforms.length;
-        while (i < length) {
+        i2 = uniforms.length;
+        while (i < i2) {
             String uniform = uniforms[i];
             this.uniformsMap.put(uniform, Integer.valueOf(GLES20.glGetUniformLocation(this.program, uniform)));
             i++;

@@ -28,10 +28,7 @@ public class SQLiteDatabase {
 
     public boolean tableExists(String tableName) throws SQLiteException {
         checkOpened();
-        if (executeInt("SELECT rowid FROM sqlite_master WHERE type='table' AND name=?;", tableName) != null) {
-            return true;
-        }
-        return false;
+        return executeInt("SELECT rowid FROM sqlite_master WHERE type='table' AND name=?;", tableName) != null;
     }
 
     public SQLitePreparedStatement executeFast(String sql) throws SQLiteException {

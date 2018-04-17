@@ -18,7 +18,7 @@
     <string name="common_open_on_phone">Ouvrir sur le téléphone</string>
     <string name="common_signin_button_text">Se connecter</string>
     <string name="common_signin_button_text_long">Se connecter avec Google</string>
-    <string name="gcm_fallback_notification_channel_label">Divers</string>
+    <string name="fcm_fallback_notification_channel_label">Divers</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">Arrêt de l\'application</string>
     <string name="hockeyapp_crash_dialog_message">Voulez-vous envoyer un rapport anonyme pour nous aider à corriger le problème?</string>
     <string name="hockeyapp_crash_dialog_negative_button">Ne pas envoyer</string>

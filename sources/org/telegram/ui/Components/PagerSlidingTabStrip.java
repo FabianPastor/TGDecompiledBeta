@@ -144,14 +144,15 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     public View getTab(int position) {
-        if (position < 0 || position >= this.tabsContainer.getChildCount()) {
-            return null;
+        if (position >= 0) {
+            if (position < this.tabsContainer.getChildCount()) {
+                return this.tabsContainer.getChildAt(position);
+            }
         }
-        return this.tabsContainer.getChildAt(position);
+        return null;
     }
 
     private void addIconTab(final int position, Drawable drawable) {
-        boolean z = true;
         ImageView tab = new ImageView(getContext()) {
             protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
@@ -160,6 +161,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 }
             }
         };
+        boolean z = true;
         tab.setFocusable(true);
         tab.setImageDrawable(drawable);
         tab.setScaleType(ScaleType.CENTER);
@@ -192,8 +194,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (this.shouldExpand && MeasureSpec.getMode(widthMeasureSpec) != 0) {
-            this.tabsContainer.measure(NUM | getMeasuredWidth(), heightMeasureSpec);
+        if (this.shouldExpand) {
+            if (MeasureSpec.getMode(widthMeasureSpec) != 0) {
+                this.tabsContainer.measure(NUM | getMeasuredWidth(), heightMeasureSpec);
+            }
         }
     }
 
@@ -212,23 +216,22 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (!isInEditMode() && this.tabCount != 0) {
-            float lineLeft;
-            int height = getHeight();
-            this.rectPaint.setColor(this.underlineColor);
-            canvas.drawRect(0.0f, (float) (height - this.underlineHeight), (float) this.tabsContainer.getWidth(), (float) height, this.rectPaint);
-            View currentTab = this.tabsContainer.getChildAt(this.currentPosition);
-            float lineLeft2 = (float) currentTab.getLeft();
-            float lineRight = (float) currentTab.getRight();
-            if (this.currentPositionOffset <= 0.0f || this.currentPosition >= this.tabCount - 1) {
-                lineLeft = lineLeft2;
-            } else {
-                View nextTab = this.tabsContainer.getChildAt(this.currentPosition + 1);
-                lineLeft = (this.currentPositionOffset * ((float) nextTab.getLeft())) + ((1.0f - this.currentPositionOffset) * lineLeft2);
-                lineRight = (this.currentPositionOffset * ((float) nextTab.getRight())) + ((1.0f - this.currentPositionOffset) * lineRight);
+        if (!isInEditMode()) {
+            if (this.tabCount != 0) {
+                int height = getHeight();
+                this.rectPaint.setColor(this.underlineColor);
+                canvas.drawRect(0.0f, (float) (height - this.underlineHeight), (float) this.tabsContainer.getWidth(), (float) height, this.rectPaint);
+                View currentTab = this.tabsContainer.getChildAt(this.currentPosition);
+                float lineLeft = (float) currentTab.getLeft();
+                float lineRight = (float) currentTab.getRight();
+                if (this.currentPositionOffset > 0.0f && this.currentPosition < this.tabCount - 1) {
+                    View nextTab = this.tabsContainer.getChildAt(this.currentPosition + 1);
+                    lineLeft = (this.currentPositionOffset * ((float) nextTab.getLeft())) + ((1.0f - this.currentPositionOffset) * lineLeft);
+                    lineRight = (this.currentPositionOffset * ((float) nextTab.getRight())) + ((1.0f - this.currentPositionOffset) * lineRight);
+                }
+                this.rectPaint.setColor(this.indicatorColor);
+                canvas.drawRect(lineLeft, (float) (height - this.indicatorHeight), lineRight, (float) height, this.rectPaint);
             }
-            this.rectPaint.setColor(this.indicatorColor);
-            canvas.drawRect(lineLeft, (float) (height - this.indicatorHeight), lineRight, (float) height, this.rectPaint);
         }
     }
 

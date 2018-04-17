@@ -46,11 +46,10 @@ public final class MetadataRenderer extends BaseRenderer implements Callback {
     }
 
     public int supportsFormat(Format format) {
-        if (this.decoderFactory.supportsFormat(format)) {
-            return BaseRenderer.supportsFormatDrm(null, format.drmInitData) ? 4 : 2;
-        } else {
+        if (!this.decoderFactory.supportsFormat(format)) {
             return 0;
         }
+        return BaseRenderer.supportsFormatDrm(null, format.drmInitData) ? 4 : 2;
     }
 
     protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {
@@ -118,13 +117,11 @@ public final class MetadataRenderer extends BaseRenderer implements Callback {
     }
 
     public boolean handleMessage(Message msg) {
-        switch (msg.what) {
-            case 0:
-                invokeRendererInternal((Metadata) msg.obj);
-                return true;
-            default:
-                throw new IllegalStateException();
+        if (msg.what != 0) {
+            throw new IllegalStateException();
         }
+        invokeRendererInternal((Metadata) msg.obj);
+        return true;
     }
 
     private void invokeRendererInternal(Metadata metadata) {

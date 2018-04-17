@@ -1,10 +1,12 @@
 package org.telegram.messenger.exoplayer2.extractor.mkv;
 
+import android.util.Log;
 import android.util.SparseArray;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,7 +14,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
+import org.telegram.messenger.exoplayer2.RendererCapabilities;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData.SchemeData;
@@ -32,6 +36,9 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
+import org.telegram.messenger.exoplayer2.video.AvcConfig;
+import org.telegram.messenger.exoplayer2.video.ColorInfo;
+import org.telegram.messenger.exoplayer2.video.HevcConfig;
 
 public final class MatroskaExtractor implements Extractor {
     private static final int BLOCK_STATE_DATA = 2;
@@ -313,792 +320,367 @@ public final class MatroskaExtractor implements Extractor {
             this.language = "eng";
         }
 
-        public void initializeOutput(org.telegram.messenger.exoplayer2.extractor.ExtractorOutput r45, int r46) throws org.telegram.messenger.exoplayer2.ParserException {
-            /* JADX: method processing error */
-/*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r26_1 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo) in PHI: PHI: (r26_2 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo) = (r26_0 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo), (r26_1 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo) binds: {(r26_0 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo)=B:162:0x044c, (r26_1 'colorInfo' org.telegram.messenger.exoplayer2.video.ColorInfo)=B:163:0x044e}
-	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
-	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
-	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
-	at jadx.core.dex.visitors.ModVisitor.visit(ModVisitor.java:68)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
-	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-	at jadx.core.ProcessClass.process(ProcessClass.java:34)
-	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:60)
-	at jadx.core.ProcessClass.process(ProcessClass.java:39)
-	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:282)
-	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-*/
-            /*
-            r44 = this;
-            r6 = -1;
-            r9 = -1;
-            r10 = 0;
-            r0 = r44;
-            r4 = r0.codecId;
-            r2 = -1;
-            r5 = r4.hashCode();
-            switch(r5) {
-                case -2095576542: goto L_0x0052;
-                case -2095575984: goto L_0x003c;
-                case -1985379776: goto L_0x0127;
-                case -1784763192: goto L_0x00e6;
-                case -1730367663: goto L_0x008b;
-                case -1482641358: goto L_0x00b2;
-                case -1482641357: goto L_0x00bf;
-                case -1373388978: goto L_0x0073;
-                case -933872740: goto L_0x0175;
-                case -538363189: goto L_0x0047;
-                case -538363109: goto L_0x005d;
-                case -425012669: goto L_0x015b;
-                case -356037306: goto L_0x010d;
-                case 62923557: goto L_0x00a5;
-                case 62923603: goto L_0x00cc;
-                case 62927045: goto L_0x00f3;
-                case 82338133: goto L_0x001b;
-                case 82338134: goto L_0x0026;
-                case 99146302: goto L_0x0168;
-                case 444813526: goto L_0x007f;
-                case 542569478: goto L_0x0100;
-                case 725957860: goto L_0x0134;
-                case 738597099: goto L_0x014e;
-                case 855502857: goto L_0x0068;
-                case 1422270023: goto L_0x0141;
-                case 1809237540: goto L_0x0031;
-                case 1950749482: goto L_0x00d9;
-                case 1950789798: goto L_0x011a;
-                case 1951062397: goto L_0x0098;
-                default: goto L_0x000f;
-            };
-        L_0x000f:
-            switch(r2) {
-                case 0: goto L_0x0182;
-                case 1: goto L_0x01d2;
-                case 2: goto L_0x01d6;
-                case 3: goto L_0x01da;
-                case 4: goto L_0x01da;
-                case 5: goto L_0x01da;
-                case 6: goto L_0x01ee;
-                case 7: goto L_0x020c;
-                case 8: goto L_0x022a;
-                case 9: goto L_0x024c;
-                case 10: goto L_0x0251;
-                case 11: goto L_0x0260;
-                case 12: goto L_0x02ae;
-                case 13: goto L_0x02bb;
-                case 14: goto L_0x02c2;
-                case 15: goto L_0x02c9;
-                case 16: goto L_0x02ce;
-                case 17: goto L_0x02d3;
-                case 18: goto L_0x02e1;
-                case 19: goto L_0x02e1;
-                case 20: goto L_0x02e6;
-                case 21: goto L_0x02eb;
-                case 22: goto L_0x02f8;
-                case 23: goto L_0x0362;
-                case 24: goto L_0x039e;
-                case 25: goto L_0x03a3;
-                case 26: goto L_0x03a8;
-                case 27: goto L_0x03b5;
-                case 28: goto L_0x03ba;
-                default: goto L_0x0012;
-            };
-        L_0x0012:
-            r2 = new org.telegram.messenger.exoplayer2.ParserException;
-            r4 = "Unrecognized codec identifier.";
-            r2.<init>(r4);
-            throw r2;
-        L_0x001b:
-            r5 = "V_VP8";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0024:
-            r2 = 0;
-            goto L_0x000f;
-        L_0x0026:
-            r5 = "V_VP9";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x002f:
-            r2 = 1;
-            goto L_0x000f;
-        L_0x0031:
-            r5 = "V_MPEG2";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x003a:
-            r2 = 2;
-            goto L_0x000f;
-        L_0x003c:
-            r5 = "V_MPEG4/ISO/SP";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0045:
-            r2 = 3;
-            goto L_0x000f;
-        L_0x0047:
-            r5 = "V_MPEG4/ISO/ASP";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0050:
-            r2 = 4;
-            goto L_0x000f;
-        L_0x0052:
-            r5 = "V_MPEG4/ISO/AP";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x005b:
-            r2 = 5;
-            goto L_0x000f;
-        L_0x005d:
-            r5 = "V_MPEG4/ISO/AVC";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0066:
-            r2 = 6;
-            goto L_0x000f;
-        L_0x0068:
-            r5 = "V_MPEGH/ISO/HEVC";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0071:
-            r2 = 7;
-            goto L_0x000f;
-        L_0x0073:
-            r5 = "V_MS/VFW/FOURCC";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x007c:
-            r2 = 8;
-            goto L_0x000f;
-        L_0x007f:
-            r5 = "V_THEORA";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0088:
-            r2 = 9;
-            goto L_0x000f;
-        L_0x008b:
-            r5 = "A_VORBIS";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0094:
-            r2 = 10;
-            goto L_0x000f;
-        L_0x0098:
-            r5 = "A_OPUS";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x00a1:
-            r2 = 11;
-            goto L_0x000f;
-        L_0x00a5:
-            r5 = "A_AAC";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x00ae:
-            r2 = 12;
-            goto L_0x000f;
-        L_0x00b2:
-            r5 = "A_MPEG/L2";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x00bb:
-            r2 = 13;
-            goto L_0x000f;
-        L_0x00bf:
-            r5 = "A_MPEG/L3";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x00c8:
-            r2 = 14;
-            goto L_0x000f;
-        L_0x00cc:
-            r5 = "A_AC3";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x00d5:
-            r2 = 15;
-            goto L_0x000f;
-        L_0x00d9:
-            r5 = "A_EAC3";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x00e2:
-            r2 = 16;
-            goto L_0x000f;
-        L_0x00e6:
-            r5 = "A_TRUEHD";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x00ef:
-            r2 = 17;
-            goto L_0x000f;
-        L_0x00f3:
-            r5 = "A_DTS";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x00fc:
-            r2 = 18;
-            goto L_0x000f;
-        L_0x0100:
-            r5 = "A_DTS/EXPRESS";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0109:
-            r2 = 19;
-            goto L_0x000f;
-        L_0x010d:
-            r5 = "A_DTS/LOSSLESS";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0116:
-            r2 = 20;
-            goto L_0x000f;
-        L_0x011a:
-            r5 = "A_FLAC";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0123:
-            r2 = 21;
-            goto L_0x000f;
-        L_0x0127:
-            r5 = "A_MS/ACM";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0130:
-            r2 = 22;
-            goto L_0x000f;
-        L_0x0134:
-            r5 = "A_PCM/INT/LIT";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x013d:
-            r2 = 23;
-            goto L_0x000f;
-        L_0x0141:
-            r5 = "S_TEXT/UTF8";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x014a:
-            r2 = 24;
-            goto L_0x000f;
-        L_0x014e:
-            r5 = "S_TEXT/ASS";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0157:
-            r2 = 25;
-            goto L_0x000f;
-        L_0x015b:
-            r5 = "S_VOBSUB";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0164:
-            r2 = 26;
-            goto L_0x000f;
-        L_0x0168:
-            r5 = "S_HDMV/PGS";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x0171:
-            r2 = 27;
-            goto L_0x000f;
-        L_0x0175:
-            r5 = "S_DVBSUB";
-            r4 = r4.equals(r5);
-            if (r4 == 0) goto L_0x000f;
-        L_0x017e:
-            r2 = 28;
-            goto L_0x000f;
-        L_0x0182:
-            r3 = "video/x-vnd.on2.vp8";
-        L_0x0185:
-            r12 = 0;
-            r0 = r44;
-            r2 = r0.flagDefault;
-            if (r2 == 0) goto L_0x03ee;
-        L_0x018c:
-            r2 = 1;
-        L_0x018d:
-            r12 = r12 | r2;
-            r0 = r44;
-            r2 = r0.flagForced;
-            if (r2 == 0) goto L_0x03f1;
-        L_0x0194:
-            r2 = 2;
-        L_0x0195:
-            r12 = r12 | r2;
-            r2 = org.telegram.messenger.exoplayer2.util.MimeTypes.isAudio(r3);
-            if (r2 == 0) goto L_0x03f4;
-        L_0x019c:
-            r43 = 1;
-            r2 = java.lang.Integer.toString(r46);
-            r4 = 0;
-            r5 = -1;
-            r0 = r44;
-            r7 = r0.channelCount;
-            r0 = r44;
-            r8 = r0.sampleRate;
-            r0 = r44;
-            r11 = r0.drmInitData;
-            r0 = r44;
-            r13 = r0.language;
-            r40 = org.telegram.messenger.exoplayer2.Format.createAudioSampleFormat(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13);
-        L_0x01b8:
-            r0 = r44;
-            r2 = r0.number;
-            r0 = r45;
-            r1 = r43;
-            r2 = r0.track(r2, r1);
-            r0 = r44;
-            r0.output = r2;
-            r0 = r44;
-            r2 = r0.output;
-            r0 = r40;
-            r2.format(r0);
-            return;
-        L_0x01d2:
-            r3 = "video/x-vnd.on2.vp9";
-            goto L_0x0185;
-        L_0x01d6:
-            r3 = "video/mpeg2";
-            goto L_0x0185;
-        L_0x01da:
-            r3 = "video/mp4v-es";
-            r0 = r44;
-            r2 = r0.codecPrivate;
-            if (r2 != 0) goto L_0x01e5;
-        L_0x01e3:
-            r10 = 0;
-        L_0x01e4:
-            goto L_0x0185;
-        L_0x01e5:
-            r0 = r44;
-            r2 = r0.codecPrivate;
-            r10 = java.util.Collections.singletonList(r2);
-            goto L_0x01e4;
-        L_0x01ee:
-            r3 = "video/avc";
-            r2 = new org.telegram.messenger.exoplayer2.util.ParsableByteArray;
-            r0 = r44;
-            r4 = r0.codecPrivate;
-            r2.<init>(r4);
-            r39 = org.telegram.messenger.exoplayer2.video.AvcConfig.parse(r2);
-            r0 = r39;
-            r10 = r0.initializationData;
-            r0 = r39;
-            r2 = r0.nalUnitLengthFieldLength;
-            r0 = r44;
-            r0.nalUnitLengthFieldLength = r2;
-            goto L_0x0185;
-        L_0x020c:
-            r3 = "video/hevc";
-            r2 = new org.telegram.messenger.exoplayer2.util.ParsableByteArray;
-            r0 = r44;
-            r4 = r0.codecPrivate;
-            r2.<init>(r4);
-            r42 = org.telegram.messenger.exoplayer2.video.HevcConfig.parse(r2);
-            r0 = r42;
-            r10 = r0.initializationData;
-            r0 = r42;
-            r2 = r0.nalUnitLengthFieldLength;
-            r0 = r44;
-            r0.nalUnitLengthFieldLength = r2;
-            goto L_0x0185;
-        L_0x022a:
-            r2 = new org.telegram.messenger.exoplayer2.util.ParsableByteArray;
-            r0 = r44;
-            r4 = r0.codecPrivate;
-            r2.<init>(r4);
-            r10 = parseFourCcVc1Private(r2);
-            if (r10 == 0) goto L_0x023e;
-        L_0x0239:
-            r3 = "video/wvc1";
-            goto L_0x0185;
-        L_0x023e:
-            r2 = "MatroskaExtractor";
-            r4 = "Unsupported FourCC. Setting mimeType to video/x-unknown";
-            android.util.Log.w(r2, r4);
-            r3 = "video/x-unknown";
-            goto L_0x0185;
-        L_0x024c:
-            r3 = "video/x-unknown";
-            goto L_0x0185;
-        L_0x0251:
-            r3 = "audio/vorbis";
-            r6 = 8192; // 0x2000 float:1.14794E-41 double:4.0474E-320;
-            r0 = r44;
-            r2 = r0.codecPrivate;
-            r10 = parseVorbisCodecPrivate(r2);
-            goto L_0x0185;
-        L_0x0260:
-            r3 = "audio/opus";
-            r6 = 5760; // 0x1680 float:8.071E-42 double:2.846E-320;
-            r10 = new java.util.ArrayList;
-            r2 = 3;
-            r10.<init>(r2);
-            r0 = r44;
-            r2 = r0.codecPrivate;
-            r10.add(r2);
-            r2 = 8;
-            r2 = java.nio.ByteBuffer.allocate(r2);
-            r4 = java.nio.ByteOrder.nativeOrder();
-            r2 = r2.order(r4);
-            r0 = r44;
-            r4 = r0.codecDelayNs;
-            r2 = r2.putLong(r4);
-            r2 = r2.array();
-            r10.add(r2);
-            r2 = 8;
-            r2 = java.nio.ByteBuffer.allocate(r2);
-            r4 = java.nio.ByteOrder.nativeOrder();
-            r2 = r2.order(r4);
-            r0 = r44;
-            r4 = r0.seekPreRollNs;
-            r2 = r2.putLong(r4);
-            r2 = r2.array();
-            r10.add(r2);
-            goto L_0x0185;
-        L_0x02ae:
-            r3 = "audio/mp4a-latm";
-            r0 = r44;
-            r2 = r0.codecPrivate;
-            r10 = java.util.Collections.singletonList(r2);
-            goto L_0x0185;
-        L_0x02bb:
-            r3 = "audio/mpeg-L2";
-            r6 = 4096; // 0x1000 float:5.74E-42 double:2.0237E-320;
-            goto L_0x0185;
-        L_0x02c2:
-            r3 = "audio/mpeg";
-            r6 = 4096; // 0x1000 float:5.74E-42 double:2.0237E-320;
-            goto L_0x0185;
-        L_0x02c9:
-            r3 = "audio/ac3";
-            goto L_0x0185;
-        L_0x02ce:
-            r3 = "audio/eac3";
-            goto L_0x0185;
-        L_0x02d3:
-            r3 = "audio/true-hd";
-            r2 = new org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor$TrueHdSampleRechunker;
-            r2.<init>();
-            r0 = r44;
-            r0.trueHdSampleRechunker = r2;
-            goto L_0x0185;
-        L_0x02e1:
-            r3 = "audio/vnd.dts";
-            goto L_0x0185;
-        L_0x02e6:
-            r3 = "audio/vnd.dts.hd";
-            goto L_0x0185;
-        L_0x02eb:
-            r3 = "audio/flac";
-            r0 = r44;
-            r2 = r0.codecPrivate;
-            r10 = java.util.Collections.singletonList(r2);
-            goto L_0x0185;
-        L_0x02f8:
-            r3 = "audio/raw";
-            r2 = new org.telegram.messenger.exoplayer2.util.ParsableByteArray;
-            r0 = r44;
-            r4 = r0.codecPrivate;
-            r2.<init>(r4);
-            r2 = parseMsAcmCodecPrivate(r2);
-            if (r2 == 0) goto L_0x0343;
-        L_0x030a:
-            r0 = r44;
-            r2 = r0.audioBitDepth;
-            r9 = org.telegram.messenger.exoplayer2.util.Util.getPcmEncoding(r2);
-            if (r9 != 0) goto L_0x0185;
-        L_0x0314:
-            r9 = -1;
-            r3 = "audio/x-unknown";
-            r2 = "MatroskaExtractor";
-            r4 = new java.lang.StringBuilder;
-            r4.<init>();
-            r5 = "Unsupported PCM bit depth: ";
-            r4 = r4.append(r5);
-            r0 = r44;
-            r5 = r0.audioBitDepth;
-            r4 = r4.append(r5);
-            r5 = ". Setting mimeType to ";
-            r4 = r4.append(r5);
-            r4 = r4.append(r3);
-            r4 = r4.toString();
-            android.util.Log.w(r2, r4);
-            goto L_0x0185;
-        L_0x0343:
-            r3 = "audio/x-unknown";
-            r2 = "MatroskaExtractor";
-            r4 = new java.lang.StringBuilder;
-            r4.<init>();
-            r5 = "Non-PCM MS/ACM is unsupported. Setting mimeType to ";
-            r4 = r4.append(r5);
-            r4 = r4.append(r3);
-            r4 = r4.toString();
-            android.util.Log.w(r2, r4);
-            goto L_0x0185;
-        L_0x0362:
-            r3 = "audio/raw";
-            r0 = r44;
-            r2 = r0.audioBitDepth;
-            r9 = org.telegram.messenger.exoplayer2.util.Util.getPcmEncoding(r2);
-            if (r9 != 0) goto L_0x0185;
-        L_0x036f:
-            r9 = -1;
-            r3 = "audio/x-unknown";
-            r2 = "MatroskaExtractor";
-            r4 = new java.lang.StringBuilder;
-            r4.<init>();
-            r5 = "Unsupported PCM bit depth: ";
-            r4 = r4.append(r5);
-            r0 = r44;
-            r5 = r0.audioBitDepth;
-            r4 = r4.append(r5);
-            r5 = ". Setting mimeType to ";
-            r4 = r4.append(r5);
-            r4 = r4.append(r3);
-            r4 = r4.toString();
-            android.util.Log.w(r2, r4);
-            goto L_0x0185;
-        L_0x039e:
-            r3 = "application/x-subrip";
-            goto L_0x0185;
-        L_0x03a3:
-            r3 = "text/x-ssa";
-            goto L_0x0185;
-        L_0x03a8:
-            r3 = "application/vobsub";
-            r0 = r44;
-            r2 = r0.codecPrivate;
-            r10 = java.util.Collections.singletonList(r2);
-            goto L_0x0185;
-        L_0x03b5:
-            r3 = "application/pgs";
-            goto L_0x0185;
-        L_0x03ba:
-            r3 = "application/dvbsubs";
-            r2 = 4;
-            r2 = new byte[r2];
-            r4 = 0;
-            r0 = r44;
-            r5 = r0.codecPrivate;
-            r7 = 0;
-            r5 = r5[r7];
-            r2[r4] = r5;
-            r4 = 1;
-            r0 = r44;
-            r5 = r0.codecPrivate;
-            r7 = 1;
-            r5 = r5[r7];
-            r2[r4] = r5;
-            r4 = 2;
-            r0 = r44;
-            r5 = r0.codecPrivate;
-            r7 = 2;
-            r5 = r5[r7];
-            r2[r4] = r5;
-            r4 = 3;
-            r0 = r44;
-            r5 = r0.codecPrivate;
-            r7 = 3;
-            r5 = r5[r7];
-            r2[r4] = r5;
-            r10 = java.util.Collections.singletonList(r2);
-            goto L_0x0185;
-        L_0x03ee:
-            r2 = 0;
-            goto L_0x018d;
-        L_0x03f1:
-            r2 = 0;
-            goto L_0x0195;
-        L_0x03f4:
-            r2 = org.telegram.messenger.exoplayer2.util.MimeTypes.isVideo(r3);
-            if (r2 == 0) goto L_0x04a7;
-        L_0x03fa:
-            r43 = 2;
-            r0 = r44;
-            r2 = r0.displayUnit;
-            if (r2 != 0) goto L_0x0420;
-        L_0x0402:
-            r0 = r44;
-            r2 = r0.displayWidth;
-            r4 = -1;
-            if (r2 != r4) goto L_0x049b;
-        L_0x0409:
-            r0 = r44;
-            r2 = r0.width;
-        L_0x040d:
-            r0 = r44;
-            r0.displayWidth = r2;
-            r0 = r44;
-            r2 = r0.displayHeight;
-            r4 = -1;
-            if (r2 != r4) goto L_0x04a1;
-        L_0x0418:
-            r0 = r44;
-            r2 = r0.height;
-        L_0x041c:
-            r0 = r44;
-            r0.displayHeight = r2;
-        L_0x0420:
-            r23 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
-            r0 = r44;
-            r2 = r0.displayWidth;
-            r4 = -1;
-            if (r2 == r4) goto L_0x0446;
-        L_0x0429:
-            r0 = r44;
-            r2 = r0.displayHeight;
-            r4 = -1;
-            if (r2 == r4) goto L_0x0446;
-        L_0x0430:
-            r0 = r44;
-            r2 = r0.height;
-            r0 = r44;
-            r4 = r0.displayWidth;
-            r2 = r2 * r4;
-            r2 = (float) r2;
-            r0 = r44;
-            r4 = r0.width;
-            r0 = r44;
-            r5 = r0.displayHeight;
-            r4 = r4 * r5;
-            r4 = (float) r4;
-            r23 = r2 / r4;
-        L_0x0446:
-            r26 = 0;
-            r0 = r44;
-            r2 = r0.hasColorInfo;
-            if (r2 == 0) goto L_0x0467;
-        L_0x044e:
-            r41 = r44.getHdrStaticInfo();
-            r26 = new org.telegram.messenger.exoplayer2.video.ColorInfo;
-            r0 = r44;
-            r2 = r0.colorSpace;
-            r0 = r44;
-            r4 = r0.colorRange;
-            r0 = r44;
-            r5 = r0.colorTransfer;
-            r0 = r26;
-            r1 = r41;
-            r0.<init>(r2, r4, r5, r1);
-        L_0x0467:
-            r13 = java.lang.Integer.toString(r46);
-            r15 = 0;
-            r16 = -1;
-            r0 = r44;
-            r0 = r0.width;
-            r18 = r0;
-            r0 = r44;
-            r0 = r0.height;
-            r19 = r0;
-            r20 = -NUM; // 0xffffffffbf800000 float:-1.0 double:NaN;
-            r22 = -1;
-            r0 = r44;
-            r0 = r0.projectionData;
-            r24 = r0;
-            r0 = r44;
-            r0 = r0.stereoMode;
-            r25 = r0;
-            r0 = r44;
-            r0 = r0.drmInitData;
-            r27 = r0;
-            r14 = r3;
-            r17 = r6;
-            r21 = r10;
-            r40 = org.telegram.messenger.exoplayer2.Format.createVideoSampleFormat(r13, r14, r15, r16, r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27);
-            goto L_0x01b8;
-        L_0x049b:
-            r0 = r44;
-            r2 = r0.displayWidth;
-            goto L_0x040d;
-        L_0x04a1:
-            r0 = r44;
-            r2 = r0.displayHeight;
-            goto L_0x041c;
-        L_0x04a7:
-            r2 = "application/x-subrip";
-            r2 = r2.equals(r3);
-            if (r2 == 0) goto L_0x04c4;
-        L_0x04b0:
-            r43 = 3;
-            r2 = java.lang.Integer.toString(r46);
-            r0 = r44;
-            r4 = r0.language;
-            r0 = r44;
-            r5 = r0.drmInitData;
-            r40 = org.telegram.messenger.exoplayer2.Format.createTextSampleFormat(r2, r3, r12, r4, r5);
-            goto L_0x01b8;
-        L_0x04c4:
-            r2 = "text/x-ssa";
-            r2 = r2.equals(r3);
-            if (r2 == 0) goto L_0x050a;
-        L_0x04cd:
-            r43 = 3;
-            r10 = new java.util.ArrayList;
-            r2 = 2;
-            r10.<init>(r2);
-            r2 = org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor.SSA_DIALOGUE_FORMAT;
-            r10.add(r2);
-            r0 = r44;
-            r2 = r0.codecPrivate;
-            r10.add(r2);
-            r28 = java.lang.Integer.toString(r46);
-            r30 = 0;
-            r31 = -1;
-            r0 = r44;
-            r0 = r0.language;
-            r33 = r0;
-            r34 = -1;
-            r0 = r44;
-            r0 = r0.drmInitData;
-            r35 = r0;
-            r36 = 922337203NUM; // 0x7fffffffffffffff float:NaN double:NaN;
-            r29 = r3;
-            r32 = r12;
-            r38 = r10;
-            r40 = org.telegram.messenger.exoplayer2.Format.createTextSampleFormat(r28, r29, r30, r31, r32, r33, r34, r35, r36, r38);
-            goto L_0x01b8;
-        L_0x050a:
-            r2 = "application/vobsub";
-            r2 = r2.equals(r3);
-            if (r2 != 0) goto L_0x0525;
-        L_0x0513:
-            r2 = "application/pgs";
-            r2 = r2.equals(r3);
-            if (r2 != 0) goto L_0x0525;
-        L_0x051c:
-            r2 = "application/dvbsubs";
-            r2 = r2.equals(r3);
-            if (r2 == 0) goto L_0x0545;
-        L_0x0525:
-            r43 = 3;
-            r13 = java.lang.Integer.toString(r46);
-            r15 = 0;
-            r16 = -1;
-            r0 = r44;
-            r0 = r0.language;
-            r19 = r0;
-            r0 = r44;
-            r0 = r0.drmInitData;
-            r20 = r0;
-            r14 = r3;
-            r17 = r12;
-            r18 = r10;
-            r40 = org.telegram.messenger.exoplayer2.Format.createImageSampleFormat(r13, r14, r15, r16, r17, r18, r19, r20);
-            goto L_0x01b8;
-        L_0x0545:
-            r2 = new org.telegram.messenger.exoplayer2.ParserException;
-            r4 = "Unexpected MIME type.";
-            r2.<init>(r4);
-            throw r2;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor.Track.initializeOutput(org.telegram.messenger.exoplayer2.extractor.ExtractorOutput, int):void");
+        /* JADX WARNING: inconsistent code. */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public void initializeOutput(ExtractorOutput output, int trackId) throws ParserException {
+            int i;
+            int type;
+            Format format;
+            int maxInputSize = -1;
+            int pcmEncoding = -1;
+            List<byte[]> initializationData = null;
+            String str = this.codecId;
+            int i2 = 0;
+            switch (str.hashCode()) {
+                case -2095576542:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_MPEG4_AP)) {
+                        i = 5;
+                        break;
+                    }
+                case -2095575984:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_MPEG4_SP)) {
+                        i = 3;
+                        break;
+                    }
+                case -1985379776:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_ACM)) {
+                        i = 22;
+                        break;
+                    }
+                case -1784763192:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_TRUEHD)) {
+                        i = 17;
+                        break;
+                    }
+                case -1730367663:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_VORBIS)) {
+                        i = 10;
+                        break;
+                    }
+                case -1482641358:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_MP2)) {
+                        i = 13;
+                        break;
+                    }
+                case -1482641357:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_MP3)) {
+                        i = 14;
+                        break;
+                    }
+                case -1373388978:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_FOURCC)) {
+                        i = 8;
+                        break;
+                    }
+                case -933872740:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_DVBSUB)) {
+                        i = 28;
+                        break;
+                    }
+                case -538363189:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_MPEG4_ASP)) {
+                        i = 4;
+                        break;
+                    }
+                case -538363109:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_H264)) {
+                        i = 6;
+                        break;
+                    }
+                case -425012669:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_VOBSUB)) {
+                        i = 26;
+                        break;
+                    }
+                case -356037306:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_DTS_LOSSLESS)) {
+                        i = 20;
+                        break;
+                    }
+                case 62923557:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_AAC)) {
+                        i = 12;
+                        break;
+                    }
+                case 62923603:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_AC3)) {
+                        i = 15;
+                        break;
+                    }
+                case 62927045:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_DTS)) {
+                        i = 18;
+                        break;
+                    }
+                case 82338133:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_VP8)) {
+                        i = 0;
+                        break;
+                    }
+                case 82338134:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_VP9)) {
+                        i = 1;
+                        break;
+                    }
+                case 99146302:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_PGS)) {
+                        i = 27;
+                        break;
+                    }
+                case 444813526:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_THEORA)) {
+                        i = 9;
+                        break;
+                    }
+                case 542569478:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_DTS_EXPRESS)) {
+                        i = 19;
+                        break;
+                    }
+                case 725957860:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_PCM_INT_LIT)) {
+                        i = 23;
+                        break;
+                    }
+                case 738597099:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_ASS)) {
+                        i = 25;
+                        break;
+                    }
+                case 855502857:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_H265)) {
+                        i = 7;
+                        break;
+                    }
+                case 1422270023:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_SUBRIP)) {
+                        i = 24;
+                        break;
+                    }
+                case 1809237540:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_MPEG2)) {
+                        i = 2;
+                        break;
+                    }
+                case 1950749482:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_E_AC3)) {
+                        i = 16;
+                        break;
+                    }
+                case 1950789798:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_FLAC)) {
+                        i = 21;
+                        break;
+                    }
+                case 1951062397:
+                    if (str.equals(MatroskaExtractor.CODEC_ID_OPUS)) {
+                        i = 11;
+                        break;
+                    }
+                default:
+            }
+            i = -1;
+            String str2;
+            StringBuilder stringBuilder;
+            switch (i) {
+                case 0:
+                    str = MimeTypes.VIDEO_VP8;
+                    break;
+                case 1:
+                    str = MimeTypes.VIDEO_VP9;
+                    break;
+                case 2:
+                    str = MimeTypes.VIDEO_MPEG2;
+                    break;
+                case 3:
+                case 4:
+                case 5:
+                    List<byte[]> list;
+                    str = MimeTypes.VIDEO_MP4V;
+                    if (r0.codecPrivate == null) {
+                        list = null;
+                    } else {
+                        list = Collections.singletonList(r0.codecPrivate);
+                    }
+                    initializationData = list;
+                    break;
+                case 6:
+                    str = "video/avc";
+                    AvcConfig avcConfig = AvcConfig.parse(new ParsableByteArray(r0.codecPrivate));
+                    initializationData = avcConfig.initializationData;
+                    r0.nalUnitLengthFieldLength = avcConfig.nalUnitLengthFieldLength;
+                    break;
+                case 7:
+                    str = MimeTypes.VIDEO_H265;
+                    HevcConfig hevcConfig = HevcConfig.parse(new ParsableByteArray(r0.codecPrivate));
+                    initializationData = hevcConfig.initializationData;
+                    r0.nalUnitLengthFieldLength = hevcConfig.nalUnitLengthFieldLength;
+                    break;
+                case 8:
+                    initializationData = parseFourCcVc1Private(new ParsableByteArray(r0.codecPrivate));
+                    if (initializationData == null) {
+                        Log.w(MatroskaExtractor.TAG, "Unsupported FourCC. Setting mimeType to video/x-unknown");
+                        str = MimeTypes.VIDEO_UNKNOWN;
+                        break;
+                    }
+                    str = MimeTypes.VIDEO_VC1;
+                    break;
+                case 9:
+                    str = MimeTypes.VIDEO_UNKNOWN;
+                    break;
+                case 10:
+                    str = MimeTypes.AUDIO_VORBIS;
+                    maxInputSize = 8192;
+                    initializationData = parseVorbisCodecPrivate(r0.codecPrivate);
+                    break;
+                case 11:
+                    str = MimeTypes.AUDIO_OPUS;
+                    maxInputSize = MatroskaExtractor.OPUS_MAX_INPUT_SIZE;
+                    initializationData = new ArrayList(3);
+                    initializationData.add(r0.codecPrivate);
+                    initializationData.add(ByteBuffer.allocate(8).order(ByteOrder.nativeOrder()).putLong(r0.codecDelayNs).array());
+                    initializationData.add(ByteBuffer.allocate(8).order(ByteOrder.nativeOrder()).putLong(r0.seekPreRollNs).array());
+                    break;
+                case 12:
+                    str = MimeTypes.AUDIO_AAC;
+                    initializationData = Collections.singletonList(r0.codecPrivate);
+                    break;
+                case 13:
+                    str = MimeTypes.AUDIO_MPEG_L2;
+                    maxInputSize = 4096;
+                    break;
+                case 14:
+                    str = MimeTypes.AUDIO_MPEG;
+                    maxInputSize = 4096;
+                    break;
+                case 15:
+                    str = MimeTypes.AUDIO_AC3;
+                    break;
+                case 16:
+                    str = MimeTypes.AUDIO_E_AC3;
+                    break;
+                case 17:
+                    str = MimeTypes.AUDIO_TRUEHD;
+                    r0.trueHdSampleRechunker = new TrueHdSampleRechunker();
+                    break;
+                case 18:
+                case 19:
+                    str = MimeTypes.AUDIO_DTS;
+                    break;
+                case 20:
+                    str = MimeTypes.AUDIO_DTS_HD;
+                    break;
+                case 21:
+                    str = MimeTypes.AUDIO_FLAC;
+                    initializationData = Collections.singletonList(r0.codecPrivate);
+                    break;
+                case 22:
+                    str = MimeTypes.AUDIO_RAW;
+                    if (!parseMsAcmCodecPrivate(new ParsableByteArray(r0.codecPrivate))) {
+                        str = MimeTypes.AUDIO_UNKNOWN;
+                        str2 = MatroskaExtractor.TAG;
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("Non-PCM MS/ACM is unsupported. Setting mimeType to ");
+                        stringBuilder.append(str);
+                        Log.w(str2, stringBuilder.toString());
+                        break;
+                    }
+                    pcmEncoding = Util.getPcmEncoding(r0.audioBitDepth);
+                    if (pcmEncoding == 0) {
+                        pcmEncoding = -1;
+                        str = MimeTypes.AUDIO_UNKNOWN;
+                        str2 = MatroskaExtractor.TAG;
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("Unsupported PCM bit depth: ");
+                        stringBuilder.append(r0.audioBitDepth);
+                        stringBuilder.append(". Setting mimeType to ");
+                        stringBuilder.append(str);
+                        Log.w(str2, stringBuilder.toString());
+                        break;
+                    }
+                    break;
+                case 23:
+                    str = MimeTypes.AUDIO_RAW;
+                    pcmEncoding = Util.getPcmEncoding(r0.audioBitDepth);
+                    if (pcmEncoding == 0) {
+                        pcmEncoding = -1;
+                        str = MimeTypes.AUDIO_UNKNOWN;
+                        str2 = MatroskaExtractor.TAG;
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("Unsupported PCM bit depth: ");
+                        stringBuilder.append(r0.audioBitDepth);
+                        stringBuilder.append(". Setting mimeType to ");
+                        stringBuilder.append(str);
+                        Log.w(str2, stringBuilder.toString());
+                        break;
+                    }
+                    break;
+                case RendererCapabilities.ADAPTIVE_SUPPORT_MASK /*24*/:
+                    str = MimeTypes.APPLICATION_SUBRIP;
+                    break;
+                case 25:
+                    str = MimeTypes.TEXT_SSA;
+                    break;
+                case 26:
+                    str = MimeTypes.APPLICATION_VOBSUB;
+                    initializationData = Collections.singletonList(r0.codecPrivate);
+                    break;
+                case 27:
+                    str = MimeTypes.APPLICATION_PGS;
+                    break;
+                case 28:
+                    str = MimeTypes.APPLICATION_DVBSUBS;
+                    initializationData = Collections.singletonList(new byte[]{r0.codecPrivate[0], r0.codecPrivate[1], r0.codecPrivate[2], r0.codecPrivate[3]});
+                    break;
+                default:
+                    ExtractorOutput extractorOutput = output;
+                    throw new ParserException("Unrecognized codec identifier.");
+            }
+            int selectionFlags = 0 | r0.flagDefault;
+            if (r0.flagForced) {
+                i2 = 2;
+            }
+            selectionFlags |= i2;
+            if (MimeTypes.isAudio(str)) {
+                type = 1;
+                format = Format.createAudioSampleFormat(Integer.toString(trackId), str, null, -1, maxInputSize, r0.channelCount, r0.sampleRate, pcmEncoding, initializationData, r0.drmInitData, selectionFlags, r0.language);
+            } else if (MimeTypes.isVideo(str)) {
+                type = 2;
+                if (r0.displayUnit == 0) {
+                    r0.displayWidth = r0.displayWidth == -1 ? r0.width : r0.displayWidth;
+                    r0.displayHeight = r0.displayHeight == -1 ? r0.height : r0.displayHeight;
+                }
+                float pixelWidthHeightRatio = -1.0f;
+                if (!(r0.displayWidth == -1 || r0.displayHeight == -1)) {
+                    pixelWidthHeightRatio = ((float) (r0.height * r0.displayWidth)) / ((float) (r0.width * r0.displayHeight));
+                }
+                ColorInfo colorInfo = null;
+                if (r0.hasColorInfo) {
+                    colorInfo = new ColorInfo(r0.colorSpace, r0.colorRange, r0.colorTransfer, getHdrStaticInfo());
+                }
+                format = Format.createVideoSampleFormat(Integer.toString(trackId), str, null, -1, maxInputSize, r0.width, r0.height, -1.0f, initializationData, -1, pixelWidthHeightRatio, r0.projectionData, r0.stereoMode, colorInfo, r0.drmInitData);
+                r0.output = output.track(r0.number, type);
+                r0.output.format(format);
+            } else if (MimeTypes.APPLICATION_SUBRIP.equals(str)) {
+                type = 3;
+                format = Format.createTextSampleFormat(Integer.toString(trackId), str, selectionFlags, r0.language, r0.drmInitData);
+            } else if (MimeTypes.TEXT_SSA.equals(str)) {
+                type = 3;
+                List initializationData2 = new ArrayList(2);
+                initializationData2.add(MatroskaExtractor.SSA_DIALOGUE_FORMAT);
+                initializationData2.add(r0.codecPrivate);
+                format = Format.createTextSampleFormat(Integer.toString(trackId), str, null, -1, selectionFlags, r0.language, -1, r0.drmInitData, Long.MAX_VALUE, initializationData2);
+            } else {
+                if (!(MimeTypes.APPLICATION_VOBSUB.equals(str) || MimeTypes.APPLICATION_PGS.equals(str))) {
+                    if (!MimeTypes.APPLICATION_DVBSUBS.equals(str)) {
+                        throw new ParserException("Unexpected MIME type.");
+                    }
+                }
+                type = 3;
+                format = Format.createImageSampleFormat(Integer.toString(trackId), str, null, -1, selectionFlags, initializationData, r0.language, r0.drmInitData);
+            }
+            r0.output = output.track(r0.number, type);
+            r0.output.format(format);
         }
 
         public void outputPendingSampleMetadata() {
@@ -1114,25 +696,27 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
 
         private byte[] getHdrStaticInfo() {
-            if (this.primaryRChromaticityX == -1.0f || this.primaryRChromaticityY == -1.0f || this.primaryGChromaticityX == -1.0f || this.primaryGChromaticityY == -1.0f || this.primaryBChromaticityX == -1.0f || this.primaryBChromaticityY == -1.0f || this.whitePointChromaticityX == -1.0f || this.whitePointChromaticityY == -1.0f || this.maxMasteringLuminance == -1.0f || this.minMasteringLuminance == -1.0f) {
-                return null;
+            if (!(this.primaryRChromaticityX == -1.0f || this.primaryRChromaticityY == -1.0f || this.primaryGChromaticityX == -1.0f || this.primaryGChromaticityY == -1.0f || this.primaryBChromaticityX == -1.0f || this.primaryBChromaticityY == -1.0f || this.whitePointChromaticityX == -1.0f || this.whitePointChromaticityY == -1.0f || this.maxMasteringLuminance == -1.0f)) {
+                if (this.minMasteringLuminance != -1.0f) {
+                    byte[] hdrStaticInfoData = new byte[25];
+                    ByteBuffer hdrStaticInfo = ByteBuffer.wrap(hdrStaticInfoData);
+                    hdrStaticInfo.put((byte) 0);
+                    hdrStaticInfo.putShort((short) ((int) ((this.primaryRChromaticityX * 50000.0f) + 0.5f)));
+                    hdrStaticInfo.putShort((short) ((int) ((this.primaryRChromaticityY * 50000.0f) + 0.5f)));
+                    hdrStaticInfo.putShort((short) ((int) ((this.primaryGChromaticityX * 50000.0f) + 0.5f)));
+                    hdrStaticInfo.putShort((short) ((int) ((this.primaryGChromaticityY * 50000.0f) + 0.5f)));
+                    hdrStaticInfo.putShort((short) ((int) ((this.primaryBChromaticityX * 50000.0f) + 0.5f)));
+                    hdrStaticInfo.putShort((short) ((int) ((this.primaryBChromaticityY * 50000.0f) + 0.5f)));
+                    hdrStaticInfo.putShort((short) ((int) ((this.whitePointChromaticityX * 50000.0f) + 0.5f)));
+                    hdrStaticInfo.putShort((short) ((int) ((this.whitePointChromaticityY * 50000.0f) + 0.5f)));
+                    hdrStaticInfo.putShort((short) ((int) (this.maxMasteringLuminance + 0.5f)));
+                    hdrStaticInfo.putShort((short) ((int) (this.minMasteringLuminance + 0.5f)));
+                    hdrStaticInfo.putShort((short) this.maxContentLuminance);
+                    hdrStaticInfo.putShort((short) this.maxFrameAverageLuminance);
+                    return hdrStaticInfoData;
+                }
             }
-            byte[] hdrStaticInfoData = new byte[25];
-            ByteBuffer hdrStaticInfo = ByteBuffer.wrap(hdrStaticInfoData);
-            hdrStaticInfo.put((byte) 0);
-            hdrStaticInfo.putShort((short) ((int) ((this.primaryRChromaticityX * 50000.0f) + 0.5f)));
-            hdrStaticInfo.putShort((short) ((int) ((this.primaryRChromaticityY * 50000.0f) + 0.5f)));
-            hdrStaticInfo.putShort((short) ((int) ((this.primaryGChromaticityX * 50000.0f) + 0.5f)));
-            hdrStaticInfo.putShort((short) ((int) ((this.primaryGChromaticityY * 50000.0f) + 0.5f)));
-            hdrStaticInfo.putShort((short) ((int) ((this.primaryBChromaticityX * 50000.0f) + 0.5f)));
-            hdrStaticInfo.putShort((short) ((int) ((this.primaryBChromaticityY * 50000.0f) + 0.5f)));
-            hdrStaticInfo.putShort((short) ((int) ((this.whitePointChromaticityX * 50000.0f) + 0.5f)));
-            hdrStaticInfo.putShort((short) ((int) ((this.whitePointChromaticityY * 50000.0f) + 0.5f)));
-            hdrStaticInfo.putShort((short) ((int) (this.maxMasteringLuminance + 0.5f)));
-            hdrStaticInfo.putShort((short) ((int) (this.minMasteringLuminance + 0.5f)));
-            hdrStaticInfo.putShort((short) this.maxContentLuminance);
-            hdrStaticInfo.putShort((short) this.maxFrameAverageLuminance);
-            return hdrStaticInfoData;
+            return null;
         }
 
         private static List<byte[]> parseFourCcVc1Private(ParsableByteArray buffer) throws ParserException {
@@ -1161,36 +745,36 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (codecPrivate[0] != (byte) 2) {
                     throw new ParserException("Error parsing vorbis codec private");
                 }
-                int vorbisInfoLength = 0;
                 int offset = 1;
+                int vorbisInfoLength = 0;
                 while (codecPrivate[offset] == (byte) -1) {
                     vorbisInfoLength += 255;
                     offset++;
                 }
-                vorbisInfoLength += codecPrivate[offset];
-                int vorbisSkipLength = 0;
-                offset++;
-                while (codecPrivate[offset] == (byte) -1) {
-                    vorbisSkipLength += 255;
-                    offset++;
-                }
                 int offset2 = offset + 1;
-                vorbisSkipLength += codecPrivate[offset];
-                if (codecPrivate[offset2] != (byte) 1) {
+                vorbisInfoLength += codecPrivate[offset];
+                offset = 0;
+                while (codecPrivate[offset2] == (byte) -1) {
+                    offset += 255;
+                    offset2++;
+                }
+                int offset3 = offset2 + 1;
+                offset += codecPrivate[offset2];
+                if (codecPrivate[offset3] != (byte) 1) {
                     throw new ParserException("Error parsing vorbis codec private");
                 }
                 byte[] vorbisInfo = new byte[vorbisInfoLength];
-                System.arraycopy(codecPrivate, offset2, vorbisInfo, 0, vorbisInfoLength);
-                offset2 += vorbisInfoLength;
-                if (codecPrivate[offset2] != (byte) 3) {
+                System.arraycopy(codecPrivate, offset3, vorbisInfo, 0, vorbisInfoLength);
+                offset3 += vorbisInfoLength;
+                if (codecPrivate[offset3] != (byte) 3) {
                     throw new ParserException("Error parsing vorbis codec private");
                 }
-                offset2 += vorbisSkipLength;
-                if (codecPrivate[offset2] != (byte) 5) {
+                offset3 += offset;
+                if (codecPrivate[offset3] != (byte) 5) {
                     throw new ParserException("Error parsing vorbis codec private");
                 }
-                byte[] vorbisBooks = new byte[(codecPrivate.length - offset2)];
-                System.arraycopy(codecPrivate, offset2, vorbisBooks, 0, codecPrivate.length - offset2);
+                byte[] vorbisBooks = new byte[(codecPrivate.length - offset3)];
+                System.arraycopy(codecPrivate, offset3, vorbisBooks, 0, codecPrivate.length - offset3);
                 List<byte[]> initializationData = new ArrayList(2);
                 initializationData.add(vorbisInfo);
                 initializationData.add(vorbisBooks);
@@ -1203,6 +787,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         private static boolean parseMsAcmCodecPrivate(ParsableByteArray buffer) throws ParserException {
             try {
                 int formatTag = buffer.readLittleEndianUnsignedShort();
+                boolean z = true;
                 if (formatTag == 1) {
                     return true;
                 }
@@ -1210,10 +795,10 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     return false;
                 }
                 buffer.setPosition(24);
-                if (buffer.readLong() == MatroskaExtractor.WAVE_SUBFORMAT_PCM.getMostSignificantBits() && buffer.readLong() == MatroskaExtractor.WAVE_SUBFORMAT_PCM.getLeastSignificantBits()) {
-                    return true;
+                if (buffer.readLong() != MatroskaExtractor.WAVE_SUBFORMAT_PCM.getMostSignificantBits() || buffer.readLong() != MatroskaExtractor.WAVE_SUBFORMAT_PCM.getLeastSignificantBits()) {
+                    z = false;
                 }
-                return false;
+                return z;
             } catch (ArrayIndexOutOfBoundsException e) {
                 throw new ParserException("Error parsing MS/ACM codec private");
             }
@@ -1361,12 +946,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     public void seek(long position, long timeUs) {
         this.clusterTimecodeUs = C0539C.TIME_UNSET;
+        int i = 0;
         this.blockState = 0;
         this.reader.reset();
         this.varintReader.reset();
         resetSample();
-        for (int i = 0; i < this.tracks.size(); i++) {
+        while (i < this.tracks.size()) {
             ((Track) this.tracks.valueAt(i)).reset();
+            i++;
         }
     }
 
@@ -1374,6 +961,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
+        int i = 0;
         this.sampleRead = false;
         boolean continueReading = true;
         while (continueReading && !this.sampleRead) {
@@ -1385,8 +973,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (continueReading) {
             return 0;
         }
-        for (int i = 0; i < this.tracks.size(); i++) {
+        while (i < this.tracks.size()) {
             ((Track) this.tracks.valueAt(i)).outputPendingSampleMetadata();
+            i++;
         }
         return -1;
     }
@@ -1482,137 +1071,122 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     boolean isLevel1Element(int id) {
-        return id == 357149030 || id == ID_CLUSTER || id == ID_CUES || id == ID_TRACKS;
+        if (!(id == 357149030 || id == ID_CLUSTER || id == ID_CUES)) {
+            if (id != ID_TRACKS) {
+                return false;
+            }
+        }
+        return true;
     }
 
     void startMasterElement(int id, long contentPosition, long contentSize) throws ParserException {
-        switch (id) {
-            case ID_BLOCK_GROUP /*160*/:
-                this.sampleSeenReferenceBlock = false;
-                return;
-            case ID_TRACK_ENTRY /*174*/:
-                this.currentTrack = new Track();
-                return;
-            case ID_CUE_POINT /*187*/:
-                this.seenClusterPositionForCurrentCuePoint = false;
-                return;
-            case ID_SEEK /*19899*/:
-                this.seekEntryId = -1;
-                this.seekEntryPosition = -1;
-                return;
-            case ID_CONTENT_ENCRYPTION /*20533*/:
-                this.currentTrack.hasContentEncryption = true;
-                return;
-            case ID_MASTERING_METADATA /*21968*/:
-                this.currentTrack.hasColorInfo = true;
-                return;
-            case ID_SEGMENT /*408125543*/:
-                if (this.segmentContentPosition == -1 || this.segmentContentPosition == contentPosition) {
-                    this.segmentContentPosition = contentPosition;
-                    this.segmentContentSize = contentSize;
-                    return;
-                }
-                throw new ParserException("Multiple Segment elements not supported");
-            case ID_CUES /*475249515*/:
-                this.cueTimesUs = new LongArray();
-                this.cueClusterPositions = new LongArray();
-                return;
-            case ID_CLUSTER /*524531317*/:
-                if (!this.sentSeekMap) {
-                    if (!this.seekForCuesEnabled || this.cuesContentPosition == -1) {
-                        this.extractorOutput.seekMap(new Unseekable(this.durationUs));
-                        this.sentSeekMap = true;
-                        return;
+        if (id == ID_BLOCK_GROUP) {
+            this.sampleSeenReferenceBlock = false;
+        } else if (id == ID_TRACK_ENTRY) {
+            this.currentTrack = new Track();
+        } else if (id == ID_CUE_POINT) {
+            this.seenClusterPositionForCurrentCuePoint = false;
+        } else if (id == ID_SEEK) {
+            this.seekEntryId = -1;
+            this.seekEntryPosition = -1;
+        } else if (id == ID_CONTENT_ENCRYPTION) {
+            this.currentTrack.hasContentEncryption = true;
+        } else if (id == ID_MASTERING_METADATA) {
+            this.currentTrack.hasColorInfo = true;
+        } else if (id == ID_CONTENT_ENCODING) {
+        } else {
+            if (id != ID_SEGMENT) {
+                if (id == ID_CUES) {
+                    this.cueTimesUs = new LongArray();
+                    this.cueClusterPositions = new LongArray();
+                } else if (id == ID_CLUSTER) {
+                    if (!this.sentSeekMap) {
+                        if (!this.seekForCuesEnabled || this.cuesContentPosition == -1) {
+                            this.extractorOutput.seekMap(new Unseekable(this.durationUs));
+                            this.sentSeekMap = true;
+                            return;
+                        }
+                        this.seekForCues = true;
                     }
-                    this.seekForCues = true;
-                    return;
                 }
-                return;
-            default:
-                return;
+            } else if (this.segmentContentPosition == -1 || this.segmentContentPosition == contentPosition) {
+                this.segmentContentPosition = contentPosition;
+                this.segmentContentSize = contentSize;
+            } else {
+                throw new ParserException("Multiple Segment elements not supported");
+            }
         }
     }
 
     void endMasterElement(int id) throws ParserException {
-        switch (id) {
-            case ID_BLOCK_GROUP /*160*/:
-                if (this.blockState == 2) {
-                    if (!this.sampleSeenReferenceBlock) {
-                        this.blockFlags |= 1;
-                    }
-                    commitSampleToOutput((Track) this.tracks.get(this.blockTrackNumber), this.blockTimeUs);
-                    this.blockState = 0;
-                    return;
-                }
-                return;
-            case ID_TRACK_ENTRY /*174*/:
+        if (id != ID_BLOCK_GROUP) {
+            if (id == ID_TRACK_ENTRY) {
                 if (isCodecSupported(this.currentTrack.codecId)) {
                     this.currentTrack.initializeOutput(this.extractorOutput, this.currentTrack.number);
                     this.tracks.put(this.currentTrack.number, this.currentTrack);
                 }
                 this.currentTrack = null;
-                return;
-            case ID_SEEK /*19899*/:
-                if (this.seekEntryId == -1 || this.seekEntryPosition == -1) {
-                    throw new ParserException("Mandatory element SeekID or SeekPosition not found");
-                } else if (this.seekEntryId == ID_CUES) {
-                    this.cuesContentPosition = this.seekEntryPosition;
-                    return;
-                } else {
-                    return;
+            } else if (id == ID_SEEK) {
+                if (this.seekEntryId != -1) {
+                    if (this.seekEntryPosition != -1) {
+                        if (this.seekEntryId == ID_CUES) {
+                            this.cuesContentPosition = this.seekEntryPosition;
+                        }
+                    }
                 }
-            case ID_CONTENT_ENCODING /*25152*/:
-                if (!this.currentTrack.hasContentEncryption) {
-                    return;
+                throw new ParserException("Mandatory element SeekID or SeekPosition not found");
+            } else if (id != ID_CONTENT_ENCODING) {
+                if (id != ID_CONTENT_ENCODINGS) {
+                    if (id == 357149030) {
+                        if (this.timecodeScale == C0539C.TIME_UNSET) {
+                            this.timecodeScale = C0539C.MICROS_PER_SECOND;
+                        }
+                        if (this.durationTimecode != C0539C.TIME_UNSET) {
+                            this.durationUs = scaleTimecodeToUs(this.durationTimecode);
+                        }
+                    } else if (id != ID_TRACKS) {
+                        if (id == ID_CUES) {
+                            if (!this.sentSeekMap) {
+                                this.extractorOutput.seekMap(buildSeekMap());
+                                this.sentSeekMap = true;
+                            }
+                        }
+                    } else if (this.tracks.size() == 0) {
+                        throw new ParserException("No valid tracks were found");
+                    } else {
+                        this.extractorOutput.endTracks();
+                    }
+                } else if (this.currentTrack.hasContentEncryption && this.currentTrack.sampleStrippedBytes != null) {
+                    throw new ParserException("Combining encryption and compression is not supported");
                 }
+            } else if (this.currentTrack.hasContentEncryption) {
                 if (this.currentTrack.cryptoData == null) {
                     throw new ParserException("Encrypted Track found but ContentEncKeyID was not found");
                 }
                 this.currentTrack.drmInitData = new DrmInitData(new SchemeData(C0539C.UUID_NIL, MimeTypes.VIDEO_WEBM, this.currentTrack.cryptoData.encryptionKey));
-                return;
-            case ID_CONTENT_ENCODINGS /*28032*/:
-                if (this.currentTrack.hasContentEncryption && this.currentTrack.sampleStrippedBytes != null) {
-                    throw new ParserException("Combining encryption and compression is not supported");
-                }
-                return;
-            case 357149030:
-                if (this.timecodeScale == C0539C.TIME_UNSET) {
-                    this.timecodeScale = C0539C.MICROS_PER_SECOND;
-                }
-                if (this.durationTimecode != C0539C.TIME_UNSET) {
-                    this.durationUs = scaleTimecodeToUs(this.durationTimecode);
-                    return;
-                }
-                return;
-            case ID_TRACKS /*374648427*/:
-                if (this.tracks.size() == 0) {
-                    throw new ParserException("No valid tracks were found");
-                }
-                this.extractorOutput.endTracks();
-                return;
-            case ID_CUES /*475249515*/:
-                if (!this.sentSeekMap) {
-                    this.extractorOutput.seekMap(buildSeekMap());
-                    this.sentSeekMap = true;
-                    return;
-                }
-                return;
-            default:
-                return;
+            }
+        } else if (this.blockState == 2) {
+            if (!this.sampleSeenReferenceBlock) {
+                this.blockFlags |= 1;
+            }
+            commitSampleToOutput((Track) this.tracks.get(this.blockTrackNumber), this.blockTimeUs);
+            this.blockState = 0;
         }
     }
 
     void integerElement(int id, long value) throws ParserException {
-        boolean z = true;
+        boolean z = false;
         Track track;
+        StringBuilder stringBuilder;
+        int i;
         switch (id) {
             case ID_TRACK_TYPE /*131*/:
                 this.currentTrack.type = (int) value;
                 return;
             case ID_FLAG_DEFAULT /*136*/:
                 track = this.currentTrack;
-                if (value != 1) {
-                    z = false;
+                if (value == 1) {
+                    z = true;
                 }
                 track.flagForced = z;
                 return;
@@ -1649,58 +1223,89 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 return;
             case ID_CONTENT_COMPRESSION_ALGORITHM /*16980*/:
                 if (value != 3) {
-                    throw new ParserException("ContentCompAlgo " + value + " not supported");
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("ContentCompAlgo ");
+                    stringBuilder.append(value);
+                    stringBuilder.append(" not supported");
+                    throw new ParserException(stringBuilder.toString());
                 }
                 return;
             case ID_DOC_TYPE_READ_VERSION /*17029*/:
                 if (value < 1 || value > 2) {
-                    throw new ParserException("DocTypeReadVersion " + value + " not supported");
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("DocTypeReadVersion ");
+                    stringBuilder.append(value);
+                    stringBuilder.append(" not supported");
+                    throw new ParserException(stringBuilder.toString());
                 }
                 return;
             case ID_EBML_READ_VERSION /*17143*/:
                 if (value != 1) {
-                    throw new ParserException("EBMLReadVersion " + value + " not supported");
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("EBMLReadVersion ");
+                    stringBuilder.append(value);
+                    stringBuilder.append(" not supported");
+                    throw new ParserException(stringBuilder.toString());
                 }
                 return;
             case ID_CONTENT_ENCRYPTION_ALGORITHM /*18401*/:
                 if (value != 5) {
-                    throw new ParserException("ContentEncAlgo " + value + " not supported");
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("ContentEncAlgo ");
+                    stringBuilder.append(value);
+                    stringBuilder.append(" not supported");
+                    throw new ParserException(stringBuilder.toString());
                 }
                 return;
             case ID_CONTENT_ENCRYPTION_AES_SETTINGS_CIPHER_MODE /*18408*/:
                 if (value != 1) {
-                    throw new ParserException("AESSettingsCipherMode " + value + " not supported");
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("AESSettingsCipherMode ");
+                    stringBuilder.append(value);
+                    stringBuilder.append(" not supported");
+                    throw new ParserException(stringBuilder.toString());
                 }
                 return;
             case ID_CONTENT_ENCODING_ORDER /*20529*/:
                 if (value != 0) {
-                    throw new ParserException("ContentEncodingOrder " + value + " not supported");
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("ContentEncodingOrder ");
+                    stringBuilder.append(value);
+                    stringBuilder.append(" not supported");
+                    throw new ParserException(stringBuilder.toString());
                 }
                 return;
             case ID_CONTENT_ENCODING_SCOPE /*20530*/:
                 if (value != 1) {
-                    throw new ParserException("ContentEncodingScope " + value + " not supported");
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("ContentEncodingScope ");
+                    stringBuilder.append(value);
+                    stringBuilder.append(" not supported");
+                    throw new ParserException(stringBuilder.toString());
                 }
                 return;
             case ID_SEEK_POSITION /*21420*/:
-                this.seekEntryPosition = this.segmentContentPosition + value;
+                this.seekEntryPosition = value + this.segmentContentPosition;
                 return;
             case ID_STEREO_MODE /*21432*/:
-                switch ((int) value) {
-                    case 0:
-                        this.currentTrack.stereoMode = 0;
-                        return;
-                    case 1:
-                        this.currentTrack.stereoMode = 2;
-                        return;
-                    case 3:
-                        this.currentTrack.stereoMode = 1;
-                        return;
-                    case 15:
-                        this.currentTrack.stereoMode = 3;
-                        return;
-                    default:
-                        return;
+                int layout = (int) value;
+                if (layout == 3) {
+                    this.currentTrack.stereoMode = 1;
+                    return;
+                } else if (layout != 15) {
+                    switch (layout) {
+                        case 0:
+                            this.currentTrack.stereoMode = 0;
+                            return;
+                        case 1:
+                            this.currentTrack.stereoMode = 2;
+                            return;
+                        default:
+                            return;
+                    }
+                } else {
+                    this.currentTrack.stereoMode = 3;
+                    return;
                 }
             case ID_DISPLAY_WIDTH /*21680*/:
                 this.currentTrack.displayWidth = (int) value;
@@ -1713,8 +1318,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 return;
             case ID_FLAG_FORCED /*21930*/:
                 track = this.currentTrack;
-                if (value != 1) {
-                    z = false;
+                if (value == 1) {
+                    z = true;
                 }
                 track.flagDefault = z;
                 return;
@@ -1730,38 +1335,46 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         return;
                 }
             case ID_COLOUR_TRANSFER /*21946*/:
-                switch ((int) value) {
-                    case 1:
-                    case 6:
-                    case 7:
-                        this.currentTrack.colorTransfer = 3;
-                        return;
-                    case 16:
+                i = (int) value;
+                if (i != 1) {
+                    if (i == 16) {
                         this.currentTrack.colorTransfer = 6;
                         return;
-                    case 18:
+                    } else if (i != 18) {
+                        switch (i) {
+                            case 6:
+                            case 7:
+                                break;
+                            default:
+                                return;
+                        }
+                    } else {
                         this.currentTrack.colorTransfer = 7;
                         return;
-                    default:
-                        return;
+                    }
                 }
+                this.currentTrack.colorTransfer = 3;
+                return;
             case ID_COLOUR_PRIMARIES /*21947*/:
                 this.currentTrack.hasColorInfo = true;
-                switch ((int) value) {
-                    case 1:
-                        this.currentTrack.colorSpace = 1;
-                        return;
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                        this.currentTrack.colorSpace = 2;
-                        return;
-                    case 9:
-                        this.currentTrack.colorSpace = 6;
-                        return;
-                    default:
-                        return;
+                i = (int) value;
+                if (i == 1) {
+                    this.currentTrack.colorSpace = 1;
+                    return;
+                } else if (i != 9) {
+                    switch (i) {
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                            this.currentTrack.colorSpace = 2;
+                            return;
+                        default:
+                            return;
+                    }
+                } else {
+                    this.currentTrack.colorSpace = 6;
+                    return;
                 }
             case ID_MAX_CLL /*21948*/:
                 this.currentTrack.maxContentLuminance = (int) value;
@@ -1790,235 +1403,287 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     void floatElement(int id, double value) {
-        switch (id) {
-            case ID_SAMPLING_FREQUENCY /*181*/:
-                this.currentTrack.sampleRate = (int) value;
-                return;
-            case ID_DURATION /*17545*/:
-                this.durationTimecode = (long) value;
-                return;
-            case ID_PRIMARY_R_CHROMATICITY_X /*21969*/:
-                this.currentTrack.primaryRChromaticityX = (float) value;
-                return;
-            case ID_PRIMARY_R_CHROMATICITY_Y /*21970*/:
-                this.currentTrack.primaryRChromaticityY = (float) value;
-                return;
-            case ID_PRIMARY_G_CHROMATICITY_X /*21971*/:
-                this.currentTrack.primaryGChromaticityX = (float) value;
-                return;
-            case ID_PRIMARY_G_CHROMATICITY_Y /*21972*/:
-                this.currentTrack.primaryGChromaticityY = (float) value;
-                return;
-            case ID_PRIMARY_B_CHROMATICITY_X /*21973*/:
-                this.currentTrack.primaryBChromaticityX = (float) value;
-                return;
-            case ID_PRIMARY_B_CHROMATICITY_Y /*21974*/:
-                this.currentTrack.primaryBChromaticityY = (float) value;
-                return;
-            case ID_WHITE_POINT_CHROMATICITY_X /*21975*/:
-                this.currentTrack.whitePointChromaticityX = (float) value;
-                return;
-            case ID_WHITE_POINT_CHROMATICITY_Y /*21976*/:
-                this.currentTrack.whitePointChromaticityY = (float) value;
-                return;
-            case ID_LUMNINANCE_MAX /*21977*/:
-                this.currentTrack.maxMasteringLuminance = (float) value;
-                return;
-            case ID_LUMNINANCE_MIN /*21978*/:
-                this.currentTrack.minMasteringLuminance = (float) value;
-                return;
-            default:
-                return;
+        if (id == ID_SAMPLING_FREQUENCY) {
+            this.currentTrack.sampleRate = (int) value;
+        } else if (id != ID_DURATION) {
+            switch (id) {
+                case ID_PRIMARY_R_CHROMATICITY_X /*21969*/:
+                    this.currentTrack.primaryRChromaticityX = (float) value;
+                    return;
+                case ID_PRIMARY_R_CHROMATICITY_Y /*21970*/:
+                    this.currentTrack.primaryRChromaticityY = (float) value;
+                    return;
+                case ID_PRIMARY_G_CHROMATICITY_X /*21971*/:
+                    this.currentTrack.primaryGChromaticityX = (float) value;
+                    return;
+                case ID_PRIMARY_G_CHROMATICITY_Y /*21972*/:
+                    this.currentTrack.primaryGChromaticityY = (float) value;
+                    return;
+                case ID_PRIMARY_B_CHROMATICITY_X /*21973*/:
+                    this.currentTrack.primaryBChromaticityX = (float) value;
+                    return;
+                case ID_PRIMARY_B_CHROMATICITY_Y /*21974*/:
+                    this.currentTrack.primaryBChromaticityY = (float) value;
+                    return;
+                case ID_WHITE_POINT_CHROMATICITY_X /*21975*/:
+                    this.currentTrack.whitePointChromaticityX = (float) value;
+                    return;
+                case ID_WHITE_POINT_CHROMATICITY_Y /*21976*/:
+                    this.currentTrack.whitePointChromaticityY = (float) value;
+                    return;
+                case ID_LUMNINANCE_MAX /*21977*/:
+                    this.currentTrack.maxMasteringLuminance = (float) value;
+                    return;
+                case ID_LUMNINANCE_MIN /*21978*/:
+                    this.currentTrack.minMasteringLuminance = (float) value;
+                    return;
+                default:
+                    return;
+            }
+        } else {
+            this.durationTimecode = (long) value;
         }
     }
 
     void stringElement(int id, String value) throws ParserException {
-        switch (id) {
-            case 134:
-                this.currentTrack.codecId = value;
-                return;
-            case ID_DOC_TYPE /*17026*/:
-                if (!DOC_TYPE_WEBM.equals(value) && !DOC_TYPE_MATROSKA.equals(value)) {
-                    throw new ParserException("DocType " + value + " not supported");
-                }
-                return;
-            case ID_LANGUAGE /*2274716*/:
+        if (id == 134) {
+            this.currentTrack.codecId = value;
+        } else if (id != ID_DOC_TYPE) {
+            if (id == ID_LANGUAGE) {
                 this.currentTrack.language = value;
-                return;
-            default:
-                return;
+            }
+        } else if (!DOC_TYPE_WEBM.equals(value) && !DOC_TYPE_MATROSKA.equals(value)) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("DocType ");
+            stringBuilder.append(value);
+            stringBuilder.append(" not supported");
+            throw new ParserException(stringBuilder.toString());
         }
     }
 
     void binaryElement(int id, int contentSize, ExtractorInput input) throws IOException, InterruptedException {
-        switch (id) {
-            case ID_BLOCK /*161*/:
-            case ID_SIMPLE_BLOCK /*163*/:
-                if (this.blockState == 0) {
-                    this.blockTrackNumber = (int) this.varintReader.readUnsignedVarint(input, false, true, 8);
-                    this.blockTrackNumberLength = this.varintReader.getLastLength();
-                    this.blockDurationUs = C0539C.TIME_UNSET;
-                    this.blockState = 1;
-                    this.scratch.reset();
-                }
-                Track track = (Track) this.tracks.get(this.blockTrackNumber);
-                if (track == null) {
-                    input.skipFully(contentSize - this.blockTrackNumberLength);
-                    this.blockState = 0;
-                    return;
-                }
-                if (this.blockState == 1) {
-                    int i;
-                    int i2;
-                    readScratch(input, 3);
-                    int lacing = (this.scratch.data[2] & 6) >> 1;
-                    if (lacing == 0) {
-                        this.blockLacingSampleCount = 1;
-                        this.blockLacingSampleSizes = ensureArrayCapacity(this.blockLacingSampleSizes, 1);
-                        this.blockLacingSampleSizes[0] = (contentSize - this.blockTrackNumberLength) - 3;
-                    } else if (id != ID_SIMPLE_BLOCK) {
-                        throw new ParserException("Lacing only supported in SimpleBlocks.");
-                    } else {
-                        readScratch(input, 4);
-                        this.blockLacingSampleCount = (this.scratch.data[3] & 255) + 1;
-                        this.blockLacingSampleSizes = ensureArrayCapacity(this.blockLacingSampleSizes, this.blockLacingSampleCount);
-                        if (lacing == 2) {
-                            Arrays.fill(this.blockLacingSampleSizes, 0, this.blockLacingSampleCount, ((contentSize - this.blockTrackNumberLength) - 4) / this.blockLacingSampleCount);
-                        } else if (lacing == 1) {
-                            totalSamplesSize = 0;
-                            headerSize = 4;
-                            for (sampleIndex = 0; sampleIndex < this.blockLacingSampleCount - 1; sampleIndex++) {
-                                this.blockLacingSampleSizes[sampleIndex] = 0;
-                                int byteValue;
-                                do {
-                                    headerSize++;
-                                    readScratch(input, headerSize);
-                                    byteValue = this.scratch.data[headerSize - 1] & 255;
-                                    r26 = this.blockLacingSampleSizes;
-                                    r26[sampleIndex] = r26[sampleIndex] + byteValue;
-                                } while (byteValue == 255);
-                                totalSamplesSize += this.blockLacingSampleSizes[sampleIndex];
-                            }
-                            this.blockLacingSampleSizes[this.blockLacingSampleCount - 1] = ((contentSize - this.blockTrackNumberLength) - headerSize) - totalSamplesSize;
-                        } else if (lacing == 3) {
-                            totalSamplesSize = 0;
-                            headerSize = 4;
-                            sampleIndex = 0;
-                            while (sampleIndex < this.blockLacingSampleCount - 1) {
-                                this.blockLacingSampleSizes[sampleIndex] = 0;
+        MatroskaExtractor matroskaExtractor = this;
+        int i = id;
+        int i2 = contentSize;
+        ExtractorInput extractorInput = input;
+        boolean z = false;
+        int i3 = 1;
+        if (i == ID_BLOCK || i == ID_SIMPLE_BLOCK) {
+            long j = 8;
+            if (matroskaExtractor.blockState == 0) {
+                matroskaExtractor.blockTrackNumber = (int) matroskaExtractor.varintReader.readUnsignedVarint(extractorInput, false, true, 8);
+                matroskaExtractor.blockTrackNumberLength = matroskaExtractor.varintReader.getLastLength();
+                matroskaExtractor.blockDurationUs = C0539C.TIME_UNSET;
+                matroskaExtractor.blockState = 1;
+                matroskaExtractor.scratch.reset();
+            }
+            Track track = (Track) matroskaExtractor.tracks.get(matroskaExtractor.blockTrackNumber);
+            if (track == null) {
+                extractorInput.skipFully(i2 - matroskaExtractor.blockTrackNumberLength);
+                matroskaExtractor.blockState = 0;
+                return;
+            }
+            if (matroskaExtractor.blockState == 1) {
+                readScratch(extractorInput, 3);
+                int i4 = 6;
+                int lacing = (matroskaExtractor.scratch.data[2] & 6) >> 1;
+                int i5 = 255;
+                if (lacing == 0) {
+                    matroskaExtractor.blockLacingSampleCount = 1;
+                    matroskaExtractor.blockLacingSampleSizes = ensureArrayCapacity(matroskaExtractor.blockLacingSampleSizes, 1);
+                    matroskaExtractor.blockLacingSampleSizes[0] = (i2 - matroskaExtractor.blockTrackNumberLength) - 3;
+                } else if (i != ID_SIMPLE_BLOCK) {
+                    throw new ParserException("Lacing only supported in SimpleBlocks.");
+                } else {
+                    readScratch(extractorInput, 4);
+                    matroskaExtractor.blockLacingSampleCount = (matroskaExtractor.scratch.data[3] & 255) + 1;
+                    matroskaExtractor.blockLacingSampleSizes = ensureArrayCapacity(matroskaExtractor.blockLacingSampleSizes, matroskaExtractor.blockLacingSampleCount);
+                    if (lacing == 2) {
+                        Arrays.fill(matroskaExtractor.blockLacingSampleSizes, 0, matroskaExtractor.blockLacingSampleCount, ((i2 - matroskaExtractor.blockTrackNumberLength) - 4) / matroskaExtractor.blockLacingSampleCount);
+                    } else if (lacing == 1) {
+                        headerSize = 4;
+                        totalSamplesSize = 0;
+                        for (sampleIndex = 0; sampleIndex < matroskaExtractor.blockLacingSampleCount - 1; sampleIndex++) {
+                            matroskaExtractor.blockLacingSampleSizes[sampleIndex] = 0;
+                            do {
                                 headerSize++;
-                                readScratch(input, headerSize);
-                                if (this.scratch.data[headerSize - 1] == (byte) 0) {
-                                    throw new ParserException("No valid varint length mask found");
-                                }
-                                long readValue = 0;
-                                int i3 = 0;
-                                while (i3 < 8) {
-                                    int lengthMask = 1 << (7 - i3);
-                                    if ((this.scratch.data[headerSize - 1] & lengthMask) != 0) {
-                                        int readPosition = headerSize - 1;
-                                        headerSize += i3;
-                                        readScratch(input, headerSize);
-                                        readValue = (long) ((this.scratch.data[readPosition] & 255) & (lengthMask ^ -1));
-                                        for (int readPosition2 = readPosition + 1; readPosition2 < headerSize; readPosition2++) {
-                                            readValue = (readValue << 8) | ((long) (this.scratch.data[readPosition2] & 255));
-                                        }
-                                        if (sampleIndex > 0) {
-                                            readValue -= (1 << ((i3 * 7) + 6)) - 1;
-                                        }
-                                        if (readValue >= -2147483648L || readValue > 2147483647L) {
-                                            throw new ParserException("EBML lacing sample size out of range.");
-                                        }
-                                        int intReadValue = (int) readValue;
-                                        r26 = this.blockLacingSampleSizes;
-                                        if (sampleIndex != 0) {
-                                            intReadValue += this.blockLacingSampleSizes[sampleIndex - 1];
-                                        }
-                                        r26[sampleIndex] = intReadValue;
-                                        totalSamplesSize += this.blockLacingSampleSizes[sampleIndex];
-                                        sampleIndex++;
-                                    } else {
-                                        i3++;
-                                    }
-                                }
-                                if (readValue >= -2147483648L) {
-                                    break;
-                                }
-                                throw new ParserException("EBML lacing sample size out of range.");
-                            }
-                            this.blockLacingSampleSizes[this.blockLacingSampleCount - 1] = ((contentSize - this.blockTrackNumberLength) - headerSize) - totalSamplesSize;
-                        } else {
-                            throw new ParserException("Unexpected lacing value: " + lacing);
+                                readScratch(extractorInput, headerSize);
+                                i4 = matroskaExtractor.scratch.data[headerSize - 1] & 255;
+                                int[] iArr = matroskaExtractor.blockLacingSampleSizes;
+                                iArr[sampleIndex] = iArr[sampleIndex] + i4;
+                            } while (i4 == 255);
+                            totalSamplesSize += matroskaExtractor.blockLacingSampleSizes[sampleIndex];
                         }
-                    }
-                    this.blockTimeUs = this.clusterTimecodeUs + scaleTimecodeToUs((long) ((this.scratch.data[0] << 8) | (this.scratch.data[1] & 255)));
-                    boolean isInvisible = (this.scratch.data[2] & 8) == 8;
-                    boolean isKeyframe = track.type == 2 || (id == ID_SIMPLE_BLOCK && (this.scratch.data[2] & 128) == 128);
-                    if (isKeyframe) {
-                        i = 1;
+                        matroskaExtractor.blockLacingSampleSizes[matroskaExtractor.blockLacingSampleCount - 1] = ((i2 - matroskaExtractor.blockTrackNumberLength) - headerSize) - totalSamplesSize;
+                    } else if (lacing == 3) {
+                        headerSize = 4;
+                        totalSamplesSize = 0;
+                        sampleIndex = 0;
+                        while (sampleIndex < matroskaExtractor.blockLacingSampleCount - i3) {
+                            matroskaExtractor.blockLacingSampleSizes[sampleIndex] = z;
+                            headerSize++;
+                            readScratch(extractorInput, headerSize);
+                            if (matroskaExtractor.scratch.data[headerSize - 1] == (byte) 0) {
+                                throw new ParserException("No valid varint length mask found");
+                            }
+                            int readPosition;
+                            int i6;
+                            long readValue;
+                            long readValue2 = 0;
+                            int i7 = z;
+                            while (i7 < j) {
+                                int lengthMask = i3 << (7 - i7);
+                                if ((matroskaExtractor.scratch.data[headerSize - 1] & lengthMask) != 0) {
+                                    int readPosition2 = headerSize - 1;
+                                    headerSize += i7;
+                                    readScratch(extractorInput, headerSize);
+                                    readValue2 = (long) ((matroskaExtractor.scratch.data[readPosition2] & i5) & (lengthMask ^ -1));
+                                    readPosition = readPosition2 + 1;
+                                    while (readPosition < headerSize) {
+                                        readPosition++;
+                                        readValue2 = (readValue2 << j) | ((long) (matroskaExtractor.scratch.data[readPosition] & 255));
+                                        j = 8;
+                                    }
+                                    if (sampleIndex > 0) {
+                                        i6 = 6;
+                                        readValue = readValue2 - ((1 << (6 + (i7 * 7))) - 1);
+                                        if (readValue >= -2147483648L) {
+                                            if (readValue > 2147483647L) {
+                                                readPosition = (int) readValue;
+                                                matroskaExtractor.blockLacingSampleSizes[sampleIndex] = sampleIndex == 0 ? readPosition : matroskaExtractor.blockLacingSampleSizes[sampleIndex - 1] + readPosition;
+                                                totalSamplesSize += matroskaExtractor.blockLacingSampleSizes[sampleIndex];
+                                                sampleIndex++;
+                                                i4 = i6;
+                                                z = false;
+                                                i3 = 1;
+                                                j = 8;
+                                                i5 = 255;
+                                            }
+                                        }
+                                        throw new ParserException("EBML lacing sample size out of range.");
+                                    }
+                                    i6 = 6;
+                                    readValue = readValue2;
+                                    if (readValue >= -2147483648L) {
+                                        if (readValue > 2147483647L) {
+                                            readPosition = (int) readValue;
+                                            if (sampleIndex == 0) {
+                                            }
+                                            matroskaExtractor.blockLacingSampleSizes[sampleIndex] = sampleIndex == 0 ? readPosition : matroskaExtractor.blockLacingSampleSizes[sampleIndex - 1] + readPosition;
+                                            totalSamplesSize += matroskaExtractor.blockLacingSampleSizes[sampleIndex];
+                                            sampleIndex++;
+                                            i4 = i6;
+                                            z = false;
+                                            i3 = 1;
+                                            j = 8;
+                                            i5 = 255;
+                                        }
+                                    }
+                                    throw new ParserException("EBML lacing sample size out of range.");
+                                }
+                                i6 = i4;
+                                i7++;
+                                i3 = 1;
+                                j = 8;
+                                i5 = 255;
+                            }
+                            i6 = i4;
+                            readValue = readValue2;
+                            if (readValue >= -2147483648L) {
+                                if (readValue > 2147483647L) {
+                                    readPosition = (int) readValue;
+                                    if (sampleIndex == 0) {
+                                    }
+                                    matroskaExtractor.blockLacingSampleSizes[sampleIndex] = sampleIndex == 0 ? readPosition : matroskaExtractor.blockLacingSampleSizes[sampleIndex - 1] + readPosition;
+                                    totalSamplesSize += matroskaExtractor.blockLacingSampleSizes[sampleIndex];
+                                    sampleIndex++;
+                                    i4 = i6;
+                                    z = false;
+                                    i3 = 1;
+                                    j = 8;
+                                    i5 = 255;
+                                }
+                            }
+                            throw new ParserException("EBML lacing sample size out of range.");
+                        }
+                        matroskaExtractor.blockLacingSampleSizes[matroskaExtractor.blockLacingSampleCount - 1] = ((i2 - matroskaExtractor.blockTrackNumberLength) - headerSize) - totalSamplesSize;
                     } else {
-                        i = 0;
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("Unexpected lacing value: ");
+                        stringBuilder.append(lacing);
+                        throw new ParserException(stringBuilder.toString());
                     }
-                    if (isInvisible) {
-                        i2 = Integer.MIN_VALUE;
-                    } else {
-                        i2 = 0;
-                    }
-                    this.blockFlags = i2 | i;
-                    this.blockState = 2;
-                    this.blockLacingSampleIndex = 0;
                 }
-                if (id == ID_SIMPLE_BLOCK) {
-                    while (this.blockLacingSampleIndex < this.blockLacingSampleCount) {
-                        writeSampleData(input, track, this.blockLacingSampleSizes[this.blockLacingSampleIndex]);
-                        commitSampleToOutput(track, this.blockTimeUs + ((long) ((this.blockLacingSampleIndex * track.defaultSampleDurationNs) / 1000)));
-                        this.blockLacingSampleIndex++;
+                matroskaExtractor.blockTimeUs = matroskaExtractor.clusterTimecodeUs + scaleTimecodeToUs((long) ((matroskaExtractor.scratch.data[0] << 8) | (matroskaExtractor.scratch.data[1] & 255)));
+                boolean isInvisible = (matroskaExtractor.scratch.data[2] & 8) == 8;
+                if (track.type != 2) {
+                    if (i != ID_SIMPLE_BLOCK || (matroskaExtractor.scratch.data[2] & 128) != 128) {
+                        z = false;
+                        matroskaExtractor.blockFlags = (z ? 1 : 0) | (isInvisible ? Integer.MIN_VALUE : 0);
+                        matroskaExtractor.blockState = 2;
+                        matroskaExtractor.blockLacingSampleIndex = 0;
                     }
-                    this.blockState = 0;
-                    return;
                 }
-                writeSampleData(input, track, this.blockLacingSampleSizes[0]);
-                return;
-            case ID_CONTENT_COMPRESSION_SETTINGS /*16981*/:
-                this.currentTrack.sampleStrippedBytes = new byte[contentSize];
-                input.readFully(this.currentTrack.sampleStrippedBytes, 0, contentSize);
-                return;
-            case ID_CONTENT_ENCRYPTION_KEY_ID /*18402*/:
-                byte[] encryptionKey = new byte[contentSize];
-                input.readFully(encryptionKey, 0, contentSize);
-                this.currentTrack.cryptoData = new CryptoData(1, encryptionKey, 0, 0);
-                return;
-            case ID_SEEK_ID /*21419*/:
-                Arrays.fill(this.seekEntryIdBytes.data, (byte) 0);
-                input.readFully(this.seekEntryIdBytes.data, 4 - contentSize, contentSize);
-                this.seekEntryIdBytes.setPosition(0);
-                this.seekEntryId = (int) this.seekEntryIdBytes.readUnsignedInt();
-                return;
-            case ID_CODEC_PRIVATE /*25506*/:
-                this.currentTrack.codecPrivate = new byte[contentSize];
-                input.readFully(this.currentTrack.codecPrivate, 0, contentSize);
-                return;
-            case ID_PROJECTION_PRIVATE /*30322*/:
-                this.currentTrack.projectionData = new byte[contentSize];
-                input.readFully(this.currentTrack.projectionData, 0, contentSize);
-                return;
-            default:
-                throw new ParserException("Unexpected id: " + id);
+                z = true;
+                if (z) {
+                }
+                if (isInvisible) {
+                }
+                matroskaExtractor.blockFlags = (z ? 1 : 0) | (isInvisible ? Integer.MIN_VALUE : 0);
+                matroskaExtractor.blockState = 2;
+                matroskaExtractor.blockLacingSampleIndex = 0;
+            }
+            if (i == ID_SIMPLE_BLOCK) {
+                while (matroskaExtractor.blockLacingSampleIndex < matroskaExtractor.blockLacingSampleCount) {
+                    writeSampleData(extractorInput, track, matroskaExtractor.blockLacingSampleSizes[matroskaExtractor.blockLacingSampleIndex]);
+                    commitSampleToOutput(track, matroskaExtractor.blockTimeUs + ((long) ((matroskaExtractor.blockLacingSampleIndex * track.defaultSampleDurationNs) / 1000)));
+                    matroskaExtractor.blockLacingSampleIndex++;
+                }
+                matroskaExtractor.blockState = 0;
+            } else {
+                writeSampleData(extractorInput, track, matroskaExtractor.blockLacingSampleSizes[0]);
+            }
+        } else if (i == ID_CONTENT_COMPRESSION_SETTINGS) {
+            matroskaExtractor.currentTrack.sampleStrippedBytes = new byte[i2];
+            extractorInput.readFully(matroskaExtractor.currentTrack.sampleStrippedBytes, 0, i2);
+        } else if (i == ID_CONTENT_ENCRYPTION_KEY_ID) {
+            byte[] encryptionKey = new byte[i2];
+            extractorInput.readFully(encryptionKey, 0, i2);
+            matroskaExtractor.currentTrack.cryptoData = new CryptoData(1, encryptionKey, 0, 0);
+        } else if (i == ID_SEEK_ID) {
+            Arrays.fill(matroskaExtractor.seekEntryIdBytes.data, (byte) 0);
+            extractorInput.readFully(matroskaExtractor.seekEntryIdBytes.data, 4 - i2, i2);
+            matroskaExtractor.seekEntryIdBytes.setPosition(0);
+            matroskaExtractor.seekEntryId = (int) matroskaExtractor.seekEntryIdBytes.readUnsignedInt();
+        } else if (i == ID_CODEC_PRIVATE) {
+            matroskaExtractor.currentTrack.codecPrivate = new byte[i2];
+            extractorInput.readFully(matroskaExtractor.currentTrack.codecPrivate, 0, i2);
+        } else if (i != ID_PROJECTION_PRIVATE) {
+            StringBuilder stringBuilder2 = new StringBuilder();
+            stringBuilder2.append("Unexpected id: ");
+            stringBuilder2.append(i);
+            throw new ParserException(stringBuilder2.toString());
+        } else {
+            matroskaExtractor.currentTrack.projectionData = new byte[i2];
+            extractorInput.readFully(matroskaExtractor.currentTrack.projectionData, 0, i2);
         }
     }
 
     private void commitSampleToOutput(Track track, long timeUs) {
-        if (track.trueHdSampleRechunker != null) {
-            track.trueHdSampleRechunker.sampleMetadata(track, timeUs);
+        MatroskaExtractor matroskaExtractor = this;
+        Track track2 = track;
+        if (track2.trueHdSampleRechunker != null) {
+            track2.trueHdSampleRechunker.sampleMetadata(track2, timeUs);
         } else {
-            if (CODEC_ID_SUBRIP.equals(track.codecId)) {
-                commitSubtitleSample(track, SUBRIP_TIMECODE_FORMAT, 19, SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR, SUBRIP_TIMECODE_EMPTY);
-            } else if (CODEC_ID_ASS.equals(track.codecId)) {
-                commitSubtitleSample(track, SSA_TIMECODE_FORMAT, 21, SSA_TIMECODE_LAST_VALUE_SCALING_FACTOR, SSA_TIMECODE_EMPTY);
+            long j = timeUs;
+            if (CODEC_ID_SUBRIP.equals(track2.codecId)) {
+                commitSubtitleSample(track2, SUBRIP_TIMECODE_FORMAT, 19, SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR, SUBRIP_TIMECODE_EMPTY);
+            } else if (CODEC_ID_ASS.equals(track2.codecId)) {
+                commitSubtitleSample(track2, SSA_TIMECODE_FORMAT, 21, SSA_TIMECODE_LAST_VALUE_SCALING_FACTOR, SSA_TIMECODE_EMPTY);
             }
-            track.output.sampleMetadata(timeUs, this.blockFlags, this.sampleBytesWritten, 0, track.cryptoData);
+            track2.output.sampleMetadata(j, matroskaExtractor.blockFlags, matroskaExtractor.sampleBytesWritten, 0, track2.cryptoData);
         }
-        this.sampleRead = true;
+        matroskaExtractor.sampleRead = true;
         resetSample();
     }
 
@@ -2046,118 +1711,134 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     private void writeSampleData(ExtractorInput input, Track track, int size) throws IOException, InterruptedException {
-        if (CODEC_ID_SUBRIP.equals(track.codecId)) {
-            writeSubtitleSampleData(input, SUBRIP_PREFIX, size);
-        } else if (CODEC_ID_ASS.equals(track.codecId)) {
-            writeSubtitleSampleData(input, SSA_PREFIX, size);
+        MatroskaExtractor matroskaExtractor = this;
+        ExtractorInput extractorInput = input;
+        Track track2 = track;
+        int size2 = size;
+        if (CODEC_ID_SUBRIP.equals(track2.codecId)) {
+            writeSubtitleSampleData(extractorInput, SUBRIP_PREFIX, size2);
+        } else if (CODEC_ID_ASS.equals(track2.codecId)) {
+            writeSubtitleSampleData(extractorInput, SSA_PREFIX, size2);
         } else {
-            TrackOutput output = track.output;
-            if (!this.sampleEncodingHandled) {
-                if (track.hasContentEncryption) {
-                    this.blockFlags &= -NUM;
-                    if (!this.sampleSignalByteRead) {
-                        input.readFully(this.scratch.data, 0, 1);
-                        this.sampleBytesRead++;
-                        if ((this.scratch.data[0] & 128) == 128) {
+            int previousPartitionOffset;
+            TrackOutput output = track2.output;
+            if (!matroskaExtractor.sampleEncodingHandled) {
+                if (track2.hasContentEncryption) {
+                    matroskaExtractor.blockFlags &= -NUM;
+                    int i = 128;
+                    if (!matroskaExtractor.sampleSignalByteRead) {
+                        extractorInput.readFully(matroskaExtractor.scratch.data, 0, 1);
+                        matroskaExtractor.sampleBytesRead++;
+                        if ((matroskaExtractor.scratch.data[0] & 128) == 128) {
                             throw new ParserException("Extension bit is set in signal byte");
                         }
-                        this.sampleSignalByte = this.scratch.data[0];
-                        this.sampleSignalByteRead = true;
+                        matroskaExtractor.sampleSignalByte = matroskaExtractor.scratch.data[0];
+                        matroskaExtractor.sampleSignalByteRead = true;
                     }
-                    if ((this.sampleSignalByte & 1) == 1) {
-                        boolean hasSubsampleEncryption = (this.sampleSignalByte & 2) == 2;
-                        this.blockFlags |= NUM;
-                        if (!this.sampleInitializationVectorRead) {
-                            input.readFully(this.encryptionInitializationVector.data, 0, 8);
-                            this.sampleBytesRead += 8;
-                            this.sampleInitializationVectorRead = true;
-                            this.scratch.data[0] = (byte) ((hasSubsampleEncryption ? 128 : 0) | 8);
-                            this.scratch.setPosition(0);
-                            output.sampleData(this.scratch, 1);
-                            this.sampleBytesWritten++;
-                            this.encryptionInitializationVector.setPosition(0);
-                            output.sampleData(this.encryptionInitializationVector, 8);
-                            this.sampleBytesWritten += 8;
+                    if ((matroskaExtractor.sampleSignalByte & 1) == 1) {
+                        boolean hasSubsampleEncryption = (matroskaExtractor.sampleSignalByte & 2) == 2;
+                        matroskaExtractor.blockFlags |= NUM;
+                        if (!matroskaExtractor.sampleInitializationVectorRead) {
+                            extractorInput.readFully(matroskaExtractor.encryptionInitializationVector.data, 0, 8);
+                            matroskaExtractor.sampleBytesRead += 8;
+                            matroskaExtractor.sampleInitializationVectorRead = true;
+                            byte[] bArr = matroskaExtractor.scratch.data;
+                            if (!hasSubsampleEncryption) {
+                                i = 0;
+                            }
+                            bArr[0] = (byte) (i | 8);
+                            matroskaExtractor.scratch.setPosition(0);
+                            output.sampleData(matroskaExtractor.scratch, 1);
+                            matroskaExtractor.sampleBytesWritten++;
+                            matroskaExtractor.encryptionInitializationVector.setPosition(0);
+                            output.sampleData(matroskaExtractor.encryptionInitializationVector, 8);
+                            matroskaExtractor.sampleBytesWritten += 8;
                         }
                         if (hasSubsampleEncryption) {
-                            if (!this.samplePartitionCountRead) {
-                                input.readFully(this.scratch.data, 0, 1);
-                                this.sampleBytesRead++;
-                                this.scratch.setPosition(0);
-                                this.samplePartitionCount = this.scratch.readUnsignedByte();
-                                this.samplePartitionCountRead = true;
+                            if (!matroskaExtractor.samplePartitionCountRead) {
+                                extractorInput.readFully(matroskaExtractor.scratch.data, 0, 1);
+                                matroskaExtractor.sampleBytesRead++;
+                                matroskaExtractor.scratch.setPosition(0);
+                                matroskaExtractor.samplePartitionCount = matroskaExtractor.scratch.readUnsignedByte();
+                                matroskaExtractor.samplePartitionCountRead = true;
                             }
-                            int samplePartitionDataSize = this.samplePartitionCount * 4;
-                            this.scratch.reset(samplePartitionDataSize);
-                            input.readFully(this.scratch.data, 0, samplePartitionDataSize);
-                            this.sampleBytesRead += samplePartitionDataSize;
-                            short subsampleCount = (short) ((this.samplePartitionCount / 2) + 1);
-                            int subsampleDataSize = (subsampleCount * 6) + 2;
-                            if (this.encryptionSubsampleDataBuffer == null || this.encryptionSubsampleDataBuffer.capacity() < subsampleDataSize) {
-                                this.encryptionSubsampleDataBuffer = ByteBuffer.allocate(subsampleDataSize);
+                            i = matroskaExtractor.samplePartitionCount * 4;
+                            matroskaExtractor.scratch.reset(i);
+                            extractorInput.readFully(matroskaExtractor.scratch.data, 0, i);
+                            matroskaExtractor.sampleBytesRead += i;
+                            short subsampleCount = (short) ((matroskaExtractor.samplePartitionCount / 2) + (short) 1);
+                            int subsampleDataSize = (6 * subsampleCount) + 2;
+                            if (matroskaExtractor.encryptionSubsampleDataBuffer == null || matroskaExtractor.encryptionSubsampleDataBuffer.capacity() < subsampleDataSize) {
+                                matroskaExtractor.encryptionSubsampleDataBuffer = ByteBuffer.allocate(subsampleDataSize);
                             }
-                            this.encryptionSubsampleDataBuffer.position(0);
-                            this.encryptionSubsampleDataBuffer.putShort(subsampleCount);
+                            matroskaExtractor.encryptionSubsampleDataBuffer.position(0);
+                            matroskaExtractor.encryptionSubsampleDataBuffer.putShort(subsampleCount);
                             int partitionOffset = 0;
-                            for (int i = 0; i < this.samplePartitionCount; i++) {
-                                int previousPartitionOffset = partitionOffset;
-                                partitionOffset = this.scratch.readUnsignedIntToInt();
-                                if (i % 2 == 0) {
-                                    this.encryptionSubsampleDataBuffer.putShort((short) (partitionOffset - previousPartitionOffset));
+                            for (int i2 = 0; i2 < matroskaExtractor.samplePartitionCount; i2++) {
+                                previousPartitionOffset = partitionOffset;
+                                partitionOffset = matroskaExtractor.scratch.readUnsignedIntToInt();
+                                if (i2 % 2 == 0) {
+                                    matroskaExtractor.encryptionSubsampleDataBuffer.putShort((short) (partitionOffset - previousPartitionOffset));
                                 } else {
-                                    this.encryptionSubsampleDataBuffer.putInt(partitionOffset - previousPartitionOffset);
+                                    matroskaExtractor.encryptionSubsampleDataBuffer.putInt(partitionOffset - previousPartitionOffset);
                                 }
                             }
-                            int finalPartitionSize = (size - this.sampleBytesRead) - partitionOffset;
-                            if (this.samplePartitionCount % 2 == 1) {
-                                this.encryptionSubsampleDataBuffer.putInt(finalPartitionSize);
+                            previousPartitionOffset = (size2 - matroskaExtractor.sampleBytesRead) - partitionOffset;
+                            if (matroskaExtractor.samplePartitionCount % 2 == 1) {
+                                matroskaExtractor.encryptionSubsampleDataBuffer.putInt(previousPartitionOffset);
                             } else {
-                                this.encryptionSubsampleDataBuffer.putShort((short) finalPartitionSize);
-                                this.encryptionSubsampleDataBuffer.putInt(0);
+                                matroskaExtractor.encryptionSubsampleDataBuffer.putShort((short) previousPartitionOffset);
+                                matroskaExtractor.encryptionSubsampleDataBuffer.putInt(0);
                             }
-                            this.encryptionSubsampleData.reset(this.encryptionSubsampleDataBuffer.array(), subsampleDataSize);
-                            output.sampleData(this.encryptionSubsampleData, subsampleDataSize);
-                            this.sampleBytesWritten += subsampleDataSize;
+                            matroskaExtractor.encryptionSubsampleData.reset(matroskaExtractor.encryptionSubsampleDataBuffer.array(), subsampleDataSize);
+                            output.sampleData(matroskaExtractor.encryptionSubsampleData, subsampleDataSize);
+                            matroskaExtractor.sampleBytesWritten += subsampleDataSize;
                         }
                     }
-                } else if (track.sampleStrippedBytes != null) {
-                    this.sampleStrippedBytes.reset(track.sampleStrippedBytes, track.sampleStrippedBytes.length);
+                } else if (track2.sampleStrippedBytes != null) {
+                    matroskaExtractor.sampleStrippedBytes.reset(track2.sampleStrippedBytes, track2.sampleStrippedBytes.length);
                 }
-                this.sampleEncodingHandled = true;
+                matroskaExtractor.sampleEncodingHandled = true;
             }
-            size += this.sampleStrippedBytes.limit();
-            if (CODEC_ID_H264.equals(track.codecId) || CODEC_ID_H265.equals(track.codecId)) {
-                byte[] nalLengthData = this.nalLength.data;
-                nalLengthData[0] = (byte) 0;
-                nalLengthData[1] = (byte) 0;
-                nalLengthData[2] = (byte) 0;
-                int nalUnitLengthFieldLength = track.nalUnitLengthFieldLength;
-                int nalUnitLengthFieldLengthDiff = 4 - track.nalUnitLengthFieldLength;
-                while (this.sampleBytesRead < size) {
-                    if (this.sampleCurrentNalBytesRemaining == 0) {
-                        readToTarget(input, nalLengthData, nalUnitLengthFieldLengthDiff, nalUnitLengthFieldLength);
-                        this.nalLength.setPosition(0);
-                        this.sampleCurrentNalBytesRemaining = this.nalLength.readUnsignedIntToInt();
-                        this.nalStartCode.setPosition(0);
-                        output.sampleData(this.nalStartCode, 4);
-                        this.sampleBytesWritten += 4;
-                    } else {
-                        this.sampleCurrentNalBytesRemaining -= readToOutput(input, output, this.sampleCurrentNalBytesRemaining);
+            size2 += matroskaExtractor.sampleStrippedBytes.limit();
+            if (!CODEC_ID_H264.equals(track2.codecId)) {
+                if (!CODEC_ID_H265.equals(track2.codecId)) {
+                    if (track2.trueHdSampleRechunker != null) {
+                        Assertions.checkState(matroskaExtractor.sampleStrippedBytes.limit() == 0);
+                        track2.trueHdSampleRechunker.startSample(extractorInput, matroskaExtractor.blockFlags, size2);
+                    }
+                    while (matroskaExtractor.sampleBytesRead < size2) {
+                        readToOutput(extractorInput, output, size2 - matroskaExtractor.sampleBytesRead);
+                    }
+                    if (CODEC_ID_VORBIS.equals(track2.codecId)) {
+                        matroskaExtractor.vorbisNumPageSamples.setPosition(0);
+                        output.sampleData(matroskaExtractor.vorbisNumPageSamples, 4);
+                        matroskaExtractor.sampleBytesWritten += 4;
                     }
                 }
-            } else {
-                if (track.trueHdSampleRechunker != null) {
-                    Assertions.checkState(this.sampleStrippedBytes.limit() == 0);
-                    track.trueHdSampleRechunker.startSample(input, this.blockFlags, size);
-                }
-                while (this.sampleBytesRead < size) {
-                    readToOutput(input, output, size - this.sampleBytesRead);
+            }
+            byte[] nalLengthData = matroskaExtractor.nalLength.data;
+            nalLengthData[0] = (byte) 0;
+            nalLengthData[1] = (byte) 0;
+            nalLengthData[2] = (byte) 0;
+            previousPartitionOffset = track2.nalUnitLengthFieldLength;
+            int nalUnitLengthFieldLengthDiff = 4 - track2.nalUnitLengthFieldLength;
+            while (matroskaExtractor.sampleBytesRead < size2) {
+                if (matroskaExtractor.sampleCurrentNalBytesRemaining == 0) {
+                    readToTarget(extractorInput, nalLengthData, nalUnitLengthFieldLengthDiff, previousPartitionOffset);
+                    matroskaExtractor.nalLength.setPosition(0);
+                    matroskaExtractor.sampleCurrentNalBytesRemaining = matroskaExtractor.nalLength.readUnsignedIntToInt();
+                    matroskaExtractor.nalStartCode.setPosition(0);
+                    output.sampleData(matroskaExtractor.nalStartCode, 4);
+                    matroskaExtractor.sampleBytesWritten += 4;
+                } else {
+                    matroskaExtractor.sampleCurrentNalBytesRemaining -= readToOutput(extractorInput, output, matroskaExtractor.sampleCurrentNalBytesRemaining);
                 }
             }
-            if (CODEC_ID_VORBIS.equals(track.codecId)) {
-                this.vorbisNumPageSamples.setPosition(0);
-                output.sampleData(this.vorbisNumPageSamples, 4);
-                this.sampleBytesWritten += 4;
+            if (CODEC_ID_VORBIS.equals(track2.codecId)) {
+                matroskaExtractor.vorbisNumPageSamples.setPosition(0);
+                output.sampleData(matroskaExtractor.vorbisNumPageSamples, 4);
+                matroskaExtractor.sampleBytesWritten += 4;
             }
         }
     }
@@ -2183,10 +1864,12 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         byte[] timeCodeData;
         if (durationUs == C0539C.TIME_UNSET) {
             timeCodeData = emptyTimecode;
+            long j = durationUs;
+            String str = timecodeFormat;
         } else {
-            durationUs -= ((long) (((int) (durationUs / 3600000000L)) * 3600)) * C0539C.MICROS_PER_SECOND;
-            durationUs -= ((long) (((int) (durationUs / 60000000)) * 60)) * C0539C.MICROS_PER_SECOND;
-            int lastValue = (int) ((durationUs - (((long) ((int) (durationUs / C0539C.MICROS_PER_SECOND))) * C0539C.MICROS_PER_SECOND)) / lastTimecodeValueScalingFactor);
+            long durationUs2 = durationUs - (((long) (((int) (durationUs / 3600000000L)) * 3600)) * C0539C.MICROS_PER_SECOND);
+            long durationUs3 = durationUs2 - (((long) (((int) (durationUs2 / 60000000)) * 60)) * C0539C.MICROS_PER_SECOND);
+            int lastValue = (int) ((durationUs3 - (((long) ((int) (durationUs3 / C0539C.MICROS_PER_SECOND))) * C0539C.MICROS_PER_SECOND)) / lastTimecodeValueScalingFactor);
             timeCodeData = Util.getUtf8Bytes(String.format(Locale.US, timecodeFormat, new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf(seconds), Integer.valueOf(lastValue)}));
         }
         System.arraycopy(timeCodeData, 0, subripSampleData, endTimecodeOffset, emptyTimecode.length);
@@ -2216,30 +1899,33 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     private SeekMap buildSeekMap() {
-        if (this.segmentContentPosition == -1 || this.durationUs == C0539C.TIME_UNSET || this.cueTimesUs == null || this.cueTimesUs.size() == 0 || this.cueClusterPositions == null || this.cueClusterPositions.size() != this.cueTimesUs.size()) {
-            this.cueTimesUs = null;
-            this.cueClusterPositions = null;
-            return new Unseekable(this.durationUs);
+        if (!(this.segmentContentPosition == -1 || this.durationUs == C0539C.TIME_UNSET || this.cueTimesUs == null || this.cueTimesUs.size() == 0 || this.cueClusterPositions == null)) {
+            if (this.cueClusterPositions.size() == this.cueTimesUs.size()) {
+                int cuePointsSize = this.cueTimesUs.size();
+                int[] sizes = new int[cuePointsSize];
+                long[] offsets = new long[cuePointsSize];
+                long[] durationsUs = new long[cuePointsSize];
+                long[] timesUs = new long[cuePointsSize];
+                int i = 0;
+                for (int i2 = 0; i2 < cuePointsSize; i2++) {
+                    timesUs[i2] = this.cueTimesUs.get(i2);
+                    offsets[i2] = this.segmentContentPosition + this.cueClusterPositions.get(i2);
+                }
+                while (i < cuePointsSize - 1) {
+                    sizes[i] = (int) (offsets[i + 1] - offsets[i]);
+                    durationsUs[i] = timesUs[i + 1] - timesUs[i];
+                    i++;
+                }
+                sizes[cuePointsSize - 1] = (int) ((this.segmentContentPosition + this.segmentContentSize) - offsets[cuePointsSize - 1]);
+                durationsUs[cuePointsSize - 1] = this.durationUs - timesUs[cuePointsSize - 1];
+                this.cueTimesUs = null;
+                this.cueClusterPositions = null;
+                return new ChunkIndex(sizes, offsets, durationsUs, timesUs);
+            }
         }
-        int i;
-        int cuePointsSize = this.cueTimesUs.size();
-        int[] sizes = new int[cuePointsSize];
-        long[] offsets = new long[cuePointsSize];
-        long[] durationsUs = new long[cuePointsSize];
-        long[] timesUs = new long[cuePointsSize];
-        for (i = 0; i < cuePointsSize; i++) {
-            timesUs[i] = this.cueTimesUs.get(i);
-            offsets[i] = this.segmentContentPosition + this.cueClusterPositions.get(i);
-        }
-        for (i = 0; i < cuePointsSize - 1; i++) {
-            sizes[i] = (int) (offsets[i + 1] - offsets[i]);
-            durationsUs[i] = timesUs[i + 1] - timesUs[i];
-        }
-        sizes[cuePointsSize - 1] = (int) ((this.segmentContentPosition + this.segmentContentSize) - offsets[cuePointsSize - 1]);
-        durationsUs[cuePointsSize - 1] = this.durationUs - timesUs[cuePointsSize - 1];
         this.cueTimesUs = null;
         this.cueClusterPositions = null;
-        return new ChunkIndex(sizes, offsets, durationsUs, timesUs);
+        return new Unseekable(this.durationUs);
     }
 
     private boolean maybeSeekForCues(PositionHolder seekPosition, long currentPosition) {
@@ -2265,16 +1951,21 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     }
 
     private static boolean isCodecSupported(String codecId) {
-        if (CODEC_ID_VP8.equals(codecId) || CODEC_ID_VP9.equals(codecId) || CODEC_ID_MPEG2.equals(codecId) || CODEC_ID_MPEG4_SP.equals(codecId) || CODEC_ID_MPEG4_ASP.equals(codecId) || CODEC_ID_MPEG4_AP.equals(codecId) || CODEC_ID_H264.equals(codecId) || CODEC_ID_H265.equals(codecId) || CODEC_ID_FOURCC.equals(codecId) || CODEC_ID_THEORA.equals(codecId) || CODEC_ID_OPUS.equals(codecId) || CODEC_ID_VORBIS.equals(codecId) || CODEC_ID_AAC.equals(codecId) || CODEC_ID_MP2.equals(codecId) || CODEC_ID_MP3.equals(codecId) || CODEC_ID_AC3.equals(codecId) || CODEC_ID_E_AC3.equals(codecId) || CODEC_ID_TRUEHD.equals(codecId) || CODEC_ID_DTS.equals(codecId) || CODEC_ID_DTS_EXPRESS.equals(codecId) || CODEC_ID_DTS_LOSSLESS.equals(codecId) || CODEC_ID_FLAC.equals(codecId) || CODEC_ID_ACM.equals(codecId) || CODEC_ID_PCM_INT_LIT.equals(codecId) || CODEC_ID_SUBRIP.equals(codecId) || CODEC_ID_ASS.equals(codecId) || CODEC_ID_VOBSUB.equals(codecId) || CODEC_ID_PGS.equals(codecId) || CODEC_ID_DVBSUB.equals(codecId)) {
-            return true;
+        if (!(CODEC_ID_VP8.equals(codecId) || CODEC_ID_VP9.equals(codecId) || CODEC_ID_MPEG2.equals(codecId) || CODEC_ID_MPEG4_SP.equals(codecId) || CODEC_ID_MPEG4_ASP.equals(codecId) || CODEC_ID_MPEG4_AP.equals(codecId) || CODEC_ID_H264.equals(codecId) || CODEC_ID_H265.equals(codecId) || CODEC_ID_FOURCC.equals(codecId) || CODEC_ID_THEORA.equals(codecId) || CODEC_ID_OPUS.equals(codecId) || CODEC_ID_VORBIS.equals(codecId) || CODEC_ID_AAC.equals(codecId) || CODEC_ID_MP2.equals(codecId) || CODEC_ID_MP3.equals(codecId) || CODEC_ID_AC3.equals(codecId) || CODEC_ID_E_AC3.equals(codecId) || CODEC_ID_TRUEHD.equals(codecId) || CODEC_ID_DTS.equals(codecId) || CODEC_ID_DTS_EXPRESS.equals(codecId) || CODEC_ID_DTS_LOSSLESS.equals(codecId) || CODEC_ID_FLAC.equals(codecId) || CODEC_ID_ACM.equals(codecId) || CODEC_ID_PCM_INT_LIT.equals(codecId) || CODEC_ID_SUBRIP.equals(codecId) || CODEC_ID_ASS.equals(codecId) || CODEC_ID_VOBSUB.equals(codecId) || CODEC_ID_PGS.equals(codecId))) {
+            if (!CODEC_ID_DVBSUB.equals(codecId)) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     private static int[] ensureArrayCapacity(int[] array, int length) {
         if (array == null) {
             return new int[length];
         }
-        return array.length < length ? new int[Math.max(array.length * 2, length)] : array;
+        if (array.length >= length) {
+            return array;
+        }
+        return new int[Math.max(array.length * 2, length)];
     }
 }

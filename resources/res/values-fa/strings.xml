@@ -18,7 +18,7 @@
     <string name="common_open_on_phone">باز کردن در تلفن</string>
     <string name="common_signin_button_text">ورود به سیستم</string>
     <string name="common_signin_button_text_long">‏ورود به سیستم با Google‎</string>
-    <string name="gcm_fallback_notification_channel_label">موارد دیگر</string>
+    <string name="fcm_fallback_notification_channel_label">موارد دیگر</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">نرم افزار</string>
     <string name="hockeyapp_crash_dialog_message">آیا تمایل دارید که بصورت ناشناس گزارش این خطا را برای ما ارسال کنید تا ما آن را رفع کنیم ؟</string>
     <string name="hockeyapp_crash_dialog_negative_button">خیر</string>

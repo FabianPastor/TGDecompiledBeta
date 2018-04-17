@@ -90,17 +90,21 @@ public class MP3Info extends AudioInfo {
     }
 
     MP3Frame readFirstFrame(MP3Input data, StopReadCondition stopCondition) throws IOException {
-        int b0 = 0;
-        int b1 = stopCondition.stopRead(data) ? -1 : data.read();
-        while (b1 != -1) {
-            if (b0 == 255 && (b1 & 224) == 224) {
-                data.mark(2);
-                int b2 = stopCondition.stopRead(data) ? -1 : data.read();
-                if (b2 == -1) {
+        byte b0;
+        MP3Input mP3Input = data;
+        StopReadCondition stopReadCondition = stopCondition;
+        int b02 = 0;
+        byte b = (byte) -1;
+        byte b1 = stopReadCondition.stopRead(mP3Input) ? (byte) -1 : data.read();
+        while (b1 != b) {
+            if (b02 == 255 && (b1 & 224) == 224) {
+                mP3Input.mark(2);
+                byte b2 = stopReadCondition.stopRead(mP3Input) ? b : data.read();
+                if (b2 == b) {
                     break;
                 }
-                int b3 = stopCondition.stopRead(data) ? -1 : data.read();
-                if (b3 == -1) {
+                byte b3 = stopReadCondition.stopRead(mP3Input) ? b : data.read();
+                if (b3 == b) {
                     break;
                 }
                 Header header = null;
@@ -110,46 +114,60 @@ public class MP3Info extends AudioInfo {
                 }
                 if (header != null) {
                     data.reset();
-                    data.mark(header.getFrameSize() + 2);
+                    mP3Input.mark(header.getFrameSize() + 2);
                     byte[] frameBytes = new byte[header.getFrameSize()];
-                    frameBytes[0] = (byte) -1;
+                    frameBytes[0] = b;
                     frameBytes[1] = (byte) b1;
                     try {
-                        data.readFully(frameBytes, 2, frameBytes.length - 2);
+                        mP3Input.readFully(frameBytes, 2, frameBytes.length - 2);
                         MP3Frame frame = new MP3Frame(header, frameBytes);
                         if (!frame.isChecksumError()) {
-                            int nextB0 = stopCondition.stopRead(data) ? -1 : data.read();
-                            int nextB1 = stopCondition.stopRead(data) ? -1 : data.read();
-                            if (nextB0 == -1 || nextB1 == -1) {
-                                return frame;
-                            }
-                            if (nextB0 == 255 && (nextB1 & 254) == (b1 & 254)) {
-                                int nextB2 = stopCondition.stopRead(data) ? -1 : data.read();
-                                int nextB3 = stopCondition.stopRead(data) ? -1 : data.read();
-                                if (nextB2 == -1 || nextB3 == -1) {
-                                    return frame;
-                                }
-                                try {
-                                    if (new Header(nextB1, nextB2, nextB3).isCompatible(header)) {
-                                        data.reset();
-                                        data.skipFully((long) (frameBytes.length - 2));
+                            byte nextB0 = stopReadCondition.stopRead(mP3Input) ? b : data.read();
+                            byte nextB1 = stopReadCondition.stopRead(mP3Input) ? b : data.read();
+                            if (nextB0 != b) {
+                                if (nextB1 != b) {
+                                    if (nextB0 == (byte) -1 && (nextB1 & 254) == (b1 & 254)) {
+                                        byte nextB2 = stopReadCondition.stopRead(mP3Input) ? b : data.read();
+                                        byte nextB3 = stopReadCondition.stopRead(mP3Input) ? b : data.read();
+                                        byte b4;
+                                        if (nextB2 == b) {
+                                            b4 = nextB2;
+                                        } else if (nextB3 == b) {
+                                            b4 = nextB2;
+                                        } else {
+                                            try {
+                                                if (new Header(nextB1, nextB2, nextB3).isCompatible(header)) {
+                                                    data.reset();
+                                                    try {
+                                                        mP3Input.skipFully((long) (frameBytes.length - 2));
+                                                        return frame;
+                                                    } catch (MP3Exception e2) {
+                                                    }
+                                                }
+                                            } catch (MP3Exception e3) {
+                                                b4 = nextB2;
+                                                data.reset();
+                                                b0 = b1;
+                                                b1 = stopReadCondition.stopRead(mP3Input) ? data.read() : (byte) -1;
+                                                b = (byte) -1;
+                                            }
+                                        }
                                         return frame;
                                     }
-                                } catch (MP3Exception e2) {
                                 }
                             }
+                            return frame;
                         }
-                    } catch (EOFException e3) {
+                    } catch (EOFException e4) {
                     }
                 }
                 data.reset();
             }
             b0 = b1;
-            if (stopCondition.stopRead(data)) {
-                b1 = -1;
-            } else {
-                b1 = data.read();
+            if (stopReadCondition.stopRead(mP3Input)) {
             }
+            b1 = stopReadCondition.stopRead(mP3Input) ? data.read() : (byte) -1;
+            b = (byte) -1;
         }
         return null;
     }
@@ -159,70 +177,81 @@ public class MP3Info extends AudioInfo {
         data.mark(4);
         int b0 = stopCondition.stopRead(data) ? -1 : data.read();
         int b1 = stopCondition.stopRead(data) ? -1 : data.read();
-        if (b0 == -1 || b1 == -1) {
-            return null;
-        }
-        if (b0 == 255 && (b1 & 224) == 224) {
-            int b2 = stopCondition.stopRead(data) ? -1 : data.read();
-            int b3 = stopCondition.stopRead(data) ? -1 : data.read();
-            if (b2 == -1 || b3 == -1) {
-                return null;
-            }
-            Header nextHeader = null;
-            try {
-                nextHeader = new Header(b1, b2, b3);
-            } catch (MP3Exception e) {
-            }
-            if (nextHeader != null && nextHeader.isCompatible(previousHeader)) {
-                byte[] frameBytes = new byte[nextHeader.getFrameSize()];
-                frameBytes[0] = (byte) b0;
-                frameBytes[1] = (byte) b1;
-                frameBytes[2] = (byte) b2;
-                frameBytes[3] = (byte) b3;
-                try {
-                    data.readFully(frameBytes, 4, frameBytes.length - 4);
-                    return new MP3Frame(nextHeader, frameBytes);
-                } catch (EOFException e2) {
+        if (b0 != -1) {
+            if (b1 != -1) {
+                if (b0 == 255 && (b1 & 224) == 224) {
+                    int b2 = stopCondition.stopRead(data) ? -1 : data.read();
+                    int b3 = stopCondition.stopRead(data) ? -1 : data.read();
+                    if (b2 != -1) {
+                        if (b3 != -1) {
+                            Header nextHeader = null;
+                            try {
+                                nextHeader = new Header(b1, b2, b3);
+                            } catch (MP3Exception e) {
+                            }
+                            if (nextHeader != null && nextHeader.isCompatible(previousHeader)) {
+                                byte[] frameBytes = new byte[nextHeader.getFrameSize()];
+                                frameBytes[0] = (byte) b0;
+                                frameBytes[1] = (byte) b1;
+                                frameBytes[2] = (byte) b2;
+                                frameBytes[3] = (byte) b3;
+                                try {
+                                    data.readFully(frameBytes, 4, frameBytes.length - 4);
+                                    return new MP3Frame(nextHeader, frameBytes);
+                                } catch (EOFException e2) {
+                                    return null;
+                                }
+                            }
+                        }
+                    }
                     return null;
                 }
+                data.reset();
+                return null;
             }
         }
-        data.reset();
         return null;
     }
 
     long calculateDuration(MP3Input data, long totalLength, StopReadCondition stopCondition) throws IOException, MP3Exception {
-        MP3Frame frame = readFirstFrame(data, stopCondition);
+        MP3Input mP3Input = data;
+        StopReadCondition stopReadCondition = stopCondition;
+        MP3Frame frame = readFirstFrame(mP3Input, stopReadCondition);
         if (frame != null) {
             int numberOfFrames = frame.getNumberOfFrames();
             if (numberOfFrames > 0) {
                 return frame.getHeader().getTotalDuration((long) (frame.getSize() * numberOfFrames));
             }
-            numberOfFrames = 1;
             long firstFramePosition = data.getPosition() - ((long) frame.getSize());
             long frameSizeSum = (long) frame.getSize();
             int firstFrameBitrate = frame.getHeader().getBitrate();
             long bitrateSum = (long) firstFrameBitrate;
             boolean vbr = false;
             int cbrThreshold = 10000 / frame.getHeader().getDuration();
+            MP3Frame frame2 = frame;
+            frame = 1;
             while (true) {
-                if (numberOfFrames == cbrThreshold && !vbr && totalLength > 0) {
-                    return frame.getHeader().getTotalDuration(totalLength - firstFramePosition);
+                if (frame != cbrThreshold || vbr || totalLength <= 0) {
+                    MP3Info mP3Info;
+                    boolean vbr2 = vbr;
+                    long bitrateSum2 = bitrateSum;
+                    MP3Frame readNextFrame = mP3Info.readNextFrame(mP3Input, stopReadCondition, frame2);
+                    frame2 = readNextFrame;
+                    if (readNextFrame == null) {
+                        return (((1000 * frameSizeSum) * ((long) frame)) * 8) / bitrateSum2;
+                    }
+                    int bitrate = frame2.getHeader().getBitrate();
+                    vbr = bitrate != firstFrameBitrate ? true : vbr2;
+                    frame++;
+                    bitrateSum = bitrateSum2 + ((long) bitrate);
+                    frameSizeSum += (long) frame2.getSize();
+                    mP3Info = this;
+                    mP3Input = data;
+                } else {
+                    return frame2.getHeader().getTotalDuration(totalLength - firstFramePosition);
                 }
-                frame = readNextFrame(data, stopCondition, frame);
-                if (frame == null) {
-                    return (((1000 * frameSizeSum) * ((long) numberOfFrames)) * 8) / bitrateSum;
-                }
-                int bitrate = frame.getHeader().getBitrate();
-                if (bitrate != firstFrameBitrate) {
-                    vbr = true;
-                }
-                bitrateSum += (long) bitrate;
-                frameSizeSum += (long) frame.getSize();
-                numberOfFrames++;
             }
-        } else {
-            throw new MP3Exception("No audio frame");
         }
+        throw new MP3Exception("No audio frame");
     }
 }

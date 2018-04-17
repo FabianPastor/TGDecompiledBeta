@@ -100,18 +100,19 @@ public final class ParsableBitArray {
     }
 
     public void readBits(byte[] buffer, int offset, int numBits) {
-        int to = offset + (numBits >> 3);
-        for (int i = offset; i < to; i++) {
+        int i;
+        int to = (numBits >> 3) + offset;
+        for (i = offset; i < to; i++) {
             byte[] bArr = this.data;
             int i2 = this.byteOffset;
             this.byteOffset = i2 + 1;
             buffer[i] = (byte) (bArr[i2] << this.bitOffset);
-            buffer[i] = (byte) (buffer[i] | ((this.data[this.byteOffset] & 255) >> (8 - this.bitOffset)));
+            buffer[i] = (byte) (((255 & this.data[this.byteOffset]) >> (8 - this.bitOffset)) | buffer[i]);
         }
-        int bitsLeft = numBits & 7;
-        if (bitsLeft != 0) {
-            buffer[to] = (byte) (buffer[to] & (255 >> bitsLeft));
-            if (this.bitOffset + bitsLeft > 8) {
+        i = numBits & 7;
+        if (i != 0) {
+            buffer[to] = (byte) (buffer[to] & (255 >> i));
+            if (this.bitOffset + i > 8) {
                 byte b = buffer[to];
                 byte[] bArr2 = this.data;
                 int i3 = this.byteOffset;
@@ -119,8 +120,8 @@ public final class ParsableBitArray {
                 buffer[to] = (byte) (b | ((byte) ((bArr2[i3] & 255) << this.bitOffset)));
                 this.bitOffset -= 8;
             }
-            this.bitOffset += bitsLeft;
-            buffer[to] = (byte) (buffer[to] | ((byte) (((this.data[this.byteOffset] & 255) >> (8 - this.bitOffset)) << (8 - bitsLeft))));
+            this.bitOffset += i;
+            buffer[to] = (byte) (buffer[to] | ((byte) (((255 & this.data[this.byteOffset]) >> (8 - this.bitOffset)) << (8 - i))));
             if (this.bitOffset == 8) {
                 this.bitOffset = 0;
                 this.byteOffset++;

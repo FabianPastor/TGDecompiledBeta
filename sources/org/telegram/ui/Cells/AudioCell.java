@@ -69,113 +69,57 @@ public class AudioCell extends FrameLayout {
     }
 
     public AudioCell(Context context) {
-        float f;
-        float f2;
-        int i;
-        int i2 = 3;
+        Context context2 = context;
         super(context);
-        this.playButton = new ImageView(context);
-        View view = this.playButton;
-        int i3 = (LocaleController.isRTL ? 5 : 3) | 48;
-        if (LocaleController.isRTL) {
-            f = 0.0f;
-        } else {
-            f = 13.0f;
-        }
-        if (LocaleController.isRTL) {
-            f2 = 13.0f;
-        } else {
-            f2 = 0.0f;
-        }
-        addView(view, LayoutHelper.createFrame(46, 46.0f, i3, f, 13.0f, f2, 0.0f));
-        this.playButton.setOnClickListener(new C08631());
-        this.titleTextView = new TextView(context);
-        this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.titleTextView.setTextSize(1, 16.0f);
-        this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.titleTextView.setLines(1);
-        this.titleTextView.setMaxLines(1);
-        this.titleTextView.setSingleLine(true);
-        this.titleTextView.setEllipsize(TruncateAt.END);
-        this.titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        view = this.titleTextView;
-        if (LocaleController.isRTL) {
-            i3 = 5;
-        } else {
-            i3 = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 7.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
-        this.genreTextView = new TextView(context);
-        this.genreTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
-        this.genreTextView.setTextSize(1, 14.0f);
-        this.genreTextView.setLines(1);
-        this.genreTextView.setMaxLines(1);
-        this.genreTextView.setSingleLine(true);
-        this.genreTextView.setEllipsize(TruncateAt.END);
-        TextView textView = this.genreTextView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        textView.setGravity(i | 48);
-        view = this.genreTextView;
-        if (LocaleController.isRTL) {
-            i3 = 5;
-        } else {
-            i3 = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 28.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
-        this.authorTextView = new TextView(context);
-        this.authorTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
-        this.authorTextView.setTextSize(1, 14.0f);
-        this.authorTextView.setLines(1);
-        this.authorTextView.setMaxLines(1);
-        this.authorTextView.setSingleLine(true);
-        this.authorTextView.setEllipsize(TruncateAt.END);
-        textView = this.authorTextView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        textView.setGravity(i | 48);
-        view = this.authorTextView;
-        if (LocaleController.isRTL) {
-            i3 = 5;
-        } else {
-            i3 = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 44.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
-        this.timeTextView = new TextView(context);
-        this.timeTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-        this.timeTextView.setTextSize(1, 13.0f);
-        this.timeTextView.setLines(1);
-        this.timeTextView.setMaxLines(1);
-        this.timeTextView.setSingleLine(true);
-        this.timeTextView.setEllipsize(TruncateAt.END);
-        textView = this.timeTextView;
-        if (LocaleController.isRTL) {
-            i = 3;
-        } else {
-            i = 5;
-        }
-        textView.setGravity(i | 48);
-        View view2 = this.timeTextView;
-        if (LocaleController.isRTL) {
-            i3 = 3;
-        } else {
-            i3 = 5;
-        }
-        addView(view2, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 11.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
-        this.checkBox = new CheckBox(context, R.drawable.round_check2);
-        this.checkBox.setVisibility(0);
-        this.checkBox.setColor(Theme.getColor(Theme.key_musicPicker_checkbox), Theme.getColor(Theme.key_musicPicker_checkboxCheck));
-        view2 = this.checkBox;
+        this.playButton = new ImageView(context2);
+        int i = 3;
+        addView(this.playButton, LayoutHelper.createFrame(46, 46.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 13.0f, 13.0f, LocaleController.isRTL ? 13.0f : 0.0f, 0.0f));
+        r0.playButton.setOnClickListener(new C08631());
+        r0.titleTextView = new TextView(context2);
+        r0.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.titleTextView.setTextSize(1, 16.0f);
+        r0.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        r0.titleTextView.setLines(1);
+        r0.titleTextView.setMaxLines(1);
+        r0.titleTextView.setSingleLine(true);
+        r0.titleTextView.setEllipsize(TruncateAt.END);
+        r0.titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        addView(r0.titleTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 50.0f : 72.0f, 7.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
+        r0.genreTextView = new TextView(context2);
+        r0.genreTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        r0.genreTextView.setTextSize(1, 14.0f);
+        r0.genreTextView.setLines(1);
+        r0.genreTextView.setMaxLines(1);
+        r0.genreTextView.setSingleLine(true);
+        r0.genreTextView.setEllipsize(TruncateAt.END);
+        r0.genreTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        addView(r0.genreTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 50.0f : 72.0f, 28.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
+        r0.authorTextView = new TextView(context2);
+        r0.authorTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        r0.authorTextView.setTextSize(1, 14.0f);
+        r0.authorTextView.setLines(1);
+        r0.authorTextView.setMaxLines(1);
+        r0.authorTextView.setSingleLine(true);
+        r0.authorTextView.setEllipsize(TruncateAt.END);
+        r0.authorTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        addView(r0.authorTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 50.0f : 72.0f, 44.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
+        r0.timeTextView = new TextView(context2);
+        r0.timeTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+        r0.timeTextView.setTextSize(1, 13.0f);
+        r0.timeTextView.setLines(1);
+        r0.timeTextView.setMaxLines(1);
+        r0.timeTextView.setSingleLine(true);
+        r0.timeTextView.setEllipsize(TruncateAt.END);
+        r0.timeTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
+        addView(r0.timeTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 18.0f : 0.0f, 11.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
+        r0.checkBox = new CheckBox(context2, R.drawable.round_check2);
+        r0.checkBox.setVisibility(0);
+        r0.checkBox.setColor(Theme.getColor(Theme.key_musicPicker_checkbox), Theme.getColor(Theme.key_musicPicker_checkboxCheck));
+        View view = r0.checkBox;
         if (!LocaleController.isRTL) {
-            i2 = 5;
+            i = 5;
         }
-        addView(view2, LayoutHelper.createFrame(22, 22.0f, i2 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 39.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(22, 22.0f, i | 48, LocaleController.isRTL ? 18.0f : 0.0f, 39.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
     }
 
     private void setPlayDrawable(boolean play) {
@@ -212,23 +156,26 @@ public class AudioCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(72.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(72.0f) + this.needDivider, NUM));
     }
 
     public void setAudio(AudioEntry entry, boolean divider, boolean checked) {
-        boolean z = true;
         this.audioEntry = entry;
         this.titleTextView.setText(this.audioEntry.title);
         this.genreTextView.setText(this.audioEntry.genre);
         this.authorTextView.setText(this.audioEntry.author);
-        this.timeTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(this.audioEntry.duration / 60), Integer.valueOf(this.audioEntry.duration % 60)}));
-        boolean z2 = MediaController.getInstance().isPlayingMessage(this.audioEntry.messageObject) && !MediaController.getInstance().isMessagePaused();
-        setPlayDrawable(z2);
-        this.needDivider = divider;
-        if (divider) {
+        TextView textView = this.timeTextView;
+        Object[] objArr = new Object[2];
+        objArr[0] = Integer.valueOf(this.audioEntry.duration / 60);
+        boolean z = true;
+        objArr[1] = Integer.valueOf(this.audioEntry.duration % 60);
+        textView.setText(String.format("%d:%02d", objArr));
+        if (!MediaController.getInstance().isPlayingMessage(this.audioEntry.messageObject) || MediaController.getInstance().isMessagePaused()) {
             z = false;
         }
-        setWillNotDraw(z);
+        setPlayDrawable(z);
+        this.needDivider = divider;
+        setWillNotDraw(divider ^ 1);
         this.checkBox.setChecked(checked, false);
     }
 

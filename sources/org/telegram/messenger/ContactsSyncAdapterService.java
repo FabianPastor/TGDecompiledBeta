@@ -44,7 +44,10 @@ public class ContactsSyncAdapterService extends Service {
 
     private static void performSync(Context context, Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) throws OperationCanceledException {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("performSync: " + account.toString());
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("performSync: ");
+            stringBuilder.append(account.toString());
+            FileLog.m0d(stringBuilder.toString());
         }
     }
 }

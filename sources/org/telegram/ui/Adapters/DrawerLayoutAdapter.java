@@ -76,8 +76,8 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     }
 
     public DrawerLayoutAdapter(Context context) {
-        boolean z = true;
         this.mContext = context;
+        boolean z = true;
         if (UserConfig.getActivatedAccountsCount() <= 1 || !MessagesController.getGlobalMainSettings().getBoolean("accountsShowed", true)) {
             z = false;
         }
@@ -130,58 +130,64 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
 
     public boolean isEnabled(ViewHolder holder) {
         int itemType = holder.getItemViewType();
-        return itemType == 3 || itemType == 4 || itemType == 5;
+        if (!(itemType == 3 || itemType == 4)) {
+            if (itemType != 5) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        switch (viewType) {
-            case 0:
-                this.profileCell = new DrawerProfileCell(this.mContext);
-                this.profileCell.setOnArrowClickListener(new C07771());
-                view = this.profileCell;
-                break;
-            case 2:
-                view = new DividerCell(this.mContext);
-                break;
-            case 3:
-                view = new DrawerActionCell(this.mContext);
-                break;
-            case 4:
-                view = new DrawerUserCell(this.mContext);
-                break;
-            case 5:
-                view = new DrawerAddCell(this.mContext);
-                break;
-            default:
-                view = new EmptyCell(this.mContext, AndroidUtilities.dp(8.0f));
-                break;
+        if (viewType != 0) {
+            switch (viewType) {
+                case 2:
+                    view = new DividerCell(this.mContext);
+                    break;
+                case 3:
+                    view = new DrawerActionCell(this.mContext);
+                    break;
+                case 4:
+                    view = new DrawerUserCell(this.mContext);
+                    break;
+                case 5:
+                    view = new DrawerAddCell(this.mContext);
+                    break;
+                default:
+                    view = new EmptyCell(this.mContext, AndroidUtilities.dp(8.0f));
+                    break;
+            }
         }
+        this.profileCell = new DrawerProfileCell(this.mContext);
+        this.profileCell.setOnArrowClickListener(new C07771());
+        view = this.profileCell;
         view.setLayoutParams(new LayoutParams(-1, -2));
         return new Holder(view);
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        switch (holder.getItemViewType()) {
-            case 0:
-                ((DrawerProfileCell) holder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShowed);
-                holder.itemView.setBackgroundColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
-                return;
-            case 3:
-                position -= 2;
-                if (this.accountsShowed) {
-                    position -= getAccountRowsCount();
-                }
-                DrawerActionCell drawerActionCell = holder.itemView;
-                ((Item) this.items.get(position)).bind(drawerActionCell);
-                drawerActionCell.setPadding(0, 0, 0, 0);
-                return;
-            case 4:
-                holder.itemView.setAccount(((Integer) this.accountNumbers.get(position - 2)).intValue());
-                return;
-            default:
-                return;
+        int itemViewType = holder.getItemViewType();
+        if (itemViewType != 0) {
+            switch (itemViewType) {
+                case 3:
+                    position -= 2;
+                    if (this.accountsShowed) {
+                        position -= getAccountRowsCount();
+                    }
+                    DrawerActionCell drawerActionCell = holder.itemView;
+                    ((Item) this.items.get(position)).bind(drawerActionCell);
+                    drawerActionCell.setPadding(0, 0, 0, 0);
+                    return;
+                case 4:
+                    holder.itemView.setAccount(((Integer) this.accountNumbers.get(position - 2)).intValue());
+                    return;
+                default:
+                    return;
+            }
         }
+        ((DrawerProfileCell) holder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShowed);
+        holder.itemView.setBackgroundColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
     }
 
     public int getItemViewType(int i) {
@@ -208,10 +214,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
             }
             i -= getAccountRowsCount();
         }
-        if (i == 3) {
-            return 2;
-        }
-        return 3;
+        return i == 3 ? 2 : 3;
     }
 
     private void resetItems() {
@@ -242,12 +245,15 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         if (this.accountsShowed) {
             position -= getAccountRowsCount();
         }
-        if (position < 0 || position >= this.items.size()) {
-            return -1;
-        }
-        Item item = (Item) this.items.get(position);
-        if (item != null) {
-            return item.id;
+        int i = -1;
+        if (position >= 0) {
+            if (position < this.items.size()) {
+                Item item = (Item) this.items.get(position);
+                if (item != null) {
+                    i = item.id;
+                }
+                return i;
+            }
         }
         return -1;
     }

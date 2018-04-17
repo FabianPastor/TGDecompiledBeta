@@ -28,10 +28,7 @@ public final class Metadata implements Parcelable {
     }
 
     public Metadata(Entry... entries) {
-        if (entries == null) {
-            entries = new Entry[0];
-        }
-        this.entries = entries;
+        this.entries = entries == null ? new Entry[0] : entries;
     }
 
     public Metadata(List<? extends Entry> entries) {
@@ -62,10 +59,12 @@ public final class Metadata implements Parcelable {
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
+        if (obj != null) {
+            if (getClass() == obj.getClass()) {
+                return Arrays.equals(this.entries, ((Metadata) obj).entries);
+            }
         }
-        return Arrays.equals(this.entries, ((Metadata) obj).entries);
+        return false;
     }
 
     public int hashCode() {

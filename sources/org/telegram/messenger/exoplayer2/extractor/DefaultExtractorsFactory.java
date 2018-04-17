@@ -64,29 +64,23 @@ public final class DefaultExtractorsFactory implements ExtractorsFactory {
 
     public synchronized Extractor[] createExtractors() {
         Extractor[] extractors;
-        int i = 11;
-        synchronized (this) {
-            if (FLAC_EXTRACTOR_CONSTRUCTOR != null) {
-                i = 12;
-            }
-            extractors = new Extractor[i];
-            extractors[0] = new MatroskaExtractor(this.matroskaFlags);
-            extractors[1] = new FragmentedMp4Extractor(this.fragmentedMp4Flags);
-            extractors[2] = new Mp4Extractor(this.mp4Flags);
-            extractors[3] = new Mp3Extractor(this.mp3Flags);
-            extractors[4] = new AdtsExtractor();
-            extractors[5] = new Ac3Extractor();
-            extractors[6] = new TsExtractor(this.tsMode, this.tsFlags);
-            extractors[7] = new FlvExtractor();
-            extractors[8] = new OggExtractor();
-            extractors[9] = new PsExtractor();
-            extractors[10] = new WavExtractor();
-            if (FLAC_EXTRACTOR_CONSTRUCTOR != null) {
-                try {
-                    extractors[11] = (Extractor) FLAC_EXTRACTOR_CONSTRUCTOR.newInstance(new Object[0]);
-                } catch (Exception e) {
-                    throw new IllegalStateException("Unexpected error creating FLAC extractor", e);
-                }
+        extractors = new Extractor[(FLAC_EXTRACTOR_CONSTRUCTOR == null ? 11 : 12)];
+        extractors[0] = new MatroskaExtractor(this.matroskaFlags);
+        extractors[1] = new FragmentedMp4Extractor(this.fragmentedMp4Flags);
+        extractors[2] = new Mp4Extractor(this.mp4Flags);
+        extractors[3] = new Mp3Extractor(this.mp3Flags);
+        extractors[4] = new AdtsExtractor();
+        extractors[5] = new Ac3Extractor();
+        extractors[6] = new TsExtractor(this.tsMode, this.tsFlags);
+        extractors[7] = new FlvExtractor();
+        extractors[8] = new OggExtractor();
+        extractors[9] = new PsExtractor();
+        extractors[10] = new WavExtractor();
+        if (FLAC_EXTRACTOR_CONSTRUCTOR != null) {
+            try {
+                extractors[11] = (Extractor) FLAC_EXTRACTOR_CONSTRUCTOR.newInstance(new Object[0]);
+            } catch (Exception e) {
+                throw new IllegalStateException("Unexpected error creating FLAC extractor", e);
             }
         }
         return extractors;

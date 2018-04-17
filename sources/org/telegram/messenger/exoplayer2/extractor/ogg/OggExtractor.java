@@ -67,22 +67,24 @@ public class OggExtractor implements Extractor {
 
     private boolean sniffInternal(ExtractorInput input) throws IOException, InterruptedException {
         OggPageHeader header = new OggPageHeader();
-        if (!header.populate(input, true) || (header.type & 2) != 2) {
-            return false;
+        if (header.populate(input, true)) {
+            if ((header.type & 2) == 2) {
+                int length = Math.min(header.bodySize, 8);
+                ParsableByteArray scratch = new ParsableByteArray(length);
+                input.peekFully(scratch.data, 0, length);
+                if (FlacReader.verifyBitstreamType(resetPosition(scratch))) {
+                    this.streamReader = new FlacReader();
+                } else if (VorbisReader.verifyBitstreamType(resetPosition(scratch))) {
+                    this.streamReader = new VorbisReader();
+                } else if (!OpusReader.verifyBitstreamType(resetPosition(scratch))) {
+                    return false;
+                } else {
+                    this.streamReader = new OpusReader();
+                }
+                return true;
+            }
         }
-        int length = Math.min(header.bodySize, 8);
-        ParsableByteArray scratch = new ParsableByteArray(length);
-        input.peekFully(scratch.data, 0, length);
-        if (FlacReader.verifyBitstreamType(resetPosition(scratch))) {
-            this.streamReader = new FlacReader();
-        } else if (VorbisReader.verifyBitstreamType(resetPosition(scratch))) {
-            this.streamReader = new VorbisReader();
-        } else if (!OpusReader.verifyBitstreamType(resetPosition(scratch))) {
-            return false;
-        } else {
-            this.streamReader = new OpusReader();
-        }
-        return true;
+        return false;
     }
 
     private static ParsableByteArray resetPosition(ParsableByteArray scratch) {

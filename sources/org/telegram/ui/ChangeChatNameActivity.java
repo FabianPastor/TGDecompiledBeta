@@ -114,14 +114,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
         }
 
         public void afterTextChanged(Editable s) {
-            String obj;
-            AvatarDrawable access$1200 = ChangeChatNameActivity.this.avatarDrawable;
-            if (ChangeChatNameActivity.this.nameTextView.length() > 0) {
-                obj = ChangeChatNameActivity.this.nameTextView.getText().toString();
-            } else {
-                obj = null;
-            }
-            access$1200.setInfo(5, obj, null, false);
+            ChangeChatNameActivity.this.avatarDrawable.setInfo(5, ChangeChatNameActivity.this.nameTextView.length() > 0 ? ChangeChatNameActivity.this.nameTextView.getText().toString() : null, null, false);
             ChangeChatNameActivity.this.avatarImage.invalidate();
         }
     }
@@ -247,103 +240,89 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
     }
 
     public View createView(Context context) {
-        float f;
-        float f2;
+        Context context2 = context;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ChannelEdit", R.string.ChannelEdit));
         this.actionBar.setActionBarMenuOnItemClick(new C19431());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
-        LinearLayout linearLayout = new LinearLayout(context);
+        LinearLayout linearLayout = new LinearLayout(context2);
         this.fragmentView = linearLayout;
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
         this.fragmentView.setOnTouchListener(new C09002());
-        LinearLayout linearLayout2 = new LinearLayout(context);
+        LinearLayout linearLayout2 = new LinearLayout(context2);
         linearLayout2.setOrientation(1);
         linearLayout2.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         linearLayout.addView(linearLayout2, LayoutHelper.createLinear(-1, -2));
-        FrameLayout frameLayout = new FrameLayout(context);
+        FrameLayout frameLayout = new FrameLayout(context2);
         linearLayout2.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
-        this.avatarImage = new BackupImageView(context);
+        this.avatarImage = new BackupImageView(context2);
         this.avatarImage.setRoundRadius(AndroidUtilities.dp(32.0f));
         this.avatarDrawable.setInfo(5, null, null, false);
         this.avatarDrawable.setDrawPhoto(true);
-        View view = this.avatarImage;
-        int i = (LocaleController.isRTL ? 5 : 3) | 48;
+        int i = 3;
+        float f = 16.0f;
+        frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(64, 64.0f, 48 | (LocaleController.isRTL ? 5 : 3), LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
+        r0.avatarImage.setOnClickListener(new C09023());
+        r0.nameTextView = new EditTextBoldCursor(context2);
+        if (r0.currentChat.megagroup) {
+            r0.nameTextView.setHint(LocaleController.getString("GroupName", R.string.GroupName));
+        } else {
+            r0.nameTextView.setHint(LocaleController.getString("EnterChannelName", R.string.EnterChannelName));
+        }
+        r0.nameTextView.setMaxLines(4);
+        r0.nameTextView.setText(r0.currentChat.title);
+        EditTextBoldCursor editTextBoldCursor = r0.nameTextView;
         if (LocaleController.isRTL) {
-            f = 0.0f;
-        } else {
-            f = 16.0f;
+            i = 5;
         }
-        if (LocaleController.isRTL) {
-            f2 = 16.0f;
-        } else {
-            f2 = 0.0f;
-        }
-        frameLayout.addView(view, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
-        this.avatarImage.setOnClickListener(new C09023());
-        this.nameTextView = new EditTextBoldCursor(context);
-        if (this.currentChat.megagroup) {
-            this.nameTextView.setHint(LocaleController.getString("GroupName", R.string.GroupName));
-        } else {
-            this.nameTextView.setHint(LocaleController.getString("EnterChannelName", R.string.EnterChannelName));
-        }
-        this.nameTextView.setMaxLines(4);
-        this.nameTextView.setText(this.currentChat.title);
-        this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        this.nameTextView.setTextSize(1, 16.0f);
-        this.nameTextView.setHint(LocaleController.getString("GroupName", R.string.GroupName));
-        this.nameTextView.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-        this.nameTextView.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-        this.nameTextView.setImeOptions(268435456);
-        this.nameTextView.setInputType(16385);
-        this.nameTextView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
-        this.nameTextView.setFocusable(this.nameTextView.isEnabled());
-        this.nameTextView.setFilters(new InputFilter[]{new LengthFilter(100)});
-        this.nameTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.nameTextView.setCursorSize(AndroidUtilities.dp(20.0f));
-        this.nameTextView.setCursorWidth(1.5f);
-        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        view = this.nameTextView;
-        f = LocaleController.isRTL ? 16.0f : 96.0f;
-        if (LocaleController.isRTL) {
-            f2 = 96.0f;
-        } else {
-            f2 = 16.0f;
-        }
-        frameLayout.addView(view, LayoutHelper.createFrame(-1, -2.0f, 16, f, 0.0f, f2, 0.0f));
-        this.nameTextView.addTextChangedListener(new C09034());
-        View shadowSectionCell = new ShadowSectionCell(context);
-        shadowSectionCell.setSize(20);
-        linearLayout.addView(shadowSectionCell, LayoutHelper.createLinear(-1, -2));
-        if (this.currentChat.creator) {
-            FrameLayout container3 = new FrameLayout(context);
+        editTextBoldCursor.setGravity(16 | i);
+        r0.nameTextView.setTextSize(1, f);
+        r0.nameTextView.setHint(LocaleController.getString("GroupName", R.string.GroupName));
+        r0.nameTextView.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        r0.nameTextView.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        r0.nameTextView.setImeOptions(268435456);
+        r0.nameTextView.setInputType(16385);
+        r0.nameTextView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
+        r0.nameTextView.setFocusable(r0.nameTextView.isEnabled());
+        r0.nameTextView.setFilters(new InputFilter[]{new LengthFilter(100)});
+        r0.nameTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.nameTextView.setCursorSize(AndroidUtilities.dp(20.0f));
+        r0.nameTextView.setCursorWidth(1.5f);
+        r0.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        frameLayout.addView(r0.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 16, LocaleController.isRTL ? f : 96.0f, 0.0f, LocaleController.isRTL ? 96.0f : f, 0.0f));
+        r0.nameTextView.addTextChangedListener(new C09034());
+        ShadowSectionCell sectionCell = new ShadowSectionCell(context2);
+        sectionCell.setSize(20);
+        linearLayout.addView(sectionCell, LayoutHelper.createLinear(-1, -2));
+        if (r0.currentChat.creator) {
+            FrameLayout container3 = new FrameLayout(context2);
             container3.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
             linearLayout.addView(container3, LayoutHelper.createLinear(-1, -2));
-            shadowSectionCell = new TextSettingsCell(context);
-            shadowSectionCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText5));
-            shadowSectionCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            shadowSectionCell.setText(LocaleController.getString("DeleteMega", R.string.DeleteMega), false);
-            container3.addView(shadowSectionCell, LayoutHelper.createFrame(-1, -2.0f));
-            shadowSectionCell.setOnClickListener(new C09055());
-            TextInfoPrivacyCell infoCell2 = new TextInfoPrivacyCell(context);
-            infoCell2.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            TextSettingsCell textCell = new TextSettingsCell(context2);
+            textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText5));
+            textCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+            textCell.setText(LocaleController.getString("DeleteMega", R.string.DeleteMega), false);
+            container3.addView(textCell, LayoutHelper.createFrame(-1, -2.0f));
+            textCell.setOnClickListener(new C09055());
+            TextInfoPrivacyCell infoCell2 = new TextInfoPrivacyCell(context2);
+            infoCell2.setBackgroundDrawable(Theme.getThemedDrawable(context2, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             infoCell2.setText(LocaleController.getString("MegaDeleteInfo", R.string.MegaDeleteInfo));
             linearLayout.addView(infoCell2, LayoutHelper.createLinear(-1, -2));
         } else {
-            shadowSectionCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         }
-        this.nameTextView.setSelection(this.nameTextView.length());
-        if (this.currentChat.photo != null) {
-            this.avatar = this.currentChat.photo.photo_small;
-            this.avatarImage.setImage(this.avatar, "50_50", this.avatarDrawable);
+        r0.nameTextView.setSelection(r0.nameTextView.length());
+        if (r0.currentChat.photo != null) {
+            r0.avatar = r0.currentChat.photo.photo_small;
+            r0.avatarImage.setImage(r0.avatar, "50_50", r0.avatarDrawable);
         } else {
-            this.avatarImage.setImageDrawable(this.avatarDrawable);
+            r0.avatarImage.setImageDrawable(r0.avatarDrawable);
         }
-        return this.fragmentView;
+        return r0.fragmentView;
     }
 
     public void onResume() {

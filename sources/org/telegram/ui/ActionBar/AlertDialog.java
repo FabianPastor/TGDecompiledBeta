@@ -124,13 +124,13 @@ public class AlertDialog extends Dialog implements Callback {
         private TextView textView;
 
         public AlertDialogCell(Context context) {
-            int i = 3;
             super(context);
             setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 2));
             setPadding(AndroidUtilities.dp(23.0f), 0, AndroidUtilities.dp(23.0f), 0);
             this.imageView = new ImageView(context);
             this.imageView.setScaleType(ScaleType.CENTER);
             this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), Mode.MULTIPLY));
+            int i = 3;
             addView(this.imageView, LayoutHelper.createFrame(24, 24, (LocaleController.isRTL ? 5 : 3) | 16));
             this.textView = new TextView(context);
             this.textView.setLines(1);
@@ -286,10 +286,21 @@ public class AlertDialog extends Dialog implements Callback {
         this.progressViewStyle = progressStyle;
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     protected void onCreate(Bundle savedInstanceState) {
+        boolean hasButtons;
+        int i;
+        View view;
+        int i2;
+        LinearLayout linearLayout;
+        View view2;
+        int i3;
+        int i4;
+        int a;
+        TextView textView;
+        int calculatedWidth;
         int maxWidth;
+        Window window;
+        LayoutParams params;
         super.onCreate(savedInstanceState);
         LinearLayout containerView = new LinearLayout(getContext()) {
             private boolean inLayout;
@@ -306,7 +317,7 @@ public class AlertDialog extends Dialog implements Callback {
                     if (!AndroidUtilities.isTablet()) {
                         maxWidth = AndroidUtilities.dp(356.0f);
                     } else if (AndroidUtilities.isSmallTablet()) {
-                        maxWidth = AndroidUtilities.dp(446.0f);
+                        maxWidth = AndroidUtilities.dp(NUM);
                     } else {
                         maxWidth = AndroidUtilities.dp(496.0f);
                     }
@@ -324,34 +335,30 @@ public class AlertDialog extends Dialog implements Callback {
                 }
 
                 public void onScrollChanged() {
-                    boolean z;
-                    boolean z2 = false;
                     AlertDialog alertDialog = AlertDialog.this;
-                    if (AlertDialog.this.titleTextView == null || AlertDialog.this.contentScrollView.getScrollY() <= AlertDialog.this.scrollContainer.getTop()) {
-                        z = false;
-                    } else {
+                    boolean z = false;
+                    boolean z2 = AlertDialog.this.titleTextView != null && AlertDialog.this.contentScrollView.getScrollY() > AlertDialog.this.scrollContainer.getTop();
+                    alertDialog.runShadowAnimation(0, z2);
+                    alertDialog = AlertDialog.this;
+                    if (AlertDialog.this.buttonsLayout != null && AlertDialog.this.contentScrollView.getScrollY() + AlertDialog.this.contentScrollView.getHeight() < AlertDialog.this.scrollContainer.getBottom()) {
                         z = true;
                     }
-                    alertDialog.runShadowAnimation(0, z);
-                    AlertDialog alertDialog2 = AlertDialog.this;
-                    if (AlertDialog.this.buttonsLayout != null && AlertDialog.this.contentScrollView.getScrollY() + AlertDialog.this.contentScrollView.getHeight() < AlertDialog.this.scrollContainer.getBottom()) {
-                        z2 = true;
-                    }
-                    alertDialog2.runShadowAnimation(1, z2);
+                    alertDialog.runShadowAnimation(1, z);
                     AlertDialog.this.contentScrollView.invalidate();
                 }
             }
 
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                int count;
                 this.inLayout = true;
                 int width = MeasureSpec.getSize(widthMeasureSpec);
-                int maxContentHeight = (MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop()) - getPaddingBottom();
-                int availableHeight = maxContentHeight;
+                int availableHeight = (MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop()) - getPaddingBottom();
+                int maxContentHeight = availableHeight;
                 int availableWidth = (width - getPaddingLeft()) - getPaddingRight();
                 int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(availableWidth - AndroidUtilities.dp(48.0f), NUM);
                 int childFullWidthMeasureSpec = MeasureSpec.makeMeasureSpec(availableWidth, NUM);
                 if (AlertDialog.this.buttonsLayout != null) {
-                    int count = AlertDialog.this.buttonsLayout.getChildCount();
+                    count = AlertDialog.this.buttonsLayout.getChildCount();
                     for (int a = 0; a < count; a++) {
                         ((TextView) AlertDialog.this.buttonsLayout.getChildAt(a)).setMaxWidth(AndroidUtilities.dp((float) ((availableWidth - AndroidUtilities.dp(24.0f)) / 2)));
                     }
@@ -361,55 +368,55 @@ public class AlertDialog extends Dialog implements Callback {
                 }
                 if (AlertDialog.this.titleTextView != null) {
                     AlertDialog.this.titleTextView.measure(childWidthMeasureSpec, heightMeasureSpec);
-                    layoutParams = (LinearLayout.LayoutParams) AlertDialog.this.titleTextView.getLayoutParams();
-                    availableHeight -= (AlertDialog.this.titleTextView.getMeasuredHeight() + layoutParams.bottomMargin) + layoutParams.topMargin;
+                    LinearLayout.LayoutParams layoutParams2 = (LinearLayout.LayoutParams) AlertDialog.this.titleTextView.getLayoutParams();
+                    availableHeight -= (AlertDialog.this.titleTextView.getMeasuredHeight() + layoutParams2.bottomMargin) + layoutParams2.topMargin;
                 }
                 if (AlertDialog.this.subtitleTextView != null) {
                     AlertDialog.this.subtitleTextView.measure(childWidthMeasureSpec, heightMeasureSpec);
-                    layoutParams = (LinearLayout.LayoutParams) AlertDialog.this.subtitleTextView.getLayoutParams();
-                    availableHeight -= (AlertDialog.this.subtitleTextView.getMeasuredHeight() + layoutParams.bottomMargin) + layoutParams.topMargin;
+                    layoutParams2 = (LinearLayout.LayoutParams) AlertDialog.this.subtitleTextView.getLayoutParams();
+                    availableHeight -= (AlertDialog.this.subtitleTextView.getMeasuredHeight() + layoutParams2.bottomMargin) + layoutParams2.topMargin;
                 }
                 if (AlertDialog.this.topImageView != null) {
                     AlertDialog.this.topImageView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(132.0f), NUM));
                     availableHeight -= AlertDialog.this.topImageView.getMeasuredHeight() - AndroidUtilities.dp(8.0f);
                 }
+                LinearLayout.LayoutParams layoutParams3;
                 if (AlertDialog.this.progressViewStyle == 0) {
-                    layoutParams = (LinearLayout.LayoutParams) AlertDialog.this.contentScrollView.getLayoutParams();
-                    int dp;
+                    layoutParams3 = (LinearLayout.LayoutParams) AlertDialog.this.contentScrollView.getLayoutParams();
                     if (AlertDialog.this.customView != null) {
-                        dp = (AlertDialog.this.titleTextView == null && AlertDialog.this.messageTextView.getVisibility() == 8 && AlertDialog.this.items == null) ? AndroidUtilities.dp(16.0f) : 0;
-                        layoutParams.topMargin = dp;
-                        layoutParams.bottomMargin = AlertDialog.this.buttonsLayout == null ? AndroidUtilities.dp(8.0f) : 0;
+                        count = (AlertDialog.this.titleTextView == null && AlertDialog.this.messageTextView.getVisibility() == 8 && AlertDialog.this.items == null) ? AndroidUtilities.dp(16.0f) : 0;
+                        layoutParams3.topMargin = count;
+                        layoutParams3.bottomMargin = AlertDialog.this.buttonsLayout == null ? AndroidUtilities.dp(8.0f) : 0;
                     } else if (AlertDialog.this.items != null) {
-                        dp = (AlertDialog.this.titleTextView == null && AlertDialog.this.messageTextView.getVisibility() == 8) ? AndroidUtilities.dp(8.0f) : 0;
-                        layoutParams.topMargin = dp;
-                        layoutParams.bottomMargin = AndroidUtilities.dp(8.0f);
+                        count = (AlertDialog.this.titleTextView == null && AlertDialog.this.messageTextView.getVisibility() == 8) ? AndroidUtilities.dp(8.0f) : 0;
+                        layoutParams3.topMargin = count;
+                        layoutParams3.bottomMargin = AndroidUtilities.dp(8.0f);
                     } else if (AlertDialog.this.messageTextView.getVisibility() == 0) {
-                        layoutParams.topMargin = AlertDialog.this.titleTextView == null ? AndroidUtilities.dp(19.0f) : 0;
-                        layoutParams.bottomMargin = AndroidUtilities.dp(20.0f);
+                        layoutParams3.topMargin = AlertDialog.this.titleTextView == null ? AndroidUtilities.dp(19.0f) : 0;
+                        layoutParams3.bottomMargin = AndroidUtilities.dp(20.0f);
                     }
-                    availableHeight -= layoutParams.bottomMargin + layoutParams.topMargin;
+                    availableHeight -= layoutParams3.bottomMargin + layoutParams3.topMargin;
                     AlertDialog.this.contentScrollView.measure(childFullWidthMeasureSpec, MeasureSpec.makeMeasureSpec(availableHeight, Integer.MIN_VALUE));
                     availableHeight -= AlertDialog.this.contentScrollView.getMeasuredHeight();
                 } else {
                     if (AlertDialog.this.progressViewContainer != null) {
                         AlertDialog.this.progressViewContainer.measure(childWidthMeasureSpec, MeasureSpec.makeMeasureSpec(availableHeight, Integer.MIN_VALUE));
-                        layoutParams = (LinearLayout.LayoutParams) AlertDialog.this.progressViewContainer.getLayoutParams();
-                        availableHeight -= (AlertDialog.this.progressViewContainer.getMeasuredHeight() + layoutParams.bottomMargin) + layoutParams.topMargin;
+                        layoutParams2 = (LinearLayout.LayoutParams) AlertDialog.this.progressViewContainer.getLayoutParams();
+                        availableHeight -= (AlertDialog.this.progressViewContainer.getMeasuredHeight() + layoutParams2.bottomMargin) + layoutParams2.topMargin;
                     } else if (AlertDialog.this.messageTextView != null) {
                         AlertDialog.this.messageTextView.measure(childWidthMeasureSpec, MeasureSpec.makeMeasureSpec(availableHeight, Integer.MIN_VALUE));
                         if (AlertDialog.this.messageTextView.getVisibility() != 8) {
-                            layoutParams = (LinearLayout.LayoutParams) AlertDialog.this.messageTextView.getLayoutParams();
-                            availableHeight -= (AlertDialog.this.messageTextView.getMeasuredHeight() + layoutParams.bottomMargin) + layoutParams.topMargin;
+                            layoutParams2 = (LinearLayout.LayoutParams) AlertDialog.this.messageTextView.getLayoutParams();
+                            availableHeight -= (AlertDialog.this.messageTextView.getMeasuredHeight() + layoutParams2.bottomMargin) + layoutParams2.topMargin;
                         }
                     }
                     if (AlertDialog.this.lineProgressView != null) {
                         AlertDialog.this.lineProgressView.measure(childWidthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(4.0f), NUM));
-                        layoutParams = (LinearLayout.LayoutParams) AlertDialog.this.lineProgressView.getLayoutParams();
-                        availableHeight -= (AlertDialog.this.lineProgressView.getMeasuredHeight() + layoutParams.bottomMargin) + layoutParams.topMargin;
+                        layoutParams3 = (LinearLayout.LayoutParams) AlertDialog.this.lineProgressView.getLayoutParams();
+                        availableHeight -= (AlertDialog.this.lineProgressView.getMeasuredHeight() + layoutParams3.bottomMargin) + layoutParams3.topMargin;
                         AlertDialog.this.lineProgressViewPercent.measure(childWidthMeasureSpec, MeasureSpec.makeMeasureSpec(availableHeight, Integer.MIN_VALUE));
-                        layoutParams = (LinearLayout.LayoutParams) AlertDialog.this.lineProgressViewPercent.getLayoutParams();
-                        availableHeight -= (AlertDialog.this.lineProgressViewPercent.getMeasuredHeight() + layoutParams.bottomMargin) + layoutParams.topMargin;
+                        layoutParams3 = (LinearLayout.LayoutParams) AlertDialog.this.lineProgressViewPercent.getLayoutParams();
+                        availableHeight -= (AlertDialog.this.lineProgressViewPercent.getMeasuredHeight() + layoutParams3.bottomMargin) + layoutParams3.topMargin;
                     }
                 }
                 setMeasuredDimension(width, ((maxContentHeight - availableHeight) + getPaddingTop()) + getPaddingBottom());
@@ -444,279 +451,486 @@ public class AlertDialog extends Dialog implements Callback {
         containerView.setBackgroundDrawable(this.shadowDrawable);
         containerView.setFitsSystemWindows(VERSION.SDK_INT >= 21);
         setContentView(containerView);
-        boolean hasButtons = (this.positiveButtonText == null && this.negativeButtonText == null && this.neutralButtonText == null) ? false : true;
-        if (!(this.topResId == 0 && this.topDrawable == null)) {
-            this.topImageView = new ImageView(getContext());
-            if (this.topDrawable != null) {
-                this.topImageView.setImageDrawable(this.topDrawable);
-            } else {
-                this.topImageView.setImageResource(this.topResId);
-            }
-            this.topImageView.setScaleType(ScaleType.CENTER);
-            this.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.popup_fixed_top));
-            this.topImageView.getBackground().setColorFilter(new PorterDuffColorFilter(this.topBackgroundColor, Mode.MULTIPLY));
-            this.topImageView.setPadding(0, 0, 0, 0);
-            containerView.addView(this.topImageView, LayoutHelper.createLinear(-1, 132, (LocaleController.isRTL ? 5 : 3) | 48, -8, -8, 0, 0));
-        }
-        if (this.title != null) {
-            this.titleTextView = new TextView(getContext());
-            this.titleTextView.setText(this.title);
-            this.titleTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
-            this.titleTextView.setTextSize(1, 20.0f);
-            this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            this.titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            View view = this.titleTextView;
-            int i = (LocaleController.isRTL ? 5 : 3) | 48;
-            int i2 = this.subtitle != null ? 2 : this.items != null ? 14 : 10;
-            containerView.addView(view, LayoutHelper.createLinear(-2, -2, i, 24, 19, 24, i2));
-        }
-        if (this.subtitle != null) {
-            this.subtitleTextView = new TextView(getContext());
-            this.subtitleTextView.setText(this.subtitle);
-            this.subtitleTextView.setTextColor(getThemeColor(Theme.key_dialogIcon));
-            this.subtitleTextView.setTextSize(1, 14.0f);
-            this.subtitleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            view = this.subtitleTextView;
-            i = (LocaleController.isRTL ? 5 : 3) | 48;
-            if (this.items != null) {
-                i2 = 14;
-            } else {
-                i2 = 10;
-            }
-            containerView.addView(view, LayoutHelper.createLinear(-2, -2, i, 24, 0, 24, i2));
-        }
-        if (this.progressViewStyle == 0) {
-            this.shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(R.drawable.header_shadow).mutate();
-            this.shadow[1] = (BitmapDrawable) getContext().getResources().getDrawable(R.drawable.header_shadow_reverse).mutate();
-            this.shadow[0].setAlpha(0);
-            this.shadow[1].setAlpha(0);
-            this.shadow[0].setCallback(this);
-            this.shadow[1].setCallback(this);
-            this.contentScrollView = new ScrollView(getContext()) {
-                protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                    boolean result = super.drawChild(canvas, child, drawingTime);
-                    if (AlertDialog.this.shadow[0].getPaint().getAlpha() != 0) {
-                        AlertDialog.this.shadow[0].setBounds(0, getScrollY(), getMeasuredWidth(), getScrollY() + AndroidUtilities.dp(3.0f));
-                        AlertDialog.this.shadow[0].draw(canvas);
+        if (r0.positiveButtonText == null && r0.negativeButtonText == null) {
+            if (r0.neutralButtonText == null) {
+                hasButtons = false;
+                if (!(r0.topResId == 0 && r0.topDrawable == null)) {
+                    r0.topImageView = new ImageView(getContext());
+                    if (r0.topDrawable == null) {
+                        r0.topImageView.setImageDrawable(r0.topDrawable);
+                    } else {
+                        r0.topImageView.setImageResource(r0.topResId);
                     }
-                    if (AlertDialog.this.shadow[1].getPaint().getAlpha() != 0) {
-                        AlertDialog.this.shadow[1].setBounds(0, (getScrollY() + getMeasuredHeight()) - AndroidUtilities.dp(3.0f), getMeasuredWidth(), getScrollY() + getMeasuredHeight());
-                        AlertDialog.this.shadow[1].draw(canvas);
-                    }
-                    return result;
+                    r0.topImageView.setScaleType(ScaleType.CENTER);
+                    r0.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.popup_fixed_top));
+                    r0.topImageView.getBackground().setColorFilter(new PorterDuffColorFilter(r0.topBackgroundColor, Mode.MULTIPLY));
+                    r0.topImageView.setPadding(0, 0, 0, 0);
+                    containerView.addView(r0.topImageView, LayoutHelper.createLinear(-1, 132, (LocaleController.isRTL ? 5 : 3) | 48, -8, -8, 0, 0));
                 }
-            };
-            this.contentScrollView.setVerticalScrollBarEnabled(false);
-            AndroidUtilities.setScrollViewEdgeEffectColor(this.contentScrollView, getThemeColor(Theme.key_dialogScrollGlow));
-            containerView.addView(this.contentScrollView, LayoutHelper.createLinear(-1, -2, 0.0f, 0.0f, 0.0f, 0.0f));
-            this.scrollContainer = new LinearLayout(getContext());
-            this.scrollContainer.setOrientation(1);
-            this.contentScrollView.addView(this.scrollContainer, new FrameLayout.LayoutParams(-1, -2));
+                i = 14;
+                if (r0.title != null) {
+                    r0.titleTextView = new TextView(getContext());
+                    r0.titleTextView.setText(r0.title);
+                    r0.titleTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
+                    r0.titleTextView.setTextSize(1, 20.0f);
+                    r0.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                    r0.titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+                    view = r0.titleTextView;
+                    i2 = (LocaleController.isRTL ? 5 : 3) | 48;
+                    int i5 = r0.subtitle == null ? 2 : r0.items == null ? 14 : 10;
+                    containerView.addView(view, LayoutHelper.createLinear(-2, -2, i2, 24, 19, 24, i5));
+                }
+                if (r0.subtitle != null) {
+                    r0.subtitleTextView = new TextView(getContext());
+                    r0.subtitleTextView.setText(r0.subtitle);
+                    r0.subtitleTextView.setTextColor(getThemeColor(Theme.key_dialogIcon));
+                    r0.subtitleTextView.setTextSize(1, 14.0f);
+                    r0.subtitleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+                    view = r0.subtitleTextView;
+                    i2 = (LocaleController.isRTL ? 5 : 3) | 48;
+                    if (r0.items == null) {
+                        i = 10;
+                    }
+                    containerView.addView(view, LayoutHelper.createLinear(-2, -2, i2, 24, 0, 24, i));
+                }
+                if (r0.progressViewStyle == 0) {
+                    r0.shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(R.drawable.header_shadow).mutate();
+                    r0.shadow[1] = (BitmapDrawable) getContext().getResources().getDrawable(R.drawable.header_shadow_reverse).mutate();
+                    r0.shadow[0].setAlpha(0);
+                    r0.shadow[1].setAlpha(0);
+                    r0.shadow[0].setCallback(r0);
+                    r0.shadow[1].setCallback(r0);
+                    r0.contentScrollView = new ScrollView(getContext()) {
+                        protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                            boolean result = super.drawChild(canvas, child, drawingTime);
+                            if (AlertDialog.this.shadow[0].getPaint().getAlpha() != 0) {
+                                AlertDialog.this.shadow[0].setBounds(0, getScrollY(), getMeasuredWidth(), getScrollY() + AndroidUtilities.dp(3.0f));
+                                AlertDialog.this.shadow[0].draw(canvas);
+                            }
+                            if (AlertDialog.this.shadow[1].getPaint().getAlpha() != 0) {
+                                AlertDialog.this.shadow[1].setBounds(0, (getScrollY() + getMeasuredHeight()) - AndroidUtilities.dp(3.0f), getMeasuredWidth(), getScrollY() + getMeasuredHeight());
+                                AlertDialog.this.shadow[1].draw(canvas);
+                            }
+                            return result;
+                        }
+                    };
+                    r0.contentScrollView.setVerticalScrollBarEnabled(false);
+                    AndroidUtilities.setScrollViewEdgeEffectColor(r0.contentScrollView, getThemeColor(Theme.key_dialogScrollGlow));
+                    containerView.addView(r0.contentScrollView, LayoutHelper.createLinear(-1, -2, 0.0f, 0.0f, 0.0f, 0.0f));
+                    r0.scrollContainer = new LinearLayout(getContext());
+                    r0.scrollContainer.setOrientation(1);
+                    r0.contentScrollView.addView(r0.scrollContainer, new FrameLayout.LayoutParams(-1, -2));
+                }
+                r0.messageTextView = new TextView(getContext());
+                r0.messageTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
+                r0.messageTextView.setTextSize(1, 16.0f);
+                r0.messageTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+                if (r0.progressViewStyle == 1) {
+                    r0.progressViewContainer = new FrameLayout(getContext());
+                    containerView.addView(r0.progressViewContainer, LayoutHelper.createLinear(-1, 44, 51, 23, r0.title != null ? 24 : 0, 23, 24));
+                    RadialProgressView progressView = new RadialProgressView(getContext());
+                    progressView.setProgressColor(getThemeColor(Theme.key_dialogProgressCircle));
+                    r0.progressViewContainer.addView(progressView, LayoutHelper.createFrame(44, 44, (LocaleController.isRTL ? 5 : 3) | 48));
+                    r0.messageTextView.setLines(1);
+                    r0.messageTextView.setSingleLine(true);
+                    r0.messageTextView.setEllipsize(TruncateAt.END);
+                    r0.progressViewContainer.addView(r0.messageTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, (float) (LocaleController.isRTL ? 0 : 62), 0.0f, (float) (LocaleController.isRTL ? 62 : 0), 0.0f));
+                } else if (r0.progressViewStyle != 2) {
+                    containerView.addView(r0.messageTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, r0.title != null ? 19 : 0, 24, 20));
+                    r0.lineProgressView = new LineProgressView(getContext());
+                    r0.lineProgressView.setProgress(((float) r0.currentProgress) / 100.0f, false);
+                    r0.lineProgressView.setProgressColor(getThemeColor(Theme.key_dialogLineProgress));
+                    r0.lineProgressView.setBackColor(getThemeColor(Theme.key_dialogLineProgressBackground));
+                    containerView.addView(r0.lineProgressView, LayoutHelper.createLinear(-1, 4, 19, 24, 0, 24, 0));
+                    r0.lineProgressViewPercent = new TextView(getContext());
+                    r0.lineProgressViewPercent.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                    r0.lineProgressViewPercent.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+                    r0.lineProgressViewPercent.setTextColor(getThemeColor(Theme.key_dialogTextGray2));
+                    r0.lineProgressViewPercent.setTextSize(1, 14.0f);
+                    containerView.addView(r0.lineProgressViewPercent, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 23, 4, 23, 24));
+                    updateLineProgressTextView();
+                } else {
+                    linearLayout = r0.scrollContainer;
+                    view2 = r0.messageTextView;
+                    i3 = (LocaleController.isRTL ? 5 : 3) | 48;
+                    if (r0.customView == null) {
+                        if (r0.items != null) {
+                            i4 = 0;
+                            linearLayout.addView(view2, LayoutHelper.createLinear(-2, -2, i3, 24, 0, 24, i4));
+                        }
+                    }
+                    i4 = r0.customViewOffset;
+                    linearLayout.addView(view2, LayoutHelper.createLinear(-2, -2, i3, 24, 0, 24, i4));
+                }
+                if (TextUtils.isEmpty(r0.message)) {
+                    r0.messageTextView.setText(r0.message);
+                    r0.messageTextView.setVisibility(0);
+                } else {
+                    r0.messageTextView.setVisibility(8);
+                }
+                if (r0.items != null) {
+                    a = 0;
+                    while (a < r0.items.length) {
+                        if (r0.items[a] == null) {
+                            AlertDialogCell cell = new AlertDialogCell(getContext());
+                            cell.setTextAndIcon(r0.items[a], r0.itemIcons == null ? r0.itemIcons[a] : 0);
+                            r0.scrollContainer.addView(cell, LayoutHelper.createLinear(-1, 48));
+                            cell.setTag(Integer.valueOf(a));
+                            cell.setOnClickListener(new C07293());
+                        }
+                        a++;
+                    }
+                }
+                if (r0.customView != null) {
+                    if (r0.customView.getParent() != null) {
+                        ((ViewGroup) r0.customView.getParent()).removeView(r0.customView);
+                    }
+                    r0.scrollContainer.addView(r0.customView, LayoutHelper.createLinear(-1, -2));
+                }
+                if (hasButtons) {
+                    r0.buttonsLayout = new FrameLayout(getContext()) {
+                        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                            int count = getChildCount();
+                            View positiveButton = null;
+                            int width = right - left;
+                            for (int a = 0; a < count; a++) {
+                                View child = getChildAt(a);
+                                if (((Integer) child.getTag()).intValue() == -1) {
+                                    positiveButton = child;
+                                    if (LocaleController.isRTL) {
+                                        child.layout(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
+                                    } else {
+                                        child.layout((width - getPaddingRight()) - child.getMeasuredWidth(), getPaddingTop(), (width - getPaddingRight()) + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
+                                    }
+                                } else if (((Integer) child.getTag()).intValue() == -2) {
+                                    int x;
+                                    if (LocaleController.isRTL) {
+                                        x = getPaddingLeft();
+                                        if (positiveButton != null) {
+                                            x += positiveButton.getMeasuredWidth() + AndroidUtilities.dp(8.0f);
+                                        }
+                                        child.layout(x, getPaddingTop(), child.getMeasuredWidth() + x, getPaddingTop() + child.getMeasuredHeight());
+                                    } else {
+                                        x = (width - getPaddingRight()) - child.getMeasuredWidth();
+                                        if (positiveButton != null) {
+                                            x -= positiveButton.getMeasuredWidth() + AndroidUtilities.dp(8.0f);
+                                        }
+                                        child.layout(x, getPaddingTop(), child.getMeasuredWidth() + x, getPaddingTop() + child.getMeasuredHeight());
+                                    }
+                                } else if (LocaleController.isRTL) {
+                                    child.layout((width - getPaddingRight()) - child.getMeasuredWidth(), getPaddingTop(), (width - getPaddingRight()) + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
+                                } else {
+                                    child.layout(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
+                                }
+                            }
+                        }
+                    };
+                    r0.buttonsLayout.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+                    containerView.addView(r0.buttonsLayout, LayoutHelper.createLinear(-1, 52));
+                    if (r0.positiveButtonText != null) {
+                        textView = new TextView(getContext()) {
+                            public void setEnabled(boolean enabled) {
+                                super.setEnabled(enabled);
+                                setAlpha(enabled ? 1.0f : 0.5f);
+                            }
+                        };
+                        textView.setMinWidth(AndroidUtilities.dp(64.0f));
+                        textView.setTag(Integer.valueOf(-1));
+                        textView.setTextSize(1, 14.0f);
+                        textView.setTextColor(getThemeColor(Theme.key_dialogButton));
+                        textView.setGravity(17);
+                        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                        textView.setText(r0.positiveButtonText.toString().toUpperCase());
+                        textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
+                        textView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+                        r0.buttonsLayout.addView(textView, LayoutHelper.createFrame(-2, 36, 53));
+                        textView.setOnClickListener(new C07326());
+                    }
+                    if (r0.negativeButtonText != null) {
+                        textView = new TextView(getContext()) {
+                            public void setEnabled(boolean enabled) {
+                                super.setEnabled(enabled);
+                                setAlpha(enabled ? 1.0f : 0.5f);
+                            }
+                        };
+                        textView.setMinWidth(AndroidUtilities.dp(64.0f));
+                        textView.setTag(Integer.valueOf(-2));
+                        textView.setTextSize(1, 14.0f);
+                        textView.setTextColor(getThemeColor(Theme.key_dialogButton));
+                        textView.setGravity(17);
+                        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                        textView.setText(r0.negativeButtonText.toString().toUpperCase());
+                        textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
+                        textView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+                        r0.buttonsLayout.addView(textView, LayoutHelper.createFrame(-2, 36, 53));
+                        textView.setOnClickListener(new C07348());
+                    }
+                    if (r0.neutralButtonText != null) {
+                        textView = new TextView(getContext()) {
+                            public void setEnabled(boolean enabled) {
+                                super.setEnabled(enabled);
+                                setAlpha(enabled ? 1.0f : 0.5f);
+                            }
+                        };
+                        textView.setMinWidth(AndroidUtilities.dp(64.0f));
+                        textView.setTag(Integer.valueOf(-3));
+                        textView.setTextSize(1, 14.0f);
+                        textView.setTextColor(getThemeColor(Theme.key_dialogButton));
+                        textView.setGravity(17);
+                        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                        textView.setText(r0.neutralButtonText.toString().toUpperCase());
+                        textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
+                        textView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+                        r0.buttonsLayout.addView(textView, LayoutHelper.createFrame(-2, 36, 51));
+                        textView.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                if (AlertDialog.this.neutralButtonListener != null) {
+                                    AlertDialog.this.neutralButtonListener.onClick(AlertDialog.this, -2);
+                                }
+                                AlertDialog.this.dismiss();
+                            }
+                        });
+                    }
+                }
+                r0.lastScreenWidth = AndroidUtilities.displaySize.x;
+                calculatedWidth = AndroidUtilities.displaySize.x - AndroidUtilities.dp(48.0f);
+                if (AndroidUtilities.isTablet()) {
+                    maxWidth = AndroidUtilities.dp(356.0f);
+                } else if (AndroidUtilities.isSmallTablet()) {
+                    maxWidth = AndroidUtilities.dp(496.0f);
+                } else {
+                    maxWidth = AndroidUtilities.dp(NUM);
+                }
+                window = getWindow();
+                params = new LayoutParams();
+                params.copyFrom(window.getAttributes());
+                params.dimAmount = 0.6f;
+                params.width = (Math.min(maxWidth, calculatedWidth) + r0.backgroundPaddings.left) + r0.backgroundPaddings.right;
+                params.flags |= 2;
+                if (r0.customView == null || !canTextInput(r0.customView)) {
+                    params.flags |= 131072;
+                }
+                window.setAttributes(params);
+            }
         }
-        this.messageTextView = new TextView(getContext());
-        this.messageTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
-        this.messageTextView.setTextSize(1, 16.0f);
-        this.messageTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        View view2;
-        if (this.progressViewStyle == 1) {
-            int i3;
-            int i4;
-            this.progressViewContainer = new FrameLayout(getContext());
-            containerView.addView(this.progressViewContainer, LayoutHelper.createLinear(-1, 44, 51, 23, this.title == null ? 24 : 0, 23, 24));
-            View radialProgressView = new RadialProgressView(getContext());
-            radialProgressView.setProgressColor(getThemeColor(Theme.key_dialogProgressCircle));
-            this.progressViewContainer.addView(radialProgressView, LayoutHelper.createFrame(44, 44, (LocaleController.isRTL ? 5 : 3) | 48));
-            this.messageTextView.setLines(1);
-            this.messageTextView.setSingleLine(true);
-            this.messageTextView.setEllipsize(TruncateAt.END);
-            FrameLayout frameLayout = this.progressViewContainer;
-            view2 = this.messageTextView;
+        hasButtons = true;
+        r0.topImageView = new ImageView(getContext());
+        if (r0.topDrawable == null) {
+            r0.topImageView.setImageResource(r0.topResId);
+        } else {
+            r0.topImageView.setImageDrawable(r0.topDrawable);
+        }
+        r0.topImageView.setScaleType(ScaleType.CENTER);
+        r0.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.popup_fixed_top));
+        r0.topImageView.getBackground().setColorFilter(new PorterDuffColorFilter(r0.topBackgroundColor, Mode.MULTIPLY));
+        r0.topImageView.setPadding(0, 0, 0, 0);
+        if (LocaleController.isRTL) {
+        }
+        containerView.addView(r0.topImageView, LayoutHelper.createLinear(-1, 132, (LocaleController.isRTL ? 5 : 3) | 48, -8, -8, 0, 0));
+        i = 14;
+        if (r0.title != null) {
+            r0.titleTextView = new TextView(getContext());
+            r0.titleTextView.setText(r0.title);
+            r0.titleTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
+            r0.titleTextView.setTextSize(1, 20.0f);
+            r0.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             if (LocaleController.isRTL) {
-                i = 5;
-            } else {
-                i = 3;
             }
-            i |= 16;
+            r0.titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+            view = r0.titleTextView;
             if (LocaleController.isRTL) {
-                i3 = 0;
-            } else {
-                i3 = 62;
             }
-            float f = (float) i3;
+            i2 = (LocaleController.isRTL ? 5 : 3) | 48;
+            if (r0.subtitle == null) {
+                if (r0.items == null) {
+                }
+            }
+            containerView.addView(view, LayoutHelper.createLinear(-2, -2, i2, 24, 19, 24, i5));
+        }
+        if (r0.subtitle != null) {
+            r0.subtitleTextView = new TextView(getContext());
+            r0.subtitleTextView.setText(r0.subtitle);
+            r0.subtitleTextView.setTextColor(getThemeColor(Theme.key_dialogIcon));
+            r0.subtitleTextView.setTextSize(1, 14.0f);
             if (LocaleController.isRTL) {
-                i4 = 62;
-            } else {
-                i4 = 0;
             }
-            frameLayout.addView(view2, LayoutHelper.createFrame(-2, -2.0f, i, f, 0.0f, (float) i4, 0.0f));
-        } else if (this.progressViewStyle == 2) {
-            containerView.addView(this.messageTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, this.title == null ? 19 : 0, 24, 20));
-            this.lineProgressView = new LineProgressView(getContext());
-            this.lineProgressView.setProgress(((float) this.currentProgress) / 100.0f, false);
-            this.lineProgressView.setProgressColor(getThemeColor(Theme.key_dialogLineProgress));
-            this.lineProgressView.setBackColor(getThemeColor(Theme.key_dialogLineProgressBackground));
-            containerView.addView(this.lineProgressView, LayoutHelper.createLinear(-1, 4, 19, 24, 0, 24, 0));
-            this.lineProgressViewPercent = new TextView(getContext());
-            this.lineProgressViewPercent.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            this.lineProgressViewPercent.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            this.lineProgressViewPercent.setTextColor(getThemeColor(Theme.key_dialogTextGray2));
-            this.lineProgressViewPercent.setTextSize(1, 14.0f);
-            containerView.addView(this.lineProgressViewPercent, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 23, 4, 23, 24));
+            r0.subtitleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+            view = r0.subtitleTextView;
+            if (LocaleController.isRTL) {
+            }
+            i2 = (LocaleController.isRTL ? 5 : 3) | 48;
+            if (r0.items == null) {
+                i = 10;
+            }
+            containerView.addView(view, LayoutHelper.createLinear(-2, -2, i2, 24, 0, 24, i));
+        }
+        if (r0.progressViewStyle == 0) {
+            r0.shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(R.drawable.header_shadow).mutate();
+            r0.shadow[1] = (BitmapDrawable) getContext().getResources().getDrawable(R.drawable.header_shadow_reverse).mutate();
+            r0.shadow[0].setAlpha(0);
+            r0.shadow[1].setAlpha(0);
+            r0.shadow[0].setCallback(r0);
+            r0.shadow[1].setCallback(r0);
+            r0.contentScrollView = /* anonymous class already generated */;
+            r0.contentScrollView.setVerticalScrollBarEnabled(false);
+            AndroidUtilities.setScrollViewEdgeEffectColor(r0.contentScrollView, getThemeColor(Theme.key_dialogScrollGlow));
+            containerView.addView(r0.contentScrollView, LayoutHelper.createLinear(-1, -2, 0.0f, 0.0f, 0.0f, 0.0f));
+            r0.scrollContainer = new LinearLayout(getContext());
+            r0.scrollContainer.setOrientation(1);
+            r0.contentScrollView.addView(r0.scrollContainer, new FrameLayout.LayoutParams(-1, -2));
+        }
+        r0.messageTextView = new TextView(getContext());
+        r0.messageTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
+        r0.messageTextView.setTextSize(1, 16.0f);
+        if (LocaleController.isRTL) {
+        }
+        r0.messageTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        if (r0.progressViewStyle == 1) {
+            r0.progressViewContainer = new FrameLayout(getContext());
+            if (r0.title != null) {
+            }
+            containerView.addView(r0.progressViewContainer, LayoutHelper.createLinear(-1, 44, 51, 23, r0.title != null ? 24 : 0, 23, 24));
+            RadialProgressView progressView2 = new RadialProgressView(getContext());
+            progressView2.setProgressColor(getThemeColor(Theme.key_dialogProgressCircle));
+            if (LocaleController.isRTL) {
+            }
+            r0.progressViewContainer.addView(progressView2, LayoutHelper.createFrame(44, 44, (LocaleController.isRTL ? 5 : 3) | 48));
+            r0.messageTextView.setLines(1);
+            r0.messageTextView.setSingleLine(true);
+            r0.messageTextView.setEllipsize(TruncateAt.END);
+            if (LocaleController.isRTL) {
+            }
+            if (LocaleController.isRTL) {
+            }
+            if (LocaleController.isRTL) {
+            }
+            r0.progressViewContainer.addView(r0.messageTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, (float) (LocaleController.isRTL ? 0 : 62), 0.0f, (float) (LocaleController.isRTL ? 62 : 0), 0.0f));
+        } else if (r0.progressViewStyle != 2) {
+            linearLayout = r0.scrollContainer;
+            view2 = r0.messageTextView;
+            if (LocaleController.isRTL) {
+            }
+            i3 = (LocaleController.isRTL ? 5 : 3) | 48;
+            if (r0.customView == null) {
+                if (r0.items != null) {
+                    i4 = 0;
+                    linearLayout.addView(view2, LayoutHelper.createLinear(-2, -2, i3, 24, 0, 24, i4));
+                }
+            }
+            i4 = r0.customViewOffset;
+            linearLayout.addView(view2, LayoutHelper.createLinear(-2, -2, i3, 24, 0, 24, i4));
+        } else {
+            if (LocaleController.isRTL) {
+            }
+            if (r0.title != null) {
+            }
+            containerView.addView(r0.messageTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, r0.title != null ? 19 : 0, 24, 20));
+            r0.lineProgressView = new LineProgressView(getContext());
+            r0.lineProgressView.setProgress(((float) r0.currentProgress) / 100.0f, false);
+            r0.lineProgressView.setProgressColor(getThemeColor(Theme.key_dialogLineProgress));
+            r0.lineProgressView.setBackColor(getThemeColor(Theme.key_dialogLineProgressBackground));
+            containerView.addView(r0.lineProgressView, LayoutHelper.createLinear(-1, 4, 19, 24, 0, 24, 0));
+            r0.lineProgressViewPercent = new TextView(getContext());
+            r0.lineProgressViewPercent.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            if (LocaleController.isRTL) {
+            }
+            r0.lineProgressViewPercent.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+            r0.lineProgressViewPercent.setTextColor(getThemeColor(Theme.key_dialogTextGray2));
+            r0.lineProgressViewPercent.setTextSize(1, 14.0f);
+            if (LocaleController.isRTL) {
+            }
+            containerView.addView(r0.lineProgressViewPercent, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 23, 4, 23, 24));
             updateLineProgressTextView();
-        } else {
-            LinearLayout linearLayout = this.scrollContainer;
-            view2 = this.messageTextView;
-            i = (LocaleController.isRTL ? 5 : 3) | 48;
-            i2 = (this.customView == null && this.items == null) ? 0 : this.customViewOffset;
-            linearLayout.addView(view2, LayoutHelper.createLinear(-2, -2, i, 24, 0, 24, i2));
         }
-        if (TextUtils.isEmpty(this.message)) {
-            this.messageTextView.setVisibility(8);
+        if (TextUtils.isEmpty(r0.message)) {
+            r0.messageTextView.setVisibility(8);
         } else {
-            this.messageTextView.setText(this.message);
-            this.messageTextView.setVisibility(0);
+            r0.messageTextView.setText(r0.message);
+            r0.messageTextView.setVisibility(0);
         }
-        if (this.items != null) {
-            int a = 0;
-            while (a < this.items.length) {
-                if (this.items[a] != null) {
-                    AlertDialogCell cell = new AlertDialogCell(getContext());
-                    cell.setTextAndIcon(this.items[a], this.itemIcons != null ? this.itemIcons[a] : 0);
-                    this.scrollContainer.addView(cell, LayoutHelper.createLinear(-1, 48));
-                    cell.setTag(Integer.valueOf(a));
-                    cell.setOnClickListener(new C07293());
+        if (r0.items != null) {
+            a = 0;
+            while (a < r0.items.length) {
+                if (r0.items[a] == null) {
+                    AlertDialogCell cell2 = new AlertDialogCell(getContext());
+                    if (r0.itemIcons == null) {
+                    }
+                    cell2.setTextAndIcon(r0.items[a], r0.itemIcons == null ? r0.itemIcons[a] : 0);
+                    r0.scrollContainer.addView(cell2, LayoutHelper.createLinear(-1, 48));
+                    cell2.setTag(Integer.valueOf(a));
+                    cell2.setOnClickListener(new C07293());
                 }
                 a++;
             }
         }
-        if (this.customView != null) {
-            if (this.customView.getParent() != null) {
-                ((ViewGroup) this.customView.getParent()).removeView(this.customView);
+        if (r0.customView != null) {
+            if (r0.customView.getParent() != null) {
+                ((ViewGroup) r0.customView.getParent()).removeView(r0.customView);
             }
-            this.scrollContainer.addView(this.customView, LayoutHelper.createLinear(-1, -2));
+            r0.scrollContainer.addView(r0.customView, LayoutHelper.createLinear(-1, -2));
         }
         if (hasButtons) {
-            this.buttonsLayout = new FrameLayout(getContext()) {
-                protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                    int count = getChildCount();
-                    View positiveButton = null;
-                    int width = right - left;
-                    for (int a = 0; a < count; a++) {
-                        View child = getChildAt(a);
-                        if (((Integer) child.getTag()).intValue() == -1) {
-                            positiveButton = child;
-                            if (LocaleController.isRTL) {
-                                child.layout(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
-                            } else {
-                                child.layout((width - getPaddingRight()) - child.getMeasuredWidth(), getPaddingTop(), (width - getPaddingRight()) + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
-                            }
-                        } else if (((Integer) child.getTag()).intValue() == -2) {
-                            int x;
-                            if (LocaleController.isRTL) {
-                                x = getPaddingLeft();
-                                if (positiveButton != null) {
-                                    x += positiveButton.getMeasuredWidth() + AndroidUtilities.dp(8.0f);
-                                }
-                                child.layout(x, getPaddingTop(), child.getMeasuredWidth() + x, getPaddingTop() + child.getMeasuredHeight());
-                            } else {
-                                x = (width - getPaddingRight()) - child.getMeasuredWidth();
-                                if (positiveButton != null) {
-                                    x -= positiveButton.getMeasuredWidth() + AndroidUtilities.dp(8.0f);
-                                }
-                                child.layout(x, getPaddingTop(), child.getMeasuredWidth() + x, getPaddingTop() + child.getMeasuredHeight());
-                            }
-                        } else if (LocaleController.isRTL) {
-                            child.layout((width - getPaddingRight()) - child.getMeasuredWidth(), getPaddingTop(), (width - getPaddingRight()) + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
-                        } else {
-                            child.layout(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
-                        }
-                    }
-                }
-            };
-            this.buttonsLayout.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
-            containerView.addView(this.buttonsLayout, LayoutHelper.createLinear(-1, 52));
-            if (this.positiveButtonText != null) {
-                radialProgressView = new TextView(getContext()) {
-                    public void setEnabled(boolean enabled) {
-                        super.setEnabled(enabled);
-                        setAlpha(enabled ? 1.0f : 0.5f);
-                    }
-                };
-                radialProgressView.setMinWidth(AndroidUtilities.dp(64.0f));
-                radialProgressView.setTag(Integer.valueOf(-1));
-                radialProgressView.setTextSize(1, 14.0f);
-                radialProgressView.setTextColor(getThemeColor(Theme.key_dialogButton));
-                radialProgressView.setGravity(17);
-                radialProgressView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                radialProgressView.setText(this.positiveButtonText.toString().toUpperCase());
-                radialProgressView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
-                radialProgressView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
-                this.buttonsLayout.addView(radialProgressView, LayoutHelper.createFrame(-2, 36, 53));
-                radialProgressView.setOnClickListener(new C07326());
+            r0.buttonsLayout = /* anonymous class already generated */;
+            r0.buttonsLayout.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+            containerView.addView(r0.buttonsLayout, LayoutHelper.createLinear(-1, 52));
+            if (r0.positiveButtonText != null) {
+                textView = /* anonymous class already generated */;
+                textView.setMinWidth(AndroidUtilities.dp(64.0f));
+                textView.setTag(Integer.valueOf(-1));
+                textView.setTextSize(1, 14.0f);
+                textView.setTextColor(getThemeColor(Theme.key_dialogButton));
+                textView.setGravity(17);
+                textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                textView.setText(r0.positiveButtonText.toString().toUpperCase());
+                textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
+                textView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+                r0.buttonsLayout.addView(textView, LayoutHelper.createFrame(-2, 36, 53));
+                textView.setOnClickListener(new C07326());
             }
-            if (this.negativeButtonText != null) {
-                radialProgressView = new TextView(getContext()) {
-                    public void setEnabled(boolean enabled) {
-                        super.setEnabled(enabled);
-                        setAlpha(enabled ? 1.0f : 0.5f);
-                    }
-                };
-                radialProgressView.setMinWidth(AndroidUtilities.dp(64.0f));
-                radialProgressView.setTag(Integer.valueOf(-2));
-                radialProgressView.setTextSize(1, 14.0f);
-                radialProgressView.setTextColor(getThemeColor(Theme.key_dialogButton));
-                radialProgressView.setGravity(17);
-                radialProgressView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                radialProgressView.setText(this.negativeButtonText.toString().toUpperCase());
-                radialProgressView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
-                radialProgressView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
-                this.buttonsLayout.addView(radialProgressView, LayoutHelper.createFrame(-2, 36, 53));
-                radialProgressView.setOnClickListener(new C07348());
+            if (r0.negativeButtonText != null) {
+                textView = /* anonymous class already generated */;
+                textView.setMinWidth(AndroidUtilities.dp(64.0f));
+                textView.setTag(Integer.valueOf(-2));
+                textView.setTextSize(1, 14.0f);
+                textView.setTextColor(getThemeColor(Theme.key_dialogButton));
+                textView.setGravity(17);
+                textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                textView.setText(r0.negativeButtonText.toString().toUpperCase());
+                textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
+                textView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+                r0.buttonsLayout.addView(textView, LayoutHelper.createFrame(-2, 36, 53));
+                textView.setOnClickListener(new C07348());
             }
-            if (this.neutralButtonText != null) {
-                radialProgressView = new TextView(getContext()) {
-                    public void setEnabled(boolean enabled) {
-                        super.setEnabled(enabled);
-                        setAlpha(enabled ? 1.0f : 0.5f);
-                    }
-                };
-                radialProgressView.setMinWidth(AndroidUtilities.dp(64.0f));
-                radialProgressView.setTag(Integer.valueOf(-3));
-                radialProgressView.setTextSize(1, 14.0f);
-                radialProgressView.setTextColor(getThemeColor(Theme.key_dialogButton));
-                radialProgressView.setGravity(17);
-                radialProgressView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                radialProgressView.setText(this.neutralButtonText.toString().toUpperCase());
-                radialProgressView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
-                radialProgressView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
-                this.buttonsLayout.addView(radialProgressView, LayoutHelper.createFrame(-2, 36, 51));
-                radialProgressView.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        if (AlertDialog.this.neutralButtonListener != null) {
-                            AlertDialog.this.neutralButtonListener.onClick(AlertDialog.this, -2);
-                        }
-                        AlertDialog.this.dismiss();
-                    }
-                });
+            if (r0.neutralButtonText != null) {
+                textView = /* anonymous class already generated */;
+                textView.setMinWidth(AndroidUtilities.dp(64.0f));
+                textView.setTag(Integer.valueOf(-3));
+                textView.setTextSize(1, 14.0f);
+                textView.setTextColor(getThemeColor(Theme.key_dialogButton));
+                textView.setGravity(17);
+                textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                textView.setText(r0.neutralButtonText.toString().toUpperCase());
+                textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
+                textView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+                r0.buttonsLayout.addView(textView, LayoutHelper.createFrame(-2, 36, 51));
+                textView.setOnClickListener(/* anonymous class already generated */);
             }
         }
-        this.lastScreenWidth = AndroidUtilities.displaySize.x;
-        int calculatedWidth = AndroidUtilities.displaySize.x - AndroidUtilities.dp(48.0f);
-        if (!AndroidUtilities.isTablet()) {
+        r0.lastScreenWidth = AndroidUtilities.displaySize.x;
+        calculatedWidth = AndroidUtilities.displaySize.x - AndroidUtilities.dp(48.0f);
+        if (AndroidUtilities.isTablet()) {
             maxWidth = AndroidUtilities.dp(356.0f);
         } else if (AndroidUtilities.isSmallTablet()) {
-            maxWidth = AndroidUtilities.dp(446.0f);
-        } else {
             maxWidth = AndroidUtilities.dp(496.0f);
+        } else {
+            maxWidth = AndroidUtilities.dp(NUM);
         }
-        Window window = getWindow();
-        LayoutParams params = new LayoutParams();
+        window = getWindow();
+        params = new LayoutParams();
         params.copyFrom(window.getAttributes());
         params.dimAmount = 0.6f;
-        params.width = (Math.min(maxWidth, calculatedWidth) + this.backgroundPaddings.left) + this.backgroundPaddings.right;
+        params.width = (Math.min(maxWidth, calculatedWidth) + r0.backgroundPaddings.left) + r0.backgroundPaddings.right;
         params.flags |= 2;
-        if (this.customView != null) {
-        }
         params.flags |= 131072;
         window.setAttributes(params);
     }

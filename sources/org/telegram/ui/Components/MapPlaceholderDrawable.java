@@ -18,18 +18,19 @@ public class MapPlaceholderDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        int a;
         canvas.drawRect(getBounds(), this.paint);
-        int gap = AndroidUtilities.dp(9.0f);
+        int gap = AndroidUtilities.dp(NUM);
         int xcount = getBounds().width() / gap;
         int ycount = getBounds().height() / gap;
         int x = getBounds().left;
         int y = getBounds().top;
-        for (a = 0; a < xcount; a++) {
-            canvas.drawLine((float) (((a + 1) * gap) + x), (float) y, (float) (((a + 1) * gap) + x), (float) (getBounds().height() + y), this.linePaint);
+        int a = 0;
+        for (int a2 = 0; a2 < xcount; a2++) {
+            canvas.drawLine((float) (((a2 + 1) * gap) + x), (float) y, (float) (((a2 + 1) * gap) + x), (float) (getBounds().height() + y), this.linePaint);
         }
-        for (a = 0; a < ycount; a++) {
+        while (a < ycount) {
             canvas.drawLine((float) x, (float) (((a + 1) * gap) + y), (float) (getBounds().width() + x), (float) (((a + 1) * gap) + y), this.linePaint);
+            a++;
         }
     }
 

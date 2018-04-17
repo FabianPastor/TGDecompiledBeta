@@ -4,7 +4,6 @@ import java.io.IOException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
-import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -47,7 +46,7 @@ public class ContainerMediaChunk extends BaseMediaChunk {
 
     public final void load() throws IOException, InterruptedException {
         DataSpec loadDataSpec = this.dataSpec.subrange((long) this.bytesLoaded);
-        ExtractorInput input;
+        DefaultExtractorInput input;
         try {
             input = new DefaultExtractorInput(this.dataSource, loadDataSpec.absoluteStreamPosition, this.dataSource.open(loadDataSpec));
             if (this.bytesLoaded == 0) {
@@ -56,11 +55,15 @@ public class ContainerMediaChunk extends BaseMediaChunk {
                 this.extractorWrapper.init(output);
             }
             Extractor extractor = this.extractorWrapper.extractor;
+            boolean z = false;
             int result = 0;
             while (result == 0 && !this.loadCanceled) {
                 result = extractor.read(input, null);
             }
-            Assertions.checkState(result != 1);
+            if (result != 1) {
+                z = true;
+            }
+            Assertions.checkState(z);
             this.bytesLoaded = (int) (input.getPosition() - this.dataSpec.absoluteStreamPosition);
             Util.closeQuietly(this.dataSource);
             this.loadCompleted = true;

@@ -106,29 +106,34 @@ public class ShutterButton extends View {
         int cy = getMeasuredHeight() / 2;
         this.shadowDrawable.setBounds(cx - AndroidUtilities.dp(36.0f), cy - AndroidUtilities.dp(36.0f), AndroidUtilities.dp(36.0f) + cx, AndroidUtilities.dp(36.0f) + cy);
         this.shadowDrawable.draw(canvas);
-        if (this.pressed || getScaleX() != 1.0f) {
-            float scale = (getScaleX() - 1.0f) / 0.06f;
-            this.whitePaint.setAlpha((int) (255.0f * scale));
-            canvas.drawCircle((float) cx, (float) cy, (float) AndroidUtilities.dp(26.0f), this.whitePaint);
-            if (this.state == State.RECORDING) {
-                if (this.redProgress != 1.0f) {
-                    long dt = Math.abs(System.currentTimeMillis() - this.lastUpdateTime);
-                    if (dt > 17) {
-                        dt = 17;
-                    }
-                    this.totalTime += dt;
-                    if (this.totalTime > 120) {
-                        this.totalTime = 120;
-                    }
-                    this.redProgress = this.interpolator.getInterpolation(((float) this.totalTime) / 120.0f);
-                    invalidate();
+        if (!this.pressed) {
+            if (getScaleX() == 1.0f) {
+                if (this.redProgress != 0.0f) {
+                    this.redProgress = 0.0f;
+                    return;
                 }
-                canvas.drawCircle((float) cx, (float) cy, (((float) AndroidUtilities.dp(26.0f)) * scale) * this.redProgress, this.redPaint);
-            } else if (this.redProgress != 0.0f) {
-                canvas.drawCircle((float) cx, (float) cy, ((float) AndroidUtilities.dp(26.0f)) * scale, this.redPaint);
+                return;
             }
+        }
+        float scale = (getScaleX() - 1.0f) / 0.06f;
+        this.whitePaint.setAlpha((int) (255.0f * scale));
+        canvas.drawCircle((float) cx, (float) cy, (float) AndroidUtilities.dp(26.0f), this.whitePaint);
+        if (this.state == State.RECORDING) {
+            if (this.redProgress != 1.0f) {
+                long dt = Math.abs(System.currentTimeMillis() - this.lastUpdateTime);
+                if (dt > 17) {
+                    dt = 17;
+                }
+                this.totalTime += dt;
+                if (this.totalTime > 120) {
+                    this.totalTime = 120;
+                }
+                this.redProgress = this.interpolator.getInterpolation(((float) this.totalTime) / 120.0f);
+                invalidate();
+            }
+            canvas.drawCircle((float) cx, (float) cy, (((float) AndroidUtilities.dp(26.0f)) * scale) * this.redProgress, this.redPaint);
         } else if (this.redProgress != 0.0f) {
-            this.redProgress = 0.0f;
+            canvas.drawCircle((float) cx, (float) cy, ((float) AndroidUtilities.dp(26.0f)) * scale, this.redPaint);
         }
     }
 
@@ -167,6 +172,8 @@ public class ShutterButton extends View {
             case 3:
                 setHighlighted(false);
                 this.pressed = false;
+                break;
+            default:
                 break;
         }
         return true;

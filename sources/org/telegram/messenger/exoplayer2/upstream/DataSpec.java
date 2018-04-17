@@ -42,9 +42,22 @@ public final class DataSpec {
     }
 
     public DataSpec(Uri uri, byte[] postBody, long absoluteStreamPosition, long position, long length, String key, int flags) {
+        boolean z = false;
         Assertions.checkArgument(absoluteStreamPosition >= 0);
         Assertions.checkArgument(position >= 0);
-        boolean z = length > 0 || length == -1;
+        if (length <= 0) {
+            if (length != -1) {
+                Assertions.checkArgument(z);
+                this.uri = uri;
+                this.postBody = postBody;
+                this.absoluteStreamPosition = absoluteStreamPosition;
+                this.position = position;
+                this.length = length;
+                this.key = key;
+                this.flags = flags;
+            }
+        }
+        z = true;
         Assertions.checkArgument(z);
         this.uri = uri;
         this.postBody = postBody;
@@ -60,7 +73,23 @@ public final class DataSpec {
     }
 
     public String toString() {
-        return "DataSpec[" + this.uri + ", " + Arrays.toString(this.postBody) + ", " + this.absoluteStreamPosition + ", " + this.position + ", " + this.length + ", " + this.key + ", " + this.flags + "]";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("DataSpec[");
+        stringBuilder.append(this.uri);
+        stringBuilder.append(", ");
+        stringBuilder.append(Arrays.toString(this.postBody));
+        stringBuilder.append(", ");
+        stringBuilder.append(this.absoluteStreamPosition);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.position);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.length);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.key);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.flags);
+        stringBuilder.append("]");
+        return stringBuilder.toString();
     }
 
     public DataSpec subrange(long offset) {
@@ -72,9 +101,10 @@ public final class DataSpec {
     }
 
     public DataSpec subrange(long offset, long length) {
-        if (offset == 0 && this.length == length) {
-            return this;
+        DataSpec dataSpec = this;
+        if (offset == 0 && dataSpec.length == length) {
+            return dataSpec;
         }
-        return new DataSpec(this.uri, this.postBody, this.absoluteStreamPosition + offset, this.position + offset, length, this.key, this.flags);
+        return new DataSpec(dataSpec.uri, dataSpec.postBody, dataSpec.absoluteStreamPosition + offset, dataSpec.position + offset, length, dataSpec.key, dataSpec.flags);
     }
 }

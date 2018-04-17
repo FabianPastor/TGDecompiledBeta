@@ -31,10 +31,7 @@ public class DashManifest {
         this.publishTimeMs = publishTimeMs;
         this.utcTiming = utcTiming;
         this.location = location;
-        if (periods == null) {
-            periods = Collections.emptyList();
-        }
-        this.periods = periods;
+        r0.periods = periods == null ? Collections.emptyList() : periods;
     }
 
     public final int getPeriodCount() {
@@ -46,13 +43,11 @@ public class DashManifest {
     }
 
     public final long getPeriodDurationMs(int index) {
-        if (index != this.periods.size() - 1) {
+        if (index == this.periods.size() - 1) {
+            return this.durationMs == C0539C.TIME_UNSET ? C0539C.TIME_UNSET : this.durationMs - ((Period) this.periods.get(index)).startMs;
+        } else {
             return ((Period) this.periods.get(index + 1)).startMs - ((Period) this.periods.get(index)).startMs;
         }
-        if (this.durationMs == C0539C.TIME_UNSET) {
-            return C0539C.TIME_UNSET;
-        }
-        return this.durationMs - ((Period) this.periods.get(index)).startMs;
     }
 
     public final long getPeriodDurationUs(int index) {
@@ -60,23 +55,51 @@ public class DashManifest {
     }
 
     public final DashManifest copy(List<RepresentationKey> representationKeys) {
-        LinkedList<RepresentationKey> linkedList = new LinkedList(representationKeys);
-        Collections.sort(linkedList);
-        linkedList.add(new RepresentationKey(-1, -1, -1));
+        long j;
+        long shiftMs;
+        DashManifest dashManifest = this;
+        LinkedList<RepresentationKey> keys = new LinkedList(representationKeys);
+        Collections.sort(keys);
+        keys.add(new RepresentationKey(-1, -1, -1));
         ArrayList<Period> copyPeriods = new ArrayList();
-        long shiftMs = 0;
-        for (int periodIndex = 0; periodIndex < getPeriodCount(); periodIndex++) {
-            if (((RepresentationKey) linkedList.peek()).periodIndex != periodIndex) {
-                long periodDurationMs = getPeriodDurationMs(periodIndex);
-                if (periodDurationMs != C0539C.TIME_UNSET) {
-                    shiftMs += periodDurationMs;
-                }
-            } else {
-                Period period = getPeriod(periodIndex);
-                copyPeriods.add(new Period(period.id, period.startMs - shiftMs, copyAdaptationSets(period.adaptationSets, linkedList), period.eventStreams));
+        int periodIndex = 0;
+        long shiftMs2 = 0;
+        while (true) {
+            int periodIndex2 = periodIndex;
+            int periodCount = getPeriodCount();
+            j = C0539C.TIME_UNSET;
+            if (periodIndex2 >= periodCount) {
+                break;
             }
+            if (((RepresentationKey) keys.peek()).periodIndex != periodIndex2) {
+                long periodDurationMs = getPeriodDurationMs(periodIndex2);
+                if (periodDurationMs != C0539C.TIME_UNSET) {
+                    shiftMs = shiftMs2 + periodDurationMs;
+                } else {
+                    shiftMs = shiftMs2;
+                }
+                shiftMs2 = shiftMs;
+            } else {
+                Period period = getPeriod(periodIndex2);
+                ArrayList<AdaptationSet> copyAdaptationSets = copyAdaptationSets(period.adaptationSets, keys);
+                copyPeriods.add(new Period(period.id, period.startMs - shiftMs2, copyAdaptationSets, period.eventStreams));
+            }
+            periodIndex = periodIndex2 + 1;
         }
-        return new DashManifest(this.availabilityStartTimeMs, this.durationMs != C0539C.TIME_UNSET ? this.durationMs - shiftMs : C0539C.TIME_UNSET, this.minBufferTimeMs, this.dynamic, this.minUpdatePeriodMs, this.timeShiftBufferDepthMs, this.suggestedPresentationDelayMs, this.publishTimeMs, this.utcTiming, this.location, copyPeriods);
+        if (dashManifest.durationMs != C0539C.TIME_UNSET) {
+            j = dashManifest.durationMs - shiftMs2;
+        }
+        long newDuration = j;
+        shiftMs = dashManifest.availabilityStartTimeMs;
+        long j2 = dashManifest.minBufferTimeMs;
+        boolean z = dashManifest.dynamic;
+        long j3 = dashManifest.minUpdatePeriodMs;
+        long j4 = dashManifest.timeShiftBufferDepthMs;
+        long j5 = dashManifest.suggestedPresentationDelayMs;
+        long newDuration2 = newDuration;
+        newDuration = dashManifest.publishTimeMs;
+        long j6 = newDuration;
+        return new DashManifest(shiftMs, newDuration2, j2, z, j3, j4, j5, j6, dashManifest.utcTiming, dashManifest.location, copyPeriods);
     }
 
     private static ArrayList<AdaptationSet> copyAdaptationSets(List<AdaptationSet> adaptationSets, LinkedList<RepresentationKey> keys) {

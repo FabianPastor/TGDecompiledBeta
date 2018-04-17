@@ -33,21 +33,24 @@ public final class BinaryFrame extends Id3Frame {
     }
 
     public boolean equals(Object obj) {
+        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        BinaryFrame other = (BinaryFrame) obj;
-        if (this.id.equals(other.id) && Arrays.equals(this.data, other.data)) {
-            return true;
+        if (obj != null) {
+            if (getClass() == obj.getClass()) {
+                BinaryFrame other = (BinaryFrame) obj;
+                if (!this.id.equals(other.id) || !Arrays.equals(this.data, other.data)) {
+                    z = false;
+                }
+                return z;
+            }
         }
         return false;
     }
 
     public int hashCode() {
-        return ((this.id.hashCode() + 527) * 31) + Arrays.hashCode(this.data);
+        return (31 * ((31 * 17) + this.id.hashCode())) + Arrays.hashCode(this.data);
     }
 
     public void writeToParcel(Parcel dest, int flags) {

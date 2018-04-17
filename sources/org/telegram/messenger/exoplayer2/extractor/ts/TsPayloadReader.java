@@ -61,7 +61,16 @@ public interface TsPayloadReader {
         }
 
         public TrackIdGenerator(int programNumber, int firstTrackId, int trackIdIncrement) {
-            this.formatIdPrefix = programNumber != Integer.MIN_VALUE ? programNumber + "/" : TtmlNode.ANONYMOUS_REGION_ID;
+            String stringBuilder;
+            if (programNumber != Integer.MIN_VALUE) {
+                StringBuilder stringBuilder2 = new StringBuilder();
+                stringBuilder2.append(programNumber);
+                stringBuilder2.append("/");
+                stringBuilder = stringBuilder2.toString();
+            } else {
+                stringBuilder = TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            this.formatIdPrefix = stringBuilder;
             this.firstTrackId = firstTrackId;
             this.trackIdIncrement = trackIdIncrement;
             this.trackId = Integer.MIN_VALUE;
@@ -69,7 +78,10 @@ public interface TsPayloadReader {
 
         public void generateNewId() {
             this.trackId = this.trackId == Integer.MIN_VALUE ? this.firstTrackId : this.trackId + this.trackIdIncrement;
-            this.formatId = this.formatIdPrefix + this.trackId;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(this.formatIdPrefix);
+            stringBuilder.append(this.trackId);
+            this.formatId = stringBuilder.toString();
         }
 
         public int getTrackId() {

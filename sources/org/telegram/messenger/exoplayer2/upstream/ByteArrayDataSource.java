@@ -20,10 +20,19 @@ public final class ByteArrayDataSource implements DataSource {
         this.uri = dataSpec.uri;
         this.readPosition = (int) dataSpec.position;
         this.bytesRemaining = (int) (dataSpec.length == -1 ? ((long) this.data.length) - dataSpec.position : dataSpec.length);
-        if (this.bytesRemaining > 0 && this.readPosition + this.bytesRemaining <= this.data.length) {
-            return (long) this.bytesRemaining;
+        if (this.bytesRemaining > 0) {
+            if (this.readPosition + this.bytesRemaining <= this.data.length) {
+                return (long) this.bytesRemaining;
+            }
         }
-        throw new IOException("Unsatisfiable range: [" + this.readPosition + ", " + dataSpec.length + "], length: " + this.data.length);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Unsatisfiable range: [");
+        stringBuilder.append(this.readPosition);
+        stringBuilder.append(", ");
+        stringBuilder.append(dataSpec.length);
+        stringBuilder.append("], length: ");
+        stringBuilder.append(this.data.length);
+        throw new IOException(stringBuilder.toString());
     }
 
     public int read(byte[] buffer, int offset, int readLength) throws IOException {

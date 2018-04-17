@@ -128,15 +128,14 @@ abstract class SignatureImpl implements Signature {
     String extractString(int n) {
         int startIndex = 0;
         int endIndex = this.stringRep.indexOf(45);
-        int n2 = n;
         while (true) {
-            n = n2 - 1;
-            if (n2 <= 0) {
+            int n2 = n - 1;
+            if (n <= 0) {
                 break;
             }
             startIndex = endIndex + 1;
             endIndex = this.stringRep.indexOf(45, startIndex);
-            n2 = n;
+            n = n2;
         }
         if (endIndex == -1) {
             endIndex = this.stringRep.length();

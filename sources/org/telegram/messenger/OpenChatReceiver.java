@@ -12,14 +12,16 @@ public class OpenChatReceiver extends Activity {
         if (intent == null) {
             finish();
         }
-        if (intent.getAction() == null || !intent.getAction().startsWith("com.tmessages.openchat")) {
-            finish();
-            return;
+        if (intent.getAction() != null) {
+            if (intent.getAction().startsWith("com.tmessages.openchat")) {
+                Intent intent2 = new Intent(this, LaunchActivity.class);
+                intent2.setAction(intent.getAction());
+                intent2.putExtras(intent);
+                startActivity(intent2);
+                finish();
+                return;
+            }
         }
-        Intent intent2 = new Intent(this, LaunchActivity.class);
-        intent2.setAction(intent.getAction());
-        intent2.putExtras(intent);
-        startActivity(intent2);
         finish();
     }
 }

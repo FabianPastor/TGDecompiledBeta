@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -35,66 +36,92 @@ public class SessionCell extends FrameLayout {
     private TextView onlineTextView;
 
     public SessionCell(Context context, int type) {
+        Context context2 = context;
         super(context);
-        LinearLayout linearLayout = new LinearLayout(context);
+        LinearLayout linearLayout = new LinearLayout(context2);
+        int i = 0;
         linearLayout.setOrientation(0);
         linearLayout.setWeightSum(1.0f);
+        int i2 = 17;
+        int i3 = 3;
+        int i4;
+        float f;
         if (type == 1) {
-            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 11 : 45), 11.0f, (float) (LocaleController.isRTL ? 45 : 11), 0.0f));
-            this.avatarDrawable = new AvatarDrawable();
-            this.avatarDrawable.setTextSize(AndroidUtilities.dp(10.0f));
-            this.imageView = new BackupImageView(context);
-            this.imageView.setRoundRadius(AndroidUtilities.dp(10.0f));
-            addView(this.imageView, LayoutHelper.createFrame(20, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 17), 13.0f, (float) (LocaleController.isRTL ? 17 : 0), 0.0f));
+            i4 = (LocaleController.isRTL ? 5 : 3) | 48;
+            int i5 = 45;
+            f = (float) (LocaleController.isRTL ? 11 : 45);
+            if (!LocaleController.isRTL) {
+                i5 = 11;
+            }
+            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, i4, f, 11.0f, (float) i5, 0.0f));
+            r0.avatarDrawable = new AvatarDrawable();
+            r0.avatarDrawable.setTextSize(AndroidUtilities.dp(10.0f));
+            r0.imageView = new BackupImageView(context2);
+            r0.imageView.setRoundRadius(AndroidUtilities.dp(10.0f));
+            View view = r0.imageView;
+            i4 = (LocaleController.isRTL ? 5 : 3) | 48;
+            f = (float) (LocaleController.isRTL ? 0 : 17);
+            if (LocaleController.isRTL) {
+                i = 17;
+            }
+            addView(view, LayoutHelper.createFrame(20, 20.0f, i4, f, 13.0f, (float) i, 0.0f));
         } else {
-            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 11 : 17), 11.0f, (float) (LocaleController.isRTL ? 17 : 11), 0.0f));
+            i4 = (LocaleController.isRTL ? 5 : 3) | 48;
+            f = (float) (LocaleController.isRTL ? 11 : 17);
+            if (!LocaleController.isRTL) {
+                i2 = 11;
+            }
+            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, i4, f, 11.0f, (float) i2, 0.0f));
         }
-        this.nameTextView = new TextView(context);
-        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.nameTextView.setTextSize(1, 16.0f);
-        this.nameTextView.setLines(1);
-        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.nameTextView.setMaxLines(1);
-        this.nameTextView.setSingleLine(true);
-        this.nameTextView.setEllipsize(TruncateAt.END);
-        this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        this.onlineTextView = new TextView(context);
-        this.onlineTextView.setTextSize(1, 14.0f);
-        this.onlineTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
+        r0.nameTextView = new TextView(context2);
+        r0.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.nameTextView.setTextSize(1, 16.0f);
+        r0.nameTextView.setLines(1);
+        r0.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        r0.nameTextView.setMaxLines(1);
+        r0.nameTextView.setSingleLine(true);
+        r0.nameTextView.setEllipsize(TruncateAt.END);
+        r0.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        r0.onlineTextView = new TextView(context2);
+        r0.onlineTextView.setTextSize(1, 14.0f);
+        r0.onlineTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         if (LocaleController.isRTL) {
-            linearLayout.addView(this.onlineTextView, LayoutHelper.createLinear(-2, -1, 51, 0, 2, 0, 0));
-            linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(0, -1, 1.0f, 53, 10, 0, 0, 0));
+            linearLayout.addView(r0.onlineTextView, LayoutHelper.createLinear(-2, -1, 51, 0, 2, 0, 0));
+            linearLayout.addView(r0.nameTextView, LayoutHelper.createLinear(0, -1, 1.0f, 53, 10, 0, 0, 0));
         } else {
-            linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(0, -1, 1.0f, 51, 0, 0, 10, 0));
-            linearLayout.addView(this.onlineTextView, LayoutHelper.createLinear(-2, -1, 53, 0, 2, 0, 0));
+            linearLayout.addView(r0.nameTextView, LayoutHelper.createLinear(0, -1, 1.0f, 51, 0, 0, 10, 0));
+            linearLayout.addView(r0.onlineTextView, LayoutHelper.createLinear(-2, -1, 53, 0, 2, 0, 0));
         }
-        this.detailTextView = new TextView(context);
-        this.detailTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        this.detailTextView.setTextSize(1, 14.0f);
-        this.detailTextView.setLines(1);
-        this.detailTextView.setMaxLines(1);
-        this.detailTextView.setSingleLine(true);
-        this.detailTextView.setEllipsize(TruncateAt.END);
-        this.detailTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.detailTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 36.0f, 17.0f, 0.0f));
-        this.detailExTextView = new TextView(context);
-        this.detailExTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-        this.detailExTextView.setTextSize(1, 14.0f);
-        this.detailExTextView.setLines(1);
-        this.detailExTextView.setMaxLines(1);
-        this.detailExTextView.setSingleLine(true);
-        this.detailExTextView.setEllipsize(TruncateAt.END);
-        this.detailExTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.detailExTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 59.0f, 17.0f, 0.0f));
+        r0.detailTextView = new TextView(context2);
+        r0.detailTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        r0.detailTextView.setTextSize(1, 14.0f);
+        r0.detailTextView.setLines(1);
+        r0.detailTextView.setMaxLines(1);
+        r0.detailTextView.setSingleLine(true);
+        r0.detailTextView.setEllipsize(TruncateAt.END);
+        r0.detailTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        addView(r0.detailTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 36.0f, 17.0f, 0.0f));
+        r0.detailExTextView = new TextView(context2);
+        r0.detailExTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+        r0.detailExTextView.setTextSize(1, 14.0f);
+        r0.detailExTextView.setLines(1);
+        r0.detailExTextView.setMaxLines(1);
+        r0.detailExTextView.setSingleLine(true);
+        r0.detailExTextView.setEllipsize(TruncateAt.END);
+        r0.detailExTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        View view2 = r0.detailExTextView;
+        if (LocaleController.isRTL) {
+            i3 = 5;
+        }
+        addView(view2, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, 17.0f, 59.0f, 17.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(90.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(90.0f) + this.needDivider, NUM));
     }
 
     public void setSession(TLObject object, boolean divider) {
         this.needDivider = divider;
-        StringBuilder stringBuilder;
         if (object instanceof TL_authorization) {
             TL_authorization session = (TL_authorization) object;
             this.nameTextView.setText(String.format(Locale.US, "%s %s", new Object[]{session.app_name, session.app_version}));
@@ -107,7 +134,7 @@ public class SessionCell extends FrameLayout {
                 this.onlineTextView.setText(LocaleController.stringForMessageListDate((long) session.date_active));
                 this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
             }
-            stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             if (session.ip.length() != 0) {
                 stringBuilder.append(session.ip);
             }
@@ -168,35 +195,35 @@ public class SessionCell extends FrameLayout {
             setTag(Theme.key_windowBackgroundWhiteGrayText3);
             this.onlineTextView.setText(LocaleController.stringForMessageListDate((long) session2.date_active));
             this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-            stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder2 = new StringBuilder();
             if (session2.ip.length() != 0) {
-                stringBuilder.append(session2.ip);
+                stringBuilder2.append(session2.ip);
             }
             if (session2.region.length() != 0) {
-                if (stringBuilder.length() != 0) {
-                    stringBuilder.append(" ");
+                if (stringBuilder2.length() != 0) {
+                    stringBuilder2.append(" ");
                 }
-                stringBuilder.append("\u2014 ");
-                stringBuilder.append(session2.region);
+                stringBuilder2.append("\u2014 ");
+                stringBuilder2.append(session2.region);
             }
-            this.detailExTextView.setText(stringBuilder);
-            stringBuilder = new StringBuilder();
+            this.detailExTextView.setText(stringBuilder2);
+            stringBuilder2 = new StringBuilder();
             if (!TextUtils.isEmpty(name)) {
-                stringBuilder.append(name);
+                stringBuilder2.append(name);
             }
             if (session2.browser.length() != 0) {
-                if (stringBuilder.length() != 0) {
-                    stringBuilder.append(", ");
+                if (stringBuilder2.length() != 0) {
+                    stringBuilder2.append(", ");
                 }
-                stringBuilder.append(session2.browser);
+                stringBuilder2.append(session2.browser);
             }
             if (session2.platform.length() != 0) {
-                if (stringBuilder.length() != 0) {
-                    stringBuilder.append(", ");
+                if (stringBuilder2.length() != 0) {
+                    stringBuilder2.append(", ");
                 }
-                stringBuilder.append(session2.platform);
+                stringBuilder2.append(session2.platform);
             }
-            this.detailTextView.setText(stringBuilder);
+            this.detailTextView.setText(stringBuilder2);
         }
     }
 

@@ -89,7 +89,7 @@ public final class CustomTabsSession {
             try {
                 postMessage = this.mService.postMessage(this.mCallback, message, extras);
             } catch (RemoteException e) {
-                postMessage = -2;
+                return -2;
             }
         }
         return postMessage;

@@ -53,14 +53,7 @@ final class WebvttExtractor implements Extractor {
     public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
         int currentFileSize = (int) input.getLength();
         if (this.sampleSize == this.sampleData.length) {
-            int i;
-            byte[] bArr = this.sampleData;
-            if (currentFileSize != -1) {
-                i = currentFileSize;
-            } else {
-                i = this.sampleData.length;
-            }
-            this.sampleData = Arrays.copyOf(bArr, (i * 3) / 2);
+            this.sampleData = Arrays.copyOf(this.sampleData, ((currentFileSize != -1 ? currentFileSize : this.sampleData.length) * 3) / 2);
         }
         int bytesRead = input.read(this.sampleData, this.sampleSize, this.sampleData.length - this.sampleSize);
         if (bytesRead != -1) {
@@ -74,41 +67,52 @@ final class WebvttExtractor implements Extractor {
     }
 
     private void processSample() throws ParserException {
-        ParsableByteArray parsableByteArray = new ParsableByteArray(this.sampleData);
+        ParsableByteArray webvttData = new ParsableByteArray(this.sampleData);
         try {
-            WebvttParserUtil.validateWebvttHeaderLine(parsableByteArray);
+            Matcher localTimestampMatcher;
+            WebvttParserUtil.validateWebvttHeaderLine(webvttData);
             long vttTimestampUs = 0;
             long tsTimestampUs = 0;
             while (true) {
-                String line = parsableByteArray.readLine();
-                if (TextUtils.isEmpty(line)) {
+                CharSequence readLine = webvttData.readLine();
+                CharSequence line = readLine;
+                if (TextUtils.isEmpty(readLine)) {
                     break;
                 } else if (line.startsWith("X-TIMESTAMP-MAP")) {
-                    Matcher localTimestampMatcher = LOCAL_TIMESTAMP.matcher(line);
+                    localTimestampMatcher = LOCAL_TIMESTAMP.matcher(line);
+                    StringBuilder stringBuilder;
                     if (localTimestampMatcher.find()) {
                         Matcher mediaTimestampMatcher = MEDIA_TIMESTAMP.matcher(line);
                         if (mediaTimestampMatcher.find()) {
                             vttTimestampUs = WebvttParserUtil.parseTimestampUs(localTimestampMatcher.group(1));
                             tsTimestampUs = TimestampAdjuster.ptsToUs(Long.parseLong(mediaTimestampMatcher.group(1)));
                         } else {
-                            throw new ParserException("X-TIMESTAMP-MAP doesn't contain media timestamp: " + line);
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("X-TIMESTAMP-MAP doesn't contain media timestamp: ");
+                            stringBuilder.append(line);
+                            throw new ParserException(stringBuilder.toString());
                         }
                     }
-                    throw new ParserException("X-TIMESTAMP-MAP doesn't contain local timestamp: " + line);
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("X-TIMESTAMP-MAP doesn't contain local timestamp: ");
+                    stringBuilder.append(line);
+                    throw new ParserException(stringBuilder.toString());
                 }
             }
-            Matcher cueHeaderMatcher = WebvttParserUtil.findNextCueHeader(parsableByteArray);
-            if (cueHeaderMatcher == null) {
+            localTimestampMatcher = WebvttParserUtil.findNextCueHeader(webvttData);
+            if (localTimestampMatcher == null) {
                 buildTrackOutput(0);
                 return;
             }
-            long firstCueTimeUs = WebvttParserUtil.parseTimestampUs(cueHeaderMatcher.group(1));
-            long sampleTimeUs = this.timestampAdjuster.adjustTsTimestamp(TimestampAdjuster.usToPts((firstCueTimeUs + tsTimestampUs) - vttTimestampUs));
-            TrackOutput trackOutput = buildTrackOutput(sampleTimeUs - firstCueTimeUs);
-            this.sampleDataWrapper.reset(this.sampleData, this.sampleSize);
-            trackOutput.sampleData(this.sampleDataWrapper, this.sampleSize);
-            trackOutput.sampleMetadata(sampleTimeUs, 1, this.sampleSize, 0, null);
+            long firstCueTimeUs = WebvttParserUtil.parseTimestampUs(localTimestampMatcher.group(1));
+            long sampleTimeUs = r1.timestampAdjuster.adjustTsTimestamp(TimestampAdjuster.usToPts((firstCueTimeUs + tsTimestampUs) - vttTimestampUs));
+            long subsampleOffsetUs = sampleTimeUs - firstCueTimeUs;
+            TrackOutput trackOutput = buildTrackOutput(subsampleOffsetUs);
+            r1.sampleDataWrapper.reset(r1.sampleData, r1.sampleSize);
+            trackOutput.sampleData(r1.sampleDataWrapper, r1.sampleSize);
+            trackOutput.sampleMetadata(sampleTimeUs, 1, r1.sampleSize, 0, null);
         } catch (Throwable e) {
+            ParsableByteArray parsableByteArray = webvttData;
             throw new ParserException(e);
         }
     }

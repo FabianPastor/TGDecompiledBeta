@@ -1,6 +1,7 @@
 package org.telegram.messenger;
 
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -36,7 +37,7 @@ public class Emoji {
     public static HashMap<String, String> emojiColor = new HashMap();
     public static HashMap<String, Integer> emojiUseHistory = new HashMap();
     private static boolean inited = false;
-    private static boolean[][] loadingEmoji = ((boolean[][]) Array.newInstance(Boolean.TYPE, new int[]{5, 4}));
+    private static boolean[][] loadingEmoji = ((boolean[][]) Array.newInstance(boolean.class, new int[]{5, 4}));
     private static Paint placeholderPaint = new Paint();
     public static ArrayList<String> recentEmoji = new ArrayList();
     private static boolean recentEmojiLoaded = false;
@@ -171,8 +172,8 @@ public class Emoji {
             }
             if (this.fontMetrics == null) {
                 int sz = super.getSize(paint, text, start, end, fm);
-                int offset = AndroidUtilities.dp(8.0f);
-                int w = AndroidUtilities.dp(10.0f);
+                int offset = AndroidUtilities.dp(NUM);
+                int w = AndroidUtilities.dp(NUM);
                 fm.top = (-w) - offset;
                 fm.bottom = w - offset;
                 fm.ascent = (-w) - offset;
@@ -221,12 +222,11 @@ public class Emoji {
         placeholderPaint.setColor(0);
     }
 
-    private static void loadEmoji(int page, int page2) {
-        float scale;
+    private static void loadEmoji(final int page, final int page2) {
         int imageResize = 1;
         try {
-            int a;
             File imageFile;
+            float scale = 2.0f;
             if (AndroidUtilities.density <= 1.0f) {
                 scale = 2.0f;
                 imageResize = 2;
@@ -234,10 +234,8 @@ public class Emoji {
                 scale = 2.0f;
             } else if (AndroidUtilities.density <= 2.0f) {
                 scale = 2.0f;
-            } else {
-                scale = 2.0f;
             }
-            for (a = 4; a < 7; a++) {
+            for (int a = 4; a < 7; a++) {
                 imageFile = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.jpg", new Object[]{Integer.valueOf(a), Float.valueOf(scale), Integer.valueOf(page)}));
                 if (imageFile.exists()) {
                     imageFile.delete();
@@ -247,14 +245,14 @@ public class Emoji {
                     imageFile.delete();
                 }
             }
-            for (a = 8; a < 12; a++) {
-                imageFile = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.png", new Object[]{Integer.valueOf(a), Float.valueOf(scale), Integer.valueOf(page)}));
+            for (Exception e = 8; e < 12; e++) {
+                imageFile = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.png", new Object[]{Integer.valueOf(e), Float.valueOf(scale), Integer.valueOf(page)}));
                 if (imageFile.exists()) {
                     imageFile.delete();
                 }
             }
-        } catch (Throwable e) {
-            FileLog.m3e(e);
+        } catch (Throwable e2) {
+            FileLog.m3e(e2);
         } catch (Throwable x) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m2e("Error loading emoji", x);
@@ -264,21 +262,23 @@ public class Emoji {
         }
         Bitmap bitmap = null;
         try {
-            InputStream is = ApplicationLoader.applicationContext.getAssets().open("emoji/" + String.format(Locale.US, "v12_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(scale), Integer.valueOf(page), Integer.valueOf(page2)}));
+            AssetManager assets = ApplicationLoader.applicationContext.getAssets();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("emoji/");
+            stringBuilder.append(String.format(Locale.US, "v12_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(scale), Integer.valueOf(page), Integer.valueOf(page2)}));
+            InputStream is = assets.open(stringBuilder.toString());
             Options opts = new Options();
             opts.inJustDecodeBounds = false;
             opts.inSampleSize = imageResize;
             bitmap = BitmapFactory.decodeStream(is, null, opts);
             is.close();
-        } catch (Throwable e2) {
-            FileLog.m3e(e2);
+        } catch (Throwable e22) {
+            FileLog.m3e(e22);
         }
         final Bitmap finalBitmap = bitmap;
-        final int i = page;
-        final int i2 = page2;
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                Emoji.emojiBmp[i][i2] = finalBitmap;
+                Emoji.emojiBmp[page][page2] = finalBitmap;
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoaded, new Object[0]);
             }
         });
@@ -297,32 +297,44 @@ public class Emoji {
 
     public static String fixEmoji(String emoji) {
         int lenght = emoji.length();
+        String emoji2 = emoji;
         int a = 0;
         while (a < lenght) {
-            char ch = emoji.charAt(a);
+            char ch = emoji2.charAt(a);
+            StringBuilder stringBuilder;
             if (ch < '\ud83c' || ch > '\ud83e') {
                 if (ch == '\u20e3') {
-                    break;
-                } else if (ch >= '\u203c' && ch <= '\u3299' && EmojiData.emojiToFE0FMap.containsKey(Character.valueOf(ch))) {
-                    emoji = emoji.substring(0, a + 1) + "\ufe0f" + emoji.substring(a + 1);
+                    return emoji2;
+                }
+                if (ch >= '\u203c' && ch <= '\u3299' && EmojiData.emojiToFE0FMap.containsKey(Character.valueOf(ch))) {
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append(emoji2.substring(0, a + 1));
+                    stringBuilder.append("\ufe0f");
+                    stringBuilder.append(emoji2.substring(a + 1));
+                    emoji2 = stringBuilder.toString();
                     lenght++;
                     a++;
                 }
             } else if (ch != '\ud83c' || a >= lenght - 1) {
                 a++;
             } else {
-                ch = emoji.charAt(a + 1);
-                if (ch == '\ude2f' || ch == '\udc04' || ch == '\ude1a' || ch == '\udd7f') {
-                    emoji = emoji.substring(0, a + 2) + "\ufe0f" + emoji.substring(a + 2);
-                    lenght++;
-                    a += 2;
-                } else {
-                    a++;
+                ch = emoji2.charAt(a + 1);
+                if (!(ch == '\ude2f' || ch == '\udc04' || ch == '\ude1a')) {
+                    if (ch != '\udd7f') {
+                        a++;
+                    }
                 }
+                stringBuilder = new StringBuilder();
+                stringBuilder.append(emoji2.substring(0, a + 2));
+                stringBuilder.append("\ufe0f");
+                stringBuilder.append(emoji2.substring(a + 2));
+                emoji2 = stringBuilder.toString();
+                lenght++;
+                a += 2;
             }
             a++;
         }
-        return emoji;
+        return emoji2;
     }
 
     public static EmojiDrawable getEmojiDrawable(CharSequence code) {
@@ -335,7 +347,10 @@ public class Emoji {
         }
         if (info == null) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("No drawable for emoji " + code);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("No drawable for emoji ");
+                stringBuilder.append(code);
+                FileLog.m0d(stringBuilder.toString());
             }
             return null;
         }
@@ -385,144 +400,201 @@ public class Emoji {
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly) {
-        if (SharedConfig.useSystemEmoji || cs == null || cs.length() == 0) {
-            return cs;
-        }
-        Spannable s;
-        if (createNew || !(cs instanceof Spannable)) {
-            s = Factory.getInstance().newSpannable(cs.toString());
-        } else {
-            s = (Spannable) cs;
-        }
-        long buf = 0;
-        int emojiCount = 0;
-        int startIndex = -1;
-        int startLength = 0;
-        int previousGoodIndex = 0;
-        StringBuilder stringBuilder = new StringBuilder(16);
-        StringBuilder addionalCode = new StringBuilder(2);
-        int length = cs.length();
-        boolean doneEmoji = false;
-        int i = 0;
-        while (i < length) {
-            try {
-                char next;
-                char c = cs.charAt(i);
-                if ((c >= '\ud83c' && c <= '\ud83e') || (buf != 0 && (-4294967296L & buf) == 0 && (65535 & buf) == 55356 && c >= '\udde6' && c <= '\uddff')) {
-                    if (startIndex == -1) {
-                        startIndex = i;
-                    }
-                    stringBuilder.append(c);
-                    startLength++;
-                    buf = (buf << 16) | ((long) c);
-                } else if (stringBuilder.length() > 0 && (c == '\u2640' || c == '\u2642' || c == '\u2695')) {
-                    stringBuilder.append(c);
-                    startLength++;
-                    buf = 0;
-                    doneEmoji = true;
-                } else if (buf > 0 && (61440 & c) == 53248) {
-                    stringBuilder.append(c);
-                    startLength++;
-                    buf = 0;
-                    doneEmoji = true;
-                } else if (c == '\u20e3') {
-                    if (i > 0) {
-                        char c2 = cs.charAt(previousGoodIndex);
+        Throwable e;
+        CharSequence charSequence = cs;
+        if (!(SharedConfig.useSystemEmoji || charSequence == null)) {
+            if (cs.length() != 0) {
+                Spannable s;
+                if (createNew || !(charSequence instanceof Spannable)) {
+                    s = Factory.getInstance().newSpannable(cs.toString());
+                } else {
+                    s = (Spannable) charSequence;
+                }
+                int startIndex = -1;
+                int startLength = 0;
+                int previousGoodIndex = 0;
+                StringBuilder emojiCode = new StringBuilder(16);
+                StringBuilder addionalCode = new StringBuilder(2);
+                int length = cs.length();
+                boolean doneEmoji = false;
+                int[] emojiOnly2 = emojiOnly;
+                int emojiCount = 0;
+                long buf = 0;
+                int i = 0;
+                while (i < length) {
+                    long j;
+                    char c2;
+                    int a;
+                    int emojiCount2;
+                    char c = charSequence.charAt(i);
+                    if ((c >= '\ud83c' && c <= '\ud83e') || (buf != 0 && (buf & -4294967296L) == 0 && (buf & 65535) == 55356 && c >= '\udde6' && c <= '\uddff')) {
+                        if (startIndex == -1) {
+                            startIndex = i;
+                        }
+                        try {
+                            emojiCode.append(c);
+                            buf = (buf << 16) | ((long) c);
+                            startIndex = startIndex;
+                            startLength++;
+                        } catch (Throwable e2) {
+                            int i2 = startIndex;
+                            e = e2;
+                            j = buf;
+                            buf = size;
+                        }
+                    } else if (emojiCode.length() > 0 && (c == '\u2640' || c == '\u2642' || c == '\u2695')) {
+                        emojiCode.append(c);
+                        startLength++;
+                        buf = 0;
+                        doneEmoji = true;
+                    } else if (buf > 0 && (61440 & c) == 53248) {
+                        emojiCode.append(c);
+                        startLength++;
+                        buf = 0;
+                        doneEmoji = true;
+                    } else if (c != '\u20e3') {
+                        if (c == '\u00a9' || c == '\u00ae' || (c >= '\u203c' && c <= '\u3299')) {
+                            try {
+                                if (EmojiData.dataCharsMap.containsKey(Character.valueOf(c))) {
+                                    if (startIndex == -1) {
+                                        startIndex = i;
+                                    }
+                                    startLength++;
+                                    try {
+                                        emojiCode.append(c);
+                                        doneEmoji = true;
+                                    } catch (Throwable e22) {
+                                        e = e22;
+                                        j = buf;
+                                        buf = size;
+                                    }
+                                }
+                            } catch (Throwable e222) {
+                                j = buf;
+                                buf = size;
+                                e = e222;
+                            }
+                        }
+                        if (startIndex != -1) {
+                            emojiCode.setLength(0);
+                            startIndex = -1;
+                            startLength = 0;
+                            doneEmoji = false;
+                        } else if (!(c == '\ufe0f' || emojiOnly2 == null)) {
+                            emojiOnly2[0] = 0;
+                            emojiOnly2 = null;
+                        }
+                    } else if (i > 0) {
+                        c2 = charSequence.charAt(previousGoodIndex);
                         if ((c2 >= '0' && c2 <= '9') || c2 == '#' || c2 == '*') {
                             startIndex = previousGoodIndex;
                             startLength = (i - previousGoodIndex) + 1;
-                            stringBuilder.append(c2);
-                            stringBuilder.append(c);
+                            emojiCode.append(c2);
+                            emojiCode.append(c);
                             doneEmoji = true;
                         }
                     }
-                } else if ((c == '\u00a9' || c == '\u00ae' || (c >= '\u203c' && c <= '\u3299')) && EmojiData.dataCharsMap.containsKey(Character.valueOf(c))) {
-                    if (startIndex == -1) {
-                        startIndex = i;
-                    }
-                    startLength++;
-                    stringBuilder.append(c);
-                    doneEmoji = true;
-                } else if (startIndex != -1) {
-                    stringBuilder.setLength(0);
-                    startIndex = -1;
-                    startLength = 0;
-                    doneEmoji = false;
-                } else if (!(c == '\ufe0f' || emojiOnly == null)) {
-                    emojiOnly[0] = 0;
-                    emojiOnly = null;
-                }
-                if (doneEmoji && i + 2 < length) {
-                    next = cs.charAt(i + 1);
-                    if (next == '\ud83c') {
-                        next = cs.charAt(i + 2);
-                        if (next >= '\udffb' && next <= '\udfff') {
-                            stringBuilder.append(cs.subSequence(i + 1, i + 3));
-                            startLength += 2;
-                            i += 2;
-                        }
-                    } else if (stringBuilder.length() >= 2 && stringBuilder.charAt(0) == '\ud83c' && stringBuilder.charAt(1) == '\udff4' && next == '\udb40') {
-                        i++;
-                        do {
-                            stringBuilder.append(cs.subSequence(i, i + 2));
-                            startLength += 2;
-                            i += 2;
-                            if (i >= cs.length()) {
-                                break;
+                    if (doneEmoji && i + 2 < length) {
+                        c2 = charSequence.charAt(i + 1);
+                        if (c2 == '\ud83c') {
+                            c2 = charSequence.charAt(i + 2);
+                            if (c2 >= '\udffb' && c2 <= '\udfff') {
+                                emojiCode.append(charSequence.subSequence(i + 1, i + 3));
+                                startLength += 2;
+                                i += 2;
                             }
-                        } while (cs.charAt(i) == '\udb40');
-                        i--;
-                    }
-                }
-                previousGoodIndex = i;
-                for (int a = 0; a < 3; a++) {
-                    if (i + 1 < length) {
-                        c = cs.charAt(i + 1);
-                        if (a == 1) {
-                            if (c == '\u200d' && stringBuilder.length() > 0) {
-                                stringBuilder.append(c);
-                                i++;
-                                startLength++;
-                                doneEmoji = false;
-                            }
-                        } else if (c >= '\ufe00' && c <= '\ufe0f') {
+                        } else if (emojiCode.length() >= 2 && emojiCode.charAt(0) == '\ud83c' && emojiCode.charAt(1) == '\udff4' && c2 == '\udb40') {
                             i++;
-                            startLength++;
+                            do {
+                                emojiCode.append(charSequence.subSequence(i, i + 2));
+                                startLength += 2;
+                                i += 2;
+                                if (i >= cs.length()) {
+                                    break;
+                                }
+                            } while (charSequence.charAt(i) == '\udb40');
+                            i--;
                         }
                     }
-                }
-                if (doneEmoji && i + 2 < length && cs.charAt(i + 1) == '\ud83c') {
-                    next = cs.charAt(i + 2);
-                    if (next >= '\udffb' && next <= '\udfff') {
-                        stringBuilder.append(cs.subSequence(i + 1, i + 3));
-                        startLength += 2;
-                        i += 2;
+                    previousGoodIndex = i;
+                    for (a = 0; a < 3; a++) {
+                        if (i + 1 < length) {
+                            c = charSequence.charAt(i + 1);
+                            if (a == 1) {
+                                if (c == '\u200d' && emojiCode.length() > 0) {
+                                    emojiCode.append(c);
+                                    i++;
+                                    startLength++;
+                                    doneEmoji = false;
+                                }
+                            } else if (c >= '\ufe00') {
+                                if (c <= '\ufe0f') {
+                                    i++;
+                                    startLength++;
+                                }
+                            }
+                        }
+                    }
+                    if (doneEmoji && i + 2 < length && charSequence.charAt(i + 1) == '\ud83c') {
+                        char next = charSequence.charAt(i + 2);
+                        if (next >= '\udffb' && next <= '\udfff') {
+                            emojiCode.append(charSequence.subSequence(i + 1, i + 3));
+                            startLength += 2;
+                            i += 2;
+                        }
+                    }
+                    if (doneEmoji) {
+                        if (emojiOnly2 != null) {
+                            emojiOnly2[0] = emojiOnly2[0] + 1;
+                        }
+                        CharSequence code = emojiCode.subSequence(0, emojiCode.length());
+                        EmojiDrawable drawable = getEmojiDrawable(code);
+                        if (drawable != null) {
+                            j = buf;
+                            try {
+                                s.setSpan(new EmojiSpan(drawable, 0, size, fontMetrics), startIndex, startIndex + startLength, 33);
+                                emojiCount++;
+                            } catch (Throwable e2222) {
+                                e = e2222;
+                            }
+                        } else {
+                            j = buf;
+                            buf = size;
+                        }
+                        startLength = 0;
+                        startIndex = -1;
+                        a = 0;
+                        emojiCode.setLength(0);
+                        doneEmoji = false;
+                        emojiCount2 = emojiCount;
+                    } else {
+                        j = buf;
+                        a = 0;
+                        buf = size;
+                        emojiCount2 = emojiCount;
+                    }
+                    try {
+                        if (VERSION.SDK_INT < 23 && emojiCount2 >= 50) {
+                            emojiCount = emojiCount2;
+                            break;
+                        }
+                        i++;
+                        int i3 = a;
+                        emojiCount = emojiCount2;
+                        buf = j;
+                    } catch (Throwable e22222) {
+                        e = e22222;
+                        emojiCount = emojiCount2;
                     }
                 }
-                if (doneEmoji) {
-                    if (emojiOnly != null) {
-                        emojiOnly[0] = emojiOnly[0] + 1;
-                    }
-                    EmojiDrawable drawable = getEmojiDrawable(stringBuilder.subSequence(0, stringBuilder.length()));
-                    if (drawable != null) {
-                        s.setSpan(new EmojiSpan(drawable, 0, size, fontMetrics), startIndex, startIndex + startLength, 33);
-                        emojiCount++;
-                    }
-                    startLength = 0;
-                    startIndex = -1;
-                    stringBuilder.setLength(0);
-                    doneEmoji = false;
-                }
-                if (VERSION.SDK_INT < 23 && emojiCount >= 50) {
-                    break;
-                }
-                i++;
-            } catch (Throwable e) {
-                FileLog.m3e(e);
-                return cs;
+                buf = size;
+                return s;
             }
         }
-        return s;
+        int i4 = size;
+        return charSequence;
+        FileLog.m3e(e);
+        return charSequence;
     }
 
     public static void addRecentEmoji(String code) {
@@ -539,7 +611,10 @@ public class Emoji {
                 }
             }
         }
-        emojiUseHistory.put(code, Integer.valueOf(count.intValue() + 1));
+        HashMap hashMap = emojiUseHistory;
+        Integer valueOf = Integer.valueOf(count.intValue() + 1);
+        count = valueOf;
+        hashMap.put(code, valueOf);
     }
 
     public static void sortEmoji() {
@@ -575,67 +650,121 @@ public class Emoji {
     }
 
     public static void loadRecentEmoji() {
+        Throwable e;
+        SharedPreferences preferences;
+        String str;
+        String[] args;
+        int a;
         if (!recentEmojiLoaded) {
-            String str;
             String[] args2;
-            int a;
             recentEmojiLoaded = true;
-            SharedPreferences preferences = MessagesController.getGlobalEmojiSettings();
+            SharedPreferences preferences2 = MessagesController.getGlobalEmojiSettings();
             try {
                 emojiUseHistory.clear();
-                if (preferences.contains("emojis")) {
-                    str = preferences.getString("emojis", TtmlNode.ANONYMOUS_REGION_ID);
-                    if (str != null && str.length() > 0) {
-                        for (String arg : str.split(",")) {
-                            args2 = arg.split("=");
-                            long value = Utilities.parseLong(args2[0]).longValue();
-                            StringBuilder string = new StringBuilder();
-                            for (a = 0; a < 4; a++) {
-                                string.insert(0, String.valueOf((char) ((int) value)));
-                                value >>= 16;
-                                if (value == 0) {
-                                    break;
+                long j = 16;
+                String str2;
+                if (preferences2.contains("emojis")) {
+                    str2 = preferences2.getString("emojis", TtmlNode.ANONYMOUS_REGION_ID);
+                    if (str2 != null) {
+                        try {
+                            if (str2.length() > 0) {
+                                args2 = str2.split(",");
+                                int length = args2.length;
+                                int i = 0;
+                                while (i < length) {
+                                    String[] args22 = args2[i].split("=");
+                                    long value = Utilities.parseLong(args22[0]).longValue();
+                                    StringBuilder string = new StringBuilder();
+                                    SharedPreferences preferences3 = preferences2;
+                                    long value2 = value;
+                                    int a2 = 0;
+                                    while (a2 < 4) {
+                                        try {
+                                            string.insert(0, String.valueOf((char) ((int) value2)));
+                                            value2 >>= j;
+                                            if (value2 == 0) {
+                                                break;
+                                            }
+                                            a2++;
+                                        } catch (Throwable e2) {
+                                            e = e2;
+                                            preferences = preferences3;
+                                        }
+                                    }
+                                    if (string.length() > 0) {
+                                        emojiUseHistory.put(string.toString(), Utilities.parseInt(args22[1]));
+                                    }
+                                    i++;
+                                    preferences2 = preferences3;
+                                    j = 16;
                                 }
                             }
-                            if (string.length() > 0) {
-                                emojiUseHistory.put(string.toString(), Utilities.parseInt(args2[1]));
+                        } catch (Throwable e22) {
+                            preferences = preferences2;
+                            e = e22;
+                            FileLog.m3e(e);
+                            str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, TtmlNode.ANONYMOUS_REGION_ID);
+                            args = str.split(",");
+                            for (String arg : args) {
+                                args2 = arg.split("=");
+                                emojiColor.put(args2[0], args2[1]);
                             }
                         }
                     }
-                    preferences.edit().remove("emojis").commit();
-                    saveRecentEmoji();
-                } else {
-                    str = preferences.getString("emojis2", TtmlNode.ANONYMOUS_REGION_ID);
-                    if (str != null && str.length() > 0) {
-                        for (String arg2 : str.split(",")) {
-                            args2 = arg2.split("=");
-                            emojiUseHistory.put(args2[0], Utilities.parseInt(args2[1]));
+                    preferences = preferences2;
+                    try {
+                        preferences.edit().remove("emojis").commit();
+                        saveRecentEmoji();
+                    } catch (Throwable e222) {
+                        e = e222;
+                        FileLog.m3e(e);
+                        str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, TtmlNode.ANONYMOUS_REGION_ID);
+                        args = str.split(",");
+                        while (a < args.length) {
+                            args2 = arg.split("=");
+                            emojiColor.put(args2[0], args2[1]);
                         }
+                    }
+                }
+                preferences = preferences2;
+                str2 = preferences.getString("emojis2", TtmlNode.ANONYMOUS_REGION_ID);
+                if (str2 != null && str2.length() > 0) {
+                    for (String arg2 : str2.split(",")) {
+                        String[] args23 = arg2.split("=");
+                        emojiUseHistory.put(args23[0], Utilities.parseInt(args23[1]));
                     }
                 }
                 if (emojiUseHistory.isEmpty() && !preferences.getBoolean("filled_default", false)) {
                     String[] newRecent = new String[]{"\ud83d\ude02", "\ud83d\ude18", "\u2764", "\ud83d\ude0d", "\ud83d\ude0a", "\ud83d\ude01", "\ud83d\udc4d", "\u263a", "\ud83d\ude14", "\ud83d\ude04", "\ud83d\ude2d", "\ud83d\udc8b", "\ud83d\ude12", "\ud83d\ude33", "\ud83d\ude1c", "\ud83d\ude48", "\ud83d\ude09", "\ud83d\ude03", "\ud83d\ude22", "\ud83d\ude1d", "\ud83d\ude31", "\ud83d\ude21", "\ud83d\ude0f", "\ud83d\ude1e", "\ud83d\ude05", "\ud83d\ude1a", "\ud83d\ude4a", "\ud83d\ude0c", "\ud83d\ude00", "\ud83d\ude0b", "\ud83d\ude06", "\ud83d\udc4c", "\ud83d\ude10", "\ud83d\ude15"};
-                    for (int i = 0; i < newRecent.length; i++) {
-                        emojiUseHistory.put(newRecent[i], Integer.valueOf(newRecent.length - i));
+                    for (a = 0; a < newRecent.length; a++) {
+                        emojiUseHistory.put(newRecent[a], Integer.valueOf(newRecent.length - a));
                     }
                     preferences.edit().putBoolean("filled_default", true).commit();
                     saveRecentEmoji();
                 }
                 sortEmoji();
-            } catch (Throwable e) {
+            } catch (Throwable e2222) {
+                preferences = preferences2;
+                e = e2222;
                 FileLog.m3e(e);
+                str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, TtmlNode.ANONYMOUS_REGION_ID);
+                args = str.split(",");
+                while (a < args.length) {
+                    args2 = arg.split("=");
+                    emojiColor.put(args2[0], args2[1]);
+                }
             }
             try {
                 str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, TtmlNode.ANONYMOUS_REGION_ID);
                 if (str != null && str.length() > 0) {
-                    String[] args = str.split(",");
-                    for (String arg22 : args) {
-                        args2 = arg22.split("=");
+                    args = str.split(",");
+                    while (a < args.length) {
+                        args2 = arg.split("=");
                         emojiColor.put(args2[0], args2[1]);
                     }
                 }
-            } catch (Throwable e2) {
-                FileLog.m3e(e2);
+            } catch (Throwable e22222) {
+                FileLog.m3e(e22222);
             }
         }
     }

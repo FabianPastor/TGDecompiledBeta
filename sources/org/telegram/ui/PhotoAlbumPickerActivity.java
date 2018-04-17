@@ -184,32 +184,29 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
 
         public int getItemCount() {
             int i = 0;
-            if (!PhotoAlbumPickerActivity.this.singlePhoto) {
+            if (PhotoAlbumPickerActivity.this.singlePhoto) {
                 if (PhotoAlbumPickerActivity.this.albumsSorted != null) {
                     i = (int) Math.ceil((double) (((float) PhotoAlbumPickerActivity.this.albumsSorted.size()) / ((float) PhotoAlbumPickerActivity.this.columnsCount)));
                 }
-                return i + 1;
-            } else if (PhotoAlbumPickerActivity.this.albumsSorted != null) {
-                return (int) Math.ceil((double) (((float) PhotoAlbumPickerActivity.this.albumsSorted.size()) / ((float) PhotoAlbumPickerActivity.this.columnsCount)));
-            } else {
-                return 0;
+                return i;
             }
+            if (PhotoAlbumPickerActivity.this.albumsSorted != null) {
+                i = (int) Math.ceil((double) (((float) PhotoAlbumPickerActivity.this.albumsSorted.size()) / ((float) PhotoAlbumPickerActivity.this.columnsCount)));
+            }
+            return 1 + i;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view;
             View cell;
-            switch (viewType) {
-                case 0:
-                    cell = new PhotoPickerAlbumsCell(this.mContext);
-                    cell.setDelegate(new C22181());
-                    view = cell;
-                    break;
-                default:
-                    cell = new PhotoPickerSearchCell(this.mContext, PhotoAlbumPickerActivity.this.allowGifs);
-                    cell.setDelegate(new C22192());
-                    view = cell;
-                    break;
+            if (viewType != 0) {
+                cell = new PhotoPickerSearchCell(this.mContext, PhotoAlbumPickerActivity.this.allowGifs);
+                cell.setDelegate(new C22192());
+                view = cell;
+            } else {
+                cell = new PhotoPickerAlbumsCell(this.mContext);
+                cell.setDelegate(new C22181());
+                view = cell;
             }
             return new Holder(view);
         }
@@ -302,33 +299,33 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.emptyView.setVisibility(8);
         this.emptyView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));
         frameLayout.addView(this.emptyView);
-        layoutParams = (LayoutParams) this.emptyView.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
-        this.emptyView.setLayoutParams(layoutParams);
+        LayoutParams layoutParams2 = (LayoutParams) this.emptyView.getLayoutParams();
+        layoutParams2.width = -1;
+        layoutParams2.height = -1;
+        layoutParams2.bottomMargin = AndroidUtilities.dp(48.0f);
+        this.emptyView.setLayoutParams(layoutParams2);
         this.emptyView.setOnTouchListener(new C15732());
         this.progressView = new FrameLayout(context);
         this.progressView.setVisibility(8);
         frameLayout.addView(this.progressView);
-        layoutParams = (LayoutParams) this.progressView.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
-        this.progressView.setLayoutParams(layoutParams);
+        layoutParams2 = (LayoutParams) this.progressView.getLayoutParams();
+        layoutParams2.width = -1;
+        layoutParams2.height = -1;
+        layoutParams2.bottomMargin = AndroidUtilities.dp(48.0f);
+        this.progressView.setLayoutParams(layoutParams2);
         this.progressView.addView(new RadialProgressView(context));
-        layoutParams = (LayoutParams) this.progressView.getLayoutParams();
-        layoutParams.width = -2;
-        layoutParams.height = -2;
-        layoutParams.gravity = 17;
-        this.progressView.setLayoutParams(layoutParams);
+        layoutParams2 = (LayoutParams) this.progressView.getLayoutParams();
+        layoutParams2.width = -2;
+        layoutParams2.height = -2;
+        layoutParams2.gravity = 17;
+        this.progressView.setLayoutParams(layoutParams2);
         this.pickerBottomLayout = new PickerBottomLayout(context);
         frameLayout.addView(this.pickerBottomLayout);
-        layoutParams = (LayoutParams) this.pickerBottomLayout.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = AndroidUtilities.dp(48.0f);
-        layoutParams.gravity = 80;
-        this.pickerBottomLayout.setLayoutParams(layoutParams);
+        layoutParams2 = (LayoutParams) this.pickerBottomLayout.getLayoutParams();
+        layoutParams2.width = -1;
+        layoutParams2.height = AndroidUtilities.dp(48.0f);
+        layoutParams2.gravity = 80;
+        this.pickerBottomLayout.setLayoutParams(layoutParams2);
         this.pickerBottomLayout.cancelButton.setOnClickListener(new C15743());
         this.pickerBottomLayout.doneButton.setOnClickListener(new C15754());
         if (!this.loading || (this.albumsSorted != null && (this.albumsSorted == null || !this.albumsSorted.isEmpty()))) {
@@ -405,71 +402,80 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     private void sendSelectedPhotos(HashMap<Object, Object> photos, ArrayList<Object> order) {
-        if (!photos.isEmpty() && this.delegate != null && !this.sendPressed) {
-            this.sendPressed = true;
-            boolean gifChanged = false;
-            boolean webChange = false;
-            ArrayList<SendingMediaInfo> media = new ArrayList();
-            for (int a = 0; a < order.size(); a++) {
-                PhotoEntry object = photos.get(order.get(a));
-                SendingMediaInfo info = new SendingMediaInfo();
-                media.add(info);
-                if (object instanceof PhotoEntry) {
-                    PhotoEntry photoEntry = object;
-                    if (photoEntry.isVideo) {
-                        info.path = photoEntry.path;
-                        info.videoEditedInfo = photoEntry.editedInfo;
-                    } else if (photoEntry.imagePath != null) {
-                        info.path = photoEntry.imagePath;
-                    } else if (photoEntry.path != null) {
-                        info.path = photoEntry.path;
-                    }
-                    info.isVideo = photoEntry.isVideo;
-                    info.caption = photoEntry.caption != null ? photoEntry.caption.toString() : null;
-                    info.entities = photoEntry.entities;
-                    info.masks = !photoEntry.stickers.isEmpty() ? new ArrayList(photoEntry.stickers) : null;
-                    info.ttl = photoEntry.ttl;
-                } else if (object instanceof SearchImage) {
-                    SearchImage searchImage = (SearchImage) object;
-                    if (searchImage.imagePath != null) {
-                        info.path = searchImage.imagePath;
-                    } else {
-                        info.searchImage = searchImage;
-                    }
-                    info.caption = searchImage.caption != null ? searchImage.caption.toString() : null;
-                    info.entities = searchImage.entities;
-                    info.masks = !searchImage.stickers.isEmpty() ? new ArrayList(searchImage.stickers) : null;
-                    info.ttl = searchImage.ttl;
-                    searchImage.date = (int) (System.currentTimeMillis() / 1000);
-                    SearchImage recentImage;
-                    if (searchImage.type == 0) {
-                        webChange = true;
-                        recentImage = (SearchImage) this.recentImagesWebKeys.get(searchImage.id);
-                        if (recentImage != null) {
-                            this.recentWebImages.remove(recentImage);
-                            this.recentWebImages.add(0, recentImage);
-                        } else {
-                            this.recentWebImages.add(0, searchImage);
+        if (!(photos.isEmpty() || this.delegate == null)) {
+            if (!this.sendPressed) {
+                this.sendPressed = true;
+                boolean webChange = false;
+                ArrayList<SendingMediaInfo> media = new ArrayList();
+                boolean gifChanged = false;
+                for (int a = 0; a < order.size(); a++) {
+                    PhotoEntry object = photos.get(order.get(a));
+                    SendingMediaInfo info = new SendingMediaInfo();
+                    media.add(info);
+                    ArrayList arrayList = null;
+                    if (object instanceof PhotoEntry) {
+                        PhotoEntry photoEntry = object;
+                        if (photoEntry.isVideo) {
+                            info.path = photoEntry.path;
+                            info.videoEditedInfo = photoEntry.editedInfo;
+                        } else if (photoEntry.imagePath != null) {
+                            info.path = photoEntry.imagePath;
+                        } else if (photoEntry.path != null) {
+                            info.path = photoEntry.path;
                         }
-                    } else if (searchImage.type == 1) {
-                        gifChanged = true;
-                        recentImage = (SearchImage) this.recentImagesGifKeys.get(searchImage.id);
-                        if (recentImage != null) {
-                            this.recentGifImages.remove(recentImage);
-                            this.recentGifImages.add(0, recentImage);
+                        info.isVideo = photoEntry.isVideo;
+                        info.caption = photoEntry.caption != null ? photoEntry.caption.toString() : null;
+                        info.entities = photoEntry.entities;
+                        if (!photoEntry.stickers.isEmpty()) {
+                            arrayList = new ArrayList(photoEntry.stickers);
+                        }
+                        info.masks = arrayList;
+                        info.ttl = photoEntry.ttl;
+                    } else if (object instanceof SearchImage) {
+                        SearchImage searchImage = (SearchImage) object;
+                        if (searchImage.imagePath != null) {
+                            info.path = searchImage.imagePath;
                         } else {
-                            this.recentGifImages.add(0, searchImage);
+                            info.searchImage = searchImage;
+                        }
+                        info.caption = searchImage.caption != null ? searchImage.caption.toString() : null;
+                        info.entities = searchImage.entities;
+                        if (!searchImage.stickers.isEmpty()) {
+                            arrayList = new ArrayList(searchImage.stickers);
+                        }
+                        info.masks = arrayList;
+                        info.ttl = searchImage.ttl;
+                        searchImage.date = (int) (System.currentTimeMillis() / 1000);
+                        SearchImage recentImage;
+                        if (searchImage.type == 0) {
+                            webChange = true;
+                            recentImage = (SearchImage) this.recentImagesWebKeys.get(searchImage.id);
+                            if (recentImage != null) {
+                                this.recentWebImages.remove(recentImage);
+                                this.recentWebImages.add(0, recentImage);
+                            } else {
+                                this.recentWebImages.add(0, searchImage);
+                            }
+                        } else if (searchImage.type == 1) {
+                            gifChanged = true;
+                            recentImage = (SearchImage) this.recentImagesGifKeys.get(searchImage.id);
+                            if (recentImage != null) {
+                                this.recentGifImages.remove(recentImage);
+                                this.recentGifImages.add(0, recentImage);
+                            } else {
+                                this.recentGifImages.add(0, searchImage);
+                            }
                         }
                     }
                 }
+                if (webChange) {
+                    MessagesStorage.getInstance(this.currentAccount).putWebRecent(this.recentWebImages);
+                }
+                if (gifChanged) {
+                    MessagesStorage.getInstance(this.currentAccount).putWebRecent(this.recentGifImages);
+                }
+                this.delegate.didSelectPhotos(media);
             }
-            if (webChange) {
-                MessagesStorage.getInstance(this.currentAccount).putWebRecent(this.recentWebImages);
-            }
-            if (gifChanged) {
-                MessagesStorage.getInstance(this.currentAccount).putWebRecent(this.recentGifImages);
-            }
-            this.delegate.didSelectPhotos(media);
         }
     }
 

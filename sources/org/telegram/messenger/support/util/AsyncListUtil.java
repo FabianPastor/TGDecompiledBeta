@@ -54,21 +54,10 @@ public class AsyncListUtil<T> {
         public abstract void onItemLoaded(int i);
 
         public void extendRangeInto(int[] range, int[] outRange, int scrollHint) {
-            int i;
             int fullRange = (range[1] - range[0]) + 1;
             int halfRange = fullRange / 2;
-            int i2 = range[0];
-            if (scrollHint == 1) {
-                i = fullRange;
-            } else {
-                i = halfRange;
-            }
-            outRange[0] = i2 - i;
-            i = range[1];
-            if (scrollHint != 2) {
-                fullRange = halfRange;
-            }
-            outRange[1] = i + fullRange;
+            outRange[0] = range[0] - (scrollHint == 1 ? fullRange : halfRange);
+            outRange[1] = range[1] + (scrollHint == 2 ? fullRange : halfRange);
         }
     }
 
@@ -92,7 +81,11 @@ public class AsyncListUtil<T> {
             if (isRequestedGeneration(generation)) {
                 Tile<T> duplicate = AsyncListUtil.this.mTileList.addOrReplace(tile);
                 if (duplicate != null) {
-                    Log.e(AsyncListUtil.TAG, "duplicate tile @" + duplicate.mStartPosition);
+                    String str = AsyncListUtil.TAG;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("duplicate tile @");
+                    stringBuilder.append(duplicate.mStartPosition);
+                    Log.e(str, stringBuilder.toString());
                     AsyncListUtil.this.mBackgroundProxy.recycleTile(duplicate);
                 }
                 int endPosition = tile.mStartPosition + tile.mItemCount;
@@ -115,10 +108,14 @@ public class AsyncListUtil<T> {
             if (isRequestedGeneration(generation)) {
                 Tile<T> tile = AsyncListUtil.this.mTileList.removeAtPos(position);
                 if (tile == null) {
-                    Log.e(AsyncListUtil.TAG, "tile not found @" + position);
-                } else {
-                    AsyncListUtil.this.mBackgroundProxy.recycleTile(tile);
+                    String str = AsyncListUtil.TAG;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("tile not found @");
+                    stringBuilder.append(position);
+                    Log.e(str, stringBuilder.toString());
+                    return;
                 }
+                AsyncListUtil.this.mBackgroundProxy.recycleTile(tile);
             }
         }
 
@@ -162,10 +159,10 @@ public class AsyncListUtil<T> {
                 if (scrollHint == 1) {
                     requestTiles(this.mFirstRequiredTileStart, lastVisibleTileStart, scrollHint, true);
                     requestTiles(AsyncListUtil.this.mTileSize + lastVisibleTileStart, this.mLastRequiredTileStart, scrollHint, false);
-                    return;
+                } else {
+                    requestTiles(firstVisibleTileStart, this.mLastRequiredTileStart, scrollHint, false);
+                    requestTiles(this.mFirstRequiredTileStart, firstVisibleTileStart - AsyncListUtil.this.mTileSize, scrollHint, true);
                 }
-                requestTiles(firstVisibleTileStart, this.mLastRequiredTileStart, scrollHint, false);
-                requestTiles(this.mFirstRequiredTileStart, firstVisibleTileStart - AsyncListUtil.this.mTileSize, scrollHint, true);
             }
         }
 
@@ -176,13 +173,7 @@ public class AsyncListUtil<T> {
         private void requestTiles(int firstTileStart, int lastTileStart, int scrollHint, boolean backwards) {
             int i = firstTileStart;
             while (i <= lastTileStart) {
-                int tileStart;
-                if (backwards) {
-                    tileStart = (lastTileStart + firstTileStart) - i;
-                } else {
-                    tileStart = i;
-                }
-                AsyncListUtil.this.mBackgroundProxy.loadTile(tileStart, scrollHint);
+                AsyncListUtil.this.mBackgroundProxy.loadTile(backwards ? (lastTileStart + firstTileStart) - i : i, scrollHint);
                 i += AsyncListUtil.this.mTileSize;
             }
         }
@@ -236,25 +227,29 @@ public class AsyncListUtil<T> {
                 int endMargin = lastLoadedTileStart - this.mLastRequiredTileStart;
                 if (startMargin > 0 && (startMargin >= endMargin || scrollHint == 2)) {
                     removeTile(firstLoadedTileStart);
-                } else if (endMargin <= 0) {
-                    return;
+                } else if (endMargin > 0 && (startMargin < endMargin || scrollHint == 1)) {
+                    removeTile(lastLoadedTileStart);
                 } else {
-                    if (startMargin < endMargin || scrollHint == 1) {
-                        removeTile(lastLoadedTileStart);
-                    } else {
-                        return;
-                    }
+                    return;
                 }
             }
         }
 
         private void log(String s, Object... args) {
-            Log.d(AsyncListUtil.TAG, "[BKGR] " + String.format(s, args));
+            String str = AsyncListUtil.TAG;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("[BKGR] ");
+            stringBuilder.append(String.format(s, args));
+            Log.d(str, stringBuilder.toString());
         }
     }
 
     void log(String s, Object... args) {
-        Log.d(TAG, "[MAIN] " + String.format(s, args));
+        String str = TAG;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[MAIN] ");
+        stringBuilder.append(String.format(s, args));
+        Log.d(str, stringBuilder.toString());
     }
 
     public AsyncListUtil(Class<T> klass, int tileSize, DataCallback<T> dataCallback, ViewCallback viewCallback) {
@@ -289,14 +284,20 @@ public class AsyncListUtil<T> {
     }
 
     public T getItem(int position) {
-        if (position < 0 || position >= this.mItemCount) {
-            throw new IndexOutOfBoundsException(position + " is not within 0 and " + this.mItemCount);
+        if (position >= 0) {
+            if (position < this.mItemCount) {
+                T item = this.mTileList.getItemAt(position);
+                if (item == null && !isRefreshPending()) {
+                    this.mMissingPositions.put(position, 0);
+                }
+                return item;
+            }
         }
-        T item = this.mTileList.getItemAt(position);
-        if (item == null && !isRefreshPending()) {
-            this.mMissingPositions.put(position, 0);
-        }
-        return item;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(position);
+        stringBuilder.append(" is not within 0 and ");
+        stringBuilder.append(this.mItemCount);
+        throw new IndexOutOfBoundsException(stringBuilder.toString());
     }
 
     public int getItemCount() {
@@ -305,22 +306,31 @@ public class AsyncListUtil<T> {
 
     void updateRange() {
         this.mViewCallback.getItemRangeInto(this.mTmpRange);
-        if (this.mTmpRange[0] <= this.mTmpRange[1] && this.mTmpRange[0] >= 0 && this.mTmpRange[1] < this.mItemCount) {
-            if (!this.mAllowScrollHints) {
-                this.mScrollHint = 0;
-            } else if (this.mTmpRange[0] > this.mPrevRange[1] || this.mPrevRange[0] > this.mTmpRange[1]) {
-                this.mScrollHint = 0;
-            } else if (this.mTmpRange[0] < this.mPrevRange[0]) {
-                this.mScrollHint = 1;
-            } else if (this.mTmpRange[0] > this.mPrevRange[0]) {
-                this.mScrollHint = 2;
+        if (this.mTmpRange[0] <= this.mTmpRange[1]) {
+            if (this.mTmpRange[0] >= 0) {
+                if (this.mTmpRange[1] < this.mItemCount) {
+                    if (this.mAllowScrollHints) {
+                        if (this.mTmpRange[0] <= this.mPrevRange[1]) {
+                            if (this.mPrevRange[0] <= this.mTmpRange[1]) {
+                                if (this.mTmpRange[0] < this.mPrevRange[0]) {
+                                    this.mScrollHint = 1;
+                                } else if (this.mTmpRange[0] > this.mPrevRange[0]) {
+                                    this.mScrollHint = 2;
+                                }
+                            }
+                        }
+                        this.mScrollHint = 0;
+                    } else {
+                        this.mScrollHint = 0;
+                    }
+                    this.mPrevRange[0] = this.mTmpRange[0];
+                    this.mPrevRange[1] = this.mTmpRange[1];
+                    this.mViewCallback.extendRangeInto(this.mTmpRange, this.mTmpRangeExtended, this.mScrollHint);
+                    this.mTmpRangeExtended[0] = Math.min(this.mTmpRange[0], Math.max(this.mTmpRangeExtended[0], 0));
+                    this.mTmpRangeExtended[1] = Math.max(this.mTmpRange[1], Math.min(this.mTmpRangeExtended[1], this.mItemCount - 1));
+                    this.mBackgroundProxy.updateRange(this.mTmpRange[0], this.mTmpRange[1], this.mTmpRangeExtended[0], this.mTmpRangeExtended[1], this.mScrollHint);
+                }
             }
-            this.mPrevRange[0] = this.mTmpRange[0];
-            this.mPrevRange[1] = this.mTmpRange[1];
-            this.mViewCallback.extendRangeInto(this.mTmpRange, this.mTmpRangeExtended, this.mScrollHint);
-            this.mTmpRangeExtended[0] = Math.min(this.mTmpRange[0], Math.max(this.mTmpRangeExtended[0], 0));
-            this.mTmpRangeExtended[1] = Math.max(this.mTmpRange[1], Math.min(this.mTmpRangeExtended[1], this.mItemCount - 1));
-            this.mBackgroundProxy.updateRange(this.mTmpRange[0], this.mTmpRange[1], this.mTmpRangeExtended[0], this.mTmpRangeExtended[1], this.mScrollHint);
         }
     }
 }

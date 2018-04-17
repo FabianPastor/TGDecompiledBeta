@@ -29,7 +29,11 @@ public final class TrackKey implements Parcelable, Comparable<TrackKey> {
     }
 
     public String toString() {
-        return this.streamElementIndex + "." + this.trackIndex;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.streamElementIndex);
+        stringBuilder.append(".");
+        stringBuilder.append(this.trackIndex);
+        return stringBuilder.toString();
     }
 
     public int describeContents() {

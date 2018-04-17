@@ -18,7 +18,7 @@
     <string name="common_open_on_phone">Buksan sa telepono</string>
     <string name="common_signin_button_text">Mag-sign in</string>
     <string name="common_signin_button_text_long">Mag-sign in sa Google</string>
-    <string name="gcm_fallback_notification_channel_label">Iba Pa</string>
+    <string name="fcm_fallback_notification_channel_label">Iba Pa</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Bumili gamit ang Google</string>
 </resources>

@@ -104,7 +104,10 @@ public final class RawCcExtractor implements Extractor {
             }
             this.timestampUs = (this.dataScratch.readUnsignedInt() * 1000) / 45;
         } else if (this.version != 1) {
-            throw new ParserException("Unsupported version number: " + this.version);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Unsupported version number: ");
+            stringBuilder.append(this.version);
+            throw new ParserException(stringBuilder.toString());
         } else if (!input.readFully(this.dataScratch.data, 0, 9, true)) {
             return false;
         } else {

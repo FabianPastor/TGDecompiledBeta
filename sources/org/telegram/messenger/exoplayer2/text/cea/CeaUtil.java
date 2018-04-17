@@ -13,27 +13,32 @@ public final class CeaUtil {
     private static final int USER_ID = NUM;
 
     public static void consume(long presentationTimeUs, ParsableByteArray seiBuffer, TrackOutput[] outputs) {
+        ParsableByteArray parsableByteArray = seiBuffer;
+        TrackOutput[] trackOutputArr = outputs;
         while (seiBuffer.bytesLeft() > 1) {
             int payloadType = readNon255TerminatedValue(seiBuffer);
             int payloadSize = readNon255TerminatedValue(seiBuffer);
-            if (payloadSize == -1 || payloadSize > seiBuffer.bytesLeft()) {
-                Log.w(TAG, "Skipping remainder of malformed SEI NAL unit.");
-                seiBuffer.setPosition(seiBuffer.limit());
-            } else if (isSeiMessageCea608(payloadType, payloadSize, seiBuffer)) {
-                seiBuffer.skipBytes(8);
-                int ccCount = seiBuffer.readUnsignedByte() & 31;
-                seiBuffer.skipBytes(1);
-                int sampleLength = ccCount * 3;
-                int sampleStartPosition = seiBuffer.getPosition();
-                for (TrackOutput output : outputs) {
-                    seiBuffer.setPosition(sampleStartPosition);
-                    output.sampleData(seiBuffer, sampleLength);
-                    output.sampleMetadata(presentationTimeUs, 1, sampleLength, 0, null);
+            if (payloadSize != -1) {
+                if (payloadSize <= seiBuffer.bytesLeft()) {
+                    if (isSeiMessageCea608(payloadType, payloadSize, parsableByteArray)) {
+                        parsableByteArray.skipBytes(8);
+                        int ccCount = seiBuffer.readUnsignedByte() & 31;
+                        parsableByteArray.skipBytes(1);
+                        int sampleLength = ccCount * 3;
+                        int sampleStartPosition = seiBuffer.getPosition();
+                        for (TrackOutput output : trackOutputArr) {
+                            parsableByteArray.setPosition(sampleStartPosition);
+                            output.sampleData(parsableByteArray, sampleLength);
+                            output.sampleMetadata(presentationTimeUs, 1, sampleLength, 0, null);
+                        }
+                        parsableByteArray.skipBytes(payloadSize - (10 + (ccCount * 3)));
+                    } else {
+                        parsableByteArray.skipBytes(payloadSize);
+                    }
                 }
-                seiBuffer.skipBytes(payloadSize - ((ccCount * 3) + 10));
-            } else {
-                seiBuffer.skipBytes(payloadSize);
             }
+            Log.w(TAG, "Skipping remainder of malformed SEI NAL unit.");
+            parsableByteArray.setPosition(seiBuffer.limit());
         }
     }
 
@@ -50,17 +55,20 @@ public final class CeaUtil {
     }
 
     private static boolean isSeiMessageCea608(int payloadType, int payloadLength, ParsableByteArray payload) {
-        if (payloadType != 4 || payloadLength < 8) {
-            return false;
-        }
-        int startPosition = payload.getPosition();
-        int countryCode = payload.readUnsignedByte();
-        int providerCode = payload.readUnsignedShort();
-        int userIdentifier = payload.readInt();
-        int userDataTypeCode = payload.readUnsignedByte();
-        payload.setPosition(startPosition);
-        if (countryCode == COUNTRY_CODE && providerCode == PROVIDER_CODE && userIdentifier == USER_ID && userDataTypeCode == 3) {
-            return true;
+        boolean z = false;
+        if (payloadType == 4) {
+            if (payloadLength >= 8) {
+                int startPosition = payload.getPosition();
+                int countryCode = payload.readUnsignedByte();
+                int providerCode = payload.readUnsignedShort();
+                int userIdentifier = payload.readInt();
+                int userDataTypeCode = payload.readUnsignedByte();
+                payload.setPosition(startPosition);
+                if (countryCode == COUNTRY_CODE && providerCode == PROVIDER_CODE && userIdentifier == USER_ID && userDataTypeCode == 3) {
+                    z = true;
+                }
+                return z;
+            }
         }
         return false;
     }

@@ -69,21 +69,14 @@ public final class AssetDataSource implements DataSource {
             return -1;
         }
         try {
-            int bytesToRead;
-            if (this.bytesRemaining == -1) {
-                bytesToRead = readLength;
-            } else {
-                bytesToRead = (int) Math.min(this.bytesRemaining, (long) readLength);
-            }
-            int bytesRead = this.inputStream.read(buffer, offset, bytesToRead);
+            int bytesRead = this.inputStream.read(buffer, offset, this.bytesRemaining == -1 ? readLength : (int) Math.min(this.bytesRemaining, (long) readLength));
             if (bytesRead != -1) {
                 if (this.bytesRemaining != -1) {
                     this.bytesRemaining -= (long) bytesRead;
                 }
-                if (this.listener == null) {
-                    return bytesRead;
+                if (this.listener != null) {
+                    this.listener.onBytesTransferred(this, bytesRead);
                 }
-                this.listener.onBytesTransferred(this, bytesRead);
                 return bytesRead;
             } else if (this.bytesRemaining == -1) {
                 return -1;

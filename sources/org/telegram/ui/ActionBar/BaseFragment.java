@@ -109,10 +109,9 @@ public class BaseFragment {
 
     protected void setParentLayout(ActionBarLayout layout) {
         if (this.parentLayout != layout) {
-            ViewGroup parent;
             this.parentLayout = layout;
             if (this.fragmentView != null) {
-                parent = (ViewGroup) this.fragmentView.getParent();
+                ViewGroup parent = (ViewGroup) this.fragmentView.getParent();
                 if (parent != null) {
                     try {
                         onRemoveFromParent();
@@ -128,10 +127,10 @@ public class BaseFragment {
             if (this.actionBar != null) {
                 boolean differentParent = (this.parentLayout == null || this.parentLayout.getContext() == this.actionBar.getContext()) ? false : true;
                 if (this.actionBar.getAddToContainer() || differentParent) {
-                    parent = (ViewGroup) this.actionBar.getParent();
-                    if (parent != null) {
+                    ViewGroup parent2 = (ViewGroup) this.actionBar.getParent();
+                    if (parent2 != null) {
                         try {
-                            parent.removeView(this.actionBar);
+                            parent2.removeView(this.actionBar);
                         } catch (Throwable e2) {
                             FileLog.m3e(e2);
                         }
@@ -163,14 +162,18 @@ public class BaseFragment {
     }
 
     public void finishFragment(boolean animated) {
-        if (!this.isFinished && this.parentLayout != null) {
-            this.parentLayout.closeLastFragment(animated);
+        if (!this.isFinished) {
+            if (this.parentLayout != null) {
+                this.parentLayout.closeLastFragment(animated);
+            }
         }
     }
 
     public void removeSelfFromStack() {
-        if (!this.isFinished && this.parentLayout != null) {
-            this.parentLayout.removeFragmentFromStack(this);
+        if (!this.isFinished) {
+            if (this.parentLayout != null) {
+                this.parentLayout.removeFragmentFromStack(this);
+            }
         }
     }
 
@@ -208,10 +211,12 @@ public class BaseFragment {
     }
 
     public BaseFragment getFragmentForAlert(int offset) {
-        if (this.parentLayout == null || this.parentLayout.fragmentsStack.size() <= offset + 1) {
-            return this;
+        if (this.parentLayout != null) {
+            if (this.parentLayout.fragmentsStack.size() > 1 + offset) {
+                return (BaseFragment) this.parentLayout.fragmentsStack.get((this.parentLayout.fragmentsStack.size() - 2) - offset);
+            }
         }
-        return (BaseFragment) this.parentLayout.fragmentsStack.get((this.parentLayout.fragmentsStack.size() - 2) - offset);
+        return this;
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -312,35 +317,37 @@ public class BaseFragment {
     }
 
     public Dialog showDialog(Dialog dialog, boolean allowInTransition, final OnDismissListener onDismissListener) {
-        Dialog dialog2 = null;
-        if (!(dialog == null || this.parentLayout == null || this.parentLayout.animationInProgress || this.parentLayout.startedTracking || (!allowInTransition && this.parentLayout.checkTransitionAnimation()))) {
-            try {
-                if (this.visibleDialog != null) {
-                    this.visibleDialog.dismiss();
-                    this.visibleDialog = null;
-                }
-            } catch (Throwable e) {
-                FileLog.m3e(e);
-            }
-            try {
-                this.visibleDialog = dialog;
-                this.visibleDialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new OnDismissListener() {
-                    public void onDismiss(DialogInterface dialog) {
-                        if (onDismissListener != null) {
-                            onDismissListener.onDismiss(dialog);
-                        }
-                        BaseFragment.this.onDialogDismiss(BaseFragment.this.visibleDialog);
-                        BaseFragment.this.visibleDialog = null;
+        if (!(dialog == null || this.parentLayout == null || this.parentLayout.animationInProgress || this.parentLayout.startedTracking)) {
+            if (allowInTransition || !this.parentLayout.checkTransitionAnimation()) {
+                try {
+                    if (this.visibleDialog != null) {
+                        this.visibleDialog.dismiss();
+                        this.visibleDialog = null;
                     }
-                });
-                this.visibleDialog.show();
-                dialog2 = this.visibleDialog;
-            } catch (Throwable e2) {
-                FileLog.m3e(e2);
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
+                }
+                try {
+                    this.visibleDialog = dialog;
+                    this.visibleDialog.setCanceledOnTouchOutside(true);
+                    this.visibleDialog.setOnDismissListener(new OnDismissListener() {
+                        public void onDismiss(DialogInterface dialog) {
+                            if (onDismissListener != null) {
+                                onDismissListener.onDismiss(dialog);
+                            }
+                            BaseFragment.this.onDialogDismiss(BaseFragment.this.visibleDialog);
+                            BaseFragment.this.visibleDialog = null;
+                        }
+                    });
+                    this.visibleDialog.show();
+                    return this.visibleDialog;
+                } catch (Throwable e2) {
+                    FileLog.m3e(e2);
+                    return null;
+                }
             }
         }
-        return dialog2;
+        return null;
     }
 
     protected void onDialogDismiss(Dialog dialog) {

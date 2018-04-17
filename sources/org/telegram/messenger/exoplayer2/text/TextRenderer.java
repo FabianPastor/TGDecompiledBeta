@@ -57,10 +57,9 @@ public final class TextRenderer extends BaseRenderer implements Callback {
     public int supportsFormat(Format format) {
         if (this.decoderFactory.supportsFormat(format)) {
             return BaseRenderer.supportsFormatDrm(null, format.drmInitData) ? 4 : 2;
+        } else if (MimeTypes.isText(format.sampleMimeType)) {
+            return 1;
         } else {
-            if (MimeTypes.isText(format.sampleMimeType)) {
-                return 1;
-            }
             return 0;
         }
     }
@@ -207,10 +206,12 @@ public final class TextRenderer extends BaseRenderer implements Callback {
     }
 
     private long getNextEventTime() {
-        if (this.nextSubtitleEventIndex == -1 || this.nextSubtitleEventIndex >= this.subtitle.getEventTimeCount()) {
-            return Long.MAX_VALUE;
+        if (this.nextSubtitleEventIndex != -1) {
+            if (this.nextSubtitleEventIndex < this.subtitle.getEventTimeCount()) {
+                return this.subtitle.getEventTime(this.nextSubtitleEventIndex);
+            }
         }
-        return this.subtitle.getEventTime(this.nextSubtitleEventIndex);
+        return Long.MAX_VALUE;
     }
 
     private void updateOutput(List<Cue> cues) {
@@ -226,13 +227,11 @@ public final class TextRenderer extends BaseRenderer implements Callback {
     }
 
     public boolean handleMessage(Message msg) {
-        switch (msg.what) {
-            case 0:
-                invokeUpdateOutputInternal((List) msg.obj);
-                return true;
-            default:
-                throw new IllegalStateException();
+        if (msg.what != 0) {
+            throw new IllegalStateException();
         }
+        invokeUpdateOutputInternal((List) msg.obj);
+        return true;
     }
 
     private void invokeUpdateOutputInternal(List<Cue> cues) {

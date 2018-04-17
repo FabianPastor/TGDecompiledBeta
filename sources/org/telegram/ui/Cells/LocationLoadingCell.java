@@ -31,19 +31,12 @@ public class LocationLoadingCell extends FrameLayout {
     }
 
     public void setLoading(boolean value) {
-        int i;
-        int i2 = 4;
-        RadialProgressView radialProgressView = this.progressBar;
-        if (value) {
-            i = 0;
-        } else {
-            i = 4;
-        }
-        radialProgressView.setVisibility(i);
+        int i = 4;
+        this.progressBar.setVisibility(value ? 0 : 4);
         TextView textView = this.textView;
         if (!value) {
-            i2 = 0;
+            i = 0;
         }
-        textView.setVisibility(i2);
+        textView.setVisibility(i);
     }
 }

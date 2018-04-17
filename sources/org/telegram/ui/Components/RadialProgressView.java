@@ -47,7 +47,7 @@ public class RadialProgressView extends View {
         super.setAlpha(alpha);
         if (this.useSelfAlpha) {
             Drawable background = getBackground();
-            int a = (int) (255.0f * alpha);
+            int a = (int) (NUM * alpha);
             if (background != null) {
                 background.setAlpha(a);
             }
@@ -63,13 +63,13 @@ public class RadialProgressView extends View {
         }
         this.lastUpdateTime = newTime;
         this.radOffset += ((float) (360 * dt)) / 2000.0f;
-        this.radOffset -= (float) (((int) (this.radOffset / 360.0f)) * 360);
+        this.radOffset -= (float) (((int) (this.radOffset / NUM)) * 360);
         this.currentProgressTime += (float) dt;
         if (this.currentProgressTime >= 500.0f) {
             this.currentProgressTime = 500.0f;
         }
         if (this.risingCircleLength) {
-            this.currentCircleLength = (266.0f * this.accelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f)) + 4.0f;
+            this.currentCircleLength = 4.0f + (266.0f * this.accelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f));
         } else {
             this.currentCircleLength = 4.0f - ((1.0f - this.decelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f)) * 270.0f);
         }
@@ -78,7 +78,7 @@ public class RadialProgressView extends View {
                 this.radOffset += 270.0f;
                 this.currentCircleLength = -266.0f;
             }
-            this.risingCircleLength = !this.risingCircleLength;
+            this.risingCircleLength ^= 1;
             this.currentProgressTime = 0.0f;
         }
         invalidate();

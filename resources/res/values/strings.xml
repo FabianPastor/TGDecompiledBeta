@@ -1830,6 +1830,7 @@
     <string name="common_signin_button_text">Sign in</string>
     <string name="common_signin_button_text_long">Sign in with Google</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>
+    <string name="fcm_fallback_notification_channel_label">Miscellaneous</string>
     <string name="firebase_database_url">https://tmessages2.firebaseio.com</string>
     <string name="formatDateAtTime">%1$s at %2$s</string>
     <string name="formatterBannedUntil12H">MMM dd yyyy, h:mm a</string>
@@ -1846,7 +1847,6 @@
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
     <string name="gcm_defaultSenderId">760348033671</string>
-    <string name="gcm_fallback_notification_channel_label">Miscellaneous</string>
     <string name="google_api_key">AIzaSyAijSIM_t8bfdRrn2-mCumXRu37pPslqkU</string>
     <string name="google_app_id">1:760348033671:android:dc022572c167a16c</string>
     <string name="google_crash_reporting_api_key">AIzaSyAijSIM_t8bfdRrn2-mCumXRu37pPslqkU</string>

@@ -47,30 +47,28 @@ public class DefaultSsChunkSource implements SsChunkSource {
     }
 
     public DefaultSsChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, SsManifest manifest, int streamElementIndex, TrackSelection trackSelection, DataSource dataSource, TrackEncryptionBox[] trackEncryptionBoxes) {
+        SsManifest ssManifest = manifest;
+        int i = streamElementIndex;
+        TrackSelection trackSelection2 = trackSelection;
         this.manifestLoaderErrorThrower = manifestLoaderErrorThrower;
-        this.manifest = manifest;
-        this.streamElementIndex = streamElementIndex;
-        this.trackSelection = trackSelection;
+        this.manifest = ssManifest;
+        this.streamElementIndex = i;
+        this.trackSelection = trackSelection2;
         this.dataSource = dataSource;
-        StreamElement streamElement = manifest.streamElements[streamElementIndex];
+        StreamElement streamElement = ssManifest.streamElements[i];
         this.extractorWrappers = new ChunkExtractorWrapper[trackSelection.length()];
-        for (int i = 0; i < this.extractorWrappers.length; i++) {
-            int manifestTrackIndex = trackSelection.getIndexInTrackGroup(i);
+        for (int i2 = 0; i2 < r0.extractorWrappers.length; i2++) {
+            int manifestTrackIndex = trackSelection2.getIndexInTrackGroup(i2);
             Format format = streamElement.formats[manifestTrackIndex];
-            this.extractorWrappers[i] = new ChunkExtractorWrapper(new FragmentedMp4Extractor(3, null, new Track(manifestTrackIndex, streamElement.type, streamElement.timescale, C0539C.TIME_UNSET, manifest.durationUs, format, 0, trackEncryptionBoxes, streamElement.type == 2 ? 4 : 0, null, null), null), streamElement.type, format);
+            r0.extractorWrappers[i2] = new ChunkExtractorWrapper(new FragmentedMp4Extractor(3, null, new Track(manifestTrackIndex, streamElement.type, streamElement.timescale, C0539C.TIME_UNSET, ssManifest.durationUs, format, 0, trackEncryptionBoxes, streamElement.type == 2 ? 4 : 0, null, null), null), streamElement.type, format);
         }
     }
 
     public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
-        long secondSyncUs;
         StreamElement streamElement = this.manifest.streamElements[this.streamElementIndex];
         int chunkIndex = streamElement.getChunkIndex(positionUs);
         long firstSyncUs = streamElement.getStartTimeUs(chunkIndex);
-        if (firstSyncUs >= positionUs || chunkIndex >= streamElement.chunkCount - 1) {
-            secondSyncUs = firstSyncUs;
-        } else {
-            secondSyncUs = streamElement.getStartTimeUs(chunkIndex + 1);
-        }
+        long secondSyncUs = (firstSyncUs >= positionUs || chunkIndex >= streamElement.chunkCount - 1) ? firstSyncUs : streamElement.getStartTimeUs(chunkIndex + 1);
         return Util.resolveSeekPositionUs(positionUs, seekParameters, firstSyncUs, secondSyncUs);
     }
 
@@ -78,17 +76,19 @@ public class DefaultSsChunkSource implements SsChunkSource {
         StreamElement currentElement = this.manifest.streamElements[this.streamElementIndex];
         int currentElementChunkCount = currentElement.chunkCount;
         StreamElement newElement = newManifest.streamElements[this.streamElementIndex];
-        if (currentElementChunkCount == 0 || newElement.chunkCount == 0) {
-            this.currentManifestChunkOffset += currentElementChunkCount;
-        } else {
-            long currentElementEndTimeUs = currentElement.getStartTimeUs(currentElementChunkCount - 1) + currentElement.getChunkDurationUs(currentElementChunkCount - 1);
-            long newElementStartTimeUs = newElement.getStartTimeUs(0);
-            if (currentElementEndTimeUs <= newElementStartTimeUs) {
-                this.currentManifestChunkOffset += currentElementChunkCount;
-            } else {
-                this.currentManifestChunkOffset += currentElement.getChunkIndex(newElementStartTimeUs);
+        if (currentElementChunkCount != 0) {
+            if (newElement.chunkCount != 0) {
+                long currentElementEndTimeUs = currentElement.getStartTimeUs(currentElementChunkCount - 1) + currentElement.getChunkDurationUs(currentElementChunkCount - 1);
+                long newElementStartTimeUs = newElement.getStartTimeUs(0);
+                if (currentElementEndTimeUs <= newElementStartTimeUs) {
+                    this.currentManifestChunkOffset += currentElementChunkCount;
+                } else {
+                    this.currentManifestChunkOffset += currentElement.getChunkIndex(newElementStartTimeUs);
+                }
+                this.manifest = newManifest;
             }
         }
+        this.currentManifestChunkOffset += currentElementChunkCount;
         this.manifest = newManifest;
     }
 
@@ -100,45 +100,48 @@ public class DefaultSsChunkSource implements SsChunkSource {
     }
 
     public int getPreferredQueueSize(long playbackPositionUs, List<? extends MediaChunk> queue) {
-        if (this.fatalError != null || this.trackSelection.length() < 2) {
-            return queue.size();
+        if (this.fatalError == null) {
+            if (this.trackSelection.length() >= 2) {
+                return this.trackSelection.evaluateQueueSize(playbackPositionUs, queue);
+            }
         }
-        return this.trackSelection.evaluateQueueSize(playbackPositionUs, queue);
+        return queue.size();
     }
 
     public final void getNextChunk(MediaChunk previous, long playbackPositionUs, long loadPositionUs, ChunkHolder out) {
+        long j = playbackPositionUs;
+        long j2 = loadPositionUs;
+        ChunkHolder chunkHolder = out;
         if (this.fatalError == null) {
-            StreamElement streamElement = this.manifest.streamElements[this.streamElementIndex];
+            StreamElement streamElement = r0.manifest.streamElements[r0.streamElementIndex];
             if (streamElement.chunkCount == 0) {
-                out.endOfStream = !this.manifest.isLive;
+                chunkHolder.endOfStream = r0.manifest.isLive ^ 1;
                 return;
             }
             int chunkIndex;
             if (previous == null) {
-                chunkIndex = streamElement.getChunkIndex(loadPositionUs);
+                chunkIndex = streamElement.getChunkIndex(j2);
             } else {
-                chunkIndex = previous.getNextChunkIndex() - this.currentManifestChunkOffset;
+                chunkIndex = previous.getNextChunkIndex() - r0.currentManifestChunkOffset;
                 if (chunkIndex < 0) {
-                    this.fatalError = new BehindLiveWindowException();
+                    r0.fatalError = new BehindLiveWindowException();
                     return;
                 }
             }
-            if (chunkIndex >= streamElement.chunkCount) {
-                boolean z;
-                if (this.manifest.isLive) {
-                    z = false;
-                } else {
-                    z = true;
-                }
-                out.endOfStream = z;
+            int chunkIndex2 = chunkIndex;
+            if (chunkIndex2 >= streamElement.chunkCount) {
+                chunkHolder.endOfStream = r0.manifest.isLive ^ 1;
                 return;
             }
-            this.trackSelection.updateSelectedTrack(playbackPositionUs, loadPositionUs - playbackPositionUs, resolveTimeToLiveEdgeUs(playbackPositionUs));
-            long chunkStartTimeUs = streamElement.getStartTimeUs(chunkIndex);
-            long chunkEndTimeUs = chunkStartTimeUs + streamElement.getChunkDurationUs(chunkIndex);
-            int currentAbsoluteChunkIndex = chunkIndex + this.currentManifestChunkOffset;
-            int trackSelectionIndex = this.trackSelection.getSelectedIndex();
-            out.chunk = newMediaChunk(this.trackSelection.getSelectedFormat(), this.dataSource, streamElement.buildRequestUri(this.trackSelection.getIndexInTrackGroup(trackSelectionIndex), chunkIndex), null, currentAbsoluteChunkIndex, chunkStartTimeUs, chunkEndTimeUs, this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData(), this.extractorWrappers[trackSelectionIndex]);
+            r0.trackSelection.updateSelectedTrack(j, j2 - j, resolveTimeToLiveEdgeUs(j));
+            long chunkStartTimeUs = streamElement.getStartTimeUs(chunkIndex2);
+            long chunkEndTimeUs = chunkStartTimeUs + streamElement.getChunkDurationUs(chunkIndex2);
+            int currentAbsoluteChunkIndex = r0.currentManifestChunkOffset + chunkIndex2;
+            int trackSelectionIndex = r0.trackSelection.getSelectedIndex();
+            ChunkExtractorWrapper extractorWrapper = r0.extractorWrappers[trackSelectionIndex];
+            int manifestTrackIndex = r0.trackSelection.getIndexInTrackGroup(trackSelectionIndex);
+            Uri uri = streamElement.buildRequestUri(manifestTrackIndex, chunkIndex2);
+            chunkHolder.chunk = newMediaChunk(r0.trackSelection.getSelectedFormat(), r0.dataSource, uri, null, currentAbsoluteChunkIndex, chunkStartTimeUs, chunkEndTimeUs, r0.trackSelection.getSelectionReason(), r0.trackSelection.getSelectionData(), extractorWrapper);
         }
     }
 

@@ -29,8 +29,8 @@ class ViewInfoStore {
         }
 
         static InfoRecord obtain() {
-            InfoRecord infoRecord = (InfoRecord) sPool.acquire();
-            return infoRecord == null ? new InfoRecord() : infoRecord;
+            InfoRecord record = (InfoRecord) sPool.acquire();
+            return record == null ? new InfoRecord() : record;
         }
 
         static void recycle(InfoRecord record) {
@@ -41,8 +41,8 @@ class ViewInfoStore {
         }
 
         static void drainCache() {
-            do {
-            } while (sPool.acquire() != null);
+            while (sPool.acquire() != null) {
+            }
         }
     }
 
@@ -88,26 +88,28 @@ class ViewInfoStore {
     }
 
     private ItemHolderInfo popFromLayoutStep(ViewHolder vh, int flag) {
-        ItemHolderInfo itemHolderInfo = null;
         int index = this.mLayoutHolderMap.indexOfKey(vh);
-        if (index >= 0) {
-            InfoRecord record = (InfoRecord) this.mLayoutHolderMap.valueAt(index);
-            if (!(record == null || (record.flags & flag) == 0)) {
-                record.flags &= flag ^ -1;
-                if (flag == 4) {
-                    itemHolderInfo = record.preInfo;
-                } else if (flag == 8) {
-                    itemHolderInfo = record.postInfo;
-                } else {
-                    throw new IllegalArgumentException("Must provide flag PRE or POST");
-                }
-                if ((record.flags & 12) == 0) {
-                    this.mLayoutHolderMap.removeAt(index);
-                    InfoRecord.recycle(record);
-                }
-            }
+        if (index < 0) {
+            return null;
         }
-        return itemHolderInfo;
+        InfoRecord record = (InfoRecord) this.mLayoutHolderMap.valueAt(index);
+        if (record == null || (record.flags & flag) == 0) {
+            return null;
+        }
+        ItemHolderInfo info;
+        record.flags &= flag ^ -1;
+        if (flag == 4) {
+            info = record.preInfo;
+        } else if (flag == 8) {
+            info = record.postInfo;
+        } else {
+            throw new IllegalArgumentException("Must provide flag PRE or POST");
+        }
+        if ((record.flags & 12) == 0) {
+            this.mLayoutHolderMap.removeAt(index);
+            InfoRecord.recycle(record);
+        }
+        return info;
     }
 
     void addToOldChangeHolders(long key, ViewHolder holder) {
@@ -179,7 +181,8 @@ class ViewInfoStore {
                 callback.processDisappeared(viewHolder, record.preInfo, null);
             } else if ((record.flags & 8) != 0) {
                 callback.processAppeared(viewHolder, record.preInfo, record.postInfo);
-            } else if ((record.flags & 2) != 0) {
+            } else {
+                int i = record.flags;
             }
             InfoRecord.recycle(record);
         }

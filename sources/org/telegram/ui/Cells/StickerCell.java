@@ -38,7 +38,7 @@ public class StickerCell extends FrameLayout {
 
     public void setPressed(boolean pressed) {
         if (this.imageView.getImageReceiver().getPressed() != pressed) {
-            this.imageView.getImageReceiver().setPressed(pressed ? 1 : 0);
+            this.imageView.getImageReceiver().setPressed(pressed);
             this.imageView.invalidate();
         }
         super.setPressed(pressed);

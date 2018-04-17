@@ -37,30 +37,25 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
     protected abstract E decode(I i, O o, boolean z);
 
     protected SimpleDecoder(I[] inputBuffers, O[] outputBuffers) {
-        int i;
         this.availableInputBuffers = inputBuffers;
+        int i = 0;
         this.availableInputBufferCount = inputBuffers.length;
-        for (i = 0; i < this.availableInputBufferCount; i++) {
-            this.availableInputBuffers[i] = createInputBuffer();
+        for (int i2 = 0; i2 < this.availableInputBufferCount; i2++) {
+            this.availableInputBuffers[i2] = createInputBuffer();
         }
         this.availableOutputBuffers = outputBuffers;
         this.availableOutputBufferCount = outputBuffers.length;
-        for (i = 0; i < this.availableOutputBufferCount; i++) {
+        while (i < this.availableOutputBufferCount) {
             this.availableOutputBuffers[i] = createOutputBuffer();
+            i++;
         }
         this.decodeThread = new C05581();
         this.decodeThread.start();
     }
 
     protected final void setInitialInputBufferSize(int size) {
-        boolean z;
         int i = 0;
-        if (this.availableInputBufferCount == this.availableInputBuffers.length) {
-            z = true;
-        } else {
-            z = false;
-        }
-        Assertions.checkState(z);
+        Assertions.checkState(this.availableInputBufferCount == this.availableInputBuffers.length);
         DecoderInputBuffer[] decoderInputBufferArr = this.availableInputBuffers;
         int length = decoderInputBufferArr.length;
         while (i < length) {
@@ -100,16 +95,14 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
     }
 
     public final O dequeueOutputBuffer() throws Exception {
-        O o;
         synchronized (this.lock) {
             maybeThrowException();
             if (this.queuedOutputBuffers.isEmpty()) {
-                o = null;
-            } else {
-                OutputBuffer outputBuffer = (OutputBuffer) this.queuedOutputBuffers.removeFirst();
+                return null;
             }
+            OutputBuffer outputBuffer = (OutputBuffer) this.queuedOutputBuffers.removeFirst();
+            return outputBuffer;
         }
-        return o;
     }
 
     protected void releaseOutputBuffer(O outputBuffer) {
@@ -161,12 +154,12 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
     }
 
     private void run() {
-        do {
+        while (decode()) {
             try {
             } catch (InterruptedException e) {
                 throw new IllegalStateException(e);
             }
-        } while (decode());
+        }
     }
 
     /* JADX WARNING: inconsistent code. */
@@ -180,10 +173,10 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
                 return false;
             }
             DecoderInputBuffer inputBuffer = (DecoderInputBuffer) this.queuedInputBuffers.removeFirst();
-            OutputBuffer[] outputBufferArr = this.availableOutputBuffers;
+            O outputBuffer = this.availableOutputBuffers;
             int i = this.availableOutputBufferCount - 1;
             this.availableOutputBufferCount = i;
-            O outputBuffer = outputBufferArr[i];
+            outputBuffer = outputBuffer[i];
             boolean resetDecoder = this.flushed;
             this.flushed = false;
         }

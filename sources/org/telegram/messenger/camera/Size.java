@@ -18,7 +18,7 @@ public final class Size {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
+        boolean z = false;
         if (obj == null) {
             return false;
         }
@@ -29,18 +29,26 @@ public final class Size {
             return false;
         }
         Size other = (Size) obj;
-        if (!(this.mWidth == other.mWidth && this.mHeight == other.mHeight)) {
-            z = false;
+        if (this.mWidth == other.mWidth && this.mHeight == other.mHeight) {
+            z = true;
         }
         return z;
     }
 
     public String toString() {
-        return this.mWidth + "x" + this.mHeight;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.mWidth);
+        stringBuilder.append("x");
+        stringBuilder.append(this.mHeight);
+        return stringBuilder.toString();
     }
 
     private static NumberFormatException invalidSize(String s) {
-        throw new NumberFormatException("Invalid Size: \"" + s + "\"");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Invalid Size: \"");
+        stringBuilder.append(s);
+        stringBuilder.append("\"");
+        throw new NumberFormatException(stringBuilder.toString());
     }
 
     public static Size parseSize(String string) throws NumberFormatException {

@@ -33,7 +33,7 @@ public final class TimestampAdjuster {
         if (this.firstSampleTimestampUs == Long.MAX_VALUE) {
             return 0;
         }
-        return this.lastSampleTimestamp != C0539C.TIME_UNSET ? this.timestampOffsetUs : C0539C.TIME_UNSET;
+        return this.lastSampleTimestamp == C0539C.TIME_UNSET ? C0539C.TIME_UNSET : this.timestampOffsetUs;
     }
 
     public void reset() {
@@ -46,14 +46,10 @@ public final class TimestampAdjuster {
         }
         if (this.lastSampleTimestamp != C0539C.TIME_UNSET) {
             long lastPts = usToPts(this.lastSampleTimestamp);
-            long closestWrapCount = (4294967296L + lastPts) / MAX_PTS_PLUS_ONE;
-            long ptsWrapBelow = pts + (MAX_PTS_PLUS_ONE * (closestWrapCount - 1));
+            long closestWrapCount = (lastPts + 4294967296L) / MAX_PTS_PLUS_ONE;
+            long ptsWrapBelow = pts + ((closestWrapCount - 1) * MAX_PTS_PLUS_ONE);
             long ptsWrapAbove = pts + (MAX_PTS_PLUS_ONE * closestWrapCount);
-            if (Math.abs(ptsWrapBelow - lastPts) < Math.abs(ptsWrapAbove - lastPts)) {
-                pts = ptsWrapBelow;
-            } else {
-                pts = ptsWrapAbove;
-            }
+            pts = Math.abs(ptsWrapBelow - lastPts) < Math.abs(ptsWrapAbove - lastPts) ? ptsWrapBelow : ptsWrapAbove;
         }
         return adjustSampleTimestamp(ptsToUs(pts));
     }
@@ -73,7 +69,7 @@ public final class TimestampAdjuster {
                 notifyAll();
             }
         }
-        return this.timestampOffsetUs + timeUs;
+        return timeUs + this.timestampOffsetUs;
     }
 
     public synchronized void waitUntilInitialized() throws InterruptedException {

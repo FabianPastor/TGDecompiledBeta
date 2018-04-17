@@ -116,32 +116,24 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
     }
 
     public int getItemCount() {
-        int i = 0;
         if (this.currentMessageObject != null) {
-            if (!this.currentLiveLocations.isEmpty()) {
-                i = this.currentLiveLocations.size() + 2;
-            }
-            return i + 2;
+            return 2 + (this.currentLiveLocations.isEmpty() ? 0 : this.currentLiveLocations.size() + 2);
         } else if (this.liveLocationType == 2) {
-            return this.currentLiveLocations.size() + 2;
+            return 2 + this.currentLiveLocations.size();
         } else {
-            if (this.searching || (!this.searching && this.places.isEmpty())) {
-                return this.liveLocationType != 0 ? 5 : 4;
-            } else {
-                int size;
-                if (this.liveLocationType == 1) {
-                    size = this.places.size() + 4;
-                    if (!this.places.isEmpty()) {
-                        i = 1;
+            int i = 4;
+            if (!this.searching) {
+                if (this.searching || !this.places.isEmpty()) {
+                    if (this.liveLocationType == 1) {
+                        return (4 + this.places.size()) + (this.places.isEmpty() ^ 1);
                     }
-                    return i + size;
+                    return (3 + this.places.size()) + (this.places.isEmpty() ^ 1);
                 }
-                size = this.places.size() + 3;
-                if (!this.places.isEmpty()) {
-                    i = 1;
-                }
-                return i + size;
             }
+            if (this.liveLocationType != 0) {
+                i = 5;
+            }
+            return i;
         }
     }
 
@@ -190,6 +182,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
+        boolean z = true;
         switch (holder.getItemViewType()) {
             case 0:
                 ((EmptyCell) holder.itemView).setHeight(this.overScrollHeight);
@@ -221,7 +214,11 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
                 ((LocationLoadingCell) holder.itemView).setLoading(this.searching);
                 return;
             case 6:
-                ((SendLocationCell) holder.itemView).setHasLocation(this.gpsLocation != null);
+                SendLocationCell sendLocationCell = (SendLocationCell) holder.itemView;
+                if (this.gpsLocation == null) {
+                    z = false;
+                }
+                sendLocationCell.setHasLocation(z);
                 return;
             case 7:
                 if (this.currentMessageObject == null || position != 1) {
@@ -241,25 +238,22 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
             if (i == 1) {
                 return this.currentMessageObject;
             }
-            if (i <= 3 || i >= this.places.size() + 3) {
-                return null;
+            if (i > 3 && i < this.places.size() + 3) {
+                return this.currentLiveLocations.get(i - 4);
             }
-            return this.currentLiveLocations.get(i - 4);
         } else if (this.liveLocationType == 2) {
             if (i >= 2) {
                 return this.currentLiveLocations.get(i - 2);
             }
             return null;
         } else if (this.liveLocationType == 1) {
-            if (i <= 3 || i >= this.places.size() + 3) {
-                return null;
+            if (i > 3 && i < this.places.size() + 3) {
+                return this.places.get(i - 4);
             }
-            return this.places.get(i - 4);
-        } else if (i <= 2 || i >= this.places.size() + 2) {
-            return null;
-        } else {
+        } else if (i > 2 && i < this.places.size() + 2) {
             return this.places.get(i - 3);
         }
+        return null;
     }
 
     public int getItemViewType(int position) {
@@ -286,12 +280,14 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
                 } else if (position == 3) {
                     return 2;
                 } else {
-                    if (this.searching || (!this.searching && this.places.isEmpty())) {
-                        return 4;
+                    if (!this.searching) {
+                        if (this.searching || !this.places.isEmpty()) {
+                            if (position == this.places.size() + 4) {
+                                return 5;
+                            }
+                        }
                     }
-                    if (position == this.places.size() + 4) {
-                        return 5;
-                    }
+                    return 4;
                 }
             } else if (position == 1) {
                 return 1;
@@ -299,12 +295,14 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
                 if (position == 2) {
                     return 2;
                 }
-                if (this.searching || (!this.searching && this.places.isEmpty())) {
-                    return 4;
+                if (!this.searching) {
+                    if (this.searching || !this.places.isEmpty()) {
+                        if (position == this.places.size() + 3) {
+                            return 5;
+                        }
+                    }
                 }
-                if (position == this.places.size() + 3) {
-                    return 5;
-                }
+                return 4;
             }
             return 3;
         } else if (position != 1) {
@@ -317,15 +315,22 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
 
     public boolean isEnabled(ViewHolder holder) {
         int viewType = holder.getItemViewType();
+        boolean z = false;
         if (viewType == 6) {
-            if (LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId) == null && this.gpsLocation == null) {
-                return false;
+            if (LocationController.getInstance(this.currentAccount).getSharingLocationInfo(this.dialogId) == null) {
+                if (this.gpsLocation == null) {
+                    return z;
+                }
             }
-            return true;
-        } else if (viewType == 1 || viewType == 3 || viewType == 7) {
-            return true;
-        } else {
-            return false;
+            z = true;
+            return z;
         }
+        if (!(viewType == 1 || viewType == 3)) {
+            if (viewType != 7) {
+                return z;
+            }
+        }
+        z = true;
+        return z;
     }
 }

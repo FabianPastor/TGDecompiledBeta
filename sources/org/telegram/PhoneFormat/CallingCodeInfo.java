@@ -55,9 +55,9 @@ public class CallingCodeInfo {
         }
         it = this.ruleSets.iterator();
         while (it.hasNext()) {
-            phone = ((RuleSet) it.next()).format(str, intlPrefix, trunkPrefix, false);
-            if (phone != null) {
-                return phone;
+            String phone2 = ((RuleSet) it.next()).format(str, intlPrefix, trunkPrefix, false);
+            if (phone2 != null) {
+                return phone2;
             }
         }
         if (intlPrefix == null || str.length() == 0) {

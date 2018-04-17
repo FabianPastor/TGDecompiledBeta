@@ -101,10 +101,7 @@ public class Browser {
     }
 
     public static void bindCustomTabsService(Activity activity) {
-        Activity currentActivity = null;
-        if (currentCustomTabsActivity != null) {
-            currentActivity = (Activity) currentCustomTabsActivity.get();
-        }
+        Activity currentActivity = currentCustomTabsActivity == null ? null : (Activity) currentCustomTabsActivity.get();
         if (!(currentActivity == null || currentActivity == activity)) {
             unbindCustomTabsService(currentActivity);
         }
@@ -152,8 +149,10 @@ public class Browser {
     }
 
     public static void openUrl(Context context, String url, boolean allowCustom) {
-        if (context != null && url != null) {
-            openUrl(context, Uri.parse(url), allowCustom);
+        if (context != null) {
+            if (url != null) {
+                openUrl(context, Uri.parse(url), allowCustom);
+            }
         }
     }
 
@@ -162,106 +161,193 @@ public class Browser {
     }
 
     public static void openUrl(Context context, Uri uri, boolean allowCustom, boolean tryTelegraph) {
-        if (context != null && uri != null) {
-            Intent intent;
-            final int currentAccount = UserConfig.selectedAccount;
-            boolean[] forceBrowser = new boolean[]{false};
-            boolean internalUri = isInternalUri(uri, forceBrowser);
-            if (tryTelegraph) {
-                try {
-                    if (uri.getHost().toLowerCase().equals("telegra.ph") || uri.toString().toLowerCase().contains("telegram.org/faq")) {
-                        final AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(context, 1)};
-                        TLObject req = new TL_messages_getWebPagePreview();
-                        req.message = uri.toString();
-                        final Uri uri2 = uri;
-                        final Context context2 = context;
-                        final boolean z = allowCustom;
-                        final int sendRequest = ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new RequestDelegate() {
-                            public void run(final TLObject response, TL_error error) {
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        try {
-                                            progressDialog[0].dismiss();
-                                        } catch (Throwable th) {
+        String scheme;
+        List<ResolveInfo> allActivities;
+        String[] browserPackageNames;
+        List<ResolveInfo> list;
+        StringBuilder stringBuilder;
+        int a;
+        StringBuilder stringBuilder2;
+        Intent share;
+        PendingIntent copy;
+        Builder builder;
+        CustomTabsIntent intent;
+        Context context2 = context;
+        Uri uri2 = uri;
+        if (context2 != null) {
+            if (uri2 != null) {
+                int currentAccount = UserConfig.selectedAccount;
+                boolean[] forceBrowser = new boolean[]{false};
+                boolean internalUri = isInternalUri(uri2, forceBrowser);
+                if (tryTelegraph) {
+                    int i;
+                    try {
+                        if (!uri.getHost().toLowerCase().equals("telegra.ph")) {
+                            try {
+                                if (!uri.toString().toLowerCase().contains("telegram.org/faq")) {
+                                    i = currentAccount;
+                                }
+                            } catch (Exception e) {
+                                i = currentAccount;
+                                scheme = uri.getScheme() == null ? TtmlNode.ANONYMOUS_REGION_ID : uri.getScheme().toLowerCase();
+                                allActivities = null;
+                                browserPackageNames = null;
+                                try {
+                                    list = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", Uri.parse("http://www.google.com")), 0);
+                                    browserPackageNames = new String[list.size()];
+                                    for (currentAccount = 0; currentAccount < list.size(); currentAccount++) {
+                                        browserPackageNames[currentAccount] = ((ResolveInfo) list.get(currentAccount)).activityInfo.packageName;
+                                        if (!BuildVars.LOGS_ENABLED) {
+                                            stringBuilder = new StringBuilder();
+                                            stringBuilder.append("default browser name = ");
+                                            stringBuilder.append(browserPackageNames[currentAccount]);
+                                            FileLog.m0d(stringBuilder.toString());
                                         }
-                                        progressDialog[0] = null;
-                                        boolean ok = false;
-                                        if (response instanceof TL_messageMediaWebPage) {
-                                            TL_messageMediaWebPage webPage = response;
-                                            if ((webPage.webpage instanceof TL_webPage) && webPage.webpage.cached_page != null) {
-                                                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.openArticle, webPage.webpage, uri2.toString());
-                                                ok = true;
+                                    }
+                                } catch (Exception e2) {
+                                }
+                                try {
+                                    allActivities = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri2), 0);
+                                    if (browserPackageNames == null) {
+                                        a = 0;
+                                        while (a < allActivities.size()) {
+                                            if (!((ResolveInfo) allActivities.get(a)).activityInfo.packageName.toLowerCase().contains("browser")) {
+                                            }
+                                            allActivities.remove(a);
+                                            a--;
+                                            a++;
+                                        }
+                                    } else {
+                                        a = 0;
+                                        while (a < allActivities.size()) {
+                                            for (String equals : browserPackageNames) {
+                                                if (!equals.equals(((ResolveInfo) allActivities.get(a)).activityInfo.packageName)) {
+                                                    allActivities.remove(a);
+                                                    a--;
+                                                    break;
+                                                }
+                                            }
+                                            a++;
+                                        }
+                                    }
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        for (a = 0; a < allActivities.size(); a++) {
+                                            stringBuilder2 = new StringBuilder();
+                                            stringBuilder2.append("device has ");
+                                            stringBuilder2.append(((ResolveInfo) allActivities.get(a)).activityInfo.packageName);
+                                            stringBuilder2.append(" to open ");
+                                            stringBuilder2.append(uri.toString());
+                                            FileLog.m0d(stringBuilder2.toString());
+                                        }
+                                    }
+                                } catch (Exception e3) {
+                                }
+                                share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
+                                share.setAction("android.intent.action.SEND");
+                                copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), 134217728);
+                                builder = new Builder(getSession());
+                                builder.addMenuItem(LocaleController.getString("CopyLink", R.string.CopyLink), copy);
+                                builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
+                                builder.setShowTitle(true);
+                                builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, 0), false);
+                                intent = builder.build();
+                                intent.setUseNewTask();
+                                intent.launchUrl(context2, uri2);
+                                return;
+                            }
+                        }
+                        AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(context2, 1)};
+                        TL_messages_getWebPagePreview req = new TL_messages_getWebPagePreview();
+                        req.message = uri.toString();
+                        C18262 c18262 = c18262;
+                        final AlertDialog[] alertDialogArr = progressDialog;
+                        C18262 c182622 = c18262;
+                        final int i2 = currentAccount;
+                        ConnectionsManager instance = ConnectionsManager.getInstance(UserConfig.selectedAccount);
+                        final Uri uri3 = uri2;
+                        currentAccount = req;
+                        final Context context3 = context2;
+                        final AlertDialog[] progressDialog2 = progressDialog;
+                        progressDialog = allowCustom;
+                        try {
+                            c18262 = new RequestDelegate() {
+                                public void run(final TLObject response, TL_error error) {
+                                    AndroidUtilities.runOnUIThread(new Runnable() {
+                                        public void run() {
+                                            try {
+                                                alertDialogArr[0].dismiss();
+                                            } catch (Throwable th) {
+                                            }
+                                            alertDialogArr[0] = null;
+                                            boolean ok = false;
+                                            if (response instanceof TL_messageMediaWebPage) {
+                                                TL_messageMediaWebPage webPage = response;
+                                                if ((webPage.webpage instanceof TL_webPage) && webPage.webpage.cached_page != null) {
+                                                    NotificationCenter.getInstance(i2).postNotificationName(NotificationCenter.openArticle, webPage.webpage, uri3.toString());
+                                                    ok = true;
+                                                }
+                                            }
+                                            if (!ok) {
+                                                Browser.openUrl(context3, uri3, progressDialog, false);
                                             }
                                         }
-                                        if (!ok) {
-                                            Browser.openUrl(context2, uri2, z, false);
+                                    });
+                                }
+                            };
+                            final int reqId = instance.sendRequest(currentAccount, c182622);
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+
+                                /* renamed from: org.telegram.messenger.browser.Browser$3$1 */
+                                class C05201 implements OnClickListener {
+                                    C05201() {
+                                    }
+
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ConnectionsManager.getInstance(UserConfig.selectedAccount).cancelRequest(reqId, true);
+                                        try {
+                                            dialog.dismiss();
+                                        } catch (Throwable e) {
+                                            FileLog.m3e(e);
                                         }
                                     }
-                                });
-                            }
-                        });
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-
-                            /* renamed from: org.telegram.messenger.browser.Browser$3$1 */
-                            class C05201 implements OnClickListener {
-                                C05201() {
                                 }
 
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ConnectionsManager.getInstance(UserConfig.selectedAccount).cancelRequest(sendRequest, true);
-                                    try {
-                                        dialog.dismiss();
-                                    } catch (Throwable e) {
-                                        FileLog.m3e(e);
+                                public void run() {
+                                    if (progressDialog2[0] != null) {
+                                        try {
+                                            progressDialog2[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
+                                            progressDialog2[0].setCanceledOnTouchOutside(false);
+                                            progressDialog2[0].setCancelable(false);
+                                            progressDialog2[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C05201());
+                                            progressDialog2[0].show();
+                                        } catch (Exception e) {
+                                        }
                                     }
                                 }
+                            }, 1000);
+                            return;
+                        } catch (Exception e4) {
+                            if (uri.getScheme() == null) {
                             }
-
-                            public void run() {
-                                if (progressDialog[0] != null) {
-                                    try {
-                                        progressDialog[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
-                                        progressDialog[0].setCanceledOnTouchOutside(false);
-                                        progressDialog[0].setCancelable(false);
-                                        progressDialog[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C05201());
-                                        progressDialog[0].show();
-                                    } catch (Exception e) {
-                                    }
+                            allActivities = null;
+                            browserPackageNames = null;
+                            list = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", Uri.parse("http://www.google.com")), 0);
+                            browserPackageNames = new String[list.size()];
+                            for (currentAccount = 0; currentAccount < list.size(); currentAccount++) {
+                                browserPackageNames[currentAccount] = ((ResolveInfo) list.get(currentAccount)).activityInfo.packageName;
+                                if (!BuildVars.LOGS_ENABLED) {
+                                    stringBuilder = new StringBuilder();
+                                    stringBuilder.append("default browser name = ");
+                                    stringBuilder.append(browserPackageNames[currentAccount]);
+                                    FileLog.m0d(stringBuilder.toString());
                                 }
                             }
-                        }, 1000);
-                        return;
-                    }
-                } catch (Exception e) {
-                }
-            }
-            try {
-                String scheme = uri.getScheme() != null ? uri.getScheme().toLowerCase() : TtmlNode.ANONYMOUS_REGION_ID;
-                if (allowCustom && SharedConfig.customTabs && !internalUri) {
-                    if (!scheme.equals("tel")) {
-                        int a;
-                        String[] browserPackageNames = null;
-                        try {
-                            List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", Uri.parse("http://www.google.com")), 0);
-                            if (!(list == null || list.isEmpty())) {
-                                browserPackageNames = new String[list.size()];
-                                for (a = 0; a < list.size(); a++) {
-                                    browserPackageNames[a] = ((ResolveInfo) list.get(a)).activityInfo.packageName;
-                                    if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.m0d("default browser name = " + browserPackageNames[a]);
-                                    }
-                                }
-                            }
-                        } catch (Exception e2) {
-                        }
-                        List<ResolveInfo> allActivities = null;
-                        try {
-                            allActivities = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri), 0);
-                            if (browserPackageNames != null) {
+                            allActivities = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri2), 0);
+                            if (browserPackageNames == null) {
                                 a = 0;
                                 while (a < allActivities.size()) {
-                                    for (String equals : browserPackageNames) {
-                                        if (equals.equals(((ResolveInfo) allActivities.get(a)).activityInfo.packageName)) {
+                                    while (currentAccount < browserPackageNames.length) {
+                                        if (!equals.equals(((ResolveInfo) allActivities.get(a)).activityInfo.packageName)) {
                                             allActivities.remove(a);
                                             a--;
                                             break;
@@ -272,49 +358,181 @@ public class Browser {
                             } else {
                                 a = 0;
                                 while (a < allActivities.size()) {
-                                    if (((ResolveInfo) allActivities.get(a)).activityInfo.packageName.toLowerCase().contains("browser") || ((ResolveInfo) allActivities.get(a)).activityInfo.packageName.toLowerCase().contains("chrome")) {
-                                        allActivities.remove(a);
-                                        a--;
+                                    if (((ResolveInfo) allActivities.get(a)).activityInfo.packageName.toLowerCase().contains("browser")) {
                                     }
+                                    allActivities.remove(a);
+                                    a--;
                                     a++;
                                 }
                             }
                             if (BuildVars.LOGS_ENABLED) {
                                 for (a = 0; a < allActivities.size(); a++) {
-                                    FileLog.m0d("device has " + ((ResolveInfo) allActivities.get(a)).activityInfo.packageName + " to open " + uri.toString());
+                                    stringBuilder2 = new StringBuilder();
+                                    stringBuilder2.append("device has ");
+                                    stringBuilder2.append(((ResolveInfo) allActivities.get(a)).activityInfo.packageName);
+                                    stringBuilder2.append(" to open ");
+                                    stringBuilder2.append(uri.toString());
+                                    FileLog.m0d(stringBuilder2.toString());
                                 }
                             }
-                        } catch (Exception e3) {
-                        }
-                        if (forceBrowser[0] || allActivities == null || allActivities.isEmpty()) {
-                            intent = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
-                            intent.setAction("android.intent.action.SEND");
-                            PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), 134217728);
-                            Builder builder = new Builder(getSession());
+                            share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
+                            share.setAction("android.intent.action.SEND");
+                            copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), 134217728);
+                            builder = new Builder(getSession());
                             builder.addMenuItem(LocaleController.getString("CopyLink", R.string.CopyLink), copy);
                             builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
                             builder.setShowTitle(true);
-                            builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, intent, 0), false);
-                            CustomTabsIntent intent2 = builder.build();
-                            intent2.setUseNewTask();
-                            intent2.launchUrl(context, uri);
+                            builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, 0), false);
+                            intent = builder.build();
+                            intent.setUseNewTask();
+                            intent.launchUrl(context2, uri2);
+                            return;
+                        }
+                    } catch (Exception e5) {
+                        i = currentAccount;
+                        if (uri.getScheme() == null) {
+                        }
+                        allActivities = null;
+                        browserPackageNames = null;
+                        list = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", Uri.parse("http://www.google.com")), 0);
+                        browserPackageNames = new String[list.size()];
+                        for (currentAccount = 0; currentAccount < list.size(); currentAccount++) {
+                            browserPackageNames[currentAccount] = ((ResolveInfo) list.get(currentAccount)).activityInfo.packageName;
+                            if (!BuildVars.LOGS_ENABLED) {
+                                stringBuilder = new StringBuilder();
+                                stringBuilder.append("default browser name = ");
+                                stringBuilder.append(browserPackageNames[currentAccount]);
+                                FileLog.m0d(stringBuilder.toString());
+                            }
+                        }
+                        allActivities = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri2), 0);
+                        if (browserPackageNames == null) {
+                            a = 0;
+                            while (a < allActivities.size()) {
+                                if (((ResolveInfo) allActivities.get(a)).activityInfo.packageName.toLowerCase().contains("browser")) {
+                                }
+                                allActivities.remove(a);
+                                a--;
+                                a++;
+                            }
+                        } else {
+                            a = 0;
+                            while (a < allActivities.size()) {
+                                while (currentAccount < browserPackageNames.length) {
+                                    if (!equals.equals(((ResolveInfo) allActivities.get(a)).activityInfo.packageName)) {
+                                        allActivities.remove(a);
+                                        a--;
+                                        break;
+                                    }
+                                }
+                                a++;
+                            }
+                        }
+                        if (BuildVars.LOGS_ENABLED) {
+                            for (a = 0; a < allActivities.size(); a++) {
+                                stringBuilder2 = new StringBuilder();
+                                stringBuilder2.append("device has ");
+                                stringBuilder2.append(((ResolveInfo) allActivities.get(a)).activityInfo.packageName);
+                                stringBuilder2.append(" to open ");
+                                stringBuilder2.append(uri.toString());
+                                FileLog.m0d(stringBuilder2.toString());
+                            }
+                        }
+                        share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
+                        share.setAction("android.intent.action.SEND");
+                        copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), 134217728);
+                        builder = new Builder(getSession());
+                        builder.addMenuItem(LocaleController.getString("CopyLink", R.string.CopyLink), copy);
+                        builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
+                        builder.setShowTitle(true);
+                        builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, 0), false);
+                        intent = builder.build();
+                        intent.setUseNewTask();
+                        intent.launchUrl(context2, uri2);
+                        return;
+                    }
+                }
+                try {
+                    if (uri.getScheme() == null) {
+                    }
+                    if (allowCustom && SharedConfig.customTabs && !internalUri && !scheme.equals("tel")) {
+                        allActivities = null;
+                        browserPackageNames = null;
+                        list = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", Uri.parse("http://www.google.com")), 0);
+                        if (!(list == null || list.isEmpty())) {
+                            browserPackageNames = new String[list.size()];
+                            for (currentAccount = 0; currentAccount < list.size(); currentAccount++) {
+                                browserPackageNames[currentAccount] = ((ResolveInfo) list.get(currentAccount)).activityInfo.packageName;
+                                if (!BuildVars.LOGS_ENABLED) {
+                                    stringBuilder = new StringBuilder();
+                                    stringBuilder.append("default browser name = ");
+                                    stringBuilder.append(browserPackageNames[currentAccount]);
+                                    FileLog.m0d(stringBuilder.toString());
+                                }
+                            }
+                        }
+                        allActivities = context.getPackageManager().queryIntentActivities(new Intent("android.intent.action.VIEW", uri2), 0);
+                        if (browserPackageNames == null) {
+                            a = 0;
+                            while (a < allActivities.size()) {
+                                while (currentAccount < browserPackageNames.length) {
+                                    if (!equals.equals(((ResolveInfo) allActivities.get(a)).activityInfo.packageName)) {
+                                        allActivities.remove(a);
+                                        a--;
+                                        break;
+                                    }
+                                }
+                                a++;
+                            }
+                        } else {
+                            a = 0;
+                            while (a < allActivities.size()) {
+                                if (((ResolveInfo) allActivities.get(a)).activityInfo.packageName.toLowerCase().contains("browser") || ((ResolveInfo) allActivities.get(a)).activityInfo.packageName.toLowerCase().contains("chrome")) {
+                                    allActivities.remove(a);
+                                    a--;
+                                }
+                                a++;
+                            }
+                        }
+                        if (BuildVars.LOGS_ENABLED) {
+                            for (a = 0; a < allActivities.size(); a++) {
+                                stringBuilder2 = new StringBuilder();
+                                stringBuilder2.append("device has ");
+                                stringBuilder2.append(((ResolveInfo) allActivities.get(a)).activityInfo.packageName);
+                                stringBuilder2.append(" to open ");
+                                stringBuilder2.append(uri.toString());
+                                FileLog.m0d(stringBuilder2.toString());
+                            }
+                        }
+                        if (forceBrowser[0] || allActivities == null || allActivities.isEmpty()) {
+                            share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
+                            share.setAction("android.intent.action.SEND");
+                            copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), 134217728);
+                            builder = new Builder(getSession());
+                            builder.addMenuItem(LocaleController.getString("CopyLink", R.string.CopyLink), copy);
+                            builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
+                            builder.setShowTitle(true);
+                            builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, 0), false);
+                            intent = builder.build();
+                            intent.setUseNewTask();
+                            intent.launchUrl(context2, uri2);
                             return;
                         }
                     }
+                } catch (Throwable e6) {
+                    FileLog.m3e(e6);
                 }
-            } catch (Throwable e4) {
-                FileLog.m3e(e4);
-            }
-            try {
-                intent = new Intent("android.intent.action.VIEW", uri);
-                if (internalUri) {
-                    intent.setComponent(new ComponentName(context.getPackageName(), LaunchActivity.class.getName()));
+                try {
+                    Intent intent2 = new Intent("android.intent.action.VIEW", uri2);
+                    if (internalUri) {
+                        intent2.setComponent(new ComponentName(context.getPackageName(), LaunchActivity.class.getName()));
+                    }
+                    intent2.putExtra("create_new_tab", true);
+                    intent2.putExtra("com.android.browser.application_id", context.getPackageName());
+                    context2.startActivity(intent2);
+                } catch (Throwable e62) {
+                    FileLog.m3e(e62);
                 }
-                intent.putExtra("create_new_tab", true);
-                intent.putExtra("com.android.browser.application_id", context.getPackageName());
-                context.startActivity(intent);
-            } catch (Throwable e42) {
-                FileLog.m3e(e42);
             }
         }
     }
@@ -334,8 +552,10 @@ public class Browser {
             path = uri.getPath();
             if (path != null && path.length() > 1) {
                 path = path.substring(1).toLowerCase();
-                if (!path.startsWith("blog") && !path.equals("iv") && !path.startsWith("faq") && !path.equals("apps")) {
-                    return true;
+                if (!(path.startsWith("blog") || path.equals("iv") || path.startsWith("faq"))) {
+                    if (!path.equals("apps")) {
+                        return true;
+                    }
                 }
                 if (forceBrowser != null) {
                     forceBrowser[0] = true;

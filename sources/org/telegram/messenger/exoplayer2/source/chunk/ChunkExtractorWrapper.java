@@ -52,10 +52,7 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
         }
 
         public void format(Format format) {
-            if (this.manifestFormat != null) {
-                format = format.copyWithManifestFormatInfo(this.manifestFormat);
-            }
-            this.sampleFormat = format;
+            this.sampleFormat = this.manifestFormat != null ? format.copyWithManifestFormatInfo(this.manifestFormat) : format;
             this.trackOutput.format(this.sampleFormat);
         }
 
@@ -101,12 +98,13 @@ public final class ChunkExtractorWrapper implements ExtractorOutput {
 
     public TrackOutput track(int id, int type) {
         BindingTrackOutput bindingTrackOutput = (BindingTrackOutput) this.bindingTrackOutputs.get(id);
-        if (bindingTrackOutput == null) {
-            Assertions.checkState(this.sampleFormats == null);
-            bindingTrackOutput = new BindingTrackOutput(id, type, type == this.primaryTrackType ? this.primaryTrackManifestFormat : null);
-            bindingTrackOutput.bind(this.trackOutputProvider);
-            this.bindingTrackOutputs.put(id, bindingTrackOutput);
+        if (bindingTrackOutput != null) {
+            return bindingTrackOutput;
         }
+        Assertions.checkState(this.sampleFormats == null);
+        bindingTrackOutput = new BindingTrackOutput(id, type, type == this.primaryTrackType ? this.primaryTrackManifestFormat : null);
+        bindingTrackOutput.bind(this.trackOutputProvider);
+        this.bindingTrackOutputs.put(id, bindingTrackOutput);
         return bindingTrackOutput;
     }
 

@@ -31,12 +31,13 @@ public final class WebvttDecoder extends SimpleSubtitleDecoder {
         this.webvttCueBuilder.reset();
         this.definedStyles.clear();
         WebvttParserUtil.validateWebvttHeaderLine(this.parsableWebvttData);
-        do {
-        } while (!TextUtils.isEmpty(this.parsableWebvttData.readLine()));
+        while (!TextUtils.isEmpty(this.parsableWebvttData.readLine())) {
+        }
         ArrayList<WebvttCue> subtitles = new ArrayList();
         while (true) {
-            int event = getNextEvent(this.parsableWebvttData);
-            if (event == 0) {
+            int nextEvent = getNextEvent(this.parsableWebvttData);
+            int event = nextEvent;
+            if (nextEvent == 0) {
                 return new WebvttSubtitle(subtitles);
             }
             if (event == 1) {
@@ -79,7 +80,7 @@ public final class WebvttDecoder extends SimpleSubtitleDecoder {
     }
 
     private static void skipComment(ParsableByteArray parsableWebvttData) {
-        do {
-        } while (!TextUtils.isEmpty(parsableWebvttData.readLine()));
+        while (!TextUtils.isEmpty(parsableWebvttData.readLine())) {
+        }
     }
 }

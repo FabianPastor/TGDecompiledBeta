@@ -120,7 +120,8 @@ public interface ICustomTabsCallback extends IInterface {
                 return null;
             }
             IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
-            return (iin == null || !(iin instanceof ICustomTabsCallback)) ? new Proxy(obj) : (ICustomTabsCallback) iin;
+            ICustomTabsCallback proxy = (iin == null || !(iin instanceof ICustomTabsCallback)) ? new Proxy(obj) : (ICustomTabsCallback) iin;
+            return proxy;
         }
 
         public IBinder asBinder() {
@@ -128,59 +129,51 @@ public interface ICustomTabsCallback extends IInterface {
         }
 
         public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
-            Bundle _arg1;
-            String _arg0;
-            switch (code) {
-                case 2:
-                    data.enforceInterface(DESCRIPTOR);
-                    int _arg02 = data.readInt();
-                    if (data.readInt() != 0) {
-                        _arg1 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg1 = null;
-                    }
-                    onNavigationEvent(_arg02, _arg1);
-                    reply.writeNoException();
-                    return true;
-                case 3:
-                    data.enforceInterface(DESCRIPTOR);
-                    _arg0 = data.readString();
-                    if (data.readInt() != 0) {
-                        _arg1 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg1 = null;
-                    }
-                    extraCallback(_arg0, _arg1);
-                    reply.writeNoException();
-                    return true;
-                case 4:
-                    Bundle _arg01;
-                    data.enforceInterface(DESCRIPTOR);
-                    if (data.readInt() != 0) {
-                        _arg01 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg01 = null;
-                    }
-                    onMessageChannelReady(_arg01);
-                    reply.writeNoException();
-                    return true;
-                case 5:
-                    data.enforceInterface(DESCRIPTOR);
-                    _arg0 = data.readString();
-                    if (data.readInt() != 0) {
-                        _arg1 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg1 = null;
-                    }
-                    onPostMessage(_arg0, _arg1);
-                    reply.writeNoException();
-                    return true;
-                case 1598968902:
-                    reply.writeString(DESCRIPTOR);
-                    return true;
-                default:
-                    return super.onTransact(code, data, reply, flags);
+            if (code != NUM) {
+                Bundle _arg1 = null;
+                String _arg0;
+                switch (code) {
+                    case 2:
+                        data.enforceInterface(DESCRIPTOR);
+                        int _arg02 = data.readInt();
+                        if (data.readInt() != 0) {
+                            _arg1 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                        }
+                        onNavigationEvent(_arg02, _arg1);
+                        reply.writeNoException();
+                        return true;
+                    case 3:
+                        data.enforceInterface(DESCRIPTOR);
+                        _arg0 = data.readString();
+                        if (data.readInt() != 0) {
+                            _arg1 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                        }
+                        extraCallback(_arg0, _arg1);
+                        reply.writeNoException();
+                        return true;
+                    case 4:
+                        data.enforceInterface(DESCRIPTOR);
+                        if (data.readInt() != 0) {
+                            _arg1 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                        }
+                        onMessageChannelReady(_arg1);
+                        reply.writeNoException();
+                        return true;
+                    case 5:
+                        data.enforceInterface(DESCRIPTOR);
+                        _arg0 = data.readString();
+                        if (data.readInt() != 0) {
+                            _arg1 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                        }
+                        onPostMessage(_arg0, _arg1);
+                        reply.writeNoException();
+                        return true;
+                    default:
+                        return super.onTransact(code, data, reply, flags);
+                }
             }
+            reply.writeString(DESCRIPTOR);
+            return true;
         }
     }
 

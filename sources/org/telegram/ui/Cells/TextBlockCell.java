@@ -15,24 +15,17 @@ public class TextBlockCell extends FrameLayout {
     private TextView textView;
 
     public TextBlockCell(Context context) {
-        int i;
-        int i2 = 5;
         super(context);
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
-        TextView textView = this.textView;
+        int i = 3;
+        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        View view = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
-        } else {
-            i = 3;
         }
-        textView.setGravity(i | 16);
-        View view = this.textView;
-        if (!LocaleController.isRTL) {
-            i2 = 3;
-        }
-        addView(view, LayoutHelper.createFrame(-1, -2.0f, i2 | 48, 17.0f, 10.0f, 17.0f, 10.0f));
+        addView(view, LayoutHelper.createFrame(-1, -2.0f, i | 48, 17.0f, 10.0f, 17.0f, 10.0f));
     }
 
     public void setTextColor(int color) {
@@ -42,7 +35,7 @@ public class TextBlockCell extends FrameLayout {
     public void setText(String text, boolean divider) {
         this.textView.setText(text);
         this.needDivider = divider;
-        setWillNotDraw(!divider);
+        setWillNotDraw(divider ^ 1);
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

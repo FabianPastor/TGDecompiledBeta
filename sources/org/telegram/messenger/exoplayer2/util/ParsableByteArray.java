@@ -214,15 +214,15 @@ public final class ParsableByteArray {
         byte[] bArr2 = this.data;
         int i2 = this.position;
         this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 16;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 8;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        return j | (((long) bArr2[i2]) & 255);
+        long j2 = j | ((((long) bArr2[i2]) & 255) << 16);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        long j3 = j2 | ((((long) bArr[i]) & 255) << 8);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        return j3 | (((long) bArr[i]) & 255);
     }
 
     public long readLittleEndianUnsignedInt() {
@@ -230,18 +230,18 @@ public final class ParsableByteArray {
         int i = this.position;
         this.position = i + 1;
         long j = ((long) bArr[i]) & 255;
-        byte[] bArr2 = this.data;
-        int i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 8;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 16;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        return j | ((((long) bArr2[i2]) & 255) << 24);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        long j2 = j | ((((long) bArr[i]) & 255) << 8);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        j = j2 | ((((long) bArr[i]) & 255) << 16);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        return j | ((((long) bArr[i]) & 255) << 24);
     }
 
     public int readInt() {
@@ -290,31 +290,31 @@ public final class ParsableByteArray {
         byte[] bArr2 = this.data;
         int i2 = this.position;
         this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 48;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 40;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 32;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 24;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 16;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 8;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        return j | (((long) bArr2[i2]) & 255);
+        long j2 = j | ((((long) bArr2[i2]) & 255) << 48);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        long j3 = j2 | ((((long) bArr[i]) & 255) << 40);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        j2 = j3 | ((((long) bArr[i]) & 255) << 32);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        j3 = j2 | ((((long) bArr[i]) & 255) << 24);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        j2 = j3 | ((((long) bArr[i]) & 255) << 16);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        j3 = j2 | ((((long) bArr[i]) & 255) << 8);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        return j3 | (((long) bArr[i]) & 255);
     }
 
     public long readLittleEndianLong() {
@@ -322,45 +322,45 @@ public final class ParsableByteArray {
         int i = this.position;
         this.position = i + 1;
         long j = ((long) bArr[i]) & 255;
-        byte[] bArr2 = this.data;
-        int i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 8;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 16;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 24;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 32;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 40;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        j |= (((long) bArr2[i2]) & 255) << 48;
-        bArr2 = this.data;
-        i2 = this.position;
-        this.position = i2 + 1;
-        return j | ((((long) bArr2[i2]) & 255) << 56);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        long j2 = j | ((((long) bArr[i]) & 255) << 8);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        j = j2 | ((((long) bArr[i]) & 255) << 16);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        j2 = j | ((((long) bArr[i]) & 255) << 24);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        j = j2 | ((((long) bArr[i]) & 255) << 32);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        j2 = j | ((((long) bArr[i]) & 255) << 40);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        j = j2 | ((((long) bArr[i]) & 255) << 48);
+        bArr = this.data;
+        i = this.position;
+        this.position = i + 1;
+        return j | ((((long) bArr[i]) & 255) << 56);
     }
 
     public int readUnsignedFixedPoint1616() {
         byte[] bArr = this.data;
         int i = this.position;
         this.position = i + 1;
-        int i2 = (bArr[i] & 255) << 8;
+        int result = (bArr[i] & 255) << 8;
         byte[] bArr2 = this.data;
-        int i3 = this.position;
-        this.position = i3 + 1;
-        int result = i2 | (bArr2[i3] & 255);
+        int i2 = this.position;
+        this.position = i2 + 1;
+        result |= bArr2[i2] & 255;
         this.position += 2;
         return result;
     }
@@ -374,7 +374,10 @@ public final class ParsableByteArray {
         if (result >= 0) {
             return result;
         }
-        throw new IllegalStateException("Top bit not zero: " + result);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Top bit not zero: ");
+        stringBuilder.append(result);
+        throw new IllegalStateException(stringBuilder.toString());
     }
 
     public int readLittleEndianUnsignedIntToInt() {
@@ -382,7 +385,10 @@ public final class ParsableByteArray {
         if (result >= 0) {
             return result;
         }
-        throw new IllegalStateException("Top bit not zero: " + result);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Top bit not zero: ");
+        stringBuilder.append(result);
+        throw new IllegalStateException(stringBuilder.toString());
     }
 
     public long readUnsignedLongToLong() {
@@ -390,7 +396,10 @@ public final class ParsableByteArray {
         if (result >= 0) {
             return result;
         }
-        throw new IllegalStateException("Top bit not zero: " + result);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Top bit not zero: ");
+        stringBuilder.append(result);
+        throw new IllegalStateException(stringBuilder.toString());
     }
 
     public float readFloat() {
@@ -435,10 +444,9 @@ public final class ParsableByteArray {
         }
         String string = new String(this.data, this.position, stringLimit - this.position);
         this.position = stringLimit;
-        if (this.position >= this.limit) {
-            return string;
+        if (this.position < this.limit) {
+            this.position++;
         }
-        this.position++;
         return string;
     }
 
@@ -464,52 +472,50 @@ public final class ParsableByteArray {
                 return line;
             }
         }
-        if (this.data[this.position] != (byte) 10) {
-            return line;
+        if (this.data[this.position] == (byte) 10) {
+            this.position++;
         }
-        this.position++;
         return line;
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public long readUtf8EncodedLong() {
         int length = 0;
         long value = (long) this.data[this.position];
-        for (int j = 7; j >= 0; j--) {
-            int x;
-            if ((((long) (1 << j)) & value) == 0) {
-                if (j < 6) {
-                    value &= (long) ((1 << j) - 1);
-                    length = 7 - j;
-                } else if (j == 7) {
-                    length = 1;
+        int j = 7;
+        while (true) {
+            int i = 1;
+            if (j < 0) {
+                break;
+            } else if ((value & ((long) (1 << j))) == 0) {
+                break;
+            } else {
+                j--;
+            }
+        }
+        if (length == 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Invalid UTF-8 sequence first byte: ");
+            stringBuilder.append(value);
+            throw new NumberFormatException(stringBuilder.toString());
+        }
+        while (true) {
+            int i2 = i;
+            if (i2 < length) {
+                j = this.data[this.position + i2];
+                if ((j & PsExtractor.AUDIO_STREAM) != 128) {
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    stringBuilder2.append("Invalid UTF-8 sequence continuation byte: ");
+                    stringBuilder2.append(value);
+                    throw new NumberFormatException(stringBuilder2.toString());
                 }
-                if (length != 0) {
-                    throw new NumberFormatException("Invalid UTF-8 sequence first byte: " + value);
-                }
-                int i;
-                for (i = 1; i < length; i++) {
-                    x = this.data[this.position + i];
-                    if ((x & PsExtractor.AUDIO_STREAM) == 128) {
-                        throw new NumberFormatException("Invalid UTF-8 sequence continuation byte: " + value);
-                    }
-                    value = (value << 6) | ((long) (x & 63));
-                }
+                value = (value << 6) | ((long) (j & 63));
+                i = i2 + 1;
+            } else {
                 this.position += length;
                 return value;
             }
         }
-        if (length != 0) {
-            while (i < length) {
-                x = this.data[this.position + i];
-                if ((x & PsExtractor.AUDIO_STREAM) == 128) {
-                    value = (value << 6) | ((long) (x & 63));
-                } else {
-                    throw new NumberFormatException("Invalid UTF-8 sequence continuation byte: " + value);
-                }
-            }
-            this.position += length;
-            return value;
-        }
-        throw new NumberFormatException("Invalid UTF-8 sequence first byte: " + value);
     }
 }

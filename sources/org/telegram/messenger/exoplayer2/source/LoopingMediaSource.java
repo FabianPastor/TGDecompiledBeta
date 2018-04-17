@@ -100,7 +100,7 @@ public final class LoopingMediaSource implements MediaSource {
     }
 
     public void prepareSource(ExoPlayer player, boolean isTopLevelSource, final Listener listener) {
-        Assertions.checkState(!this.wasPrepareSourceCalled, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+        Assertions.checkState(this.wasPrepareSourceCalled ^ true, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
         this.wasPrepareSourceCalled = true;
         this.childSource.prepareSource(player, false, new Listener() {
             public void onSourceInfoRefreshed(MediaSource source, Timeline timeline, Object manifest) {

@@ -21,7 +21,7 @@ public final class C0539C {
     public static final String CENC_TYPE_cbcs = "cbcs";
     public static final String CENC_TYPE_cenc = "cenc";
     public static final String CENC_TYPE_cens = "cens";
-    public static final int CHANNEL_OUT_7POINT1_SURROUND;
+    public static final int CHANNEL_OUT_7POINT1_SURROUND = (Util.SDK_INT < 23 ? 1020 : 6396);
     public static final UUID CLEARKEY_UUID = new UUID(-2129748144642739255L, 8654423357094679310L);
     public static final int COLOR_RANGE_FULL = 1;
     public static final int COLOR_RANGE_LIMITED = 2;
@@ -223,22 +223,22 @@ public final class C0539C {
     private C0539C() {
     }
 
-    static {
-        int i;
-        if (Util.SDK_INT < 23) {
-            i = 1020;
-        } else {
-            i = 6396;
-        }
-        CHANNEL_OUT_7POINT1_SURROUND = i;
-    }
-
     public static long usToMs(long timeUs) {
-        return (timeUs == TIME_UNSET || timeUs == Long.MIN_VALUE) ? timeUs : timeUs / 1000;
+        if (timeUs != TIME_UNSET) {
+            if (timeUs != Long.MIN_VALUE) {
+                return timeUs / 1000;
+            }
+        }
+        return timeUs;
     }
 
     public static long msToUs(long timeMs) {
-        return (timeMs == TIME_UNSET || timeMs == Long.MIN_VALUE) ? timeMs : timeMs * 1000;
+        if (timeMs != TIME_UNSET) {
+            if (timeMs != Long.MIN_VALUE) {
+                return 1000 * timeMs;
+            }
+        }
+        return timeMs;
     }
 
     @TargetApi(21)

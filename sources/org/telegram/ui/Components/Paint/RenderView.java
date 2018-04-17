@@ -69,13 +69,15 @@ public class RenderView extends TextureView {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            if (surface != null && RenderView.this.internal == null) {
-                RenderView.this.internal = new CanvasInternal(surface);
-                RenderView.this.internal.setBufferSize(width, height);
-                RenderView.this.updateTransform();
-                RenderView.this.internal.requestRender();
-                if (RenderView.this.painting.isPaused()) {
-                    RenderView.this.painting.onResume();
+            if (surface != null) {
+                if (RenderView.this.internal == null) {
+                    RenderView.this.internal = new CanvasInternal(surface);
+                    RenderView.this.internal.setBufferSize(width, height);
+                    RenderView.this.updateTransform();
+                    RenderView.this.internal.requestRender();
+                    if (RenderView.this.painting.isPaused()) {
+                        RenderView.this.painting.onResume();
+                    }
                 }
             }
         }
@@ -177,17 +179,19 @@ public class RenderView extends TextureView {
             }
 
             public void run() {
-                if (CanvasInternal.this.initialized && !RenderView.this.shuttingDown) {
-                    CanvasInternal.this.setCurrentContext();
-                    GLES20.glBindFramebuffer(36160, 0);
-                    GLES20.glViewport(0, 0, CanvasInternal.this.bufferWidth, CanvasInternal.this.bufferHeight);
-                    GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-                    GLES20.glClear(MessagesController.UPDATE_MASK_CHAT_ADMINS);
-                    RenderView.this.painting.render();
-                    GLES20.glBlendFunc(1, 771);
-                    CanvasInternal.this.egl10.eglSwapBuffers(CanvasInternal.this.eglDisplay, CanvasInternal.this.eglSurface);
-                    if (!CanvasInternal.this.ready) {
-                        RenderView.this.queue.postRunnable(new C12071(), 200);
+                if (CanvasInternal.this.initialized) {
+                    if (!RenderView.this.shuttingDown) {
+                        CanvasInternal.this.setCurrentContext();
+                        GLES20.glBindFramebuffer(36160, 0);
+                        GLES20.glViewport(0, 0, CanvasInternal.this.bufferWidth, CanvasInternal.this.bufferHeight);
+                        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+                        GLES20.glClear(MessagesController.UPDATE_MASK_CHAT_ADMINS);
+                        RenderView.this.painting.render();
+                        GLES20.glBlendFunc(1, 771);
+                        CanvasInternal.this.egl10.eglSwapBuffers(CanvasInternal.this.eglDisplay, CanvasInternal.this.eglSurface);
+                        if (!CanvasInternal.this.ready) {
+                            RenderView.this.queue.postRunnable(new C12071(), 200);
+                        }
                     }
                 }
             }
@@ -234,9 +238,11 @@ public class RenderView extends TextureView {
         }
 
         public void run() {
-            if (RenderView.this.bitmap != null && !RenderView.this.bitmap.isRecycled()) {
-                this.initialized = initGL();
-                super.run();
+            if (RenderView.this.bitmap != null) {
+                if (!RenderView.this.bitmap.isRecycled()) {
+                    this.initialized = initGL();
+                    super.run();
+                }
             }
         }
 
@@ -245,17 +251,24 @@ public class RenderView extends TextureView {
             this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             if (this.eglDisplay == EGL10.EGL_NO_DISPLAY) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m1e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("eglGetDisplay failed ");
+                    stringBuilder.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                    FileLog.m1e(stringBuilder.toString());
                 }
                 finish();
                 return false;
             }
+            StringBuilder stringBuilder2;
             if (this.egl10.eglInitialize(this.eglDisplay, new int[2])) {
                 int[] configsCount = new int[1];
                 EGLConfig[] configs = new EGLConfig[1];
                 if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12326, 0, 12344}, configs, 1, configsCount)) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m1e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        stringBuilder2 = new StringBuilder();
+                        stringBuilder2.append("eglChooseConfig failed ");
+                        stringBuilder2.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        FileLog.m1e(stringBuilder2.toString());
                     }
                     finish();
                     return false;
@@ -264,35 +277,46 @@ public class RenderView extends TextureView {
                     this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
                     if (this.eglContext == null) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m1e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                            stringBuilder2 = new StringBuilder();
+                            stringBuilder2.append("eglCreateContext failed ");
+                            stringBuilder2.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                            FileLog.m1e(stringBuilder2.toString());
                         }
                         finish();
                         return false;
                     } else if (this.surfaceTexture instanceof SurfaceTexture) {
                         this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, this.surfaceTexture, null);
-                        if (this.eglSurface == null || this.eglSurface == EGL10.EGL_NO_SURFACE) {
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m1e("createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        if (this.eglSurface != null) {
+                            if (this.eglSurface != EGL10.EGL_NO_SURFACE) {
+                                if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
+                                    GLES20.glEnable(3042);
+                                    GLES20.glDisable(3024);
+                                    GLES20.glDisable(2960);
+                                    GLES20.glDisable(2929);
+                                    RenderView.this.painting.setupShaders();
+                                    checkBitmap();
+                                    RenderView.this.painting.setBitmap(RenderView.this.bitmap);
+                                    Utils.HasGLError();
+                                    return true;
+                                }
+                                if (BuildVars.LOGS_ENABLED) {
+                                    stringBuilder2 = new StringBuilder();
+                                    stringBuilder2.append("eglMakeCurrent failed ");
+                                    stringBuilder2.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                                    FileLog.m1e(stringBuilder2.toString());
+                                }
+                                finish();
+                                return false;
                             }
-                            finish();
-                            return false;
-                        } else if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
-                            GLES20.glEnable(3042);
-                            GLES20.glDisable(3024);
-                            GLES20.glDisable(2960);
-                            GLES20.glDisable(2929);
-                            RenderView.this.painting.setupShaders();
-                            checkBitmap();
-                            RenderView.this.painting.setBitmap(RenderView.this.bitmap);
-                            Utils.HasGLError();
-                            return true;
-                        } else {
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m1e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
-                            }
-                            finish();
-                            return false;
                         }
+                        if (BuildVars.LOGS_ENABLED) {
+                            stringBuilder2 = new StringBuilder();
+                            stringBuilder2.append("createWindowSurface failed ");
+                            stringBuilder2.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                            FileLog.m1e(stringBuilder2.toString());
+                        }
+                        finish();
+                        return false;
                     } else {
                         finish();
                         return false;
@@ -306,7 +330,10 @@ public class RenderView extends TextureView {
                 }
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m1e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                stringBuilder2 = new StringBuilder();
+                stringBuilder2.append("eglInitialize failed ");
+                stringBuilder2.append(GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                FileLog.m1e(stringBuilder2.toString());
             }
             finish();
             return false;
@@ -419,10 +446,12 @@ public class RenderView extends TextureView {
         if (event.getPointerCount() > 1) {
             return false;
         }
-        if (this.internal == null || !this.internal.initialized || !this.internal.ready) {
-            return true;
+        if (this.internal != null && this.internal.initialized) {
+            if (this.internal.ready) {
+                this.input.process(event);
+                return true;
+            }
         }
-        this.input.process(event);
         return true;
     }
 
@@ -474,13 +503,8 @@ public class RenderView extends TextureView {
     }
 
     private void updateTransform() {
-        float scale;
         Matrix matrix = new Matrix();
-        if (this.painting != null) {
-            scale = ((float) getWidth()) / this.painting.getSize().width;
-        } else {
-            scale = 1.0f;
-        }
+        float scale = this.painting != null ? ((float) getWidth()) / this.painting.getSize().width : 1.0f;
         if (scale <= 0.0f) {
             scale = 1.0f;
         }
@@ -493,7 +517,12 @@ public class RenderView extends TextureView {
     }
 
     public boolean shouldDraw() {
-        return this.delegate == null || this.delegate.shouldDraw();
+        if (this.delegate != null) {
+            if (!this.delegate.shouldDraw()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void onBeganDrawing() {
@@ -524,9 +553,11 @@ public class RenderView extends TextureView {
         if (this.internal != null) {
             this.internal.postRunnable(new Runnable() {
                 public void run() {
-                    if (RenderView.this.internal != null && RenderView.this.internal.initialized) {
-                        RenderView.this.internal.setCurrentContext();
-                        action.run();
+                    if (RenderView.this.internal != null) {
+                        if (RenderView.this.internal.initialized) {
+                            RenderView.this.internal.setCurrentContext();
+                            action.run();
+                        }
                     }
                 }
             });

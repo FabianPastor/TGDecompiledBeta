@@ -40,30 +40,48 @@ public final class HlsDownloader extends SegmentDownloader<HlsMasterPlaylist, St
     }
 
     protected List<Segment> getSegments(DataSource dataSource, HlsMasterPlaylist manifest, String[] keys, boolean allowIndexLoadErrors) throws InterruptedException, IOException {
+        String[] strArr = keys;
         HashSet<Uri> encryptionKeyUris = new HashSet();
         ArrayList<Segment> segments = new ArrayList();
-        for (String playlistUrl : keys) {
+        int length = strArr.length;
+        int i = 0;
+        while (i < length) {
+            int i2;
+            long j;
             HlsMediaPlaylist mediaPlaylist = null;
-            Uri uri = UriUtil.resolveToUri(manifest.baseUri, playlistUrl);
+            Uri uri = UriUtil.resolveToUri(manifest.baseUri, strArr[i]);
             try {
                 mediaPlaylist = (HlsMediaPlaylist) loadManifest(dataSource, uri);
             } catch (IOException e) {
+                IOException e2 = e;
                 if (!allowIndexLoadErrors) {
-                    throw e;
+                    throw e2;
                 }
             }
-            segments.add(new Segment(mediaPlaylist != null ? mediaPlaylist.startTimeUs : Long.MIN_VALUE, new DataSpec(uri)));
+            if (mediaPlaylist != null) {
+                i2 = length;
+                j = mediaPlaylist.startTimeUs;
+            } else {
+                i2 = length;
+                j = Long.MIN_VALUE;
+            }
+            segments.add(new Segment(j, new DataSpec(uri)));
             if (mediaPlaylist != null) {
                 Segment initSegment = mediaPlaylist.initializationSegment;
                 if (initSegment != null) {
                     addSegment(segments, mediaPlaylist, initSegment, encryptionKeyUris);
                 }
                 List<Segment> hlsSegments = mediaPlaylist.segments;
-                for (int i = 0; i < hlsSegments.size(); i++) {
-                    addSegment(segments, mediaPlaylist, (Segment) hlsSegments.get(i), encryptionKeyUris);
+                for (int i3 = 0; i3 < hlsSegments.size(); i3++) {
+                    addSegment(segments, mediaPlaylist, (Segment) hlsSegments.get(i3), encryptionKeyUris);
                 }
             }
+            i++;
+            length = i2;
         }
+        HlsDownloader hlsDownloader = this;
+        DataSource dataSource2 = dataSource;
+        HlsMasterPlaylist hlsMasterPlaylist = manifest;
         return segments;
     }
 
@@ -74,14 +92,19 @@ public final class HlsDownloader extends SegmentDownloader<HlsMasterPlaylist, St
     }
 
     private static void addSegment(ArrayList<Segment> segments, HlsMediaPlaylist mediaPlaylist, Segment hlsSegment, HashSet<Uri> encryptionKeyUris) throws IOException, InterruptedException {
-        long startTimeUs = mediaPlaylist.startTimeUs + hlsSegment.relativeStartTimeUs;
-        if (hlsSegment.fullSegmentEncryptionKeyUri != null) {
-            Uri keyUri = UriUtil.resolveToUri(mediaPlaylist.baseUri, hlsSegment.fullSegmentEncryptionKeyUri);
+        ArrayList<Segment> arrayList = segments;
+        HlsMediaPlaylist hlsMediaPlaylist = mediaPlaylist;
+        Segment segment = hlsSegment;
+        long startTimeUs = hlsMediaPlaylist.startTimeUs + segment.relativeStartTimeUs;
+        if (segment.fullSegmentEncryptionKeyUri != null) {
+            Uri keyUri = UriUtil.resolveToUri(hlsMediaPlaylist.baseUri, segment.fullSegmentEncryptionKeyUri);
             if (encryptionKeyUris.add(keyUri)) {
-                segments.add(new Segment(startTimeUs, new DataSpec(keyUri)));
+                arrayList.add(new Segment(startTimeUs, new DataSpec(keyUri)));
             }
+        } else {
+            HashSet<Uri> hashSet = encryptionKeyUris;
         }
-        segments.add(new Segment(startTimeUs, new DataSpec(UriUtil.resolveToUri(mediaPlaylist.baseUri, hlsSegment.url), hlsSegment.byterangeOffset, hlsSegment.byterangeLength, null)));
+        arrayList.add(new Segment(startTimeUs, new DataSpec(UriUtil.resolveToUri(hlsMediaPlaylist.baseUri, segment.url), segment.byterangeOffset, segment.byterangeLength, null)));
     }
 
     private static void extractUrls(List<HlsUrl> hlsUrls, ArrayList<String> urls) {

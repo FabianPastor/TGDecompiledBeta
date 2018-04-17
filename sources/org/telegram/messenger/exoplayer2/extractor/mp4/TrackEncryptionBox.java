@@ -14,10 +14,10 @@ public final class TrackEncryptionBox {
     public final String schemeType;
 
     public TrackEncryptionBox(boolean isEncrypted, String schemeType, int initializationVectorSize, byte[] keyId, int defaultEncryptedBlocks, int defaultClearBlocks, byte[] defaultInitializationVector) {
-        int i = 1;
+        int i = 0;
         int i2 = initializationVectorSize == 0 ? 1 : 0;
-        if (defaultInitializationVector != null) {
-            i = 0;
+        if (defaultInitializationVector == null) {
+            i = 1;
         }
         Assertions.checkArgument(i ^ i2);
         this.isEncrypted = isEncrypted;
@@ -32,31 +32,23 @@ public final class TrackEncryptionBox {
             return 1;
         }
         int i = -1;
-        switch (schemeType.hashCode()) {
-            case 3046605:
-                if (schemeType.equals(C0539C.CENC_TYPE_cbc1)) {
-                    i = 2;
-                    break;
-                }
-                break;
-            case 3046671:
-                if (schemeType.equals(C0539C.CENC_TYPE_cbcs)) {
-                    i = 3;
-                    break;
-                }
-                break;
-            case 3049879:
-                if (schemeType.equals(C0539C.CENC_TYPE_cenc)) {
+        int hashCode = schemeType.hashCode();
+        if (hashCode != 3046605) {
+            if (hashCode != 3046671) {
+                if (hashCode != 3049879) {
+                    if (hashCode == 3049895) {
+                        if (schemeType.equals(C0539C.CENC_TYPE_cens)) {
+                            i = 1;
+                        }
+                    }
+                } else if (schemeType.equals(C0539C.CENC_TYPE_cenc)) {
                     i = 0;
-                    break;
                 }
-                break;
-            case 3049895:
-                if (schemeType.equals(C0539C.CENC_TYPE_cens)) {
-                    i = 1;
-                    break;
-                }
-                break;
+            } else if (schemeType.equals(C0539C.CENC_TYPE_cbcs)) {
+                i = 3;
+            }
+        } else if (schemeType.equals(C0539C.CENC_TYPE_cbc1)) {
+            i = 2;
         }
         switch (i) {
             case 0:
@@ -66,7 +58,12 @@ public final class TrackEncryptionBox {
             case 3:
                 return 2;
             default:
-                Log.w(TAG, "Unsupported protection scheme type '" + schemeType + "'. Assuming AES-CTR crypto mode.");
+                String str = TAG;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Unsupported protection scheme type '");
+                stringBuilder.append(schemeType);
+                stringBuilder.append("'. Assuming AES-CTR crypto mode.");
+                Log.w(str, stringBuilder.toString());
                 return 1;
         }
     }

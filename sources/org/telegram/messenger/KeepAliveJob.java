@@ -6,6 +6,7 @@ import org.telegram.messenger.support.JobIntentService;
 
 public class KeepAliveJob extends JobIntentService {
     private static volatile CountDownLatch countDownLatch;
+    private static Runnable finishJobByTimeoutRunnable = new C23713();
     private static volatile boolean startingJob;
     private static final Object sync = new Object();
 
@@ -15,16 +16,18 @@ public class KeepAliveJob extends JobIntentService {
         }
 
         public void run() {
-            if (!KeepAliveJob.startingJob && KeepAliveJob.countDownLatch == null) {
-                try {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m0d("starting keep-alive job");
+            if (!KeepAliveJob.startingJob) {
+                if (KeepAliveJob.countDownLatch == null) {
+                    try {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.m0d("starting keep-alive job");
+                        }
+                        synchronized (KeepAliveJob.sync) {
+                            KeepAliveJob.startingJob = true;
+                        }
+                        JobIntentService.enqueueWork(ApplicationLoader.applicationContext, KeepAliveJob.class, 1000, new Intent());
+                    } catch (Exception e) {
                     }
-                    synchronized (KeepAliveJob.sync) {
-                        KeepAliveJob.startingJob = true;
-                    }
-                    JobIntentService.enqueueWork(ApplicationLoader.applicationContext, KeepAliveJob.class, 1000, new Intent());
-                } catch (Exception e) {
                 }
             }
         }
@@ -53,6 +56,16 @@ public class KeepAliveJob extends JobIntentService {
         }
     }
 
+    /* renamed from: org.telegram.messenger.KeepAliveJob$3 */
+    static class C23713 implements Runnable {
+        C23713() {
+        }
+
+        public void run() {
+            KeepAliveJob.finishJob();
+        }
+    }
+
     public static void startJob() {
         Utilities.globalQueue.postRunnable(new C02171());
     }
@@ -71,6 +84,7 @@ public class KeepAliveJob extends JobIntentService {
                 return;
             }
         }
+        Utilities.globalQueue.cancelRunnable(finishJobByTimeoutRunnable);
         synchronized (sync) {
             countDownLatch = null;
         }

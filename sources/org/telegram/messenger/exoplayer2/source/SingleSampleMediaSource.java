@@ -41,13 +41,13 @@ public final class SingleSampleMediaSource implements MediaSource {
         }
 
         public Factory setMinLoadableRetryCount(int minLoadableRetryCount) {
-            Assertions.checkState(!this.isCreateCalled);
+            Assertions.checkState(this.isCreateCalled ^ 1);
             this.minLoadableRetryCount = minLoadableRetryCount;
             return this;
         }
 
         public Factory setTreatLoadErrorsAsEndOfStream(boolean treatLoadErrorsAsEndOfStream) {
-            Assertions.checkState(!this.isCreateCalled);
+            Assertions.checkState(this.isCreateCalled ^ 1);
             this.treatLoadErrorsAsEndOfStream = treatLoadErrorsAsEndOfStream;
             return this;
         }
@@ -103,7 +103,15 @@ public final class SingleSampleMediaSource implements MediaSource {
 
     @Deprecated
     public SingleSampleMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, Format format, long durationUs, int minLoadableRetryCount, Handler eventHandler, EventListener eventListener, int eventSourceId, boolean treatLoadErrorsAsEndOfStream) {
-        this(uri, dataSourceFactory, format, durationUs, minLoadableRetryCount, eventHandler, eventListener == null ? null : new EventListenerWrapper(eventListener, eventSourceId), treatLoadErrorsAsEndOfStream);
+        EventListenerWrapper eventListenerWrapper;
+        EventListener eventListener2 = eventListener;
+        if (eventListener2 == null) {
+            eventListenerWrapper = null;
+            int i = eventSourceId;
+        } else {
+            eventListenerWrapper = new EventListenerWrapper(eventListener2, eventSourceId);
+        }
+        this(uri, dataSourceFactory, format, durationUs, minLoadableRetryCount, eventHandler, eventListenerWrapper, treatLoadErrorsAsEndOfStream);
     }
 
     private SingleSampleMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, Format format, long durationUs, int minLoadableRetryCount, Handler eventHandler, MediaSourceEventListener eventListener, boolean treatLoadErrorsAsEndOfStream) {
@@ -118,7 +126,7 @@ public final class SingleSampleMediaSource implements MediaSource {
     }
 
     public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
-        Assertions.checkState(!this.isPrepared, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+        Assertions.checkState(this.isPrepared ^ true, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
         this.isPrepared = true;
         listener.onSourceInfoRefreshed(this, this.timeline, null);
     }

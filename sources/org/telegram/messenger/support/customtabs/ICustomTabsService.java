@@ -37,17 +37,18 @@ public interface ICustomTabsService extends IInterface {
             }
 
             public boolean warmup(long flags) throws RemoteException {
-                boolean _result = false;
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
                     _data.writeInterfaceToken(Stub.DESCRIPTOR);
                     _data.writeLong(flags);
+                    boolean z = false;
                     this.mRemote.transact(2, _data, _reply, 0);
                     _reply.readException();
                     if (_reply.readInt() != 0) {
-                        _result = true;
+                        z = true;
                     }
+                    boolean _result = z;
                     _reply.recycle();
                     _data.recycle();
                     return _result;
@@ -58,17 +59,18 @@ public interface ICustomTabsService extends IInterface {
             }
 
             public boolean newSession(ICustomTabsCallback callback) throws RemoteException {
-                boolean _result = false;
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
                     _data.writeInterfaceToken(Stub.DESCRIPTOR);
                     _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
+                    boolean z = false;
                     this.mRemote.transact(3, _data, _reply, 0);
                     _reply.readException();
                     if (_reply.readInt() != 0) {
-                        _result = true;
+                        z = true;
                     }
+                    boolean _result = z;
                     _reply.recycle();
                     _data.recycle();
                     return _result;
@@ -79,12 +81,12 @@ public interface ICustomTabsService extends IInterface {
             }
 
             public boolean mayLaunchUrl(ICustomTabsCallback callback, Uri url, Bundle extras, List<Bundle> otherLikelyBundles) throws RemoteException {
-                boolean _result = true;
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
                     _data.writeInterfaceToken(Stub.DESCRIPTOR);
                     _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
+                    boolean _result = true;
                     if (url != null) {
                         _data.writeInt(1);
                         url.writeToParcel(_data, 0);
@@ -142,12 +144,12 @@ public interface ICustomTabsService extends IInterface {
             }
 
             public boolean updateVisuals(ICustomTabsCallback callback, Bundle bundle) throws RemoteException {
-                boolean _result = true;
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
                     _data.writeInterfaceToken(Stub.DESCRIPTOR);
                     _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
+                    boolean _result = true;
                     if (bundle != null) {
                         _data.writeInt(1);
                         bundle.writeToParcel(_data, 0);
@@ -169,12 +171,12 @@ public interface ICustomTabsService extends IInterface {
             }
 
             public boolean requestPostMessageChannel(ICustomTabsCallback callback, Uri postMessageOrigin) throws RemoteException {
-                boolean _result = true;
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
                     _data.writeInterfaceToken(Stub.DESCRIPTOR);
                     _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
+                    boolean _result = true;
                     if (postMessageOrigin != null) {
                         _data.writeInt(1);
                         postMessageOrigin.writeToParcel(_data, 0);
@@ -228,7 +230,8 @@ public interface ICustomTabsService extends IInterface {
                 return null;
             }
             IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
-            return (iin == null || !(iin instanceof ICustomTabsService)) ? new Proxy(obj) : (ICustomTabsService) iin;
+            ICustomTabsService proxy = (iin == null || !(iin instanceof ICustomTabsService)) ? new Proxy(obj) : (ICustomTabsService) iin;
+            return proxy;
         }
 
         public IBinder asBinder() {
@@ -236,101 +239,92 @@ public interface ICustomTabsService extends IInterface {
         }
 
         public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
-            boolean _arg21;
-            ICustomTabsCallback _arg0;
-            Uri _arg11;
-            Bundle _arg2;
-            Bundle _arg12;
-            switch (code) {
-                case 2:
-                    data.enforceInterface(DESCRIPTOR);
-                    _arg21 = warmup(data.readLong());
-                    reply.writeNoException();
-                    reply.writeInt(_arg21 ? 1 : 0);
-                    return true;
-                case 3:
-                    data.enforceInterface(DESCRIPTOR);
-                    boolean _arg13 = newSession(org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder()));
-                    reply.writeNoException();
-                    reply.writeInt(_arg13 ? 1 : 0);
-                    return true;
-                case 4:
-                    data.enforceInterface(DESCRIPTOR);
-                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
-                    if (data.readInt() != 0) {
-                        _arg11 = (Uri) Uri.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg11 = null;
-                    }
-                    if (data.readInt() != 0) {
-                        _arg2 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg2 = null;
-                    }
-                    boolean _result1 = mayLaunchUrl(_arg0, _arg11, _arg2, data.createTypedArrayList(Bundle.CREATOR));
-                    reply.writeNoException();
-                    reply.writeInt(_result1 ? 1 : 0);
-                    return true;
-                case 5:
-                    data.enforceInterface(DESCRIPTOR);
-                    String _arg01 = data.readString();
-                    if (data.readInt() != 0) {
-                        _arg12 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg12 = null;
-                    }
-                    _arg2 = extraCommand(_arg01, _arg12);
-                    reply.writeNoException();
-                    if (_arg2 != null) {
-                        reply.writeInt(1);
-                        _arg2.writeToParcel(reply, 1);
-                    } else {
-                        reply.writeInt(0);
-                    }
-                    return true;
-                case 6:
-                    data.enforceInterface(DESCRIPTOR);
-                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
-                    if (data.readInt() != 0) {
-                        _arg12 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg12 = null;
-                    }
-                    _arg21 = updateVisuals(_arg0, _arg12);
-                    reply.writeNoException();
-                    reply.writeInt(_arg21 ? 1 : 0);
-                    return true;
-                case 7:
-                    data.enforceInterface(DESCRIPTOR);
-                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
-                    if (data.readInt() != 0) {
-                        _arg11 = (Uri) Uri.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg11 = null;
-                    }
-                    _arg21 = requestPostMessageChannel(_arg0, _arg11);
-                    reply.writeNoException();
-                    reply.writeInt(_arg21 ? 1 : 0);
-                    return true;
-                case 8:
-                    data.enforceInterface(DESCRIPTOR);
-                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
-                    String _arg1 = data.readString();
-                    if (data.readInt() != 0) {
-                        _arg2 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg2 = null;
-                    }
-                    int _result = postMessage(_arg0, _arg1, _arg2);
-                    reply.writeNoException();
-                    reply.writeInt(_result);
-                    return true;
-                case 1598968902:
-                    reply.writeString(DESCRIPTOR);
-                    return true;
-                default:
-                    return super.onTransact(code, data, reply, flags);
+            if (code != NUM) {
+                Bundle _arg2 = null;
+                ICustomTabsCallback _arg0;
+                boolean _arg21;
+                switch (code) {
+                    case 2:
+                        data.enforceInterface(DESCRIPTOR);
+                        boolean _arg212 = warmup(data.readLong());
+                        reply.writeNoException();
+                        reply.writeInt(_arg212);
+                        return true;
+                    case 3:
+                        data.enforceInterface(DESCRIPTOR);
+                        boolean _arg13 = newSession(org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder()));
+                        reply.writeNoException();
+                        reply.writeInt(_arg13);
+                        return true;
+                    case 4:
+                        Uri _arg11;
+                        data.enforceInterface(DESCRIPTOR);
+                        _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                        if (data.readInt() != 0) {
+                            _arg11 = (Uri) Uri.CREATOR.createFromParcel(data);
+                        } else {
+                            _arg11 = null;
+                        }
+                        if (data.readInt() != 0) {
+                            _arg2 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                        }
+                        boolean _result1 = mayLaunchUrl(_arg0, _arg11, _arg2, data.createTypedArrayList(Bundle.CREATOR));
+                        reply.writeNoException();
+                        reply.writeInt(_result1);
+                        return true;
+                    case 5:
+                        data.enforceInterface(DESCRIPTOR);
+                        String _arg01 = data.readString();
+                        if (data.readInt() != 0) {
+                            _arg2 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                        }
+                        Bundle _arg22 = extraCommand(_arg01, _arg2);
+                        reply.writeNoException();
+                        if (_arg22 != null) {
+                            reply.writeInt(1);
+                            _arg22.writeToParcel(reply, 1);
+                        } else {
+                            reply.writeInt(0);
+                        }
+                        return true;
+                    case 6:
+                        data.enforceInterface(DESCRIPTOR);
+                        _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                        if (data.readInt() != 0) {
+                            _arg2 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                        }
+                        _arg21 = updateVisuals(_arg0, _arg2);
+                        reply.writeNoException();
+                        reply.writeInt(_arg21);
+                        return true;
+                    case 7:
+                        Uri _arg112;
+                        data.enforceInterface(DESCRIPTOR);
+                        _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                        if (data.readInt() != 0) {
+                            _arg112 = (Uri) Uri.CREATOR.createFromParcel(data);
+                        }
+                        _arg21 = requestPostMessageChannel(_arg0, _arg112);
+                        reply.writeNoException();
+                        reply.writeInt(_arg21);
+                        return true;
+                    case 8:
+                        data.enforceInterface(DESCRIPTOR);
+                        _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                        String _arg1 = data.readString();
+                        if (data.readInt() != 0) {
+                            _arg2 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                        }
+                        int _result = postMessage(_arg0, _arg1, _arg2);
+                        reply.writeNoException();
+                        reply.writeInt(_result);
+                        return true;
+                    default:
+                        return super.onTransact(code, data, reply, flags);
+                }
             }
+            reply.writeString(DESCRIPTOR);
+            return true;
         }
     }
 

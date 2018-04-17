@@ -46,10 +46,13 @@ public final class SonicAudioProcessor implements AudioProcessor {
         if (this.outputBytes < 1024) {
             return (long) (((double) this.speed) * ((double) duration));
         }
+        long scaleLargeTimestamp;
         if (this.outputSampleRateHz == this.sampleRateHz) {
-            return Util.scaleLargeTimestamp(duration, this.inputBytes, this.outputBytes);
+            scaleLargeTimestamp = Util.scaleLargeTimestamp(duration, this.inputBytes, this.outputBytes);
+        } else {
+            scaleLargeTimestamp = Util.scaleLargeTimestamp(duration, this.inputBytes * ((long) this.outputSampleRateHz), this.outputBytes * ((long) this.sampleRateHz));
         }
-        return Util.scaleLargeTimestamp(duration, ((long) this.outputSampleRateHz) * this.inputBytes, ((long) this.sampleRateHz) * this.outputBytes);
+        return scaleLargeTimestamp;
     }
 
     public boolean configure(int sampleRateHz, int channelCount, int encoding) throws UnhandledFormatException {
@@ -67,7 +70,12 @@ public final class SonicAudioProcessor implements AudioProcessor {
     }
 
     public boolean isActive() {
-        return Math.abs(this.speed - 1.0f) >= CLOSE_THRESHOLD || Math.abs(this.pitch - 1.0f) >= CLOSE_THRESHOLD || this.outputSampleRateHz != this.sampleRateHz;
+        if (Math.abs(this.speed - 1.0f) < CLOSE_THRESHOLD && Math.abs(this.pitch - 1.0f) < CLOSE_THRESHOLD) {
+            if (this.outputSampleRateHz == this.sampleRateHz) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int getOutputChannelCount() {

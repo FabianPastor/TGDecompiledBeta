@@ -40,38 +40,29 @@ public final class CommentFrame extends Id3Frame {
     }
 
     public boolean equals(Object obj) {
+        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        CommentFrame other = (CommentFrame) obj;
-        if (Util.areEqual(this.description, other.description) && Util.areEqual(this.language, other.language) && Util.areEqual(this.text, other.text)) {
-            return true;
+        if (obj != null) {
+            if (getClass() == obj.getClass()) {
+                CommentFrame other = (CommentFrame) obj;
+                if (!Util.areEqual(this.description, other.description) || !Util.areEqual(this.language, other.language) || !Util.areEqual(this.text, other.text)) {
+                    z = false;
+                }
+                return z;
+            }
         }
         return false;
     }
 
     public int hashCode() {
-        int hashCode;
         int i = 0;
-        if (this.language != null) {
-            hashCode = this.language.hashCode();
-        } else {
-            hashCode = 0;
-        }
-        int i2 = (hashCode + 527) * 31;
-        if (this.description != null) {
-            hashCode = this.description.hashCode();
-        } else {
-            hashCode = 0;
-        }
-        hashCode = (i2 + hashCode) * 31;
+        int result = 31 * ((31 * ((31 * 17) + (this.language != null ? this.language.hashCode() : 0))) + (this.description != null ? this.description.hashCode() : 0));
         if (this.text != null) {
             i = this.text.hashCode();
         }
-        return hashCode + i;
+        return result + i;
     }
 
     public void writeToParcel(Parcel dest, int flags) {

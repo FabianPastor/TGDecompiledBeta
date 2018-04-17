@@ -50,13 +50,11 @@ public class LetterDrawable extends Drawable {
                     this.textLeft = this.textLayout.getLineLeft(0);
                     this.textWidth = this.textLayout.getLineWidth(0);
                     this.textHeight = (float) this.textLayout.getLineBottom(0);
-                    return;
                 }
-                return;
             } catch (Throwable e) {
                 FileLog.m3e(e);
-                return;
             }
+            return;
         }
         this.textLayout = null;
     }

@@ -86,13 +86,13 @@ public final class CacheDataSink implements DataSink {
     }
 
     private void openNextOutputStream() throws IOException {
-        long maxLength;
+        long j;
         if (this.dataSpec.length == -1) {
-            maxLength = this.maxCacheFileSize;
+            j = this.maxCacheFileSize;
         } else {
-            maxLength = Math.min(this.dataSpec.length - this.dataSpecBytesWritten, this.maxCacheFileSize);
+            j = Math.min(this.dataSpec.length - this.dataSpecBytesWritten, this.maxCacheFileSize);
         }
-        this.file = this.cache.startFile(this.dataSpec.key, this.dataSpec.absoluteStreamPosition + this.dataSpecBytesWritten, maxLength);
+        this.file = this.cache.startFile(this.dataSpec.key, this.dataSpec.absoluteStreamPosition + this.dataSpecBytesWritten, j);
         this.underlyingFileOutputStream = new FileOutputStream(this.file);
         if (this.bufferSize > 0) {
             if (this.bufferedOutputStream == null) {
@@ -107,28 +107,19 @@ public final class CacheDataSink implements DataSink {
         this.outputStreamBytesWritten = 0;
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void closeCurrentOutputStream() throws IOException {
         if (this.outputStream != null) {
-            File fileToCommit;
+            boolean success = false;
             try {
                 this.outputStream.flush();
                 this.underlyingFileOutputStream.getFD().sync();
+                success = true;
+            } finally {
                 Util.closeQuietly(this.outputStream);
                 this.outputStream = null;
-                fileToCommit = this.file;
+                File fileToCommit = this.file;
                 this.file = null;
-                if (true) {
-                    this.cache.commitFile(fileToCommit);
-                }
-                fileToCommit.delete();
-            } catch (Throwable th) {
-                Util.closeQuietly(this.outputStream);
-                this.outputStream = null;
-                fileToCommit = this.file;
-                this.file = null;
-                if (false) {
+                if (success) {
                     this.cache.commitFile(fileToCommit);
                 } else {
                     fileToCommit.delete();

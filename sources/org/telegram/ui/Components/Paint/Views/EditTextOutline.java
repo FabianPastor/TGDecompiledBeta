@@ -53,26 +53,28 @@ public class EditTextOutline extends EditText {
     }
 
     protected void onDraw(Canvas canvas) {
-        if (!(this.mCache == null || this.mStrokeColor == 0)) {
-            if (this.mUpdateCachedBitmap) {
+        if (this.mCache == null || r0.mStrokeColor == 0) {
+            Canvas canvas2 = canvas;
+        } else {
+            if (r0.mUpdateCachedBitmap) {
                 int w = (getMeasuredWidth() - getPaddingLeft()) - getPaddingRight();
                 int h = getMeasuredHeight();
                 String text = getText().toString();
-                this.mCanvas.setBitmap(this.mCache);
-                this.mCanvas.drawColor(0, Mode.CLEAR);
-                this.mPaint.setStrokeWidth(this.mStrokeWidth > 0.0f ? this.mStrokeWidth : (float) Math.ceil((double) (getTextSize() / 11.5f)));
-                this.mPaint.setColor(this.mStrokeColor);
-                this.mPaint.setTextSize(getTextSize());
-                this.mPaint.setTypeface(getTypeface());
-                this.mPaint.setStyle(Style.FILL_AND_STROKE);
-                StaticLayout sl = new StaticLayout(text, this.mPaint, w, Alignment.ALIGN_CENTER, 1.0f, 0.0f, true);
-                this.mCanvas.save();
-                this.mCanvas.translate((float) getPaddingLeft(), ((float) getPaddingTop()) + (((float) (((h - getPaddingTop()) - getPaddingBottom()) - sl.getHeight())) / 2.0f));
-                sl.draw(this.mCanvas);
-                this.mCanvas.restore();
-                this.mUpdateCachedBitmap = false;
+                r0.mCanvas.setBitmap(r0.mCache);
+                r0.mCanvas.drawColor(0, Mode.CLEAR);
+                r0.mPaint.setStrokeWidth(r0.mStrokeWidth > 0.0f ? r0.mStrokeWidth : (float) Math.ceil((double) (getTextSize() / 11.5f)));
+                r0.mPaint.setColor(r0.mStrokeColor);
+                r0.mPaint.setTextSize(getTextSize());
+                r0.mPaint.setTypeface(getTypeface());
+                r0.mPaint.setStyle(Style.FILL_AND_STROKE);
+                StaticLayout sl = new StaticLayout(text, r0.mPaint, w, Alignment.ALIGN_CENTER, 1.0f, 0.0f, true);
+                r0.mCanvas.save();
+                r0.mCanvas.translate((float) getPaddingLeft(), ((float) getPaddingTop()) + (((float) (((h - getPaddingTop()) - getPaddingBottom()) - sl.getHeight())) / 2.0f));
+                sl.draw(r0.mCanvas);
+                r0.mCanvas.restore();
+                r0.mUpdateCachedBitmap = false;
             }
-            canvas.drawBitmap(this.mCache, 0.0f, 0.0f, this.mPaint);
+            canvas.drawBitmap(r0.mCache, 0.0f, 0.0f, r0.mPaint);
         }
         super.onDraw(canvas);
     }

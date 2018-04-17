@@ -42,7 +42,7 @@ public final class SampleQueue implements TrackOutput {
 
         public AllocationNode(long startPosition, int allocationLength) {
             this.startPosition = startPosition;
-            this.endPosition = ((long) allocationLength) + startPosition;
+            this.endPosition = startPosition + ((long) allocationLength);
         }
 
         public void initialize(Allocation allocation, AllocationNode next) {
@@ -100,30 +100,27 @@ public final class SampleQueue implements TrackOutput {
 
     public void discardUpstreamSamples(int discardFromIndex) {
         this.totalBytesWritten = this.metadataQueue.discardUpstreamSamples(discardFromIndex);
-        if (this.totalBytesWritten == 0 || this.totalBytesWritten == this.firstAllocationNode.startPosition) {
-            clearAllocationNodes(this.firstAllocationNode);
-            this.firstAllocationNode = new AllocationNode(this.totalBytesWritten, this.allocationLength);
-            this.readAllocationNode = this.firstAllocationNode;
-            this.writeAllocationNode = this.firstAllocationNode;
-            return;
+        if (this.totalBytesWritten != 0) {
+            if (this.totalBytesWritten != this.firstAllocationNode.startPosition) {
+                AllocationNode lastNodeToKeep = this.firstAllocationNode;
+                while (this.totalBytesWritten > lastNodeToKeep.endPosition) {
+                    lastNodeToKeep = lastNodeToKeep.next;
+                }
+                AllocationNode firstNodeToDiscard = lastNodeToKeep.next;
+                clearAllocationNodes(firstNodeToDiscard);
+                lastNodeToKeep.next = new AllocationNode(lastNodeToKeep.endPosition, this.allocationLength);
+                this.writeAllocationNode = this.totalBytesWritten == lastNodeToKeep.endPosition ? lastNodeToKeep.next : lastNodeToKeep;
+                if (this.readAllocationNode == firstNodeToDiscard) {
+                    this.readAllocationNode = lastNodeToKeep.next;
+                    return;
+                }
+                return;
+            }
         }
-        AllocationNode allocationNode;
-        AllocationNode lastNodeToKeep = this.firstAllocationNode;
-        while (this.totalBytesWritten > lastNodeToKeep.endPosition) {
-            lastNodeToKeep = lastNodeToKeep.next;
-        }
-        AllocationNode firstNodeToDiscard = lastNodeToKeep.next;
-        clearAllocationNodes(firstNodeToDiscard);
-        lastNodeToKeep.next = new AllocationNode(lastNodeToKeep.endPosition, this.allocationLength);
-        if (this.totalBytesWritten == lastNodeToKeep.endPosition) {
-            allocationNode = lastNodeToKeep.next;
-        } else {
-            allocationNode = lastNodeToKeep;
-        }
-        this.writeAllocationNode = allocationNode;
-        if (this.readAllocationNode == firstNodeToDiscard) {
-            this.readAllocationNode = lastNodeToKeep.next;
-        }
+        clearAllocationNodes(this.firstAllocationNode);
+        this.firstAllocationNode = new AllocationNode(this.totalBytesWritten, this.allocationLength);
+        this.readAllocationNode = this.firstAllocationNode;
+        this.writeAllocationNode = this.firstAllocationNode;
     }
 
     public boolean hasNextSample() {
@@ -208,81 +205,90 @@ public final class SampleQueue implements TrackOutput {
     }
 
     private void readEncryptionData(DecoderInputBuffer buffer, SampleExtrasHolder extrasHolder) {
-        int subsampleCount;
-        long offset = extrasHolder.offset;
+        DecoderInputBuffer decoderInputBuffer = buffer;
+        SampleExtrasHolder sampleExtrasHolder = extrasHolder;
+        long offset = sampleExtrasHolder.offset;
+        int subsampleCount = 1;
         this.scratch.reset(1);
         readData(offset, this.scratch.data, 1);
-        offset++;
+        long offset2 = offset + 1;
+        int i = 0;
         byte signalByte = this.scratch.data[0];
         boolean subsampleEncryption = (signalByte & 128) != 0;
         int ivSize = signalByte & 127;
-        if (buffer.cryptoInfo.iv == null) {
-            buffer.cryptoInfo.iv = new byte[16];
+        if (decoderInputBuffer.cryptoInfo.iv == null) {
+            decoderInputBuffer.cryptoInfo.iv = new byte[16];
         }
-        readData(offset, buffer.cryptoInfo.iv, ivSize);
-        offset += (long) ivSize;
+        readData(offset2, decoderInputBuffer.cryptoInfo.iv, ivSize);
+        long offset3 = offset2 + ((long) ivSize);
         if (subsampleEncryption) {
-            this.scratch.reset(2);
-            readData(offset, this.scratch.data, 2);
-            offset += 2;
-            subsampleCount = this.scratch.readUnsignedShort();
-        } else {
-            subsampleCount = 1;
+            r0.scratch.reset(2);
+            readData(offset3, r0.scratch.data, 2);
+            long offset4 = offset3 + 2;
+            subsampleCount = r0.scratch.readUnsignedShort();
+            offset3 = offset4;
         }
-        int[] clearDataSizes = buffer.cryptoInfo.numBytesOfClearData;
+        int[] clearDataSizes = decoderInputBuffer.cryptoInfo.numBytesOfClearData;
         if (clearDataSizes == null || clearDataSizes.length < subsampleCount) {
             clearDataSizes = new int[subsampleCount];
         }
-        int[] encryptedDataSizes = buffer.cryptoInfo.numBytesOfEncryptedData;
+        int[] encryptedDataSizes = decoderInputBuffer.cryptoInfo.numBytesOfEncryptedData;
         if (encryptedDataSizes == null || encryptedDataSizes.length < subsampleCount) {
             encryptedDataSizes = new int[subsampleCount];
         }
         if (subsampleEncryption) {
-            int subsampleDataLength = subsampleCount * 6;
-            this.scratch.reset(subsampleDataLength);
-            readData(offset, this.scratch.data, subsampleDataLength);
-            offset += (long) subsampleDataLength;
-            this.scratch.setPosition(0);
-            for (int i = 0; i < subsampleCount; i++) {
-                clearDataSizes[i] = this.scratch.readUnsignedShort();
-                encryptedDataSizes[i] = this.scratch.readUnsignedIntToInt();
+            int subsampleDataLength = 6 * subsampleCount;
+            r0.scratch.reset(subsampleDataLength);
+            readData(offset3, r0.scratch.data, subsampleDataLength);
+            long offset5 = offset3 + ((long) subsampleDataLength);
+            r0.scratch.setPosition(0);
+            while (i < subsampleCount) {
+                clearDataSizes[i] = r0.scratch.readUnsignedShort();
+                encryptedDataSizes[i] = r0.scratch.readUnsignedIntToInt();
+                i++;
             }
+            boolean z = subsampleEncryption;
+            offset3 = offset5;
         } else {
             clearDataSizes[0] = 0;
-            encryptedDataSizes[0] = extrasHolder.size - ((int) (offset - extrasHolder.offset));
+            encryptedDataSizes[0] = sampleExtrasHolder.size - ((int) (offset3 - sampleExtrasHolder.offset));
         }
-        CryptoData cryptoData = extrasHolder.cryptoData;
-        buffer.cryptoInfo.set(subsampleCount, clearDataSizes, encryptedDataSizes, cryptoData.encryptionKey, buffer.cryptoInfo.iv, cryptoData.cryptoMode, cryptoData.encryptedBlocks, cryptoData.clearBlocks);
-        int bytesRead = (int) (offset - extrasHolder.offset);
-        extrasHolder.offset += (long) bytesRead;
-        extrasHolder.size -= bytesRead;
+        CryptoData cryptoData = sampleExtrasHolder.cryptoData;
+        decoderInputBuffer.cryptoInfo.set(subsampleCount, clearDataSizes, encryptedDataSizes, cryptoData.encryptionKey, decoderInputBuffer.cryptoInfo.iv, cryptoData.cryptoMode, cryptoData.encryptedBlocks, cryptoData.clearBlocks);
+        int bytesRead = (int) (offset3 - sampleExtrasHolder.offset);
+        sampleExtrasHolder.offset += (long) bytesRead;
+        sampleExtrasHolder.size -= bytesRead;
     }
 
     private void readData(long absolutePosition, ByteBuffer target, int length) {
         advanceReadTo(absolutePosition);
+        long absolutePosition2 = absolutePosition;
         int remaining = length;
         while (remaining > 0) {
-            int toCopy = Math.min(remaining, (int) (this.readAllocationNode.endPosition - absolutePosition));
-            target.put(this.readAllocationNode.allocation.data, this.readAllocationNode.translateOffset(absolutePosition), toCopy);
+            int toCopy = Math.min(remaining, (int) (this.readAllocationNode.endPosition - absolutePosition2));
+            target.put(this.readAllocationNode.allocation.data, this.readAllocationNode.translateOffset(absolutePosition2), toCopy);
             remaining -= toCopy;
-            absolutePosition += (long) toCopy;
-            if (absolutePosition == this.readAllocationNode.endPosition) {
+            long absolutePosition3 = absolutePosition2 + ((long) toCopy);
+            if (absolutePosition3 == this.readAllocationNode.endPosition) {
                 this.readAllocationNode = this.readAllocationNode.next;
             }
+            absolutePosition2 = absolutePosition3;
         }
     }
 
     private void readData(long absolutePosition, byte[] target, int length) {
         advanceReadTo(absolutePosition);
+        long absolutePosition2 = absolutePosition;
         int remaining = length;
         while (remaining > 0) {
-            int toCopy = Math.min(remaining, (int) (this.readAllocationNode.endPosition - absolutePosition));
-            System.arraycopy(this.readAllocationNode.allocation.data, this.readAllocationNode.translateOffset(absolutePosition), target, length - remaining, toCopy);
+            int toCopy = Math.min(remaining, (int) (this.readAllocationNode.endPosition - absolutePosition2));
+            System.arraycopy(this.readAllocationNode.allocation.data, this.readAllocationNode.translateOffset(absolutePosition2), target, length - remaining, toCopy);
             remaining -= toCopy;
-            absolutePosition += (long) toCopy;
-            if (absolutePosition == this.readAllocationNode.endPosition) {
+            long absolutePosition3 = absolutePosition2 + ((long) toCopy);
+            if (absolutePosition3 == this.readAllocationNode.endPosition) {
                 this.readAllocationNode = this.readAllocationNode.next;
             }
+            absolutePosition2 = absolutePosition3;
         }
     }
 
@@ -347,22 +353,25 @@ public final class SampleQueue implements TrackOutput {
     }
 
     public void sampleMetadata(long timeUs, int flags, int size, int offset, CryptoData cryptoData) {
+        long j = timeUs;
         if (this.pendingFormatAdjustment) {
-            format(this.lastUnadjustedFormat);
+            format(r0.lastUnadjustedFormat);
         }
-        if (this.pendingSplice) {
-            if ((flags & 1) != 0 && this.metadataQueue.attemptSplice(timeUs)) {
-                this.pendingSplice = false;
-            } else {
-                return;
+        if (r0.pendingSplice) {
+            if ((flags & 1) != 0) {
+                if (r0.metadataQueue.attemptSplice(j)) {
+                    r0.pendingSplice = false;
+                }
             }
+            return;
         }
-        this.metadataQueue.commitSample(timeUs + this.sampleOffsetUs, flags, (this.totalBytesWritten - ((long) size)) - ((long) offset), size, cryptoData);
+        int i = size;
+        r0.metadataQueue.commitSample(j + r0.sampleOffsetUs, flags, (r0.totalBytesWritten - ((long) i)) - ((long) offset), i, cryptoData);
     }
 
     private void clearAllocationNodes(AllocationNode fromNode) {
         if (fromNode.wasInitialized) {
-            Allocation[] allocationsToRelease = new Allocation[((this.writeAllocationNode.wasInitialized ? 1 : 0) + (((int) (this.writeAllocationNode.startPosition - fromNode.startPosition)) / this.allocationLength))];
+            Allocation[] allocationsToRelease = new Allocation[(this.writeAllocationNode.wasInitialized + (((int) (this.writeAllocationNode.startPosition - fromNode.startPosition)) / this.allocationLength))];
             AllocationNode currentNode = fromNode;
             for (int i = 0; i < allocationsToRelease.length; i++) {
                 allocationsToRelease[i] = currentNode.allocation;
@@ -390,9 +399,9 @@ public final class SampleQueue implements TrackOutput {
         if (format == null) {
             return null;
         }
-        if (sampleOffsetUs == 0 || format.subsampleOffsetUs == Long.MAX_VALUE) {
-            return format;
+        if (!(sampleOffsetUs == 0 || format.subsampleOffsetUs == Long.MAX_VALUE)) {
+            format = format.copyWithSubsampleOffsetUs(format.subsampleOffsetUs + sampleOffsetUs);
         }
-        return format.copyWithSubsampleOffsetUs(format.subsampleOffsetUs + sampleOffsetUs);
+        return format;
     }
 }

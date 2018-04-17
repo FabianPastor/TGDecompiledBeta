@@ -28,8 +28,7 @@ public class ProgressView {
 
     public void draw(Canvas canvas) {
         Canvas canvas2 = canvas;
-        canvas2.drawRect(0.0f, ((float) (this.height / 2)) - (this.progressHeight / 2.0f), (float) this.width, (this.progressHeight / 2.0f) + ((float) (this.height / 2)), this.innerPaint);
-        canvas2 = canvas;
-        canvas2.drawRect(0.0f, ((float) (this.height / 2)) - (this.progressHeight / 2.0f), this.currentProgress * ((float) this.width), (this.progressHeight / 2.0f) + ((float) (this.height / 2)), this.outerPaint);
+        canvas2.drawRect(0.0f, ((float) (this.height / 2)) - (this.progressHeight / 2.0f), (float) this.width, ((float) (this.height / 2)) + (this.progressHeight / 2.0f), this.innerPaint);
+        canvas2.drawRect(0.0f, ((float) (this.height / 2)) - (this.progressHeight / 2.0f), ((float) this.width) * this.currentProgress, ((float) (this.height / 2)) + (this.progressHeight / 2.0f), this.outerPaint);
     }
 }

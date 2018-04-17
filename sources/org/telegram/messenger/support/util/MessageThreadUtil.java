@@ -19,14 +19,12 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
         }
 
         synchronized SyncQueueItem next() {
-            SyncQueueItem syncQueueItem;
             if (this.mRoot == null) {
-                syncQueueItem = null;
-            } else {
-                syncQueueItem = this.mRoot;
-                this.mRoot = this.mRoot.next;
+                return null;
             }
-            return syncQueueItem;
+            SyncQueueItem next = this.mRoot;
+            this.mRoot = this.mRoot.next;
+            return next;
         }
 
         synchronized void sendMessageAtFrontOfQueue(SyncQueueItem item) {
@@ -37,13 +35,13 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
         synchronized void sendMessage(SyncQueueItem item) {
             if (this.mRoot == null) {
                 this.mRoot = item;
-            } else {
-                SyncQueueItem last = this.mRoot;
-                while (last.next != null) {
-                    last = last.next;
-                }
-                last.next = item;
+                return;
             }
+            SyncQueueItem last = this.mRoot;
+            while (last.next != null) {
+                last = last.next;
+            }
+            last.next = item;
         }
 
         synchronized void removeMessages(int what) {
@@ -53,17 +51,17 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
                 item.recycle();
             }
             if (this.mRoot != null) {
-                SyncQueueItem prev = this.mRoot;
-                item = prev.next;
-                while (item != null) {
-                    SyncQueueItem next = item.next;
-                    if (item.what == what) {
-                        prev.next = next;
-                        item.recycle();
+                item = this.mRoot;
+                SyncQueueItem item2 = item.next;
+                while (item2 != null) {
+                    SyncQueueItem next = item2.next;
+                    if (item2.what == what) {
+                        item.next = next;
+                        item2.recycle();
                     } else {
-                        prev = item;
+                        item = item2;
                     }
-                    item = next;
+                    item2 = next;
                 }
             }
         }
@@ -162,7 +160,10 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
                                 callback.removeTile(msg.arg1, msg.arg2);
                                 break;
                             default:
-                                Log.e("ThreadUtil", "Unsupported message, what=" + msg.what);
+                                StringBuilder stringBuilder = new StringBuilder();
+                                stringBuilder.append("Unsupported message, what=");
+                                stringBuilder.append(msg.what);
+                                Log.e("ThreadUtil", stringBuilder.toString());
                                 break;
                         }
                         msg = C18591.this.mQueue.next();
@@ -226,7 +227,10 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
                                     callback.recycleTile((Tile) msg.data);
                                     break;
                                 default:
-                                    Log.e("ThreadUtil", "Unsupported message, what=" + msg.what);
+                                    StringBuilder stringBuilder = new StringBuilder();
+                                    stringBuilder.append("Unsupported message, what=");
+                                    stringBuilder.append(msg.what);
+                                    Log.e("ThreadUtil", stringBuilder.toString());
                                     break;
                             }
                         }

@@ -46,7 +46,11 @@ public class VideoEditedInfo {
                     if (this.originalPath == null) {
                         this.originalPath = args[a];
                     } else {
-                        this.originalPath += "_" + args[a];
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append(this.originalPath);
+                        stringBuilder.append("_");
+                        stringBuilder.append(args[a]);
+                        this.originalPath = stringBuilder.toString();
                     }
                 }
             }
@@ -58,6 +62,15 @@ public class VideoEditedInfo {
     }
 
     public boolean needConvert() {
-        return !this.roundVideo || (this.roundVideo && (this.startTime > 0 || !(this.endTime == -1 || this.endTime == this.estimatedDuration)));
+        if (this.roundVideo) {
+            if (this.roundVideo) {
+                if (this.startTime <= 0) {
+                    if (!(this.endTime == -1 || this.endTime == this.estimatedDuration)) {
+                    }
+                }
+            }
+            return false;
+        }
+        return true;
     }
 }

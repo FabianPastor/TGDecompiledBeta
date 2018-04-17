@@ -6,16 +6,12 @@ public final class ConditionVariable {
     private boolean isOpen;
 
     public synchronized boolean open() {
-        boolean z = true;
-        synchronized (this) {
-            if (this.isOpen) {
-                z = false;
-            } else {
-                this.isOpen = true;
-                notifyAll();
-            }
+        if (this.isOpen) {
+            return false;
         }
-        return z;
+        this.isOpen = true;
+        notifyAll();
+        return true;
     }
 
     public synchronized boolean close() {
