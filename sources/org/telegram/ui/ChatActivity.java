@@ -9622,13 +9622,15 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 if (this.newUnreadMessageCount < 0) {
                     this.newUnreadMessageCount = 0;
                 }
-                this.pagedownButtonCounter.setText(String.format("%d", new Object[]{Integer.valueOf(this.newUnreadMessageCount)}));
-                if (this.newUnreadMessageCount <= 0) {
-                    if (this.pagedownButtonCounter.getVisibility() != 4) {
-                        this.pagedownButtonCounter.setVisibility(4);
+                if (this.pagedownButtonCounter != null) {
+                    this.pagedownButtonCounter.setText(String.format("%d", new Object[]{Integer.valueOf(this.newUnreadMessageCount)}));
+                    if (this.newUnreadMessageCount <= 0) {
+                        if (this.pagedownButtonCounter.getVisibility() != 4) {
+                            this.pagedownButtonCounter.setVisibility(4);
+                        }
+                    } else if (this.pagedownButtonCounter.getVisibility() != 0) {
+                        this.pagedownButtonCounter.setVisibility(0);
                     }
-                } else if (this.pagedownButtonCounter.getVisibility() != 0) {
-                    this.pagedownButtonCounter.setVisibility(0);
                 }
             }
             if (outbox != null) {

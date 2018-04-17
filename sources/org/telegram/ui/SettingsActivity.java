@@ -340,6 +340,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
+                SharedConfig.pushAuthKey = null;
+                SharedConfig.pushAuthKeyId = null;
+                SharedConfig.saveConfig();
                 ConnectionsManager.getInstance(SettingsActivity.this.currentAccount).switchBackend();
             }
         }

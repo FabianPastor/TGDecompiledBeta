@@ -2,7 +2,6 @@ package org.telegram.ui.Adapters;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.LongSparseArray;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,12 +11,10 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.Utilities;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -40,7 +37,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     private String lastSticker;
     private Context mContext;
     private ArrayList<Document> stickers;
-    private LongSparseArray<Document> stickersMap;
+    private HashMap<String, Document> stickersMap;
     private ArrayList<String> stickersToLoad = new ArrayList();
     private boolean visible;
 
@@ -108,38 +105,38 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
 
     private void addStickerToResult(Document document) {
         if (document != null) {
-            if (this.stickersMap == null || this.stickersMap.indexOfKey(document.id) < 0) {
+            String key = document.dc_id + "_" + document.id;
+            if (this.stickersMap == null || !this.stickersMap.containsKey(key)) {
                 if (this.stickers == null) {
                     this.stickers = new ArrayList();
-                    this.stickersMap = new LongSparseArray();
+                    this.stickersMap = new HashMap();
                 }
                 this.stickers.add(document);
-                this.stickersMap.put(document.id, document);
+                this.stickersMap.put(key, document);
             }
         }
     }
 
     private void addStickersToResult(ArrayList<Document> documents) {
         if (documents != null && !documents.isEmpty()) {
-            int a = 0;
             int size = documents.size();
-            while (a < size) {
+            for (int a = 0; a < size; a++) {
                 Document document = (Document) documents.get(a);
-                if (this.stickersMap == null || this.stickersMap.indexOfKey(document.id) < 0) {
+                String key = document.dc_id + "_" + document.id;
+                if (this.stickersMap == null || !this.stickersMap.containsKey(key)) {
                     if (this.stickers == null) {
                         this.stickers = new ArrayList();
-                        this.stickersMap = new LongSparseArray();
+                        this.stickersMap = new HashMap();
                     }
                     this.stickers.add(document);
-                    this.stickersMap.put(document.id, document);
-                    a++;
-                } else {
-                    return;
+                    this.stickersMap.put(key, document);
                 }
             }
         }
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void loadStikersForEmoji(CharSequence emoji) {
         if (SharedConfig.suggestStickers != 2) {
             boolean search = emoji != null && emoji.length() > 0 && emoji.length() <= 14;
@@ -150,14 +147,24 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                 int a = 0;
                 while (a < length) {
                     CharSequence[] charSequenceArr;
-                    if (a < length - 1 && ((emoji.charAt(a) == '\ud83c' && emoji.charAt(a + 1) >= '\udffb' && emoji.charAt(a + 1) <= '\udfff') || (emoji.charAt(a) == '\u200d' && (emoji.charAt(a + 1) == '\u2640' || emoji.charAt(a + 1) == '\u2642')))) {
-                        charSequenceArr = new CharSequence[2];
-                        charSequenceArr[0] = emoji.subSequence(0, a);
-                        charSequenceArr[1] = emoji.subSequence(a + 2, emoji.length());
-                        emoji = TextUtils.concat(charSequenceArr);
-                        length -= 2;
-                        a--;
-                    } else if (emoji.charAt(a) == '\ufe0f') {
+                    if (a < length - 1) {
+                        if (emoji.charAt(a) == '\ud83c') {
+                            if (emoji.charAt(a + 1) >= '\udffb') {
+                            }
+                        }
+                        if (emoji.charAt(a) == '\u200d') {
+                            if (emoji.charAt(a + 1) != '\u2640') {
+                            }
+                            charSequenceArr = new CharSequence[2];
+                            charSequenceArr[0] = emoji.subSequence(0, a);
+                            charSequenceArr[1] = emoji.subSequence(a + 2, emoji.length());
+                            emoji = TextUtils.concat(charSequenceArr);
+                            length -= 2;
+                            a--;
+                            a++;
+                        }
+                    }
+                    if (emoji.charAt(a) == '\ufe0f') {
                         charSequenceArr = new CharSequence[2];
                         charSequenceArr[0] = emoji.subSequence(0, a);
                         charSequenceArr[1] = emoji.subSequence(a + 1, emoji.length());
@@ -167,7 +174,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                     }
                     a++;
                 }
-                this.lastSticker = emoji.toString();
+                this.lastSticker = emoji.toString().trim();
                 if (Emoji.isValidEmoji(this.lastSticker)) {
                     Document document;
                     this.delayLocalResults = false;
@@ -190,30 +197,6 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
                         document = (Document) favsStickers.get(a);
                         if (isValidSticker(document, this.lastSticker)) {
                             addStickerToResult(document);
-                        }
-                    }
-                    if (SharedConfig.suggestStickers == 0) {
-                        HashMap<String, ArrayList<Document>> allStickersFeatured = DataQuery.getInstance(this.currentAccount).getAllStickersFeatured();
-                        ArrayList<Document> newStickersFeatured = allStickersFeatured != null ? (ArrayList) allStickersFeatured.get(this.lastSticker) : null;
-                        if (!(newStickersFeatured == null || newStickersFeatured.isEmpty())) {
-                            final LongSparseArray<Integer> indices = new LongSparseArray(newStickersFeatured.size());
-                            for (a = 0; a < newStickersFeatured.size(); a++) {
-                                indices.put(((Document) newStickersFeatured.get(a)).id, Integer.valueOf(Utilities.random.nextInt()));
-                            }
-                            Collections.sort(newStickersFeatured, new Comparator<Document>() {
-                                public int compare(Document o1, Document o2) {
-                                    Integer idx1 = (Integer) indices.get(o1.id);
-                                    Integer idx2 = (Integer) indices.get(o2.id);
-                                    if (idx1 == null) {
-                                        idx1 = Integer.valueOf(0);
-                                    }
-                                    if (idx2 == null) {
-                                        idx2 = Integer.valueOf(0);
-                                    }
-                                    return idx1.compareTo(idx2);
-                                }
-                            });
-                            addStickersToResult(newStickersFeatured);
                         }
                     }
                     HashMap<String, ArrayList<Document>> allStickers = DataQuery.getInstance(this.currentAccount).getAllStickers();
@@ -291,17 +274,13 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     }
 
     private void searchServerStickers(final String emoji) {
-        boolean z = true;
         if (this.lastReqId != 0) {
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.lastReqId, true);
         }
         TL_messages_getStickers req = new TL_messages_getStickers();
         req.emoticon = emoji;
         req.hash = TtmlNode.ANONYMOUS_REGION_ID;
-        if (MessagesController.getInstance(this.currentAccount).preloadFeaturedStickers) {
-            z = false;
-        }
-        req.exclude_featured = z;
+        req.exclude_featured = false;
         this.lastReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
             public void run(final TLObject response, TL_error error) {
                 AndroidUtilities.runOnUIThread(new Runnable() {

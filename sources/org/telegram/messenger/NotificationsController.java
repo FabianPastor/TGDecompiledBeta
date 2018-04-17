@@ -1911,7 +1911,9 @@ public class NotificationsController {
                     intent.putExtra("currentAccount", this.currentAccount);
                     contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
                     replace = true;
-                    if (chat == null) {
+                    if (((chat_id == 0 && chat == null) || user == null) && lastMessageObject.isFcmMessage()) {
+                        chatName = lastMessageObject.localName;
+                    } else if (chat == null) {
                         chatName = chat.title;
                     } else {
                         chatName = UserObject.getUserName(user);
@@ -2269,6 +2271,8 @@ public class NotificationsController {
             intent.putExtra("currentAccount", this.currentAccount);
             contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
             replace = true;
+            if (chat_id == 0) {
+            }
             if (chat == null) {
                 chatName = UserObject.getUserName(user);
             } else {
@@ -2452,6 +2456,9 @@ public class NotificationsController {
         }
         int size = sortedDialogs.size();
         for (int b = 0; b < size; b++) {
+            boolean canReply;
+            String name;
+            String dismissalID;
             dialog_id = ((Long) sortedDialogs.get(b)).longValue();
             ArrayList<MessageObject> messageObjects = (ArrayList) messagesByDialogs.get(dialog_id);
             int max_id = ((MessageObject) messageObjects.get(0)).getId();
@@ -2469,51 +2476,13 @@ public class NotificationsController {
             if (serializedNotifications != null) {
                 jSONObject = new JSONObject();
             }
-            int max_date = ((MessageObject) messageObjects.get(0)).messageOwner.date;
+            MessageObject lastMessageObject = (MessageObject) messageObjects.get(0);
+            int max_date = lastMessageObject.messageOwner.date;
             Chat chat = null;
             User user = null;
+            boolean isChannel = false;
+            boolean isSupergroup = false;
             TLObject photoPath = null;
-            boolean canReply;
-            String name;
-            UnreadConversation.Builder unreadConvBuilder;
-            Intent intent;
-            Action wearReplyAction;
-            PendingIntent replyPendingIntent;
-            RemoteInput remoteInputWear;
-            String replyToString;
-            Integer count;
-            Style messagingStyle;
-            StringBuilder text;
-            boolean[] isText;
-            ArrayList<TL_keyboardButtonRow> rows;
-            int rowsMid;
-            JSONArray serializedMsgs;
-            String message;
-            String nameToReplace;
-            JSONObject jmsg;
-            User sender;
-            PendingIntent contentIntent;
-            WearableExtender wearableExtender;
-            String dismissalID;
-            WearableExtender summaryExtender;
-            long date;
-            NotificationCompat.Builder builder;
-            BitmapDrawable img;
-            File file;
-            float scaleFactor;
-            Options options;
-            int i;
-            Bitmap bitmap;
-            int rc;
-            int r;
-            TL_keyboardButtonRow row;
-            int cc;
-            int c;
-            KeyboardButton button;
-            Intent callbackIntent;
-            String str;
-            Context context;
-            int i2;
             if (lowerId != 0) {
                 canReply = true;
                 if (lowerId > 0) {
@@ -2523,413 +2492,24 @@ public class NotificationsController {
                         if (!(user.photo == null || user.photo.photo_small == null || user.photo.photo_small.volume_id == 0 || user.photo.photo_small.local_id == 0)) {
                             photoPath = user.photo.photo_small;
                         }
-                        if (AndroidUtilities.needShowPasscode(false) || SharedConfig.isWaitingForPasscodeEnter) {
-                            name = LocaleController.getString("AppName", R.string.AppName);
-                            photoPath = null;
-                            canReply = false;
-                        }
-                        unreadConvBuilder = new UnreadConversation.Builder(name).setLatestTimestamp(((long) max_date) * 1000);
-                        intent = new Intent(ApplicationLoader.applicationContext, AutoMessageHeardReceiver.class);
-                        intent.addFlags(32);
-                        intent.setAction("org.telegram.messenger.ACTION_MESSAGE_HEARD");
-                        intent.putExtra("dialog_id", dialog_id);
-                        intent.putExtra("max_id", max_id);
-                        intent.putExtra("currentAccount", this.currentAccount);
-                        unreadConvBuilder.setReadPendingIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728));
-                        wearReplyAction = null;
-                        if ((!ChatObject.isChannel(chat) || (chat != null && chat.megagroup)) && canReply && !SharedConfig.isWaitingForPasscodeEnter) {
-                            intent = new Intent(ApplicationLoader.applicationContext, AutoMessageReplyReceiver.class);
-                            intent.addFlags(32);
-                            intent.setAction("org.telegram.messenger.ACTION_MESSAGE_REPLY");
-                            intent.putExtra("dialog_id", dialog_id);
-                            intent.putExtra("max_id", max_id);
-                            intent.putExtra("currentAccount", this.currentAccount);
-                            unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build());
-                            intent = new Intent(ApplicationLoader.applicationContext, WearReplyReceiver.class);
-                            intent.putExtra("dialog_id", dialog_id);
-                            intent.putExtra("max_id", max_id);
-                            intent.putExtra("currentAccount", this.currentAccount);
-                            replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728);
-                            remoteInputWear = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build();
-                            if (chat != null) {
-                                replyToString = LocaleController.formatString("ReplyToGroup", R.string.ReplyToGroup, name);
-                            } else {
-                                replyToString = LocaleController.formatString("ReplyToUser", R.string.ReplyToUser, name);
-                            }
-                            wearReplyAction = new Action.Builder(R.drawable.ic_reply_icon, replyToString, replyPendingIntent).setAllowGeneratedReplies(true).addRemoteInput(remoteInputWear).build();
-                        }
-                        count = (Integer) this.pushDialogs.get(dialog_id);
-                        if (count == null) {
-                            count = Integer.valueOf(0);
-                        }
-                        messagingStyle = new MessagingStyle(TtmlNode.ANONYMOUS_REGION_ID).setConversationTitle(String.format("%1$s (%2$s)", new Object[]{name, LocaleController.formatPluralString("NewMessages", Math.max(count.intValue(), messageObjects.size()))}));
-                        text = new StringBuilder();
-                        isText = new boolean[1];
-                        rows = null;
-                        rowsMid = 0;
-                        serializedMsgs = null;
-                        if (jSONObject != null) {
-                            serializedMsgs = new JSONArray();
-                        }
-                        for (a = messageObjects.size() - 1; a >= 0; a--) {
-                            messageObject = (MessageObject) messageObjects.get(a);
-                            message = getStringForMessage(messageObject, false, isText);
-                            if (messageObject.isFcmMessage()) {
-                                nameToReplace = messageObject.localName;
-                            } else {
-                                nameToReplace = name;
-                            }
-                            if (message != null) {
-                                if (chat == null) {
-                                    message = message.replace(" @ " + nameToReplace, TtmlNode.ANONYMOUS_REGION_ID);
-                                } else if (isText[0]) {
-                                    message = message.replace(nameToReplace + ": ", TtmlNode.ANONYMOUS_REGION_ID);
-                                } else {
-                                    message = message.replace(nameToReplace + " ", TtmlNode.ANONYMOUS_REGION_ID);
-                                }
-                                if (text.length() > 0) {
-                                    text.append("\n\n");
-                                }
-                                text.append(message);
-                                unreadConvBuilder.addMessage(message);
-                                messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, null);
-                                if (serializedMsgs != null) {
-                                    try {
-                                        jmsg = new JSONObject();
-                                        jmsg.put(MimeTypes.BASE_TYPE_TEXT, getShortStringForMessage(messageObject));
-                                        jmsg.put("date", messageObject.messageOwner.date);
-                                        if (messageObject.isFromUser() && chat != null) {
-                                            sender = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.getFromId()));
-                                            if (sender != null) {
-                                                jmsg.put("fname", sender.first_name);
-                                                jmsg.put("lname", sender.last_name);
-                                            }
-                                        }
-                                        serializedMsgs.put(jmsg);
-                                    } catch (JSONException e) {
-                                    }
-                                }
-                                if (dialog_id == 777000 && messageObject.messageOwner.reply_markup != null) {
-                                    rows = messageObject.messageOwner.reply_markup.rows;
-                                    rowsMid = messageObject.getId();
-                                }
-                            }
-                        }
-                        intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-                        intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-                        intent.setFlags(32768);
-                        if (lowerId != 0) {
-                            intent.putExtra("encId", highId);
-                        } else if (lowerId > 0) {
-                            intent.putExtra("userId", lowerId);
-                        } else {
-                            intent.putExtra("chatId", -lowerId);
-                        }
-                        intent.putExtra("currentAccount", this.currentAccount);
-                        contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
-                        wearableExtender = new WearableExtender();
-                        if (wearReplyAction != null) {
-                            wearableExtender.addAction(wearReplyAction);
-                        }
-                        if (lowerId != 0) {
-                            dismissalID = "tgenc" + highId + "_" + max_id;
-                        } else if (lowerId > 0) {
-                            dismissalID = "tguser" + lowerId + "_" + max_id;
-                        } else {
-                            dismissalID = "tgchat" + (-lowerId) + "_" + max_id;
-                        }
-                        wearableExtender.setDismissalId(dismissalID);
-                        wearableExtender.setBridgeTag("tgaccount" + UserConfig.getInstance(this.currentAccount).getClientUserId());
-                        summaryExtender = new WearableExtender();
-                        summaryExtender.setDismissalId("summary_" + dismissalID);
-                        notificationBuilder.extend(summaryExtender);
-                        date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
-                        builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShowWhen(true).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
-                        if (this.pushDialogs.size() == 1 && !TextUtils.isEmpty(summary)) {
-                            builder.setSubText(summary);
-                        }
-                        if (lowerId == 0) {
-                            builder.setLocalOnly(true);
-                        }
-                        if (photoPath != null) {
-                            img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
-                            if (img != null) {
-                                builder.setLargeIcon(img.getBitmap());
-                            } else {
-                                try {
-                                    file = FileLoader.getPathToAttach(photoPath, true);
-                                    if (file.exists()) {
-                                        scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
-                                        options = new Options();
-                                        if (scaleFactor < 1.0f) {
-                                            i = 1;
-                                        } else {
-                                            i = (int) scaleFactor;
-                                        }
-                                        options.inSampleSize = i;
-                                        bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-                                        if (bitmap != null) {
-                                            builder.setLargeIcon(bitmap);
-                                        }
-                                    }
-                                } catch (Throwable th) {
-                                }
-                            }
-                        }
-                        if (!(AndroidUtilities.needShowPasscode(false) || SharedConfig.isWaitingForPasscodeEnter || rows == null)) {
-                            rc = rows.size();
-                            for (r = 0; r < rc; r++) {
-                                row = (TL_keyboardButtonRow) rows.get(r);
-                                cc = row.buttons.size();
-                                for (c = 0; c < cc; c++) {
-                                    button = (KeyboardButton) row.buttons.get(c);
-                                    if (!(button instanceof TL_keyboardButtonCallback)) {
-                                        callbackIntent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
-                                        callbackIntent.putExtra("currentAccount", this.currentAccount);
-                                        callbackIntent.putExtra("did", dialog_id);
-                                        if (button.data != null) {
-                                            callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
-                                        }
-                                        callbackIntent.putExtra("mid", rowsMid);
-                                        str = button.text;
-                                        context = ApplicationLoader.applicationContext;
-                                        i2 = this.lastButtonId;
-                                        this.lastButtonId = i2 + 1;
-                                        builder.addAction(0, str, PendingIntent.getBroadcast(context, i2, callbackIntent, 134217728));
-                                    }
-                                }
-                            }
-                        }
-                        if (chat == null && user != null && user.phone != null && user.phone.length() > 0) {
-                            builder.addPerson("tel:+" + user.phone);
-                        }
-                        if (VERSION.SDK_INT >= 26) {
-                            builder.setChannelId(OTHER_NOTIFICATIONS_CHANNEL);
-                        }
-                        holders.add(new AnonymousClass1NotificationHolder(internalId.intValue(), builder.build()));
-                        this.wearNotificationsIds.put(dialog_id, internalId);
-                        if (jSONObject == null) {
-                            try {
-                                jSONObject.put("reply", canReply);
-                                jSONObject.put("name", name);
-                                jSONObject.put("max_id", max_id);
-                                jSONObject.put("max_date", max_date);
-                                jSONObject.put(TtmlNode.ATTR_ID, Math.abs(lowerId));
-                                if (photoPath != null) {
-                                    jSONObject.put("photo", photoPath.dc_id + "_" + photoPath.volume_id + "_" + photoPath.secret);
-                                }
-                                if (serializedMsgs != null) {
-                                    jSONObject.put("msgs", serializedMsgs);
-                                }
-                                if (user == null) {
-                                    jSONObject.put("type", "user");
-                                } else if (chat != null) {
-                                    if (ChatObject.isChannel(chat)) {
-                                        jSONObject.put("type", "channel");
-                                    } else {
-                                        jSONObject.put("type", "group");
-                                    }
-                                }
-                                serializedNotifications.put(jSONObject);
-                            } catch (JSONException e2) {
-                            }
-                        }
+                    } else if (lastMessageObject.isFcmMessage()) {
+                        name = lastMessageObject.localName;
+                    } else {
                     }
                 } else {
                     chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lowerId));
                     if (chat != null) {
+                        isSupergroup = chat.megagroup;
+                        isChannel = ChatObject.isChannel(chat) && !chat.megagroup;
                         name = chat.title;
                         if (!(chat.photo == null || chat.photo.photo_small == null || chat.photo.photo_small.volume_id == 0 || chat.photo.photo_small.local_id == 0)) {
                             photoPath = chat.photo.photo_small;
                         }
-                        name = LocaleController.getString("AppName", R.string.AppName);
-                        photoPath = null;
-                        canReply = false;
-                        unreadConvBuilder = new UnreadConversation.Builder(name).setLatestTimestamp(((long) max_date) * 1000);
-                        intent = new Intent(ApplicationLoader.applicationContext, AutoMessageHeardReceiver.class);
-                        intent.addFlags(32);
-                        intent.setAction("org.telegram.messenger.ACTION_MESSAGE_HEARD");
-                        intent.putExtra("dialog_id", dialog_id);
-                        intent.putExtra("max_id", max_id);
-                        intent.putExtra("currentAccount", this.currentAccount);
-                        unreadConvBuilder.setReadPendingIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728));
-                        wearReplyAction = null;
-                        intent = new Intent(ApplicationLoader.applicationContext, AutoMessageReplyReceiver.class);
-                        intent.addFlags(32);
-                        intent.setAction("org.telegram.messenger.ACTION_MESSAGE_REPLY");
-                        intent.putExtra("dialog_id", dialog_id);
-                        intent.putExtra("max_id", max_id);
-                        intent.putExtra("currentAccount", this.currentAccount);
-                        unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build());
-                        intent = new Intent(ApplicationLoader.applicationContext, WearReplyReceiver.class);
-                        intent.putExtra("dialog_id", dialog_id);
-                        intent.putExtra("max_id", max_id);
-                        intent.putExtra("currentAccount", this.currentAccount);
-                        replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728);
-                        remoteInputWear = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build();
-                        if (chat != null) {
-                            replyToString = LocaleController.formatString("ReplyToUser", R.string.ReplyToUser, name);
-                        } else {
-                            replyToString = LocaleController.formatString("ReplyToGroup", R.string.ReplyToGroup, name);
-                        }
-                        wearReplyAction = new Action.Builder(R.drawable.ic_reply_icon, replyToString, replyPendingIntent).setAllowGeneratedReplies(true).addRemoteInput(remoteInputWear).build();
-                        count = (Integer) this.pushDialogs.get(dialog_id);
-                        if (count == null) {
-                            count = Integer.valueOf(0);
-                        }
-                        messagingStyle = new MessagingStyle(TtmlNode.ANONYMOUS_REGION_ID).setConversationTitle(String.format("%1$s (%2$s)", new Object[]{name, LocaleController.formatPluralString("NewMessages", Math.max(count.intValue(), messageObjects.size()))}));
-                        text = new StringBuilder();
-                        isText = new boolean[1];
-                        rows = null;
-                        rowsMid = 0;
-                        serializedMsgs = null;
-                        if (jSONObject != null) {
-                            serializedMsgs = new JSONArray();
-                        }
-                        for (a = messageObjects.size() - 1; a >= 0; a--) {
-                            messageObject = (MessageObject) messageObjects.get(a);
-                            message = getStringForMessage(messageObject, false, isText);
-                            if (messageObject.isFcmMessage()) {
-                                nameToReplace = name;
-                            } else {
-                                nameToReplace = messageObject.localName;
-                            }
-                            if (message != null) {
-                                if (chat == null) {
-                                    message = message.replace(" @ " + nameToReplace, TtmlNode.ANONYMOUS_REGION_ID);
-                                } else if (isText[0]) {
-                                    message = message.replace(nameToReplace + " ", TtmlNode.ANONYMOUS_REGION_ID);
-                                } else {
-                                    message = message.replace(nameToReplace + ": ", TtmlNode.ANONYMOUS_REGION_ID);
-                                }
-                                if (text.length() > 0) {
-                                    text.append("\n\n");
-                                }
-                                text.append(message);
-                                unreadConvBuilder.addMessage(message);
-                                messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, null);
-                                if (serializedMsgs != null) {
-                                    jmsg = new JSONObject();
-                                    jmsg.put(MimeTypes.BASE_TYPE_TEXT, getShortStringForMessage(messageObject));
-                                    jmsg.put("date", messageObject.messageOwner.date);
-                                    sender = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.getFromId()));
-                                    if (sender != null) {
-                                        jmsg.put("fname", sender.first_name);
-                                        jmsg.put("lname", sender.last_name);
-                                    }
-                                    serializedMsgs.put(jmsg);
-                                }
-                                rows = messageObject.messageOwner.reply_markup.rows;
-                                rowsMid = messageObject.getId();
-                            }
-                        }
-                        intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-                        intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-                        intent.setFlags(32768);
-                        if (lowerId != 0) {
-                            intent.putExtra("encId", highId);
-                        } else if (lowerId > 0) {
-                            intent.putExtra("chatId", -lowerId);
-                        } else {
-                            intent.putExtra("userId", lowerId);
-                        }
-                        intent.putExtra("currentAccount", this.currentAccount);
-                        contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
-                        wearableExtender = new WearableExtender();
-                        if (wearReplyAction != null) {
-                            wearableExtender.addAction(wearReplyAction);
-                        }
-                        if (lowerId != 0) {
-                            dismissalID = "tgenc" + highId + "_" + max_id;
-                        } else if (lowerId > 0) {
-                            dismissalID = "tgchat" + (-lowerId) + "_" + max_id;
-                        } else {
-                            dismissalID = "tguser" + lowerId + "_" + max_id;
-                        }
-                        wearableExtender.setDismissalId(dismissalID);
-                        wearableExtender.setBridgeTag("tgaccount" + UserConfig.getInstance(this.currentAccount).getClientUserId());
-                        summaryExtender = new WearableExtender();
-                        summaryExtender.setDismissalId("summary_" + dismissalID);
-                        notificationBuilder.extend(summaryExtender);
-                        date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
-                        builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShowWhen(true).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
-                        builder.setSubText(summary);
-                        if (lowerId == 0) {
-                            builder.setLocalOnly(true);
-                        }
-                        if (photoPath != null) {
-                            img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
-                            if (img != null) {
-                                file = FileLoader.getPathToAttach(photoPath, true);
-                                if (file.exists()) {
-                                    scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
-                                    options = new Options();
-                                    if (scaleFactor < 1.0f) {
-                                        i = (int) scaleFactor;
-                                    } else {
-                                        i = 1;
-                                    }
-                                    options.inSampleSize = i;
-                                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-                                    if (bitmap != null) {
-                                        builder.setLargeIcon(bitmap);
-                                    }
-                                }
-                            } else {
-                                builder.setLargeIcon(img.getBitmap());
-                            }
-                        }
-                        rc = rows.size();
-                        for (r = 0; r < rc; r++) {
-                            row = (TL_keyboardButtonRow) rows.get(r);
-                            cc = row.buttons.size();
-                            for (c = 0; c < cc; c++) {
-                                button = (KeyboardButton) row.buttons.get(c);
-                                if (!(button instanceof TL_keyboardButtonCallback)) {
-                                    callbackIntent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
-                                    callbackIntent.putExtra("currentAccount", this.currentAccount);
-                                    callbackIntent.putExtra("did", dialog_id);
-                                    if (button.data != null) {
-                                        callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
-                                    }
-                                    callbackIntent.putExtra("mid", rowsMid);
-                                    str = button.text;
-                                    context = ApplicationLoader.applicationContext;
-                                    i2 = this.lastButtonId;
-                                    this.lastButtonId = i2 + 1;
-                                    builder.addAction(0, str, PendingIntent.getBroadcast(context, i2, callbackIntent, 134217728));
-                                }
-                            }
-                        }
-                        builder.addPerson("tel:+" + user.phone);
-                        if (VERSION.SDK_INT >= 26) {
-                            builder.setChannelId(OTHER_NOTIFICATIONS_CHANNEL);
-                        }
-                        holders.add(new AnonymousClass1NotificationHolder(internalId.intValue(), builder.build()));
-                        this.wearNotificationsIds.put(dialog_id, internalId);
-                        if (jSONObject == null) {
-                            jSONObject.put("reply", canReply);
-                            jSONObject.put("name", name);
-                            jSONObject.put("max_id", max_id);
-                            jSONObject.put("max_date", max_date);
-                            jSONObject.put(TtmlNode.ATTR_ID, Math.abs(lowerId));
-                            if (photoPath != null) {
-                                jSONObject.put("photo", photoPath.dc_id + "_" + photoPath.volume_id + "_" + photoPath.secret);
-                            }
-                            if (serializedMsgs != null) {
-                                jSONObject.put("msgs", serializedMsgs);
-                            }
-                            if (user == null) {
-                                jSONObject.put("type", "user");
-                            } else if (chat != null) {
-                                if (ChatObject.isChannel(chat)) {
-                                    jSONObject.put("type", "group");
-                                } else {
-                                    jSONObject.put("type", "channel");
-                                }
-                            }
-                            serializedNotifications.put(jSONObject);
-                        }
+                    } else if (lastMessageObject.isFcmMessage()) {
+                        isSupergroup = lastMessageObject.isMegagroup();
+                        name = lastMessageObject.localName;
+                        isChannel = lastMessageObject.localChannel;
+                    } else {
                     }
                 }
             } else {
@@ -2941,195 +2521,221 @@ public class NotificationsController {
                         name = LocaleController.getString("SecretChatName", R.string.SecretChatName);
                         photoPath = null;
                         jSONObject = null;
-                        name = LocaleController.getString("AppName", R.string.AppName);
-                        photoPath = null;
-                        canReply = false;
-                        unreadConvBuilder = new UnreadConversation.Builder(name).setLatestTimestamp(((long) max_date) * 1000);
-                        intent = new Intent(ApplicationLoader.applicationContext, AutoMessageHeardReceiver.class);
-                        intent.addFlags(32);
-                        intent.setAction("org.telegram.messenger.ACTION_MESSAGE_HEARD");
-                        intent.putExtra("dialog_id", dialog_id);
-                        intent.putExtra("max_id", max_id);
-                        intent.putExtra("currentAccount", this.currentAccount);
-                        unreadConvBuilder.setReadPendingIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728));
-                        wearReplyAction = null;
-                        intent = new Intent(ApplicationLoader.applicationContext, AutoMessageReplyReceiver.class);
-                        intent.addFlags(32);
-                        intent.setAction("org.telegram.messenger.ACTION_MESSAGE_REPLY");
-                        intent.putExtra("dialog_id", dialog_id);
-                        intent.putExtra("max_id", max_id);
-                        intent.putExtra("currentAccount", this.currentAccount);
-                        unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build());
-                        intent = new Intent(ApplicationLoader.applicationContext, WearReplyReceiver.class);
-                        intent.putExtra("dialog_id", dialog_id);
-                        intent.putExtra("max_id", max_id);
-                        intent.putExtra("currentAccount", this.currentAccount);
-                        replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728);
-                        remoteInputWear = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build();
-                        if (chat != null) {
-                            replyToString = LocaleController.formatString("ReplyToGroup", R.string.ReplyToGroup, name);
-                        } else {
-                            replyToString = LocaleController.formatString("ReplyToUser", R.string.ReplyToUser, name);
-                        }
-                        wearReplyAction = new Action.Builder(R.drawable.ic_reply_icon, replyToString, replyPendingIntent).setAllowGeneratedReplies(true).addRemoteInput(remoteInputWear).build();
-                        count = (Integer) this.pushDialogs.get(dialog_id);
-                        if (count == null) {
-                            count = Integer.valueOf(0);
-                        }
-                        messagingStyle = new MessagingStyle(TtmlNode.ANONYMOUS_REGION_ID).setConversationTitle(String.format("%1$s (%2$s)", new Object[]{name, LocaleController.formatPluralString("NewMessages", Math.max(count.intValue(), messageObjects.size()))}));
-                        text = new StringBuilder();
-                        isText = new boolean[1];
-                        rows = null;
-                        rowsMid = 0;
-                        serializedMsgs = null;
-                        if (jSONObject != null) {
-                            serializedMsgs = new JSONArray();
-                        }
-                        for (a = messageObjects.size() - 1; a >= 0; a--) {
-                            messageObject = (MessageObject) messageObjects.get(a);
-                            message = getStringForMessage(messageObject, false, isText);
-                            if (messageObject.isFcmMessage()) {
-                                nameToReplace = messageObject.localName;
-                            } else {
-                                nameToReplace = name;
-                            }
-                            if (message != null) {
-                                if (chat == null) {
-                                    message = message.replace(" @ " + nameToReplace, TtmlNode.ANONYMOUS_REGION_ID);
-                                } else if (isText[0]) {
-                                    message = message.replace(nameToReplace + ": ", TtmlNode.ANONYMOUS_REGION_ID);
-                                } else {
-                                    message = message.replace(nameToReplace + " ", TtmlNode.ANONYMOUS_REGION_ID);
-                                }
-                                if (text.length() > 0) {
-                                    text.append("\n\n");
-                                }
-                                text.append(message);
-                                unreadConvBuilder.addMessage(message);
-                                messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, null);
-                                if (serializedMsgs != null) {
-                                    jmsg = new JSONObject();
-                                    jmsg.put(MimeTypes.BASE_TYPE_TEXT, getShortStringForMessage(messageObject));
-                                    jmsg.put("date", messageObject.messageOwner.date);
-                                    sender = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.getFromId()));
-                                    if (sender != null) {
-                                        jmsg.put("fname", sender.first_name);
-                                        jmsg.put("lname", sender.last_name);
-                                    }
-                                    serializedMsgs.put(jmsg);
-                                }
-                                rows = messageObject.messageOwner.reply_markup.rows;
-                                rowsMid = messageObject.getId();
-                            }
-                        }
-                        intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-                        intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-                        intent.setFlags(32768);
-                        if (lowerId != 0) {
-                            intent.putExtra("encId", highId);
-                        } else if (lowerId > 0) {
-                            intent.putExtra("userId", lowerId);
-                        } else {
-                            intent.putExtra("chatId", -lowerId);
-                        }
-                        intent.putExtra("currentAccount", this.currentAccount);
-                        contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
-                        wearableExtender = new WearableExtender();
-                        if (wearReplyAction != null) {
-                            wearableExtender.addAction(wearReplyAction);
-                        }
-                        if (lowerId != 0) {
-                            dismissalID = "tgenc" + highId + "_" + max_id;
-                        } else if (lowerId > 0) {
-                            dismissalID = "tguser" + lowerId + "_" + max_id;
-                        } else {
-                            dismissalID = "tgchat" + (-lowerId) + "_" + max_id;
-                        }
-                        wearableExtender.setDismissalId(dismissalID);
-                        wearableExtender.setBridgeTag("tgaccount" + UserConfig.getInstance(this.currentAccount).getClientUserId());
-                        summaryExtender = new WearableExtender();
-                        summaryExtender.setDismissalId("summary_" + dismissalID);
-                        notificationBuilder.extend(summaryExtender);
-                        date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
-                        builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShowWhen(true).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
-                        builder.setSubText(summary);
-                        if (lowerId == 0) {
-                            builder.setLocalOnly(true);
-                        }
-                        if (photoPath != null) {
-                            img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
-                            if (img != null) {
-                                builder.setLargeIcon(img.getBitmap());
-                            } else {
-                                file = FileLoader.getPathToAttach(photoPath, true);
-                                if (file.exists()) {
-                                    scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
-                                    options = new Options();
-                                    if (scaleFactor < 1.0f) {
-                                        i = 1;
-                                    } else {
-                                        i = (int) scaleFactor;
-                                    }
-                                    options.inSampleSize = i;
-                                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-                                    if (bitmap != null) {
-                                        builder.setLargeIcon(bitmap);
-                                    }
+                    }
+                }
+            }
+            if (AndroidUtilities.needShowPasscode(false) || SharedConfig.isWaitingForPasscodeEnter) {
+                name = LocaleController.getString("AppName", R.string.AppName);
+                photoPath = null;
+                canReply = false;
+            }
+            UnreadConversation.Builder unreadConvBuilder = new UnreadConversation.Builder(name).setLatestTimestamp(((long) max_date) * 1000);
+            Intent intent = new Intent(ApplicationLoader.applicationContext, AutoMessageHeardReceiver.class);
+            intent.addFlags(32);
+            intent.setAction("org.telegram.messenger.ACTION_MESSAGE_HEARD");
+            intent.putExtra("dialog_id", dialog_id);
+            intent.putExtra("max_id", max_id);
+            intent.putExtra("currentAccount", this.currentAccount);
+            unreadConvBuilder.setReadPendingIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728));
+            Action wearReplyAction = null;
+            if ((!isChannel || isSupergroup) && canReply && !SharedConfig.isWaitingForPasscodeEnter) {
+                String replyToString;
+                intent = new Intent(ApplicationLoader.applicationContext, AutoMessageReplyReceiver.class);
+                intent.addFlags(32);
+                intent.setAction("org.telegram.messenger.ACTION_MESSAGE_REPLY");
+                intent.putExtra("dialog_id", dialog_id);
+                intent.putExtra("max_id", max_id);
+                intent.putExtra("currentAccount", this.currentAccount);
+                unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build());
+                intent = new Intent(ApplicationLoader.applicationContext, WearReplyReceiver.class);
+                intent.putExtra("dialog_id", dialog_id);
+                intent.putExtra("max_id", max_id);
+                intent.putExtra("currentAccount", this.currentAccount);
+                PendingIntent replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, 134217728);
+                RemoteInput remoteInputWear = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build();
+                if (lowerId < 0) {
+                    replyToString = LocaleController.formatString("ReplyToGroup", R.string.ReplyToGroup, name);
+                } else {
+                    replyToString = LocaleController.formatString("ReplyToUser", R.string.ReplyToUser, name);
+                }
+                wearReplyAction = new Action.Builder(R.drawable.ic_reply_icon, replyToString, replyPendingIntent).setAllowGeneratedReplies(true).addRemoteInput(remoteInputWear).build();
+            }
+            Integer count = (Integer) this.pushDialogs.get(dialog_id);
+            if (count == null) {
+                count = Integer.valueOf(0);
+            }
+            Style messagingStyle = new MessagingStyle(TtmlNode.ANONYMOUS_REGION_ID).setConversationTitle(String.format("%1$s (%2$s)", new Object[]{name, LocaleController.formatPluralString("NewMessages", Math.max(count.intValue(), messageObjects.size()))}));
+            StringBuilder text = new StringBuilder();
+            boolean[] isText = new boolean[1];
+            ArrayList<TL_keyboardButtonRow> rows = null;
+            int rowsMid = 0;
+            JSONArray serializedMsgs = null;
+            if (jSONObject != null) {
+                serializedMsgs = new JSONArray();
+            }
+            for (a = messageObjects.size() - 1; a >= 0; a--) {
+                String nameToReplace;
+                messageObject = (MessageObject) messageObjects.get(a);
+                String message = getStringForMessage(messageObject, false, isText);
+                if (messageObject.isFcmMessage()) {
+                    nameToReplace = messageObject.localName;
+                } else {
+                    nameToReplace = name;
+                }
+                if (message != null) {
+                    if (lowerId < 0) {
+                        message = message.replace(" @ " + nameToReplace, TtmlNode.ANONYMOUS_REGION_ID);
+                    } else if (isText[0]) {
+                        message = message.replace(nameToReplace + ": ", TtmlNode.ANONYMOUS_REGION_ID);
+                    } else {
+                        message = message.replace(nameToReplace + " ", TtmlNode.ANONYMOUS_REGION_ID);
+                    }
+                    if (text.length() > 0) {
+                        text.append("\n\n");
+                    }
+                    text.append(message);
+                    unreadConvBuilder.addMessage(message);
+                    messagingStyle.addMessage(message, ((long) messageObject.messageOwner.date) * 1000, null);
+                    if (serializedMsgs != null) {
+                        try {
+                            JSONObject jmsg = new JSONObject();
+                            jmsg.put(MimeTypes.BASE_TYPE_TEXT, getShortStringForMessage(messageObject));
+                            jmsg.put("date", messageObject.messageOwner.date);
+                            if (messageObject.isFromUser() && lowerId < 0) {
+                                User sender = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(messageObject.getFromId()));
+                                if (sender != null) {
+                                    jmsg.put("fname", sender.first_name);
+                                    jmsg.put("lname", sender.last_name);
                                 }
                             }
-                        }
-                        rc = rows.size();
-                        for (r = 0; r < rc; r++) {
-                            row = (TL_keyboardButtonRow) rows.get(r);
-                            cc = row.buttons.size();
-                            for (c = 0; c < cc; c++) {
-                                button = (KeyboardButton) row.buttons.get(c);
-                                if (!(button instanceof TL_keyboardButtonCallback)) {
-                                    callbackIntent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
-                                    callbackIntent.putExtra("currentAccount", this.currentAccount);
-                                    callbackIntent.putExtra("did", dialog_id);
-                                    if (button.data != null) {
-                                        callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
-                                    }
-                                    callbackIntent.putExtra("mid", rowsMid);
-                                    str = button.text;
-                                    context = ApplicationLoader.applicationContext;
-                                    i2 = this.lastButtonId;
-                                    this.lastButtonId = i2 + 1;
-                                    builder.addAction(0, str, PendingIntent.getBroadcast(context, i2, callbackIntent, 134217728));
-                                }
-                            }
-                        }
-                        builder.addPerson("tel:+" + user.phone);
-                        if (VERSION.SDK_INT >= 26) {
-                            builder.setChannelId(OTHER_NOTIFICATIONS_CHANNEL);
-                        }
-                        holders.add(new AnonymousClass1NotificationHolder(internalId.intValue(), builder.build()));
-                        this.wearNotificationsIds.put(dialog_id, internalId);
-                        if (jSONObject == null) {
-                            jSONObject.put("reply", canReply);
-                            jSONObject.put("name", name);
-                            jSONObject.put("max_id", max_id);
-                            jSONObject.put("max_date", max_date);
-                            jSONObject.put(TtmlNode.ATTR_ID, Math.abs(lowerId));
-                            if (photoPath != null) {
-                                jSONObject.put("photo", photoPath.dc_id + "_" + photoPath.volume_id + "_" + photoPath.secret);
-                            }
-                            if (serializedMsgs != null) {
-                                jSONObject.put("msgs", serializedMsgs);
-                            }
-                            if (user == null) {
-                                jSONObject.put("type", "user");
-                            } else if (chat != null) {
-                                if (ChatObject.isChannel(chat)) {
-                                    jSONObject.put("type", "channel");
-                                } else {
-                                    jSONObject.put("type", "group");
-                                }
-                            }
-                            serializedNotifications.put(jSONObject);
+                            serializedMsgs.put(jmsg);
+                        } catch (JSONException e) {
                         }
                     }
+                    if (dialog_id == 777000 && messageObject.messageOwner.reply_markup != null) {
+                        rows = messageObject.messageOwner.reply_markup.rows;
+                        rowsMid = messageObject.getId();
+                    }
+                }
+            }
+            intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+            intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
+            intent.setFlags(32768);
+            if (lowerId == 0) {
+                intent.putExtra("encId", highId);
+            } else if (lowerId > 0) {
+                intent.putExtra("userId", lowerId);
+            } else {
+                intent.putExtra("chatId", -lowerId);
+            }
+            intent.putExtra("currentAccount", this.currentAccount);
+            PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
+            WearableExtender wearableExtender = new WearableExtender();
+            if (wearReplyAction != null) {
+                wearableExtender.addAction(wearReplyAction);
+            }
+            if (lowerId == 0) {
+                dismissalID = "tgenc" + highId + "_" + max_id;
+            } else if (lowerId > 0) {
+                dismissalID = "tguser" + lowerId + "_" + max_id;
+            } else {
+                dismissalID = "tgchat" + (-lowerId) + "_" + max_id;
+            }
+            wearableExtender.setDismissalId(dismissalID);
+            wearableExtender.setBridgeTag("tgaccount" + UserConfig.getInstance(this.currentAccount).getClientUserId());
+            WearableExtender summaryExtender = new WearableExtender();
+            summaryExtender.setDismissalId("summary_" + dismissalID);
+            notificationBuilder.extend(summaryExtender);
+            long date = ((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000;
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup(this.notificationGroup).setContentText(text.toString()).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(date).setShowWhen(true).setShortcutId("sdid_" + dialog_id).setGroupAlertBehavior(1).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).setSortKey(TtmlNode.ANONYMOUS_REGION_ID + (Long.MAX_VALUE - date)).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
+            if (this.pushDialogs.size() == 1 && !TextUtils.isEmpty(summary)) {
+                builder.setSubText(summary);
+            }
+            if (lowerId == 0) {
+                builder.setLocalOnly(true);
+            }
+            if (photoPath != null) {
+                BitmapDrawable img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
+                if (img != null) {
+                    builder.setLargeIcon(img.getBitmap());
+                } else {
+                    try {
+                        File file = FileLoader.getPathToAttach(photoPath, true);
+                        if (file.exists()) {
+                            int i;
+                            float scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
+                            Options options = new Options();
+                            if (scaleFactor < 1.0f) {
+                                i = 1;
+                            } else {
+                                i = (int) scaleFactor;
+                            }
+                            options.inSampleSize = i;
+                            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+                            if (bitmap != null) {
+                                builder.setLargeIcon(bitmap);
+                            }
+                        }
+                    } catch (Throwable th) {
+                    }
+                }
+            }
+            if (!(AndroidUtilities.needShowPasscode(false) || SharedConfig.isWaitingForPasscodeEnter || rows == null)) {
+                int rc = rows.size();
+                for (int r = 0; r < rc; r++) {
+                    TL_keyboardButtonRow row = (TL_keyboardButtonRow) rows.get(r);
+                    int cc = row.buttons.size();
+                    for (int c = 0; c < cc; c++) {
+                        KeyboardButton button = (KeyboardButton) row.buttons.get(c);
+                        if (button instanceof TL_keyboardButtonCallback) {
+                            Intent callbackIntent = new Intent(ApplicationLoader.applicationContext, NotificationCallbackReceiver.class);
+                            callbackIntent.putExtra("currentAccount", this.currentAccount);
+                            callbackIntent.putExtra("did", dialog_id);
+                            if (button.data != null) {
+                                callbackIntent.putExtra(DataSchemeDataSource.SCHEME_DATA, button.data);
+                            }
+                            callbackIntent.putExtra("mid", rowsMid);
+                            String str = button.text;
+                            Context context = ApplicationLoader.applicationContext;
+                            int i2 = this.lastButtonId;
+                            this.lastButtonId = i2 + 1;
+                            builder.addAction(0, str, PendingIntent.getBroadcast(context, i2, callbackIntent, 134217728));
+                        }
+                    }
+                }
+            }
+            if (chat == null && user != null && user.phone != null && user.phone.length() > 0) {
+                builder.addPerson("tel:+" + user.phone);
+            }
+            if (VERSION.SDK_INT >= 26) {
+                builder.setChannelId(OTHER_NOTIFICATIONS_CHANNEL);
+            }
+            holders.add(new AnonymousClass1NotificationHolder(internalId.intValue(), builder.build()));
+            this.wearNotificationsIds.put(dialog_id, internalId);
+            if (jSONObject != null) {
+                try {
+                    jSONObject.put("reply", canReply);
+                    jSONObject.put("name", name);
+                    jSONObject.put("max_id", max_id);
+                    jSONObject.put("max_date", max_date);
+                    jSONObject.put(TtmlNode.ATTR_ID, Math.abs(lowerId));
+                    if (photoPath != null) {
+                        jSONObject.put("photo", photoPath.dc_id + "_" + photoPath.volume_id + "_" + photoPath.secret);
+                    }
+                    if (serializedMsgs != null) {
+                        jSONObject.put("msgs", serializedMsgs);
+                    }
+                    if (lowerId > 0) {
+                        jSONObject.put("type", "user");
+                    } else if (lowerId < 0) {
+                        if (isChannel || isSupergroup) {
+                            jSONObject.put("type", "channel");
+                        } else {
+                            jSONObject.put("type", "group");
+                        }
+                    }
+                    serializedNotifications.put(jSONObject);
+                } catch (JSONException e2) {
                 }
             }
         }

@@ -202,6 +202,7 @@ public class MessageObject {
     private boolean layoutCreated;
     public int linesCount;
     public CharSequence linkDescription;
+    public boolean localChannel;
     public long localGroupId;
     public String localName;
     public int localType;
@@ -605,13 +606,14 @@ public class MessageObject {
         }
     }
 
-    public MessageObject(int accountNum, Message message, String formattedMessage, String name, boolean localMessage) {
+    public MessageObject(int accountNum, Message message, String formattedMessage, String name, boolean localMessage, boolean isChannel) {
         this.type = 1000;
         this.localType = localMessage ? 2 : 1;
         this.currentAccount = accountNum;
         this.localName = name;
         this.messageText = formattedMessage;
         this.messageOwner = message;
+        this.localChannel = isChannel;
     }
 
     public MessageObject(int accountNum, Message message, AbstractMap<Integer, User> users, boolean generateLayout) {
@@ -3068,7 +3070,8 @@ public class MessageObject {
 
     public boolean needDrawBluredPreview() {
         if (this.messageOwner instanceof TL_message_secret) {
-            if (this.messageOwner.ttl <= 0 || (((!(this.messageOwner.media instanceof TL_messageMediaPhoto) && !isVideo() && !isGif()) || this.messageOwner.media.ttl_seconds > 60) && !isRoundVideo())) {
+            int ttl = Math.max(this.messageOwner.ttl, this.messageOwner.media.ttl_seconds);
+            if (ttl <= 0 || (((!(this.messageOwner.media instanceof TL_messageMediaPhoto) && !isVideo() && !isGif()) || ttl > 60) && !isRoundVideo())) {
                 return false;
             }
             return true;
