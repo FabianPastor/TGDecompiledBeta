@@ -218,7 +218,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private SparseArray<ChatParticipant> participantsMap = new SparseArray();
     private int phoneRow;
     private boolean playProfileAnimation;
-    private PhotoViewerProvider provider = new C23421();
+    private PhotoViewerProvider provider = new C23481();
     private boolean recreateMenuAfterAnimation;
     private int rowCount = 0;
     private int sectionRow;
@@ -271,8 +271,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$3 */
-    class C22513 implements AvatarUpdaterDelegate {
-        C22513() {
+    class C22573 implements AvatarUpdaterDelegate {
+        C22573() {
         }
 
         public void didUploadedPhoto(InputFile file, PhotoSize small, PhotoSize big) {
@@ -283,11 +283,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$5 */
-    class C22545 extends ActionBarMenuOnItemClick {
+    class C22605 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.ProfileActivity$5$1 */
-        class C16381 implements OnClickListener {
-            C16381() {
+        class C16441 implements OnClickListener {
+            C16441() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -299,7 +299,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C22545() {
+        C22605() {
         }
 
         public void onItemClick(int id) {
@@ -317,7 +317,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                 builder.setMessage(LocaleController.getString("AreYouSureBlockContact", R.string.AreYouSureBlockContact));
                             }
                             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16381());
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16441());
                             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                             ProfileActivity.this.showDialog(builder.create());
                         } else if (ProfileActivity.this.userBlocked) {
@@ -474,11 +474,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$9 */
-    class C22559 implements OnItemClickListener {
+    class C22619 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.ProfileActivity$9$2 */
-        class C16422 implements OnClickListener {
-            C16422() {
+        class C16482 implements OnClickListener {
+            C16482() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -488,8 +488,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
 
         /* renamed from: org.telegram.ui.ProfileActivity$9$3 */
-        class C16433 implements OnClickListener {
-            C16433() {
+        class C16493 implements OnClickListener {
+            C16493() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -497,7 +497,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C22559() {
+        C22619() {
         }
 
         public void onItemClick(View view, int position) {
@@ -679,7 +679,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         builder = new Builder(ProfileActivity.this.getParentActivity());
                         builder.setMessage(LocaleController.getString("AreYouSureSecretChat", R.string.AreYouSureSecretChat));
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16422());
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16482());
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         ProfileActivity.this.showDialog(builder.create());
                     } else if (i > ProfileActivity.this.emptyRowChat2 && i < ProfileActivity.this.membersEndRow) {
@@ -735,7 +735,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         builder = new Builder(ProfileActivity.this.getParentActivity());
                         builder.setMessage(LocaleController.getString("ConvertGroupAlert", R.string.ConvertGroupAlert));
                         builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", R.string.ConvertGroupAlertWarning));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16433());
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16493());
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         ProfileActivity.this.showDialog(builder.create());
                     } else {
@@ -747,8 +747,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.ProfileActivity$1 */
-    class C23421 extends EmptyPhotoViewerProvider {
-        C23421() {
+    class C23481 extends EmptyPhotoViewerProvider {
+        C23481() {
         }
 
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -803,8 +803,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         private Context mContext;
 
         /* renamed from: org.telegram.ui.ProfileActivity$ListAdapter$1 */
-        class C22561 implements AboutLinkCellDelegate {
-            C22561() {
+        class C22621 implements AboutLinkCellDelegate {
+            C22621() {
             }
 
             public void didPressUrl(String url) {
@@ -866,7 +866,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     break;
                 case 8:
                     view = new AboutLinkCell(this.mContext);
-                    ((AboutLinkCell) view).setDelegate(new C22561());
+                    ((AboutLinkCell) view).setDelegate(new C22621());
                     break;
                 default:
                     break;
@@ -1426,7 +1426,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             this.sortedUsers = new ArrayList();
             updateOnlineCount();
             this.avatarUpdater = new AvatarUpdater();
-            this.avatarUpdater.delegate = new C22513();
+            this.avatarUpdater.delegate = new C22573();
             this.avatarUpdater.parentFragment = this;
             if (ChatObject.isChannel(this.currentChat)) {
                 MessagesController.getInstance(this.currentAccount).loadFullChat(this.chat_id, this.classGuid, true);
@@ -1529,7 +1529,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         Theme.createProfileResources(context);
         this.hasOwnBackground = true;
         this.extraHeight = AndroidUtilities.dp(88.0f);
-        this.actionBar.setActionBarMenuOnItemClick(new C22545());
+        this.actionBar.setActionBarMenuOnItemClick(new C22605());
         createActionBarMenu();
         this.listAdapter = new ListAdapter(context2);
         this.avatarDrawable = new AvatarDrawable();
@@ -1570,7 +1570,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 recyclerListView.setGlowColor(AvatarDrawable.getProfileBackColorForId(i));
                 frameLayout.addView(r0.listView, LayoutHelper.createFrame(-1, -1, 51));
                 r0.listView.setAdapter(r0.listAdapter);
-                r0.listView.setOnItemClickListener(new C22559());
+                r0.listView.setOnItemClickListener(new C22619());
                 r0.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
                     public boolean onItemClick(View view, int position) {
                         int i = position;
@@ -1766,8 +1766,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     frameLayout1.setOnClickListener(new View.OnClickListener() {
 
                         /* renamed from: org.telegram.ui.ProfileActivity$13$1 */
-                        class C22501 implements ChannelRightsEditActivityDelegate {
-                            C22501() {
+                        class C22561 implements ChannelRightsEditActivityDelegate {
+                            C22561() {
                             }
 
                             public void didSetRights(int rights, TL_channelAdminRights rightsAdmin, TL_channelBannedRights rightsBanned) {
@@ -1777,7 +1777,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
 
                         public void onClick(View v) {
                             ChannelRightsEditActivity fragment = new ChannelRightsEditActivity(ProfileActivity.this.user_id, ProfileActivity.this.banFromGroup, null, ProfileActivity.this.currentChannelParticipant != null ? ProfileActivity.this.currentChannelParticipant.banned_rights : null, 1, true);
-                            fragment.setDelegate(new C22501());
+                            fragment.setDelegate(new C22561());
                             ProfileActivity.this.presentFragment(fragment);
                         }
                     });
@@ -1919,8 +1919,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             r0.writeButton.setOnClickListener(new View.OnClickListener() {
 
                                 /* renamed from: org.telegram.ui.ProfileActivity$16$1 */
-                                class C16351 implements OnClickListener {
-                                    C16351() {
+                                class C16411 implements OnClickListener {
+                                    C16411() {
                                     }
 
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -1963,12 +1963,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                                 if (!(chat.photo == null || chat.photo.photo_big == null)) {
                                                     if (!(chat.photo instanceof TL_chatPhotoEmpty)) {
                                                         items = new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
-                                                        builder.setItems(items, new C16351());
+                                                        builder.setItems(items, new C16411());
                                                         ProfileActivity.this.showDialog(builder.create());
                                                     }
                                                 }
                                                 items = new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley)};
-                                                builder.setItems(items, new C16351());
+                                                builder.setItems(items, new C16411());
                                                 ProfileActivity.this.showDialog(builder.create());
                                             } else if (ProfileActivity.this.playProfileAnimation && (ProfileActivity.this.parentLayout.fragmentsStack.get(ProfileActivity.this.parentLayout.fragmentsStack.size() - 2) instanceof ChatActivity)) {
                                                 ProfileActivity.this.finishFragment();
@@ -2111,7 +2111,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         recyclerListView.setGlowColor(AvatarDrawable.getProfileBackColorForId(i));
         frameLayout.addView(r0.listView, LayoutHelper.createFrame(-1, -1, 51));
         r0.listView.setAdapter(r0.listAdapter);
-        r0.listView.setOnItemClickListener(new C22559());
+        r0.listView.setOnItemClickListener(new C22619());
         r0.listView.setOnItemLongClickListener(/* anonymous class already generated */);
         if (r0.banFromGroup == 0) {
             r0.listView.setPadding(0, AndroidUtilities.dp(88.0f), 0, 0);

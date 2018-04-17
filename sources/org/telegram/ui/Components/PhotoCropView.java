@@ -38,8 +38,8 @@ public class PhotoCropView extends FrameLayout {
     private CropRotationWheel wheelView;
 
     /* renamed from: org.telegram.ui.Components.PhotoCropView$3 */
-    class C12323 implements Runnable {
-        C12323() {
+    class C12383 implements Runnable {
+        C12383() {
         }
 
         public void run() {
@@ -59,8 +59,8 @@ public class PhotoCropView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoCropView$1 */
-    class C20601 implements CropViewListener {
-        C20601() {
+    class C20661 implements CropViewListener {
+        C20661() {
         }
 
         public void onChange(boolean reset) {
@@ -75,8 +75,8 @@ public class PhotoCropView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PhotoCropView$2 */
-    class C20612 implements RotationWheelListener {
-        C20612() {
+    class C20672 implements RotationWheelListener {
+        C20672() {
         }
 
         public void onStart() {
@@ -124,11 +124,11 @@ public class PhotoCropView extends FrameLayout {
         requestLayout();
         if (this.cropView == null) {
             this.cropView = new CropView(getContext());
-            this.cropView.setListener(new C20601());
+            this.cropView.setListener(new C20661());
             this.cropView.setBottomPadding((float) AndroidUtilities.dp(64.0f));
             addView(this.cropView);
             this.wheelView = new CropRotationWheel(getContext());
-            this.wheelView.setListener(new C20612());
+            this.wheelView.setListener(new C20672());
             addView(this.wheelView, LayoutHelper.createFrame(-1, -2.0f, 81, 0.0f, 0.0f, 0.0f, 0.0f));
         }
         this.cropView.setVisibility(0);
@@ -234,7 +234,7 @@ public class PhotoCropView extends FrameLayout {
 
     public void startAnimationRunnable() {
         if (this.animationRunnable == null) {
-            this.animationRunnable = new C12323();
+            this.animationRunnable = new C12383();
             AndroidUtilities.runOnUIThread(this.animationRunnable, 1500);
         }
     }

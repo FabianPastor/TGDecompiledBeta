@@ -82,8 +82,8 @@ public class PasscodeView extends FrameLayout {
     private boolean selfCancelled;
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$1 */
-    class C12181 implements OnEditorActionListener {
-        C12181() {
+    class C12241 implements OnEditorActionListener {
+        C12241() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -96,8 +96,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$2 */
-    class C12192 implements TextWatcher {
-        C12192() {
+    class C12252 implements TextWatcher {
+        C12252() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -114,8 +114,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$3 */
-    class C12203 implements Callback {
-        C12203() {
+    class C12263 implements Callback {
+        C12263() {
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -135,8 +135,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$4 */
-    class C12214 implements OnClickListener {
-        C12214() {
+    class C12274 implements OnClickListener {
+        C12274() {
         }
 
         public void onClick(View v) {
@@ -145,8 +145,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$5 */
-    class C12225 implements OnLongClickListener {
-        C12225() {
+    class C12285 implements OnLongClickListener {
+        C12285() {
         }
 
         public boolean onLongClick(View v) {
@@ -157,8 +157,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$6 */
-    class C12236 implements OnClickListener {
-        C12236() {
+    class C12296 implements OnClickListener {
+        C12296() {
         }
 
         public void onClick(View v) {
@@ -206,8 +206,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$7 */
-    class C12247 extends AnimatorListenerAdapter {
-        C12247() {
+    class C12307 extends AnimatorListenerAdapter {
+        C12307() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -216,8 +216,8 @@ public class PasscodeView extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.PasscodeView$9 */
-    class C12269 implements Runnable {
-        C12269() {
+    class C12329 implements Runnable {
+        C12329() {
         }
 
         public void run() {
@@ -237,8 +237,8 @@ public class PasscodeView extends FrameLayout {
         private StringBuilder stringBuilder = new StringBuilder(4);
 
         /* renamed from: org.telegram.ui.Components.PasscodeView$AnimatingTextView$2 */
-        class C12292 extends AnimatorListenerAdapter {
-            C12292() {
+        class C12352 extends AnimatorListenerAdapter {
+            C12352() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -249,8 +249,8 @@ public class PasscodeView extends FrameLayout {
         }
 
         /* renamed from: org.telegram.ui.Components.PasscodeView$AnimatingTextView$3 */
-        class C12303 extends AnimatorListenerAdapter {
-            C12303() {
+        class C12363 extends AnimatorListenerAdapter {
+            C12363() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -261,8 +261,8 @@ public class PasscodeView extends FrameLayout {
         }
 
         /* renamed from: org.telegram.ui.Components.PasscodeView$AnimatingTextView$4 */
-        class C12314 extends AnimatorListenerAdapter {
-            C12314() {
+        class C12374 extends AnimatorListenerAdapter {
+            C12374() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -354,8 +354,8 @@ public class PasscodeView extends FrameLayout {
                 this.dotRunnable = new Runnable() {
 
                     /* renamed from: org.telegram.ui.Components.PasscodeView$AnimatingTextView$1$1 */
-                    class C12271 extends AnimatorListenerAdapter {
-                        C12271() {
+                    class C12331 extends AnimatorListenerAdapter {
+                        C12331() {
                         }
 
                         public void onAnimationEnd(Animator animation) {
@@ -379,7 +379,7 @@ public class PasscodeView extends FrameLayout {
                             AnimatingTextView.this.currentAnimation = new AnimatorSet();
                             AnimatingTextView.this.currentAnimation.setDuration(150);
                             AnimatingTextView.this.currentAnimation.playTogether(animators);
-                            AnimatingTextView.this.currentAnimation.addListener(new C12271());
+                            AnimatingTextView.this.currentAnimation.addListener(new C12331());
                             AnimatingTextView.this.currentAnimation.start();
                         }
                     }
@@ -405,7 +405,7 @@ public class PasscodeView extends FrameLayout {
                 this.currentAnimation = new AnimatorSet();
                 this.currentAnimation.setDuration(150);
                 this.currentAnimation.playTogether(animators);
-                this.currentAnimation.addListener(new C12292());
+                this.currentAnimation.addListener(new C12352());
                 this.currentAnimation.start();
             }
         }
@@ -466,7 +466,7 @@ public class PasscodeView extends FrameLayout {
                 this.currentAnimation = new AnimatorSet();
                 this.currentAnimation.setDuration(150);
                 this.currentAnimation.playTogether(animators);
-                this.currentAnimation.addListener(new C12303());
+                this.currentAnimation.addListener(new C12363());
                 this.currentAnimation.start();
             }
         }
@@ -502,7 +502,7 @@ public class PasscodeView extends FrameLayout {
                     this.currentAnimation = new AnimatorSet();
                     this.currentAnimation.setDuration(150);
                     this.currentAnimation.playTogether(animators);
-                    this.currentAnimation.addListener(new C12314());
+                    this.currentAnimation.addListener(new C12374());
                     this.currentAnimation.start();
                 } else {
                     while (a < 4) {
@@ -627,9 +627,9 @@ public class PasscodeView extends FrameLayout {
         layoutParams.rightMargin = AndroidUtilities.dp(70.0f);
         layoutParams.gravity = 81;
         r0.passwordEditText.setLayoutParams(layoutParams);
-        r0.passwordEditText.setOnEditorActionListener(new C12181());
-        r0.passwordEditText.addTextChangedListener(new C12192());
-        r0.passwordEditText.setCustomSelectionActionModeCallback(new C12203());
+        r0.passwordEditText.setOnEditorActionListener(new C12241());
+        r0.passwordEditText.addTextChangedListener(new C12252());
+        r0.passwordEditText.setCustomSelectionActionModeCallback(new C12263());
         r0.checkImage = new ImageView(context2);
         r0.checkImage.setImageResource(R.drawable.passcode_check);
         r0.checkImage.setScaleType(ScaleType.CENTER);
@@ -642,7 +642,7 @@ public class PasscodeView extends FrameLayout {
         layoutParams.rightMargin = AndroidUtilities.dp(10.0f);
         layoutParams.gravity = 85;
         r0.checkImage.setLayoutParams(layoutParams);
-        r0.checkImage.setOnClickListener(new C12214());
+        r0.checkImage.setOnClickListener(new C12274());
         FrameLayout lineFrameLayout = new FrameLayout(context2);
         lineFrameLayout.setBackgroundColor(654311423);
         r0.passwordFrameLayout.addView(lineFrameLayout);
@@ -738,9 +738,9 @@ public class PasscodeView extends FrameLayout {
             frameLayout.setBackgroundResource(R.drawable.bar_selector_lock);
             frameLayout.setTag(Integer.valueOf(a));
             if (a == 10) {
-                frameLayout.setOnLongClickListener(new C12225());
+                frameLayout.setOnLongClickListener(new C12285());
             }
-            frameLayout.setOnClickListener(new C12236());
+            frameLayout.setOnClickListener(new C12296());
             r0.numberFrameLayouts.add(frameLayout);
             a++;
         }
@@ -791,7 +791,7 @@ public class PasscodeView extends FrameLayout {
         r2[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) AndroidUtilities.dp(20.0f)});
         r2[1] = ObjectAnimator.ofFloat(this, "alpha", new float[]{(float) AndroidUtilities.dp(0.0f)});
         AnimatorSet.playTogether(r2);
-        AnimatorSet.addListener(new C12247());
+        AnimatorSet.addListener(new C12307());
         AnimatorSet.start();
         SharedConfig.appLocked = false;
         SharedConfig.saveConfig();
@@ -832,7 +832,7 @@ public class PasscodeView extends FrameLayout {
                 this.passwordEditText.requestFocus();
                 AndroidUtilities.showKeyboard(this.passwordEditText);
             }
-            AndroidUtilities.runOnUIThread(new C12269(), 200);
+            AndroidUtilities.runOnUIThread(new C12329(), 200);
         }
         checkFingerprint();
     }

@@ -39,8 +39,8 @@ public class DialogsAdapter extends SelectionAdapter {
     private ArrayList<Long> selectedDialogs;
 
     /* renamed from: org.telegram.ui.Adapters.DialogsAdapter$1 */
-    class C07641 implements OnClickListener {
-        C07641() {
+    class C07711 implements OnClickListener {
+        C07711() {
         }
 
         public void onClick(View view) {
@@ -185,7 +185,7 @@ public class DialogsAdapter extends SelectionAdapter {
                     i = 5;
                 }
                 view.addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 15.0f, 17.0f, 0.0f));
-                textView.setOnClickListener(new C07641());
+                textView.setOnClickListener(new C07711());
                 View view2 = view;
                 break;
             case 3:

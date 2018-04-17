@@ -6,7 +6,7 @@ import android.os.Parcelable.Creator;
 import java.util.Arrays;
 
 public final class ColorInfo implements Parcelable {
-    public static final Creator<ColorInfo> CREATOR = new C06251();
+    public static final Creator<ColorInfo> CREATOR = new C06281();
     public final int colorRange;
     public final int colorSpace;
     public final int colorTransfer;
@@ -14,8 +14,8 @@ public final class ColorInfo implements Parcelable {
     public final byte[] hdrStaticInfo;
 
     /* renamed from: org.telegram.messenger.exoplayer2.video.ColorInfo$1 */
-    static class C06251 implements Creator<ColorInfo> {
-        C06251() {
+    static class C06281 implements Creator<ColorInfo> {
+        C06281() {
         }
 
         public ColorInfo createFromParcel(Parcel in) {

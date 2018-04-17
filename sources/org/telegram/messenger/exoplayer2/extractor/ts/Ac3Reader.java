@@ -2,7 +2,7 @@ package org.telegram.messenger.exoplayer2.extractor.ts;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util.Ac3SyncFrameInfo;
@@ -142,6 +142,6 @@ public final class Ac3Reader implements ElementaryStreamReader {
             this.output.format(this.format);
         }
         this.sampleSize = frameInfo.frameSize;
-        this.sampleDurationUs = (C0539C.MICROS_PER_SECOND * ((long) frameInfo.sampleCount)) / ((long) this.format.sampleRate);
+        this.sampleDurationUs = (C0542C.MICROS_PER_SECOND * ((long) frameInfo.sampleCount)) / ((long) this.format.sampleRate);
     }
 }

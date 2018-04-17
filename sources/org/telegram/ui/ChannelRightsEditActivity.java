@@ -86,8 +86,8 @@ public class ChannelRightsEditActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChannelRightsEditActivity$1 */
-    class C19871 extends ActionBarMenuOnItemClick {
-        C19871() {
+    class C19931 extends ActionBarMenuOnItemClick {
+        C19931() {
         }
 
         public void onItemClick(int id) {
@@ -144,21 +144,21 @@ public class ChannelRightsEditActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChannelRightsEditActivity$3 */
-    class C19883 implements OnItemClickListener {
+    class C19943 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.ChannelRightsEditActivity$3$1 */
-        class C09981 implements OnDateSetListener {
+        class C10041 implements OnDateSetListener {
 
             /* renamed from: org.telegram.ui.ChannelRightsEditActivity$3$1$2 */
-            class C09972 implements OnClickListener {
-                C09972() {
+            class C10032 implements OnClickListener {
+                C10032() {
                 }
 
                 public void onClick(DialogInterface dialog, int which) {
                 }
             }
 
-            C09981() {
+            C10041() {
             }
 
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -174,7 +174,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
                         }
                     }, 0, 0, true);
                     dialog.setButton(-1, LocaleController.getString("Set", R.string.Set), dialog);
-                    dialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C09972());
+                    dialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C10032());
                     ChannelRightsEditActivity.this.showDialog(dialog);
                 } catch (Throwable e) {
                     FileLog.m3e(e);
@@ -183,8 +183,8 @@ public class ChannelRightsEditActivity extends BaseFragment {
         }
 
         /* renamed from: org.telegram.ui.ChannelRightsEditActivity$3$2 */
-        class C09992 implements OnClickListener {
-            C09992() {
+        class C10052 implements OnClickListener {
+            C10052() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -194,15 +194,15 @@ public class ChannelRightsEditActivity extends BaseFragment {
         }
 
         /* renamed from: org.telegram.ui.ChannelRightsEditActivity$3$3 */
-        class C10003 implements OnClickListener {
-            C10003() {
+        class C10063 implements OnClickListener {
+            C10063() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
             }
         }
 
-        C19883() {
+        C19943() {
         }
 
         public void onItemClick(View view, int position) {
@@ -241,7 +241,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
                         int monthOfYear = calendar.get(2);
                         int dayOfMonth = calendar.get(5);
                         try {
-                            DatePickerDialog dialog = new DatePickerDialog(ChannelRightsEditActivity.this.getParentActivity(), new C09981(), year, monthOfYear, dayOfMonth);
+                            DatePickerDialog dialog = new DatePickerDialog(ChannelRightsEditActivity.this.getParentActivity(), new C10041(), year, monthOfYear, dayOfMonth);
                             final DatePicker datePicker = dialog.getDatePicker();
                             Calendar date = Calendar.getInstance();
                             date.setTimeInMillis(System.currentTimeMillis());
@@ -258,8 +258,8 @@ public class ChannelRightsEditActivity extends BaseFragment {
                                 date.set(14, date.getMaximum(14));
                                 datePicker.setMaxDate(date.getTimeInMillis());
                                 dialog.setButton(-1, LocaleController.getString("Set", R.string.Set), dialog);
-                                dialog.setButton(-3, LocaleController.getString("UserRestrictionsUntilForever", R.string.UserRestrictionsUntilForever), new C09992());
-                                dialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C10003());
+                                dialog.setButton(-3, LocaleController.getString("UserRestrictionsUntilForever", R.string.UserRestrictionsUntilForever), new C10052());
+                                dialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C10063());
                                 if (VERSION.SDK_INT >= 21) {
                                     dialog.setOnShowListener(new OnShowListener() {
                                         public void onShow(DialogInterface dialog) {
@@ -397,8 +397,8 @@ public class ChannelRightsEditActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChannelRightsEditActivity$4 */
-    class C19894 implements ThemeDescriptionDelegate {
-        C19894() {
+    class C19954 implements ThemeDescriptionDelegate {
+        C19954() {
         }
 
         public void didSetColor() {
@@ -847,7 +847,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
         } else {
             this.actionBar.setTitle(LocaleController.getString("UserRestrictions", R.string.UserRestrictions));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C19871());
+        this.actionBar.setActionBarMenuOnItemClick(new C19931());
         if (this.canEdit) {
             this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         }
@@ -873,7 +873,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C19883());
+        this.listView.setOnItemClickListener(new C19943());
         return this.fragmentView;
     }
 
@@ -889,7 +889,7 @@ public class ChannelRightsEditActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C19894();
+        ThemeDescriptionDelegate сellDelegate = new C19954();
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[34];
         themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{UserCell.class, TextSettingsCell.class, TextCheckCell2.class, HeaderCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);

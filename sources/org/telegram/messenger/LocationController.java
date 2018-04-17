@@ -59,8 +59,8 @@ public class LocationController implements NotificationCenterDelegate {
     private boolean started;
 
     /* renamed from: org.telegram.messenger.LocationController$1 */
-    class C02281 implements Runnable {
-        C02281() {
+    class C02311 implements Runnable {
+        C02311() {
         }
 
         public void run() {
@@ -72,8 +72,8 @@ public class LocationController implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.LocationController$4 */
-    class C02314 implements Runnable {
-        C02314() {
+    class C02344 implements Runnable {
+        C02344() {
         }
 
         public void run() {
@@ -86,8 +86,8 @@ public class LocationController implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.LocationController$6 */
-    class C02366 implements Runnable {
-        C02366() {
+    class C02396 implements Runnable {
+        C02396() {
         }
 
         public void run() {
@@ -137,11 +137,11 @@ public class LocationController implements NotificationCenterDelegate {
                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.LocationController$6$1$1 */
-                    class C02341 implements Runnable {
+                    class C02371 implements Runnable {
 
                         /* renamed from: org.telegram.messenger.LocationController$6$1$1$1 */
-                        class C02331 implements Runnable {
-                            C02331() {
+                        class C02361 implements Runnable {
+                            C02361() {
                             }
 
                             public void run() {
@@ -155,7 +155,7 @@ public class LocationController implements NotificationCenterDelegate {
                             }
                         }
 
-                        C02341() {
+                        C02371() {
                         }
 
                         public void run() {
@@ -164,14 +164,14 @@ public class LocationController implements NotificationCenterDelegate {
                                 SharingLocationInfo info = (SharingLocationInfo) LocationController.this.sharingLocations.get(a);
                                 LocationController.this.sharingLocationsMap.put(info.did, info);
                             }
-                            AndroidUtilities.runOnUIThread(new C02331());
+                            AndroidUtilities.runOnUIThread(new C02361());
                         }
                     }
 
                     public void run() {
                         MessagesController.getInstance(LocationController.this.currentAccount).putUsers(users, true);
                         MessagesController.getInstance(LocationController.this.currentAccount).putChats(chats, true);
-                        Utilities.stageQueue.postRunnable(new C02341());
+                        Utilities.stageQueue.postRunnable(new C02371());
                     }
                 });
             }
@@ -179,11 +179,11 @@ public class LocationController implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.LocationController$9 */
-    class C02419 implements Runnable {
+    class C02449 implements Runnable {
 
         /* renamed from: org.telegram.messenger.LocationController$9$2 */
-        class C02402 implements Runnable {
-            C02402() {
+        class C02432 implements Runnable {
+            C02432() {
             }
 
             public void run() {
@@ -195,8 +195,8 @@ public class LocationController implements NotificationCenterDelegate {
         }
 
         /* renamed from: org.telegram.messenger.LocationController$9$1 */
-        class C18061 implements RequestDelegate {
-            C18061() {
+        class C18121 implements RequestDelegate {
+            C18121() {
             }
 
             public void run(TLObject response, TL_error error) {
@@ -206,7 +206,7 @@ public class LocationController implements NotificationCenterDelegate {
             }
         }
 
-        C02419() {
+        C02449() {
         }
 
         public void run() {
@@ -216,13 +216,13 @@ public class LocationController implements NotificationCenterDelegate {
                 req.peer = MessagesController.getInstance(LocationController.this.currentAccount).getInputPeer((int) info.did);
                 req.id = info.mid;
                 req.stop_geo_live = true;
-                ConnectionsManager.getInstance(LocationController.this.currentAccount).sendRequest(req, new C18061());
+                ConnectionsManager.getInstance(LocationController.this.currentAccount).sendRequest(req, new C18121());
             }
             LocationController.this.sharingLocations.clear();
             LocationController.this.sharingLocationsMap.clear();
             LocationController.this.saveSharingLocation(null, 2);
             LocationController.this.stop(true);
-            AndroidUtilities.runOnUIThread(new C02402());
+            AndroidUtilities.runOnUIThread(new C02432());
         }
     }
 
@@ -278,7 +278,7 @@ public class LocationController implements NotificationCenterDelegate {
     public LocationController(int instance) {
         this.currentAccount = instance;
         this.locationManager = (LocationManager) ApplicationLoader.applicationContext.getSystemService("location");
-        AndroidUtilities.runOnUIThread(new C02281());
+        AndroidUtilities.runOnUIThread(new C02311());
         loadSharingLocations();
     }
 
@@ -405,8 +405,8 @@ public class LocationController implements NotificationCenterDelegate {
                 final int[] reqId = new int[]{ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                     /* renamed from: org.telegram.messenger.LocationController$2$1 */
-                    class C02291 implements Runnable {
-                        C02291() {
+                    class C02321 implements Runnable {
+                        C02321() {
                         }
 
                         public void run() {
@@ -426,7 +426,7 @@ public class LocationController implements NotificationCenterDelegate {
                                 LocationController.this.sharingLocationsMap.remove(info.did);
                                 LocationController.this.saveSharingLocation(info, 1);
                                 LocationController.this.requests.delete(reqId[0]);
-                                AndroidUtilities.runOnUIThread(new C02291());
+                                AndroidUtilities.runOnUIThread(new C02321());
                             }
                             return;
                         }
@@ -498,7 +498,7 @@ public class LocationController implements NotificationCenterDelegate {
         this.locationsCache.clear();
         this.cacheRequests.clear();
         stopService();
-        Utilities.stageQueue.postRunnable(new C02314());
+        Utilities.stageQueue.postRunnable(new C02344());
     }
 
     protected void addSharingLocation(long did, int mid, int period, Message message) {
@@ -538,7 +538,7 @@ public class LocationController implements NotificationCenterDelegate {
     }
 
     private void loadSharingLocations() {
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C02366());
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new C02396());
     }
 
     private void saveSharingLocation(final SharingLocationInfo info, final int remove) {
@@ -580,8 +580,8 @@ public class LocationController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.LocationController$8$1 */
-            class C18051 implements RequestDelegate {
-                C18051() {
+            class C18111 implements RequestDelegate {
+                C18111() {
                 }
 
                 public void run(TLObject response, TL_error error) {
@@ -599,7 +599,7 @@ public class LocationController implements NotificationCenterDelegate {
                     req.peer = MessagesController.getInstance(LocationController.this.currentAccount).getInputPeer((int) info.did);
                     req.id = info.mid;
                     req.stop_geo_live = true;
-                    ConnectionsManager.getInstance(LocationController.this.currentAccount).sendRequest(req, new C18051());
+                    ConnectionsManager.getInstance(LocationController.this.currentAccount).sendRequest(req, new C18111());
                     LocationController.this.sharingLocations.remove(info);
                     LocationController.this.saveSharingLocation(info, 1);
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -633,7 +633,7 @@ public class LocationController implements NotificationCenterDelegate {
     }
 
     public void removeAllLocationSharings() {
-        Utilities.stageQueue.postRunnable(new C02419());
+        Utilities.stageQueue.postRunnable(new C02449());
     }
 
     public void setGoogleMapLocation(Location location, boolean first) {

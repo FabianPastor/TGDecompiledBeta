@@ -26,8 +26,8 @@ public class BotKeyboardView extends LinearLayout {
     private ScrollView scrollView;
 
     /* renamed from: org.telegram.ui.Components.BotKeyboardView$1 */
-    class C10871 implements OnClickListener {
-        C10871() {
+    class C10931 implements OnClickListener {
+        C10931() {
         }
 
         public void onClick(View v) {
@@ -121,7 +121,7 @@ public class BotKeyboardView extends LinearLayout {
                     boolean z2 = b != row.buttons.size() - 1 ? true : z;
                     TextView textView2 = textView;
                     layout.addView(textView2, LayoutHelper.createLinear(0, -1, weight, 0, 0, (int) z2, 0));
-                    textView2.setOnClickListener(new C10871());
+                    textView2.setOnClickListener(new C10931());
                     r0.buttonViews.add(textView2);
                     b++;
                     z = false;

@@ -53,8 +53,8 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
     private BackupImageView thumbImageView;
 
     /* renamed from: org.telegram.ui.Cells.SharedDocumentCell$1 */
-    class C19401 implements ImageReceiverDelegate {
-        C19401() {
+    class C19461 implements ImageReceiverDelegate {
+        C19461() {
         }
 
         public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
@@ -86,7 +86,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         addView(r0.extTextView, LayoutHelper.createFrame(32, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 22.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
         r0.thumbImageView = new BackupImageView(context2);
         addView(r0.thumbImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
-        r0.thumbImageView.getImageReceiver().setDelegate(new C19401());
+        r0.thumbImageView.getImageReceiver().setDelegate(new C19461());
         r0.nameTextView = new TextView(context2);
         r0.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         r0.nameTextView.setTextSize(1, 16.0f);

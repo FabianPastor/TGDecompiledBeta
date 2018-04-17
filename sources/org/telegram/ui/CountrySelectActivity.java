@@ -62,8 +62,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$1 */
-    class C21101 extends ActionBarMenuOnItemClick {
-        C21101() {
+    class C21161 extends ActionBarMenuOnItemClick {
+        C21161() {
         }
 
         public void onItemClick(int id) {
@@ -74,8 +74,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$2 */
-    class C21112 extends ActionBarMenuItemSearchListener {
-        C21112() {
+    class C21172 extends ActionBarMenuItemSearchListener {
+        C21172() {
         }
 
         public void onSearchExpand() {
@@ -106,8 +106,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$3 */
-    class C21123 implements OnItemClickListener {
-        C21123() {
+    class C21183 implements OnItemClickListener {
+        C21183() {
         }
 
         public void onItemClick(View view, int position) {
@@ -134,8 +134,8 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CountrySelectActivity$4 */
-    class C21134 extends OnScrollListener {
-        C21134() {
+    class C21194 extends OnScrollListener {
+        C21194() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -432,8 +432,8 @@ public class CountrySelectActivity extends BaseFragment {
         int i = 1;
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
-        this.actionBar.setActionBarMenuOnItemClick(new C21101());
-        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21112()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        this.actionBar.setActionBarMenuOnItemClick(new C21161());
+        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21172()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.searching = false;
         this.searchWas = false;
         this.listViewAdapter = new CountryAdapter(context);
@@ -458,8 +458,8 @@ public class CountrySelectActivity extends BaseFragment {
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C21123());
-        this.listView.setOnScrollListener(new C21134());
+        this.listView.setOnItemClickListener(new C21183());
+        this.listView.setOnScrollListener(new C21194());
         return this.fragmentView;
     }
 

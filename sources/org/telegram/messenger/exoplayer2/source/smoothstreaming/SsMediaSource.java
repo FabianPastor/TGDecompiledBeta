@@ -54,8 +54,8 @@ public final class SsMediaSource implements MediaSource, Callback<ParsingLoadabl
     private Listener sourceListener;
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.smoothstreaming.SsMediaSource$1 */
-    class C06151 implements Runnable {
-        C06151() {
+    class C06181 implements Runnable {
+        C06181() {
         }
 
         public void run() {
@@ -375,7 +375,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
     L_0x00ae:
         r1 = r13 - r3;
         r5 = r0.livePresentationDelayMs;
-        r5 = org.telegram.messenger.exoplayer2.C0539C.msToUs(r5);
+        r5 = org.telegram.messenger.exoplayer2.C0542C.msToUs(r5);
         r7 = r1 - r5;
         r5 = 5000000; // 0x4c4b40 float:7.006492E-39 double:2.470328E-317;
         r9 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1));
@@ -433,7 +433,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 
     private void scheduleManifestRefresh() {
         if (this.manifest.isLive) {
-            this.manifestRefreshHandler.postDelayed(new C06151(), Math.max(0, (this.manifestLoadStartTimestamp + DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) - SystemClock.elapsedRealtime()));
+            this.manifestRefreshHandler.postDelayed(new C06181(), Math.max(0, (this.manifestLoadStartTimestamp + DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) - SystemClock.elapsedRealtime()));
         }
     }
 

@@ -2,18 +2,18 @@ package org.telegram.messenger.exoplayer2.metadata.scte35;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 
 public final class TimeSignalCommand extends SpliceCommand {
-    public static final Creator<TimeSignalCommand> CREATOR = new C05891();
+    public static final Creator<TimeSignalCommand> CREATOR = new C05921();
     public final long playbackPositionUs;
     public final long ptsTime;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.scte35.TimeSignalCommand$1 */
-    static class C05891 implements Creator<TimeSignalCommand> {
-        C05891() {
+    static class C05921 implements Creator<TimeSignalCommand> {
+        C05921() {
         }
 
         public TimeSignalCommand createFromParcel(Parcel in) {
@@ -40,7 +40,7 @@ public final class TimeSignalCommand extends SpliceCommand {
         if ((firstByte & 128) != 0) {
             return ((((firstByte & 1) << 32) | sectionData.readUnsignedInt()) + ptsAdjustment) & 8589934591L;
         }
-        return C0539C.TIME_UNSET;
+        return C0542C.TIME_UNSET;
     }
 
     public void writeToParcel(Parcel dest, int flags) {

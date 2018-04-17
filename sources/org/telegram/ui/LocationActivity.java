@@ -162,8 +162,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private boolean wasResults;
 
     /* renamed from: org.telegram.ui.LocationActivity$4 */
-    class C14604 extends ViewOutlineProvider {
-        C14604() {
+    class C14664 extends ViewOutlineProvider {
+        C14664() {
         }
 
         @SuppressLint({"NewApi"})
@@ -185,8 +185,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$1 */
-    class C21691 extends ActionBarMenuOnItemClick {
-        C21691() {
+    class C21751 extends ActionBarMenuOnItemClick {
+        C21751() {
         }
 
         public void onItemClick(int id) {
@@ -227,8 +227,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$2 */
-    class C21702 extends ActionBarMenuItemSearchListener {
-        C21702() {
+    class C21762 extends ActionBarMenuItemSearchListener {
+        C21762() {
         }
 
         public void onSearchExpand() {
@@ -264,11 +264,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$6 */
-    class C21716 extends OnScrollListener {
+    class C21776 extends OnScrollListener {
 
         /* renamed from: org.telegram.ui.LocationActivity$6$1 */
-        class C14611 implements Runnable {
-            C14611() {
+        class C14671 implements Runnable {
+            C14671() {
             }
 
             public void run() {
@@ -276,7 +276,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        C21716() {
+        C21776() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -287,7 +287,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     if (dy > 0 && !LocationActivity.this.adapter.isPulledUp()) {
                         LocationActivity.this.adapter.setPulledUp();
                         if (LocationActivity.this.myLocation != null) {
-                            AndroidUtilities.runOnUIThread(new C14611());
+                            AndroidUtilities.runOnUIThread(new C14671());
                         }
                     }
                 }
@@ -296,11 +296,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$7 */
-    class C21737 implements OnItemClickListener {
+    class C21797 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.LocationActivity$7$1 */
-        class C21721 implements IntCallback {
-            C21721() {
+        class C21781 implements IntCallback {
+            C21781() {
             }
 
             public void run(int param) {
@@ -314,7 +314,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        C21737() {
+        C21797() {
         }
 
         public void onItemClick(View view, int position) {
@@ -349,7 +349,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                                 if (((int) LocationActivity.this.dialogId) > 0) {
                                     user = MessagesController.getInstance(LocationActivity.this.currentAccount).getUser(Integer.valueOf((int) LocationActivity.this.dialogId));
                                 }
-                                LocationActivity.this.showDialog(AlertsCreator.createLocationUpdateDialog(LocationActivity.this.getParentActivity(), user, new C21721()));
+                                LocationActivity.this.showDialog(AlertsCreator.createLocationUpdateDialog(LocationActivity.this.getParentActivity(), user, new C21781()));
                             }
                         }
                     }
@@ -361,8 +361,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.LocationActivity$8 */
-    class C21748 implements BaseLocationAdapterDelegate {
-        C21748() {
+    class C21808 implements BaseLocationAdapterDelegate {
+        C21808() {
         }
 
         public void didLoadedSearchResult(ArrayList<TL_messageMediaVenue> places) {
@@ -423,11 +423,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             r0.actionBar.setOccupyStatusBar(false);
         }
         r0.actionBar.setAddToContainer(false);
-        r0.actionBar.setActionBarMenuOnItemClick(new C21691());
+        r0.actionBar.setActionBarMenuOnItemClick(new C21751());
         ActionBarMenu menu = r0.actionBar.createMenu();
         if (r0.messageObject == null) {
             r0.actionBar.setTitle(LocaleController.getString("ShareLocation", R.string.ShareLocation));
-            menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21702()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+            menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21762()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         } else if (r0.messageObject.isLiveLocation()) {
             r0.actionBar.setTitle(LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation));
         } else {
@@ -472,7 +472,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(r0.locationButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(r0.locationButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             r0.locationButton.setStateListAnimator(animator);
-            r0.locationButton.setOutlineProvider(new C14604());
+            r0.locationButton.setOutlineProvider(new C14664());
         }
         if (r0.messageObject != null) {
             r0.userLocation = new Location("network");
@@ -498,17 +498,17 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         recyclerListView.setAdapter(locationActivityAdapter);
         r0.listView.setVerticalScrollBarEnabled(false);
         recyclerListView = r0.listView;
-        LayoutManager c23365 = new LinearLayoutManager(context2, 1, false) {
+        LayoutManager c23425 = new LinearLayoutManager(context2, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        r0.layoutManager = c23365;
-        recyclerListView.setLayoutManager(c23365);
+        r0.layoutManager = c23425;
+        recyclerListView.setLayoutManager(c23425);
         frameLayout.addView(r0.listView, LayoutHelper.createFrame(-1, -1, 51));
-        r0.listView.setOnScrollListener(new C21716());
-        r0.listView.setOnItemClickListener(new C21737());
-        r0.adapter.setDelegate(new C21748());
+        r0.listView.setOnScrollListener(new C21776());
+        r0.listView.setOnItemClickListener(new C21797());
+        r0.adapter.setDelegate(new C21808());
         r0.adapter.setOverScrollHeight(r0.overScrollHeight);
         frameLayout.addView(r0.mapViewClip, LayoutHelper.createFrame(-1, -1, 51));
         r0.mapView = new MapView(context2) {
@@ -563,11 +563,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         new Thread(new Runnable() {
 
             /* renamed from: org.telegram.ui.LocationActivity$10$1 */
-            class C14571 implements Runnable {
+            class C14631 implements Runnable {
 
                 /* renamed from: org.telegram.ui.LocationActivity$10$1$1 */
-                class C21681 implements OnMapReadyCallback {
-                    C21681() {
+                class C21741 implements OnMapReadyCallback {
+                    C21741() {
                     }
 
                     public void onMapReady(GoogleMap map) {
@@ -577,7 +577,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     }
                 }
 
-                C14571() {
+                C14631() {
                 }
 
                 public void run() {
@@ -585,7 +585,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         try {
                             map.onCreate(null);
                             MapsInitializer.initialize(LocationActivity.this.getParentActivity());
-                            LocationActivity.this.mapView.getMapAsync(new C21681());
+                            LocationActivity.this.mapView.getMapAsync(new C21741());
                             LocationActivity.this.mapsInitialized = true;
                             if (LocationActivity.this.onResumeCalled) {
                                 LocationActivity.this.mapView.onResume();
@@ -602,7 +602,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     map.onCreate(null);
                 } catch (Exception e) {
                 }
-                AndroidUtilities.runOnUIThread(new C14571());
+                AndroidUtilities.runOnUIThread(new C14631());
             }
         }).start();
         View shadow = new View(context2);

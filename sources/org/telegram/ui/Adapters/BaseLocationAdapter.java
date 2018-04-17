@@ -19,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
@@ -65,8 +65,8 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 this.searchTimer.schedule(new TimerTask() {
 
                     /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$1$1 */
-                    class C07611 implements Runnable {
-                        C07611() {
+                    class C07681 implements Runnable {
+                        C07681() {
                         }
 
                         public void run() {
@@ -82,7 +82,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                         }
-                        AndroidUtilities.runOnUIThread(new C07611());
+                        AndroidUtilities.runOnUIThread(new C07681());
                     }
                 }, 200, 500);
                 return;
@@ -114,7 +114,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 } else {
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append("&query=");
-                    stringBuilder.append(URLEncoder.encode(query, C0539C.UTF8_NAME));
+                    stringBuilder.append(URLEncoder.encode(query, C0542C.UTF8_NAME));
                     str = stringBuilder.toString();
                 }
                 r5[4] = str;
@@ -190,7 +190,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                                             if (result == null) {
                                                 result = new StringBuilder();
                                             }
-                                            result.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                            result.append(new String(data, 0, read, C0542C.UTF8_NAME));
                                         } else if (read == -1) {
                                             done = true;
                                         }

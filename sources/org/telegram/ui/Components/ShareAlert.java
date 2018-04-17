@@ -52,7 +52,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -110,8 +110,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private int topBeforeSwitch;
 
     /* renamed from: org.telegram.ui.Components.ShareAlert$3 */
-    class C12863 implements OnTouchListener {
-        C12863() {
+    class C12923 implements OnTouchListener {
+        C12923() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -120,8 +120,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.Components.ShareAlert$4 */
-    class C12874 implements OnClickListener {
-        C12874() {
+    class C12934 implements OnClickListener {
+        C12934() {
         }
 
         public void onClick(View v) {
@@ -170,8 +170,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.Components.ShareAlert$5 */
-    class C12885 implements TextWatcher {
-        C12885() {
+    class C12945 implements TextWatcher {
+        C12945() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -207,8 +207,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.Components.ShareAlert$9 */
-    class C12899 implements OnTouchListener {
-        C12899() {
+    class C12959 implements OnTouchListener {
+        C12959() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -217,8 +217,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.Components.ShareAlert$6 */
-    class C20756 extends ItemDecoration {
-        C20756() {
+    class C20816 extends ItemDecoration {
+        C20816() {
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
@@ -239,8 +239,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.Components.ShareAlert$7 */
-    class C20767 implements OnItemClickListener {
-        C20767() {
+    class C20827 implements OnItemClickListener {
+        C20827() {
         }
 
         public void onItemClick(View view, int position) {
@@ -267,8 +267,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     }
 
     /* renamed from: org.telegram.ui.Components.ShareAlert$8 */
-    class C20778 extends OnScrollListener {
-        C20778() {
+    class C20838 extends OnScrollListener {
+        C20838() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -368,8 +368,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             MessagesStorage.getInstance(ShareAlert.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.ui.Components.ShareAlert$ShareSearchAdapter$1$1 */
-                class C12901 implements Comparator<DialogSearchResult> {
-                    C12901() {
+                class C12961 implements Comparator<DialogSearchResult> {
+                    C12961() {
                     }
 
                     public int compare(DialogSearchResult lhs, DialogSearchResult rhs) {
@@ -807,7 +807,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                             }
                         }
                         cursor2.dispose();
-                        Collections.sort(searchResults, new C12901());
+                        Collections.sort(searchResults, new C12961());
                         ShareSearchAdapter.this.updateSearchResults(searchResults, searchId);
                     } catch (Throwable e) {
                         FileLog.m3e(e);
@@ -847,7 +847,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         ShareSearchAdapter.this.notifyDataSetChanged();
                         if (!(isEmpty || becomeEmpty || ShareAlert.this.topBeforeSwitch <= 0)) {
                             ShareAlert.this.layoutManager.scrollToPositionWithOffset(0, -ShareAlert.this.topBeforeSwitch);
-                            ShareAlert.this.topBeforeSwitch = C0539C.PRIORITY_DOWNLOAD;
+                            ShareAlert.this.topBeforeSwitch = C0542C.PRIORITY_DOWNLOAD;
                         }
                     }
                 }
@@ -1026,13 +1026,13 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         r0.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
         r0.frameLayout = new FrameLayout(context2);
         r0.frameLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
-        r0.frameLayout.setOnTouchListener(new C12863());
+        r0.frameLayout.setOnTouchListener(new C12923());
         r0.doneButton = new LinearLayout(context2);
         r0.doneButton.setOrientation(0);
         r0.doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
         r0.doneButton.setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), 0);
         r0.frameLayout.addView(r0.doneButton, LayoutHelper.createFrame(-2, -1, 53));
-        r0.doneButton.setOnClickListener(new C12874());
+        r0.doneButton.setOnClickListener(new C12934());
         r0.doneButtonBadgeTextView = new TextView(context2);
         r0.doneButtonBadgeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         r0.doneButtonBadgeTextView.setTextSize(1, 13.0f);
@@ -1069,7 +1069,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         r0.nameTextView.setCursorWidth(1.5f);
         r0.nameTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         r0.frameLayout.addView(r0.nameTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 48.0f, 2.0f, 96.0f, 0.0f));
-        r0.nameTextView.addTextChangedListener(new C12885());
+        r0.nameTextView.addTextChangedListener(new C12945());
         r0.gridView = new RecyclerListView(context2);
         r0.gridView.setTag(Integer.valueOf(13));
         r0.gridView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
@@ -1080,15 +1080,15 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         recyclerListView.setLayoutManager(gridLayoutManager);
         r0.gridView.setHorizontalScrollBarEnabled(false);
         r0.gridView.setVerticalScrollBarEnabled(false);
-        r0.gridView.addItemDecoration(new C20756());
+        r0.gridView.addItemDecoration(new C20816());
         r0.containerView.addView(r0.gridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
         recyclerListView = r0.gridView;
         Adapter shareDialogsAdapter = new ShareDialogsAdapter(context2);
         r0.listAdapter = shareDialogsAdapter;
         recyclerListView.setAdapter(shareDialogsAdapter);
         r0.gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        r0.gridView.setOnItemClickListener(new C20767());
-        r0.gridView.setOnScrollListener(new C20778());
+        r0.gridView.setOnItemClickListener(new C20827());
+        r0.gridView.setOnScrollListener(new C20838());
         r0.searchEmptyView = new EmptyTextProgressView(context2);
         r0.searchEmptyView.setShowAtCenter(true);
         r0.searchEmptyView.showTextView();
@@ -1103,7 +1103,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         r0.frameLayout2.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         r0.frameLayout2.setTranslationY((float) AndroidUtilities.dp(53.0f));
         r0.containerView.addView(r0.frameLayout2, LayoutHelper.createFrame(-1, 48, 83));
-        r0.frameLayout2.setOnTouchListener(new C12899());
+        r0.frameLayout2.setOnTouchListener(new C12959());
         r0.commentTextView = new EditTextBoldCursor(context2);
         r0.commentTextView.setHint(LocaleController.getString("ShareComment", R.string.ShareComment));
         r0.commentTextView.setMaxLines(1);
@@ -1147,7 +1147,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 return paddingTop - i;
             }
         }
-        return C0539C.PRIORITY_DOWNLOAD;
+        return C0542C.PRIORITY_DOWNLOAD;
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {

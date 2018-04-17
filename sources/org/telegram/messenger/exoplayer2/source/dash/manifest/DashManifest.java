@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 
 public class DashManifest {
     public final long availabilityStartTimeMs;
@@ -44,14 +44,14 @@ public class DashManifest {
 
     public final long getPeriodDurationMs(int index) {
         if (index == this.periods.size() - 1) {
-            return this.durationMs == C0539C.TIME_UNSET ? C0539C.TIME_UNSET : this.durationMs - ((Period) this.periods.get(index)).startMs;
+            return this.durationMs == C0542C.TIME_UNSET ? C0542C.TIME_UNSET : this.durationMs - ((Period) this.periods.get(index)).startMs;
         } else {
             return ((Period) this.periods.get(index + 1)).startMs - ((Period) this.periods.get(index)).startMs;
         }
     }
 
     public final long getPeriodDurationUs(int index) {
-        return C0539C.msToUs(getPeriodDurationMs(index));
+        return C0542C.msToUs(getPeriodDurationMs(index));
     }
 
     public final DashManifest copy(List<RepresentationKey> representationKeys) {
@@ -67,13 +67,13 @@ public class DashManifest {
         while (true) {
             int periodIndex2 = periodIndex;
             int periodCount = getPeriodCount();
-            j = C0539C.TIME_UNSET;
+            j = C0542C.TIME_UNSET;
             if (periodIndex2 >= periodCount) {
                 break;
             }
             if (((RepresentationKey) keys.peek()).periodIndex != periodIndex2) {
                 long periodDurationMs = getPeriodDurationMs(periodIndex2);
-                if (periodDurationMs != C0539C.TIME_UNSET) {
+                if (periodDurationMs != C0542C.TIME_UNSET) {
                     shiftMs = shiftMs2 + periodDurationMs;
                 } else {
                     shiftMs = shiftMs2;
@@ -86,7 +86,7 @@ public class DashManifest {
             }
             periodIndex = periodIndex2 + 1;
         }
-        if (dashManifest.durationMs != C0539C.TIME_UNSET) {
+        if (dashManifest.durationMs != C0542C.TIME_UNSET) {
             j = dashManifest.durationMs - shiftMs2;
         }
         long newDuration = j;

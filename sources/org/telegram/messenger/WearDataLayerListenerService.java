@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.json.JSONObject;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -38,8 +38,8 @@ public class WearDataLayerListenerService extends WearableListenerService {
     private int currentAccount = UserConfig.selectedAccount;
 
     /* renamed from: org.telegram.messenger.WearDataLayerListenerService$9 */
-    static class C18239 implements OnCompleteListener<CapabilityInfo> {
-        C18239() {
+    static class C18299 implements OnCompleteListener<CapabilityInfo> {
+        C18299() {
         }
 
         public void onComplete(Task<CapabilityInfo> task) {
@@ -293,7 +293,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                     try {
                         ApplicationLoader.postInitApplication();
                         try {
-                            JSONObject r = new JSONObject(new String(messageEvent.getData(), C0539C.UTF8_NAME));
+                            JSONObject r = new JSONObject(new String(messageEvent.getData(), C0542C.UTF8_NAME));
                             CharSequence text = r.getString(MimeTypes.BASE_TYPE_TEXT);
                             if (text != null) {
                                 if (text.length() != 0) {
@@ -333,7 +333,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                         }
                     } catch (Exception e3) {
                         e = e3;
-                        C05177 c05177 = this;
+                        C05207 c05207 = this;
                         x = e;
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.m3e(x);
@@ -370,7 +370,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
     }
 
     public static void updateWatchConnectionState() {
-        Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener(new C18239());
+        Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener(new C18299());
     }
 
     public static boolean isWatchConnected() {

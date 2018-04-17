@@ -24,7 +24,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -145,7 +145,7 @@ public class AlertsCreator {
                                                         showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
                                                     } else if (error.text.startsWith("FLOOD_WAIT")) {
                                                         showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
-                                                    } else if (error.code != C0539C.PRIORITY_DOWNLOAD) {
+                                                    } else if (error.code != C0542C.PRIORITY_DOWNLOAD) {
                                                         r0 = new StringBuilder();
                                                         r0.append(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
                                                         r0.append("\n");
@@ -448,8 +448,8 @@ public class AlertsCreator {
                 builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence), LocaleController.getString("ReportChatPornography", R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", R.string.ReportChatOther)}, new OnClickListener() {
 
                     /* renamed from: org.telegram.ui.Components.AlertsCreator$2$1 */
-                    class C20301 implements RequestDelegate {
-                        C20301() {
+                    class C20361 implements RequestDelegate {
+                        C20361() {
                         }
 
                         public void run(TLObject response, TL_error error) {
@@ -488,7 +488,7 @@ public class AlertsCreator {
                                 req.reason = new TL_inputReportReasonPornography();
                             }
                         }
-                        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new C20301());
+                        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, new C20361());
                         Toast.makeText(context2, LocaleController.getString("ReportChatSent", R.string.ReportChatSent), 0).show();
                     }
                 });
@@ -750,8 +750,8 @@ public class AlertsCreator {
         Builder builder;
         final boolean z;
         final int[] iArr;
-        C10695 c10695;
-        C10695 c106952;
+        C10755 c10755;
+        C10755 c107552;
         final boolean z2;
         Builder builder2;
         String string;
@@ -808,13 +808,13 @@ public class AlertsCreator {
                 builder.setView(linearLayout);
                 z = globalAll;
                 iArr = selectedColor;
-                c10695 = c106952;
+                c10755 = c107552;
                 z2 = globalGroup;
                 builder2 = builder;
                 string = LocaleController.getString("Set", R.string.Set);
                 j = j3;
                 selectedColor = onSelect;
-                c106952 = new OnClickListener() {
+                c107552 = new OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int which) {
                         Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
                         if (z) {
@@ -833,7 +833,7 @@ public class AlertsCreator {
                         }
                     }
                 };
-                builder2.setPositiveButton(string, c10695);
+                builder2.setPositiveButton(string, c10755);
                 z3 = globalGroup;
                 j2 = j3;
                 runnable = onSelect;
@@ -898,14 +898,14 @@ public class AlertsCreator {
         builder.setView(linearLayout);
         z = globalAll;
         iArr = selectedColor;
-        c10695 = c106952;
+        c10755 = c107552;
         z2 = globalGroup;
         builder2 = builder;
         string = LocaleController.getString("Set", R.string.Set);
         j = j3;
         selectedColor = onSelect;
-        c106952 = /* anonymous class already generated */;
-        builder2.setPositiveButton(string, c10695);
+        c107552 = /* anonymous class already generated */;
+        builder2.setPositiveButton(string, c10755);
         z3 = globalGroup;
         j2 = j3;
         runnable = onSelect;
@@ -967,7 +967,7 @@ public class AlertsCreator {
                 cell.setTextAndValue(descriptions2[a2], selected[z2] == a2 ? z : z2);
                 linearLayout.addView(cell);
                 final int[] iArr = selected;
-                C10728 c10728 = r1;
+                C10788 c10788 = r1;
                 final long j2 = j;
                 RadioColorCell cell2 = cell;
                 final String str2 = str;
@@ -975,7 +975,7 @@ public class AlertsCreator {
                 final BaseFragment baseFragment = parentFragment;
                 linearLayout2 = linearLayout;
                 final Runnable linearLayout3 = onSelect;
-                C10728 c107282 = new View.OnClickListener() {
+                C10788 c107882 = new View.OnClickListener() {
                     public void onClick(View v) {
                         iArr[0] = ((Integer) v.getTag()).intValue();
                         Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
@@ -1021,7 +1021,7 @@ public class AlertsCreator {
                         }
                     }
                 };
-                cell2.setOnClickListener(c10728);
+                cell2.setOnClickListener(c10788);
                 a = a3 + 1;
                 linearLayout = linearLayout2;
                 j = dialog_id;

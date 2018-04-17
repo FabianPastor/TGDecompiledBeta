@@ -53,11 +53,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$1 */
-    class C22451 extends ActionBarMenuOnItemClick {
+    class C22511 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.PrivacyUsersActivity$1$1 */
-        class C22441 implements GroupCreateActivityDelegate {
-            C22441() {
+        class C22501 implements GroupCreateActivityDelegate {
+            C22501() {
             }
 
             public void didSelectUsers(ArrayList<Integer> ids) {
@@ -75,7 +75,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C22451() {
+        C22511() {
         }
 
         public void onItemClick(int id) {
@@ -86,15 +86,15 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 args.putBoolean(PrivacyUsersActivity.this.isAlwaysShare ? "isAlwaysShare" : "isNeverShare", true);
                 args.putBoolean("isGroup", PrivacyUsersActivity.this.isGroup);
                 GroupCreateActivity fragment = new GroupCreateActivity(args);
-                fragment.setDelegate(new C22441());
+                fragment.setDelegate(new C22501());
                 PrivacyUsersActivity.this.presentFragment(fragment);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$2 */
-    class C22462 implements OnItemClickListener {
-        C22462() {
+    class C22522 implements OnItemClickListener {
+        C22522() {
         }
 
         public void onItemClick(View view, int position) {
@@ -107,11 +107,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$3 */
-    class C22473 implements OnItemLongClickListener {
+    class C22533 implements OnItemLongClickListener {
 
         /* renamed from: org.telegram.ui.PrivacyUsersActivity$3$1 */
-        class C16321 implements OnClickListener {
-            C16321() {
+        class C16381 implements OnClickListener {
+            C16381() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -125,7 +125,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C22473() {
+        C22533() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -133,7 +133,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 if (PrivacyUsersActivity.this.getParentActivity() != null) {
                     PrivacyUsersActivity.this.selectedUserId = ((Integer) PrivacyUsersActivity.this.uidArray.get(position)).intValue();
                     Builder builder = new Builder(PrivacyUsersActivity.this.getParentActivity());
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)}, new C16321());
+                    builder.setItems(new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)}, new C16381());
                     PrivacyUsersActivity.this.showDialog(builder.create());
                     return true;
                 }
@@ -143,8 +143,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$4 */
-    class C22484 implements ThemeDescriptionDelegate {
-        C22484() {
+    class C22544 implements ThemeDescriptionDelegate {
+        C22544() {
         }
 
         public void didSetColor() {
@@ -247,7 +247,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         } else {
             this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", R.string.NeverShareWithTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22451());
+        this.actionBar.setActionBarMenuOnItemClick(new C22511());
         this.actionBar.createMenu().addItem(1, (int) R.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -269,8 +269,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C22462());
-        this.listView.setOnItemLongClickListener(new C22473());
+        this.listView.setOnItemClickListener(new C22522());
+        this.listView.setOnItemLongClickListener(new C22533());
         return this.fragmentView;
     }
 
@@ -307,7 +307,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C22484();
+        ThemeDescriptionDelegate сellDelegate = new C22544();
         r10 = new ThemeDescription[19];
         r10[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
         r10[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);

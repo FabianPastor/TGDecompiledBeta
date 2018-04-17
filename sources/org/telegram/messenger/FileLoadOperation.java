@@ -105,8 +105,8 @@ public class FileLoadOperation {
     private TL_inputWebFileLocation webLocation;
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$4 */
-    class C01494 implements Runnable {
-        C01494() {
+    class C01534 implements Runnable {
+        C01534() {
         }
 
         public void run() {
@@ -115,8 +115,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$6 */
-    class C01516 implements Runnable {
-        C01516() {
+    class C01556 implements Runnable {
+        C01556() {
         }
 
         public void run() {
@@ -125,8 +125,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$7 */
-    class C01527 implements Runnable {
-        C01527() {
+    class C01567 implements Runnable {
+        C01567() {
         }
 
         public void run() {
@@ -143,8 +143,8 @@ public class FileLoadOperation {
     }
 
     /* renamed from: org.telegram.messenger.FileLoadOperation$8 */
-    class C01538 implements Runnable {
-        C01538() {
+    class C01578 implements Runnable {
+        C01578() {
         }
 
         public void run() {
@@ -587,7 +587,7 @@ public class FileLoadOperation {
 
     public void pause() {
         if (this.state == 1) {
-            Utilities.stageQueue.postRunnable(new C01494());
+            Utilities.stageQueue.postRunnable(new C01534());
         }
     }
 
@@ -625,7 +625,7 @@ public class FileLoadOperation {
                 }
             });
         } else if (wasPaused && alreadyStarted2) {
-            Utilities.stageQueue.postRunnable(new C01516());
+            Utilities.stageQueue.postRunnable(new C01556());
         }
         if (alreadyStarted2) {
             return wasPaused;
@@ -942,7 +942,7 @@ public class FileLoadOperation {
                     }
                     if (r1.fileOutputStream != null) {
                         r1.started = true;
-                        Utilities.stageQueue.postRunnable(new C01527());
+                        Utilities.stageQueue.postRunnable(new C01567());
                         alreadyStarted2 = true;
                         return alreadyStarted2;
                     }
@@ -1018,7 +1018,7 @@ public class FileLoadOperation {
                 return false;
             }
             r1.started = true;
-            Utilities.stageQueue.postRunnable(new C01527());
+            Utilities.stageQueue.postRunnable(new C01567());
             alreadyStarted2 = true;
         }
         return alreadyStarted2;
@@ -1029,7 +1029,7 @@ public class FileLoadOperation {
     }
 
     public void cancel() {
-        Utilities.stageQueue.postRunnable(new C01538());
+        Utilities.stageQueue.postRunnable(new C01578());
     }
 
     private void cleanup() {
@@ -1876,8 +1876,8 @@ public class FileLoadOperation {
                             requestInfo.requestToken = ConnectionsManager.getInstance(r0.currentAccount).sendRequest(req, new RequestDelegate() {
 
                                 /* renamed from: org.telegram.messenger.FileLoadOperation$12$1 */
-                                class C17941 implements RequestDelegate {
-                                    C17941() {
+                                class C18001 implements RequestDelegate {
+                                    C18001() {
                                     }
 
                                     public void run(TLObject response, TL_error error) {
@@ -1980,7 +1980,7 @@ public class FileLoadOperation {
                                         TLObject req = new TL_upload_reuploadCdnFile();
                                         req.file_token = FileLoadOperation.this.cdnToken;
                                         req.request_token = res2.request_token;
-                                        ConnectionsManager.getInstance(FileLoadOperation.this.currentAccount).sendRequest(req, new C17941(), null, null, 0, FileLoadOperation.this.datacenter_id, 1, true);
+                                        ConnectionsManager.getInstance(FileLoadOperation.this.currentAccount).sendRequest(req, new C18001(), null, null, 0, FileLoadOperation.this.datacenter_id, 1, true);
                                     }
                                 }
                             }, null, null, b, r0.isCdn ? r0.cdnDatacenterId : r0.datacenter_id, connectionType, isLast);

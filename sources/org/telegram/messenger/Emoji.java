@@ -45,8 +45,8 @@ public class Emoji {
     private static final int splitCount = 4;
 
     /* renamed from: org.telegram.messenger.Emoji$2 */
-    static class C01442 implements Comparator<String> {
-        C01442() {
+    static class C01482 implements Comparator<String> {
+        C01482() {
         }
 
         public int compare(String lhs, String rhs) {
@@ -90,8 +90,8 @@ public class Emoji {
         private DrawableInfo info;
 
         /* renamed from: org.telegram.messenger.Emoji$EmojiDrawable$1 */
-        class C01451 implements Runnable {
-            C01451() {
+        class C01491 implements Runnable {
+            C01491() {
             }
 
             public void run() {
@@ -130,7 +130,7 @@ public class Emoji {
                 canvas.drawBitmap(Emoji.emojiBmp[this.info.page][this.info.page2], this.info.rect, b, paint);
             } else if (!Emoji.loadingEmoji[this.info.page][this.info.page2]) {
                 Emoji.loadingEmoji[this.info.page][this.info.page2] = true;
-                Utilities.globalQueue.postRunnable(new C01451());
+                Utilities.globalQueue.postRunnable(new C01491());
                 canvas.drawRect(getBounds(), Emoji.placeholderPaint);
             }
         }
@@ -622,7 +622,7 @@ public class Emoji {
         for (Entry<String, Integer> entry : emojiUseHistory.entrySet()) {
             recentEmoji.add(entry.getKey());
         }
-        Collections.sort(recentEmoji, new C01442());
+        Collections.sort(recentEmoji, new C01482());
         while (recentEmoji.size() > 50) {
             recentEmoji.remove(recentEmoji.size() - 1);
         }

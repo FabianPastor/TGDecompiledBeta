@@ -18,7 +18,7 @@ public class StatsController {
     public static final int TYPE_TOTAL = 6;
     public static final int TYPE_VIDEOS = 2;
     public static final int TYPE_WIFI = 1;
-    private static final ThreadLocal<Long> lastStatsSaveTime = new C05101();
+    private static final ThreadLocal<Long> lastStatsSaveTime = new C05131();
     private static DispatchQueue statsSaveQueue = new DispatchQueue("statsSaveQueue");
     private byte[] buffer = new byte[8];
     private int[] callsTotalTime;
@@ -32,8 +32,8 @@ public class StatsController {
     private RandomAccessFile statsFile;
 
     /* renamed from: org.telegram.messenger.StatsController$1 */
-    static class C05101 extends ThreadLocal<Long> {
-        C05101() {
+    static class C05131 extends ThreadLocal<Long> {
+        C05131() {
         }
 
         protected Long initialValue() {
@@ -42,8 +42,8 @@ public class StatsController {
     }
 
     /* renamed from: org.telegram.messenger.StatsController$2 */
-    class C05112 implements Runnable {
-        C05112() {
+    class C05142 implements Runnable {
+        C05142() {
         }
 
         public void run() {
@@ -123,7 +123,7 @@ public class StatsController {
         this.receivedItems = (int[][]) Array.newInstance(int.class, new int[]{3, 7});
         this.resetStatsDate = new long[3];
         this.callsTotalTime = new int[3];
-        this.saveRunnable = new C05112();
+        this.saveRunnable = new C05142();
         File filesDir = ApplicationLoader.getFilesDirFixed();
         if (i != 0) {
             File filesDirFixed = ApplicationLoader.getFilesDirFixed();

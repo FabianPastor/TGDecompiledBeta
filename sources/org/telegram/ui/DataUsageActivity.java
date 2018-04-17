@@ -78,8 +78,8 @@ public class DataUsageActivity extends BaseFragment {
     private int videosSentRow;
 
     /* renamed from: org.telegram.ui.DataUsageActivity$1 */
-    class C21191 extends ActionBarMenuOnItemClick {
-        C21191() {
+    class C21251 extends ActionBarMenuOnItemClick {
+        C21251() {
         }
 
         public void onItemClick(int id) {
@@ -90,11 +90,11 @@ public class DataUsageActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DataUsageActivity$2 */
-    class C21202 implements OnItemClickListener {
+    class C21262 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.DataUsageActivity$2$1 */
-        class C13691 implements OnClickListener {
-            C13691() {
+        class C13751 implements OnClickListener {
+            C13751() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -103,7 +103,7 @@ public class DataUsageActivity extends BaseFragment {
             }
         }
 
-        C21202() {
+        C21262() {
         }
 
         public void onItemClick(View view, int position) {
@@ -111,7 +111,7 @@ public class DataUsageActivity extends BaseFragment {
                 Builder builder = new Builder(DataUsageActivity.this.getParentActivity());
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setMessage(LocaleController.getString("ResetStatisticsAlert", R.string.ResetStatisticsAlert));
-                builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), new C13691());
+                builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), new C13751());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 DataUsageActivity.this.showDialog(builder.create());
             }
@@ -642,7 +642,7 @@ public class DataUsageActivity extends BaseFragment {
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C21191());
+        this.actionBar.setActionBarMenuOnItemClick(new C21251());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -652,7 +652,7 @@ public class DataUsageActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C21202());
+        this.listView.setOnItemClickListener(new C21262());
         frameLayout.addView(this.actionBar);
         return this.fragmentView;
     }

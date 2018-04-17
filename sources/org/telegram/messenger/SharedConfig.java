@@ -6,7 +6,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Base64;
 import java.io.File;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 
 public class SharedConfig {
     public static boolean allowBigEmoji;
@@ -146,7 +146,7 @@ public class SharedConfig {
                 try {
                     passcodeSalt = new byte[16];
                     Utilities.random.nextBytes(passcodeSalt);
-                    byte[] passcodeBytes = passcode.getBytes(C0539C.UTF8_NAME);
+                    byte[] passcodeBytes = passcode.getBytes(C0542C.UTF8_NAME);
                     byte[] bytes = new byte[(32 + passcodeBytes.length)];
                     System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                     System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -160,7 +160,7 @@ public class SharedConfig {
             return result;
         }
         try {
-            byte[] passcodeBytes2 = passcode.getBytes(C0539C.UTF8_NAME);
+            byte[] passcodeBytes2 = passcode.getBytes(C0542C.UTF8_NAME);
             bytes = new byte[(32 + passcodeBytes2.length)];
             System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
             System.arraycopy(passcodeBytes2, 0, bytes, 16, passcodeBytes2.length);

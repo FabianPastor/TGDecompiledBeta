@@ -48,8 +48,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     private int user_id;
 
     /* renamed from: org.telegram.ui.ContactAddActivity$2 */
-    class C13542 implements OnTouchListener {
-        C13542() {
+    class C13602 implements OnTouchListener {
+        C13602() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -58,8 +58,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.ContactAddActivity$3 */
-    class C13553 implements OnEditorActionListener {
-        C13553() {
+    class C13613 implements OnEditorActionListener {
+        C13613() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -73,8 +73,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.ContactAddActivity$4 */
-    class C13564 implements OnEditorActionListener {
-        C13564() {
+    class C13624 implements OnEditorActionListener {
+        C13624() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -87,8 +87,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.ContactAddActivity$1 */
-    class C21011 extends ActionBarMenuOnItemClick {
-        C21011() {
+    class C21071 extends ActionBarMenuOnItemClick {
+        C21071() {
         }
 
         public void onItemClick(int id) {
@@ -112,8 +112,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     /* renamed from: org.telegram.ui.ContactAddActivity$5 */
-    class C21025 implements ThemeDescriptionDelegate {
-        C21025() {
+    class C21085 implements ThemeDescriptionDelegate {
+        C21085() {
         }
 
         public void didSetColor() {
@@ -156,13 +156,13 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         } else {
             r0.actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
         }
-        r0.actionBar.setActionBarMenuOnItemClick(new C21011());
+        r0.actionBar.setActionBarMenuOnItemClick(new C21071());
         r0.doneButton = r0.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         r0.fragmentView = new ScrollView(context2);
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(1);
         ((ScrollView) r0.fragmentView).addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
-        linearLayout.setOnTouchListener(new C13542());
+        linearLayout.setOnTouchListener(new C13602());
         FrameLayout frameLayout = new FrameLayout(context2);
         linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 24.0f, 0.0f));
         r0.avatarImage = new BackupImageView(context2);
@@ -204,7 +204,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         r0.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         r0.firstNameField.setCursorWidth(1.5f);
         linearLayout.addView(r0.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
-        r0.firstNameField.setOnEditorActionListener(new C13553());
+        r0.firstNameField.setOnEditorActionListener(new C13613());
         r0.lastNameField = new EditTextBoldCursor(context2);
         r0.lastNameField.setTextSize(1, 18.0f);
         r0.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -225,7 +225,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         r0.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         r0.lastNameField.setCursorWidth(1.5f);
         linearLayout.addView(r0.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
-        r0.lastNameField.setOnEditorActionListener(new C13564());
+        r0.lastNameField.setOnEditorActionListener(new C13624());
         User user = MessagesController.getInstance(r0.currentAccount).getUser(Integer.valueOf(r0.user_id));
         if (user != null) {
             if (user.phone == null && r0.phone != null) {
@@ -286,7 +286,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C21025();
+        ThemeDescriptionDelegate сellDelegate = new C21085();
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[23];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);

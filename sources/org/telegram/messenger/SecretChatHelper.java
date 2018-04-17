@@ -120,8 +120,8 @@ public class SecretChatHelper {
     private boolean startingSecretChat = false;
 
     /* renamed from: org.telegram.messenger.SecretChatHelper$8 */
-    class C04648 implements Comparator<TL_decryptedMessageHolder> {
-        C04648() {
+    class C04678 implements Comparator<TL_decryptedMessageHolder> {
+        C04678() {
         }
 
         public int compare(TL_decryptedMessageHolder lhs, TL_decryptedMessageHolder rhs) {
@@ -619,11 +619,11 @@ public class SecretChatHelper {
                 Utilities.stageQueue.postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.SecretChatHelper$4$1 */
-                    class C18131 implements RequestDelegate {
+                    class C18191 implements RequestDelegate {
 
                         /* renamed from: org.telegram.messenger.SecretChatHelper$4$1$2 */
-                        class C04552 implements Runnable {
-                            C04552() {
+                        class C04582 implements Runnable {
+                            C04582() {
                             }
 
                             public void run() {
@@ -637,7 +637,7 @@ public class SecretChatHelper {
                             }
                         }
 
-                        C18131() {
+                        C18191() {
                         }
 
                         public void run(TLObject response, TL_error error) {
@@ -680,8 +680,8 @@ public class SecretChatHelper {
                                 MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                                     /* renamed from: org.telegram.messenger.SecretChatHelper$4$1$1$1 */
-                                    class C04531 implements Runnable {
-                                        C04531() {
+                                    class C04561 implements Runnable {
+                                        C04561() {
                                         }
 
                                         public void run() {
@@ -700,18 +700,18 @@ public class SecretChatHelper {
                                             res.date = 0;
                                         }
                                         MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).updateMessageStateAndId(message2.random_id, Integer.valueOf(message2.id), message2.id, res.date, false, 0);
-                                        AndroidUtilities.runOnUIThread(new C04531());
+                                        AndroidUtilities.runOnUIThread(new C04561());
                                     }
                                 });
                                 return;
                             }
                             MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).markMessageAsSendError(message2);
-                            AndroidUtilities.runOnUIThread(new C04552());
+                            AndroidUtilities.runOnUIThread(new C04582());
                         }
                     }
 
                     public void run() {
-                        C04564 c04564 = this;
+                        C04594 c04594 = this;
                         try {
                             byte[] b;
                             TLObject reqToSend;
@@ -827,7 +827,7 @@ public class SecretChatHelper {
                                 reqToSend.peer.chat_id = encryptedChat2.id;
                                 reqToSend.peer.access_hash = encryptedChat2.access_hash;
                             }
-                            ConnectionsManager.getInstance(SecretChatHelper.this.currentAccount).sendRequest(reqToSend, new C18131(), 64);
+                            ConnectionsManager.getInstance(SecretChatHelper.this.currentAccount).sendRequest(reqToSend, new C18191(), 64);
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                         }
@@ -1169,11 +1169,11 @@ public class SecretChatHelper {
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.messenger.SecretChatHelper$6$1 */
-                                class C04591 implements Runnable {
+                                class C04621 implements Runnable {
 
                                     /* renamed from: org.telegram.messenger.SecretChatHelper$6$1$1 */
-                                    class C04581 implements Runnable {
-                                        C04581() {
+                                    class C04611 implements Runnable {
+                                        C04611() {
                                         }
 
                                         public void run() {
@@ -1184,11 +1184,11 @@ public class SecretChatHelper {
                                         }
                                     }
 
-                                    C04591() {
+                                    C04621() {
                                     }
 
                                     public void run() {
-                                        AndroidUtilities.runOnUIThread(new C04581());
+                                        AndroidUtilities.runOnUIThread(new C04611());
                                     }
                                 }
 
@@ -1198,7 +1198,7 @@ public class SecretChatHelper {
                                         dialog.unread_count = 0;
                                         MessagesController.getInstance(SecretChatHelper.this.currentAccount).dialogMessage.remove(dialog.id);
                                     }
-                                    MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getStorageQueue().postRunnable(new C04591());
+                                    MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getStorageQueue().postRunnable(new C04621());
                                     MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).deleteDialog(did, 1);
                                     NotificationCenter.getInstance(SecretChatHelper.this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                                     NotificationCenter.getInstance(SecretChatHelper.this.currentAccount).postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(did), Boolean.valueOf(false));
@@ -1434,8 +1434,8 @@ public class SecretChatHelper {
                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.messenger.SecretChatHelper$7$1 */
-                    class C04611 implements Comparator<Message> {
-                        C04611() {
+                    class C04641 implements Comparator<Message> {
+                        C04641() {
                         }
 
                         public int compare(Message lhs, Message rhs) {
@@ -1507,7 +1507,7 @@ public class SecretChatHelper {
                                     }
                                     UserConfig.getInstance(SecretChatHelper.this.currentAccount).saveConfig(false);
                                 }
-                                Collections.sort(messages, new C04611());
+                                Collections.sort(messages, new C04641());
                                 ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                                 encryptedChats.add(encryptedChat);
                                 AndroidUtilities.runOnUIThread(new Runnable() {
@@ -1534,7 +1534,7 @@ public class SecretChatHelper {
     public void checkSecretHoles(EncryptedChat chat, ArrayList<Message> messages) {
         ArrayList<TL_decryptedMessageHolder> holes = (ArrayList) this.secretHolesQueue.get(chat.id);
         if (holes != null) {
-            Collections.sort(holes, new C04648());
+            Collections.sort(holes, new C04678());
             boolean update = false;
             int a = 0;
             while (a < holes.size()) {
@@ -1937,8 +1937,8 @@ public class SecretChatHelper {
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                 /* renamed from: org.telegram.messenger.SecretChatHelper$13$1 */
-                class C18111 implements RequestDelegate {
-                    C18111() {
+                class C18171 implements RequestDelegate {
+                    C18171() {
                     }
 
                     public void run(TLObject response, TL_error error) {
@@ -2021,7 +2021,7 @@ public class SecretChatHelper {
                             req2.peer.chat_id = encryptedChat.id;
                             req2.peer.access_hash = encryptedChat.access_hash;
                             req2.key_fingerprint = Utilities.bytesToLong(authKeyId);
-                            ConnectionsManager.getInstance(SecretChatHelper.this.currentAccount).sendRequest(req2, new C18111());
+                            ConnectionsManager.getInstance(SecretChatHelper.this.currentAccount).sendRequest(req2, new C18171());
                         } else {
                             SecretChatHelper.this.acceptingChats.remove(encryptedChat.id);
                             SecretChatHelper.this.declineSecretChat(encryptedChat.id);
@@ -2048,8 +2048,8 @@ public class SecretChatHelper {
                 final int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                     /* renamed from: org.telegram.messenger.SecretChatHelper$14$1 */
-                    class C04451 implements Runnable {
-                        C04451() {
+                    class C04481 implements Runnable {
+                        C04481() {
                         }
 
                         public void run() {
@@ -2064,8 +2064,8 @@ public class SecretChatHelper {
                     }
 
                     /* renamed from: org.telegram.messenger.SecretChatHelper$14$3 */
-                    class C04493 implements Runnable {
-                        C04493() {
+                    class C04523 implements Runnable {
+                        C04523() {
                         }
 
                         public void run() {
@@ -2090,7 +2090,7 @@ public class SecretChatHelper {
                                     MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).setLastSecretVersion(res.version);
                                     MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).saveSecretParams(MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getLastSecretVersion(), MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getSecretG(), MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).getSecretPBytes());
                                 } else {
-                                    AndroidUtilities.runOnUIThread(new C04451());
+                                    AndroidUtilities.runOnUIThread(new C04481());
                                     return;
                                 }
                             }
@@ -2111,8 +2111,8 @@ public class SecretChatHelper {
                             ConnectionsManager.getInstance(SecretChatHelper.this.currentAccount).sendRequest(req2, new RequestDelegate() {
 
                                 /* renamed from: org.telegram.messenger.SecretChatHelper$14$2$2 */
-                                class C04482 implements Runnable {
-                                    C04482() {
+                                class C04512 implements Runnable {
+                                    C04512() {
                                     }
 
                                     public void run() {
@@ -2137,8 +2137,8 @@ public class SecretChatHelper {
                                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                                             /* renamed from: org.telegram.messenger.SecretChatHelper$14$2$1$1 */
-                                            class C04461 implements Runnable {
-                                                C04461() {
+                                            class C04491 implements Runnable {
+                                                C04491() {
                                                 }
 
                                                 public void run() {
@@ -2175,18 +2175,18 @@ public class SecretChatHelper {
                                                 MessagesStorage.getInstance(SecretChatHelper.this.currentAccount).putEncryptedChat(chat, user, dialog);
                                                 NotificationCenter.getInstance(SecretChatHelper.this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                                                 NotificationCenter.getInstance(SecretChatHelper.this.currentAccount).postNotificationName(NotificationCenter.encryptedChatCreated, chat);
-                                                Utilities.stageQueue.postRunnable(new C04461());
+                                                Utilities.stageQueue.postRunnable(new C04491());
                                             }
                                         });
                                         return;
                                     }
                                     SecretChatHelper.this.delayedEncryptedChatUpdates.clear();
-                                    AndroidUtilities.runOnUIThread(new C04482());
+                                    AndroidUtilities.runOnUIThread(new C04512());
                                 }
                             }, 2);
                         } else {
                             SecretChatHelper.this.delayedEncryptedChatUpdates.clear();
-                            AndroidUtilities.runOnUIThread(new C04493());
+                            AndroidUtilities.runOnUIThread(new C04523());
                         }
                     }
                 }, 2);

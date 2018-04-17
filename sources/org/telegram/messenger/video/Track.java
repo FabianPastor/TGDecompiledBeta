@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 
 public class Track {
     private static Map<Integer, Integer> samplingFrequencyIndexMap = new HashMap();
@@ -46,8 +46,8 @@ public class Track {
     private int width;
 
     /* renamed from: org.telegram.messenger.video.Track$1 */
-    class C06691 implements Comparator<SamplePresentationTime> {
-        C06691() {
+    class C06721 implements Comparator<SamplePresentationTime> {
+        C06721() {
         }
 
         public int compare(SamplePresentationTime o1, SamplePresentationTime o2) {
@@ -198,7 +198,7 @@ public class Track {
                     avcConfigurationBox.setAvcLevelIndication(5);
                 } else if (level == 32768) {
                     avcConfigurationBox.setAvcLevelIndication(51);
-                } else if (level == C0539C.DEFAULT_BUFFER_SEGMENT_SIZE) {
+                } else if (level == C0542C.DEFAULT_BUFFER_SEGMENT_SIZE) {
                     avcConfigurationBox.setAvcLevelIndication(52);
                 } else if (level == 2) {
                     avcConfigurationBox.setAvcLevelIndication(27);
@@ -261,13 +261,13 @@ public class Track {
         if (this.syncSamples != null && isSyncFrame) {
             this.syncSamples.add(Integer.valueOf(this.samples.size()));
         }
-        this.samplePresentationTimes.add(new SamplePresentationTime(this.samplePresentationTimes.size(), ((bufferInfo.presentationTimeUs * ((long) this.timeScale)) + 500000) / C0539C.MICROS_PER_SECOND));
+        this.samplePresentationTimes.add(new SamplePresentationTime(this.samplePresentationTimes.size(), ((bufferInfo.presentationTimeUs * ((long) this.timeScale)) + 500000) / C0542C.MICROS_PER_SECOND));
     }
 
     public void prepare() {
         int a;
         ArrayList<SamplePresentationTime> original = new ArrayList(this.samplePresentationTimes);
-        Collections.sort(this.samplePresentationTimes, new C06691());
+        Collections.sort(this.samplePresentationTimes, new C06721());
         this.sampleDurations = new long[this.samplePresentationTimes.size()];
         boolean outOfOrder = false;
         long minDelta = Long.MAX_VALUE;

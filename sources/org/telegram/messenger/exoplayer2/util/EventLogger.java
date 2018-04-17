@@ -6,7 +6,7 @@ import android.view.Surface;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.PlaybackParameters;
@@ -554,7 +554,7 @@ public class EventLogger implements EventListener, AudioRendererEventListener, D
     }
 
     private static String getTimeString(long timeMs) {
-        return timeMs == C0539C.TIME_UNSET ? "?" : TIME_FORMAT.format((double) (((float) timeMs) / 1000.0f));
+        return timeMs == C0542C.TIME_UNSET ? "?" : TIME_FORMAT.format((double) (((float) timeMs) / 1000.0f));
     }
 
     private static String getStateString(int state) {

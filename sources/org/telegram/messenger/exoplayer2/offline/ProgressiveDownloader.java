@@ -2,7 +2,7 @@ package org.telegram.messenger.exoplayer2.offline;
 
 import android.net.Uri;
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.offline.Downloader.ProgressListener;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.upstream.cache.Cache;
@@ -31,15 +31,15 @@ public final class ProgressiveDownloader implements Downloader {
     }
 
     public void download(ProgressListener listener) throws InterruptedException, IOException {
-        this.priorityTaskManager.add(C0539C.PRIORITY_DOWNLOAD);
+        this.priorityTaskManager.add(C0542C.PRIORITY_DOWNLOAD);
         try {
-            CacheUtil.cache(this.dataSpec, this.cache, this.dataSource, new byte[131072], this.priorityTaskManager, C0539C.PRIORITY_DOWNLOAD, this.cachingCounters, true);
+            CacheUtil.cache(this.dataSpec, this.cache, this.dataSource, new byte[131072], this.priorityTaskManager, C0542C.PRIORITY_DOWNLOAD, this.cachingCounters, true);
             if (listener != null) {
                 listener.onDownloadProgress(this, 100.0f, this.cachingCounters.contentLength);
             }
-            this.priorityTaskManager.remove(C0539C.PRIORITY_DOWNLOAD);
+            this.priorityTaskManager.remove(C0542C.PRIORITY_DOWNLOAD);
         } catch (Throwable th) {
-            this.priorityTaskManager.remove(C0539C.PRIORITY_DOWNLOAD);
+            this.priorityTaskManager.remove(C0542C.PRIORITY_DOWNLOAD);
         }
     }
 

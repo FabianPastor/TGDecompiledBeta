@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.PlaybackParameters;
 import org.telegram.messenger.exoplayer2.audio.AudioSink.ConfigurationException;
 import org.telegram.messenger.exoplayer2.audio.AudioSink.InitializationException;
@@ -135,8 +135,8 @@ public final class DefaultAudioSink implements AudioSink {
         public void reconfigure(AudioTrack audioTrack, boolean needsPassthroughWorkaround) {
             this.audioTrack = audioTrack;
             this.needsPassthroughWorkaround = needsPassthroughWorkaround;
-            this.stopTimestampUs = C0539C.TIME_UNSET;
-            this.forceResetWorkaroundTimeMs = C0539C.TIME_UNSET;
+            this.stopTimestampUs = C0542C.TIME_UNSET;
+            this.forceResetWorkaroundTimeMs = C0542C.TIME_UNSET;
             this.lastRawPlaybackHeadPosition = 0;
             this.rawPlaybackHeadWrapCount = 0;
             this.passthroughWorkaroundPauseOffset = 0;
@@ -153,18 +153,18 @@ public final class DefaultAudioSink implements AudioSink {
         }
 
         public void pause() {
-            if (this.stopTimestampUs == C0539C.TIME_UNSET) {
+            if (this.stopTimestampUs == C0542C.TIME_UNSET) {
                 this.audioTrack.pause();
             }
         }
 
         public boolean needsReset(long writtenFrames) {
-            return this.forceResetWorkaroundTimeMs != C0539C.TIME_UNSET && writtenFrames > 0 && SystemClock.elapsedRealtime() - this.forceResetWorkaroundTimeMs >= FORCE_RESET_WORKAROUND_TIMEOUT_MS;
+            return this.forceResetWorkaroundTimeMs != C0542C.TIME_UNSET && writtenFrames > 0 && SystemClock.elapsedRealtime() - this.forceResetWorkaroundTimeMs >= FORCE_RESET_WORKAROUND_TIMEOUT_MS;
         }
 
         public long getPlaybackHeadPosition() {
-            if (this.stopTimestampUs != C0539C.TIME_UNSET) {
-                return Math.min(this.endPlaybackHeadPosition, this.stopPlaybackHeadPosition + ((((long) this.sampleRate) * ((SystemClock.elapsedRealtime() * 1000) - this.stopTimestampUs)) / C0539C.MICROS_PER_SECOND));
+            if (this.stopTimestampUs != C0542C.TIME_UNSET) {
+                return Math.min(this.endPlaybackHeadPosition, this.stopPlaybackHeadPosition + ((((long) this.sampleRate) * ((SystemClock.elapsedRealtime() * 1000) - this.stopTimestampUs)) / C0542C.MICROS_PER_SECOND));
             }
             int state = this.audioTrack.getPlayState();
             if (state == 1) {
@@ -182,12 +182,12 @@ public final class DefaultAudioSink implements AudioSink {
             }
             if (Util.SDK_INT <= 26) {
                 if (rawPlaybackHeadPosition == 0 && this.lastRawPlaybackHeadPosition > 0 && state == 3) {
-                    if (this.forceResetWorkaroundTimeMs == C0539C.TIME_UNSET) {
+                    if (this.forceResetWorkaroundTimeMs == C0542C.TIME_UNSET) {
                         this.forceResetWorkaroundTimeMs = SystemClock.elapsedRealtime();
                     }
                     return this.lastRawPlaybackHeadPosition;
                 }
-                this.forceResetWorkaroundTimeMs = C0539C.TIME_UNSET;
+                this.forceResetWorkaroundTimeMs = C0542C.TIME_UNSET;
             }
             if (this.lastRawPlaybackHeadPosition > rawPlaybackHeadPosition) {
                 this.rawPlaybackHeadWrapCount++;
@@ -197,7 +197,7 @@ public final class DefaultAudioSink implements AudioSink {
         }
 
         public long getPositionUs() {
-            return (getPlaybackHeadPosition() * C0539C.MICROS_PER_SECOND) / ((long) this.sampleRate);
+            return (getPlaybackHeadPosition() * C0542C.MICROS_PER_SECOND) / ((long) this.sampleRate);
         }
 
         public boolean updateTimestamp() {
@@ -435,7 +435,7 @@ public final class DefaultAudioSink implements AudioSink {
                 i = 1276;
                 break;
             case 8:
-                i = C0539C.CHANNEL_OUT_7POINT1_SURROUND;
+                i = C0542C.CHANNEL_OUT_7POINT1_SURROUND;
                 break;
             default:
                 StringBuilder stringBuilder = new StringBuilder();
@@ -447,7 +447,7 @@ public final class DefaultAudioSink implements AudioSink {
             if (channelCount == 3 || channelCount == 5) {
                 i = 252;
             } else if (channelCount == 7) {
-                i = C0539C.CHANNEL_OUT_7POINT1_SURROUND;
+                i = C0542C.CHANNEL_OUT_7POINT1_SURROUND;
             }
         }
         if (Util.SDK_INT > 25 || !"fugu".equals(Util.DEVICE) || r1.isInputPcm) {
@@ -505,7 +505,7 @@ public final class DefaultAudioSink implements AudioSink {
                 }
                 r1.bufferSize = CacheDataSink.DEFAULT_BUFFER_SIZE;
             }
-            r1.bufferSizeUs = r1.isInputPcm ? framesToDurationUs((long) (r1.bufferSize / r1.outputPcmFrameSize)) : C0539C.TIME_UNSET;
+            r1.bufferSizeUs = r1.isInputPcm ? framesToDurationUs((long) (r1.bufferSize / r1.outputPcmFrameSize)) : C0542C.TIME_UNSET;
         }
     }
 
@@ -596,7 +596,7 @@ public final class DefaultAudioSink implements AudioSink {
                 z = r0.hasData;
                 r0.hasData = hasPendingData();
                 if (!(!z || r0.hasData || r0.audioTrack.getPlayState() == 1 || r0.listener == null)) {
-                    r0.listener.onUnderrun(r0.bufferSize, C0539C.usToMs(r0.bufferSizeUs), SystemClock.elapsedRealtime() - r0.lastFeedElapsedRealtimeMs);
+                    r0.listener.onUnderrun(r0.bufferSize, C0542C.usToMs(r0.bufferSizeUs), SystemClock.elapsedRealtime() - r0.lastFeedElapsedRealtimeMs);
                 }
                 if (r0.inputBuffer == null) {
                     if (!buffer.hasRemaining()) {
@@ -687,7 +687,7 @@ public final class DefaultAudioSink implements AudioSink {
         }
         z = r0.hasData;
         r0.hasData = hasPendingData();
-        r0.listener.onUnderrun(r0.bufferSize, C0539C.usToMs(r0.bufferSizeUs), SystemClock.elapsedRealtime() - r0.lastFeedElapsedRealtimeMs);
+        r0.listener.onUnderrun(r0.bufferSize, C0542C.usToMs(r0.bufferSizeUs), SystemClock.elapsedRealtime() - r0.lastFeedElapsedRealtimeMs);
         if (r0.inputBuffer == null) {
             if (!buffer.hasRemaining()) {
                 return true;
@@ -803,7 +803,7 @@ public final class DefaultAudioSink implements AudioSink {
                     }
                 }
             } else if (this.tunneling) {
-                if (avSyncPresentationTimeUs == C0539C.TIME_UNSET) {
+                if (avSyncPresentationTimeUs == C0542C.TIME_UNSET) {
                     z = false;
                 }
                 Assertions.checkState(z);
@@ -850,7 +850,7 @@ public final class DefaultAudioSink implements AudioSink {
             if (audioProcessorNeedsEndOfStream) {
                 audioProcessor.queueEndOfStream();
             }
-            processBuffers(C0539C.TIME_UNSET);
+            processBuffers(C0542C.TIME_UNSET);
             if (!audioProcessor.isEnded()) {
                 return false;
             }
@@ -858,7 +858,7 @@ public final class DefaultAudioSink implements AudioSink {
             this.drainingAudioProcessorIndex++;
         }
         if (this.outputBuffer != null) {
-            writeBuffer(this.outputBuffer, C0539C.TIME_UNSET);
+            writeBuffer(this.outputBuffer, C0542C.TIME_UNSET);
             if (this.outputBuffer != null) {
                 return false;
             }
@@ -1148,15 +1148,15 @@ public final class DefaultAudioSink implements AudioSink {
     }
 
     private long inputFramesToDurationUs(long frameCount) {
-        return (C0539C.MICROS_PER_SECOND * frameCount) / ((long) this.inputSampleRate);
+        return (C0542C.MICROS_PER_SECOND * frameCount) / ((long) this.inputSampleRate);
     }
 
     private long framesToDurationUs(long frameCount) {
-        return (C0539C.MICROS_PER_SECOND * frameCount) / ((long) this.sampleRate);
+        return (C0542C.MICROS_PER_SECOND * frameCount) / ((long) this.sampleRate);
     }
 
     private long durationUsToFrames(long durationUs) {
-        return (((long) this.sampleRate) * durationUs) / C0539C.MICROS_PER_SECOND;
+        return (((long) this.sampleRate) * durationUs) / C0542C.MICROS_PER_SECOND;
     }
 
     private long getSubmittedFrames() {

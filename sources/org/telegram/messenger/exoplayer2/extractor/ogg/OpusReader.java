@@ -6,7 +6,7 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -68,7 +68,7 @@ final class OpusReader extends StreamReader {
     }
 
     private void putNativeOrderLong(List<byte[]> initializationData, int samples) {
-        initializationData.add(ByteBuffer.allocate(8).order(ByteOrder.nativeOrder()).putLong((((long) samples) * C0539C.NANOS_PER_SECOND) / 48000).array());
+        initializationData.add(ByteBuffer.allocate(8).order(ByteOrder.nativeOrder()).putLong((((long) samples) * C0542C.NANOS_PER_SECOND) / 48000).array());
     }
 
     private long getPacketDurationUs(byte[] packet) {

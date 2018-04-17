@@ -60,8 +60,8 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
     private InputFile uploadedAvatar;
 
     /* renamed from: org.telegram.ui.ChangeChatNameActivity$2 */
-    class C09002 implements OnTouchListener {
-        C09002() {
+    class C09062 implements OnTouchListener {
+        C09062() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -70,11 +70,11 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
     }
 
     /* renamed from: org.telegram.ui.ChangeChatNameActivity$3 */
-    class C09023 implements OnClickListener {
+    class C09083 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.ChangeChatNameActivity$3$1 */
-        class C09011 implements DialogInterface.OnClickListener {
-            C09011() {
+        class C09071 implements DialogInterface.OnClickListener {
+            C09071() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -90,21 +90,21 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
             }
         }
 
-        C09023() {
+        C09083() {
         }
 
         public void onClick(View view) {
             if (ChangeChatNameActivity.this.getParentActivity() != null) {
                 Builder builder = new Builder(ChangeChatNameActivity.this.getParentActivity());
-                builder.setItems(ChangeChatNameActivity.this.avatar != null ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley)}, new C09011());
+                builder.setItems(ChangeChatNameActivity.this.avatar != null ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley)}, new C09071());
                 ChangeChatNameActivity.this.showDialog(builder.create());
             }
         }
     }
 
     /* renamed from: org.telegram.ui.ChangeChatNameActivity$4 */
-    class C09034 implements TextWatcher {
-        C09034() {
+    class C09094 implements TextWatcher {
+        C09094() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -120,11 +120,11 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
     }
 
     /* renamed from: org.telegram.ui.ChangeChatNameActivity$5 */
-    class C09055 implements OnClickListener {
+    class C09115 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.ChangeChatNameActivity$5$1 */
-        class C09041 implements DialogInterface.OnClickListener {
-            C09041() {
+        class C09101 implements DialogInterface.OnClickListener {
+            C09101() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -139,22 +139,22 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
             }
         }
 
-        C09055() {
+        C09115() {
         }
 
         public void onClick(View v) {
             Builder builder = new Builder(ChangeChatNameActivity.this.getParentActivity());
             builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", R.string.AreYouSureDeleteAndExit));
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C09041());
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C09101());
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             ChangeChatNameActivity.this.showDialog(builder.create());
         }
     }
 
     /* renamed from: org.telegram.ui.ChangeChatNameActivity$7 */
-    class C09077 implements Runnable {
-        C09077() {
+    class C09137 implements Runnable {
+        C09137() {
         }
 
         public void run() {
@@ -166,11 +166,11 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
     }
 
     /* renamed from: org.telegram.ui.ChangeChatNameActivity$1 */
-    class C19431 extends ActionBarMenuOnItemClick {
+    class C19491 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.ChangeChatNameActivity$1$1 */
-        class C08991 implements DialogInterface.OnClickListener {
-            C08991() {
+        class C09051 implements DialogInterface.OnClickListener {
+            C09051() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -185,7 +185,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
             }
         }
 
-        C19431() {
+        C19491() {
         }
 
         public void onItemClick(int id) {
@@ -207,7 +207,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
                     ChangeChatNameActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                     ChangeChatNameActivity.this.progressDialog.setCanceledOnTouchOutside(false);
                     ChangeChatNameActivity.this.progressDialog.setCancelable(false);
-                    ChangeChatNameActivity.this.progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C08991());
+                    ChangeChatNameActivity.this.progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C09051());
                     ChangeChatNameActivity.this.progressDialog.show();
                     return;
                 }
@@ -244,7 +244,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ChannelEdit", R.string.ChannelEdit));
-        this.actionBar.setActionBarMenuOnItemClick(new C19431());
+        this.actionBar.setActionBarMenuOnItemClick(new C19491());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
         LinearLayout linearLayout = new LinearLayout(context2);
@@ -252,7 +252,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
-        this.fragmentView.setOnTouchListener(new C09002());
+        this.fragmentView.setOnTouchListener(new C09062());
         LinearLayout linearLayout2 = new LinearLayout(context2);
         linearLayout2.setOrientation(1);
         linearLayout2.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
@@ -266,7 +266,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
         int i = 3;
         float f = 16.0f;
         frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(64, 64.0f, 48 | (LocaleController.isRTL ? 5 : 3), LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
-        r0.avatarImage.setOnClickListener(new C09023());
+        r0.avatarImage.setOnClickListener(new C09083());
         r0.nameTextView = new EditTextBoldCursor(context2);
         if (r0.currentChat.megagroup) {
             r0.nameTextView.setHint(LocaleController.getString("GroupName", R.string.GroupName));
@@ -294,7 +294,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
         r0.nameTextView.setCursorWidth(1.5f);
         r0.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         frameLayout.addView(r0.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 16, LocaleController.isRTL ? f : 96.0f, 0.0f, LocaleController.isRTL ? 96.0f : f, 0.0f));
-        r0.nameTextView.addTextChangedListener(new C09034());
+        r0.nameTextView.addTextChangedListener(new C09094());
         ShadowSectionCell sectionCell = new ShadowSectionCell(context2);
         sectionCell.setSize(20);
         linearLayout.addView(sectionCell, LayoutHelper.createLinear(-1, -2));
@@ -307,7 +307,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
             textCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             textCell.setText(LocaleController.getString("DeleteMega", R.string.DeleteMega), false);
             container3.addView(textCell, LayoutHelper.createFrame(-1, -2.0f));
-            textCell.setOnClickListener(new C09055());
+            textCell.setOnClickListener(new C09115());
             TextInfoPrivacyCell infoCell2 = new TextInfoPrivacyCell(context2);
             infoCell2.setBackgroundDrawable(Theme.getThemedDrawable(context2, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             infoCell2.setText(LocaleController.getString("MegaDeleteInfo", R.string.MegaDeleteInfo));
@@ -379,7 +379,7 @@ public class ChangeChatNameActivity extends BaseFragment implements AvatarUpdate
 
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen) {
-            AndroidUtilities.runOnUIThread(new C09077(), 100);
+            AndroidUtilities.runOnUIThread(new C09137(), 100);
         }
     }
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util;
@@ -27,7 +27,7 @@ import org.telegram.messenger.exoplayer2.video.HevcConfig;
 
 final class AtomParsers {
     private static final String TAG = "AtomParsers";
-    private static final int TYPE_cenc = Util.getIntegerCodeForString(C0539C.CENC_TYPE_cenc);
+    private static final int TYPE_cenc = Util.getIntegerCodeForString(C0542C.CENC_TYPE_cenc);
     private static final int TYPE_clcp = Util.getIntegerCodeForString("clcp");
     private static final int TYPE_meta = Util.getIntegerCodeForString(MetaBox.TYPE);
     private static final int TYPE_sbtl = Util.getIntegerCodeForString("sbtl");
@@ -622,7 +622,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     gaplessInfoHolder3.encoderDelay = (int) encoderDelay;
                                     gaplessInfoHolder3.encoderPadding = (int) ctts;
                                     long encoderDelay2 = encoderDelay;
-                                    Util.scaleLargeTimestampsInPlace(timestamps, C0539C.MICROS_PER_SECOND, track2.timescale);
+                                    Util.scaleLargeTimestampsInPlace(timestamps, C0542C.MICROS_PER_SECOND, track2.timescale);
                                     return new TrackSampleTable(offsets2, sizes, nextSynchronizationSampleIndex2, timestamps, flags2);
                                 }
                                 if (track2.editListDurations.length == 1 || track2.editListDurations[0] != 0) {
@@ -716,7 +716,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                                 editedFlags3 = nextSynchronizationSampleIndex2;
                                                 endIndex = maximumSize3;
                                                 mediaTime3 = mediaTime2;
-                                                editedTimestamps2[editedTimestamps] = Util.scaleLargeTimestamp(offset, C0539C.MICROS_PER_SECOND, track2.movieTimescale) + Util.scaleLargeTimestamp(timestamps[maximumSize2] - mediaTime2, C0539C.MICROS_PER_SECOND, track2.timescale);
+                                                editedTimestamps2[editedTimestamps] = Util.scaleLargeTimestamp(offset, C0542C.MICROS_PER_SECOND, track2.movieTimescale) + Util.scaleLargeTimestamp(timestamps[maximumSize2] - mediaTime2, C0542C.MICROS_PER_SECOND, track2.timescale);
                                                 if (offsets6 != null && sizes[editedTimestamps] > sizes2) {
                                                     sizes2 = omitClippedSample[maximumSize2];
                                                 }
@@ -778,7 +778,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                         } else if (stss == null) {
                                             Log.w(TAG, "Ignoring edit list: Edited sample sequence does not contain a sync sample.");
                                             sampleIndex = maximumSize2;
-                                            Util.scaleLargeTimestampsInPlace(timestamps, C0539C.MICROS_PER_SECOND, track2.timescale);
+                                            Util.scaleLargeTimestampsInPlace(timestamps, C0542C.MICROS_PER_SECOND, track2.timescale);
                                             return new TrackSampleTable(flags4, ctts, maximumSize, timestamps, flags);
                                         } else {
                                             nextSynchronizationSampleIndex2 = maximumSize2;
@@ -793,11 +793,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     }
                                     Log.w(TAG, "Ignoring edit list: Edited sample sequence does not contain a sync sample.");
                                     sampleIndex = maximumSize2;
-                                    Util.scaleLargeTimestampsInPlace(timestamps, C0539C.MICROS_PER_SECOND, track2.timescale);
+                                    Util.scaleLargeTimestampsInPlace(timestamps, C0542C.MICROS_PER_SECOND, track2.timescale);
                                     return new TrackSampleTable(flags4, ctts, maximumSize, timestamps, flags);
                                 }
                                 for (maximumSize2 = 0; maximumSize2 < timestamps.length; maximumSize2++) {
-                                    timestamps[maximumSize2] = Util.scaleLargeTimestamp(timestamps[maximumSize2] - track2.editListMediaTimes[0], C0539C.MICROS_PER_SECOND, track2.timescale);
+                                    timestamps[maximumSize2] = Util.scaleLargeTimestamp(timestamps[maximumSize2] - track2.editListMediaTimes[0], C0542C.MICROS_PER_SECOND, track2.timescale);
                                 }
                                 return new TrackSampleTable(offsets2, sizes, nextSynchronizationSampleIndex2, timestamps, flags2);
                             }
@@ -917,7 +917,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                                     editedFlags3 = nextSynchronizationSampleIndex2;
                                     endIndex = maximumSize3;
                                     mediaTime3 = mediaTime2;
-                                    editedTimestamps2[editedTimestamps] = Util.scaleLargeTimestamp(offset, C0539C.MICROS_PER_SECOND, track2.movieTimescale) + Util.scaleLargeTimestamp(timestamps[maximumSize2] - mediaTime2, C0539C.MICROS_PER_SECOND, track2.timescale);
+                                    editedTimestamps2[editedTimestamps] = Util.scaleLargeTimestamp(offset, C0542C.MICROS_PER_SECOND, track2.movieTimescale) + Util.scaleLargeTimestamp(timestamps[maximumSize2] - mediaTime2, C0542C.MICROS_PER_SECOND, track2.timescale);
                                     sizes2 = omitClippedSample[maximumSize2];
                                     editedTimestamps++;
                                     maximumSize2++;
@@ -970,7 +970,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                         if (stss == null) {
                             Log.w(TAG, "Ignoring edit list: Edited sample sequence does not contain a sync sample.");
                             sampleIndex = maximumSize2;
-                            Util.scaleLargeTimestampsInPlace(timestamps, C0539C.MICROS_PER_SECOND, track2.timescale);
+                            Util.scaleLargeTimestampsInPlace(timestamps, C0542C.MICROS_PER_SECOND, track2.timescale);
                             return new TrackSampleTable(flags4, ctts, maximumSize, timestamps, flags);
                         }
                         nextSynchronizationSampleIndex2 = maximumSize2;
@@ -997,7 +997,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                     i3 = sampleCount2;
                     omitClippedSample = sizes;
                 }
-                Util.scaleLargeTimestampsInPlace(timestamps, C0539C.MICROS_PER_SECOND, track2.timescale);
+                Util.scaleLargeTimestampsInPlace(timestamps, C0542C.MICROS_PER_SECOND, track2.timescale);
                 return new TrackSampleTable(chunkOffsetsBytes, omitClippedSample, maximumSize, timestamps, flags);
             }
         }
@@ -1181,7 +1181,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
                 gaplessInfoHolder3.encoderDelay = (int) encoderDelay;
                 gaplessInfoHolder3.encoderPadding = (int) ctts;
                 long encoderDelay22 = encoderDelay;
-                Util.scaleLargeTimestampsInPlace(timestamps, C0539C.MICROS_PER_SECOND, track2.timescale);
+                Util.scaleLargeTimestampsInPlace(timestamps, C0542C.MICROS_PER_SECOND, track2.timescale);
                 return new TrackSampleTable(offsets2, sizes, nextSynchronizationSampleIndex2, timestamps, flags2);
             }
             flags = flags2;
@@ -1194,7 +1194,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             i3 = sampleCount2;
             omitClippedSample = sizes;
         }
-        Util.scaleLargeTimestampsInPlace(timestamps, C0539C.MICROS_PER_SECOND, track2.timescale);
+        Util.scaleLargeTimestampsInPlace(timestamps, C0542C.MICROS_PER_SECOND, track2.timescale);
         return new TrackSampleTable(chunkOffsetsBytes, omitClippedSample, maximumSize, timestamps, flags);
     }
 
@@ -1274,11 +1274,11 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         }
         if (durationUnknown) {
             tkhd.skipBytes(durationByteCount);
-            duration = C0539C.TIME_UNSET;
+            duration = C0542C.TIME_UNSET;
         } else {
             duration = version == 0 ? tkhd.readUnsignedInt() : tkhd.readUnsignedLongToLong();
             if (duration == 0) {
-                duration = C0539C.TIME_UNSET;
+                duration = C0542C.TIME_UNSET;
             }
         }
         tkhd.skipBytes(16);
@@ -1287,9 +1287,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         tkhd.skipBytes(4);
         int a10 = tkhd.readInt();
         int a11 = tkhd.readInt();
-        if (a00 == 0 && a01 == C0539C.DEFAULT_BUFFER_SEGMENT_SIZE && a10 == (-65536) && a11 == 0) {
+        if (a00 == 0 && a01 == C0542C.DEFAULT_BUFFER_SEGMENT_SIZE && a10 == (-65536) && a11 == 0) {
             rotationDegrees = 90;
-        } else if (a00 == 0 && a01 == (-65536) && a10 == C0539C.DEFAULT_BUFFER_SEGMENT_SIZE && a11 == 0) {
+        } else if (a00 == 0 && a01 == (-65536) && a10 == C0542C.DEFAULT_BUFFER_SEGMENT_SIZE && a11 == 0) {
             rotationDegrees = 270;
         } else if (a00 != (-65536) || a01 != 0 || a10 != 0 || a11 != (-65536)) {
             return new TkhdData(trackId, duration, rotationDegrees);
@@ -2181,8 +2181,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
             }
             childPosition += childAtomSize;
         }
-        if (!(C0539C.CENC_TYPE_cenc.equals(schemeType) || C0539C.CENC_TYPE_cbc1.equals(schemeType) || C0539C.CENC_TYPE_cens.equals(schemeType))) {
-            if (!C0539C.CENC_TYPE_cbcs.equals(schemeType)) {
+        if (!(C0542C.CENC_TYPE_cenc.equals(schemeType) || C0542C.CENC_TYPE_cbc1.equals(schemeType) || C0542C.CENC_TYPE_cens.equals(schemeType))) {
+            if (!C0542C.CENC_TYPE_cbcs.equals(schemeType)) {
                 return null;
             }
         }

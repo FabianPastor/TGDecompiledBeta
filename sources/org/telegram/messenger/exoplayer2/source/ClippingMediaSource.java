@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.ExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
@@ -52,7 +52,7 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
             } else {
                 Window window = timeline.getWindow(0, new Window(), false);
                 long resolvedEndUs = endUs == Long.MIN_VALUE ? window.durationUs : endUs;
-                if (window.durationUs != C0539C.TIME_UNSET) {
+                if (window.durationUs != C0542C.TIME_UNSET) {
                     if (resolvedEndUs > window.durationUs) {
                         resolvedEndUs = window.durationUs;
                     }
@@ -70,10 +70,10 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
         public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
             long j;
             window = this.timeline.getWindow(0, window, setIds, defaultPositionProjectionUs);
-            window.durationUs = this.endUs != C0539C.TIME_UNSET ? this.endUs - this.startUs : C0539C.TIME_UNSET;
-            if (window.defaultPositionUs != C0539C.TIME_UNSET) {
+            window.durationUs = this.endUs != C0542C.TIME_UNSET ? this.endUs - this.startUs : C0542C.TIME_UNSET;
+            if (window.defaultPositionUs != C0542C.TIME_UNSET) {
                 window.defaultPositionUs = Math.max(window.defaultPositionUs, this.startUs);
-                if (this.endUs == C0539C.TIME_UNSET) {
+                if (this.endUs == C0542C.TIME_UNSET) {
                     j = window.defaultPositionUs;
                 } else {
                     j = Math.min(window.defaultPositionUs, this.endUs);
@@ -81,11 +81,11 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
                 window.defaultPositionUs = j;
                 window.defaultPositionUs -= this.startUs;
             }
-            j = C0539C.usToMs(this.startUs);
-            if (window.presentationStartTimeMs != C0539C.TIME_UNSET) {
+            j = C0542C.usToMs(this.startUs);
+            if (window.presentationStartTimeMs != C0542C.TIME_UNSET) {
                 window.presentationStartTimeMs += j;
             }
-            if (window.windowStartTimeMs != C0539C.TIME_UNSET) {
+            if (window.windowStartTimeMs != C0542C.TIME_UNSET) {
                 window.windowStartTimeMs += j;
             }
             return window;
@@ -94,8 +94,8 @@ public final class ClippingMediaSource extends CompositeMediaSource<Void> {
         public Period getPeriod(int periodIndex, Period period, boolean setIds) {
             period = this.timeline.getPeriod(0, period, setIds);
             long j = this.endUs;
-            long j2 = C0539C.TIME_UNSET;
-            if (j != C0539C.TIME_UNSET) {
+            long j2 = C0542C.TIME_UNSET;
+            if (j != C0542C.TIME_UNSET) {
                 j2 = this.endUs - this.startUs;
             }
             period.durationUs = j2;

@@ -44,8 +44,8 @@ public class CheckBox extends View {
     private TextPaint textPaint;
 
     /* renamed from: org.telegram.ui.Components.CheckBox$1 */
-    class C11101 extends AnimatorListenerAdapter {
-        C11101() {
+    class C11161 extends AnimatorListenerAdapter {
+        C11161() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -156,7 +156,7 @@ public class CheckBox extends View {
         float[] fArr = new float[1];
         fArr[0] = newCheckedState ? 1.0f : 0.0f;
         this.checkAnimator = ObjectAnimator.ofFloat(this, str, fArr);
-        this.checkAnimator.addListener(new C11101());
+        this.checkAnimator.addListener(new C11161());
         this.checkAnimator.setDuration(300);
         this.checkAnimator.start();
     }

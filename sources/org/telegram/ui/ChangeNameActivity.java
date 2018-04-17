@@ -36,8 +36,8 @@ public class ChangeNameActivity extends BaseFragment {
     private EditTextBoldCursor lastNameField;
 
     /* renamed from: org.telegram.ui.ChangeNameActivity$2 */
-    class C09082 implements OnTouchListener {
-        C09082() {
+    class C09142 implements OnTouchListener {
+        C09142() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -46,8 +46,8 @@ public class ChangeNameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeNameActivity$3 */
-    class C09093 implements OnEditorActionListener {
-        C09093() {
+    class C09153 implements OnEditorActionListener {
+        C09153() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -61,8 +61,8 @@ public class ChangeNameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeNameActivity$4 */
-    class C09104 implements OnEditorActionListener {
-        C09104() {
+    class C09164 implements OnEditorActionListener {
+        C09164() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -75,8 +75,8 @@ public class ChangeNameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeNameActivity$6 */
-    class C09116 implements Runnable {
-        C09116() {
+    class C09176 implements Runnable {
+        C09176() {
         }
 
         public void run() {
@@ -88,8 +88,8 @@ public class ChangeNameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeNameActivity$1 */
-    class C19441 extends ActionBarMenuOnItemClick {
-        C19441() {
+    class C19501 extends ActionBarMenuOnItemClick {
+        C19501() {
         }
 
         public void onItemClick(int id) {
@@ -103,8 +103,8 @@ public class ChangeNameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeNameActivity$5 */
-    class C19455 implements RequestDelegate {
-        C19455() {
+    class C19515 implements RequestDelegate {
+        C19515() {
         }
 
         public void run(TLObject response, TL_error error) {
@@ -116,7 +116,7 @@ public class ChangeNameActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
-        this.actionBar.setActionBarMenuOnItemClick(new C19441());
+        this.actionBar.setActionBarMenuOnItemClick(new C19501());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
@@ -126,7 +126,7 @@ public class ChangeNameActivity extends BaseFragment {
         r0.fragmentView = linearLayout;
         r0.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
         ((LinearLayout) r0.fragmentView).setOrientation(1);
-        r0.fragmentView.setOnTouchListener(new C09082());
+        r0.fragmentView.setOnTouchListener(new C09142());
         r0.firstNameField = new EditTextBoldCursor(context2);
         r0.firstNameField.setTextSize(1, 18.0f);
         r0.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -144,7 +144,7 @@ public class ChangeNameActivity extends BaseFragment {
         r0.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         r0.firstNameField.setCursorWidth(1.5f);
         linearLayout.addView(r0.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
-        r0.firstNameField.setOnEditorActionListener(new C09093());
+        r0.firstNameField.setOnEditorActionListener(new C09153());
         r0.lastNameField = new EditTextBoldCursor(context2);
         r0.lastNameField.setTextSize(1, 18.0f);
         r0.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -165,7 +165,7 @@ public class ChangeNameActivity extends BaseFragment {
         r0.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         r0.lastNameField.setCursorWidth(1.5f);
         linearLayout.addView(r0.lastNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 16.0f, 24.0f, 0.0f));
-        r0.lastNameField.setOnEditorActionListener(new C09104());
+        r0.lastNameField.setOnEditorActionListener(new C09164());
         if (user != null) {
             r0.firstNameField.setText(user.first_name);
             r0.firstNameField.setSelection(r0.firstNameField.length());
@@ -203,7 +203,7 @@ public class ChangeNameActivity extends BaseFragment {
                     UserConfig.getInstance(this.currentAccount).saveConfig(true);
                     NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
                     NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19455());
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19515());
                 }
             }
         }
@@ -211,7 +211,7 @@ public class ChangeNameActivity extends BaseFragment {
 
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen) {
-            AndroidUtilities.runOnUIThread(new C09116(), 100);
+            AndroidUtilities.runOnUIThread(new C09176(), 100);
         }
     }
 

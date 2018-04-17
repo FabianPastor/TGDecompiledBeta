@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.UriUtil;
@@ -57,7 +57,7 @@ public class SsManifest {
 
         public StreamElement(String baseUri, String chunkTemplate, int type, String subType, long timescale, String name, int maxWidth, int maxHeight, int displayWidth, int displayHeight, String language, Format[] formats, List<Long> chunkStartTimes, long lastChunkDuration) {
             long j = timescale;
-            this(baseUri, chunkTemplate, type, subType, j, name, maxWidth, maxHeight, displayWidth, displayHeight, language, formats, chunkStartTimes, Util.scaleLargeTimestamps(chunkStartTimes, C0539C.MICROS_PER_SECOND, j), Util.scaleLargeTimestamp(lastChunkDuration, C0539C.MICROS_PER_SECOND, j));
+            this(baseUri, chunkTemplate, type, subType, j, name, maxWidth, maxHeight, displayWidth, displayHeight, language, formats, chunkStartTimes, Util.scaleLargeTimestamps(chunkStartTimes, C0542C.MICROS_PER_SECOND, j), Util.scaleLargeTimestamp(lastChunkDuration, C0542C.MICROS_PER_SECOND, j));
         }
 
         private StreamElement(String baseUri, String chunkTemplate, int type, String subType, long timescale, String name, int maxWidth, int maxHeight, int displayWidth, int displayHeight, String language, Format[] formats, List<Long> chunkStartTimes, long[] chunkStartTimesUs, long lastChunkDurationUs) {
@@ -124,10 +124,10 @@ public class SsManifest {
 
     public SsManifest(int majorVersion, int minorVersion, long timescale, long duration, long dvrWindowLength, int lookAheadCount, boolean isLive, ProtectionElement protectionElement, StreamElement[] streamElements) {
         int i = (duration > 0 ? 1 : (duration == 0 ? 0 : -1));
-        long j = C0539C.TIME_UNSET;
-        long scaleLargeTimestamp = i == 0 ? C0539C.TIME_UNSET : Util.scaleLargeTimestamp(duration, C0539C.MICROS_PER_SECOND, timescale);
+        long j = C0542C.TIME_UNSET;
+        long scaleLargeTimestamp = i == 0 ? C0542C.TIME_UNSET : Util.scaleLargeTimestamp(duration, C0542C.MICROS_PER_SECOND, timescale);
         if (dvrWindowLength != 0) {
-            j = Util.scaleLargeTimestamp(dvrWindowLength, C0539C.MICROS_PER_SECOND, timescale);
+            j = Util.scaleLargeTimestamp(dvrWindowLength, C0542C.MICROS_PER_SECOND, timescale);
         }
         this(majorVersion, minorVersion, scaleLargeTimestamp, j, lookAheadCount, isLive, protectionElement, streamElements);
     }

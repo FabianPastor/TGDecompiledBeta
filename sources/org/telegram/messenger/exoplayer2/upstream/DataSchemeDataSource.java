@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.util.Base64;
 import java.io.IOException;
 import java.net.URLDecoder;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.ParserException;
 
 public final class DataSchemeDataSource implements DataSource {
@@ -36,7 +36,7 @@ public final class DataSchemeDataSource implements DataSource {
                     throw new ParserException(stringBuilder2.toString(), e);
                 }
             }
-            this.data = URLDecoder.decode(dataString, C0539C.ASCII_NAME).getBytes();
+            this.data = URLDecoder.decode(dataString, C0542C.ASCII_NAME).getBytes();
             return (long) this.data.length;
         }
         StringBuilder stringBuilder3 = new StringBuilder();

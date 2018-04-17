@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.source.dash.manifest;
 
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public abstract class SegmentBase {
@@ -42,7 +42,7 @@ public abstract class SegmentBase {
                 return firstSegmentNum;
             }
             if (this.segmentTimeline == null) {
-                int segmentNum = this.startNumber + ((int) (timeUs / ((this.duration * C0539C.MICROS_PER_SECOND) / this.timescale)));
+                int segmentNum = this.startNumber + ((int) (timeUs / ((this.duration * C0542C.MICROS_PER_SECOND) / this.timescale)));
                 int min = segmentNum < firstSegmentNum ? firstSegmentNum : segmentCount == -1 ? segmentNum : Math.min(segmentNum, (firstSegmentNum + segmentCount) - 1);
                 return min;
             }
@@ -64,10 +64,10 @@ public abstract class SegmentBase {
 
         public final long getSegmentDurationUs(int sequenceNumber, long periodDurationUs) {
             if (this.segmentTimeline != null) {
-                return (C0539C.MICROS_PER_SECOND * ((SegmentTimelineElement) this.segmentTimeline.get(sequenceNumber - this.startNumber)).duration) / this.timescale;
+                return (C0542C.MICROS_PER_SECOND * ((SegmentTimelineElement) this.segmentTimeline.get(sequenceNumber - this.startNumber)).duration) / this.timescale;
             }
             int segmentCount = getSegmentCount(periodDurationUs);
-            long segmentTimeUs = (segmentCount == -1 || sequenceNumber != (getFirstSegmentNum() + segmentCount) - 1) ? (this.duration * C0539C.MICROS_PER_SECOND) / this.timescale : periodDurationUs - getSegmentTimeUs(sequenceNumber);
+            long segmentTimeUs = (segmentCount == -1 || sequenceNumber != (getFirstSegmentNum() + segmentCount) - 1) ? (this.duration * C0542C.MICROS_PER_SECOND) / this.timescale : periodDurationUs - getSegmentTimeUs(sequenceNumber);
             return segmentTimeUs;
         }
 
@@ -78,7 +78,7 @@ public abstract class SegmentBase {
             } else {
                 j = ((long) (sequenceNumber - this.startNumber)) * this.duration;
             }
-            return Util.scaleLargeTimestamp(j, C0539C.MICROS_PER_SECOND, this.timescale);
+            return Util.scaleLargeTimestamp(j, C0542C.MICROS_PER_SECOND, this.timescale);
         }
 
         public int getFirstSegmentNum() {
@@ -163,8 +163,8 @@ public abstract class SegmentBase {
             if (this.segmentTimeline != null) {
                 return this.segmentTimeline.size();
             }
-            if (periodDurationUs != C0539C.TIME_UNSET) {
-                return (int) Util.ceilDivide(periodDurationUs, (this.duration * C0539C.MICROS_PER_SECOND) / this.timescale);
+            if (periodDurationUs != C0542C.TIME_UNSET) {
+                return (int) Util.ceilDivide(periodDurationUs, (this.duration * C0542C.MICROS_PER_SECOND) / this.timescale);
             }
             return -1;
         }
@@ -181,6 +181,6 @@ public abstract class SegmentBase {
     }
 
     public long getPresentationTimeOffsetUs() {
-        return Util.scaleLargeTimestamp(this.presentationTimeOffset, C0539C.MICROS_PER_SECOND, this.timescale);
+        return Util.scaleLargeTimestamp(this.presentationTimeOffset, C0542C.MICROS_PER_SECOND, this.timescale);
     }
 }

@@ -12,7 +12,7 @@ public class GoogleVoiceClientService extends SearchActionVerificationClientServ
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                C01821 c01821 = this;
+                C01841 c01841 = this;
                 try {
                     int currentAccount = UserConfig.selectedAccount;
                     ApplicationLoader.postInitApplication();

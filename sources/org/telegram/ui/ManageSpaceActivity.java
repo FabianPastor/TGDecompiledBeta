@@ -36,8 +36,8 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
     private ActionBarLayout layersActionBarLayout;
 
     /* renamed from: org.telegram.ui.ManageSpaceActivity$1 */
-    class C15131 implements OnTouchListener {
-        C15131() {
+    class C15191 implements OnTouchListener {
+        C15191() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -66,8 +66,8 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
     }
 
     /* renamed from: org.telegram.ui.ManageSpaceActivity$2 */
-    class C15142 implements OnClickListener {
-        C15142() {
+    class C15202 implements OnClickListener {
+        C15202() {
         }
 
         public void onClick(View v) {
@@ -75,8 +75,8 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
     }
 
     /* renamed from: org.telegram.ui.ManageSpaceActivity$3 */
-    class C15153 implements OnGlobalLayoutListener {
-        C15153() {
+    class C15213 implements OnGlobalLayoutListener {
+        C15213() {
         }
 
         public void onGlobalLayout() {
@@ -120,8 +120,8 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             FrameLayout shadowTablet = new FrameLayout(this);
             shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             launchLayout.addView(shadowTablet, LayoutHelper.createRelative(-1, -1));
-            shadowTablet.setOnTouchListener(new C15131());
-            shadowTablet.setOnClickListener(new C15142());
+            shadowTablet.setOnTouchListener(new C15191());
+            shadowTablet.setOnClickListener(new C15202());
             this.layersActionBarLayout = new ActionBarLayout(this);
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(shadowTablet);
@@ -220,7 +220,7 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
 
     public void fixLayout() {
         if (AndroidUtilities.isTablet() && this.actionBarLayout != null) {
-            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C15153());
+            this.actionBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new C15213());
         }
     }
 

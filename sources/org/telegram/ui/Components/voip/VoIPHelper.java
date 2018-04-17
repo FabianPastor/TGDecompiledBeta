@@ -110,8 +110,8 @@ public class VoIPHelper {
                         new Builder((Context) activity).setTitle(LocaleController.getString("VoipOngoingAlertTitle", R.string.VoipOngoingAlertTitle)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipOngoingAlert", R.string.VoipOngoingAlert, ContactsController.formatName(callUser.first_name, callUser.last_name), ContactsController.formatName(user.first_name, user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
 
                             /* renamed from: org.telegram.ui.Components.voip.VoIPHelper$2$1 */
-                            class C13471 implements Runnable {
-                                C13471() {
+                            class C13531 implements Runnable {
+                                C13531() {
                                 }
 
                                 public void run() {
@@ -121,7 +121,7 @@ public class VoIPHelper {
 
                             public void onClick(DialogInterface dialog, int which) {
                                 if (VoIPService.getSharedInstance() != null) {
-                                    VoIPService.getSharedInstance().hangUp(new C13471());
+                                    VoIPService.getSharedInstance().hangUp(new C13531());
                                 } else {
                                     VoIPHelper.doInitiateCall(user, activity);
                                 }
@@ -294,7 +294,7 @@ public class VoIPHelper {
         Builder builder = view;
         final File file = log;
         pad = context2;
-        OnClickListener c13537 = new OnClickListener() {
+        OnClickListener c13597 = new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 final int currentAccount = UserConfig.selectedAccount;
                 final TL_phone_setCallRating req = new TL_phone_setCallRating();
@@ -321,7 +321,7 @@ public class VoIPHelper {
             }
         };
         final Runnable runnable = onDismiss;
-        View btn = builder.setPositiveButton(string, c13537).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).setOnDismissListener(new OnDismissListener() {
+        View btn = builder.setPositiveButton(string, c13597).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).setOnDismissListener(new OnDismissListener() {
             public void onDismiss(DialogInterface dialog) {
                 if (runnable != null) {
                     runnable.run();

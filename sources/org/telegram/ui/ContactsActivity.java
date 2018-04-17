@@ -97,8 +97,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.ContactsActivity$1 */
-    class C21031 extends ActionBarMenuOnItemClick {
-        C21031() {
+    class C21091 extends ActionBarMenuOnItemClick {
+        C21091() {
         }
 
         public void onItemClick(int id) {
@@ -111,8 +111,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.ContactsActivity$2 */
-    class C21042 extends ActionBarMenuItemSearchListener {
-        C21042() {
+    class C21102 extends ActionBarMenuItemSearchListener {
+        C21102() {
         }
 
         public void onSearchExpand() {
@@ -157,8 +157,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.ContactsActivity$3 */
-    class C21053 implements OnItemClickListener {
-        C21053() {
+    class C21113 implements OnItemClickListener {
+        C21113() {
         }
 
         public void onItemClick(View view, int position) {
@@ -277,8 +277,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.ContactsActivity$4 */
-    class C21064 extends OnScrollListener {
-        C21064() {
+    class C21124 extends OnScrollListener {
+        C21124() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -293,8 +293,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* renamed from: org.telegram.ui.ContactsActivity$7 */
-    class C21077 implements ThemeDescriptionDelegate {
-        C21077() {
+    class C21137 implements ThemeDescriptionDelegate {
+        C21137() {
         }
 
         public void didSetColor() {
@@ -365,9 +365,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         } else {
             r0.actionBar.setTitle(LocaleController.getString("NewMessageTitle", R.string.NewMessageTitle));
         }
-        r0.actionBar.setActionBarMenuOnItemClick(new C21031());
+        r0.actionBar.setActionBarMenuOnItemClick(new C21091());
         ActionBarMenu menu = r0.actionBar.createMenu();
-        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21042()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21102()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         if (!(r0.createSecretChat || r0.returnAsResult)) {
             r0.addItem = menu.addItem(1, (int) R.drawable.add);
         }
@@ -387,8 +387,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r0.listView.setLayoutManager(new LinearLayoutManager(context2, 1, false));
         r0.listView.setAdapter(r0.listViewAdapter);
         frameLayout.addView(r0.listView, LayoutHelper.createFrame(-1, -1.0f));
-        r0.listView.setOnItemClickListener(new C21053());
-        r0.listView.setOnScrollListener(new C21064());
+        r0.listView.setOnItemClickListener(new C21113());
+        r0.listView.setOnScrollListener(new C21124());
         return r0.fragmentView;
     }
 
@@ -611,7 +611,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C21077();
+        ThemeDescriptionDelegate сellDelegate = new C21137();
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[36];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);

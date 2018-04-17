@@ -71,11 +71,11 @@ public class CacheControlActivity extends BaseFragment {
     private long videoSize = -1;
 
     /* renamed from: org.telegram.ui.CacheControlActivity$1 */
-    class C08341 implements Runnable {
+    class C08401 implements Runnable {
 
         /* renamed from: org.telegram.ui.CacheControlActivity$1$1 */
-        class C08331 implements Runnable {
-            C08331() {
+        class C08391 implements Runnable {
+            C08391() {
             }
 
             public void run() {
@@ -86,7 +86,7 @@ public class CacheControlActivity extends BaseFragment {
             }
         }
 
-        C08341() {
+        C08401() {
         }
 
         public void run() {
@@ -102,7 +102,7 @@ public class CacheControlActivity extends BaseFragment {
                             if (!CacheControlActivity.this.canceled) {
                                 CacheControlActivity.this.audioSize = CacheControlActivity.this.getDirectorySize(FileLoader.checkDirectory(1), 0);
                                 CacheControlActivity.this.totalSize = ((((CacheControlActivity.this.cacheSize + CacheControlActivity.this.videoSize) + CacheControlActivity.this.audioSize) + CacheControlActivity.this.photoSize) + CacheControlActivity.this.documentsSize) + CacheControlActivity.this.musicSize;
-                                AndroidUtilities.runOnUIThread(new C08331());
+                                AndroidUtilities.runOnUIThread(new C08391());
                             }
                         }
                     }
@@ -112,8 +112,8 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CacheControlActivity$3 */
-    class C19223 extends ActionBarMenuOnItemClick {
-        C19223() {
+    class C19283 extends ActionBarMenuOnItemClick {
+        C19283() {
         }
 
         public void onItemClick(int id) {
@@ -124,15 +124,15 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.CacheControlActivity$4 */
-    class C19234 implements OnItemClickListener {
+    class C19294 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.CacheControlActivity$4$1 */
-        class C08371 implements OnClickListener {
-            C08371() {
+        class C08431 implements OnClickListener {
+            C08431() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
-                C08371 c08371 = this;
+                C08431 c08431 = this;
                 int i = which;
                 Editor editor = MessagesController.getGlobalMainSettings().edit();
                 if (i == 0) {
@@ -158,8 +158,8 @@ public class CacheControlActivity extends BaseFragment {
         }
 
         /* renamed from: org.telegram.ui.CacheControlActivity$4$2 */
-        class C08402 implements OnClickListener {
-            C08402() {
+        class C08462 implements OnClickListener {
+            C08462() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -171,8 +171,8 @@ public class CacheControlActivity extends BaseFragment {
                 MessagesStorage.getInstance(CacheControlActivity.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                     /* renamed from: org.telegram.ui.CacheControlActivity$4$2$1$1 */
-                    class C08381 implements Runnable {
-                        C08381() {
+                    class C08441 implements Runnable {
+                        C08441() {
                         }
 
                         public void run() {
@@ -203,7 +203,7 @@ public class CacheControlActivity extends BaseFragment {
                         StringBuilder ids2;
                         int messageId;
                         Throwable e;
-                        Runnable c08381;
+                        Runnable c08441;
                         try {
                             database = MessagesStorage.getInstance(CacheControlActivity.this.currentAccount).getDatabase();
                             dialogsToCleanup = new ArrayList();
@@ -366,15 +366,15 @@ public class CacheControlActivity extends BaseFragment {
                             database.executeFast("PRAGMA journal_size_limit = 0").stepThis().dispose();
                             database.executeFast("VACUUM").stepThis().dispose();
                             database.executeFast("PRAGMA journal_size_limit = -1").stepThis().dispose();
-                            c08381 = new C08381();
+                            c08441 = new C08441();
                         } catch (Throwable e222) {
                             FileLog.m3e(e222);
-                            c08381 = new C08381();
+                            c08441 = new C08441();
                         } catch (Throwable e2222) {
                             Throwable th = e2222;
-                            AndroidUtilities.runOnUIThread(new C08381());
+                            AndroidUtilities.runOnUIThread(new C08441());
                         }
-                        AndroidUtilities.runOnUIThread(c08381);
+                        AndroidUtilities.runOnUIThread(c08441);
                         return;
                         FileLog.m3e(e);
                         dialogsToCleanup.dispose();
@@ -422,8 +422,8 @@ public class CacheControlActivity extends BaseFragment {
         }
 
         /* renamed from: org.telegram.ui.CacheControlActivity$4$3 */
-        class C08413 implements View.OnClickListener {
-            C08413() {
+        class C08473 implements View.OnClickListener {
+            C08473() {
             }
 
             public void onClick(View v) {
@@ -435,8 +435,8 @@ public class CacheControlActivity extends BaseFragment {
         }
 
         /* renamed from: org.telegram.ui.CacheControlActivity$4$4 */
-        class C08424 implements View.OnClickListener {
-            C08424() {
+        class C08484 implements View.OnClickListener {
+            C08484() {
             }
 
             public void onClick(View v) {
@@ -451,7 +451,7 @@ public class CacheControlActivity extends BaseFragment {
             }
         }
 
-        C19234() {
+        C19294() {
         }
 
         public void onItemClick(View view, int position) {
@@ -462,14 +462,14 @@ public class CacheControlActivity extends BaseFragment {
                 Builder builder;
                 if (i == CacheControlActivity.this.keepMediaRow) {
                     builder = new Builder(CacheControlActivity.this.getParentActivity());
-                    builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever)}, new C08371());
+                    builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever)}, new C08431());
                     CacheControlActivity.this.showDialog(builder.create());
                 } else if (i == CacheControlActivity.this.databaseRow) {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(CacheControlActivity.this.getParentActivity());
                     builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     builder2.setMessage(LocaleController.getString("LocalDatabaseClear", R.string.LocalDatabaseClear));
-                    builder2.setPositiveButton(LocaleController.getString("CacheClear", R.string.CacheClear), new C08402());
+                    builder2.setPositiveButton(LocaleController.getString("CacheClear", R.string.CacheClear), new C08462());
                     CacheControlActivity.this.showDialog(builder2.create());
                 } else {
                     if (i == CacheControlActivity.this.cacheRow && CacheControlActivity.this.totalSize > 0) {
@@ -512,7 +512,7 @@ public class CacheControlActivity extends BaseFragment {
                                     linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
                                     checkBoxCell.setText(name, AndroidUtilities.formatFileSize(size2), true, true);
                                     checkBoxCell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                                    checkBoxCell.setOnClickListener(new C08413());
+                                    checkBoxCell.setOnClickListener(new C08473());
                                 } else {
                                     CacheControlActivity.this.clear[a] = false;
                                 }
@@ -524,7 +524,7 @@ public class CacheControlActivity extends BaseFragment {
                             cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                             cell.setTextAndIcon(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache).toUpperCase(), 0);
                             cell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
-                            cell.setOnClickListener(new C08424());
+                            cell.setOnClickListener(new C08484());
                             linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
                             builder.setCustomView(linearLayout);
                             CacheControlActivity.this.showDialog(builder.create());
@@ -655,7 +655,7 @@ public class CacheControlActivity extends BaseFragment {
         this.rowCount = i + 1;
         this.databaseInfoRow = i;
         this.databaseSize = MessagesStorage.getInstance(this.currentAccount).getDatabaseSize();
-        Utilities.globalQueue.postRunnable(new C08341());
+        Utilities.globalQueue.postRunnable(new C08401());
         return true;
     }
 
@@ -757,7 +757,7 @@ public class CacheControlActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("StorageUsage", R.string.StorageUsage));
-        this.actionBar.setActionBarMenuOnItemClick(new C19223());
+        this.actionBar.setActionBarMenuOnItemClick(new C19283());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -767,7 +767,7 @@ public class CacheControlActivity extends BaseFragment {
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C19234());
+        this.listView.setOnItemClickListener(new C19294());
         return this.fragmentView;
     }
 

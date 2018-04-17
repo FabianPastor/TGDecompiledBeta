@@ -30,7 +30,7 @@ import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Components.LayoutHelper;
@@ -87,8 +87,8 @@ public class ActionBarLayout extends FrameLayout {
     private Runnable waitingForKeyboardCloseRunnable;
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$4 */
-    class C07084 extends AnimatorListenerAdapter {
-        C07084() {
+    class C07154 extends AnimatorListenerAdapter {
+        C07154() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -97,8 +97,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$6 */
-    class C07106 implements Runnable {
-        C07106() {
+    class C07176 implements Runnable {
+        C07176() {
         }
 
         public void run() {
@@ -107,8 +107,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$7 */
-    class C07117 implements Runnable {
-        C07117() {
+    class C07187 implements Runnable {
+        C07187() {
         }
 
         public void run() {
@@ -120,8 +120,8 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.ActionBar.ActionBarLayout$8 */
-    class C07128 implements Runnable {
-        C07128() {
+    class C07198 implements Runnable {
+        C07198() {
         }
 
         public void run() {
@@ -646,16 +646,16 @@ public class ActionBarLayout extends FrameLayout {
     private void startLayoutAnimation(final boolean open, final boolean first) {
         if (first) {
             this.animationProgress = 0.0f;
-            this.lastFrameTime = System.nanoTime() / C0539C.MICROS_PER_SECOND;
+            this.lastFrameTime = System.nanoTime() / C0542C.MICROS_PER_SECOND;
         }
-        Runnable c07062 = new Runnable() {
+        Runnable c07132 = new Runnable() {
             public void run() {
                 if (ActionBarLayout.this.animationRunnable == this) {
                     ActionBarLayout.this.animationRunnable = null;
                     if (first) {
                         ActionBarLayout.this.transitionAnimationStartTime = System.currentTimeMillis();
                     }
-                    long newTime = System.nanoTime() / C0539C.MICROS_PER_SECOND;
+                    long newTime = System.nanoTime() / C0542C.MICROS_PER_SECOND;
                     long dt = newTime - ActionBarLayout.this.lastFrameTime;
                     if (dt > 18) {
                         dt = 18;
@@ -681,8 +681,8 @@ public class ActionBarLayout extends FrameLayout {
                 }
             }
         };
-        this.animationRunnable = c07062;
-        AndroidUtilities.runOnUIThread(c07062);
+        this.animationRunnable = c07132;
+        AndroidUtilities.runOnUIThread(c07132);
     }
 
     public void resumeDelayedFragmentAnimation() {
@@ -780,7 +780,7 @@ public class ActionBarLayout extends FrameLayout {
                     actionBarLayout.currentAnimation.playTogether(animators);
                     actionBarLayout.currentAnimation.setInterpolator(actionBarLayout.accelerateDecelerateInterpolator);
                     actionBarLayout.currentAnimation.setDuration(200);
-                    actionBarLayout.currentAnimation.addListener(new C07084());
+                    actionBarLayout.currentAnimation.addListener(new C07154());
                     actionBarLayout.currentAnimation.start();
                 } else {
                     actionBarLayout.transitionAnimationStartTime = System.currentTimeMillis();
@@ -794,21 +794,21 @@ public class ActionBarLayout extends FrameLayout {
                         }
                     };
                     baseFragment.onTransitionAnimationStart(true, false);
-                    AnimatorSet animation = baseFragment.onCustomTransitionAnimation(true, new C07106());
+                    AnimatorSet animation = baseFragment.onCustomTransitionAnimation(true, new C07176());
                     if (animation == null) {
                         actionBarLayout.containerView.setAlpha(0.0f);
                         actionBarLayout.containerView.setTranslationX(48.0f);
                         if (!actionBarLayout.containerView.isKeyboardVisible) {
                             if (!actionBarLayout.containerViewBack.isKeyboardVisible) {
                                 if (fragment.needDelayOpenAnimation()) {
-                                    actionBarLayout.delayedOpenAnimationRunnable = new C07128();
+                                    actionBarLayout.delayedOpenAnimationRunnable = new C07198();
                                     AndroidUtilities.runOnUIThread(actionBarLayout.delayedOpenAnimationRunnable, 200);
                                 } else {
                                     startLayoutAnimation(true, true);
                                 }
                             }
                         }
-                        actionBarLayout.waitingForKeyboardCloseRunnable = new C07117();
+                        actionBarLayout.waitingForKeyboardCloseRunnable = new C07187();
                         AndroidUtilities.runOnUIThread(actionBarLayout.waitingForKeyboardCloseRunnable, 200);
                     } else {
                         actionBarLayout.containerView.setAlpha(1.0f);

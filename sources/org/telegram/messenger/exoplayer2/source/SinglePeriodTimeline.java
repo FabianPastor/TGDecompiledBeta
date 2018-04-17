@@ -1,6 +1,6 @@
 package org.telegram.messenger.exoplayer2.source;
 
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
@@ -22,7 +22,7 @@ public final class SinglePeriodTimeline extends Timeline {
     }
 
     public SinglePeriodTimeline(long periodDurationUs, long windowDurationUs, long windowPositionInPeriodUs, long windowDefaultStartPositionUs, boolean isSeekable, boolean isDynamic) {
-        this(C0539C.TIME_UNSET, C0539C.TIME_UNSET, periodDurationUs, windowDurationUs, windowPositionInPeriodUs, windowDefaultStartPositionUs, isSeekable, isDynamic);
+        this(C0542C.TIME_UNSET, C0542C.TIME_UNSET, periodDurationUs, windowDurationUs, windowPositionInPeriodUs, windowDefaultStartPositionUs, isSeekable, isDynamic);
     }
 
     public SinglePeriodTimeline(long presentationStartTimeMs, long windowStartTimeMs, long periodDurationUs, long windowDurationUs, long windowPositionInPeriodUs, long windowDefaultStartPositionUs, boolean isSeekable, boolean isDynamic) {
@@ -47,12 +47,12 @@ public final class SinglePeriodTimeline extends Timeline {
         Object id = setIds ? ID : null;
         long j = singlePeriodTimeline.windowDefaultStartPositionUs;
         if (singlePeriodTimeline.isDynamic && defaultPositionProjectionUs != 0) {
-            if (singlePeriodTimeline.windowDurationUs == C0539C.TIME_UNSET) {
-                j = C0539C.TIME_UNSET;
+            if (singlePeriodTimeline.windowDurationUs == C0542C.TIME_UNSET) {
+                j = C0542C.TIME_UNSET;
             } else {
                 long windowDefaultStartPositionUs2 = j + defaultPositionProjectionUs;
                 if (windowDefaultStartPositionUs2 > singlePeriodTimeline.windowDurationUs) {
-                    j = C0539C.TIME_UNSET;
+                    j = C0542C.TIME_UNSET;
                 } else {
                     windowDefaultStartPositionUs = windowDefaultStartPositionUs2;
                     return window.set(id, singlePeriodTimeline.presentationStartTimeMs, singlePeriodTimeline.windowStartTimeMs, singlePeriodTimeline.isSeekable, singlePeriodTimeline.isDynamic, windowDefaultStartPositionUs, singlePeriodTimeline.windowDurationUs, 0, 0, singlePeriodTimeline.windowPositionInPeriodUs);

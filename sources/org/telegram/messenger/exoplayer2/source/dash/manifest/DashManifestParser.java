@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
@@ -96,20 +96,20 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
     protected DashManifest parseMediaPresentationDescription(XmlPullParser xpp, String baseUrl) throws XmlPullParserException, IOException {
         DashManifestParser dashManifestParser;
         XmlPullParser xmlPullParser = xpp;
-        long availabilityStartTime = parseDateTime(xmlPullParser, "availabilityStartTime", C0539C.TIME_UNSET);
-        long durationMs = parseDuration(xmlPullParser, "mediaPresentationDuration", C0539C.TIME_UNSET);
-        long minBufferTimeMs = parseDuration(xmlPullParser, "minBufferTime", C0539C.TIME_UNSET);
+        long availabilityStartTime = parseDateTime(xmlPullParser, "availabilityStartTime", C0542C.TIME_UNSET);
+        long durationMs = parseDuration(xmlPullParser, "mediaPresentationDuration", C0542C.TIME_UNSET);
+        long minBufferTimeMs = parseDuration(xmlPullParser, "minBufferTime", C0542C.TIME_UNSET);
         String typeString = xmlPullParser.getAttributeValue(null, "type");
         boolean seenFirstBaseUrl = false;
         boolean z = typeString != null && typeString.equals("dynamic");
         boolean dynamic = z;
-        long minUpdateTimeMs = dynamic ? parseDuration(xmlPullParser, "minimumUpdatePeriod", C0539C.TIME_UNSET) : C0539C.TIME_UNSET;
-        long timeShiftBufferDepthMs = dynamic ? parseDuration(xmlPullParser, "timeShiftBufferDepth", C0539C.TIME_UNSET) : C0539C.TIME_UNSET;
-        long suggestedPresentationDelayMs = dynamic ? parseDuration(xmlPullParser, "suggestedPresentationDelay", C0539C.TIME_UNSET) : C0539C.TIME_UNSET;
-        long publishTimeMs = parseDateTime(xmlPullParser, "publishTime", C0539C.TIME_UNSET);
+        long minUpdateTimeMs = dynamic ? parseDuration(xmlPullParser, "minimumUpdatePeriod", C0542C.TIME_UNSET) : C0542C.TIME_UNSET;
+        long timeShiftBufferDepthMs = dynamic ? parseDuration(xmlPullParser, "timeShiftBufferDepth", C0542C.TIME_UNSET) : C0542C.TIME_UNSET;
+        long suggestedPresentationDelayMs = dynamic ? parseDuration(xmlPullParser, "suggestedPresentationDelay", C0542C.TIME_UNSET) : C0542C.TIME_UNSET;
+        long publishTimeMs = parseDateTime(xmlPullParser, "publishTime", C0542C.TIME_UNSET);
         List<Period> periods = new ArrayList();
         boolean seenEarlyAccessPeriod = false;
-        long nextPeriodStartMs = dynamic ? C0539C.TIME_UNSET : 0;
+        long nextPeriodStartMs = dynamic ? C0542C.TIME_UNSET : 0;
         Uri location = null;
         UtcTimingElement utcTiming = null;
         String baseUrl2 = baseUrl;
@@ -132,13 +132,13 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                             Period period = typeString.first;
                             seenFirstBaseUrl2 = seenFirstBaseUrl;
                             baseUrl3 = baseUrl2;
-                            if (period.startMs != C0539C.TIME_UNSET) {
+                            if (period.startMs != C0542C.TIME_UNSET) {
                                 long j;
                                 seenFirstBaseUrl = ((Long) typeString.second).longValue();
-                                if (seenFirstBaseUrl == C0539C.TIME_UNSET) {
+                                if (seenFirstBaseUrl == C0542C.TIME_UNSET) {
                                     utcTimingElement = utcTiming;
                                     uri = location;
-                                    j = C0539C.TIME_UNSET;
+                                    j = C0542C.TIME_UNSET;
                                 } else {
                                     utcTimingElement = utcTiming;
                                     uri = location;
@@ -242,8 +242,8 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
             utcTiming = utcTimingElement;
             location = uri;
         }
-        if (durationMs == C0539C.TIME_UNSET) {
-            if (nextPeriodStartMs != C0539C.TIME_UNSET) {
+        if (durationMs == C0542C.TIME_UNSET) {
+            if (nextPeriodStartMs != C0542C.TIME_UNSET) {
                 durationMs = nextPeriodStartMs;
             } else if (!dynamic) {
                 throw new ParserException("Unable to determine duration of static manifest.");
@@ -273,7 +273,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         XmlPullParser xmlPullParser = xpp;
         String id = xmlPullParser.getAttributeValue(null, TtmlNode.ATTR_ID);
         long startMs = parseDuration(xmlPullParser, TtmlNode.START, defaultStartMs);
-        long durationMs = parseDuration(xmlPullParser, "duration", C0539C.TIME_UNSET);
+        long durationMs = parseDuration(xmlPullParser, "duration", C0542C.TIME_UNSET);
         List adaptationSets = new ArrayList();
         List<EventStream> eventStreams = new ArrayList();
         boolean seenFirstBaseUrl = false;
@@ -594,14 +594,14 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                             for (i2 = 0; i2 < defaultKidStrings.length; i2++) {
                                 defaultKids[i2] = UUID.fromString(defaultKidStrings[i2]);
                             }
-                            data = PsshAtomUtil.buildPsshAtom(C0539C.COMMON_PSSH_UUID, defaultKids, null);
-                            uuid = C0539C.COMMON_PSSH_UUID;
+                            data = PsshAtomUtil.buildPsshAtom(C0542C.COMMON_PSSH_UUID, defaultKids, null);
+                            uuid = C0542C.COMMON_PSSH_UUID;
                             break;
                         case 1:
-                            uuid = C0539C.PLAYREADY_UUID;
+                            uuid = C0542C.PLAYREADY_UUID;
                             break;
                         case 2:
-                            uuid = C0539C.WIDEVINE_UUID;
+                            uuid = C0542C.WIDEVINE_UUID;
                             break;
                         default:
                             break;
@@ -619,14 +619,14 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                             for (i2 = 0; i2 < defaultKidStrings.length; i2++) {
                                 defaultKids[i2] = UUID.fromString(defaultKidStrings[i2]);
                             }
-                            data = PsshAtomUtil.buildPsshAtom(C0539C.COMMON_PSSH_UUID, defaultKids, null);
-                            uuid = C0539C.COMMON_PSSH_UUID;
+                            data = PsshAtomUtil.buildPsshAtom(C0542C.COMMON_PSSH_UUID, defaultKids, null);
+                            uuid = C0542C.COMMON_PSSH_UUID;
                             break;
                         case 1:
-                            uuid = C0539C.PLAYREADY_UUID;
+                            uuid = C0542C.PLAYREADY_UUID;
                             break;
                         case 2:
-                            uuid = C0539C.WIDEVINE_UUID;
+                            uuid = C0542C.WIDEVINE_UUID;
                             break;
                         default:
                             break;
@@ -645,15 +645,15 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                                 for (i2 = 0; i2 < defaultKidStrings.length; i2++) {
                                     defaultKids[i2] = UUID.fromString(defaultKidStrings[i2]);
                                 }
-                                data = PsshAtomUtil.buildPsshAtom(C0539C.COMMON_PSSH_UUID, defaultKids, null);
-                                uuid = C0539C.COMMON_PSSH_UUID;
+                                data = PsshAtomUtil.buildPsshAtom(C0542C.COMMON_PSSH_UUID, defaultKids, null);
+                                uuid = C0542C.COMMON_PSSH_UUID;
                                 break;
                             }
                         case 1:
-                            uuid = C0539C.PLAYREADY_UUID;
+                            uuid = C0542C.PLAYREADY_UUID;
                             break;
                         case 2:
-                            uuid = C0539C.WIDEVINE_UUID;
+                            uuid = C0542C.WIDEVINE_UUID;
                             break;
                         default:
                             break;
@@ -670,14 +670,14 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                     for (i2 = 0; i2 < defaultKidStrings.length; i2++) {
                         defaultKids[i2] = UUID.fromString(defaultKidStrings[i2]);
                     }
-                    data = PsshAtomUtil.buildPsshAtom(C0539C.COMMON_PSSH_UUID, defaultKids, null);
-                    uuid = C0539C.COMMON_PSSH_UUID;
+                    data = PsshAtomUtil.buildPsshAtom(C0542C.COMMON_PSSH_UUID, defaultKids, null);
+                    uuid = C0542C.COMMON_PSSH_UUID;
                     break;
                 case 1:
-                    uuid = C0539C.PLAYREADY_UUID;
+                    uuid = C0542C.PLAYREADY_UUID;
                     break;
                 case 2:
-                    uuid = C0539C.WIDEVINE_UUID;
+                    uuid = C0542C.WIDEVINE_UUID;
                     break;
                 default:
                     break;
@@ -697,8 +697,8 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
                         Log.w(TAG, "Skipping malformed cenc:pssh data");
                         data = null;
                     }
-                } else if (C0539C.PLAYREADY_UUID.equals(uuid) && XmlPullParserUtil.isStartTag(xpp, "mspr:pro") && xpp.next() == 4) {
-                    data = PsshAtomUtil.buildPsshAtom(C0539C.PLAYREADY_UUID, Base64.decode(xpp.getText(), 0));
+                } else if (C0542C.PLAYREADY_UUID.equals(uuid) && XmlPullParserUtil.isStartTag(xpp, "mspr:pro") && xpp.next() == 4) {
+                    data = PsshAtomUtil.buildPsshAtom(C0542C.PLAYREADY_UUID, Base64.decode(xpp.getText(), 0));
                 }
             }
         } while (!XmlPullParserUtil.isEndTag(xpp, "ContentProtection"));
@@ -947,7 +947,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         SegmentList segmentList = parent;
         long timescale = parseLong(xmlPullParser, "timescale", segmentList != null ? segmentList.timescale : 1);
         long presentationTimeOffset = parseLong(xmlPullParser, "presentationTimeOffset", segmentList != null ? segmentList.presentationTimeOffset : 0);
-        long duration = parseLong(xmlPullParser, "duration", segmentList != null ? segmentList.duration : C0539C.TIME_UNSET);
+        long duration = parseLong(xmlPullParser, "duration", segmentList != null ? segmentList.duration : C0542C.TIME_UNSET);
         int startNumber = parseInt(xmlPullParser, "startNumber", segmentList != null ? segmentList.startNumber : 1);
         RangedUri initialization = null;
         List<SegmentTimelineElement> timeline = null;
@@ -983,7 +983,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
         SegmentTemplate segmentTemplate = parent;
         long timescale = parseLong(xmlPullParser, "timescale", segmentTemplate != null ? segmentTemplate.timescale : 1);
         long presentationTimeOffset = parseLong(xmlPullParser, "presentationTimeOffset", segmentTemplate != null ? segmentTemplate.presentationTimeOffset : 0);
-        long duration = parseLong(xmlPullParser, "duration", segmentTemplate != null ? segmentTemplate.duration : C0539C.TIME_UNSET);
+        long duration = parseLong(xmlPullParser, "duration", segmentTemplate != null ? segmentTemplate.duration : C0542C.TIME_UNSET);
         int startNumber = parseInt(xmlPullParser, "startNumber", segmentTemplate != null ? segmentTemplate.startNumber : 1);
         List<SegmentTimelineElement> timeline = null;
         UrlTemplate mediaTemplate = parseUrlTemplate(xmlPullParser, "media", segmentTemplate != null ? segmentTemplate.mediaTemplate : null);
@@ -1038,9 +1038,9 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
     protected EventMessage parseEvent(XmlPullParser xpp, String schemeIdUri, String value, long timescale, ByteArrayOutputStream scratchOutputStream) throws IOException, XmlPullParserException {
         XmlPullParser xmlPullParser = xpp;
         long id = parseLong(xmlPullParser, TtmlNode.ATTR_ID, 0);
-        long duration = parseLong(xmlPullParser, "duration", C0539C.TIME_UNSET);
+        long duration = parseLong(xmlPullParser, "duration", C0542C.TIME_UNSET);
         long presentationTime = parseLong(xmlPullParser, "presentationTime", 0);
-        return buildEvent(schemeIdUri, value, id, Util.scaleLargeTimestamp(duration, 1000, timescale), parseEventObject(xmlPullParser, scratchOutputStream), Util.scaleLargeTimestamp(presentationTime, C0539C.MICROS_PER_SECOND, timescale));
+        return buildEvent(schemeIdUri, value, id, Util.scaleLargeTimestamp(duration, 1000, timescale), parseEventObject(xmlPullParser, scratchOutputStream), Util.scaleLargeTimestamp(presentationTime, C0542C.MICROS_PER_SECOND, timescale));
     }
 
     protected byte[] parseEventObject(XmlPullParser xpp, ByteArrayOutputStream scratchOutputStream) throws XmlPullParserException, IOException {
@@ -1111,7 +1111,7 @@ public class DashManifestParser extends DefaultHandler implements Parser<DashMan
             xpp.next();
             if (XmlPullParserUtil.isStartTag(xpp, "S")) {
                 elapsedTime = parseLong(xpp, "t", elapsedTime);
-                long duration = parseLong(xpp, "d", C0539C.TIME_UNSET);
+                long duration = parseLong(xpp, "d", C0542C.TIME_UNSET);
                 int i = 0;
                 int count = 1 + parseInt(xpp, "r", 0);
                 while (true) {

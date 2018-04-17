@@ -65,8 +65,8 @@ public class AdminLogFilterAlert extends BottomSheet {
     private Pattern urlPattern;
 
     /* renamed from: org.telegram.ui.Components.AdminLogFilterAlert$5 */
-    class C10645 implements OnClickListener {
-        C10645() {
+    class C10705 implements OnClickListener {
+        C10705() {
         }
 
         public void onClick(View v) {
@@ -80,8 +80,8 @@ public class AdminLogFilterAlert extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.AdminLogFilterAlert$3 */
-    class C20283 extends OnScrollListener {
-        C20283() {
+    class C20343 extends OnScrollListener {
+        C20343() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -90,12 +90,12 @@ public class AdminLogFilterAlert extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.AdminLogFilterAlert$4 */
-    class C20294 implements OnItemClickListener {
-        C20294() {
+    class C20354 implements OnItemClickListener {
+        C20354() {
         }
 
         public void onItemClick(View view, int position) {
-            C20294 c20294 = this;
+            C20354 c20354 = this;
             View view2 = view;
             int i = position;
             boolean z;
@@ -706,8 +706,8 @@ public class AdminLogFilterAlert extends BottomSheet {
         r0.listView.setClipToPadding(false);
         r0.listView.setEnabled(true);
         r0.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        r0.listView.setOnScrollListener(new C20283());
-        r0.listView.setOnItemClickListener(new C20294());
+        r0.listView.setOnScrollListener(new C20343());
+        r0.listView.setOnItemClickListener(new C20354());
         r0.containerView.addView(r0.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View shadow = new View(context2);
         shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
@@ -716,7 +716,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         r0.saveButton.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         r0.saveButton.setTextAndIcon(LocaleController.getString("Save", R.string.Save).toUpperCase(), 0);
         r0.saveButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        r0.saveButton.setOnClickListener(new C10645());
+        r0.saveButton.setOnClickListener(new C10705());
         r0.containerView.addView(r0.saveButton, LayoutHelper.createFrame(-1, 48, 83));
         r0.adapter.notifyDataSetChanged();
     }

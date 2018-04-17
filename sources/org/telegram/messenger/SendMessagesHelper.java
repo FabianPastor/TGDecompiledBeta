@@ -219,15 +219,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     private int currentAccount;
     private ChatFull currentChatInfo = null;
     private HashMap<String, ArrayList<DelayedMessage>> delayedMessages = new HashMap();
-    private LocationProvider locationProvider = new LocationProvider(new C18141());
+    private LocationProvider locationProvider = new LocationProvider(new C18201());
     private SparseArray<Message> sendingMessages = new SparseArray();
     private SparseArray<MessageObject> unsentMessages = new SparseArray();
     private HashMap<String, Boolean> waitingForCallback = new HashMap();
     private HashMap<String, MessageObject> waitingForLocation = new HashMap();
 
     /* renamed from: org.telegram.messenger.SendMessagesHelper$2 */
-    class C04942 implements Runnable {
-        C04942() {
+    class C04972 implements Runnable {
+        C04972() {
         }
 
         public void run() {
@@ -352,8 +352,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         private GpsLocationListener networkLocationListener = new GpsLocationListener();
 
         /* renamed from: org.telegram.messenger.SendMessagesHelper$LocationProvider$1 */
-        class C05081 implements Runnable {
-            C05081() {
+        class C05111 implements Runnable {
+            C05111() {
             }
 
             public void run() {
@@ -453,7 +453,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             if (this.locationQueryCancelRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.locationQueryCancelRunnable);
             }
-            this.locationQueryCancelRunnable = new C05081();
+            this.locationQueryCancelRunnable = new C05111();
             AndroidUtilities.runOnUIThread(this.locationQueryCancelRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
         }
 
@@ -488,8 +488,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     /* renamed from: org.telegram.messenger.SendMessagesHelper$1 */
-    class C18141 implements LocationProviderDelegate {
-        C18141() {
+    class C18201 implements LocationProviderDelegate {
+        C18201() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -533,7 +533,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public SendMessagesHelper(int instance) {
         this.currentAccount = instance;
-        AndroidUtilities.runOnUIThread(new C04942());
+        AndroidUtilities.runOnUIThread(new C04972());
     }
 
     public void cleanup() {
@@ -924,14 +924,14 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             stringBuilder3.append(ImageLoader.getHttpUrlExtension(str, "file"));
                             String md5 = stringBuilder3.toString();
                             cacheFile = new File(FileLoader.getDirectory(4), md5);
-                            C04963 c04963 = r0;
+                            C04993 c04993 = r0;
                             DispatchQueue dispatchQueue = Utilities.globalQueue;
                             final MessageObject messageObject6 = messageObject5;
                             obj = message5;
                             arr7 = arr6;
                             arr8 = messageObject5;
                             final String messageObject7 = str;
-                            C04963 c049632 = new Runnable() {
+                            C04993 c049932 = new Runnable() {
                                 public void run() {
                                     final TL_photo photo = SendMessagesHelper.this.generatePhotoSizes(cacheFile.toString(), null);
                                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -965,7 +965,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     });
                                 }
                             };
-                            dispatchQueue.postRunnable(c04963);
+                            dispatchQueue.postRunnable(c04993);
                         } else {
                             arr7 = arr6;
                             arr8 = messageObject5;
@@ -1739,11 +1739,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     lower_id3 = lower_id5;
                                     TL_messages_forwardMessages req2 = req;
                                     canSendPreview = toMyself;
-                                    C18155 c18155 = new RequestDelegate() {
+                                    C18215 c18215 = new RequestDelegate() {
                                         public void run(TLObject response, TL_error error) {
                                             int a;
                                             int index;
-                                            C18155 c18155 = this;
+                                            C18215 c18215 = this;
                                             final TL_error tL_error = error;
                                             if (tL_error == null) {
                                                 boolean z;
@@ -1827,15 +1827,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                                 final Message message3 = message;
                                                                 final int i = oldId;
                                                                 newMessagesByIds2 = newMessagesByIds;
-                                                                C05001 c05001 = r0;
+                                                                C05031 c05031 = r0;
                                                                 final ArrayList<Message> arrayList = sentMessages2;
                                                                 DispatchQueue storageQueue = MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getStorageQueue();
                                                                 final Message message4 = message2;
-                                                                C05001 c050012 = new Runnable() {
+                                                                C05031 c050312 = new Runnable() {
 
                                                                     /* renamed from: org.telegram.messenger.SendMessagesHelper$5$1$1 */
-                                                                    class C04991 implements Runnable {
-                                                                        C04991() {
+                                                                    class C05021 implements Runnable {
+                                                                        C05021() {
                                                                         }
 
                                                                         public void run() {
@@ -1850,10 +1850,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                                     public void run() {
                                                                         MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).updateMessageStateAndId(message3.random_id, Integer.valueOf(i), message3.id, 0, false, to_id.channel_id);
                                                                         MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages(arrayList, true, false, false, 0);
-                                                                        AndroidUtilities.runOnUIThread(new C04991());
+                                                                        AndroidUtilities.runOnUIThread(new C05021());
                                                                     }
                                                                 };
-                                                                storageQueue.postRunnable(c05001);
+                                                                storageQueue.postRunnable(c05031);
                                                                 sentCount = sentCount2;
                                                             }
                                                         }
@@ -2002,8 +2002,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 return ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                     /* renamed from: org.telegram.messenger.SendMessagesHelper$6$1 */
-                    class C05031 implements Runnable {
-                        C05031() {
+                    class C05061 implements Runnable {
+                        C05061() {
                         }
 
                         public void run() {
@@ -2012,7 +2012,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
 
                     public void run(TLObject response, final TL_error error) {
-                        AndroidUtilities.runOnUIThread(new C05031());
+                        AndroidUtilities.runOnUIThread(new C05061());
                         if (error == null) {
                             MessagesController.getInstance(SendMessagesHelper.this.currentAccount).processUpdates((Updates) response, false);
                         } else {
@@ -2115,8 +2115,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 ConnectionsManager.getInstance(SendMessagesHelper.this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                     /* renamed from: org.telegram.messenger.SendMessagesHelper$7$1$1 */
-                    class C05051 implements Runnable {
-                        C05051() {
+                    class C05081 implements Runnable {
+                        C05081() {
                         }
 
                         public void run() {
@@ -2125,7 +2125,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
 
                     public void run(TLObject response, TL_error error) {
-                        AndroidUtilities.runOnUIThread(new C05051());
+                        AndroidUtilities.runOnUIThread(new C05081());
                     }
                 }, 2);
                 MessagesController.getInstance(SendMessagesHelper.this.currentAccount).markDialogAsRead(j, i, i, 0, false, 0, true);
@@ -2169,7 +2169,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 final MessageObject messageObject3 = messageObject2;
                 final KeyboardButton keyboardButton2 = keyboardButton;
                 final ChatActivity chatActivity = parentFragment;
-                C18188 requestDelegate = new RequestDelegate() {
+                C18248 requestDelegate = new RequestDelegate() {
                     public void run(final TLObject response, TL_error error) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -13654,8 +13654,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.SendMessagesHelper$11$1 */
-            class C04671 implements Runnable {
-                C04671() {
+            class C04701 implements Runnable {
+                C04701() {
                 }
 
                 public void run() {
@@ -13664,7 +13664,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             }
 
             public void run() {
-                AndroidUtilities.runOnUIThread(new C04671());
+                AndroidUtilities.runOnUIThread(new C04701());
             }
         });
     }
@@ -13778,8 +13778,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                                         /* renamed from: org.telegram.messenger.SendMessagesHelper$12$1$3$1 */
-                                        class C04701 implements Runnable {
-                                            C04701() {
+                                        class C04731 implements Runnable {
+                                            C04731() {
                                             }
 
                                             public void run() {
@@ -13793,7 +13793,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         public void run() {
                                             MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.id, 0, false, newMsgObj.to_id.channel_id);
                                             MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages(sentMessages, true, false, false, 0);
-                                            AndroidUtilities.runOnUIThread(new C04701());
+                                            AndroidUtilities.runOnUIThread(new C04731());
                                         }
                                     });
                                 }
@@ -13997,8 +13997,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
                                     /* renamed from: org.telegram.messenger.SendMessagesHelper$13$1$5$1 */
-                                    class C04781 implements Runnable {
-                                        C04781() {
+                                    class C04811 implements Runnable {
+                                        C04811() {
                                         }
 
                                         public void run() {
@@ -14034,7 +14034,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             currentMessage.add(message);
                                             MessagesStorage.getInstance(SendMessagesHelper.this.currentAccount).putMessages((ArrayList) currentMessage, true, false, false, 0);
                                         }
-                                        AndroidUtilities.runOnUIThread(new C04781());
+                                        AndroidUtilities.runOnUIThread(new C04811());
                                         if (MessageObject.isVideoMessage(message) || MessageObject.isRoundVideoMessage(message) || MessageObject.isNewGifMessage(message)) {
                                             SendMessagesHelper.this.stopVideoService(str);
                                         }
@@ -16855,8 +16855,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             new Thread(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.SendMessagesHelper$18$1 */
-                class C04831 implements Runnable {
-                    C04831() {
+                class C04861 implements Runnable {
+                    C04861() {
                     }
 
                     public void run() {
@@ -16896,7 +16896,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         inputContentInfoCompat.releasePermission();
                     }
                     if (z) {
-                        AndroidUtilities.runOnUIThread(new C04831());
+                        AndroidUtilities.runOnUIThread(new C04861());
                     }
                 }
             }).start();
@@ -17128,11 +17128,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.SendMessagesHelper$20$1 */
-            class C04861 implements Runnable {
+            class C04891 implements Runnable {
 
                 /* renamed from: org.telegram.messenger.SendMessagesHelper$20$1$1 */
-                class C04851 implements Runnable {
-                    C04851() {
+                class C04881 implements Runnable {
+                    C04881() {
                     }
 
                     public void run() {
@@ -17146,16 +17146,16 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                 }
 
-                C04861() {
+                C04891() {
                 }
 
                 public void run() {
-                    AndroidUtilities.runOnUIThread(new C04851());
+                    AndroidUtilities.runOnUIThread(new C04881());
                 }
             }
 
             public void run() {
-                Utilities.stageQueue.postRunnable(new C04861());
+                Utilities.stageQueue.postRunnable(new C04891());
             }
         });
     }
@@ -18109,10 +18109,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             final SendingMediaInfo sendingMediaInfo2 = info3;
                                             str3 = null;
                                             sendAsDocumentsOriginal = isEncrypted2;
-                                            C04904 c04904 = thumb;
+                                            C04934 c04934 = thumb;
                                             isEncrypted = params3;
                                             final TL_document videoFinal2 = videoFinal;
-                                            C04904 thumb3 = new Runnable() {
+                                            C04934 thumb3 = new Runnable() {
                                                 public void run() {
                                                     if (!(thumbFinal == null || originalPath == null)) {
                                                         ImageLoader.getInstance().putImageToCache(new BitmapDrawable(thumbFinal), originalPath);
@@ -18120,7 +18120,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                     SendMessagesHelper.getInstance(i).sendMessage(videoFinal2, videoEditedInfo4, info6, j, messageObject, sendingMediaInfo2.caption, sendingMediaInfo2.entities, null, isEncrypted, sendingMediaInfo2.ttl);
                                                 }
                                             };
-                                            AndroidUtilities.runOnUIThread(c04904);
+                                            AndroidUtilities.runOnUIThread(c04934);
                                             info2 = info3;
                                             lastGroupId2 = lastGroupId;
                                             hashMap2 = workers2;
@@ -18468,11 +18468,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     final SendingMediaInfo sendingMediaInfo22 = info3;
                                     str3 = null;
                                     sendAsDocumentsOriginal = isEncrypted2;
-                                    C04904 c049042 = thumb3;
+                                    C04934 c049342 = thumb3;
                                     isEncrypted = params3;
                                     final TL_document videoFinal22 = videoFinal3;
-                                    C04904 thumb32 = /* anonymous class already generated */;
-                                    AndroidUtilities.runOnUIThread(c049042);
+                                    C04934 thumb32 = /* anonymous class already generated */;
+                                    AndroidUtilities.runOnUIThread(c049342);
                                     info2 = info3;
                                     lastGroupId2 = lastGroupId;
                                     hashMap2 = workers2;
@@ -19643,9 +19643,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         if (originalPath2 != null) {
                             params.put("originalPath", originalPath2);
                         }
-                        C04931 c04931 = r0;
+                        C04961 c04961 = r0;
                         final VideoEditedInfo videoEditedInfo2 = videoEditedInfo;
-                        C04931 c049312 = new Runnable() {
+                        C04961 c049612 = new Runnable() {
                             public void run() {
                                 if (!(thumbFinal == null || thumbKey == null)) {
                                     ImageLoader.getInstance().putImageToCache(new BitmapDrawable(thumbFinal), thumbKey);
@@ -19653,7 +19653,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 SendMessagesHelper.getInstance(i2).sendMessage(videoFinal, videoEditedInfo2, fileName, j, messageObject, captionFinal, arrayList, null, params, i);
                             }
                         };
-                        AndroidUtilities.runOnUIThread(c04931);
+                        AndroidUtilities.runOnUIThread(c04961);
                         thumb = thumb2;
                     }
                 };

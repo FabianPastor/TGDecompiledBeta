@@ -22,7 +22,7 @@ import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.MediaController.SearchImage;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
@@ -120,8 +120,8 @@ public class MessagesStorage {
     private File walCacheFile;
 
     /* renamed from: org.telegram.messenger.MessagesStorage$1 */
-    class C03721 implements Runnable {
-        C03721() {
+    class C03751 implements Runnable {
+        C03751() {
         }
 
         public void run() {
@@ -130,8 +130,8 @@ public class MessagesStorage {
     }
 
     /* renamed from: org.telegram.messenger.MessagesStorage$5 */
-    class C03905 implements Runnable {
-        C03905() {
+    class C03935 implements Runnable {
+        C03935() {
         }
 
         public void run() {
@@ -186,8 +186,8 @@ public class MessagesStorage {
     }
 
     /* renamed from: org.telegram.messenger.MessagesStorage$8 */
-    class C04038 implements Runnable {
-        C04038() {
+    class C04068 implements Runnable {
+        C04068() {
         }
 
         public void run() {
@@ -427,7 +427,7 @@ public class MessagesStorage {
 
     public MessagesStorage(int instance) {
         this.currentAccount = instance;
-        this.storageQueue.postRunnable(new C03721());
+        this.storageQueue.postRunnable(new C03751());
     }
 
     public SQLiteDatabase getDatabase() {
@@ -957,8 +957,8 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesStorage$3$1 */
-            class C03801 implements Runnable {
-                C03801() {
+            class C03831 implements Runnable {
+                C03831() {
                 }
 
                 public void run() {
@@ -970,7 +970,7 @@ public class MessagesStorage {
                 MessagesStorage.this.cleanupInternal();
                 MessagesStorage.this.openDatabase(false);
                 if (isLogin) {
-                    Utilities.stageQueue.postRunnable(new C03801());
+                    Utilities.stageQueue.postRunnable(new C03831());
                 }
             }
         });
@@ -1003,7 +1003,7 @@ public class MessagesStorage {
     }
 
     private void fixNotificationSettings() {
-        this.storageQueue.postRunnable(new C03905());
+        this.storageQueue.postRunnable(new C03935());
     }
 
     public long createPendingTask(final NativeByteBuffer data) {
@@ -1047,7 +1047,7 @@ public class MessagesStorage {
     }
 
     private void loadPendingTasks() {
-        this.storageQueue.postRunnable(new C04038());
+        this.storageQueue.postRunnable(new C04068());
     }
 
     public void saveChannelPts(final int channelId, final int pts) {
@@ -1880,8 +1880,8 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesStorage$23$1 */
-            class C03751 implements Runnable {
-                C03751() {
+            class C03781 implements Runnable {
+                C03781() {
                 }
 
                 public void run() {
@@ -2077,7 +2077,7 @@ public class MessagesStorage {
                             stringBuilder2.append(did);
                             access$000.executeFast(stringBuilder2.toString()).stepThis().dispose();
                             DataQuery.getInstance(MessagesStorage.this.currentAccount).clearBotKeyboard(did, null);
-                            AndroidUtilities.runOnUIThread(new C03751());
+                            AndroidUtilities.runOnUIThread(new C03781());
                         }
                     }
                     access$000 = MessagesStorage.this.database;
@@ -2157,7 +2157,7 @@ public class MessagesStorage {
                     stringBuilder2.append(did);
                     access$000.executeFast(stringBuilder2.toString()).stepThis().dispose();
                     DataQuery.getInstance(MessagesStorage.this.currentAccount).clearBotKeyboard(did, null);
-                    AndroidUtilities.runOnUIThread(new C03751());
+                    AndroidUtilities.runOnUIThread(new C03781());
                 } catch (Throwable e3) {
                     FileLog.m3e(e3);
                 }
@@ -4254,8 +4254,8 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
         this.storageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesStorage$58$1 */
-            class C03891 implements Comparator<Message> {
-                C03891() {
+            class C03921 implements Comparator<Message> {
+                C03921() {
                 }
 
                 public int compare(Message lhs, Message rhs) {
@@ -5041,9 +5041,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                                     }
                                                                                                                 }
                                                                                                                 if (j2 == null) {
-                                                                                                                    j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                                    j2 = C0542C.NANOS_PER_SECOND;
                                                                                                                     if (usersToLoad != null) {
-                                                                                                                        replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                                        replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                                         chatsToLoad = MessagesStorage.this.database;
                                                                                                                         locale = Locale.US;
                                                                                                                         replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -5309,9 +5309,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                                                 max_id_query = replyMessageRandomOwners2;
                                                                                                                             }
                                                                                                                             if (j2 == null) {
-                                                                                                                                j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                                                j2 = C0542C.NANOS_PER_SECOND;
                                                                                                                                 if (usersToLoad != null) {
-                                                                                                                                    replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                                                    replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                                                     chatsToLoad = MessagesStorage.this.database;
                                                                                                                                     locale = Locale.US;
                                                                                                                                     replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -5434,9 +5434,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                                         channelId = count_unread;
                                                                                                                     }
                                                                                                                     if (j2 == null) {
-                                                                                                                        j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                                        j2 = C0542C.NANOS_PER_SECOND;
                                                                                                                         if (usersToLoad != null) {
-                                                                                                                            replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                                            replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                                             chatsToLoad = MessagesStorage.this.database;
                                                                                                                             locale = Locale.US;
                                                                                                                             replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -5676,9 +5676,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                 max_id_query = replyMessageRandomOwners2;
                                                                                             }
                                                                                             if (j2 == null) {
-                                                                                                j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                j2 = C0542C.NANOS_PER_SECOND;
                                                                                                 if (usersToLoad != null) {
-                                                                                                    replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                    replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                     chatsToLoad = MessagesStorage.this.database;
                                                                                                     locale = Locale.US;
                                                                                                     replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -6416,9 +6416,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                     channelId = count_unread;
                                                                                                 }
                                                                                                 if (j2 == null) {
-                                                                                                    j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                    j2 = C0542C.NANOS_PER_SECOND;
                                                                                                     if (usersToLoad != null) {
-                                                                                                        replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                        replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                         chatsToLoad = MessagesStorage.this.database;
                                                                                                         locale = Locale.US;
                                                                                                         replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -6611,9 +6611,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                             max_id_query = replyMessageRandomOwners2;
                                                                                         }
                                                                                         if (j2 == null) {
-                                                                                            j2 = C0539C.NANOS_PER_SECOND;
+                                                                                            j2 = C0542C.NANOS_PER_SECOND;
                                                                                             if (usersToLoad != null) {
-                                                                                                replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                 chatsToLoad = MessagesStorage.this.database;
                                                                                                 locale = Locale.US;
                                                                                                 replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -6736,9 +6736,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                             channelId = count_unread;
                                                                                         }
                                                                                         if (j2 == null) {
-                                                                                            j2 = C0539C.NANOS_PER_SECOND;
+                                                                                            j2 = C0542C.NANOS_PER_SECOND;
                                                                                             if (usersToLoad != null) {
-                                                                                                replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                 chatsToLoad = MessagesStorage.this.database;
                                                                                                 locale = Locale.US;
                                                                                                 replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -6933,9 +6933,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                 max_id_query = replyMessageRandomOwners2;
                                                                             }
                                                                             if (j2 == null) {
-                                                                                j2 = C0539C.NANOS_PER_SECOND;
+                                                                                j2 = C0542C.NANOS_PER_SECOND;
                                                                                 if (usersToLoad != null) {
-                                                                                    replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                    replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                     chatsToLoad = MessagesStorage.this.database;
                                                                                     locale = Locale.US;
                                                                                     replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -8028,9 +8028,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                         channelId = count_unread;
                                                                                                     }
                                                                                                     if (j2 == null) {
-                                                                                                        j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                        j2 = C0542C.NANOS_PER_SECOND;
                                                                                                         if (usersToLoad != null) {
-                                                                                                            replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                            replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                             chatsToLoad = MessagesStorage.this.database;
                                                                                                             locale = Locale.US;
                                                                                                             replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -8248,9 +8248,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                                 max_id_query = replyMessageRandomOwners2;
                                                                                                             }
                                                                                                             if (j2 == null) {
-                                                                                                                j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                                j2 = C0542C.NANOS_PER_SECOND;
                                                                                                                 if (usersToLoad != null) {
-                                                                                                                    replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                                    replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                                     chatsToLoad = MessagesStorage.this.database;
                                                                                                                     locale = Locale.US;
                                                                                                                     replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -8373,9 +8373,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                         channelId = count_unread;
                                                                                                     }
                                                                                                     if (j2 == null) {
-                                                                                                        j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                        j2 = C0542C.NANOS_PER_SECOND;
                                                                                                         if (usersToLoad != null) {
-                                                                                                            replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                            replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                             chatsToLoad = MessagesStorage.this.database;
                                                                                                             locale = Locale.US;
                                                                                                             replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -8570,9 +8570,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                             max_id_query = replyMessageRandomOwners2;
                                                                                         }
                                                                                         if (j2 == null) {
-                                                                                            j2 = C0539C.NANOS_PER_SECOND;
+                                                                                            j2 = C0542C.NANOS_PER_SECOND;
                                                                                             if (usersToLoad != null) {
-                                                                                                replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                 chatsToLoad = MessagesStorage.this.database;
                                                                                                 locale = Locale.US;
                                                                                                 replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -8930,9 +8930,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                 channelId = count_unread;
                                                                                             }
                                                                                             if (j2 == null) {
-                                                                                                j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                j2 = C0542C.NANOS_PER_SECOND;
                                                                                                 if (usersToLoad != null) {
-                                                                                                    replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                    replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                     chatsToLoad = MessagesStorage.this.database;
                                                                                                     locale = Locale.US;
                                                                                                     replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -9125,9 +9125,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                         max_id_query = replyMessageRandomOwners2;
                                                                                     }
                                                                                     if (j2 == null) {
-                                                                                        j2 = C0539C.NANOS_PER_SECOND;
+                                                                                        j2 = C0542C.NANOS_PER_SECOND;
                                                                                         if (usersToLoad != null) {
-                                                                                            replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                            replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                             chatsToLoad = MessagesStorage.this.database;
                                                                                             locale = Locale.US;
                                                                                             replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -9250,9 +9250,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                         channelId = count_unread;
                                                                                     }
                                                                                     if (j2 == null) {
-                                                                                        j2 = C0539C.NANOS_PER_SECOND;
+                                                                                        j2 = C0542C.NANOS_PER_SECOND;
                                                                                         if (usersToLoad != null) {
-                                                                                            replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                            replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                             chatsToLoad = MessagesStorage.this.database;
                                                                                             locale = Locale.US;
                                                                                             replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -9447,9 +9447,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                             max_id_query = replyMessageRandomOwners2;
                                                                         }
                                                                         if (j2 == null) {
-                                                                            j2 = C0539C.NANOS_PER_SECOND;
+                                                                            j2 = C0542C.NANOS_PER_SECOND;
                                                                             if (usersToLoad != null) {
-                                                                                replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                 chatsToLoad = MessagesStorage.this.database;
                                                                                 locale = Locale.US;
                                                                                 replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -9651,9 +9651,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                     channelId = count_unread;
                                                                                                 }
                                                                                                 if (j2 == null) {
-                                                                                                    j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                    j2 = C0542C.NANOS_PER_SECOND;
                                                                                                     if (usersToLoad != null) {
-                                                                                                        replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                        replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                         chatsToLoad = MessagesStorage.this.database;
                                                                                                         locale = Locale.US;
                                                                                                         replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -9871,9 +9871,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                             max_id_query = replyMessageRandomOwners2;
                                                                                                         }
                                                                                                         if (j2 == null) {
-                                                                                                            j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                            j2 = C0542C.NANOS_PER_SECOND;
                                                                                                             if (usersToLoad != null) {
-                                                                                                                replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                                replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                                 chatsToLoad = MessagesStorage.this.database;
                                                                                                                 locale = Locale.US;
                                                                                                                 replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -9996,9 +9996,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                                     channelId = count_unread;
                                                                                                 }
                                                                                                 if (j2 == null) {
-                                                                                                    j2 = C0539C.NANOS_PER_SECOND;
+                                                                                                    j2 = C0542C.NANOS_PER_SECOND;
                                                                                                     if (usersToLoad != null) {
-                                                                                                        replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                        replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                         chatsToLoad = MessagesStorage.this.database;
                                                                                                         locale = Locale.US;
                                                                                                         replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -10193,9 +10193,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                         max_id_query = replyMessageRandomOwners2;
                                                                                     }
                                                                                     if (j2 == null) {
-                                                                                        j2 = C0539C.NANOS_PER_SECOND;
+                                                                                        j2 = C0542C.NANOS_PER_SECOND;
                                                                                         if (usersToLoad != null) {
-                                                                                            replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                            replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                             chatsToLoad = MessagesStorage.this.database;
                                                                                             locale = Locale.US;
                                                                                             replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -10553,9 +10553,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                             channelId = count_unread;
                                                                                         }
                                                                                         if (j2 == null) {
-                                                                                            j2 = C0539C.NANOS_PER_SECOND;
+                                                                                            j2 = C0542C.NANOS_PER_SECOND;
                                                                                             if (usersToLoad != null) {
-                                                                                                replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                 chatsToLoad = MessagesStorage.this.database;
                                                                                                 locale = Locale.US;
                                                                                                 replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -10748,9 +10748,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                     max_id_query = replyMessageRandomOwners2;
                                                                                 }
                                                                                 if (j2 == null) {
-                                                                                    j2 = C0539C.NANOS_PER_SECOND;
+                                                                                    j2 = C0542C.NANOS_PER_SECOND;
                                                                                     if (usersToLoad != null) {
-                                                                                        replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                        replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                         chatsToLoad = MessagesStorage.this.database;
                                                                                         locale = Locale.US;
                                                                                         replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -10873,9 +10873,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                     channelId = count_unread;
                                                                                 }
                                                                                 if (j2 == null) {
-                                                                                    j2 = C0539C.NANOS_PER_SECOND;
+                                                                                    j2 = C0542C.NANOS_PER_SECOND;
                                                                                     if (usersToLoad != null) {
-                                                                                        replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                        replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                         chatsToLoad = MessagesStorage.this.database;
                                                                                         locale = Locale.US;
                                                                                         replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -11070,9 +11070,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                         max_id_query = replyMessageRandomOwners2;
                                                                     }
                                                                     if (j2 == null) {
-                                                                        j2 = C0539C.NANOS_PER_SECOND;
+                                                                        j2 = C0542C.NANOS_PER_SECOND;
                                                                         if (usersToLoad != null) {
-                                                                            replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                            replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                             chatsToLoad = MessagesStorage.this.database;
                                                                             locale = Locale.US;
                                                                             replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -11380,9 +11380,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                     channelId = count_unread;
                                                                                 }
                                                                                 if (j2 == null) {
-                                                                                    j2 = C0539C.NANOS_PER_SECOND;
+                                                                                    j2 = C0542C.NANOS_PER_SECOND;
                                                                                     if (usersToLoad != null) {
-                                                                                        replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                        replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                         chatsToLoad = MessagesStorage.this.database;
                                                                                         locale = Locale.US;
                                                                                         replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -11600,9 +11600,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                             max_id_query = replyMessageRandomOwners2;
                                                                                         }
                                                                                         if (j2 == null) {
-                                                                                            j2 = C0539C.NANOS_PER_SECOND;
+                                                                                            j2 = C0542C.NANOS_PER_SECOND;
                                                                                             if (usersToLoad != null) {
-                                                                                                replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                                replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                                 chatsToLoad = MessagesStorage.this.database;
                                                                                                 locale = Locale.US;
                                                                                                 replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -11725,9 +11725,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                                     channelId = count_unread;
                                                                                 }
                                                                                 if (j2 == null) {
-                                                                                    j2 = C0539C.NANOS_PER_SECOND;
+                                                                                    j2 = C0542C.NANOS_PER_SECOND;
                                                                                     if (usersToLoad != null) {
-                                                                                        replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                        replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                         chatsToLoad = MessagesStorage.this.database;
                                                                                         locale = Locale.US;
                                                                                         replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -11922,9 +11922,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                         max_id_query = replyMessageRandomOwners2;
                                                                     }
                                                                     if (j2 == null) {
-                                                                        j2 = C0539C.NANOS_PER_SECOND;
+                                                                        j2 = C0542C.NANOS_PER_SECOND;
                                                                         if (usersToLoad != null) {
-                                                                            replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                            replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                             chatsToLoad = MessagesStorage.this.database;
                                                                             locale = Locale.US;
                                                                             replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -12282,9 +12282,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                             channelId = count_unread;
                                                                         }
                                                                         if (j2 == null) {
-                                                                            j2 = C0539C.NANOS_PER_SECOND;
+                                                                            j2 = C0542C.NANOS_PER_SECOND;
                                                                             if (usersToLoad != null) {
-                                                                                replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                                replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                                 chatsToLoad = MessagesStorage.this.database;
                                                                                 locale = Locale.US;
                                                                                 replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -12477,9 +12477,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                     max_id_query = replyMessageRandomOwners2;
                                                                 }
                                                                 if (j2 == null) {
-                                                                    j2 = C0539C.NANOS_PER_SECOND;
+                                                                    j2 = C0542C.NANOS_PER_SECOND;
                                                                     if (usersToLoad != null) {
-                                                                        replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                        replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                         chatsToLoad = MessagesStorage.this.database;
                                                                         locale = Locale.US;
                                                                         replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -12602,9 +12602,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                                     channelId = count_unread;
                                                                 }
                                                                 if (j2 == null) {
-                                                                    j2 = C0539C.NANOS_PER_SECOND;
+                                                                    j2 = C0542C.NANOS_PER_SECOND;
                                                                     if (usersToLoad != null) {
-                                                                        replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                                        replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                                         chatsToLoad = MessagesStorage.this.database;
                                                                         locale = Locale.US;
                                                                         replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -12799,9 +12799,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                                         max_id_query = replyMessageRandomOwners2;
                                                     }
                                                     if (j2 == null) {
-                                                        j2 = C0539C.NANOS_PER_SECOND;
+                                                        j2 = C0542C.NANOS_PER_SECOND;
                                                         if (usersToLoad != null) {
-                                                            replyMessageRandomOwners2 = C0539C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
+                                                            replyMessageRandomOwners2 = C0542C.NANOS_PER_SECOND | (((long) usersToLoad) << 32);
                                                             chatsToLoad = MessagesStorage.this.database;
                                                             locale = Locale.US;
                                                             replyMessageOwners = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND m.mid >= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
@@ -14464,7 +14464,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
                                         throw tL_messages_messages;
                                     }
                                     try {
-                                        Collections.sort(lower_id.messages, new C03891());
+                                        Collections.sort(lower_id.messages, new C03921());
                                         if (i11 != 0) {
                                             if ((i3 == 3 || i3 == 4 || (i3 == 2 && queryFromServer && !unreadCountIsLocal)) && !lower_id.messages.isEmpty()) {
                                                 mentions_unread6 = ((Message) lower_id.messages.get(lower_id.messages.size() - 1)).id;

@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.SeekParameters;
@@ -172,11 +172,11 @@ public final class Util {
     }
 
     public static String fromUtf8Bytes(byte[] bytes) {
-        return new String(bytes, Charset.forName(C0539C.UTF8_NAME));
+        return new String(bytes, Charset.forName(C0542C.UTF8_NAME));
     }
 
     public static byte[] getUtf8Bytes(String value) {
-        return value.getBytes(Charset.forName(C0539C.UTF8_NAME));
+        return value.getBytes(Charset.forName(C0542C.UTF8_NAME));
     }
 
     public static boolean isLinebreak(int c) {
@@ -745,11 +745,11 @@ public final class Util {
                         obj = 2;
                         switch (obj) {
                             case null:
-                                return C0539C.WIDEVINE_UUID;
+                                return C0542C.WIDEVINE_UUID;
                             case 1:
-                                return C0539C.PLAYREADY_UUID;
+                                return C0542C.PLAYREADY_UUID;
                             case 2:
-                                return C0539C.CLEARKEY_UUID;
+                                return C0542C.CLEARKEY_UUID;
                             default:
                                 try {
                                     return UUID.fromString(drmScheme);
@@ -763,11 +763,11 @@ public final class Util {
                 obj = null;
                 switch (obj) {
                     case null:
-                        return C0539C.WIDEVINE_UUID;
+                        return C0542C.WIDEVINE_UUID;
                     case 1:
-                        return C0539C.PLAYREADY_UUID;
+                        return C0542C.PLAYREADY_UUID;
                     case 2:
-                        return C0539C.CLEARKEY_UUID;
+                        return C0542C.CLEARKEY_UUID;
                     default:
                         return UUID.fromString(drmScheme);
                 }
@@ -776,11 +776,11 @@ public final class Util {
             obj = 1;
             switch (obj) {
                 case null:
-                    return C0539C.WIDEVINE_UUID;
+                    return C0542C.WIDEVINE_UUID;
                 case 1:
-                    return C0539C.PLAYREADY_UUID;
+                    return C0542C.PLAYREADY_UUID;
                 case 2:
-                    return C0539C.CLEARKEY_UUID;
+                    return C0542C.CLEARKEY_UUID;
                 default:
                     return UUID.fromString(drmScheme);
             }
@@ -788,11 +788,11 @@ public final class Util {
         obj = -1;
         switch (obj) {
             case null:
-                return C0539C.WIDEVINE_UUID;
+                return C0542C.WIDEVINE_UUID;
             case 1:
-                return C0539C.PLAYREADY_UUID;
+                return C0542C.PLAYREADY_UUID;
             case 2:
-                return C0539C.CLEARKEY_UUID;
+                return C0542C.CLEARKEY_UUID;
             default:
                 return UUID.fromString(drmScheme);
         }
@@ -820,7 +820,7 @@ public final class Util {
     public static String getStringForTime(StringBuilder builder, Formatter formatter, long timeMs) {
         long timeMs2;
         Formatter formatter2 = formatter;
-        if (timeMs == C0539C.TIME_UNSET) {
+        if (timeMs == C0542C.TIME_UNSET) {
             timeMs2 = 0;
         } else {
             timeMs2 = timeMs;
@@ -841,9 +841,9 @@ public final class Util {
             case 0:
                 return 16777216;
             case 1:
-                return C0539C.DEFAULT_AUDIO_BUFFER_SIZE;
+                return C0542C.DEFAULT_AUDIO_BUFFER_SIZE;
             case 2:
-                return C0539C.DEFAULT_VIDEO_BUFFER_SIZE;
+                return C0542C.DEFAULT_VIDEO_BUFFER_SIZE;
             case 3:
                 return 131072;
             case 4:

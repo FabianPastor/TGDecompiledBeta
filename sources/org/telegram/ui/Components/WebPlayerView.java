@@ -71,7 +71,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -154,8 +154,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     private WebView webView;
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$1 */
-    class C13301 implements Runnable {
-        C13301() {
+    class C13361 implements Runnable {
+        C13361() {
         }
 
         public void run() {
@@ -170,14 +170,14 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$2 */
-    class C13332 implements SurfaceTextureListener {
+    class C13392 implements SurfaceTextureListener {
 
         /* renamed from: org.telegram.ui.Components.WebPlayerView$2$1 */
-        class C13321 implements OnPreDrawListener {
+        class C13381 implements OnPreDrawListener {
 
             /* renamed from: org.telegram.ui.Components.WebPlayerView$2$1$1 */
-            class C13311 implements Runnable {
-                C13311() {
+            class C13371 implements Runnable {
+                C13371() {
                 }
 
                 public void run() {
@@ -185,7 +185,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 }
             }
 
-            C13321() {
+            C13381() {
             }
 
             public boolean onPreDraw() {
@@ -198,13 +198,13 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         WebPlayerView.this.currentBitmap = null;
                     }
                 }
-                AndroidUtilities.runOnUIThread(new C13311());
+                AndroidUtilities.runOnUIThread(new C13371());
                 WebPlayerView.this.waitingForFirstTextureUpload = 0;
                 return true;
             }
         }
 
-        C13332() {
+        C13392() {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -228,15 +228,15 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
 
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
             if (WebPlayerView.this.waitingForFirstTextureUpload == 1) {
-                WebPlayerView.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new C13321());
+                WebPlayerView.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new C13381());
                 WebPlayerView.this.changedTextureView.invalidate();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$3 */
-    class C13343 implements Runnable {
-        C13343() {
+    class C13403 implements Runnable {
+        C13403() {
         }
 
         public void run() {
@@ -284,8 +284,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$6 */
-    class C13356 implements OnClickListener {
-        C13356() {
+    class C13416 implements OnClickListener {
+        C13416() {
         }
 
         public void onClick(View v) {
@@ -299,8 +299,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$7 */
-    class C13367 implements OnClickListener {
-        C13367() {
+    class C13427 implements OnClickListener {
+        C13427() {
         }
 
         public void onClick(View v) {
@@ -322,8 +322,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$8 */
-    class C13378 implements OnClickListener {
-        C13378() {
+    class C13438 implements OnClickListener {
+        C13438() {
         }
 
         public void onClick(View v) {
@@ -378,8 +378,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$9 */
-    class C13389 implements OnClickListener {
-        C13389() {
+    class C13449 implements OnClickListener {
+        C13449() {
         }
 
         public void onClick(View v) {
@@ -455,7 +455,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         private int duration;
         private StaticLayout durationLayout;
         private int durationWidth;
-        private Runnable hideRunnable = new C13391();
+        private Runnable hideRunnable = new C13451();
         private ImageReceiver imageReceiver;
         private boolean isVisible = true;
         private int lastProgressX;
@@ -468,8 +468,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         private TextPaint textPaint;
 
         /* renamed from: org.telegram.ui.Components.WebPlayerView$ControlsView$1 */
-        class C13391 implements Runnable {
-            C13391() {
+        class C13451 implements Runnable {
+            C13451() {
             }
 
             public void run() {
@@ -478,8 +478,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         }
 
         /* renamed from: org.telegram.ui.Components.WebPlayerView$ControlsView$2 */
-        class C13402 extends AnimatorListenerAdapter {
-            C13402() {
+        class C13462 extends AnimatorListenerAdapter {
+            C13462() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -488,8 +488,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         }
 
         /* renamed from: org.telegram.ui.Components.WebPlayerView$ControlsView$3 */
-        class C13413 extends AnimatorListenerAdapter {
-            C13413() {
+        class C13473 extends AnimatorListenerAdapter {
+            C13473() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -556,7 +556,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f});
                         animatorSet.playTogether(animatorArr);
                         this.currentAnimation.setDuration(150);
-                        this.currentAnimation.addListener(new C13402());
+                        this.currentAnimation.addListener(new C13462());
                         this.currentAnimation.start();
                     } else {
                         setAlpha(1.0f);
@@ -568,7 +568,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                     this.currentAnimation.setDuration(150);
-                    this.currentAnimation.addListener(new C13413());
+                    this.currentAnimation.addListener(new C13473());
                     this.currentAnimation.start();
                 } else {
                     setAlpha(0.0f);
@@ -768,7 +768,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 source.setCharAt(a, c == lower ? Character.toUpperCase(c) : lower);
             }
             try {
-                return new String(Base64.decode(source.toString(), 0), C0539C.UTF8_NAME);
+                return new String(Base64.decode(source.toString(), 0), C0542C.UTF8_NAME);
             } catch (Exception e) {
                 return null;
             }
@@ -1120,12 +1120,12 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             try {
                 JSONObject stream = new JSONObject(streamCode).getJSONObject("stream");
                 JSONObject accessToken = new JSONObject(WebPlayerView.this.downloadUrlContent(r1, String.format(Locale.US, "https://api.twitch.tv/api/channels/%s/access_token", new Object[]{r1.videoId}), headers, false));
-                String sig = URLEncoder.encode(accessToken.getString("sig"), C0539C.UTF8_NAME);
-                String token = URLEncoder.encode(accessToken.getString("token"), C0539C.UTF8_NAME);
+                String sig = URLEncoder.encode(accessToken.getString("sig"), C0542C.UTF8_NAME);
+                String token = URLEncoder.encode(accessToken.getString("token"), C0542C.UTF8_NAME);
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("https://youtube.googleapis.com/v/");
                 stringBuilder.append(r1.videoId);
-                URLEncoder.encode(stringBuilder.toString(), C0539C.UTF8_NAME);
+                URLEncoder.encode(stringBuilder.toString(), C0542C.UTF8_NAME);
                 stringBuilder = new StringBuilder();
                 stringBuilder.append("allow_source=true&allow_audio_only=true&allow_spectre=true&player=twitchweb&segment_preference=4&p=");
                 stringBuilder.append((int) (Math.random() * 1.0E7d));
@@ -1274,7 +1274,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 StringBuilder stringBuilder3 = new StringBuilder();
                 stringBuilder3.append("https://youtube.googleapis.com/v/");
                 stringBuilder3.append(r1.videoId);
-                stringBuilder2.append(URLEncoder.encode(stringBuilder3.toString(), C0539C.UTF8_NAME));
+                stringBuilder2.append(URLEncoder.encode(stringBuilder3.toString(), C0542C.UTF8_NAME));
                 params2 = stringBuilder2.toString();
             } catch (Throwable e) {
                 FileLog.m3e(e);
@@ -1331,7 +1331,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             strArr = args[a].split("=");
                             if (strArr.length == i4) {
                                 try {
-                                    r1.result[0] = URLDecoder.decode(strArr[i2], C0539C.UTF8_NAME);
+                                    r1.result[0] = URLDecoder.decode(strArr[i2], C0542C.UTF8_NAME);
                                 } catch (Throwable e2) {
                                     FileLog.m3e(e2);
                                 }
@@ -1342,7 +1342,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             if (strArr.length == 2) {
                                 String[] args2;
                                 try {
-                                    String[] args3 = URLDecoder.decode(strArr[1], C0539C.UTF8_NAME).split("[&,]");
+                                    String[] args3 = URLDecoder.decode(strArr[1], C0542C.UTF8_NAME).split("[&,]");
                                     boolean isMp4 = false;
                                     currentUrl = null;
                                     i3 = 0;
@@ -1357,11 +1357,11 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                                 params2 = args3[i3].split("=");
                                                 String[] args32 = args3;
                                                 if (params2[null].startsWith("type") != null) {
-                                                    if (URLDecoder.decode(params2[1], C0539C.UTF8_NAME).contains(MimeTypes.VIDEO_MP4)) {
+                                                    if (URLDecoder.decode(params2[1], C0542C.UTF8_NAME).contains(MimeTypes.VIDEO_MP4)) {
                                                         isMp4 = true;
                                                     }
                                                 } else if (params2[null].startsWith(UpdateFragment.FRAGMENT_URL) != null) {
-                                                    currentUrl = URLDecoder.decode(params2[1], C0539C.UTF8_NAME);
+                                                    currentUrl = URLDecoder.decode(params2[1], C0542C.UTF8_NAME);
                                                 } else if (params2[null].startsWith("itag") != null) {
                                                     currentUrl = null;
                                                     isMp4 = false;
@@ -1405,7 +1405,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                 params2 = args[a].split("=");
                                 if (params2.length == 2) {
                                     try {
-                                        hls = URLDecoder.decode(params2[1], C0539C.UTF8_NAME);
+                                        hls = URLDecoder.decode(params2[1], C0542C.UTF8_NAME);
                                     } catch (Throwable e22222) {
                                         FileLog.m3e(e22222);
                                     }
@@ -1579,8 +1579,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                                                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                                                                     /* renamed from: org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask$1$1 */
-                                                                    class C13421 implements ValueCallback<String> {
-                                                                        C13421() {
+                                                                    class C13481 implements ValueCallback<String> {
+                                                                        C13481() {
                                                                         }
 
                                                                         public void onReceiveValue(String value) {
@@ -1597,7 +1597,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
 
                                                                     public void run() {
                                                                         if (VERSION.SDK_INT >= 21) {
-                                                                            WebPlayerView.this.webView.evaluateJavascript(params2, new C13421());
+                                                                            WebPlayerView.this.webView.evaluateJavascript(params2, new C13481());
                                                                             return;
                                                                         }
                                                                         try {
@@ -1605,7 +1605,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                                                             javascript.append("<script>");
                                                                             javascript.append(params2);
                                                                             javascript.append("</script>");
-                                                                            String base64 = Base64.encodeToString(javascript.toString().getBytes(C0539C.UTF8_NAME), null);
+                                                                            String base64 = Base64.encodeToString(javascript.toString().getBytes(C0542C.UTF8_NAME), null);
                                                                             WebView access$1600 = WebPlayerView.this.webView;
                                                                             StringBuilder stringBuilder = new StringBuilder();
                                                                             stringBuilder.append("data:text/html;charset=utf-8;base64,");
@@ -1843,8 +1843,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$5 */
-    class C20985 implements CallJavaResultInterface {
-        C20985() {
+    class C21045 implements CallJavaResultInterface {
+        C21045() {
         }
 
         public void jsCallFinished(String value) {
@@ -1907,7 +1907,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                                 if (result2 == null) {
                                                     result2 = new StringBuilder();
                                                 }
-                                                result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                                result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                                             } else if (read == -1) {
                                                 done = true;
                                             }
@@ -1969,7 +1969,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                         if (result2 == null) {
                                             result2 = new StringBuilder();
                                         }
-                                        result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                        result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                                     } else if (read == -1) {
                                         done = true;
                                     }
@@ -1997,7 +1997,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                     if (result2 == null) {
                                         result2 = new StringBuilder();
                                     }
-                                    result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                    result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                                 } else if (read == -1) {
                                     done = true;
                                 }
@@ -2054,7 +2054,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                             if (result2 == null) {
                                                 result2 = new StringBuilder();
                                             }
-                                            result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                            result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                                         } else if (read == -1) {
                                             done = true;
                                         }
@@ -2110,7 +2110,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                                         if (result2 == null) {
                                                             result2 = new StringBuilder();
                                                         }
-                                                        result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                                        result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                                                     } else if (read == -1) {
                                                         done = true;
                                                     }
@@ -2166,7 +2166,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                     if (result2 == null) {
                                         result2 = new StringBuilder();
                                     }
-                                    result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                    result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                                 } else if (read == -1) {
                                     done = true;
                                 }
@@ -2200,7 +2200,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                     if (result2 == null) {
                                         result2 = new StringBuilder();
                                     }
-                                    result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                    result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                                 } else if (read == -1) {
                                     done = true;
                                 }
@@ -2232,7 +2232,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                     if (result2 == null) {
                                         result2 = new StringBuilder();
                                     }
-                                    result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                    result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                                 } else if (read == -1) {
                                     done = true;
                                 }
@@ -2260,7 +2260,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                 if (result2 == null) {
                                     result2 = new StringBuilder();
                                 }
-                                result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                             } else if (read == -1) {
                                 done = true;
                             }
@@ -2298,7 +2298,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                 if (result2 == null) {
                                     result2 = new StringBuilder();
                                 }
-                                result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                             } else if (read == -1) {
                                 done = true;
                             }
@@ -2332,7 +2332,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                                 if (result2 == null) {
                                     result2 = new StringBuilder();
                                 }
-                                result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                                result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                             } else if (read == -1) {
                                 done = true;
                             }
@@ -2362,7 +2362,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             if (result2 == null) {
                                 result2 = new StringBuilder();
                             }
-                            result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                            result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                         } else if (read == -1) {
                             done = true;
                         }
@@ -2389,7 +2389,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         if (result2 == null) {
                             result2 = new StringBuilder();
                         }
-                        result2.append(new String(data, 0, read, C0539C.UTF8_NAME));
+                        result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
                     } else if (read == -1) {
                         done = true;
                     }
@@ -2412,9 +2412,9 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         this.fragment_container_id = i;
         r0.allowInlineAnimation = VERSION.SDK_INT >= 21;
         r0.backgroundPaint = new Paint();
-        r0.progressRunnable = new C13301();
-        r0.surfaceTextureListener = new C13332();
-        r0.switchToInlineRunnable = new C13343();
+        r0.progressRunnable = new C13361();
+        r0.surfaceTextureListener = new C13392();
+        r0.switchToInlineRunnable = new C13403();
         setWillNotDraw(false);
         r0.delegate = webPlayerViewDelegate;
         r0.backgroundPaint.setColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
@@ -2436,7 +2436,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         addView(r0.aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
         r0.interfaceName = "JavaScriptInterface";
         r0.webView = new WebView(context2);
-        r0.webView.addJavascriptInterface(new JavaScriptInterface(new C20985()), r0.interfaceName);
+        r0.webView.addJavascriptInterface(new JavaScriptInterface(new C21045()), r0.interfaceName);
         WebSettings webSettings = r0.webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDefaultTextEncodingName("utf-8");
@@ -2472,23 +2472,23 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         r0.fullscreenButton = new ImageView(context2);
         r0.fullscreenButton.setScaleType(ScaleType.CENTER);
         r0.controlsView.addView(r0.fullscreenButton, LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
-        r0.fullscreenButton.setOnClickListener(new C13356());
+        r0.fullscreenButton.setOnClickListener(new C13416());
         r0.playButton = new ImageView(context2);
         r0.playButton.setScaleType(ScaleType.CENTER);
         r0.controlsView.addView(r0.playButton, LayoutHelper.createFrame(48, 48, 17));
-        r0.playButton.setOnClickListener(new C13367());
+        r0.playButton.setOnClickListener(new C13427());
         if (allowInline) {
             r0.inlineButton = new ImageView(context2);
             r0.inlineButton.setScaleType(ScaleType.CENTER);
             r0.controlsView.addView(r0.inlineButton, LayoutHelper.createFrame(56, 48, 53));
-            r0.inlineButton.setOnClickListener(new C13378());
+            r0.inlineButton.setOnClickListener(new C13438());
         }
         if (allowShare) {
             r0.shareButton = new ImageView(context2);
             r0.shareButton.setScaleType(ScaleType.CENTER);
             r0.shareButton.setImageResource(R.drawable.ic_share_video);
             r0.controlsView.addView(r0.shareButton, LayoutHelper.createFrame(56, 48, 53));
-            r0.shareButton.setOnClickListener(new C13389());
+            r0.shareButton.setOnClickListener(new C13449());
         }
         updatePlayButton();
         updateFullscreenButton();
@@ -2530,7 +2530,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
 
     public void onStateChanged(boolean playWhenReady, int playbackState) {
         if (playbackState != 2) {
-            if (this.videoPlayer.getDuration() != C0539C.TIME_UNSET) {
+            if (this.videoPlayer.getDuration() != C0542C.TIME_UNSET) {
                 this.controlsView.setDuration((int) (this.videoPlayer.getDuration() / 1000));
             } else {
                 this.controlsView.setDuration(0);
@@ -2749,7 +2749,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             }
             this.videoPlayer.setPlayWhenReady(this.isAutoplay);
             this.isLoading = false;
-            if (this.videoPlayer.getDuration() != C0539C.TIME_UNSET) {
+            if (this.videoPlayer.getDuration() != C0542C.TIME_UNSET) {
                 this.controlsView.setDuration((int) (this.videoPlayer.getDuration() / 1000));
             } else {
                 this.controlsView.setDuration(0);

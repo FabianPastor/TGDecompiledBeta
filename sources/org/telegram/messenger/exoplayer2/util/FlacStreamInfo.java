@@ -1,6 +1,6 @@
 package org.telegram.messenger.exoplayer2.util;
 
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 
 public final class FlacStreamInfo {
     public final int bitsPerSample;
@@ -45,6 +45,6 @@ public final class FlacStreamInfo {
     }
 
     public long durationUs() {
-        return (this.totalSamples * C0539C.MICROS_PER_SECOND) / ((long) this.sampleRate);
+        return (this.totalSamples * C0542C.MICROS_PER_SECOND) / ((long) this.sampleRate);
     }
 }

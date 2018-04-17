@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
@@ -38,8 +38,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         AndroidUtilities.runOnUIThread(new Runnable() {
 
             /* renamed from: org.telegram.messenger.GcmPushListenerService$1$1 */
-            class C01761 implements Runnable {
-                C01761() {
+            class C01821 implements Runnable {
+                C01821() {
                 }
 
                 /* JADX WARNING: inconsistent code. */
@@ -124,7 +124,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                     int len = buffer.readInt32(true);
                                     byte[] strBytes = new byte[len];
                                     buffer.readBytes(strBytes, true);
-                                    String jsonString = new String(strBytes, C0539C.UTF8_NAME);
+                                    String jsonString = new String(strBytes, C0542C.UTF8_NAME);
                                     JSONObject json = new JSONObject(jsonString);
                                     JSONObject custom = json.getJSONObject("custom");
                                     int currentAccount3 = -1;
@@ -7071,7 +7071,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
 
             public void run() {
                 ApplicationLoader.postInitApplication();
-                Utilities.stageQueue.postRunnable(new C01761());
+                Utilities.stageQueue.postRunnable(new C01821());
             }
         });
     }

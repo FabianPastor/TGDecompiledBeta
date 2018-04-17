@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.source;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.source.MediaPeriod.Callback;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
@@ -149,11 +149,11 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
     public long readDiscontinuity() {
         long positionUs = this.periods[0].readDiscontinuity();
         for (int i = 1; i < this.periods.length; i++) {
-            if (this.periods[i].readDiscontinuity() != C0539C.TIME_UNSET) {
+            if (this.periods[i].readDiscontinuity() != C0542C.TIME_UNSET) {
                 throw new IllegalStateException("Child reported discontinuity");
             }
         }
-        if (positionUs != C0539C.TIME_UNSET) {
+        if (positionUs != C0542C.TIME_UNSET) {
             MediaPeriod[] mediaPeriodArr = this.enabledPeriods;
             int length = mediaPeriodArr.length;
             int i2 = 0;

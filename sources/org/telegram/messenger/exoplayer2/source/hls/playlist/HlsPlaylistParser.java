@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
@@ -502,11 +502,11 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
         boolean z;
         int i;
         int playlistType = 0;
-        long startOffsetUs = C0539C.TIME_UNSET;
+        long startOffsetUs = C0542C.TIME_UNSET;
         List<Segment> segments = new ArrayList();
         List<String> tags = new ArrayList();
         DrmInitData drmInitData = null;
-        long targetDurationUs = C0539C.TIME_UNSET;
+        long targetDurationUs = C0542C.TIME_UNSET;
         boolean hasEndTag = false;
         Segment initializationSegment = null;
         long segmentDurationUs = 0;
@@ -563,7 +563,7 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                     i = version;
                     z = hasIndependentSegmentsTag;
                     if (line.startsWith(TAG_TARGET_DURATION)) {
-                        targetDurationUs = ((long) parseIntAttr(line, REGEX_TARGET_DURATION)) * C0539C.MICROS_PER_SECOND;
+                        targetDurationUs = ((long) parseIntAttr(line, REGEX_TARGET_DURATION)) * C0542C.MICROS_PER_SECOND;
                     } else if (line.startsWith(TAG_MEDIA_SEQUENCE)) {
                         mediaSequence = parseIntAttr(line, REGEX_MEDIA_SEQUENCE);
                         segmentMediaSequence = mediaSequence;
@@ -603,14 +603,14 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                                     encryptionIV2 = playlistTypeString;
                                     if (!METHOD_SAMPLE_AES_CENC.equals(version)) {
                                         if (!METHOD_SAMPLE_AES_CTR.equals(version)) {
-                                            playlistTypeString = C0539C.CENC_TYPE_cbcs;
+                                            playlistTypeString = C0542C.CENC_TYPE_cbcs;
                                             i2 = mediaSequence;
                                             drmInitData = new DrmInitData(playlistTypeString, uri);
                                             encryptionKeyUri = encryptionKeyUri2;
                                             encryptionIV = encryptionIV2;
                                         }
                                     }
-                                    playlistTypeString = C0539C.CENC_TYPE_cenc;
+                                    playlistTypeString = C0542C.CENC_TYPE_cenc;
                                     i2 = mediaSequence;
                                     drmInitData = new DrmInitData(playlistTypeString, uri);
                                     encryptionKeyUri = encryptionKeyUri2;
@@ -638,7 +638,7 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                                 relativeDiscontinuitySequence++;
                             } else if (line.startsWith(TAG_PROGRAM_DATE_TIME) != 0) {
                                 if (playlistStartTimeUs == 0) {
-                                    playlistStartTimeUs = C0539C.msToUs(Util.parseXsDateTime(line.substring(line.indexOf(58) + 1))) - segmentStartTimeUs;
+                                    playlistStartTimeUs = C0542C.msToUs(Util.parseXsDateTime(line.substring(line.indexOf(58) + 1))) - segmentStartTimeUs;
                                 }
                             } else if (line.startsWith("#") == 0) {
                                 long segmentByteRangeOffset2;
@@ -691,12 +691,12 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
     private static SchemeData parseWidevineSchemeData(String line, String keyFormat) throws ParserException {
         if (KEYFORMAT_WIDEVINE_PSSH_BINARY.equals(keyFormat)) {
             String uriString = parseStringAttr(line, REGEX_URI);
-            return new SchemeData(C0539C.WIDEVINE_UUID, MimeTypes.VIDEO_MP4, Base64.decode(uriString.substring(uriString.indexOf(44)), 0));
+            return new SchemeData(C0542C.WIDEVINE_UUID, MimeTypes.VIDEO_MP4, Base64.decode(uriString.substring(uriString.indexOf(44)), 0));
         } else if (!KEYFORMAT_WIDEVINE_PSSH_JSON.equals(keyFormat)) {
             return null;
         } else {
             try {
-                return new SchemeData(C0539C.WIDEVINE_UUID, "hls", line.getBytes(C0539C.UTF8_NAME));
+                return new SchemeData(C0542C.WIDEVINE_UUID, "hls", line.getBytes(C0542C.UTF8_NAME));
             } catch (Throwable e) {
                 throw new ParserException(e);
             }

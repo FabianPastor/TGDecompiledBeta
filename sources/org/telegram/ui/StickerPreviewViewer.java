@@ -64,7 +64,7 @@ public class StickerPreviewViewer {
     private Runnable openStickerPreviewRunnable;
     private Activity parentActivity;
     private float showProgress;
-    private Runnable showSheetRunnable = new C16981();
+    private Runnable showSheetRunnable = new C17041();
     private int startX;
     private int startY;
     private StaticLayout stickerEmojiLayout;
@@ -73,11 +73,11 @@ public class StickerPreviewViewer {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.StickerPreviewViewer$1 */
-    class C16981 implements Runnable {
+    class C17041 implements Runnable {
 
         /* renamed from: org.telegram.ui.StickerPreviewViewer$1$2 */
-        class C16972 implements OnDismissListener {
-            C16972() {
+        class C17032 implements OnDismissListener {
+            C17032() {
             }
 
             public void onDismiss(DialogInterface dialog) {
@@ -86,7 +86,7 @@ public class StickerPreviewViewer {
             }
         }
 
-        C16981() {
+        C17041() {
         }
 
         public void run() {
@@ -144,7 +144,7 @@ public class StickerPreviewViewer {
                             }
                         });
                         StickerPreviewViewer.this.visibleDialog = builder.create();
-                        StickerPreviewViewer.this.visibleDialog.setOnDismissListener(new C16972());
+                        StickerPreviewViewer.this.visibleDialog.setOnDismissListener(new C17032());
                         StickerPreviewViewer.this.visibleDialog.show();
                         StickerPreviewViewer.this.containerView.performHapticFeedback(0);
                     }
@@ -154,8 +154,8 @@ public class StickerPreviewViewer {
     }
 
     /* renamed from: org.telegram.ui.StickerPreviewViewer$4 */
-    class C17014 implements OnTouchListener {
-        C17014() {
+    class C17074 implements OnTouchListener {
+        C17074() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -167,8 +167,8 @@ public class StickerPreviewViewer {
     }
 
     /* renamed from: org.telegram.ui.StickerPreviewViewer$5 */
-    class C17025 implements Runnable {
-        C17025() {
+    class C17085 implements Runnable {
+        C17085() {
         }
 
         public void run() {
@@ -484,7 +484,7 @@ public class StickerPreviewViewer {
             this.containerView = new FrameLayoutDrawer(activity);
             this.containerView.setFocusable(false);
             this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
-            this.containerView.setOnTouchListener(new C17014());
+            this.containerView.setOnTouchListener(new C17074());
             this.windowLayoutParams = new LayoutParams();
             this.windowLayoutParams.height = -1;
             this.windowLayoutParams.format = -3;
@@ -674,7 +674,7 @@ public class StickerPreviewViewer {
                     }
                     if (this.showProgress == 0.0f) {
                         AndroidUtilities.unlockOrientation(this.parentActivity);
-                        AndroidUtilities.runOnUIThread(new C17025());
+                        AndroidUtilities.runOnUIThread(new C17085());
                         try {
                             if (this.windowView.getParent() != null) {
                                 ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);

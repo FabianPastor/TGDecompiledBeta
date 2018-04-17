@@ -100,7 +100,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
@@ -252,8 +252,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private boolean webviewLoading;
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$2 */
-    class C15542 implements Comparator<String> {
-        C15542() {
+    class C15602 implements Comparator<String> {
+        C15602() {
         }
 
         public int compare(String lhs, String rhs) {
@@ -262,11 +262,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$3 */
-    class C15653 implements OnTouchListener {
+    class C15713 implements OnTouchListener {
 
         /* renamed from: org.telegram.ui.PaymentFormActivity$3$1 */
-        class C22121 implements CountrySelectActivityDelegate {
-            C22121() {
+        class C22181 implements CountrySelectActivityDelegate {
+            C22181() {
             }
 
             public void didSelectCountry(String name, String shortName) {
@@ -275,7 +275,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        C15653() {
+        C15713() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -284,7 +284,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
             if (event.getAction() == 1) {
                 CountrySelectActivity fragment = new CountrySelectActivity(false);
-                fragment.setCountrySelectActivityDelegate(new C22121());
+                fragment.setCountrySelectActivityDelegate(new C22181());
                 PaymentFormActivity.this.presentFragment(fragment);
             }
             return true;
@@ -292,8 +292,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$4 */
-    class C15664 implements TextWatcher {
-        C15664() {
+    class C15724 implements TextWatcher {
+        C15724() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -376,11 +376,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$5 */
-    class C15675 implements TextWatcher {
+    class C15735 implements TextWatcher {
         private int actionPosition;
         private int characterAction = -1;
 
-        C15675() {
+        C15735() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -456,8 +456,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$6 */
-    class C15686 implements OnEditorActionListener {
-        C15686() {
+    class C15746 implements OnEditorActionListener {
+        C15746() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -481,8 +481,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$7 */
-    class C15697 implements OnClickListener {
-        C15697() {
+    class C15757 implements OnClickListener {
+        C15757() {
         }
 
         public void onClick(View v) {
@@ -492,8 +492,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$9 */
-    class C15719 extends WebViewClient {
-        C15719() {
+    class C15779 extends WebViewClient {
+        C15779() {
         }
 
         public void onLoadResource(WebView view, String url) {
@@ -570,8 +570,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.PaymentFormActivity$1 */
-    class C22101 extends ActionBarMenuOnItemClick {
-        C22101() {
+    class C22161 extends ActionBarMenuOnItemClick {
+        C22161() {
         }
 
         /* JADX WARNING: inconsistent code. */
@@ -806,7 +806,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         }
         r1.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         r1.actionBar.setAllowOverlayTitle(true);
-        r1.actionBar.setActionBarMenuOnItemClick(new C22101());
+        r1.actionBar.setActionBarMenuOnItemClick(new C22161());
         ActionBarMenu menu = r1.actionBar.createMenu();
         if (r1.currentStep == 0 || r1.currentStep == 1 || r1.currentStep == 2 || r1.currentStep == 3 || r1.currentStep == 4 || r1.currentStep == 6) {
             r1.doneItem = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
@@ -861,7 +861,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
-            Collections.sort(r1.countriesArray, new C15542());
+            Collections.sort(r1.countriesArray, new C15602());
             r1.inputFields = new EditTextBoldCursor[10];
             a = 0;
             while (a < 10) {
@@ -921,7 +921,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 r1.inputFields[a].setCursorSize(AndroidUtilities.dp(20.0f));
                 r1.inputFields[a].setCursorWidth(1.5f);
                 if (a == 4) {
-                    r1.inputFields[a].setOnTouchListener(new C15653());
+                    r1.inputFields[a].setOnTouchListener(new C15713());
                     r1.inputFields[a].setInputType(0);
                 }
                 if (a != 9) {
@@ -999,18 +999,18 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                             inputFilters[0] = new LengthFilter(5);
                             r1.inputFields[a].setFilters(inputFilters);
                             container.addView(r1.inputFields[a], LayoutHelper.createLinear(55, -2, 0.0f, 12.0f, 16.0f, 6.0f));
-                            r1.inputFields[a].addTextChangedListener(new C15664());
+                            r1.inputFields[a].addTextChangedListener(new C15724());
                         } else if (a != 9) {
                             r1.inputFields[a].setPadding(0, 0, 0, 0);
                             r1.inputFields[a].setGravity(19);
                             container.addView(r1.inputFields[a], LayoutHelper.createLinear(-1, -2, 0.0f, 12.0f, 17.0f, 6.0f));
-                            r1.inputFields[a].addTextChangedListener(new C15675());
+                            r1.inputFields[a].addTextChangedListener(new C15735());
                         } else {
                             r1.inputFields[a].setPadding(0, 0, 0, AndroidUtilities.dp(6.0f));
                             r1.inputFields[a].setGravity(LocaleController.isRTL ? 5 : 3);
                             container.addView(r1.inputFields[a], LayoutHelper.createFrame(-1, -2.0f, 51, 17.0f, 12.0f, 17.0f, 6.0f));
                         }
-                        r1.inputFields[a].setOnEditorActionListener(new C15686());
+                        r1.inputFields[a].setOnEditorActionListener(new C15746());
                         if (a != 9) {
                             if (!r1.paymentForm.invoice.email_to_provider) {
                                 if (r1.paymentForm.invoice.phone_to_provider) {
@@ -1020,7 +1020,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                     r1.checkCell1.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                                     r1.checkCell1.setTextAndCheck(LocaleController.getString("PaymentShippingSave", R.string.PaymentShippingSave), r1.saveShippingInfo, false);
                                     r1.linearLayout2.addView(r1.checkCell1, LayoutHelper.createLinear(-1, -2));
-                                    r1.checkCell1.setOnClickListener(new C15697());
+                                    r1.checkCell1.setOnClickListener(new C15757());
                                     r1.bottomCell[0] = new TextInfoPrivacyCell(context2);
                                     r1.bottomCell[0].setBackgroundDrawable(Theme.getThemedDrawable(context2, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                                     r1.bottomCell[0].setText(LocaleController.getString("PaymentShippingSaveInfo", R.string.PaymentShippingSaveInfo));
@@ -1053,7 +1053,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                             r1.checkCell1.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                             r1.checkCell1.setTextAndCheck(LocaleController.getString("PaymentShippingSave", R.string.PaymentShippingSave), r1.saveShippingInfo, false);
                             r1.linearLayout2.addView(r1.checkCell1, LayoutHelper.createLinear(-1, -2));
-                            r1.checkCell1.setOnClickListener(new C15697());
+                            r1.checkCell1.setOnClickListener(new C15757());
                             r1.bottomCell[0] = new TextInfoPrivacyCell(context2);
                             r1.bottomCell[0].setBackgroundDrawable(Theme.getThemedDrawable(context2, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                             r1.bottomCell[0].setText(LocaleController.getString("PaymentShippingSaveInfo", R.string.PaymentShippingSaveInfo));
@@ -1118,7 +1118,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     inputFilters[0] = new LengthFilter(5);
                     r1.inputFields[a].setFilters(inputFilters);
                     container.addView(r1.inputFields[a], LayoutHelper.createLinear(55, -2, 0.0f, 12.0f, 16.0f, 6.0f));
-                    r1.inputFields[a].addTextChangedListener(new C15664());
+                    r1.inputFields[a].addTextChangedListener(new C15724());
                 } else if (a != 9) {
                     r1.inputFields[a].setPadding(0, 0, 0, AndroidUtilities.dp(6.0f));
                     if (LocaleController.isRTL) {
@@ -1129,9 +1129,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     r1.inputFields[a].setPadding(0, 0, 0, 0);
                     r1.inputFields[a].setGravity(19);
                     container.addView(r1.inputFields[a], LayoutHelper.createLinear(-1, -2, 0.0f, 12.0f, 17.0f, 6.0f));
-                    r1.inputFields[a].addTextChangedListener(new C15675());
+                    r1.inputFields[a].addTextChangedListener(new C15735());
                 }
-                r1.inputFields[a].setOnEditorActionListener(new C15686());
+                r1.inputFields[a].setOnEditorActionListener(new C15746());
                 if (a != 9) {
                     if (r1.paymentForm.invoice.email_to_provider) {
                         if (r1.paymentForm.invoice.phone_to_provider) {
@@ -1141,7 +1141,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                             r1.checkCell1.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                             r1.checkCell1.setTextAndCheck(LocaleController.getString("PaymentShippingSave", R.string.PaymentShippingSave), r1.saveShippingInfo, false);
                             r1.linearLayout2.addView(r1.checkCell1, LayoutHelper.createLinear(-1, -2));
-                            r1.checkCell1.setOnClickListener(new C15697());
+                            r1.checkCell1.setOnClickListener(new C15757());
                             r1.bottomCell[0] = new TextInfoPrivacyCell(context2);
                             r1.bottomCell[0].setBackgroundDrawable(Theme.getThemedDrawable(context2, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                             r1.bottomCell[0].setText(LocaleController.getString("PaymentShippingSaveInfo", R.string.PaymentShippingSaveInfo));
@@ -1174,7 +1174,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     r1.checkCell1.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                     r1.checkCell1.setTextAndCheck(LocaleController.getString("PaymentShippingSave", R.string.PaymentShippingSave), r1.saveShippingInfo, false);
                     r1.linearLayout2.addView(r1.checkCell1, LayoutHelper.createLinear(-1, -2));
-                    r1.checkCell1.setOnClickListener(new C15697());
+                    r1.checkCell1.setOnClickListener(new C15757());
                     r1.bottomCell[0] = new TextInfoPrivacyCell(context2);
                     r1.bottomCell[0].setBackgroundDrawable(Theme.getThemedDrawable(context2, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     r1.bottomCell[0].setText(LocaleController.getString("PaymentShippingSaveInfo", R.string.PaymentShippingSaveInfo));
@@ -1344,7 +1344,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     CookieManager.getInstance().setAcceptThirdPartyCookies(r1.webView, true);
                 }
                 r1.webView.addJavascriptInterface(new TelegramWebviewProxy(), "TelegramWebviewProxy");
-                r1.webView.setWebViewClient(new C15719());
+                r1.webView.setWebViewClient(new C15779());
                 r1.linearLayout2.addView(r1.webView, LayoutHelper.createFrame(-1, -2.0f));
                 r1.sectionCell[2] = new ShadowSectionCell(context2);
                 r1.linearLayout2.addView(r1.sectionCell[2], LayoutHelper.createLinear(-1, -2));
@@ -1434,8 +1434,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         r1.inputFields[a].setOnTouchListener(new OnTouchListener() {
 
                             /* renamed from: org.telegram.ui.PaymentFormActivity$11$1 */
-                            class C22091 implements CountrySelectActivityDelegate {
-                                C22091() {
+                            class C22151 implements CountrySelectActivityDelegate {
+                                C22151() {
                                 }
 
                                 public void didSelectCountry(String name, String shortName) {
@@ -1449,7 +1449,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 }
                                 if (event.getAction() == 1) {
                                     CountrySelectActivity fragment = new CountrySelectActivity(false);
-                                    fragment.setCountrySelectActivityDelegate(new C22091());
+                                    fragment.setCountrySelectActivityDelegate(new C22151());
                                     PaymentFormActivity.this.presentFragment(fragment);
                                 }
                                 return true;
@@ -1982,8 +1982,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         r1.settingsCell1.setOnClickListener(new OnClickListener() {
 
                             /* renamed from: org.telegram.ui.PaymentFormActivity$24$1 */
-                            class C15511 implements DialogInterface.OnClickListener {
-                                C15511() {
+                            class C15571 implements DialogInterface.OnClickListener {
+                                C15571() {
                                 }
 
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -1995,7 +1995,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
                                 builder.setMessage(LocaleController.getString("TurnPasswordOffQuestion", R.string.TurnPasswordOffQuestion));
                                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C15511());
+                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C15571());
                                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                                 PaymentFormActivity.this.showDialog(builder.create());
                             }
@@ -2256,8 +2256,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 r1.detailSettingsCell[0].setOnClickListener(new OnClickListener() {
 
                     /* renamed from: org.telegram.ui.PaymentFormActivity$20$1 */
-                    class C22111 implements PaymentFormActivityDelegate {
-                        C22111() {
+                    class C22171 implements PaymentFormActivityDelegate {
+                        C22171() {
                         }
 
                         public boolean didSelectNewCard(String tokenJson, String card, boolean saveCard, TL_inputPaymentCredentialsAndroidPay androidPay) {
@@ -2279,7 +2279,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
 
                     public void onClick(View v) {
                         PaymentFormActivity activity = new PaymentFormActivity(PaymentFormActivity.this.paymentForm, PaymentFormActivity.this.messageObject, 2, PaymentFormActivity.this.requestedInfo, PaymentFormActivity.this.shippingOption, null, PaymentFormActivity.this.cardName, PaymentFormActivity.this.validateRequest, PaymentFormActivity.this.saveCardInfo, null);
-                        activity.setDelegate(new C22111());
+                        activity.setDelegate(new C22171());
                         PaymentFormActivity.this.presentFragment(activity);
                     }
                 });
@@ -2343,8 +2343,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 r1.bottomLayout.setOnClickListener(new OnClickListener() {
 
                     /* renamed from: org.telegram.ui.PaymentFormActivity$21$1 */
-                    class C15501 implements DialogInterface.OnClickListener {
-                        C15501() {
+                    class C15561 implements DialogInterface.OnClickListener {
+                        C15561() {
                         }
 
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -2369,7 +2369,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                             Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
                             builder.setTitle(LocaleController.getString("PaymentWarning", R.string.PaymentWarning));
                             builder.setMessage(LocaleController.formatString("PaymentWarningText", R.string.PaymentWarningText, PaymentFormActivity.this.currentBotName, value));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C15501());
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C15561());
                             PaymentFormActivity.this.showDialog(builder.create());
                         }
                     }
@@ -2519,8 +2519,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     AndroidUtilities.runOnUIThread(new Runnable() {
 
                         /* renamed from: org.telegram.ui.PaymentFormActivity$26$1$1 */
-                        class C15521 implements Runnable {
-                            C15521() {
+                        class C15581 implements Runnable {
+                            C15581() {
                             }
 
                             public void run() {
@@ -2549,7 +2549,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 }
                             }
                             if ((response instanceof TL_account_noPassword) && PaymentFormActivity.this.shortPollRunnable == null) {
-                                PaymentFormActivity.this.shortPollRunnable = new C15521();
+                                PaymentFormActivity.this.shortPollRunnable = new C15581();
                                 AndroidUtilities.runOnUIThread(PaymentFormActivity.this.shortPollRunnable, DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                             }
                         }
@@ -3013,7 +3013,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         req.new_settings = new TL_account_passwordInputSettings();
                         byte[] newPasswordBytes = null;
                         try {
-                            newPasswordBytes = firstPassword.getBytes(C0539C.UTF8_NAME);
+                            newPasswordBytes = firstPassword.getBytes(C0542C.UTF8_NAME);
                         } catch (Throwable e) {
                             FileLog.m3e(e);
                         }
@@ -3053,8 +3053,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 AndroidUtilities.runOnUIThread(new Runnable() {
 
                     /* renamed from: org.telegram.ui.PaymentFormActivity$32$1$1 */
-                    class C15551 implements DialogInterface.OnClickListener {
-                        C15551() {
+                    class C15611 implements DialogInterface.OnClickListener {
+                        C15611() {
                         }
 
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -3077,7 +3077,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         } else if (error != null) {
                             if (error.text.equals("EMAIL_UNCONFIRMED")) {
                                 Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C15551());
+                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C15611());
                                 builder.setMessage(LocaleController.getString("YourEmailAlmostThereText", R.string.YourEmailAlmostThereText));
                                 builder.setTitle(LocaleController.getString("YourEmailAlmostThere", R.string.YourEmailAlmostThere));
                                 Dialog dialog = PaymentFormActivity.this.showDialog(builder.create());
@@ -3146,8 +3146,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                             new Stripe(r1.stripeApiKey).createToken(card, new TokenCallback() {
 
                                 /* renamed from: org.telegram.ui.PaymentFormActivity$33$1 */
-                                class C15571 implements Runnable {
-                                    C15571() {
+                                class C15631 implements Runnable {
+                                    C15631() {
                                     }
 
                                     public void run() {
@@ -3160,7 +3160,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 public void onSuccess(Token token) {
                                     if (!PaymentFormActivity.this.canceled) {
                                         PaymentFormActivity.this.paymentJson = String.format(Locale.US, "{\"type\":\"%1$s\", \"id\":\"%2$s\"}", new Object[]{token.getType(), token.getId()});
-                                        AndroidUtilities.runOnUIThread(new C15571());
+                                        AndroidUtilities.runOnUIThread(new C15631());
                                     }
                                 }
 
@@ -3237,8 +3237,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.PaymentFormActivity$34$1$1 */
-                            class C22131 implements RequestDelegate {
-                                C22131() {
+                            class C22191 implements RequestDelegate {
+                                C22191() {
                                 }
 
                                 public void run(TLObject response, TL_error error) {
@@ -3250,7 +3250,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 if (!(PaymentFormActivity.this.paymentForm.saved_info == null || PaymentFormActivity.this.saveShippingInfo)) {
                                     TL_payments_clearSavedInfo req = new TL_payments_clearSavedInfo();
                                     req.info = true;
-                                    ConnectionsManager.getInstance(PaymentFormActivity.this.currentAccount).sendRequest(req, new C22131());
+                                    ConnectionsManager.getInstance(PaymentFormActivity.this.currentAccount).sendRequest(req, new C22191());
                                 }
                                 PaymentFormActivity.this.goToNextStep();
                                 PaymentFormActivity.this.setDonePressed(false);
@@ -3416,8 +3416,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
 
                 /* renamed from: org.telegram.ui.PaymentFormActivity$35$1 */
-                class C15601 implements Runnable {
-                    C15601() {
+                class C15661 implements Runnable {
+                    C15661() {
                     }
 
                     public void run() {
@@ -3436,7 +3436,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         });
                     } else if (response instanceof TL_payments_paymentResult) {
                         MessagesController.getInstance(PaymentFormActivity.this.currentAccount).processUpdates(((TL_payments_paymentResult) response).updates, false);
-                        AndroidUtilities.runOnUIThread(new C15601());
+                        AndroidUtilities.runOnUIThread(new C15661());
                     } else if (response instanceof TL_payments_paymentVerficationNeeded) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -3507,7 +3507,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 TL_account_password currentPassword = response;
                                 byte[] passwordBytes = null;
                                 try {
-                                    passwordBytes = password.getBytes(C0539C.UTF8_NAME);
+                                    passwordBytes = password.getBytes(C0542C.UTF8_NAME);
                                 } catch (Throwable e) {
                                     FileLog.m3e(e);
                                 }

@@ -50,7 +50,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
@@ -153,8 +153,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     private boolean zooming;
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$4 */
-    class C16614 implements OnApplyWindowInsetsListener {
-        C16614() {
+    class C16674 implements OnApplyWindowInsetsListener {
+        C16674() {
         }
 
         @SuppressLint({"NewApi"})
@@ -169,8 +169,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$6 */
-    class C16626 implements Runnable {
-        C16626() {
+    class C16686 implements Runnable {
+        C16686() {
         }
 
         public void run() {
@@ -186,8 +186,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$7 */
-    class C16637 extends AnimatorListenerAdapter {
-        C16637() {
+    class C16697 extends AnimatorListenerAdapter {
+        C16697() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -199,8 +199,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$9 */
-    class C16659 extends AnimatorListenerAdapter {
-        C16659() {
+    class C16719 extends AnimatorListenerAdapter {
+        C16719() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -376,7 +376,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                         float progress2;
                         long duration = SecretMediaViewer.this.videoPlayer.getDuration();
                         long position = SecretMediaViewer.this.videoPlayer.getCurrentPosition();
-                        if (duration == C0539C.TIME_UNSET || position == C0539C.TIME_UNSET) {
+                        if (duration == C0542C.TIME_UNSET || position == C0542C.TIME_UNSET) {
                             progress2 = 1.0f;
                         } else {
                             progress2 = 1.0f - (((float) position) / ((float) duration));
@@ -442,8 +442,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$1 */
-    class C22651 implements VideoPlayerDelegate {
-        C22651() {
+    class C22711 implements VideoPlayerDelegate {
+        C22711() {
         }
 
         public void onStateChanged(boolean playWhenReady, int playbackState) {
@@ -516,8 +516,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     }
 
     /* renamed from: org.telegram.ui.SecretMediaViewer$5 */
-    class C22675 extends ActionBarMenuOnItemClick {
-        C22675() {
+    class C22735 extends ActionBarMenuOnItemClick {
+        C22735() {
         }
 
         public void onItemClick(int id) {
@@ -615,7 +615,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             if (this.videoPlayer == null) {
                 this.videoPlayer = new VideoPlayer();
                 this.videoPlayer.setTextureView(this.videoTextureView);
-                this.videoPlayer.setDelegate(new C22651());
+                this.videoPlayer.setDelegate(new C22711());
             }
             this.videoPlayer.preparePlayer(Uri.fromFile(file), "other");
             this.videoPlayer.setPlayWhenReady(true);
@@ -711,7 +711,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.containerView.setLayoutParams(layoutParams);
             if (VERSION.SDK_INT >= 21) {
                 this.containerView.setFitsSystemWindows(true);
-                this.containerView.setOnApplyWindowInsetsListener(new C16614());
+                this.containerView.setOnApplyWindowInsetsListener(new C16674());
                 this.containerView.setSystemUiVisibility(1280);
             }
             this.gestureDetector = new GestureDetector(this.containerView.getContext(), this);
@@ -725,7 +725,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             this.actionBar.setTitleRightMargin(AndroidUtilities.dp(70.0f));
             this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-            this.actionBar.setActionBarMenuOnItemClick(new C22675());
+            this.actionBar.setActionBarMenuOnItemClick(new C22735());
             this.secretDeleteTimer = new SecretDeleteTimer(activity);
             this.containerView.addView(this.secretDeleteTimer, LayoutHelper.createFrame(119, 48.0f, 53, 0.0f, 0.0f, 0.0f, 0.0f));
             this.windowLayoutParams = new LayoutParams();
@@ -883,9 +883,9 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                     r1.imageMoveAnimation = new AnimatorSet();
                     r1.imageMoveAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(r1.actionBar, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(r1.secretDeleteTimer, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(r1.photoBackgroundDrawable, "alpha", new int[]{0, 255}), ObjectAnimator.ofFloat(r1.secretDeleteTimer, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(r1, "animationValue", new float[]{0.0f, 1.0f})});
                     r1.photoAnimationInProgress = 3;
-                    r1.photoAnimationEndRunnable = new C16626();
+                    r1.photoAnimationEndRunnable = new C16686();
                     r1.imageMoveAnimation.setDuration(250);
-                    r1.imageMoveAnimation.addListener(new C16637());
+                    r1.imageMoveAnimation.addListener(new C16697());
                     r1.photoTransitionAnimationStartTime = System.currentTimeMillis();
                     if (VERSION.SDK_INT >= 18) {
                         r1.containerView.setLayerType(2, null);
@@ -928,7 +928,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.currentActionBarAnimation = new AnimatorSet();
             this.currentActionBarAnimation.playTogether(arrayList);
             if (!show) {
-                this.currentActionBarAnimation.addListener(new C16659());
+                this.currentActionBarAnimation.addListener(new C16719());
             }
             this.currentActionBarAnimation.setDuration(200);
             this.currentActionBarAnimation.start();
@@ -1324,8 +1324,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                             r0.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
 
                                 /* renamed from: org.telegram.ui.SecretMediaViewer$11$1 */
-                                class C16591 implements Runnable {
-                                    C16591() {
+                                class C16651 implements Runnable {
+                                    C16651() {
                                     }
 
                                     public void run() {
@@ -1341,7 +1341,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                                         object.imageReceiver.setVisible(true, true);
                                     }
                                     SecretMediaViewer.this.isVisible = false;
-                                    AndroidUtilities.runOnUIThread(new C16591());
+                                    AndroidUtilities.runOnUIThread(new C16651());
                                 }
                             });
                             r0.photoTransitionAnimationStartTime = System.currentTimeMillis();

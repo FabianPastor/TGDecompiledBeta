@@ -8,20 +8,20 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
-    public static final Creator<DrmInitData> CREATOR = new C05641();
+    public static final Creator<DrmInitData> CREATOR = new C05671();
     private int hashCode;
     public final int schemeDataCount;
     private final SchemeData[] schemeDatas;
     public final String schemeType;
 
     /* renamed from: org.telegram.messenger.exoplayer2.drm.DrmInitData$1 */
-    static class C05641 implements Creator<DrmInitData> {
-        C05641() {
+    static class C05671 implements Creator<DrmInitData> {
+        C05671() {
         }
 
         public DrmInitData createFromParcel(Parcel in) {
@@ -34,7 +34,7 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
     }
 
     public static final class SchemeData implements Parcelable {
-        public static final Creator<SchemeData> CREATOR = new C05651();
+        public static final Creator<SchemeData> CREATOR = new C05681();
         public final byte[] data;
         private int hashCode;
         public final String mimeType;
@@ -42,8 +42,8 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
         private final UUID uuid;
 
         /* renamed from: org.telegram.messenger.exoplayer2.drm.DrmInitData$SchemeData$1 */
-        static class C05651 implements Creator<SchemeData> {
-            C05651() {
+        static class C05681 implements Creator<SchemeData> {
+            C05681() {
             }
 
             public SchemeData createFromParcel(Parcel in) {
@@ -74,7 +74,7 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
         }
 
         public boolean matches(UUID schemeUuid) {
-            if (!C0539C.UUID_NIL.equals(this.uuid)) {
+            if (!C0542C.UUID_NIL.equals(this.uuid)) {
                 if (!schemeUuid.equals(this.uuid)) {
                     return false;
                 }
@@ -235,8 +235,8 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
     }
 
     public int compare(SchemeData first, SchemeData second) {
-        if (C0539C.UUID_NIL.equals(first.uuid)) {
-            return C0539C.UUID_NIL.equals(second.uuid) ? 0 : 1;
+        if (C0542C.UUID_NIL.equals(first.uuid)) {
+            return C0542C.UUID_NIL.equals(second.uuid) ? 0 : 1;
         } else {
             return first.uuid.compareTo(second.uuid);
         }

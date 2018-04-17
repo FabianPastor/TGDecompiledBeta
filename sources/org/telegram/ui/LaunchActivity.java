@@ -77,7 +77,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.camera.CameraController;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveTrackSelection;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -174,8 +174,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     private AlertDialog visibleDialog;
 
     /* renamed from: org.telegram.ui.LaunchActivity$2 */
-    class C14512 implements OnTouchListener {
-        C14512() {
+    class C14572 implements OnTouchListener {
+        C14572() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -204,8 +204,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$3 */
-    class C14533 implements OnClickListener {
-        C14533() {
+    class C14593 implements OnClickListener {
+        C14593() {
         }
 
         public void onClick(View v) {
@@ -222,8 +222,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$4 */
-    class C21614 implements OnItemClickListener {
-        C21614() {
+    class C21674 implements OnItemClickListener {
+        C21674() {
         }
 
         public void onItemClick(View view, int position) {
@@ -294,8 +294,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
     }
 
     /* renamed from: org.telegram.ui.LaunchActivity$6 */
-    class C21626 implements PasscodeViewDelegate {
-        C21626() {
+    class C21686 implements PasscodeViewDelegate {
+        C21686() {
         }
 
         public void didAcceptedPassword() {
@@ -448,8 +448,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
             this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             launchLayout.addView(this.shadowTablet);
-            this.shadowTablet.setOnTouchListener(new C14512());
-            this.shadowTablet.setOnClickListener(new C14533());
+            this.shadowTablet.setOnTouchListener(new C14572());
+            this.shadowTablet.setOnClickListener(new C14593());
             this.layersActionBarLayout = new ActionBarLayout(this);
             this.layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             this.layersActionBarLayout.setBackgroundView(this.shadowTablet);
@@ -481,7 +481,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
         layoutParams.width = AndroidUtilities.isTablet() ? AndroidUtilities.dp(320.0f) : Math.min(AndroidUtilities.dp(320.0f), Math.min(screenSize.x, screenSize.y) - AndroidUtilities.dp(56.0f));
         layoutParams.height = -1;
         this.sideMenu.setLayoutParams(layoutParams);
-        this.sideMenu.setOnItemClickListener(new C21614());
+        this.sideMenu.setOnItemClickListener(new C21674());
         this.drawerLayoutContainer.setParentActionBarLayout(this.actionBarLayout);
         this.actionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);
         this.actionBarLayout.init(mainFragmentsStack);
@@ -662,7 +662,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 AndroidUtilities.incorrectDisplaySizeFix = true;
                 final View view = getWindow().getDecorView().getRootView();
                 ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
-                OnGlobalLayoutListener c14545 = new OnGlobalLayoutListener() {
+                OnGlobalLayoutListener c14605 = new OnGlobalLayoutListener() {
                     public void onGlobalLayout() {
                         int height = view.getMeasuredHeight();
                         if (VERSION.SDK_INT >= 21) {
@@ -679,8 +679,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         }
                     }
                 };
-                this.onGlobalLayoutListener = c14545;
-                viewTreeObserver.addOnGlobalLayoutListener(c14545);
+                this.onGlobalLayoutListener = c14605;
+                viewTreeObserver.addOnGlobalLayoutListener(c14605);
             }
         } catch (Throwable e4) {
             FileLog.m3e(e4);
@@ -857,7 +857,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             this.passcodeView.onShow();
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new C21626());
+            this.passcodeView.setDelegate(new C21686());
         }
     }
 
@@ -1039,7 +1039,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                                 String push_user_id5;
                                                 String line;
                                                 ContentResolver contentResolver;
-                                                push_user_id3 = new BufferedReader(new InputStreamReader(stream, C0539C.UTF8_NAME));
+                                                push_user_id3 = new BufferedReader(new InputStreamReader(stream, C0542C.UTF8_NAME));
                                                 while (true) {
                                                     subject = push_user_id3.readLine();
                                                     push_user_id5 = subject;
@@ -4118,7 +4118,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             req.username = str;
             alertDialog = progressDialog2;
             final String str9 = game;
-            C21679 c21679 = r1;
+            C21739 c21739 = r1;
             final int i5 = i2;
             ConnectionsManager instance = ConnectionsManager.getInstance(intentAccount);
             str5 = botChat;
@@ -4126,7 +4126,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             str6 = botUser;
             progressDialog3 = progressDialog2;
             final Integer progressDialog4 = messageId;
-            C21679 c216792 = new RequestDelegate() {
+            C21739 c217392 = new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -4214,7 +4214,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                                     DialogsActivity fragment2 = new DialogsActivity(args2);
                                                     fragment2.setDelegate(new DialogsActivityDelegate() {
                                                         public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids, CharSequence message, boolean param) {
-                                                            C21662 c21662 = this;
+                                                            C21722 c21722 = this;
                                                             long did = ((Long) dids.get(0)).longValue();
                                                             Bundle args = new Bundle();
                                                             args.putBoolean("scrollToTopOnResume", true);
@@ -4272,7 +4272,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                     });
                 }
             };
-            requestId = instance.sendRequest(req2, c21679);
+            requestId = instance.sendRequest(req2, c21739);
             z = hasUrl;
             i4 = i3;
             str7 = str2;
@@ -4357,8 +4357,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                         AndroidUtilities.runOnUIThread(new Runnable() {
 
                             /* renamed from: org.telegram.ui.LaunchActivity$10$1$1 */
-                            class C14441 implements DialogInterface.OnClickListener {
-                                C14441() {
+                            class C14501 implements DialogInterface.OnClickListener {
+                                C14501() {
                                 }
 
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -4405,7 +4405,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                         Object[] objArr = new Object[1];
                                         objArr[0] = invite.chat != null ? invite.chat.title : invite.title;
                                         builder2.setMessage(LocaleController.formatString(str, R.string.ChannelJoinTo, objArr));
-                                        builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C14441());
+                                        builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C14501());
                                         builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                                         LaunchActivity.this.showAlertDialog(builder2);
                                     } else {
@@ -5001,8 +5001,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             builder2.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", R.string.ShareYouLocationUnableManually), new DialogInterface.OnClickListener() {
 
                 /* renamed from: org.telegram.ui.LaunchActivity$19$1 */
-                class C21601 implements LocationActivityDelegate {
-                    C21601() {
+                class C21661 implements LocationActivityDelegate {
+                    C21661() {
                     }
 
                     public void didSelectLocation(MessageMedia location, int live) {
@@ -5016,7 +5016,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (!LaunchActivity.mainFragmentsStack.isEmpty() && AndroidUtilities.isGoogleMapsInstalled((BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1))) {
                         LocationActivity fragment = new LocationActivity(0);
-                        fragment.setDelegate(new C21601());
+                        fragment.setDelegate(new C21661());
                         LaunchActivity.this.presentFragment(fragment);
                     }
                 }
@@ -5152,8 +5152,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
             Utilities.globalQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.ui.LaunchActivity$23$1 */
-                class C14481 implements Runnable {
-                    C14481() {
+                class C14541 implements Runnable {
+                    C14541() {
                     }
 
                     public void run() {
@@ -5180,7 +5180,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                     }
                                     preferences.edit().putLong("last_space_check", System.currentTimeMillis()).commit();
                                     if (freeSpace < 104857600) {
-                                        AndroidUtilities.runOnUIThread(new C14481());
+                                        AndroidUtilities.runOnUIThread(new C14541());
                                     }
                                 }
                             }
@@ -5574,8 +5574,8 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                 action = new Runnable() {
 
                     /* renamed from: org.telegram.ui.LaunchActivity$31$1 */
-                    class C14521 implements DialogInterface.OnClickListener {
-                        C14521() {
+                    class C14581 implements DialogInterface.OnClickListener {
+                        C14581() {
                         }
 
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -5597,7 +5597,7 @@ public class LaunchActivity extends Activity implements NotificationCenterDelega
                                 Builder builder = new Builder(LaunchActivity.this);
                                 builder.setTitle(LocaleController.getString("Proxy", R.string.Proxy));
                                 builder.setMessage(LocaleController.formatString("ConnectingToProxyDisableAlert", R.string.ConnectingToProxyDisableAlert, preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID)));
-                                builder.setPositiveButton(LocaleController.getString("ConnectingToProxyDisable", R.string.ConnectingToProxyDisable), new C14521());
+                                builder.setPositiveButton(LocaleController.getString("ConnectingToProxyDisable", R.string.ConnectingToProxyDisable), new C14581());
                                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                                 fragment.showDialog(builder.create());
                             }

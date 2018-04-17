@@ -191,7 +191,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
         if (r2 == 0) goto L_0x001c;
     L_0x0015:
         r10 = r1.startTimeUs;
-        r10 = org.telegram.messenger.exoplayer2.C0539C.usToMs(r10);
+        r10 = org.telegram.messenger.exoplayer2.C0542C.usToMs(r10);
         goto L_0x001d;
     L_0x001c:
         r10 = r5;

@@ -43,8 +43,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     private int selectedUserId;
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$1 */
-    class C19181 extends ActionBarMenuOnItemClick {
-        C19181() {
+    class C19241 extends ActionBarMenuOnItemClick {
+        C19241() {
         }
 
         public void onItemClick(int id) {
@@ -63,8 +63,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$2 */
-    class C19192 implements OnItemClickListener {
-        C19192() {
+    class C19252 implements OnItemClickListener {
+        C19252() {
         }
 
         public void onItemClick(View view, int position) {
@@ -77,11 +77,11 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$3 */
-    class C19203 implements OnItemLongClickListener {
+    class C19263 implements OnItemLongClickListener {
 
         /* renamed from: org.telegram.ui.BlockedUsersActivity$3$1 */
-        class C08321 implements OnClickListener {
-            C08321() {
+        class C08381 implements OnClickListener {
+            C08381() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -91,7 +91,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C19203() {
+        C19263() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -99,7 +99,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                 if (BlockedUsersActivity.this.getParentActivity() != null) {
                     BlockedUsersActivity.this.selectedUserId = ((Integer) MessagesController.getInstance(BlockedUsersActivity.this.currentAccount).blockedUsers.get(position)).intValue();
                     Builder builder = new Builder(BlockedUsersActivity.this.getParentActivity());
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", R.string.Unblock)}, new C08321());
+                    builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", R.string.Unblock)}, new C08381());
                     BlockedUsersActivity.this.showDialog(builder.create());
                     return true;
                 }
@@ -109,8 +109,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.BlockedUsersActivity$4 */
-    class C19214 implements ThemeDescriptionDelegate {
-        C19214() {
+    class C19274 implements ThemeDescriptionDelegate {
+        C19274() {
         }
 
         public void didSetColor() {
@@ -207,7 +207,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         int i = 1;
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("BlockedUsers", R.string.BlockedUsers));
-        this.actionBar.setActionBarMenuOnItemClick(new C19181());
+        this.actionBar.setActionBarMenuOnItemClick(new C19241());
         this.actionBar.createMenu().addItem(1, (int) R.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -228,8 +228,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C19192());
-        this.listView.setOnItemLongClickListener(new C19203());
+        this.listView.setOnItemClickListener(new C19252());
+        this.listView.setOnItemLongClickListener(new C19263());
         if (MessagesController.getInstance(this.currentAccount).loadingBlockedUsers) {
             this.emptyView.showProgress();
         } else {
@@ -278,7 +278,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C19214();
+        ThemeDescriptionDelegate сellDelegate = new C19274();
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[20];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);

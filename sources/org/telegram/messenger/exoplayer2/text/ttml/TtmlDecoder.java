@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.text.SimpleSubtitleDecoder;
 import org.telegram.messenger.exoplayer2.text.SubtitleDecoderException;
 import org.telegram.messenger.exoplayer2.util.ColorParser;
@@ -610,14 +610,14 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
         XmlPullParser xmlPullParser = parser;
         TtmlNode ttmlNode = parent;
         FrameAndTickRate frameAndTickRate2 = frameAndTickRate;
-        long startTime = C0539C.TIME_UNSET;
-        long endTime2 = C0539C.TIME_UNSET;
+        long startTime = C0542C.TIME_UNSET;
+        long endTime2 = C0542C.TIME_UNSET;
         String regionId = TtmlNode.ANONYMOUS_REGION_ID;
         int attributeCount = parser.getAttributeCount();
         TtmlStyle style = parseStyleAttributes(xmlPullParser, null);
         String regionId2 = regionId;
         String[] styleIds = null;
-        long duration = C0539C.TIME_UNSET;
+        long duration = C0542C.TIME_UNSET;
         int i = 0;
         while (i < attributeCount) {
             int attributeCount2;
@@ -689,22 +689,22 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
             attributeCount = attributeCount2;
             TtmlDecoder ttmlDecoder = this;
         }
-        if (!(ttmlNode == null || ttmlNode.startTimeUs == C0539C.TIME_UNSET)) {
+        if (!(ttmlNode == null || ttmlNode.startTimeUs == C0542C.TIME_UNSET)) {
             long startTime2;
-            if (startTime != C0539C.TIME_UNSET) {
+            if (startTime != C0542C.TIME_UNSET) {
                 startTime2 = startTime + ttmlNode.startTimeUs;
             } else {
                 startTime2 = startTime;
             }
-            if (endTime2 != C0539C.TIME_UNSET) {
+            if (endTime2 != C0542C.TIME_UNSET) {
                 endTime2 += ttmlNode.startTimeUs;
             }
             startTime = startTime2;
         }
-        if (endTime2 == C0539C.TIME_UNSET) {
-            if (duration != C0539C.TIME_UNSET) {
+        if (endTime2 == C0542C.TIME_UNSET) {
+            if (duration != C0542C.TIME_UNSET) {
                 endTime = startTime + duration;
-            } else if (!(ttmlNode == null || ttmlNode.endTimeUs == C0539C.TIME_UNSET)) {
+            } else if (!(ttmlNode == null || ttmlNode.endTimeUs == C0542C.TIME_UNSET)) {
                 endTime = ttmlNode.endTimeUs;
             }
             return TtmlNode.buildNode(parser.getName(), startTime, endTime, style, styleIds, regionId2);

@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.RendererCapabilities;
@@ -76,7 +76,7 @@ public final class MatroskaExtractor implements Extractor {
     private static final String DOC_TYPE_MATROSKA = "matroska";
     private static final String DOC_TYPE_WEBM = "webm";
     private static final int ENCRYPTION_IV_SIZE = 8;
-    public static final ExtractorsFactory FACTORY = new C18321();
+    public static final ExtractorsFactory FACTORY = new C18381();
     public static final int FLAG_DISABLE_SEEK_FOR_CUES = 1;
     private static final int FOURCC_COMPRESSION_VC1 = 826496599;
     private static final int ID_AUDIO = 225;
@@ -858,8 +858,8 @@ public final class MatroskaExtractor implements Extractor {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.mkv.MatroskaExtractor$1 */
-    static class C18321 implements ExtractorsFactory {
-        C18321() {
+    static class C18381 implements ExtractorsFactory {
+        C18381() {
         }
 
         public Extractor[] createExtractors() {
@@ -914,12 +914,12 @@ public final class MatroskaExtractor implements Extractor {
 
     MatroskaExtractor(EbmlReader reader, int flags) {
         this.segmentContentPosition = -1;
-        this.timecodeScale = C0539C.TIME_UNSET;
-        this.durationTimecode = C0539C.TIME_UNSET;
-        this.durationUs = C0539C.TIME_UNSET;
+        this.timecodeScale = C0542C.TIME_UNSET;
+        this.durationTimecode = C0542C.TIME_UNSET;
+        this.durationUs = C0542C.TIME_UNSET;
         this.cuesContentPosition = -1;
         this.seekPositionAfterBuildingCues = -1;
-        this.clusterTimecodeUs = C0539C.TIME_UNSET;
+        this.clusterTimecodeUs = C0542C.TIME_UNSET;
         this.reader = reader;
         this.reader.init(new InnerEbmlReaderOutput());
         this.seekForCuesEnabled = (flags & 1) == 0;
@@ -945,7 +945,7 @@ public final class MatroskaExtractor implements Extractor {
     }
 
     public void seek(long position, long timeUs) {
-        this.clusterTimecodeUs = C0539C.TIME_UNSET;
+        this.clusterTimecodeUs = C0542C.TIME_UNSET;
         int i = 0;
         this.blockState = 0;
         this.reader.reset();
@@ -1138,10 +1138,10 @@ public final class MatroskaExtractor implements Extractor {
             } else if (id != ID_CONTENT_ENCODING) {
                 if (id != ID_CONTENT_ENCODINGS) {
                     if (id == 357149030) {
-                        if (this.timecodeScale == C0539C.TIME_UNSET) {
-                            this.timecodeScale = C0539C.MICROS_PER_SECOND;
+                        if (this.timecodeScale == C0542C.TIME_UNSET) {
+                            this.timecodeScale = C0542C.MICROS_PER_SECOND;
                         }
-                        if (this.durationTimecode != C0539C.TIME_UNSET) {
+                        if (this.durationTimecode != C0542C.TIME_UNSET) {
                             this.durationUs = scaleTimecodeToUs(this.durationTimecode);
                         }
                     } else if (id != ID_TRACKS) {
@@ -1163,7 +1163,7 @@ public final class MatroskaExtractor implements Extractor {
                 if (this.currentTrack.cryptoData == null) {
                     throw new ParserException("Encrypted Track found but ContentEncKeyID was not found");
                 }
-                this.currentTrack.drmInitData = new DrmInitData(new SchemeData(C0539C.UUID_NIL, MimeTypes.VIDEO_WEBM, this.currentTrack.cryptoData.encryptionKey));
+                this.currentTrack.drmInitData = new DrmInitData(new SchemeData(C0542C.UUID_NIL, MimeTypes.VIDEO_WEBM, this.currentTrack.cryptoData.encryptionKey));
             }
         } else if (this.blockState == 2) {
             if (!this.sampleSeenReferenceBlock) {
@@ -1473,7 +1473,7 @@ public final class MatroskaExtractor implements Extractor {
             if (matroskaExtractor.blockState == 0) {
                 matroskaExtractor.blockTrackNumber = (int) matroskaExtractor.varintReader.readUnsignedVarint(extractorInput, false, true, 8);
                 matroskaExtractor.blockTrackNumberLength = matroskaExtractor.varintReader.getLastLength();
-                matroskaExtractor.blockDurationUs = C0539C.TIME_UNSET;
+                matroskaExtractor.blockDurationUs = C0542C.TIME_UNSET;
                 matroskaExtractor.blockState = 1;
                 matroskaExtractor.scratch.reset();
             }
@@ -1862,14 +1862,14 @@ public final class MatroskaExtractor implements Extractor {
 
     private static void setSampleDuration(byte[] subripSampleData, long durationUs, String timecodeFormat, int endTimecodeOffset, long lastTimecodeValueScalingFactor, byte[] emptyTimecode) {
         byte[] timeCodeData;
-        if (durationUs == C0539C.TIME_UNSET) {
+        if (durationUs == C0542C.TIME_UNSET) {
             timeCodeData = emptyTimecode;
             long j = durationUs;
             String str = timecodeFormat;
         } else {
-            long durationUs2 = durationUs - (((long) (((int) (durationUs / 3600000000L)) * 3600)) * C0539C.MICROS_PER_SECOND);
-            long durationUs3 = durationUs2 - (((long) (((int) (durationUs2 / 60000000)) * 60)) * C0539C.MICROS_PER_SECOND);
-            int lastValue = (int) ((durationUs3 - (((long) ((int) (durationUs3 / C0539C.MICROS_PER_SECOND))) * C0539C.MICROS_PER_SECOND)) / lastTimecodeValueScalingFactor);
+            long durationUs2 = durationUs - (((long) (((int) (durationUs / 3600000000L)) * 3600)) * C0542C.MICROS_PER_SECOND);
+            long durationUs3 = durationUs2 - (((long) (((int) (durationUs2 / 60000000)) * 60)) * C0542C.MICROS_PER_SECOND);
+            int lastValue = (int) ((durationUs3 - (((long) ((int) (durationUs3 / C0542C.MICROS_PER_SECOND))) * C0542C.MICROS_PER_SECOND)) / lastTimecodeValueScalingFactor);
             timeCodeData = Util.getUtf8Bytes(String.format(Locale.US, timecodeFormat, new Object[]{Integer.valueOf(hours), Integer.valueOf(minutes), Integer.valueOf(seconds), Integer.valueOf(lastValue)}));
         }
         System.arraycopy(timeCodeData, 0, subripSampleData, endTimecodeOffset, emptyTimecode.length);
@@ -1899,7 +1899,7 @@ public final class MatroskaExtractor implements Extractor {
     }
 
     private SeekMap buildSeekMap() {
-        if (!(this.segmentContentPosition == -1 || this.durationUs == C0539C.TIME_UNSET || this.cueTimesUs == null || this.cueTimesUs.size() == 0 || this.cueClusterPositions == null)) {
+        if (!(this.segmentContentPosition == -1 || this.durationUs == C0542C.TIME_UNSET || this.cueTimesUs == null || this.cueTimesUs.size() == 0 || this.cueClusterPositions == null)) {
             if (this.cueClusterPositions.size() == this.cueTimesUs.size()) {
                 int cuePointsSize = this.cueTimesUs.size();
                 int[] sizes = new int[cuePointsSize];
@@ -1944,7 +1944,7 @@ public final class MatroskaExtractor implements Extractor {
     }
 
     private long scaleTimecodeToUs(long unscaledTimecode) throws ParserException {
-        if (this.timecodeScale == C0539C.TIME_UNSET) {
+        if (this.timecodeScale == C0542C.TIME_UNSET) {
             throw new ParserException("Can't scale timecode prior to timecodeScale being set.");
         }
         return Util.scaleLargeTimestamp(unscaledTimecode, this.timecodeScale, SUBRIP_TIMECODE_LAST_VALUE_SCALING_FACTOR);

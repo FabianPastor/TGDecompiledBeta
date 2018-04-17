@@ -79,7 +79,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     private static final int TYPE_IN = 1;
     private static final int TYPE_MISSED = 2;
     private static final int TYPE_OUT = 0;
-    private OnClickListener callBtnClickListener = new C08431();
+    private OnClickListener callBtnClickListener = new C08491();
     private ArrayList<CallLogRow> calls = new ArrayList();
     private EmptyTextProgressView emptyView;
     private boolean endReached;
@@ -103,8 +103,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     private boolean scrollUpdated;
 
     /* renamed from: org.telegram.ui.CallLogActivity$1 */
-    class C08431 implements OnClickListener {
-        C08431() {
+    class C08491 implements OnClickListener {
+        C08491() {
         }
 
         public void onClick(View v) {
@@ -113,8 +113,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.CallLogActivity$6 */
-    class C08466 extends ViewOutlineProvider {
-        C08466() {
+    class C08526 extends ViewOutlineProvider {
+        C08526() {
         }
 
         @SuppressLint({"NewApi"})
@@ -124,11 +124,11 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.CallLogActivity$7 */
-    class C08477 implements OnClickListener {
+    class C08537 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.CallLogActivity$7$1 */
-        class C19281 implements ContactsActivityDelegate {
-            C19281() {
+        class C19341 implements ContactsActivityDelegate {
+            C19341() {
             }
 
             public void didSelectContact(User user, String param, ContactsActivity activity) {
@@ -136,7 +136,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C08477() {
+        C08537() {
         }
 
         public void onClick(View v) {
@@ -145,7 +145,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             args.putBoolean("returnAsResult", true);
             args.putBoolean("onlyUsers", true);
             ContactsActivity contactsFragment = new ContactsActivity(args);
-            contactsFragment.setDelegate(new C19281());
+            contactsFragment.setDelegate(new C19341());
             CallLogActivity.this.presentFragment(contactsFragment);
         }
     }
@@ -176,8 +176,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.CallLogActivity$2 */
-    class C19242 extends ActionBarMenuOnItemClick {
-        C19242() {
+    class C19302 extends ActionBarMenuOnItemClick {
+        C19302() {
         }
 
         public void onItemClick(int id) {
@@ -188,8 +188,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.CallLogActivity$3 */
-    class C19253 implements OnItemClickListener {
-        C19253() {
+    class C19313 implements OnItemClickListener {
+        C19313() {
         }
 
         public void onItemClick(View view, int position) {
@@ -207,8 +207,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.CallLogActivity$4 */
-    class C19264 implements OnItemLongClickListener {
-        C19264() {
+    class C19324 implements OnItemLongClickListener {
+        C19324() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -242,8 +242,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.CallLogActivity$5 */
-    class C19275 extends OnScrollListener {
-        C19275() {
+    class C19335 extends OnScrollListener {
+        C19335() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -291,8 +291,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.CallLogActivity$8 */
-    class C19298 implements RequestDelegate {
-        C19298() {
+    class C19358 implements RequestDelegate {
+        C19358() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -550,7 +550,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("Calls", R.string.Calls));
-        this.actionBar.setActionBarMenuOnItemClick(new C19242());
+        this.actionBar.setActionBarMenuOnItemClick(new C19302());
         this.fragmentView = new FrameLayout(context2);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
@@ -569,9 +569,9 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         recyclerListView.setAdapter(listAdapter);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         frameLayout.addView(r0.listView, LayoutHelper.createFrame(-1, -1.0f));
-        r0.listView.setOnItemClickListener(new C19253());
-        r0.listView.setOnItemLongClickListener(new C19264());
-        r0.listView.setOnScrollListener(new C19275());
+        r0.listView.setOnItemClickListener(new C19313());
+        r0.listView.setOnItemLongClickListener(new C19324());
+        r0.listView.setOnScrollListener(new C19335());
         if (r0.loading) {
             r0.emptyView.showProgress();
         } else {
@@ -596,10 +596,10 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(r0.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(r0.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             r0.floatingButton.setStateListAnimator(animator);
-            r0.floatingButton.setOutlineProvider(new C08466());
+            r0.floatingButton.setOutlineProvider(new C08526());
         }
         frameLayout.addView(r0.floatingButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
-        r0.floatingButton.setOnClickListener(new C08477());
+        r0.floatingButton.setOnClickListener(new C08537());
         return r0.fragmentView;
     }
 
@@ -632,7 +632,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             req.filter = new TL_inputMessagesFilterPhoneCalls();
             req.f49q = TtmlNode.ANONYMOUS_REGION_ID;
             req.offset_id = max_id;
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19298(), 2), this.classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19358(), 2), this.classGuid);
         }
     }
 

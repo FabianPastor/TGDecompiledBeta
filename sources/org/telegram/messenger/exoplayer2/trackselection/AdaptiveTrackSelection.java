@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.trackselection;
 
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.source.TrackGroup;
 import org.telegram.messenger.exoplayer2.source.chunk.MediaChunk;
@@ -85,11 +85,11 @@ public class AdaptiveTrackSelection extends BaseTrackSelection {
         this.playbackSpeed = 1.0f;
         this.selectedIndex = determineIdealSelectedIndex(Long.MIN_VALUE);
         this.reason = 1;
-        this.lastBufferEvaluationMs = C0539C.TIME_UNSET;
+        this.lastBufferEvaluationMs = C0542C.TIME_UNSET;
     }
 
     public void enable() {
-        this.lastBufferEvaluationMs = C0539C.TIME_UNSET;
+        this.lastBufferEvaluationMs = C0542C.TIME_UNSET;
     }
 
     public void onPlaybackSpeed(float playbackSpeed) {
@@ -131,7 +131,7 @@ public class AdaptiveTrackSelection extends BaseTrackSelection {
     public int evaluateQueueSize(long playbackPositionUs, List<? extends MediaChunk> queue) {
         List list = queue;
         long nowMs = this.clock.elapsedRealtime();
-        if (this.lastBufferEvaluationMs != C0539C.TIME_UNSET && nowMs - r0.lastBufferEvaluationMs < r0.minTimeBetweenBufferReevaluationMs) {
+        if (this.lastBufferEvaluationMs != C0542C.TIME_UNSET && nowMs - r0.lastBufferEvaluationMs < r0.minTimeBetweenBufferReevaluationMs) {
             return queue.size();
         }
         r0.lastBufferEvaluationMs = nowMs;
@@ -186,7 +186,7 @@ public class AdaptiveTrackSelection extends BaseTrackSelection {
     }
 
     private long minDurationForQualityIncreaseUs(long availableDurationUs) {
-        boolean isAvailableDurationTooShort = availableDurationUs != C0539C.TIME_UNSET && availableDurationUs <= this.minDurationForQualityIncreaseUs;
+        boolean isAvailableDurationTooShort = availableDurationUs != C0542C.TIME_UNSET && availableDurationUs <= this.minDurationForQualityIncreaseUs;
         return isAvailableDurationTooShort ? (long) (((float) availableDurationUs) * this.bufferedFractionToLiveEdgeForQualityIncrease) : this.minDurationForQualityIncreaseUs;
     }
 }

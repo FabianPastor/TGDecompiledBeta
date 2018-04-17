@@ -53,8 +53,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     private CropRectangle tempRect = new CropRectangle();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$1 */
-    class C11171 implements OnPreDrawListener {
-        C11171() {
+    class C11231 implements OnPreDrawListener {
+        C11231() {
         }
 
         public boolean onPreDraw() {
@@ -65,8 +65,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$7 */
-    class C11237 implements OnCancelListener {
-        C11237() {
+    class C11297 implements OnCancelListener {
+        C11297() {
         }
 
         public void onCancel(DialogInterface dialog) {
@@ -267,7 +267,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         if (fform) {
             this.areaView.setDimVisibility(false);
         }
-        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C11171());
+        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C11231());
         this.imageView.setImageBitmap(this.bitmap);
     }
 
@@ -338,11 +338,11 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         float y = ((targetRect.centerY() - (((((float) r6.imageView.getHeight()) - r6.bottomPadding) + ((float) i)) / 2.0f)) / r6.areaView.getCropHeight()) * r6.state.getOrientedHeight();
         final float targetScale = scale;
         final boolean animEnsureFit = ensureFit;
-        C11182 c11182 = r0;
+        C11242 c11242 = r0;
         final float centerX = ((targetRect.centerX() - ((float) (r6.imageView.getWidth() / 2))) / r6.areaView.getCropWidth()) * r6.state.getOrientedWidth();
         ValueAnimator animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
         final ValueAnimator animator2 = y;
-        C11182 c111822 = new AnimatorUpdateListener() {
+        C11242 c112422 = new AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
                 float deltaScale = (1.0f + ((targetScale - 1.0f) * ((Float) animation.getAnimatedValue()).floatValue())) / currentScale[0];
                 float[] fArr = currentScale;
@@ -351,7 +351,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                 CropView.this.updateMatrix();
             }
         };
-        animator.addUpdateListener(c11182);
+        animator.addUpdateListener(c11242);
         animator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 if (animEnsureFit) {
@@ -748,7 +748,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                 }
             }).create();
             dialog.setCanceledOnTouchOutside(true);
-            dialog.setOnCancelListener(new C11237());
+            dialog.setOnCancelListener(new C11297());
             dialog.show();
         }
     }

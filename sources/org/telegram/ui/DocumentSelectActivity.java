@@ -68,7 +68,7 @@ public class DocumentSelectActivity extends BaseFragment {
     private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
-    private BroadcastReceiver receiver = new C13811();
+    private BroadcastReceiver receiver = new C13871();
     private boolean receiverRegistered = false;
     private ArrayList<ListItem> recentItems = new ArrayList();
     private boolean scrolling;
@@ -77,11 +77,11 @@ public class DocumentSelectActivity extends BaseFragment {
     private long sizeLimit = NUM;
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$1 */
-    class C13811 extends BroadcastReceiver {
+    class C13871 extends BroadcastReceiver {
 
         /* renamed from: org.telegram.ui.DocumentSelectActivity$1$1 */
-        class C13801 implements Runnable {
-            C13801() {
+        class C13861 implements Runnable {
+            C13861() {
             }
 
             public void run() {
@@ -97,11 +97,11 @@ public class DocumentSelectActivity extends BaseFragment {
             }
         }
 
-        C13811() {
+        C13871() {
         }
 
         public void onReceive(Context arg0, Intent intent) {
-            Runnable r = new C13801();
+            Runnable r = new C13861();
             if ("android.intent.action.MEDIA_UNMOUNTED".equals(intent.getAction())) {
                 DocumentSelectActivity.this.listView.postDelayed(r, 1000);
             } else {
@@ -111,8 +111,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$3 */
-    class C13823 implements OnTouchListener {
-        C13823() {
+    class C13883 implements OnTouchListener {
+        C13883() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -121,8 +121,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$7 */
-    class C13837 implements Comparator<ListItem> {
-        C13837() {
+    class C13897 implements Comparator<ListItem> {
+        C13897() {
         }
 
         public int compare(ListItem o1, ListItem o2) {
@@ -139,8 +139,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$8 */
-    class C13848 implements OnPreDrawListener {
-        C13848() {
+    class C13908 implements OnPreDrawListener {
+        C13908() {
         }
 
         public boolean onPreDraw() {
@@ -151,8 +151,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$9 */
-    class C13859 implements Comparator<File> {
-        C13859() {
+    class C13919 implements Comparator<File> {
+        C13919() {
         }
 
         public int compare(File lhs, File rhs) {
@@ -195,8 +195,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$2 */
-    class C21262 extends ActionBarMenuOnItemClick {
-        C21262() {
+    class C21322 extends ActionBarMenuOnItemClick {
+        C21322() {
         }
 
         public void onItemClick(int id) {
@@ -226,8 +226,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$4 */
-    class C21274 extends OnScrollListener {
-        C21274() {
+    class C21334 extends OnScrollListener {
+        C21334() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -236,8 +236,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$5 */
-    class C21285 implements OnItemLongClickListener {
-        C21285() {
+    class C21345 implements OnItemLongClickListener {
+        C21345() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -283,8 +283,8 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.DocumentSelectActivity$6 */
-    class C21296 implements OnItemClickListener {
-        C21296() {
+    class C21356 implements OnItemClickListener {
+        C21356() {
         }
 
         public void onItemClick(View view, int position) {
@@ -457,7 +457,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("SelectFile", R.string.SelectFile));
-        this.actionBar.setActionBarMenuOnItemClick(new C21262());
+        this.actionBar.setActionBarMenuOnItemClick(new C21322());
         this.selectedFiles.clear();
         this.actionModeViews.clear();
         ActionBarMenu actionMode = this.actionBar.createActionMode();
@@ -465,7 +465,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.selectedMessagesCountTextView.setTextSize(18);
         this.selectedMessagesCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedMessagesCountTextView.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
-        this.selectedMessagesCountTextView.setOnTouchListener(new C13823());
+        this.selectedMessagesCountTextView.setOnTouchListener(new C13883());
         actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
         this.actionModeViews.add(actionMode.addItemWithWidth(3, R.drawable.ic_ab_done, AndroidUtilities.dp(54.0f)));
         this.fragmentView = new FrameLayout(context);
@@ -485,9 +485,9 @@ public class DocumentSelectActivity extends BaseFragment {
         this.listAdapter = listAdapter;
         recyclerListView2.setAdapter(listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnScrollListener(new C21274());
-        this.listView.setOnItemLongClickListener(new C21285());
-        this.listView.setOnItemClickListener(new C21296());
+        this.listView.setOnScrollListener(new C21334());
+        this.listView.setOnItemLongClickListener(new C21345());
+        this.listView.setOnItemClickListener(new C21356());
         listRoots();
         return this.fragmentView;
     }
@@ -511,7 +511,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     this.recentItems.add(item);
                 }
             }
-            Collections.sort(this.recentItems, new C13837());
+            Collections.sort(this.recentItems, new C13897());
         } catch (Throwable e) {
             FileLog.m3e(e);
         }
@@ -528,7 +528,7 @@ public class DocumentSelectActivity extends BaseFragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (this.listView != null) {
-            this.listView.getViewTreeObserver().addOnPreDrawListener(new C13848());
+            this.listView.getViewTreeObserver().addOnPreDrawListener(new C13908());
         }
     }
 
@@ -571,7 +571,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
                 this.currentDir = dir;
                 this.items.clear();
-                Arrays.sort(files, new C13859());
+                Arrays.sort(files, new C13919());
                 for (File file : files) {
                     if (file.getName().indexOf(46) != 0) {
                         ListItem item = new ListItem();

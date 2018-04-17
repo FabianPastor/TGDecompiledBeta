@@ -53,7 +53,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.DefaultRenderersFactory;
 import org.telegram.messenger.exoplayer2.upstream.DataSchemeDataSource;
@@ -87,7 +87,7 @@ public class ConnectionsManager {
     public static final int RequestFlagTryDifferentDc = 16;
     public static final int RequestFlagWithoutLogin = 8;
     private static AsyncTask currentTask;
-    private static ThreadLocal<HashMap<String, ResolvedDomain>> dnsCache = new C06891();
+    private static ThreadLocal<HashMap<String, ResolvedDomain>> dnsCache = new C06911();
     private static final int dnsConfigVersion = 0;
     private static int lastClassGuid = 1;
     private static long lastDnsRequestTime;
@@ -100,8 +100,8 @@ public class ConnectionsManager {
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
 
     /* renamed from: org.telegram.tgnet.ConnectionsManager$1 */
-    static class C06891 extends ThreadLocal<HashMap<String, ResolvedDomain>> {
-        C06891() {
+    static class C06911 extends ThreadLocal<HashMap<String, ResolvedDomain>> {
+        C06911() {
         }
 
         protected HashMap<String, ResolvedDomain> initialValue() {
@@ -110,8 +110,8 @@ public class ConnectionsManager {
     }
 
     /* renamed from: org.telegram.tgnet.ConnectionsManager$3 */
-    class C06913 extends BroadcastReceiver {
-        C06913() {
+    class C06943 extends BroadcastReceiver {
+        C06943() {
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -216,8 +216,8 @@ public class ConnectionsManager {
         private int currentAccount;
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$DnsTxtLoadTask$1 */
-        class C06981 implements Comparator<String> {
-            C06981() {
+        class C07021 implements Comparator<String> {
+            C07021() {
             }
 
             public int compare(String o1, String o2) {
@@ -270,13 +270,13 @@ public class ConnectionsManager {
                     } else {
                         if (read == -1) {
                         }
-                        array = new JSONObject(new String(outbuf.toByteArray(), C0539C.UTF8_NAME)).getJSONArray("Answer");
+                        array = new JSONObject(new String(outbuf.toByteArray(), C0542C.UTF8_NAME)).getJSONArray("Answer");
                         len = array.length();
                         arrayList = new ArrayList(len);
                         for (a = 0; a < len; a++) {
                             arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
                         }
-                        Collections.sort(arrayList, new C06981());
+                        Collections.sort(arrayList, new C07021());
                         builder = new StringBuilder();
                         a = 0;
                         while (a < arrayList.size()) {
@@ -303,13 +303,13 @@ public class ConnectionsManager {
                         return buffer;
                     }
                 }
-                array = new JSONObject(new String(outbuf.toByteArray(), C0539C.UTF8_NAME)).getJSONArray("Answer");
+                array = new JSONObject(new String(outbuf.toByteArray(), C0542C.UTF8_NAME)).getJSONArray("Answer");
                 len = array.length();
                 arrayList = new ArrayList(len);
                 for (a = 0; a < len; a++) {
                     arrayList.add(array.getJSONObject(a).getString(DataSchemeDataSource.SCHEME_DATA));
                 }
-                Collections.sort(arrayList, new C06981());
+                Collections.sort(arrayList, new C07021());
                 builder = new StringBuilder();
                 a = 0;
                 while (a < arrayList.size()) {
@@ -355,8 +355,8 @@ public class ConnectionsManager {
         private FirebaseRemoteConfig firebaseRemoteConfig;
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$2 */
-        class C24172 implements Runnable {
-            C24172() {
+        class C07052 implements Runnable {
+            C07052() {
             }
 
             public void run() {
@@ -371,8 +371,8 @@ public class ConnectionsManager {
         }
 
         /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$1 */
-        class C24231 implements OnCompleteListener<Void> {
-            C24231() {
+        class C18881 implements OnCompleteListener<Void> {
+            C18881() {
             }
 
             public void onComplete(Task<Void> finishedTask) {
@@ -423,9 +423,9 @@ public class ConnectionsManager {
                     stringBuilder.append(currentValue);
                     FileLog.m0d(stringBuilder.toString());
                 }
-                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new C24231());
+                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new C18881());
             } catch (Throwable e) {
-                Utilities.stageQueue.postRunnable(new C24172());
+                Utilities.stageQueue.postRunnable(new C07052());
                 FileLog.m3e(e);
             }
             return null;
@@ -632,8 +632,8 @@ public class ConnectionsManager {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.tgnet.ConnectionsManager$2$1 */
-            class C24221 implements RequestDelegateInternal {
-                C24221() {
+            class C18871 implements RequestDelegateInternal {
+                C18871() {
                 }
 
                 public void run(long response, int errorCode, String errorText, int networkType) {
@@ -699,7 +699,7 @@ public class ConnectionsManager {
                     NativeByteBuffer buffer = new NativeByteBuffer(tLObject.getObjectSize());
                     tLObject.serializeToStream(buffer);
                     tLObject.freeResources();
-                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new C24221(), quickAckDelegate, writeToSocketDelegate, i2, i3, i4, z, i);
+                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new C18871(), quickAckDelegate, writeToSocketDelegate, i2, i3, i4, z, i);
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
@@ -760,7 +760,7 @@ public class ConnectionsManager {
         }
         native_init(connectionsManager.currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
         checkConnection();
-        ApplicationLoader.applicationContext.registerReceiver(new C06913(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        ApplicationLoader.applicationContext.registerReceiver(new C06943(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
     }
 
     public static void setLangCode(String langCode) {

@@ -5,13 +5,13 @@ import android.os.Parcelable.Creator;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class TextInformationFrame extends Id3Frame {
-    public static final Creator<TextInformationFrame> CREATOR = new C05831();
+    public static final Creator<TextInformationFrame> CREATOR = new C05861();
     public final String description;
     public final String value;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.id3.TextInformationFrame$1 */
-    static class C05831 implements Creator<TextInformationFrame> {
-        C05831() {
+    static class C05861 implements Creator<TextInformationFrame> {
+        C05861() {
         }
 
         public TextInformationFrame createFromParcel(Parcel in) {

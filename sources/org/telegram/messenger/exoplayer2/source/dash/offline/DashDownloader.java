@@ -4,7 +4,7 @@ import android.net.Uri;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.extractor.ChunkIndex;
 import org.telegram.messenger.exoplayer2.offline.DownloadException;
 import org.telegram.messenger.exoplayer2.offline.DownloaderConstructorHelper;
@@ -79,7 +79,7 @@ public final class DashDownloader extends SegmentDownloader<DashManifest, Repres
                     }
                     Period period = dashManifest.getPeriod(key.periodIndex);
                     Representation representation = (Representation) ((AdaptationSet) period.adaptationSets.get(key.adaptationSetIndex)).representations.get(key.representationIndex);
-                    long startUs = C0539C.msToUs(period.startMs);
+                    long startUs = C0542C.msToUs(period.startMs);
                     String baseUrl = representation.baseUrl;
                     RangedUri initializationUri = representation.getInitializationUri();
                     if (initializationUri != null) {

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.source.BehindLiveWindowException;
@@ -37,7 +37,7 @@ class HlsChunkSource {
     private IOException fatalError;
     private boolean independentSegments;
     private boolean isTimestampMaster;
-    private long liveEdgeTimeUs = C0539C.TIME_UNSET;
+    private long liveEdgeTimeUs = C0542C.TIME_UNSET;
     private final DataSource mediaDataSource;
     private final List<Format> muxedCaptionFormats;
     private final HlsPlaylistTracker playlistTracker;
@@ -188,7 +188,7 @@ class HlsChunkSource {
         } else {
             subtractedDurationUs = previous.getDurationUs();
             long bufferedDurationUs3 = Math.max(0, bufferedDurationUs2 - subtractedDurationUs);
-            if (timeToLiveEdgeUs2 != C0539C.TIME_UNSET) {
+            if (timeToLiveEdgeUs2 != C0542C.TIME_UNSET) {
                 bufferedDurationUs = bufferedDurationUs3;
                 timeToLiveEdgeUs = Math.max(0, timeToLiveEdgeUs2 - subtractedDurationUs);
             } else {
@@ -551,14 +551,14 @@ class HlsChunkSource {
     }
 
     private long resolveTimeToLiveEdgeUs(long playbackPositionUs) {
-        if (this.liveEdgeTimeUs != C0539C.TIME_UNSET) {
+        if (this.liveEdgeTimeUs != C0542C.TIME_UNSET) {
             return this.liveEdgeTimeUs - playbackPositionUs;
         }
-        return C0539C.TIME_UNSET;
+        return C0542C.TIME_UNSET;
     }
 
     private void updateLiveEdgeTimeUs(HlsMediaPlaylist mediaPlaylist) {
-        this.liveEdgeTimeUs = mediaPlaylist.hasEndTag ? C0539C.TIME_UNSET : mediaPlaylist.getEndTimeUs();
+        this.liveEdgeTimeUs = mediaPlaylist.hasEndTag ? C0542C.TIME_UNSET : mediaPlaylist.getEndTimeUs();
     }
 
     private EncryptionKeyChunk newEncryptionKeyChunk(Uri keyUri, String iv, int variantIndex, int trackSelectionReason, Object trackSelectionData) {

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.drm.DefaultDrmSessionManager.EventListener;
 import org.telegram.messenger.exoplayer2.drm.DrmSession.DrmSessionException;
@@ -49,8 +49,8 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     final UUID uuid;
 
     /* renamed from: org.telegram.messenger.exoplayer2.drm.DefaultDrmSession$1 */
-    class C05591 implements Runnable {
-        C05591() {
+    class C05621 implements Runnable {
+        C05621() {
         }
 
         public void run() {
@@ -59,8 +59,8 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.drm.DefaultDrmSession$2 */
-    class C05602 implements Runnable {
-        C05602() {
+    class C05632 implements Runnable {
+        C05632() {
         }
 
         public void run() {
@@ -69,8 +69,8 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.drm.DefaultDrmSession$3 */
-    class C05613 implements Runnable {
-        C05613() {
+    class C05643 implements Runnable {
+        C05643() {
         }
 
         public void run() {
@@ -311,7 +311,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
                     } else {
                         this.state = 4;
                         if (!(this.eventHandler == null || this.eventListener == null)) {
-                            this.eventHandler.post(new C05591());
+                            this.eventHandler.post(new C05621());
                         }
                     }
                     return;
@@ -351,7 +351,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     }
 
     private long getLicenseDurationRemainingSec() {
-        if (!C0539C.WIDEVINE_UUID.equals(this.uuid)) {
+        if (!C0542C.WIDEVINE_UUID.equals(this.uuid)) {
             return Long.MAX_VALUE;
         }
         Pair<Long, Long> pair = WidevineUtil.getLicenseDurationRemainingSec(this);
@@ -361,7 +361,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
     private void postKeyRequest(int type, boolean allowRetry) {
         try {
             KeyRequest request = this.mediaDrm.getKeyRequest(type == 3 ? this.offlineLicenseKeySetId : this.sessionId, this.initData, this.mimeType, type, this.optionalKeyRequestParameters);
-            if (C0539C.CLEARKEY_UUID.equals(this.uuid)) {
+            if (C0542C.CLEARKEY_UUID.equals(this.uuid)) {
                 request = new DefaultKeyRequest(ClearKeyUtil.adjustRequestData(request.getData()), request.getDefaultUrl());
             }
             this.postRequestHandler.obtainMessage(1, request, allowRetry).sendToTarget();
@@ -380,13 +380,13 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
         }
         try {
             byte[] responseData = (byte[]) response;
-            if (C0539C.CLEARKEY_UUID.equals(this.uuid)) {
+            if (C0542C.CLEARKEY_UUID.equals(this.uuid)) {
                 responseData = ClearKeyUtil.adjustResponseData(responseData);
             }
             if (this.mode == 3) {
                 this.mediaDrm.provideKeyResponse(this.offlineLicenseKeySetId, responseData);
                 if (!(this.eventHandler == null || this.eventListener == null)) {
-                    this.eventHandler.post(new C05602());
+                    this.eventHandler.post(new C05632());
                 }
             } else {
                 byte[] keySetId = this.mediaDrm.provideKeyResponse(this.sessionId, responseData);
@@ -395,7 +395,7 @@ class DefaultDrmSession<T extends ExoMediaCrypto> implements DrmSession<T> {
                 }
                 this.state = 4;
                 if (!(this.eventHandler == null || this.eventListener == null)) {
-                    this.eventHandler.post(new C05613());
+                    this.eventHandler.post(new C05643());
                 }
             }
         } catch (Exception e) {

@@ -6,7 +6,7 @@ import org.telegram.messenger.exoplayer2.source.ads.AdPlaybackState.AdGroup;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
 public abstract class Timeline {
-    public static final Timeline EMPTY = new C18271();
+    public static final Timeline EMPTY = new C18331();
 
     public static final class Period {
         private AdPlaybackState adPlaybackState;
@@ -31,7 +31,7 @@ public abstract class Timeline {
         }
 
         public long getDurationMs() {
-            return C0539C.usToMs(this.durationUs);
+            return C0542C.usToMs(this.durationUs);
         }
 
         public long getDurationUs() {
@@ -39,7 +39,7 @@ public abstract class Timeline {
         }
 
         public long getPositionInWindowMs() {
-            return C0539C.usToMs(this.positionInWindowUs);
+            return C0542C.usToMs(this.positionInWindowUs);
         }
 
         public long getPositionInWindowUs() {
@@ -140,7 +140,7 @@ public abstract class Timeline {
         }
 
         public long getDefaultPositionMs() {
-            return C0539C.usToMs(this.defaultPositionUs);
+            return C0542C.usToMs(this.defaultPositionUs);
         }
 
         public long getDefaultPositionUs() {
@@ -148,7 +148,7 @@ public abstract class Timeline {
         }
 
         public long getDurationMs() {
-            return C0539C.usToMs(this.durationUs);
+            return C0542C.usToMs(this.durationUs);
         }
 
         public long getDurationUs() {
@@ -156,7 +156,7 @@ public abstract class Timeline {
         }
 
         public long getPositionInFirstPeriodMs() {
-            return C0539C.usToMs(this.positionInFirstPeriodUs);
+            return C0542C.usToMs(this.positionInFirstPeriodUs);
         }
 
         public long getPositionInFirstPeriodUs() {
@@ -165,8 +165,8 @@ public abstract class Timeline {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.Timeline$1 */
-    static class C18271 extends Timeline {
-        C18271() {
+    static class C18331 extends Timeline {
+        C18331() {
         }
 
         public int getWindowCount() {
@@ -273,9 +273,9 @@ public abstract class Timeline {
         int i = windowIndex;
         Assertions.checkIndex(i, 0, getWindowCount());
         getWindow(i, window2, false, defaultPositionProjectionUs);
-        if (windowPositionUs == C0539C.TIME_UNSET) {
+        if (windowPositionUs == C0542C.TIME_UNSET) {
             windowPositionUs2 = window.getDefaultPositionUs();
-            if (windowPositionUs2 == C0539C.TIME_UNSET) {
+            if (windowPositionUs2 == C0542C.TIME_UNSET) {
                 return null;
             }
         }
@@ -283,7 +283,7 @@ public abstract class Timeline {
         int periodIndex = window2.firstPeriodIndex;
         long periodPositionUs = window.getPositionInFirstPeriodUs() + windowPositionUs2;
         long periodDurationUs = getPeriod(periodIndex, period2).getDurationUs();
-        while (periodDurationUs != C0539C.TIME_UNSET && periodPositionUs >= periodDurationUs && periodIndex < window2.lastPeriodIndex) {
+        while (periodDurationUs != C0542C.TIME_UNSET && periodPositionUs >= periodDurationUs && periodIndex < window2.lastPeriodIndex) {
             long periodPositionUs2 = periodPositionUs - periodDurationUs;
             periodIndex++;
             periodDurationUs = getPeriod(periodIndex, period2).getDurationUs();

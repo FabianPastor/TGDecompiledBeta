@@ -147,8 +147,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private ActionBarMenuItem switchItem;
 
     /* renamed from: org.telegram.ui.DialogsActivity$8 */
-    class C13788 extends ViewOutlineProvider {
-        C13788() {
+    class C13848 extends ViewOutlineProvider {
+        C13848() {
         }
 
         @SuppressLint({"NewApi"})
@@ -158,8 +158,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$9 */
-    class C13799 implements OnClickListener {
-        C13799() {
+    class C13859 implements OnClickListener {
+        C13859() {
         }
 
         public void onClick(View v) {
@@ -174,8 +174,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$2 */
-    class C21212 extends ActionBarMenuItemSearchListener {
-        C21212() {
+    class C21272 extends ActionBarMenuItemSearchListener {
+        C21272() {
         }
 
         public void onSearchExpand() {
@@ -255,8 +255,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$3 */
-    class C21223 extends ActionBarMenuOnItemClick {
-        C21223() {
+    class C21283 extends ActionBarMenuOnItemClick {
+        C21283() {
         }
 
         public void onItemClick(int id) {
@@ -282,8 +282,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$6 */
-    class C21246 implements OnItemClickListener {
-        C21246() {
+    class C21306 implements OnItemClickListener {
+        C21306() {
         }
 
         public void onItemClick(View view, int position) {
@@ -434,11 +434,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.DialogsActivity$7 */
-    class C21257 implements OnItemLongClickListener {
+    class C21317 implements OnItemLongClickListener {
 
         /* renamed from: org.telegram.ui.DialogsActivity$7$1 */
-        class C13721 implements DialogInterface.OnClickListener {
-            C13721() {
+        class C13781 implements DialogInterface.OnClickListener {
+            C13781() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -450,7 +450,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
         }
 
-        C21257() {
+        C21317() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -468,7 +468,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 Builder builder = new Builder(DialogsActivity.this.getParentActivity());
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
-                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new C13721());
+                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new C13781());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 DialogsActivity.this.showDialog(builder.create());
                 return true;
@@ -576,8 +576,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         builder2.setItems(items, icons, new DialogInterface.OnClickListener() {
 
                             /* renamed from: org.telegram.ui.DialogsActivity$7$2$1 */
-                            class C13731 implements DialogInterface.OnClickListener {
-                                C13731() {
+                            class C13791 implements DialogInterface.OnClickListener {
+                                C13791() {
                                 }
 
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -590,8 +590,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             }
 
                             /* renamed from: org.telegram.ui.DialogsActivity$7$2$2 */
-                            class C13742 implements DialogInterface.OnClickListener {
-                                C13742() {
+                            class C13802 implements DialogInterface.OnClickListener {
+                                C13802() {
                                 }
 
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -614,14 +614,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                         } else {
                                             builder.setMessage(LocaleController.getString("AreYouSureClearHistoryGroup", R.string.AreYouSureClearHistoryGroup));
                                         }
-                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C13731());
+                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C13791());
                                     } else {
                                         if (chat == null || !chat.megagroup) {
                                             builder.setMessage(LocaleController.getString("ChannelLeaveAlert", R.string.ChannelLeaveAlert));
                                         } else {
                                             builder.setMessage(LocaleController.getString("MegaLeaveAlert", R.string.MegaLeaveAlert));
                                         }
-                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C13742());
+                                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C13802());
                                     }
                                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                                     DialogsActivity.this.showDialog(builder.create());
@@ -842,7 +842,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             r0.passcodeItem = menu.addItem(1, (int) R.drawable.lock_close);
             updatePasscodeButton();
         }
-        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21212()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21272()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         ActionBarMenu actionBarMenu = 3;
         if (r0.onlySelect) {
             r0.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -910,7 +910,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
         }
         r0.actionBar.setAllowOverlayTitle(true);
-        r0.actionBar.setActionBarMenuOnItemClick(new C21223());
+        r0.actionBar.setActionBarMenuOnItemClick(new C21283());
         if (r0.sideMenu != null) {
             r0.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
             r0.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
@@ -1044,8 +1044,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.listView.setLayoutManager(r0.layoutManager);
         r0.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         contentView.addView(r0.listView, LayoutHelper.createFrame(-1, -1.0f));
-        r0.listView.setOnItemClickListener(new C21246());
-        r0.listView.setOnItemLongClickListener(new C21257());
+        r0.listView.setOnItemClickListener(new C21306());
+        r0.listView.setOnItemLongClickListener(new C21317());
         r0.searchEmptyView = new EmptyTextProgressView(context2);
         r0.searchEmptyView.setVisibility(8);
         r0.searchEmptyView.setShowAtCenter(true);
@@ -1073,10 +1073,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(r0.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             animator.addState(new int[0], ObjectAnimator.ofFloat(r0.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             r0.floatingButton.setStateListAnimator(animator);
-            r0.floatingButton.setOutlineProvider(new C13788());
+            r0.floatingButton.setOutlineProvider(new C13848());
         }
         contentView.addView(r0.floatingButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
-        r0.floatingButton.setOnClickListener(new C13799());
+        r0.floatingButton.setOnClickListener(new C13859());
         r0.listView.setOnScrollListener(new OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == 1 && DialogsActivity.this.searching && DialogsActivity.this.searchWas) {

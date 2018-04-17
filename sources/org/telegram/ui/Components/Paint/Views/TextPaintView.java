@@ -22,11 +22,11 @@ public class TextPaintView extends EntityView {
     private Swatch swatch;
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.TextPaintView$1 */
-    class C12171 implements TextWatcher {
+    class C12231 implements TextWatcher {
         private int beforeCursorPosition = 0;
         private String text;
 
-        C12171() {
+        C12231() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -161,7 +161,7 @@ public class TextPaintView extends EntityView {
         setSwatch(swatch);
         setStroke(stroke);
         updatePosition();
-        this.editText.addTextChangedListener(new C12171());
+        this.editText.addTextChangedListener(new C12231());
     }
 
     public TextPaintView(Context context, TextPaintView textPaintView, Point position) {

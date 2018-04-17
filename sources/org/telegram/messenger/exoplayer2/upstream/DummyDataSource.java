@@ -5,12 +5,12 @@ import java.io.IOException;
 import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
 
 public final class DummyDataSource implements DataSource {
-    public static final Factory FACTORY = new C18501();
+    public static final Factory FACTORY = new C18561();
     public static final DummyDataSource INSTANCE = new DummyDataSource();
 
     /* renamed from: org.telegram.messenger.exoplayer2.upstream.DummyDataSource$1 */
-    static class C18501 implements Factory {
-        C18501() {
+    static class C18561 implements Factory {
+        C18561() {
         }
 
         public DataSource createDataSource() {

@@ -5,7 +5,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.ParserException;
@@ -49,12 +49,12 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     private long lastSeekPositionUs;
     private final Loader loader = new Loader("Loader:HlsSampleStreamWrapper");
     private boolean loadingFinished;
-    private final Runnable maybeFinishPrepareRunnable = new C06121();
+    private final Runnable maybeFinishPrepareRunnable = new C06151();
     private final ArrayList<HlsMediaChunk> mediaChunks = new ArrayList();
     private final int minLoadableRetryCount;
     private final Format muxedAudioFormat;
     private final HlsChunkHolder nextChunkHolder = new HlsChunkHolder();
-    private final Runnable onTracksEndedRunnable = new C06132();
+    private final Runnable onTracksEndedRunnable = new C06162();
     private long pendingResetPositionUs;
     private boolean pendingResetUpstreamFormats;
     private boolean prepared;
@@ -75,8 +75,8 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     private boolean videoSampleQueueMappingDone;
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.hls.HlsSampleStreamWrapper$1 */
-    class C06121 implements Runnable {
-        C06121() {
+    class C06151 implements Runnable {
+        C06151() {
         }
 
         public void run() {
@@ -85,8 +85,8 @@ final class HlsSampleStreamWrapper implements ExtractorOutput, UpstreamFormatCha
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.source.hls.HlsSampleStreamWrapper$2 */
-    class C06132 implements Runnable {
-        C06132() {
+    class C06162 implements Runnable {
+        C06162() {
         }
 
         public void run() {
@@ -584,7 +584,7 @@ Error: java.lang.IndexOutOfBoundsException: bitIndex < 0: -1
                 HlsUrl playlistToLoad = r0.nextChunkHolder.playlist;
                 r0.nextChunkHolder.clear();
                 if (endOfStream) {
-                    r0.pendingResetPositionUs = C0539C.TIME_UNSET;
+                    r0.pendingResetPositionUs = C0542C.TIME_UNSET;
                     r0.loadingFinished = true;
                     return true;
                 } else if (loadable == null) {
@@ -594,7 +594,7 @@ Error: java.lang.IndexOutOfBoundsException: bitIndex < 0: -1
                     return false;
                 } else {
                     if (isMediaChunk(loadable)) {
-                        r0.pendingResetPositionUs = C0539C.TIME_UNSET;
+                        r0.pendingResetPositionUs = C0542C.TIME_UNSET;
                         HlsMediaChunk mediaChunk = (HlsMediaChunk) loadable;
                         mediaChunk.init(r0);
                         r0.mediaChunks.add(mediaChunk);
@@ -951,7 +951,7 @@ Error: java.lang.IndexOutOfBoundsException: bitIndex < 0: -1
     }
 
     private boolean isPendingReset() {
-        return this.pendingResetPositionUs != C0539C.TIME_UNSET;
+        return this.pendingResetPositionUs != C0542C.TIME_UNSET;
     }
 
     private boolean seekInsideBufferUs(long positionUs) {

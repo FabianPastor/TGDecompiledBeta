@@ -130,8 +130,8 @@ public class AndroidUtilities {
     private static boolean waitingForSms = false;
 
     /* renamed from: org.telegram.messenger.AndroidUtilities$5 */
-    static class C17825 extends CrashManagerListener {
-        C17825() {
+    static class C17885 extends CrashManagerListener {
+        C17885() {
         }
 
         public boolean includeDeviceData() {
@@ -776,7 +776,7 @@ public class AndroidUtilities {
             if (callLogContentObserver == null) {
                 ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
                 Uri uri = Calls.CONTENT_URI;
-                ContentObserver c00582 = new ContentObserver(new Handler()) {
+                ContentObserver c00612 = new ContentObserver(new Handler()) {
                     public boolean deliverSelfNotifications() {
                         return true;
                     }
@@ -786,16 +786,16 @@ public class AndroidUtilities {
                         AndroidUtilities.removeLoginPhoneCall(number, false);
                     }
                 };
-                callLogContentObserver = c00582;
-                contentResolver.registerContentObserver(uri, true, c00582);
-                Runnable c00593 = new Runnable() {
+                callLogContentObserver = c00612;
+                contentResolver.registerContentObserver(uri, true, c00612);
+                Runnable c00623 = new Runnable() {
                     public void run() {
                         AndroidUtilities.unregisterRunnable = null;
                         AndroidUtilities.registerLoginContentObserver(false, number);
                     }
                 };
-                unregisterRunnable = c00593;
-                runOnUIThread(c00593, 10000);
+                unregisterRunnable = c00623;
+                runOnUIThread(c00623, 10000);
             }
         } else if (callLogContentObserver != null) {
             if (unregisterRunnable != null) {
@@ -1088,7 +1088,7 @@ public class AndroidUtilities {
     }
 
     public static void checkForCrashes(Activity context) {
-        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C17825());
+        CrashManager.register(context, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new C17885());
     }
 
     public static void checkForUpdates(Activity context) {

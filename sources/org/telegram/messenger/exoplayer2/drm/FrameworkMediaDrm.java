@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.DefaultKeyRequest;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.DefaultKeyStatus;
 import org.telegram.messenger.exoplayer2.drm.ExoMediaDrm.DefaultProvisionRequest;
@@ -42,8 +42,8 @@ public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto
 
     private FrameworkMediaDrm(UUID uuid) throws UnsupportedSchemeException {
         Assertions.checkNotNull(uuid);
-        Assertions.checkArgument(C0539C.COMMON_PSSH_UUID.equals(uuid) ^ 1, "Use C.CLEARKEY_UUID instead");
-        UUID uuid2 = (Util.SDK_INT >= 27 || !C0539C.CLEARKEY_UUID.equals(uuid)) ? uuid : C0539C.COMMON_PSSH_UUID;
+        Assertions.checkArgument(C0542C.COMMON_PSSH_UUID.equals(uuid) ^ 1, "Use C.CLEARKEY_UUID instead");
+        UUID uuid2 = (Util.SDK_INT >= 27 || !C0542C.CLEARKEY_UUID.equals(uuid)) ? uuid : C0542C.COMMON_PSSH_UUID;
         uuid = uuid2;
         this.uuid = uuid;
         this.mediaDrm = new MediaDrm(uuid);
@@ -127,7 +127,7 @@ public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto
     }
 
     public FrameworkMediaCrypto createMediaCrypto(byte[] initData) throws MediaCryptoException {
-        boolean forceAllowInsecureDecoderComponents = Util.SDK_INT < 21 && C0539C.WIDEVINE_UUID.equals(this.uuid) && "L3".equals(getPropertyString("securityLevel"));
+        boolean forceAllowInsecureDecoderComponents = Util.SDK_INT < 21 && C0542C.WIDEVINE_UUID.equals(this.uuid) && "L3".equals(getPropertyString("securityLevel"));
         return new FrameworkMediaCrypto(new MediaCrypto(this.uuid, initData), forceAllowInsecureDecoderComponents);
     }
 }

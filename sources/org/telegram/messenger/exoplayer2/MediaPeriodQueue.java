@@ -47,7 +47,7 @@ final class MediaPeriodQueue {
 
     public boolean shouldLoadNextMediaPeriod() {
         if (this.loading != null) {
-            if (this.loading.info.isFinal || !this.loading.isFullyBuffered() || this.loading.info.durationUs == C0539C.TIME_UNSET || this.length >= MAXIMUM_BUFFER_AHEAD_PERIODS) {
+            if (this.loading.info.isFinal || !this.loading.isFullyBuffered() || this.loading.info.durationUs == C0542C.TIME_UNSET || this.length >= MAXIMUM_BUFFER_AHEAD_PERIODS) {
                 return false;
             }
         }
@@ -193,7 +193,7 @@ final class MediaPeriodQueue {
             long startPositionUs = 0;
             if (mediaPeriodQueue.timeline.getWindow(nextWindowIndex, mediaPeriodQueue.window).firstPeriodIndex == nextPeriodIndex) {
                 long defaultPositionProjectionUs = (rendererOffsetUs + mediaPeriodInfo.durationUs) - rendererPositionUs;
-                Pair<Integer, Long> defaultPosition = mediaPeriodQueue.timeline.getPeriodPosition(mediaPeriodQueue.window, mediaPeriodQueue.period, nextWindowIndex, C0539C.TIME_UNSET, Math.max(0, defaultPositionProjectionUs));
+                Pair<Integer, Long> defaultPosition = mediaPeriodQueue.timeline.getPeriodPosition(mediaPeriodQueue.window, mediaPeriodQueue.period, nextWindowIndex, C0542C.TIME_UNSET, Math.max(0, defaultPositionProjectionUs));
                 if (defaultPosition == null) {
                     return null;
                 }
@@ -294,7 +294,7 @@ final class MediaPeriodQueue {
         boolean isLastInTimeline = isLastInTimeline(id, isLastInPeriod);
         this.timeline.getPeriod(id.periodIndex, this.period);
         boolean isLastInPeriod2 = isLastInPeriod;
-        return new MediaPeriodInfo(id, startPositionUs, j, C0539C.TIME_UNSET, j == Long.MIN_VALUE ? r0.period.getDurationUs() : j, isLastInPeriod, isLastInTimeline);
+        return new MediaPeriodInfo(id, startPositionUs, j, C0542C.TIME_UNSET, j == Long.MIN_VALUE ? r0.period.getDurationUs() : j, isLastInPeriod, isLastInTimeline);
     }
 
     private boolean isLastInPeriod(MediaPeriodId id, long endPositionUs) {

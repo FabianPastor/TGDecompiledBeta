@@ -20,7 +20,7 @@ import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class FlacExtractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C18291();
+    public static final ExtractorsFactory FACTORY = new C18351();
     private static final byte[] FLAC_SIGNATURE = new byte[]{(byte) 102, (byte) 76, (byte) 97, (byte) 67, (byte) 0, (byte) 0, (byte) 0, (byte) 34};
     private FlacDecoderJni decoderJni;
     private ExtractorOutput extractorOutput;
@@ -30,8 +30,8 @@ public final class FlacExtractor implements Extractor {
     private TrackOutput trackOutput;
 
     /* renamed from: org.telegram.messenger.exoplayer2.ext.flac.FlacExtractor$1 */
-    static class C18291 implements ExtractorsFactory {
-        C18291() {
+    static class C18351 implements ExtractorsFactory {
+        C18351() {
         }
 
         public Extractor[] createExtractors() {

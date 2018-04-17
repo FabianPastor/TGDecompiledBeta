@@ -46,7 +46,7 @@ public class TgChooserTargetService extends ChooserTargetService {
         final CountDownLatch countDownLatch2 = countDownLatch;
         MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(new Runnable() {
             public void run() {
-                C05121 c05121 = this;
+                C05151 c05151 = this;
                 ArrayList<Integer> dialogs = new ArrayList();
                 ArrayList<Chat> chats = new ArrayList();
                 ArrayList<User> users = new ArrayList();

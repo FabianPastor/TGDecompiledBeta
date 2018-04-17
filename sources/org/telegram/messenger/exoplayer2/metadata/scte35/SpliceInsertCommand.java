@@ -5,12 +5,12 @@ import android.os.Parcelable.Creator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 
 public final class SpliceInsertCommand extends SpliceCommand {
-    public static final Creator<SpliceInsertCommand> CREATOR = new C05861();
+    public static final Creator<SpliceInsertCommand> CREATOR = new C05891();
     public final boolean autoReturn;
     public final int availNum;
     public final int availsExpected;
@@ -26,8 +26,8 @@ public final class SpliceInsertCommand extends SpliceCommand {
     public final int uniqueProgramId;
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.scte35.SpliceInsertCommand$1 */
-    static class C05861 implements Creator<SpliceInsertCommand> {
-        C05861() {
+    static class C05891 implements Creator<SpliceInsertCommand> {
+        C05891() {
         }
 
         public SpliceInsertCommand createFromParcel(Parcel in) {
@@ -113,10 +113,10 @@ public final class SpliceInsertCommand extends SpliceCommand {
         TimestampAdjuster timestampAdjuster2 = timestampAdjuster;
         long spliceEventId = sectionData.readUnsignedInt();
         boolean spliceEventCancelIndicator = (sectionData.readUnsignedByte() & 128) != 0;
-        long programSplicePts = C0539C.TIME_UNSET;
+        long programSplicePts = C0542C.TIME_UNSET;
         List<ComponentSplice> componentSplices2 = Collections.emptyList();
         boolean autoReturn = false;
-        long breakDurationUs = C0539C.TIME_UNSET;
+        long breakDurationUs = C0542C.TIME_UNSET;
         if (spliceEventCancelIndicator) {
             outOfNetworkIndicator = false;
             programSpliceFlag = false;
@@ -145,7 +145,7 @@ public final class SpliceInsertCommand extends SpliceCommand {
                 outOfNetworkIndicator2 = false;
                 while (outOfNetworkIndicator2 < componentCount) {
                     int componentTag = sectionData.readUnsignedByte();
-                    long componentSplicePts = C0539C.TIME_UNSET;
+                    long componentSplicePts = C0542C.TIME_UNSET;
                     if (!spliceImmediateFlag2) {
                         componentSplicePts = TimeSignalCommand.parseSpliceTime(sectionData, ptsAdjustment);
                     }

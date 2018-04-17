@@ -21,7 +21,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.Components.LayoutHelper;
@@ -165,7 +165,7 @@ public class ThemeCell extends FrameLayout {
                             i = (linesRead - start) + 1;
                             str = text;
                             try {
-                                String line = new String(bytes, start, i - 1, C0539C.UTF8_NAME);
+                                String line = new String(bytes, start, i - 1, C0542C.UTF8_NAME);
                                 if (line.startsWith("WPS") == null) {
                                     text = line.indexOf(61);
                                     int idx = text;

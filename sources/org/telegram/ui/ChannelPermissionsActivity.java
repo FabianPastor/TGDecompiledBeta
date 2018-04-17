@@ -58,8 +58,8 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     private int sendStickersRow;
 
     /* renamed from: org.telegram.ui.ChannelPermissionsActivity$4 */
-    class C09944 implements OnClickListener {
-        C09944() {
+    class C10004 implements OnClickListener {
+        C10004() {
         }
 
         public void onClick(View v) {
@@ -70,8 +70,8 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     }
 
     /* renamed from: org.telegram.ui.ChannelPermissionsActivity$5 */
-    class C09955 implements OnClickListener {
-        C09955() {
+    class C10015 implements OnClickListener {
+        C10015() {
         }
 
         public void onClick(View v) {
@@ -82,8 +82,8 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     }
 
     /* renamed from: org.telegram.ui.ChannelPermissionsActivity$1 */
-    class C19851 extends ActionBarMenuOnItemClick {
-        C19851() {
+    class C19911 extends ActionBarMenuOnItemClick {
+        C19911() {
         }
 
         public void onItemClick(int id) {
@@ -100,8 +100,8 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     }
 
     /* renamed from: org.telegram.ui.ChannelPermissionsActivity$3 */
-    class C19863 implements OnItemClickListener {
-        C19863() {
+    class C19923 implements OnItemClickListener {
+        C19923() {
         }
 
         public void onItemClick(View view, int position) {
@@ -246,7 +246,7 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C19851());
+        this.actionBar.setActionBarMenuOnItemClick(new C19911());
         this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -266,7 +266,7 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         recyclerListView.setAdapter(listAdapter);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C19863());
+        this.listView.setOnItemClickListener(new C19923());
         this.linearLayout = new LinearLayout(context);
         this.linearLayout.setOrientation(1);
         this.linearLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
@@ -279,12 +279,12 @@ public class ChannelPermissionsActivity extends BaseFragment implements Notifica
         this.radioButtonCell3.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         this.radioButtonCell3.setTextAndValue(LocaleController.getString("ChatHistoryVisible", R.string.ChatHistoryVisible), LocaleController.getString("ChatHistoryVisibleInfo", R.string.ChatHistoryVisibleInfo), true ^ this.historyHidden);
         this.linearLayout.addView(this.radioButtonCell3, LayoutHelper.createLinear(-1, -2));
-        this.radioButtonCell3.setOnClickListener(new C09944());
+        this.radioButtonCell3.setOnClickListener(new C10004());
         this.radioButtonCell4 = new RadioButtonCell(context);
         this.radioButtonCell4.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         this.radioButtonCell4.setTextAndValue(LocaleController.getString("ChatHistoryHidden", R.string.ChatHistoryHidden), LocaleController.getString("ChatHistoryHiddenInfo", R.string.ChatHistoryHiddenInfo), this.historyHidden);
         this.linearLayout.addView(this.radioButtonCell4, LayoutHelper.createLinear(-1, -2));
-        this.radioButtonCell4.setOnClickListener(new C09955());
+        this.radioButtonCell4.setOnClickListener(new C10015());
         return this.fragmentView;
     }
 

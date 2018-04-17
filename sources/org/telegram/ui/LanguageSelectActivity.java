@@ -51,8 +51,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     private ArrayList<LocaleInfo> sortedLanguages;
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$1 */
-    class C21551 extends ActionBarMenuOnItemClick {
-        C21551() {
+    class C21611 extends ActionBarMenuOnItemClick {
+        C21611() {
         }
 
         public void onItemClick(int id) {
@@ -63,8 +63,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$2 */
-    class C21562 extends ActionBarMenuItemSearchListener {
-        C21562() {
+    class C21622 extends ActionBarMenuItemSearchListener {
+        C21622() {
         }
 
         public void onSearchExpand() {
@@ -94,8 +94,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$3 */
-    class C21573 implements OnItemClickListener {
-        C21573() {
+    class C21633 implements OnItemClickListener {
+        C21633() {
         }
 
         public void onItemClick(View view, int position) {
@@ -120,8 +120,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$4 */
-    class C21584 implements OnItemLongClickListener {
-        C21584() {
+    class C21644 implements OnItemLongClickListener {
+        C21644() {
         }
 
         public boolean onItemClick(View view, int position) {
@@ -165,8 +165,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.LanguageSelectActivity$5 */
-    class C21595 extends OnScrollListener {
-        C21595() {
+    class C21655 extends OnScrollListener {
+        C21655() {
         }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -249,8 +249,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("Language", R.string.Language));
-        this.actionBar.setActionBarMenuOnItemClick(new C21551());
-        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21562()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        this.actionBar.setActionBarMenuOnItemClick(new C21611());
+        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C21622()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.listAdapter = new ListAdapter(context, false);
         this.searchListViewAdapter = new ListAdapter(context, true);
         this.fragmentView = new FrameLayout(context);
@@ -266,9 +266,9 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setAdapter(this.listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C21573());
-        this.listView.setOnItemLongClickListener(new C21584());
-        this.listView.setOnScrollListener(new C21595());
+        this.listView.setOnItemClickListener(new C21633());
+        this.listView.setOnItemLongClickListener(new C21644());
+        this.listView.setOnScrollListener(new C21655());
         return this.fragmentView;
     }
 

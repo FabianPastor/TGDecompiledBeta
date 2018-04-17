@@ -12,12 +12,12 @@ import android.graphics.RectF;
 import android.os.Build.VERSION;
 
 public class Bitmaps {
-    private static final ThreadLocal<byte[]> jpegData = new C00661();
+    private static final ThreadLocal<byte[]> jpegData = new C00701();
     private static volatile Matrix sScaleMatrix;
 
     /* renamed from: org.telegram.messenger.Bitmaps$1 */
-    static class C00661 extends ThreadLocal<byte[]> {
-        C00661() {
+    static class C00701 extends ThreadLocal<byte[]> {
+        C00701() {
         }
 
         protected byte[] initialValue() {
@@ -26,7 +26,7 @@ public class Bitmaps {
     }
 
     /* renamed from: org.telegram.messenger.Bitmaps$2 */
-    static /* synthetic */ class C00672 {
+    static /* synthetic */ class C00712 {
         static final /* synthetic */ int[] $SwitchMap$android$graphics$Bitmap$Config = new int[Config.values().length];
 
         static {
@@ -205,7 +205,7 @@ Error: java.lang.NullPointerException
             Config newConfig = Config.ARGB_8888;
             Config config = source.getConfig();
             if (config != null) {
-                switch (C00672.$SwitchMap$android$graphics$Bitmap$Config[config.ordinal()]) {
+                switch (C00712.$SwitchMap$android$graphics$Bitmap$Config[config.ordinal()]) {
                     case 1:
                         newConfig = Config.ARGB_8888;
                         break;

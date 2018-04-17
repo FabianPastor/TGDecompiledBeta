@@ -62,8 +62,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     private int stickersStartRow;
 
     /* renamed from: org.telegram.ui.ArchivedStickersActivity$1 */
-    class C18981 extends ActionBarMenuOnItemClick {
-        C18981() {
+    class C19041 extends ActionBarMenuOnItemClick {
+        C19041() {
         }
 
         public void onItemClick(int id) {
@@ -74,8 +74,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.ArchivedStickersActivity$2 */
-    class C19002 implements OnItemClickListener {
-        C19002() {
+    class C19062 implements OnItemClickListener {
+        C19062() {
         }
 
         public void onItemClick(final View view, int position) {
@@ -106,8 +106,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.ArchivedStickersActivity$3 */
-    class C19013 extends OnScrollListener {
-        C19013() {
+    class C19073 extends OnScrollListener {
+        C19073() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -118,8 +118,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     }
 
     /* renamed from: org.telegram.ui.ArchivedStickersActivity$4 */
-    class C19024 implements RequestDelegate {
-        C19024() {
+    class C19084 implements RequestDelegate {
+        C19084() {
         }
 
         public void run(final TLObject response, final TL_error error) {
@@ -145,8 +145,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         private Context mContext;
 
         /* renamed from: org.telegram.ui.ArchivedStickersActivity$ListAdapter$1 */
-        class C08041 implements OnCheckedChangeListener {
-            C08041() {
+        class C08101 implements OnCheckedChangeListener {
+            C08101() {
             }
 
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -189,7 +189,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                 case 0:
                     view = new ArchivedStickerSetCell(this.mContext, true);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    ((ArchivedStickerSetCell) view).setOnCheckClick(new C08041());
+                    ((ArchivedStickerSetCell) view).setOnCheckClick(new C08101());
                     break;
                 case 1:
                     view = new LoadingCell(this.mContext);
@@ -245,7 +245,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         } else {
             this.actionBar.setTitle(LocaleController.getString("ArchivedMasks", R.string.ArchivedMasks));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C18981());
+        this.actionBar.setActionBarMenuOnItemClick(new C19041());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -271,8 +271,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         recyclerListView.setLayoutManager(linearLayoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C19002());
-        this.listView.setOnScrollListener(new C19013());
+        this.listView.setOnItemClickListener(new C19062());
+        this.listView.setOnScrollListener(new C19073());
         return this.fragmentView;
     }
 
@@ -323,7 +323,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                     z = false;
                 }
                 req.masks = z;
-                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19024()), this.classGuid);
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19084()), this.classGuid);
             }
         }
     }

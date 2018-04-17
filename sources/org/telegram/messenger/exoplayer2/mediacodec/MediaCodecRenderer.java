@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.BaseRenderer;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.FormatHolder;
@@ -259,7 +259,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
                     } catch (Throwable e2) {
                         throwDecoderInitError(new DecoderInitializationException(this.format, e2, drmSessionRequiresSecureDecoder, str));
                     }
-                    this.codecHotswapDeadlineMs = getState() == 2 ? SystemClock.elapsedRealtime() + MAX_CODEC_HOTSWAP_TIME_MS : C0539C.TIME_UNSET;
+                    this.codecHotswapDeadlineMs = getState() == 2 ? SystemClock.elapsedRealtime() + MAX_CODEC_HOTSWAP_TIME_MS : C0542C.TIME_UNSET;
                     resetInputBuffer();
                     resetOutputBuffer();
                     this.waitingForFirstSyncFrame = true;
@@ -335,7 +335,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     protected void releaseCodec() {
-        this.codecHotswapDeadlineMs = C0539C.TIME_UNSET;
+        this.codecHotswapDeadlineMs = C0542C.TIME_UNSET;
         resetInputBuffer();
         resetOutputBuffer();
         this.waitingForKeys = false;
@@ -445,7 +445,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     protected void flushCodec() throws ExoPlaybackException {
-        this.codecHotswapDeadlineMs = C0539C.TIME_UNSET;
+        this.codecHotswapDeadlineMs = C0542C.TIME_UNSET;
         resetInputBuffer();
         resetOutputBuffer();
         this.waitingForFirstSyncFrame = true;
@@ -720,7 +720,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     }
 
     public boolean isReady() {
-        return (this.format == null || this.waitingForKeys || (!isSourceReady() && !hasOutputBuffer() && (this.codecHotswapDeadlineMs == C0539C.TIME_UNSET || SystemClock.elapsedRealtime() >= this.codecHotswapDeadlineMs))) ? false : true;
+        return (this.format == null || this.waitingForKeys || (!isSourceReady() && !hasOutputBuffer() && (this.codecHotswapDeadlineMs == C0542C.TIME_UNSET || SystemClock.elapsedRealtime() >= this.codecHotswapDeadlineMs))) ? false : true;
     }
 
     protected long getDequeueOutputBufferTimeoutUs() {

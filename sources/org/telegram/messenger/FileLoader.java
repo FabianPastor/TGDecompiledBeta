@@ -172,11 +172,11 @@ public class FileLoader {
             fileLoaderQueue.postRunnable(new Runnable() {
 
                 /* renamed from: org.telegram.messenger.FileLoader$3$1 */
-                class C17951 implements FileUploadOperationDelegate {
+                class C18011 implements FileUploadOperationDelegate {
 
                     /* renamed from: org.telegram.messenger.FileLoader$3$1$2 */
-                    class C01582 implements Runnable {
-                        C01582() {
+                    class C01622 implements Runnable {
+                        C01622() {
                         }
 
                         public void run() {
@@ -212,7 +212,7 @@ public class FileLoader {
                         }
                     }
 
-                    C17951() {
+                    C18011() {
                     }
 
                     public void didFinishUploadingFile(FileUploadOperation operation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv) {
@@ -256,7 +256,7 @@ public class FileLoader {
                     }
 
                     public void didFailedUploadingFile(FileUploadOperation operation) {
-                        FileLoader.fileLoaderQueue.postRunnable(new C01582());
+                        FileLoader.fileLoaderQueue.postRunnable(new C01622());
                     }
 
                     public void didChangedUploadProgress(FileUploadOperation operation, float progress) {
@@ -285,7 +285,7 @@ public class FileLoader {
                     } else {
                         FileLoader.this.uploadOperationPaths.put(str, fileUploadOperation);
                     }
-                    fileUploadOperation.setDelegate(new C17951());
+                    fileUploadOperation.setDelegate(new C18011());
                     if (z2) {
                         if (FileLoader.this.currentUploadSmallOperationsCount < 1) {
                             FileLoader.this.currentUploadSmallOperationsCount = FileLoader.this.currentUploadSmallOperationsCount + 1;

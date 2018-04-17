@@ -12,7 +12,7 @@ import android.view.Choreographer;
 import android.view.Choreographer.FrameCallback;
 import android.view.Display;
 import android.view.WindowManager;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 @TargetApi(16)
@@ -72,7 +72,7 @@ public final class VideoFrameReleaseTimeHelper {
         private final HandlerThread choreographerOwnerThread = new HandlerThread("ChoreographerOwner:Handler");
         private final Handler handler;
         private int observerCount;
-        public volatile long sampledVsyncTimeNs = C0539C.TIME_UNSET;
+        public volatile long sampledVsyncTimeNs = C0542C.TIME_UNSET;
 
         public static VSyncSampler getInstance() {
             return INSTANCE;
@@ -128,7 +128,7 @@ public final class VideoFrameReleaseTimeHelper {
             this.observerCount--;
             if (this.observerCount == 0) {
                 this.choreographer.removeFrameCallback(this);
-                this.sampledVsyncTimeNs = C0539C.TIME_UNSET;
+                this.sampledVsyncTimeNs = C0542C.TIME_UNSET;
             }
         }
     }
@@ -150,8 +150,8 @@ public final class VideoFrameReleaseTimeHelper {
             this.displayListener = null;
             this.vsyncSampler = null;
         }
-        this.vsyncDurationNs = C0539C.TIME_UNSET;
-        this.vsyncOffsetNs = C0539C.TIME_UNSET;
+        this.vsyncDurationNs = C0542C.TIME_UNSET;
+        this.vsyncOffsetNs = C0542C.TIME_UNSET;
     }
 
     public void enable() {
@@ -210,9 +210,9 @@ public final class VideoFrameReleaseTimeHelper {
                 r0.lastFramePresentationTimeUs = j2;
                 r0.pendingAdjustedFrameTimeNs = adjustedFrameTimeNs;
                 if (r0.vsyncSampler != null) {
-                    if (r0.vsyncDurationNs == C0539C.TIME_UNSET) {
+                    if (r0.vsyncDurationNs == C0542C.TIME_UNSET) {
                         sampledVsyncTimeNs = r0.vsyncSampler.sampledVsyncTimeNs;
-                        if (sampledVsyncTimeNs == C0539C.TIME_UNSET) {
+                        if (sampledVsyncTimeNs == C0542C.TIME_UNSET) {
                             return j;
                         }
                         return closestVsync(j, sampledVsyncTimeNs, r0.vsyncDurationNs) - r0.vsyncOffsetNs;
@@ -236,9 +236,9 @@ public final class VideoFrameReleaseTimeHelper {
         r0.lastFramePresentationTimeUs = j2;
         r0.pendingAdjustedFrameTimeNs = adjustedFrameTimeNs;
         if (r0.vsyncSampler != null) {
-            if (r0.vsyncDurationNs == C0539C.TIME_UNSET) {
+            if (r0.vsyncDurationNs == C0542C.TIME_UNSET) {
                 sampledVsyncTimeNs = r0.vsyncSampler.sampledVsyncTimeNs;
-                if (sampledVsyncTimeNs == C0539C.TIME_UNSET) {
+                if (sampledVsyncTimeNs == C0542C.TIME_UNSET) {
                     return j;
                 }
                 return closestVsync(j, sampledVsyncTimeNs, r0.vsyncDurationNs) - r0.vsyncOffsetNs;

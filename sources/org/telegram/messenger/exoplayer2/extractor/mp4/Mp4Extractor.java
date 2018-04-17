@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
@@ -27,7 +27,7 @@ import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class Mp4Extractor implements Extractor, SeekMap {
     private static final int BRAND_QUICKTIME = Util.getIntegerCodeForString("qt  ");
-    public static final ExtractorsFactory FACTORY = new C18351();
+    public static final ExtractorsFactory FACTORY = new C18411();
     public static final int FLAG_WORKAROUND_IGNORE_EDIT_LISTS = 1;
     private static final long MAXIMUM_READ_AHEAD_BYTES_STREAM = 10485760;
     private static final long RELOAD_MINIMUM_SEEK_DISTANCE = 262144;
@@ -76,8 +76,8 @@ public final class Mp4Extractor implements Extractor, SeekMap {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.mp4.Mp4Extractor$1 */
-    static class C18351 implements ExtractorsFactory {
-        C18351() {
+    static class C18411 implements ExtractorsFactory {
+        C18411() {
         }
 
         public Extractor[] createExtractors() {
@@ -159,7 +159,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         int sampleIndex;
         long firstTimeUs;
         long firstOffset;
-        long secondTimeUs = C0539C.TIME_UNSET;
+        long secondTimeUs = C0542C.TIME_UNSET;
         long secondOffset = -1;
         if (r0.firstVideoTrackIndex != -1) {
             TrackSampleTable sampleTable = r0.tracks[r0.firstVideoTrackIndex].sampleTable;
@@ -186,13 +186,13 @@ public final class Mp4Extractor implements Extractor, SeekMap {
             if (sampleIndex != r0.firstVideoTrackIndex) {
                 TrackSampleTable sampleTable2 = r0.tracks[sampleIndex].sampleTable;
                 firstOffset2 = maybeAdjustSeekOffset(sampleTable2, firstTimeUs, firstOffset2);
-                if (secondTimeUs != C0539C.TIME_UNSET) {
+                if (secondTimeUs != C0542C.TIME_UNSET) {
                     secondOffset = maybeAdjustSeekOffset(sampleTable2, secondTimeUs, secondOffset);
                 }
             }
         }
         SeekPoint firstSeekPoint = new SeekPoint(firstTimeUs, firstOffset2);
-        if (secondTimeUs == C0539C.TIME_UNSET) {
+        if (secondTimeUs == C0542C.TIME_UNSET) {
             return new SeekPoints(firstSeekPoint);
         }
         return new SeekPoints(firstSeekPoint, new SeekPoint(secondTimeUs, secondOffset));
@@ -302,14 +302,14 @@ public final class Mp4Extractor implements Extractor, SeekMap {
                 gaplessInfoHolder2.setFromMetadata(metadata);
             }
         }
-        long durationUs = C0539C.TIME_UNSET;
+        long durationUs = C0542C.TIME_UNSET;
         int firstVideoTrackIndex = -1;
         int i = 0;
         while (i < containerAtom.containerChildren.size()) {
             Metadata metadata2;
             ContainerAtom atom = (ContainerAtom) containerAtom.containerChildren.get(i);
             if (atom.type == Atom.TYPE_trak) {
-                Track track = AtomParsers.parseTrak(atom, containerAtom.getLeafAtomOfType(Atom.TYPE_mvhd), C0539C.TIME_UNSET, null, (mp4Extractor.flags & 1) != 0, mp4Extractor.isQuickTime);
+                Track track = AtomParsers.parseTrak(atom, containerAtom.getLeafAtomOfType(Atom.TYPE_mvhd), C0542C.TIME_UNSET, null, (mp4Extractor.flags & 1) != 0, mp4Extractor.isQuickTime);
                 if (track != null) {
                     TrackSampleTable trackSampleTable = AtomParsers.parseStbl(track, atom.getContainerAtomOfType(Atom.TYPE_mdia).getContainerAtomOfType(Atom.TYPE_minf).getContainerAtomOfType(Atom.TYPE_stbl), gaplessInfoHolder2);
                     if (trackSampleTable.sampleCount != 0) {

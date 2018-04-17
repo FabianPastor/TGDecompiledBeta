@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.source.smoothstreaming;
 import android.net.Uri;
 import java.io.IOException;
 import java.util.List;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SeekParameters;
 import org.telegram.messenger.exoplayer2.extractor.mp4.FragmentedMp4Extractor;
@@ -60,7 +60,7 @@ public class DefaultSsChunkSource implements SsChunkSource {
         for (int i2 = 0; i2 < r0.extractorWrappers.length; i2++) {
             int manifestTrackIndex = trackSelection2.getIndexInTrackGroup(i2);
             Format format = streamElement.formats[manifestTrackIndex];
-            r0.extractorWrappers[i2] = new ChunkExtractorWrapper(new FragmentedMp4Extractor(3, null, new Track(manifestTrackIndex, streamElement.type, streamElement.timescale, C0539C.TIME_UNSET, ssManifest.durationUs, format, 0, trackEncryptionBoxes, streamElement.type == 2 ? 4 : 0, null, null), null), streamElement.type, format);
+            r0.extractorWrappers[i2] = new ChunkExtractorWrapper(new FragmentedMp4Extractor(3, null, new Track(manifestTrackIndex, streamElement.type, streamElement.timescale, C0542C.TIME_UNSET, ssManifest.durationUs, format, 0, trackEncryptionBoxes, streamElement.type == 2 ? 4 : 0, null, null), null), streamElement.type, format);
         }
     }
 
@@ -158,7 +158,7 @@ public class DefaultSsChunkSource implements SsChunkSource {
 
     private long resolveTimeToLiveEdgeUs(long playbackPositionUs) {
         if (!this.manifest.isLive) {
-            return C0539C.TIME_UNSET;
+            return C0542C.TIME_UNSET;
         }
         StreamElement currentElement = this.manifest.streamElements[this.streamElementIndex];
         int lastChunkIndex = currentElement.chunkCount - 1;

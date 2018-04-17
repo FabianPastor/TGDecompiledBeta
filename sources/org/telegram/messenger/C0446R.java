@@ -3,7 +3,7 @@ package org.telegram.messenger;
 import org.telegram.messenger.beta.R;
 
 /* renamed from: org.telegram.messenger.R */
-public final class C0443R {
+public final class C0446R {
 
     /* renamed from: org.telegram.messenger.R$anim */
     public static final class anim {

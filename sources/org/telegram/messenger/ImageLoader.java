@@ -94,11 +94,11 @@ public class ImageLoader {
     private SparseArray<String> waitingForQualityThumbByTag = new SparseArray();
 
     /* renamed from: org.telegram.messenger.ImageLoader$3 */
-    class C01933 extends BroadcastReceiver {
+    class C01953 extends BroadcastReceiver {
 
         /* renamed from: org.telegram.messenger.ImageLoader$3$1 */
-        class C01921 implements Runnable {
-            C01921() {
+        class C01941 implements Runnable {
+            C01941() {
             }
 
             public void run() {
@@ -106,14 +106,14 @@ public class ImageLoader {
             }
         }
 
-        C01933() {
+        C01953() {
         }
 
         public void onReceive(Context arg0, Intent intent) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m0d("file system changed");
             }
-            Runnable r = new C01921();
+            Runnable r = new C01941();
             if ("android.intent.action.MEDIA_UNMOUNTED".equals(intent.getAction())) {
                 AndroidUtilities.runOnUIThread(r, 1000);
             } else {
@@ -123,8 +123,8 @@ public class ImageLoader {
     }
 
     /* renamed from: org.telegram.messenger.ImageLoader$4 */
-    class C01954 implements Runnable {
-        C01954() {
+    class C01974 implements Runnable {
+        C01974() {
         }
 
         public void run() {
@@ -424,8 +424,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                             Utilities.stageQueue.postRunnable(new Runnable() {
 
                                 /* renamed from: org.telegram.messenger.ImageLoader$HttpFileTask$1$1 */
-                                class C02041 implements Runnable {
-                                    C02041() {
+                                class C02061 implements Runnable {
+                                    C02061() {
                                     }
 
                                     public void run() {
@@ -435,7 +435,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
 
                                 public void run() {
                                     ImageLoader.this.fileProgresses.put(HttpFileTask.this.url, Float.valueOf(progress));
-                                    AndroidUtilities.runOnUIThread(new C02041());
+                                    AndroidUtilities.runOnUIThread(new C02061());
                                 }
                             });
                         }
@@ -573,8 +573,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                     private long lastProgressTime;
 
                     /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$3 */
-                    class C02103 implements Runnable {
-                        C02103() {
+                    class C02123 implements Runnable {
+                        C02123() {
                         }
 
                         public void run() {
@@ -583,8 +583,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                     }
 
                     /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$4 */
-                    class C02114 implements Runnable {
-                        C02114() {
+                    class C02134 implements Runnable {
+                        C02134() {
                         }
 
                         public void run() {
@@ -593,11 +593,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                     }
 
                     /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$5 */
-                    class C02135 implements Runnable {
+                    class C02155 implements Runnable {
 
                         /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$5$1 */
-                        class C02121 implements Runnable {
-                            C02121() {
+                        class C02141 implements Runnable {
+                            C02141() {
                             }
 
                             public void run() {
@@ -605,12 +605,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                             }
                         }
 
-                        C02135() {
+                        C02155() {
                         }
 
                         public void run() {
                             ImageLoader.this.fileProgresses.remove(HttpImageTask.this.cacheImage.url);
-                            AndroidUtilities.runOnUIThread(new C02121());
+                            AndroidUtilities.runOnUIThread(new C02141());
                         }
                     }
 
@@ -626,8 +626,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                             Utilities.stageQueue.postRunnable(new Runnable() {
 
                                 /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$1$1 */
-                                class C02061 implements Runnable {
-                                    C02061() {
+                                class C02081 implements Runnable {
+                                    C02081() {
                                     }
 
                                     public void run() {
@@ -637,7 +637,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
 
                                 public void run() {
                                     ImageLoader.this.fileProgresses.put(HttpImageTask.this.cacheImage.url, Float.valueOf(progress));
-                                    AndroidUtilities.runOnUIThread(new C02061());
+                                    AndroidUtilities.runOnUIThread(new C02081());
                                 }
                             });
                         }
@@ -762,8 +762,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                                 Utilities.stageQueue.postRunnable(new Runnable() {
 
                                     /* renamed from: org.telegram.messenger.ImageLoader$HttpImageTask$2$1 */
-                                    class C02081 implements Runnable {
-                                        C02081() {
+                                    class C02101 implements Runnable {
+                                        C02101() {
                                         }
 
                                         public void run() {
@@ -777,20 +777,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
 
                                     public void run() {
                                         ImageLoader.this.fileProgresses.remove(HttpImageTask.this.cacheImage.url);
-                                        AndroidUtilities.runOnUIThread(new C02081());
+                                        AndroidUtilities.runOnUIThread(new C02101());
                                     }
                                 });
-                                ImageLoader.this.imageLoadQueue.postRunnable(new C02103());
+                                ImageLoader.this.imageLoadQueue.postRunnable(new C02123());
                             }
                         }
                         ImageLoader.this.fileDidLoaded(this.cacheImage.url, this.cacheImage.finalFilePath, 0);
                         Utilities.stageQueue.postRunnable(/* anonymous class already generated */);
-                        ImageLoader.this.imageLoadQueue.postRunnable(new C02103());
+                        ImageLoader.this.imageLoadQueue.postRunnable(new C02123());
                     }
 
                     protected void onCancelled() {
-                        ImageLoader.this.imageLoadQueue.postRunnable(new C02114());
-                        Utilities.stageQueue.postRunnable(new C02135());
+                        ImageLoader.this.imageLoadQueue.postRunnable(new C02134());
+                        Utilities.stageQueue.postRunnable(new C02155());
                     }
                 }
 
@@ -997,8 +997,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                                 Utilities.stageQueue.postRunnable(new Runnable() {
 
                                     /* renamed from: org.telegram.messenger.ImageLoader$2$2$1 */
-                                    class C01851 implements Runnable {
-                                        C01851() {
+                                    class C01871 implements Runnable {
+                                        C01871() {
                                         }
 
                                         public void run() {
@@ -1007,7 +1007,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                                     }
 
                                     public void run() {
-                                        AndroidUtilities.runOnUIThread(new C01851());
+                                        AndroidUtilities.runOnUIThread(new C01871());
                                         ImageLoader.this.fileProgresses.remove(str);
                                     }
                                 });
@@ -1017,8 +1017,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                                 Utilities.stageQueue.postRunnable(new Runnable() {
 
                                     /* renamed from: org.telegram.messenger.ImageLoader$2$3$1 */
-                                    class C01871 implements Runnable {
-                                        C01871() {
+                                    class C01891 implements Runnable {
+                                        C01891() {
                                         }
 
                                         public void run() {
@@ -1027,7 +1027,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                                     }
 
                                     public void run() {
-                                        AndroidUtilities.runOnUIThread(new C01871());
+                                        AndroidUtilities.runOnUIThread(new C01891());
                                         ImageLoader.this.fileProgresses.remove(location);
                                     }
                                 });
@@ -1072,7 +1072,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                         a++;
                     }
                     FileLoader.setMediaDirs(mediaDirs);
-                    BroadcastReceiver receiver = new C01933();
+                    BroadcastReceiver receiver = new C01953();
                     IntentFilter filter = new IntentFilter();
                     filter.addAction("android.intent.action.MEDIA_BAD_REMOVAL");
                     filter.addAction("android.intent.action.MEDIA_CHECKING");
@@ -1092,7 +1092,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                 }
 
                 public void checkMediaPaths() {
-                    this.cacheOutQueue.postRunnable(new C01954());
+                    this.cacheOutQueue.postRunnable(new C01974());
                 }
 
                 public SparseArray<File> createMediaPaths() {
@@ -1511,14 +1511,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                             final boolean z = finalIsNeedsQualityThumb;
                             final MessageObject messageObject = parentMessageObject;
                             final TLObject tLObject = imageLocation;
-                            C01998 c01998 = r0;
+                            C02018 c02018 = r0;
                             final boolean z2 = shouldGenerateQualityThumb;
                             DispatchQueue dispatchQueue = imageLoader.imageLoadQueue;
                             final int i2 = cacheType;
                             final int i3 = size;
                             final String str5 = ext;
                             final int i4 = currentAccount;
-                            C01998 c019982 = new Runnable() {
+                            C02018 c020182 = new Runnable() {
                                 public void run() {
                                     boolean added = false;
                                     if (TAG != 2) {
@@ -1797,7 +1797,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: MERGE can be used only i
                                     }
                                 }
                             };
-                            dispatchQueue.postRunnable(c01998);
+                            dispatchQueue.postRunnable(c02018);
                         }
                     }
                 }

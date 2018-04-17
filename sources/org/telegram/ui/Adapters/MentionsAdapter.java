@@ -93,7 +93,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private int lastPosition;
     private String lastText;
     private boolean lastUsernameOnly;
-    private LocationProvider locationProvider = new LocationProvider(new C18871()) {
+    private LocationProvider locationProvider = new LocationProvider(new C18931()) {
         public void stop() {
             super.stop();
             MentionsAdapter.this.lastKnownLocation = null;
@@ -132,8 +132,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$1 */
-    class C18871 implements LocationProviderDelegate {
-        C18871() {
+    class C18931 implements LocationProviderDelegate {
+        C18931() {
         }
 
         public void onLocationAcquired(Location location) {
@@ -149,8 +149,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$3 */
-    class C18893 implements SearchAdapterHelperDelegate {
-        C18893() {
+    class C18953 implements SearchAdapterHelperDelegate {
+        C18953() {
         }
 
         public void onDataSetChanged() {
@@ -176,7 +176,7 @@ public class MentionsAdapter extends SelectionAdapter {
         this.isDarkTheme = darkTheme;
         this.dialog_id = did;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
-        this.searchAdapterHelper.setDelegate(new C18893());
+        this.searchAdapterHelper.setDelegate(new C18953());
     }
 
     public void onDestroy() {
@@ -408,8 +408,8 @@ public class MentionsAdapter extends SelectionAdapter {
             this.contextQueryRunnable = new Runnable() {
 
                 /* renamed from: org.telegram.ui.Adapters.MentionsAdapter$7$1 */
-                class C18901 implements RequestDelegate {
-                    C18901() {
+                class C18961 implements RequestDelegate {
+                    C18961() {
                     }
 
                     public void run(final TLObject response, final TL_error error) {
@@ -446,7 +446,7 @@ public class MentionsAdapter extends SelectionAdapter {
                                 } else {
                                     TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
                                     req.username = MentionsAdapter.this.searchingContextUsername;
-                                    MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new C18901());
+                                    MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new C18961());
                                 }
                             }
                         }
@@ -539,7 +539,7 @@ public class MentionsAdapter extends SelectionAdapter {
                         final MessagesStorage messagesStorage2 = messagesStorage;
                         MessagesStorage messagesStorage3 = messagesStorage;
                         final String messagesStorage4 = key;
-                        C18918 requestDelegate = new RequestDelegate() {
+                        C18978 requestDelegate = new RequestDelegate() {
                             public void run(final TLObject response, TL_error error) {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
@@ -902,7 +902,7 @@ public class MentionsAdapter extends SelectionAdapter {
             if (foundType == 0) {
                 int a4;
                 Chat chat;
-                Runnable c07879;
+                Runnable c07949;
                 ChatParticipant searchPostion2;
                 User user;
                 ChatParticipant chatParticipant;
@@ -971,7 +971,7 @@ public class MentionsAdapter extends SelectionAdapter {
                                 r0.searchResultUsernames = newResult;
                                 r0.searchResultUsernamesMap = newMap;
                                 if (chat != null && chat.megagroup && usernameString.length() > 0) {
-                                    c07879 = new Runnable() {
+                                    c07949 = new Runnable() {
                                         public void run() {
                                             if (MentionsAdapter.this.searchGlobalRunnable == this) {
                                                 TL_channels_getParticipants req = new TL_channels_getParticipants();
@@ -1014,8 +1014,8 @@ public class MentionsAdapter extends SelectionAdapter {
                                             }
                                         }
                                     };
-                                    r0.searchGlobalRunnable = c07879;
-                                    AndroidUtilities.runOnUIThread(c07879, 200);
+                                    r0.searchGlobalRunnable = c07949;
+                                    AndroidUtilities.runOnUIThread(c07949, 200);
                                 }
                                 Collections.sort(r0.searchResultUsernames, new Comparator<User>() {
                                     public int compare(User lhs, User rhs) {
@@ -1097,9 +1097,9 @@ public class MentionsAdapter extends SelectionAdapter {
                     r0.searchResultSuggestions = null;
                     r0.searchResultUsernames = newResult;
                     r0.searchResultUsernamesMap = newMap;
-                    c07879 = /* anonymous class already generated */;
-                    r0.searchGlobalRunnable = c07879;
-                    AndroidUtilities.runOnUIThread(c07879, 200);
+                    c07949 = /* anonymous class already generated */;
+                    r0.searchGlobalRunnable = c07949;
+                    AndroidUtilities.runOnUIThread(c07949, 200);
                     Collections.sort(r0.searchResultUsernames, /* anonymous class already generated */);
                     notifyDataSetChanged();
                     r0.delegate.needChangePanelVisibility(newResult.isEmpty() ^ true);
@@ -1114,9 +1114,9 @@ public class MentionsAdapter extends SelectionAdapter {
                         r0.searchResultSuggestions = null;
                         r0.searchResultUsernames = newResult;
                         r0.searchResultUsernamesMap = newMap;
-                        c07879 = /* anonymous class already generated */;
-                        r0.searchGlobalRunnable = c07879;
-                        AndroidUtilities.runOnUIThread(c07879, 200);
+                        c07949 = /* anonymous class already generated */;
+                        r0.searchGlobalRunnable = c07949;
+                        AndroidUtilities.runOnUIThread(c07949, 200);
                         Collections.sort(r0.searchResultUsernames, /* anonymous class already generated */);
                         notifyDataSetChanged();
                         r0.delegate.needChangePanelVisibility(newResult.isEmpty() ^ true);
@@ -1161,9 +1161,9 @@ public class MentionsAdapter extends SelectionAdapter {
                 r0.searchResultSuggestions = null;
                 r0.searchResultUsernames = newResult;
                 r0.searchResultUsernamesMap = newMap;
-                c07879 = /* anonymous class already generated */;
-                r0.searchGlobalRunnable = c07879;
-                AndroidUtilities.runOnUIThread(c07879, 200);
+                c07949 = /* anonymous class already generated */;
+                r0.searchGlobalRunnable = c07949;
+                AndroidUtilities.runOnUIThread(c07949, 200);
                 Collections.sort(r0.searchResultUsernames, /* anonymous class already generated */);
                 notifyDataSetChanged();
                 r0.delegate.needChangePanelVisibility(newResult.isEmpty() ^ true);

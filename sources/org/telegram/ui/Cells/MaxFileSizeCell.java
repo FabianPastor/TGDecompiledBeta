@@ -23,8 +23,8 @@ public class MaxFileSizeCell extends FrameLayout {
     private TextView textView;
 
     /* renamed from: org.telegram.ui.Cells.MaxFileSizeCell$2 */
-    class C19382 implements SeekBarViewDelegate {
-        C19382() {
+    class C19442 implements SeekBarViewDelegate {
+        C19442() {
         }
 
         public void onSeekBarDrag(float progress) {
@@ -76,7 +76,7 @@ public class MaxFileSizeCell extends FrameLayout {
             }
         };
         this.seekBarView.setReportChanges(true);
-        this.seekBarView.setDelegate(new C19382());
+        this.seekBarView.setDelegate(new C19442());
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 4.0f, 40.0f, 4.0f, 0.0f));
     }
 

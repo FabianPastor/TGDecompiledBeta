@@ -48,8 +48,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private Matrix txform = new Matrix();
 
     /* renamed from: org.telegram.messenger.camera.CameraView$1 */
-    class C05371 implements Runnable {
-        C05371() {
+    class C05401 implements Runnable {
+        C05401() {
         }
 
         public void run() {
@@ -61,8 +61,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     /* renamed from: org.telegram.messenger.camera.CameraView$2 */
-    class C05382 implements Runnable {
-        C05382() {
+    class C05412 implements Runnable {
+        C05412() {
         }
 
         public void run() {
@@ -178,7 +178,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                     if (!(cameraView.previewSize == null || surfaceTexture == null)) {
                         surfaceTexture.setDefaultBufferSize(cameraView.previewSize.getWidth(), cameraView.previewSize.getHeight());
                         cameraView.cameraSession = new CameraSession(info, cameraView.previewSize, pictureSize, 256);
-                        CameraController.getInstance().open(cameraView.cameraSession, surfaceTexture, new C05371(), new C05382());
+                        CameraController.getInstance().open(cameraView.cameraSession, surfaceTexture, new C05401(), new C05412());
                     }
                 }
                 width = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
@@ -194,7 +194,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                 surfaceTexture = cameraView.textureView.getSurfaceTexture();
                 surfaceTexture.setDefaultBufferSize(cameraView.previewSize.getWidth(), cameraView.previewSize.getHeight());
                 cameraView.cameraSession = new CameraSession(info, cameraView.previewSize, pictureSize, 256);
-                CameraController.getInstance().open(cameraView.cameraSession, surfaceTexture, new C05371(), new C05382());
+                CameraController.getInstance().open(cameraView.cameraSession, surfaceTexture, new C05401(), new C05412());
             }
         }
     }

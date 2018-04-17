@@ -54,8 +54,8 @@ public class Browser {
     private static CustomTabsSession customTabsSession;
 
     /* renamed from: org.telegram.messenger.browser.Browser$1 */
-    static class C18251 implements ServiceConnectionCallback {
-        C18251() {
+    static class C18311 implements ServiceConnectionCallback {
+        C18311() {
         }
 
         public void onServiceConnected(CustomTabsClient client) {
@@ -114,7 +114,7 @@ public class Browser {
                         return;
                     }
                 }
-                customTabsServiceConnection = new ServiceConnection(new C18251());
+                customTabsServiceConnection = new ServiceConnection(new C18311());
                 if (!CustomTabsClient.bindCustomTabsService(activity, customTabsPackageToBind, customTabsServiceConnection)) {
                     customTabsServiceConnection = null;
                 }
@@ -259,9 +259,9 @@ public class Browser {
                         AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(context2, 1)};
                         TL_messages_getWebPagePreview req = new TL_messages_getWebPagePreview();
                         req.message = uri.toString();
-                        C18262 c18262 = c18262;
+                        C18322 c18322 = c18322;
                         final AlertDialog[] alertDialogArr = progressDialog;
-                        C18262 c182622 = c18262;
+                        C18322 c183222 = c18322;
                         final int i2 = currentAccount;
                         ConnectionsManager instance = ConnectionsManager.getInstance(UserConfig.selectedAccount);
                         final Uri uri3 = uri2;
@@ -270,7 +270,7 @@ public class Browser {
                         final AlertDialog[] progressDialog2 = progressDialog;
                         progressDialog = allowCustom;
                         try {
-                            c18262 = new RequestDelegate() {
+                            c18322 = new RequestDelegate() {
                                 public void run(final TLObject response, TL_error error) {
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
@@ -294,12 +294,12 @@ public class Browser {
                                     });
                                 }
                             };
-                            final int reqId = instance.sendRequest(currentAccount, c182622);
+                            final int reqId = instance.sendRequest(currentAccount, c183222);
                             AndroidUtilities.runOnUIThread(new Runnable() {
 
                                 /* renamed from: org.telegram.messenger.browser.Browser$3$1 */
-                                class C05201 implements OnClickListener {
-                                    C05201() {
+                                class C05231 implements OnClickListener {
+                                    C05231() {
                                     }
 
                                     public void onClick(DialogInterface dialog, int which) {
@@ -318,7 +318,7 @@ public class Browser {
                                             progressDialog2[0].setMessage(LocaleController.getString("Loading", R.string.Loading));
                                             progressDialog2[0].setCanceledOnTouchOutside(false);
                                             progressDialog2[0].setCancelable(false);
-                                            progressDialog2[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C05201());
+                                            progressDialog2[0].setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C05231());
                                             progressDialog2[0].show();
                                         } catch (Exception e) {
                                         }

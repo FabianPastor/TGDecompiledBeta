@@ -4,11 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 
 public final class SpliceNullCommand extends SpliceCommand {
-    public static final Creator<SpliceNullCommand> CREATOR = new C05871();
+    public static final Creator<SpliceNullCommand> CREATOR = new C05901();
 
     /* renamed from: org.telegram.messenger.exoplayer2.metadata.scte35.SpliceNullCommand$1 */
-    static class C05871 implements Creator<SpliceNullCommand> {
-        C05871() {
+    static class C05901 implements Creator<SpliceNullCommand> {
+        C05901() {
         }
 
         public SpliceNullCommand createFromParcel(Parcel in) {

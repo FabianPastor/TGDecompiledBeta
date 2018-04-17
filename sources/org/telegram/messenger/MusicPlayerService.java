@@ -49,8 +49,8 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
     private RemoteControlClient remoteControlClient;
 
     /* renamed from: org.telegram.messenger.MusicPlayerService$1 */
-    class C04071 extends Callback {
-        C04071() {
+    class C04101 extends Callback {
+        C04101() {
         }
 
         public void onPlay() {
@@ -74,8 +74,8 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
     }
 
     /* renamed from: org.telegram.messenger.MusicPlayerService$2 */
-    class C04082 implements Runnable {
-        C04082() {
+    class C04112 implements Runnable {
+        C04112() {
         }
 
         public void run() {
@@ -108,7 +108,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
             Drawable placeholder = getResources().getDrawable(R.drawable.nocover_big);
             placeholder.setBounds(0, 0, this.albumArtPlaceholder.getWidth(), this.albumArtPlaceholder.getHeight());
             placeholder.draw(new Canvas(this.albumArtPlaceholder));
-            this.mediaSession.setCallback(new C04071());
+            this.mediaSession.setCallback(new C04101());
             this.mediaSession.setActive(true);
         }
         super.onCreate();
@@ -131,7 +131,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
         }
         Exception e2 = MediaController.getInstance().getPlayingMessageObject();
         if (e2 == null) {
-            AndroidUtilities.runOnUIThread(new C04082());
+            AndroidUtilities.runOnUIThread(new C04112());
             return 1;
         }
         if (supportLockScreenControls) {

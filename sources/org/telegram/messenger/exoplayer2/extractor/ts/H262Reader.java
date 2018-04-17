@@ -3,7 +3,7 @@ package org.telegram.messenger.exoplayer2.extractor.ts;
 import android.util.Pair;
 import java.util.Arrays;
 import java.util.Collections;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
@@ -137,10 +137,10 @@ public final class H262Reader implements ElementaryStreamReader {
             }
             if (!r0.startedFirstSample || r0.sampleHasPicture) {
                 r0.samplePosition = r0.totalBytesWritten - ((long) lengthToStartCode);
-                long j = r0.pesTimeUs != C0539C.TIME_UNSET ? r0.pesTimeUs : r0.startedFirstSample ? r0.sampleTimeUs + r0.frameDurationUs : 0;
+                long j = r0.pesTimeUs != C0542C.TIME_UNSET ? r0.pesTimeUs : r0.startedFirstSample ? r0.sampleTimeUs + r0.frameDurationUs : 0;
                 r0.sampleTimeUs = j;
                 r0.sampleIsKeyframe = false;
-                r0.pesTimeUs = C0539C.TIME_UNSET;
+                r0.pesTimeUs = C0542C.TIME_UNSET;
                 r0.startedFirstSample = true;
             }
             if (startCodeValue == 0) {

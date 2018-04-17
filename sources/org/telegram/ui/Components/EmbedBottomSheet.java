@@ -54,7 +54,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -98,11 +98,11 @@ public class EmbedBottomSheet extends BottomSheet {
     private ImageView youtubeLogoImage;
 
     /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$1 */
-    class C11271 implements OnShowListener {
+    class C11331 implements OnShowListener {
 
         /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$1$1 */
-        class C11251 implements OnPreDrawListener {
-            C11251() {
+        class C11311 implements OnPreDrawListener {
+            C11311() {
             }
 
             public boolean onPreDraw() {
@@ -111,19 +111,19 @@ public class EmbedBottomSheet extends BottomSheet {
             }
         }
 
-        C11271() {
+        C11331() {
         }
 
         public void onShow(DialogInterface dialog) {
             if (EmbedBottomSheet.this.pipVideoView != null && EmbedBottomSheet.this.videoView.isInline()) {
-                EmbedBottomSheet.this.videoView.getViewTreeObserver().addOnPreDrawListener(new C11251());
+                EmbedBottomSheet.this.videoView.getViewTreeObserver().addOnPreDrawListener(new C11311());
             }
         }
     }
 
     /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$2 */
-    class C11282 implements OnTouchListener {
-        C11282() {
+    class C11342 implements OnTouchListener {
+        C11342() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -132,8 +132,8 @@ public class EmbedBottomSheet extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$4 */
-    class C11304 implements OnTouchListener {
-        C11304() {
+    class C11364 implements OnTouchListener {
+        C11364() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -142,8 +142,8 @@ public class EmbedBottomSheet extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$6 */
-    class C11326 extends WebChromeClient {
-        C11326() {
+    class C11386 extends WebChromeClient {
+        C11386() {
         }
 
         public void onShowCustomView(View view, int requestedOrientation, CustomViewCallback callback) {
@@ -180,8 +180,8 @@ public class EmbedBottomSheet extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$7 */
-    class C11337 extends WebViewClient {
-        C11337() {
+    class C11397 extends WebViewClient {
+        C11397() {
         }
 
         public void onLoadResource(WebView view, String url) {
@@ -200,8 +200,8 @@ public class EmbedBottomSheet extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$8 */
-    class C11348 implements OnClickListener {
-        C11348() {
+    class C11408 implements OnClickListener {
+        C11408() {
         }
 
         public void onClick(View v) {
@@ -247,11 +247,11 @@ public class EmbedBottomSheet extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$9 */
-    class C20459 implements WebPlayerViewDelegate {
+    class C20519 implements WebPlayerViewDelegate {
 
         /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$9$2 */
-        class C11362 extends AnimatorListenerAdapter {
-            C11362() {
+        class C11422 extends AnimatorListenerAdapter {
+            C11422() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -259,7 +259,7 @@ public class EmbedBottomSheet extends BottomSheet {
             }
         }
 
-        C20459() {
+        C20519() {
         }
 
         public void onInitFailed() {
@@ -330,7 +330,7 @@ public class EmbedBottomSheet extends BottomSheet {
         }
 
         public void prepareToSwitchInlineMode(boolean inline, Runnable switchInlineModeRunnable, float aspectRatio, boolean animated) {
-            C20459 c20459 = this;
+            C20519 c20519 = this;
             final Runnable runnable;
             if (inline) {
                 if (EmbedBottomSheet.this.parentActivity != null) {
@@ -435,7 +435,7 @@ public class EmbedBottomSheet extends BottomSheet {
         }
 
         public TextureView onSwitchInlineMode(View controlsView, boolean inline, float aspectRatio, int rotation, boolean animated) {
-            C20459 c20459 = this;
+            C20519 c20519 = this;
             if (inline) {
                 View view = controlsView;
                 view.setTranslationY(0.0f);
@@ -467,7 +467,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 animatorSet.playTogether(animatorArr);
                 animatorSet.setInterpolator(new DecelerateInterpolator());
                 animatorSet.setDuration(250);
-                animatorSet.addListener(new C11362());
+                animatorSet.addListener(new C11422());
                 animatorSet.start();
             } else {
                 EmbedBottomSheet.this.containerView.setTranslationY(0.0f);
@@ -520,7 +520,7 @@ public class EmbedBottomSheet extends BottomSheet {
         this.lastOrientation = -1;
         this.prevOrientation = -2;
         this.youtubeFrame = "<!DOCTYPE html><html><head><style>body { margin: 0; width:100%%; height:100%%;  background-color:#000; }html { width:100%%; height:100%%; background-color:#000; }.embed-container iframe,.embed-container object,   .embed-container embed {       position: absolute;       top: 0;       left: 0;       width: 100%% !important;       height: 100%% !important;   }   </style></head><body>   <div class=\"embed-container\">       <div id=\"player\"></div>   </div>   <script src=\"https://www.youtube.com/iframe_api\"></script>   <script>   var player;   var observer;   var videoEl;   var playing;   var posted = false;   YT.ready(function() {       player = new YT.Player(\"player\", {                              \"width\" : \"100%%\",                              \"events\" : {                              \"onReady\" : \"onReady\",                              \"onError\" : \"onError\",                              },                              \"videoId\" : \"%1$s\",                              \"height\" : \"100%%\",                              \"playerVars\" : {                              \"start\" : %2$d,                              \"rel\" : 0,                              \"showinfo\" : 0,                              \"modestbranding\" : 1,                              \"iv_load_policy\" : 3,                              \"autohide\" : 1,                              \"autoplay\" : 1,                              \"cc_load_policy\" : 1,                              \"playsinline\" : 1,                              \"controls\" : 1                              }                            });        player.setSize(window.innerWidth, window.innerHeight);    });    function hideControls() {        playing = !videoEl.paused;       videoEl.controls = 0;       observer.observe(videoEl, {attributes: true});    }    function showControls() {        playing = !videoEl.paused;       observer.disconnect();       videoEl.controls = 1;    }    function onError(event) {       if (!posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onReady(event) {       player.playVideo();       videoEl = player.getIframe().contentDocument.getElementsByTagName('video')[0];\n       videoEl.addEventListener(\"canplay\", function() {            if (playing) {               videoEl.play();            }       }, true);       videoEl.addEventListener(\"timeupdate\", function() {            if (!posted && videoEl.currentTime > 0) {               if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);                }               posted = true;           }       }, true);       observer = new MutationObserver(function() {\n          if (videoEl.controls) {\n               videoEl.controls = 0;\n          }       });\n    }    window.onresize = function() {        player.setSize(window.innerWidth, window.innerHeight);    }    </script></body></html>";
-        this.onShowListener = new C11271();
+        this.onShowListener = new C11331();
         this.fullWidth = true;
         setApplyTopPadding(false);
         setApplyBottomPadding(false);
@@ -544,7 +544,7 @@ public class EmbedBottomSheet extends BottomSheet {
         }
         r0.container.addView(r0.fullscreenVideoContainer, LayoutHelper.createFrame(-1, -1.0f));
         r0.fullscreenVideoContainer.setVisibility(4);
-        r0.fullscreenVideoContainer.setOnTouchListener(new C11282());
+        r0.fullscreenVideoContainer.setOnTouchListener(new C11342());
         r0.containerLayout = new FrameLayout(context2) {
             protected void onDetachedFromWindow() {
                 super.onDetachedFromWindow();
@@ -570,7 +570,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((AndroidUtilities.dp((float) (84 + (EmbedBottomSheet.this.hasDescription ? 22 : 0))) + ((int) Math.min(((float) EmbedBottomSheet.this.height) / (((float) EmbedBottomSheet.this.width) / ((float) MeasureSpec.getSize(widthMeasureSpec))), (float) (AndroidUtilities.displaySize.y / 2)))) + 1, NUM));
             }
         };
-        r0.containerLayout.setOnTouchListener(new C11304());
+        r0.containerLayout.setOnTouchListener(new C11364());
         setCustomView(r0.containerLayout);
         r0.webView = new WebView(context2) {
             public boolean onTouchEvent(MotionEvent event) {
@@ -589,15 +589,15 @@ public class EmbedBottomSheet extends BottomSheet {
             r0.webView.getSettings().setMixedContentMode(0);
             CookieManager.getInstance().setAcceptThirdPartyCookies(r0.webView, true);
         }
-        r0.webView.setWebChromeClient(new C11326());
-        r0.webView.setWebViewClient(new C11337());
+        r0.webView.setWebChromeClient(new C11386());
+        r0.webView.setWebViewClient(new C11397());
         int i = 22;
         r0.containerLayout.addView(r0.webView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, (float) (84 + (r0.hasDescription ? 22 : 0))));
         r0.youtubeLogoImage = new ImageView(context2);
         r0.youtubeLogoImage.setVisibility(8);
         r0.containerLayout.addView(r0.youtubeLogoImage, LayoutHelper.createFrame(66, 28.0f, 53, 0.0f, 8.0f, 8.0f, 0.0f));
-        r0.youtubeLogoImage.setOnClickListener(new C11348());
-        r0.videoView = new WebPlayerView(context2, true, false, new C20459());
+        r0.youtubeLogoImage.setOnClickListener(new C11408());
+        r0.videoView = new WebPlayerView(context2, true, false, new C20519());
         r0.videoView.setVisibility(4);
         r0.containerLayout.addView(r0.videoView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, (float) ((84 + (r0.hasDescription ? 22 : 0)) - 10)));
         r0.progressBarBlackBackground = new View(context2);
@@ -672,8 +672,8 @@ public class EmbedBottomSheet extends BottomSheet {
         r0.pipButton.setOnClickListener(new OnClickListener() {
 
             /* renamed from: org.telegram.ui.Components.EmbedBottomSheet$11$1 */
-            class C11261 extends AnimatorListenerAdapter {
-                C11261() {
+            class C11321 extends AnimatorListenerAdapter {
+                C11321() {
                 }
 
                 public void onAnimationEnd(Animator animation) {
@@ -716,7 +716,7 @@ public class EmbedBottomSheet extends BottomSheet {
                         animatorSet.playTogether(animatorArr);
                         animatorSet.setInterpolator(new DecelerateInterpolator());
                         animatorSet.setDuration(250);
-                        animatorSet.addListener(new C11261());
+                        animatorSet.addListener(new C11321());
                         animatorSet.start();
                     } else {
                         EmbedBottomSheet.this.containerView.setTranslationY(0.0f);
@@ -823,7 +823,7 @@ public class EmbedBottomSheet extends BottomSheet {
                                 FileLog.m3e(e);
                             }
                         }
-                        EmbedBottomSheet.this.webView.loadDataWithBaseURL("https://www.youtube.com", String.format("<!DOCTYPE html><html><head><style>body { margin: 0; width:100%%; height:100%%;  background-color:#000; }html { width:100%%; height:100%%; background-color:#000; }.embed-container iframe,.embed-container object,   .embed-container embed {       position: absolute;       top: 0;       left: 0;       width: 100%% !important;       height: 100%% !important;   }   </style></head><body>   <div class=\"embed-container\">       <div id=\"player\"></div>   </div>   <script src=\"https://www.youtube.com/iframe_api\"></script>   <script>   var player;   var observer;   var videoEl;   var playing;   var posted = false;   YT.ready(function() {       player = new YT.Player(\"player\", {                              \"width\" : \"100%%\",                              \"events\" : {                              \"onReady\" : \"onReady\",                              \"onError\" : \"onError\",                              },                              \"videoId\" : \"%1$s\",                              \"height\" : \"100%%\",                              \"playerVars\" : {                              \"start\" : %2$d,                              \"rel\" : 0,                              \"showinfo\" : 0,                              \"modestbranding\" : 1,                              \"iv_load_policy\" : 3,                              \"autohide\" : 1,                              \"autoplay\" : 1,                              \"cc_load_policy\" : 1,                              \"playsinline\" : 1,                              \"controls\" : 1                              }                            });        player.setSize(window.innerWidth, window.innerHeight);    });    function hideControls() {        playing = !videoEl.paused;       videoEl.controls = 0;       observer.observe(videoEl, {attributes: true});    }    function showControls() {        playing = !videoEl.paused;       observer.disconnect();       videoEl.controls = 1;    }    function onError(event) {       if (!posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onReady(event) {       player.playVideo();       videoEl = player.getIframe().contentDocument.getElementsByTagName('video')[0];\n       videoEl.addEventListener(\"canplay\", function() {            if (playing) {               videoEl.play();            }       }, true);       videoEl.addEventListener(\"timeupdate\", function() {            if (!posted && videoEl.currentTime > 0) {               if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);                }               posted = true;           }       }, true);       observer = new MutationObserver(function() {\n          if (videoEl.controls) {\n               videoEl.controls = 0;\n          }       });\n    }    window.onresize = function() {        player.setSize(window.innerWidth, window.innerHeight);    }    </script></body></html>", new Object[]{currentYoutubeId, Integer.valueOf(seekToTime)}), "text/html", C0539C.UTF8_NAME, "http://youtube.com");
+                        EmbedBottomSheet.this.webView.loadDataWithBaseURL("https://www.youtube.com", String.format("<!DOCTYPE html><html><head><style>body { margin: 0; width:100%%; height:100%%;  background-color:#000; }html { width:100%%; height:100%%; background-color:#000; }.embed-container iframe,.embed-container object,   .embed-container embed {       position: absolute;       top: 0;       left: 0;       width: 100%% !important;       height: 100%% !important;   }   </style></head><body>   <div class=\"embed-container\">       <div id=\"player\"></div>   </div>   <script src=\"https://www.youtube.com/iframe_api\"></script>   <script>   var player;   var observer;   var videoEl;   var playing;   var posted = false;   YT.ready(function() {       player = new YT.Player(\"player\", {                              \"width\" : \"100%%\",                              \"events\" : {                              \"onReady\" : \"onReady\",                              \"onError\" : \"onError\",                              },                              \"videoId\" : \"%1$s\",                              \"height\" : \"100%%\",                              \"playerVars\" : {                              \"start\" : %2$d,                              \"rel\" : 0,                              \"showinfo\" : 0,                              \"modestbranding\" : 1,                              \"iv_load_policy\" : 3,                              \"autohide\" : 1,                              \"autoplay\" : 1,                              \"cc_load_policy\" : 1,                              \"playsinline\" : 1,                              \"controls\" : 1                              }                            });        player.setSize(window.innerWidth, window.innerHeight);    });    function hideControls() {        playing = !videoEl.paused;       videoEl.controls = 0;       observer.observe(videoEl, {attributes: true});    }    function showControls() {        playing = !videoEl.paused;       observer.disconnect();       videoEl.controls = 1;    }    function onError(event) {       if (!posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onReady(event) {       player.playVideo();       videoEl = player.getIframe().contentDocument.getElementsByTagName('video')[0];\n       videoEl.addEventListener(\"canplay\", function() {            if (playing) {               videoEl.play();            }       }, true);       videoEl.addEventListener(\"timeupdate\", function() {            if (!posted && videoEl.currentTime > 0) {               if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);                }               posted = true;           }       }, true);       observer = new MutationObserver(function() {\n          if (videoEl.controls) {\n               videoEl.controls = 0;\n          }       });\n    }    window.onresize = function() {        player.setSize(window.innerWidth, window.innerHeight);    }    </script></body></html>", new Object[]{currentYoutubeId, Integer.valueOf(seekToTime)}), "text/html", C0542C.UTF8_NAME, "http://youtube.com");
                     } else {
                         EmbedBottomSheet.this.webView.loadUrl(EmbedBottomSheet.this.embedUrl, args);
                     }

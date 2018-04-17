@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.extractor.ts;
 
 import java.io.IOException;
-import org.telegram.messenger.exoplayer2.C0539C;
+import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
@@ -14,7 +14,7 @@ import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class AdtsExtractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C18381();
+    public static final ExtractorsFactory FACTORY = new C18441();
     private static final int ID3_TAG = Util.getIntegerCodeForString("ID3");
     private static final int MAX_PACKET_SIZE = 200;
     private static final int MAX_SNIFF_BYTES = 8192;
@@ -24,8 +24,8 @@ public final class AdtsExtractor implements Extractor {
     private boolean startedPacket;
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.ts.AdtsExtractor$1 */
-    static class C18381 implements ExtractorsFactory {
-        C18381() {
+    static class C18441 implements ExtractorsFactory {
+        C18441() {
         }
 
         public Extractor[] createExtractors() {
@@ -96,7 +96,7 @@ public final class AdtsExtractor implements Extractor {
     public void init(ExtractorOutput output) {
         this.reader.createTracks(output, new TrackIdGenerator(0, 1));
         output.endTracks();
-        output.seekMap(new Unseekable(C0539C.TIME_UNSET));
+        output.seekMap(new Unseekable(C0542C.TIME_UNSET));
     }
 
     public void seek(long position, long timeUs) {

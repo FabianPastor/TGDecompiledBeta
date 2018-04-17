@@ -19,7 +19,7 @@ public class ShutterButton extends View {
     private ShutterButtonDelegate delegate;
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private long lastUpdateTime;
-    private Runnable longPressed = new C12981();
+    private Runnable longPressed = new C13041();
     private boolean pressed;
     private boolean processRelease;
     private Paint redPaint;
@@ -30,8 +30,8 @@ public class ShutterButton extends View {
     private Paint whitePaint = new Paint(1);
 
     /* renamed from: org.telegram.ui.Components.ShutterButton$1 */
-    class C12981 implements Runnable {
-        C12981() {
+    class C13041 implements Runnable {
+        C13041() {
         }
 
         public void run() {

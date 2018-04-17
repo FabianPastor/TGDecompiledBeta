@@ -271,12 +271,12 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         this.mMoveAnimations.add(viewHolder);
         final ViewHolder viewHolder2 = viewHolder;
         final int i = deltaX;
-        C06506 c06506 = r0;
+        C06536 c06536 = r0;
         final View view2 = view;
         ViewPropertyAnimator duration = animation.setDuration(getMoveDuration());
         final int i2 = deltaY;
         final ViewPropertyAnimator viewPropertyAnimator = animation;
-        C06506 c065062 = new AnimatorListenerAdapter() {
+        C06536 c065362 = new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
                 DefaultItemAnimator.this.dispatchMoveStarting(viewHolder2);
             }
@@ -297,7 +297,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
                 DefaultItemAnimator.this.dispatchFinishedWhenDone();
             }
         };
-        duration.setListener(c06506).start();
+        duration.setListener(c06536).start();
     }
 
     public boolean animateChange(ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY, int toX, int toY) {

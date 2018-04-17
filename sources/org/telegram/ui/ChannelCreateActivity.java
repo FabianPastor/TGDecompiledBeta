@@ -113,11 +113,11 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private InputFile uploadedAvatar;
 
     /* renamed from: org.telegram.ui.ChannelCreateActivity$3 */
-    class C09623 implements OnClickListener {
+    class C09683 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.ChannelCreateActivity$3$1 */
-        class C09611 implements DialogInterface.OnClickListener {
-            C09611() {
+        class C09671 implements DialogInterface.OnClickListener {
+            C09671() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -133,21 +133,21 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
         }
 
-        C09623() {
+        C09683() {
         }
 
         public void onClick(View view) {
             if (ChannelCreateActivity.this.getParentActivity() != null) {
                 Builder builder = new Builder(ChannelCreateActivity.this.getParentActivity());
-                builder.setItems(ChannelCreateActivity.this.avatar != null ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley)}, new C09611());
+                builder.setItems(ChannelCreateActivity.this.avatar != null ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley)}, new C09671());
                 ChannelCreateActivity.this.showDialog(builder.create());
             }
         }
     }
 
     /* renamed from: org.telegram.ui.ChannelCreateActivity$4 */
-    class C09634 implements TextWatcher {
-        C09634() {
+    class C09694 implements TextWatcher {
+        C09694() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -163,8 +163,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.ChannelCreateActivity$5 */
-    class C09645 implements OnEditorActionListener {
-        C09645() {
+    class C09705 implements OnEditorActionListener {
+        C09705() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -177,8 +177,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.ChannelCreateActivity$6 */
-    class C09656 implements TextWatcher {
-        C09656() {
+    class C09716 implements TextWatcher {
+        C09716() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -192,8 +192,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.ChannelCreateActivity$7 */
-    class C09667 implements OnClickListener {
-        C09667() {
+    class C09727 implements OnClickListener {
+        C09727() {
         }
 
         public void onClick(View v) {
@@ -205,8 +205,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.ChannelCreateActivity$8 */
-    class C09678 implements OnClickListener {
-        C09678() {
+    class C09738 implements OnClickListener {
+        C09738() {
         }
 
         public void onClick(View v) {
@@ -218,8 +218,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.ChannelCreateActivity$9 */
-    class C09689 implements TextWatcher {
-        C09689() {
+    class C09749 implements TextWatcher {
+        C09749() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -234,8 +234,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.ChannelCreateActivity$1 */
-    class C19681 implements RequestDelegate {
-        C19681() {
+    class C19741 implements RequestDelegate {
+        C19741() {
         }
 
         public void run(TLObject response, final TL_error error) {
@@ -257,11 +257,11 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     /* renamed from: org.telegram.ui.ChannelCreateActivity$2 */
-    class C19692 extends ActionBarMenuOnItemClick {
+    class C19752 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.ChannelCreateActivity$2$1 */
-        class C09591 implements DialogInterface.OnClickListener {
-            C09591() {
+        class C09651 implements DialogInterface.OnClickListener {
+            C09651() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -276,7 +276,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
         }
 
-        C19692() {
+        C19752() {
         }
 
         public void onItemClick(int id) {
@@ -301,7 +301,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                             ChannelCreateActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                             ChannelCreateActivity.this.progressDialog.setCanceledOnTouchOutside(false);
                             ChannelCreateActivity.this.progressDialog.setCancelable(false);
-                            ChannelCreateActivity.this.progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C09591());
+                            ChannelCreateActivity.this.progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new C09651());
                             ChannelCreateActivity.this.progressDialog.show();
                             return;
                         }
@@ -362,7 +362,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             TL_channels_checkUsername req = new TL_channels_checkUsername();
             req.username = "1";
             req.channel = new TL_inputChannelEmpty();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19681());
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new C19741());
             return;
         }
         if (this.currentStep == 1) {
@@ -407,7 +407,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         Context context2 = context;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setActionBarMenuOnItemClick(new C19692());
+        this.actionBar.setActionBarMenuOnItemClick(new C19752());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new ScrollView(context2);
         ScrollView scrollView = this.fragmentView;
@@ -427,7 +427,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             r0.avatarDrawable.setDrawPhoto(true);
             r0.avatarImage.setImageDrawable(r0.avatarDrawable);
             frameLayout.addView(r0.avatarImage, LayoutHelper.createFrame(64, 64.0f, 48 | (LocaleController.isRTL ? 5 : 3), LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
-            r0.avatarImage.setOnClickListener(new C09623());
+            r0.avatarImage.setOnClickListener(new C09683());
             r0.nameTextView = new EditTextBoldCursor(context2);
             r0.nameTextView.setHint(LocaleController.getString("EnterChannelName", R.string.EnterChannelName));
             if (r0.nameToSet != null) {
@@ -448,7 +448,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             r0.nameTextView.setCursorSize(AndroidUtilities.dp(20.0f));
             r0.nameTextView.setCursorWidth(1.5f);
             frameLayout.addView(r0.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 16, LocaleController.isRTL ? 16.0f : 96.0f, 0.0f, LocaleController.isRTL ? 96.0f : 16.0f, 0.0f));
-            r0.nameTextView.addTextChangedListener(new C09634());
+            r0.nameTextView.addTextChangedListener(new C09694());
             r0.descriptionTextView = new EditTextBoldCursor(context2);
             r0.descriptionTextView.setTextSize(1, 18.0f);
             r0.descriptionTextView.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -464,8 +464,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             r0.descriptionTextView.setCursorSize(AndroidUtilities.dp(20.0f));
             r0.descriptionTextView.setCursorWidth(1.5f);
             r0.linearLayout.addView(r0.descriptionTextView, LayoutHelper.createLinear(-1, -2, 24.0f, 18.0f, 24.0f, 0.0f));
-            r0.descriptionTextView.setOnEditorActionListener(new C09645());
-            r0.descriptionTextView.addTextChangedListener(new C09656());
+            r0.descriptionTextView.setOnEditorActionListener(new C09705());
+            r0.descriptionTextView.addTextChangedListener(new C09716());
             r0.helpTextView = new TextView(context2);
             r0.helpTextView.setTextSize(1, 15.0f);
             r0.helpTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
@@ -484,12 +484,12 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             r0.radioButtonCell1.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             r0.radioButtonCell1.setTextAndValue(LocaleController.getString("ChannelPublic", R.string.ChannelPublic), LocaleController.getString("ChannelPublicInfo", R.string.ChannelPublicInfo), r0.isPrivate ^ true);
             r0.linearLayout2.addView(r0.radioButtonCell1, LayoutHelper.createLinear(-1, -2));
-            r0.radioButtonCell1.setOnClickListener(new C09667());
+            r0.radioButtonCell1.setOnClickListener(new C09727());
             r0.radioButtonCell2 = new RadioButtonCell(context2);
             r0.radioButtonCell2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             r0.radioButtonCell2.setTextAndValue(LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate), LocaleController.getString("ChannelPrivateInfo", R.string.ChannelPrivateInfo), r0.isPrivate);
             r0.linearLayout2.addView(r0.radioButtonCell2, LayoutHelper.createLinear(-1, -2));
-            r0.radioButtonCell2.setOnClickListener(new C09678());
+            r0.radioButtonCell2.setOnClickListener(new C09738());
             r0.sectionCell = new ShadowSectionCell(context2);
             r0.linearLayout.addView(r0.sectionCell, LayoutHelper.createLinear(-1, -2));
             r0.linkContainer = new LinearLayout(context2);
@@ -535,7 +535,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             r0.nameTextView.setCursorSize(AndroidUtilities.dp(20.0f));
             r0.nameTextView.setCursorWidth(1.5f);
             r0.publicContainer.addView(r0.nameTextView, LayoutHelper.createLinear(-1, 36));
-            r0.nameTextView.addTextChangedListener(new C09689());
+            r0.nameTextView.addTextChangedListener(new C09749());
             r0.privateContainer = new TextBlockCell(context2);
             r0.privateContainer.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             r0.linkContainer.addView(r0.privateContainer);
@@ -765,8 +765,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     AndroidUtilities.runOnUIThread(new Runnable() {
 
                         /* renamed from: org.telegram.ui.ChannelCreateActivity$13$1$1 */
-                        class C09561 implements OnClickListener {
-                            C09561() {
+                        class C09621 implements OnClickListener {
+                            C09621() {
                             }
 
                             public void onClick(View view) {
@@ -798,11 +798,11 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                 builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), new DialogInterface.OnClickListener() {
 
                                     /* renamed from: org.telegram.ui.ChannelCreateActivity$13$1$1$1$1 */
-                                    class C19661 implements RequestDelegate {
+                                    class C19721 implements RequestDelegate {
 
                                         /* renamed from: org.telegram.ui.ChannelCreateActivity$13$1$1$1$1$1 */
-                                        class C09541 implements Runnable {
-                                            C09541() {
+                                        class C09601 implements Runnable {
+                                            C09601() {
                                             }
 
                                             public void run() {
@@ -814,12 +814,12 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                             }
                                         }
 
-                                        C19661() {
+                                        C19721() {
                                         }
 
                                         public void run(TLObject response, TL_error error) {
                                             if (response instanceof TL_boolTrue) {
-                                                AndroidUtilities.runOnUIThread(new C09541());
+                                                AndroidUtilities.runOnUIThread(new C09601());
                                             }
                                         }
                                     }
@@ -828,7 +828,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                         TL_channels_updateUsername req = new TL_channels_updateUsername();
                                         req.channel = MessagesController.getInputChannel(channel);
                                         req.username = TtmlNode.ANONYMOUS_REGION_ID;
-                                        ConnectionsManager.getInstance(ChannelCreateActivity.this.currentAccount).sendRequest(req, new C19661(), 64);
+                                        ConnectionsManager.getInstance(ChannelCreateActivity.this.currentAccount).sendRequest(req, new C19721(), 64);
                                     }
                                 });
                                 ChannelCreateActivity.this.showDialog(builder.create());
@@ -844,7 +844,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                 ChannelCreateActivity.this.adminedChannelCells.clear();
                                 TL_messages_chats res = response;
                                 for (int a2 = 0; a2 < res.chats.size(); a2++) {
-                                    AdminedChannelCell adminedChannelCell = new AdminedChannelCell(ChannelCreateActivity.this.getParentActivity(), new C09561());
+                                    AdminedChannelCell adminedChannelCell = new AdminedChannelCell(ChannelCreateActivity.this.getParentActivity(), new C09621());
                                     Chat chat = (Chat) res.chats.get(a2);
                                     boolean z = true;
                                     if (a2 != res.chats.size() - 1) {
@@ -920,8 +920,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 this.checkRunnable = new Runnable() {
 
                     /* renamed from: org.telegram.ui.ChannelCreateActivity$14$1 */
-                    class C19671 implements RequestDelegate {
-                        C19671() {
+                    class C19731 implements RequestDelegate {
+                        C19731() {
                         }
 
                         public void run(final TLObject response, final TL_error error) {
@@ -955,7 +955,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         TL_channels_checkUsername req = new TL_channels_checkUsername();
                         req.username = name;
                         req.channel = MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).getInputChannel(ChannelCreateActivity.this.chatId);
-                        ChannelCreateActivity.this.checkReqId = ConnectionsManager.getInstance(ChannelCreateActivity.this.currentAccount).sendRequest(req, new C19671(), 2);
+                        ChannelCreateActivity.this.checkReqId = ConnectionsManager.getInstance(ChannelCreateActivity.this.currentAccount).sendRequest(req, new C19731(), 2);
                     }
                 };
                 AndroidUtilities.runOnUIThread(this.checkRunnable, 300);

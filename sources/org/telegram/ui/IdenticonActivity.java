@@ -58,8 +58,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     private int textWidth;
 
     /* renamed from: org.telegram.ui.IdenticonActivity$2 */
-    class C14152 implements OnTouchListener {
-        C14152() {
+    class C14212 implements OnTouchListener {
+        C14212() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -68,8 +68,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.IdenticonActivity$4 */
-    class C14174 extends AnimatorListenerAdapter {
-        C14174() {
+    class C14234 extends AnimatorListenerAdapter {
+        C14234() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -80,8 +80,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.IdenticonActivity$5 */
-    class C14185 implements OnPreDrawListener {
-        C14185() {
+    class C14245 implements OnPreDrawListener {
+        C14245() {
         }
 
         public boolean onPreDraw() {
@@ -118,8 +118,8 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     /* renamed from: org.telegram.ui.IdenticonActivity$1 */
-    class C21481 extends ActionBarMenuOnItemClick {
-        C21481() {
+    class C21541 extends ActionBarMenuOnItemClick {
+        C21541() {
         }
 
         public void onItemClick(int id) {
@@ -149,11 +149,11 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("EncryptionKey", R.string.EncryptionKey));
-        this.actionBar.setActionBarMenuOnItemClick(new C21481());
+        this.actionBar.setActionBarMenuOnItemClick(new C21541());
         this.fragmentView = new FrameLayout(context2);
         FrameLayout parentFrameLayout = this.fragmentView;
         this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        this.fragmentView.setOnTouchListener(new C14152());
+        this.fragmentView.setOnTouchListener(new C14212());
         this.linearLayout = new LinearLayout(context2);
         this.linearLayout.setOrientation(1);
         this.linearLayout.setWeightSum(100.0f);
@@ -312,7 +312,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             fArr3[0] = f;
             animatorArr[5] = ObjectAnimator.ofFloat(textView2, str2, fArr3);
             animatorSet.playTogether(animatorArr);
-            this.animatorSet.addListener(new C14174());
+            this.animatorSet.addListener(new C14234());
             this.animatorSet.setInterpolator(new DecelerateInterpolator());
             this.animatorSet.setDuration(150);
             this.animatorSet.start();
@@ -332,7 +332,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     private void fixLayout() {
-        this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C14185());
+        this.fragmentView.getViewTreeObserver().addOnPreDrawListener(new C14245());
     }
 
     protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {

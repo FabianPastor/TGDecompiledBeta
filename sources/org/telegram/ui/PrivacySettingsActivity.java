@@ -90,8 +90,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     private int webSessionsRow;
 
     /* renamed from: org.telegram.ui.PrivacySettingsActivity$1 */
-    class C22401 extends ActionBarMenuOnItemClick {
-        C22401() {
+    class C22461 extends ActionBarMenuOnItemClick {
+        C22461() {
         }
 
         public void onItemClick(int id) {
@@ -102,11 +102,11 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     }
 
     /* renamed from: org.telegram.ui.PrivacySettingsActivity$3 */
-    class C22433 implements OnItemClickListener {
+    class C22493 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.PrivacySettingsActivity$3$1 */
-        class C16271 implements OnClickListener {
-            C16271() {
+        class C16331 implements OnClickListener {
+            C16331() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -149,8 +149,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: org.telegram.ui.PrivacySettingsActivity$3$2 */
-        class C16282 implements OnClickListener {
-            C16282() {
+        class C16342 implements OnClickListener {
+            C16342() {
             }
 
             public void onClick(DialogInterface dialog, int which) {
@@ -160,8 +160,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: org.telegram.ui.PrivacySettingsActivity$3$3 */
-        class C16293 implements View.OnClickListener {
-            C16293() {
+        class C16353 implements View.OnClickListener {
+            C16353() {
             }
 
             public void onClick(View v) {
@@ -173,21 +173,21 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
 
         /* renamed from: org.telegram.ui.PrivacySettingsActivity$3$4 */
-        class C16314 implements View.OnClickListener {
+        class C16374 implements View.OnClickListener {
 
             /* renamed from: org.telegram.ui.PrivacySettingsActivity$3$4$1 */
-            class C16301 implements OnClickListener {
+            class C16361 implements OnClickListener {
 
                 /* renamed from: org.telegram.ui.PrivacySettingsActivity$3$4$1$1 */
-                class C22421 implements RequestDelegate {
-                    C22421() {
+                class C22481 implements RequestDelegate {
+                    C22481() {
                     }
 
                     public void run(TLObject response, TL_error error) {
                     }
                 }
 
-                C16301() {
+                C16361() {
                 }
 
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -196,11 +196,11 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     req.info = PrivacySettingsActivity.this.clear[0];
                     UserConfig.getInstance(PrivacySettingsActivity.this.currentAccount).tmpPassword = null;
                     UserConfig.getInstance(PrivacySettingsActivity.this.currentAccount).saveConfig(false);
-                    ConnectionsManager.getInstance(PrivacySettingsActivity.this.currentAccount).sendRequest(req, new C22421());
+                    ConnectionsManager.getInstance(PrivacySettingsActivity.this.currentAccount).sendRequest(req, new C22481());
                 }
             }
 
-            C16314() {
+            C16374() {
             }
 
             public void onClick(View v) {
@@ -214,13 +214,13 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 Builder builder = new Builder(PrivacySettingsActivity.this.getParentActivity());
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setMessage(LocaleController.getString("PrivacyPaymentsClearAlert", R.string.PrivacyPaymentsClearAlert));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16301());
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C16361());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 PrivacySettingsActivity.this.showDialog(builder.create());
             }
         }
 
-        C22433() {
+        C22493() {
         }
 
         public void onItemClick(View view, int position) {
@@ -237,7 +237,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         if (PrivacySettingsActivity.this.getParentActivity() != null) {
                             Builder builder = new Builder(PrivacySettingsActivity.this.getParentActivity());
                             builder.setTitle(LocaleController.getString("DeleteAccountTitle", R.string.DeleteAccountTitle));
-                            builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Months", 1), LocaleController.formatPluralString("Months", 3), LocaleController.formatPluralString("Months", 6), LocaleController.formatPluralString("Years", 1)}, new C16271());
+                            builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Months", 1), LocaleController.formatPluralString("Months", 3), LocaleController.formatPluralString("Months", 6), LocaleController.formatPluralString("Years", 1)}, new C16331());
                             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                             PrivacySettingsActivity.this.showDialog(builder.create());
                         }
@@ -276,7 +276,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         }
                         PrivacySettingsActivity.this.listAdapter.notifyItemChanged(PrivacySettingsActivity.this.contactsDetailRow);
                     } else if (position == PrivacySettingsActivity.this.callsP2PRow) {
-                        new Builder(PrivacySettingsActivity.this.getParentActivity()).setTitle(LocaleController.getString("PrivacyCallsP2PTitle", R.string.PrivacyCallsP2PTitle)).setItems(new String[]{LocaleController.getString("LastSeenEverybody", R.string.LastSeenEverybody), LocaleController.getString("LastSeenContacts", R.string.LastSeenContacts), LocaleController.getString("LastSeenNobody", R.string.LastSeenNobody)}, new C16282()).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).show();
+                        new Builder(PrivacySettingsActivity.this.getParentActivity()).setTitle(LocaleController.getString("PrivacyCallsP2PTitle", R.string.PrivacyCallsP2PTitle)).setItems(new String[]{LocaleController.getString("LastSeenEverybody", R.string.LastSeenEverybody), LocaleController.getString("LastSeenContacts", R.string.LastSeenContacts), LocaleController.getString("LastSeenNobody", R.string.LastSeenNobody)}, new C16342()).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).show();
                     } else if (position == PrivacySettingsActivity.this.paymentsClearRow) {
                         BottomSheet.Builder builder2 = new BottomSheet.Builder(PrivacySettingsActivity.this.getParentActivity());
                         builder2.setApplyTopPadding(false);
@@ -297,13 +297,13 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                             linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
                             checkBoxCell.setText(name, null, true, true);
                             checkBoxCell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                            checkBoxCell.setOnClickListener(new C16293());
+                            checkBoxCell.setOnClickListener(new C16353());
                         }
                         BottomSheetCell cell = new BottomSheetCell(PrivacySettingsActivity.this.getParentActivity(), 1);
                         cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                         cell.setTextAndIcon(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), 0);
                         cell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
-                        cell.setOnClickListener(new C16314());
+                        cell.setOnClickListener(new C16374());
                         linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
                         builder2.setCustomView(linearLayout);
                         PrivacySettingsActivity.this.showDialog(builder2.create());
@@ -670,7 +670,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("PrivacySettings", R.string.PrivacySettings));
-        this.actionBar.setActionBarMenuOnItemClick(new C22401());
+        this.actionBar.setActionBarMenuOnItemClick(new C22461());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -686,7 +686,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         this.listView.setLayoutAnimation(null);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22433());
+        this.listView.setOnItemClickListener(new C22493());
         return this.fragmentView;
     }
 

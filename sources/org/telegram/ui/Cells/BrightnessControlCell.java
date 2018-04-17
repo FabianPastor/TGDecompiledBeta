@@ -20,8 +20,8 @@ public class BrightnessControlCell extends FrameLayout {
     private SeekBarView seekBarView;
 
     /* renamed from: org.telegram.ui.Cells.BrightnessControlCell$2 */
-    class C19362 implements SeekBarViewDelegate {
-        C19362() {
+    class C19422 implements SeekBarViewDelegate {
+        C19422() {
         }
 
         public void onSeekBarDrag(float progress) {
@@ -43,7 +43,7 @@ public class BrightnessControlCell extends FrameLayout {
             }
         };
         this.seekBarView.setReportChanges(true);
-        this.seekBarView.setDelegate(new C19362());
+        this.seekBarView.setDelegate(new C19422());
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 58.0f, 9.0f, 58.0f, 0.0f));
         this.rightImageView = new ImageView(context);
         this.rightImageView.setImageResource(R.drawable.brightness_high);

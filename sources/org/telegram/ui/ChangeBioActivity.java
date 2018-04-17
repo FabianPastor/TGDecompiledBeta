@@ -49,8 +49,8 @@ public class ChangeBioActivity extends BaseFragment {
     private TextView helpTextView;
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$2 */
-    class C08922 implements OnTouchListener {
-        C08922() {
+    class C08982 implements OnTouchListener {
+        C08982() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -59,8 +59,8 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$4 */
-    class C08944 implements OnEditorActionListener {
-        C08944() {
+    class C09004 implements OnEditorActionListener {
+        C09004() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -73,8 +73,8 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$5 */
-    class C08955 implements TextWatcher {
-        C08955() {
+    class C09015 implements TextWatcher {
+        C09015() {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -89,8 +89,8 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeBioActivity$1 */
-    class C19411 extends ActionBarMenuOnItemClick {
-        C19411() {
+    class C19471 extends ActionBarMenuOnItemClick {
+        C19471() {
         }
 
         public void onItemClick(int id) {
@@ -107,12 +107,12 @@ public class ChangeBioActivity extends BaseFragment {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("UserBio", R.string.UserBio));
-        this.actionBar.setActionBarMenuOnItemClick(new C19411());
+        this.actionBar.setActionBarMenuOnItemClick(new C19471());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.fragmentView = new LinearLayout(context2);
         LinearLayout linearLayout = this.fragmentView;
         linearLayout.setOrientation(1);
-        this.fragmentView.setOnTouchListener(new C08922());
+        this.fragmentView.setOnTouchListener(new C08982());
         FrameLayout fieldContainer = new FrameLayout(context2);
         linearLayout.addView(fieldContainer, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 20.0f, 0.0f));
         this.firstNameField = new EditTextBoldCursor(context2);
@@ -154,8 +154,8 @@ public class ChangeBioActivity extends BaseFragment {
         r0.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         r0.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         r0.firstNameField.setCursorWidth(1.5f);
-        r0.firstNameField.setOnEditorActionListener(new C08944());
-        r0.firstNameField.addTextChangedListener(new C08955());
+        r0.firstNameField.setOnEditorActionListener(new C09004());
+        r0.firstNameField.addTextChangedListener(new C09015());
         fieldContainer.addView(r0.firstNameField, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 0.0f, 4.0f, 0.0f));
         r0.checkTextView = new TextView(context2);
         r0.checkTextView.setTextSize(1, 15.0f);
