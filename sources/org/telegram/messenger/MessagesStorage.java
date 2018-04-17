@@ -14906,7 +14906,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find block by offs
     public TLObject getSentFile(String path, int type) {
         TLObject tLObject = null;
         if (path != null) {
-            if (!path.endsWith("attheme")) {
+            if (!path.toLowerCase().endsWith("attheme")) {
                 CountDownLatch countDownLatch = new CountDownLatch(1);
                 ArrayList<TLObject> result = new ArrayList();
                 final String str = path;

@@ -354,9 +354,25 @@ public class ConnectionsManager {
         private int currentAccount;
         private FirebaseRemoteConfig firebaseRemoteConfig;
 
+        /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$2 */
+        class C24172 implements Runnable {
+            C24172() {
+            }
+
+            public void run() {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.m0d("failed to get firebase result");
+                    FileLog.m0d("start azure task");
+                }
+                AzureLoadTask task = new AzureLoadTask(FirebaseTask.this.currentAccount);
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                ConnectionsManager.currentTask = task;
+            }
+        }
+
         /* renamed from: org.telegram.tgnet.ConnectionsManager$FirebaseTask$1 */
-        class C24221 implements OnCompleteListener<Void> {
-            C24221() {
+        class C24231 implements OnCompleteListener<Void> {
+            C24231() {
             }
 
             public void onComplete(Task<Void> finishedTask) {
@@ -385,7 +401,6 @@ public class ConnectionsManager {
                             buffer.writeBytes(bytes);
                             ConnectionsManager.native_applyDnsConfig(FirebaseTask.this.currentAccount, buffer.address);
                         } catch (Throwable e) {
-                            ConnectionsManager.currentTask = null;
                             FileLog.m3e(e);
                         }
                     }
@@ -408,8 +423,9 @@ public class ConnectionsManager {
                     stringBuilder.append(currentValue);
                     FileLog.m0d(stringBuilder.toString());
                 }
-                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new C24221());
+                this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new C24231());
             } catch (Throwable e) {
+                Utilities.stageQueue.postRunnable(new C24172());
                 FileLog.m3e(e);
             }
             return null;
@@ -616,8 +632,8 @@ public class ConnectionsManager {
         Utilities.stageQueue.postRunnable(new Runnable() {
 
             /* renamed from: org.telegram.tgnet.ConnectionsManager$2$1 */
-            class C24211 implements RequestDelegateInternal {
-                C24211() {
+            class C24221 implements RequestDelegateInternal {
+                C24221() {
                 }
 
                 public void run(long response, int errorCode, String errorText, int networkType) {
@@ -683,7 +699,7 @@ public class ConnectionsManager {
                     NativeByteBuffer buffer = new NativeByteBuffer(tLObject.getObjectSize());
                     tLObject.serializeToStream(buffer);
                     tLObject.freeResources();
-                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new C24211(), quickAckDelegate, writeToSocketDelegate, i2, i3, i4, z, i);
+                    ConnectionsManager.native_sendRequest(ConnectionsManager.this.currentAccount, buffer.address, new C24221(), quickAckDelegate, writeToSocketDelegate, i2, i3, i4, z, i);
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }

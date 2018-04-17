@@ -514,7 +514,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                     return;
                                 }
                             } else if (message.type == 9 || message.type == 0) {
-                                if (message.getDocumentName().endsWith("attheme")) {
+                                if (message.getDocumentName().toLowerCase().endsWith("attheme")) {
                                     File f2;
                                     f = null;
                                     if (!(message.messageOwner.attachPath == null || message.messageOwner.attachPath.length() == 0)) {
@@ -1845,7 +1845,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         }
                     }
                     if (locFile != null) {
-                        if (!locFile.getName().endsWith("attheme")) {
+                        if (!locFile.getName().toLowerCase().endsWith("attheme")) {
                             if (!LocaleController.getInstance().applyLanguageFile(locFile, this.currentAccount)) {
                                 if (getParentActivity() != null) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
@@ -2024,7 +2024,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         if (messageObject.getDocument() != null) {
                             String mime = messageObject.getDocument().mime_type;
                             if (mime != null) {
-                                if (messageObject.getDocumentName().endsWith("attheme")) {
+                                if (messageObject.getDocumentName().toLowerCase().endsWith("attheme")) {
                                     return 10;
                                 }
                                 if (mime.endsWith("/xml")) {

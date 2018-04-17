@@ -2056,7 +2056,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                     f = FileLoader.getPathToMessage(messageObject.messageOwner);
                                 }
                                 if (f != null && f.exists()) {
-                                    if (f.getName().endsWith("attheme")) {
+                                    if (f.getName().toLowerCase().endsWith("attheme")) {
                                         ThemeInfo themeInfo = Theme.applyThemeFile(f, message.getDocumentName(), true);
                                         if (themeInfo != null) {
                                             presentFragment(new ThemePreviewActivity(f, themeInfo));

@@ -3722,12 +3722,14 @@ public class MessagesController implements NotificationCenterDelegate {
                                 TL_messages_peerDialogs res = (TL_messages_peerDialogs) response;
                                 if (!res.dialogs.isEmpty()) {
                                     TL_dialog dialog = (TL_dialog) res.dialogs.get(0);
-                                    TL_messages_dialogs dialogs = new TL_messages_dialogs();
-                                    dialogs.chats = res.chats;
-                                    dialogs.users = res.users;
-                                    dialogs.dialogs = res.dialogs;
-                                    dialogs.messages = res.messages;
-                                    MessagesStorage.getInstance(MessagesController.this.currentAccount).putDialogs(dialogs, false);
+                                    if (dialog.top_message != 0) {
+                                        TL_messages_dialogs dialogs = new TL_messages_dialogs();
+                                        dialogs.chats = res.chats;
+                                        dialogs.users = res.users;
+                                        dialogs.dialogs = res.dialogs;
+                                        dialogs.messages = res.messages;
+                                        MessagesStorage.getInstance(MessagesController.this.currentAccount).putDialogs(dialogs, false);
+                                    }
                                     MessagesController messagesController = MessagesController.this;
                                     long j = j3;
                                     int i = i8;
@@ -3744,7 +3746,8 @@ public class MessagesController implements NotificationCenterDelegate {
                                     int i11 = lower_part3;
                                     int i12 = i6;
                                     int i13 = i7;
-                                    messagesController.loadMessagesInternal(j, i, i2, i3, false, i4, i5, i12, i13, z, i8, i9, i10, i11, z5, dialog.unread_mentions_count, false);
+                                    boolean z2 = z;
+                                    messagesController.loadMessagesInternal(j, i, i2, i3, false, i4, i5, i12, i13, z2, i8, i9, i10, i11, z5, dialog.unread_mentions_count, false);
                                 }
                             }
                         }
@@ -11410,8 +11413,8 @@ public class MessagesController implements NotificationCenterDelegate {
         AndroidUtilities.runOnUIThread(new Runnable() {
 
             /* renamed from: org.telegram.messenger.MessagesController$132$3 */
-            class C24193 implements RequestDelegate {
-                C24193() {
+            class C24203 implements RequestDelegate {
+                C24203() {
                 }
 
                 public void run(TLObject response, TL_error error) {
@@ -11835,7 +11838,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                                         req.peer.access_hash = dbUsers.access_hash;
                                                         req.peer.id = dbUsers.id;
                                                         req.reason = new TL_phoneCallDiscardReasonBusy();
-                                                        ConnectionsManager.getInstance(MessagesController.this.currentAccount).sendRequest(req, new C24193());
+                                                        ConnectionsManager.getInstance(MessagesController.this.currentAccount).sendRequest(req, new C24203());
                                                     } else if (BuildVars.LOGS_ENABLED) {
                                                         FileLog.m0d("ignoring too old call");
                                                     }

@@ -2179,7 +2179,7 @@ public class Theme {
 
     public static String getCurrentThemeName() {
         String text = currentDayTheme.getName();
-        if (text.endsWith(".attheme")) {
+        if (text.toLowerCase().endsWith(".attheme")) {
             return text.substring(0, text.lastIndexOf(46));
         }
         return text;
@@ -2190,7 +2190,7 @@ public class Theme {
             return TtmlNode.ANONYMOUS_REGION_ID;
         }
         String text = currentNightTheme.getName();
-        if (text.endsWith(".attheme")) {
+        if (text.toLowerCase().endsWith(".attheme")) {
             text = text.substring(0, text.lastIndexOf(46));
         }
         return text;

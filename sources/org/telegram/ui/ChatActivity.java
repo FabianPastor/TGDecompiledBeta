@@ -1137,7 +1137,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         ChatActivity.this.presentFragment(fragment);
                                     }
                                 } else if (message.type == 9 || message.type == 0) {
-                                    if (message.getDocumentName().endsWith("attheme")) {
+                                    if (message.getDocumentName().toLowerCase().endsWith("attheme")) {
                                         File f2;
                                         f = null;
                                         if (!(message.messageOwner.attachPath == null || message.messageOwner.attachPath.length() == 0)) {
@@ -9374,7 +9374,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 if (messageObject.getDocument() != null) {
                                     String mime = messageObject.getDocument().mime_type;
                                     if (mime != null) {
-                                        if (messageObject.getDocumentName().endsWith("attheme")) {
+                                        if (messageObject.getDocumentName().toLowerCase().endsWith("attheme")) {
                                             return 10;
                                         }
                                         if (mime.endsWith("/xml")) {
@@ -16101,7 +16101,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             }
                         }
                         if (locFile != null) {
-                            if (!locFile.getName().endsWith("attheme")) {
+                            if (!locFile.getName().toLowerCase().endsWith("attheme")) {
                                 if (!LocaleController.getInstance().applyLanguageFile(locFile, r7.currentAccount)) {
                                     if (getParentActivity() != null) {
                                         Builder builder2 = new Builder(getParentActivity());
