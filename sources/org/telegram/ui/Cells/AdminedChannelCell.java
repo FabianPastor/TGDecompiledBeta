@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.text.SpannableStringBuilder;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
@@ -35,33 +34,27 @@ public class AdminedChannelCell extends FrameLayout {
     private SimpleTextView statusTextView;
 
     public AdminedChannelCell(Context context, OnClickListener onClickListener) {
-        Context context2 = context;
         super(context);
-        this.avatarImageView = new BackupImageView(context2);
+        this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
-        int i = 3;
         addView(this.avatarImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 12.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
-        r0.nameTextView = new SimpleTextView(context2);
-        r0.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        r0.nameTextView.setTextSize(17);
-        r0.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(r0.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 62.0f : 73.0f, 15.5f, LocaleController.isRTL ? 73.0f : 62.0f, 0.0f));
-        r0.statusTextView = new SimpleTextView(context2);
-        r0.statusTextView.setTextSize(14);
-        r0.statusTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        r0.statusTextView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
-        r0.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(r0.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 62.0f : 73.0f, 38.5f, LocaleController.isRTL ? 73.0f : 62.0f, 0.0f));
-        r0.deleteButton = new ImageView(context2);
-        r0.deleteButton.setScaleType(ScaleType.CENTER);
-        r0.deleteButton.setImageResource(R.drawable.msg_panel_clear);
-        r0.deleteButton.setOnClickListener(onClickListener);
-        r0.deleteButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText), Mode.MULTIPLY));
-        View view = r0.deleteButton;
-        if (!LocaleController.isRTL) {
-            i = 5;
-        }
-        addView(view, LayoutHelper.createFrame(48, 48.0f, i | 48, LocaleController.isRTL ? 7.0f : 0.0f, 12.0f, LocaleController.isRTL ? 0.0f : 7.0f, 0.0f));
+        this.nameTextView = new SimpleTextView(context);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.nameTextView.setTextSize(17);
+        this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 62.0f : 73.0f, 15.5f, LocaleController.isRTL ? 73.0f : 62.0f, 0.0f));
+        this.statusTextView = new SimpleTextView(context);
+        this.statusTextView.setTextSize(14);
+        this.statusTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
+        this.statusTextView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
+        this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 62.0f : 73.0f, 38.5f, LocaleController.isRTL ? 73.0f : 62.0f, 0.0f));
+        this.deleteButton = new ImageView(context);
+        this.deleteButton.setScaleType(ScaleType.CENTER);
+        this.deleteButton.setImageResource(R.drawable.msg_panel_clear);
+        this.deleteButton.setOnClickListener(onClickListener);
+        this.deleteButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText), Mode.MULTIPLY));
+        addView(this.deleteButton, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 7.0f : 0.0f, 12.0f, LocaleController.isRTL ? 0.0f : 7.0f, 0.0f));
     }
 
     public void setChannel(Chat channel, boolean last) {
@@ -69,19 +62,13 @@ public class AdminedChannelCell extends FrameLayout {
         if (channel.photo != null) {
             photo = channel.photo.photo_small;
         }
-        String url = new StringBuilder();
-        url.append(MessagesController.getInstance(this.currentAccount).linkPrefix);
-        url.append("/");
-        url = url.toString();
+        String url = MessagesController.getInstance(this.currentAccount).linkPrefix + "/";
         this.currentChannel = channel;
         this.avatarDrawable.setInfo(channel);
         this.nameTextView.setText(channel.title);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(url);
-        stringBuilder.append(channel.username);
-        SpannableStringBuilder stringBuilder2 = new SpannableStringBuilder(stringBuilder.toString());
-        stringBuilder2.setSpan(new URLSpanNoUnderline(TtmlNode.ANONYMOUS_REGION_ID), url.length(), stringBuilder2.length(), 33);
-        this.statusTextView.setText(stringBuilder2);
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(url + channel.username);
+        stringBuilder.setSpan(new URLSpanNoUnderline(TtmlNode.ANONYMOUS_REGION_ID), url.length(), stringBuilder.length(), 33);
+        this.statusTextView.setText(stringBuilder);
         this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);
         this.isLast = last;
     }
@@ -96,7 +83,7 @@ public class AdminedChannelCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (60 + (this.isLast ? 12 : 0))), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) ((this.isLast ? 12 : 0) + 60)), NUM));
     }
 
     public boolean hasOverlappingRendering() {

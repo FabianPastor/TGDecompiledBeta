@@ -11,13 +11,7 @@ public final class PriorityTaskManager {
 
     public static class PriorityTooLowException extends IOException {
         public PriorityTooLowException(int priority, int highestPriority) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Priority too low [priority=");
-            stringBuilder.append(priority);
-            stringBuilder.append(", highest=");
-            stringBuilder.append(highestPriority);
-            stringBuilder.append("]");
-            super(stringBuilder.toString());
+            super("Priority too low [priority=" + priority + ", highest=" + highestPriority + "]");
         }
     }
 

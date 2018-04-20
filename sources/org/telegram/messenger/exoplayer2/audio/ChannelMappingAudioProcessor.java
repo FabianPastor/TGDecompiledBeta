@@ -20,7 +20,7 @@ final class ChannelMappingAudioProcessor implements AudioProcessor {
     }
 
     public boolean configure(int sampleRateHz, int channelCount, int encoding) throws UnhandledFormatException {
-        boolean outputChannelsChanged = Arrays.equals(this.pendingOutputChannels, this.outputChannels) ^ true;
+        boolean outputChannelsChanged = !Arrays.equals(this.pendingOutputChannels, this.outputChannels);
         this.outputChannels = this.pendingOutputChannels;
         if (this.outputChannels == null) {
             this.active = false;
@@ -30,16 +30,22 @@ final class ChannelMappingAudioProcessor implements AudioProcessor {
         } else if (!outputChannelsChanged && this.sampleRateHz == sampleRateHz && this.channelCount == channelCount) {
             return false;
         } else {
+            boolean z;
             this.sampleRateHz = sampleRateHz;
             this.channelCount = channelCount;
-            this.active = channelCount != this.outputChannels.length;
+            if (channelCount != this.outputChannels.length) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.active = z;
             int i = 0;
             while (i < this.outputChannels.length) {
                 int channelIndex = this.outputChannels[i];
                 if (channelIndex >= channelCount) {
                     throw new UnhandledFormatException(sampleRateHz, channelCount, encoding);
                 }
-                this.active |= channelIndex != i ? 1 : 0;
+                this.active = (channelIndex != i ? 1 : 0) | this.active;
                 i++;
             }
             return true;
@@ -73,7 +79,7 @@ final class ChannelMappingAudioProcessor implements AudioProcessor {
         }
         while (position < limit) {
             for (int channelIndex : this.outputChannels) {
-                this.buffer.putShort(inputBuffer.getShort((2 * channelIndex) + position));
+                this.buffer.putShort(inputBuffer.getShort((channelIndex * 2) + position));
             }
             position += this.channelCount * 2;
         }

@@ -9,10 +9,10 @@ public final class PlaybackParameters {
     public final float speed;
 
     public PlaybackParameters(float speed, float pitch) {
-        boolean z = false;
+        boolean z = true;
         Assertions.checkArgument(speed > 0.0f);
-        if (pitch > 0.0f) {
-            z = true;
+        if (pitch <= 0.0f) {
+            z = false;
         }
         Assertions.checkArgument(z);
         this.speed = speed;
@@ -25,23 +25,20 @@ public final class PlaybackParameters {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                PlaybackParameters other = (PlaybackParameters) obj;
-                if (this.speed != other.speed || this.pitch != other.pitch) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        PlaybackParameters other = (PlaybackParameters) obj;
+        if (this.speed == other.speed && this.pitch == other.pitch) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * ((31 * 17) + Float.floatToRawIntBits(this.speed))) + Float.floatToRawIntBits(this.pitch);
+        return ((Float.floatToRawIntBits(this.speed) + 527) * 31) + Float.floatToRawIntBits(this.pitch);
     }
 }

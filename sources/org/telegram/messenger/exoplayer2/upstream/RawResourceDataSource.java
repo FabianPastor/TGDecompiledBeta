@@ -31,10 +31,7 @@ public final class RawResourceDataSource implements DataSource {
     }
 
     public static Uri buildRawResourceUri(int rawResourceId) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("rawresource:///");
-        stringBuilder.append(rawResourceId);
-        return Uri.parse(stringBuilder.toString());
+        return Uri.parse("rawresource:///" + rawResourceId);
     }
 
     public RawResourceDataSource(Context context) {
@@ -47,6 +44,7 @@ public final class RawResourceDataSource implements DataSource {
     }
 
     public long open(DataSpec dataSpec) throws RawResourceDataSourceException {
+        long j = -1;
         try {
             this.uri = dataSpec.uri;
             if (TextUtils.equals(RAW_RESOURCE_SCHEME, this.uri.getScheme())) {
@@ -56,7 +54,6 @@ public final class RawResourceDataSource implements DataSource {
                 if (this.inputStream.skip(dataSpec.position) < dataSpec.position) {
                     throw new EOFException();
                 }
-                long j = -1;
                 if (dataSpec.length != -1) {
                     this.bytesRemaining = dataSpec.length;
                 } else {
@@ -88,14 +85,21 @@ public final class RawResourceDataSource implements DataSource {
             return -1;
         }
         try {
-            int bytesRead = this.inputStream.read(buffer, offset, this.bytesRemaining == -1 ? readLength : (int) Math.min(this.bytesRemaining, (long) readLength));
+            int bytesToRead;
+            if (this.bytesRemaining == -1) {
+                bytesToRead = readLength;
+            } else {
+                bytesToRead = (int) Math.min(this.bytesRemaining, (long) readLength);
+            }
+            int bytesRead = this.inputStream.read(buffer, offset, bytesToRead);
             if (bytesRead != -1) {
                 if (this.bytesRemaining != -1) {
                     this.bytesRemaining -= (long) bytesRead;
                 }
-                if (this.listener != null) {
-                    this.listener.onBytesTransferred(this, bytesRead);
+                if (this.listener == null) {
+                    return bytesRead;
                 }
+                this.listener.onBytesTransferred(this, bytesRead);
                 return bytesRead;
             } else if (this.bytesRemaining == -1) {
                 return -1;

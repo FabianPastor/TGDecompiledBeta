@@ -57,33 +57,22 @@ public class PagerSnapHelper extends SnapHelper {
         if (centerPosition == -1) {
             return -1;
         }
-        int i;
-        boolean z = false;
-        boolean forwardDirection = layoutManager.canScrollHorizontally() ? velocityX > 0 : velocityY > 0;
+        boolean forwardDirection;
+        if (!layoutManager.canScrollHorizontally()) {
+            forwardDirection = velocityY > 0;
+        } else if (velocityX > 0) {
+            forwardDirection = true;
+        } else {
+            forwardDirection = false;
+        }
         boolean reverseLayout = false;
         if (layoutManager instanceof ScrollVectorProvider) {
             PointF vectorForEnd = ((ScrollVectorProvider) layoutManager).computeScrollVectorForPosition(itemCount - 1);
             if (vectorForEnd != null) {
-                if (vectorForEnd.x >= 0.0f) {
-                    if (vectorForEnd.y >= 0.0f) {
-                        reverseLayout = z;
-                    }
-                }
-                z = true;
-                reverseLayout = z;
+                reverseLayout = vectorForEnd.x < 0.0f || vectorForEnd.y < 0.0f;
             }
         }
-        if (reverseLayout) {
-            if (forwardDirection) {
-                i = centerPosition - 1;
-                return i;
-            }
-        } else if (forwardDirection) {
-            i = centerPosition + 1;
-            return i;
-        }
-        i = centerPosition;
-        return i;
+        return reverseLayout ? forwardDirection ? centerPosition - 1 : centerPosition : forwardDirection ? centerPosition + 1 : centerPosition;
     }
 
     protected LinearSmoothScroller createSnapScroller(LayoutManager layoutManager) {

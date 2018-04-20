@@ -165,8 +165,8 @@ public class Switch extends CompoundButton {
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int thumbWidth;
         int thumbHeight;
+        int trackHeight;
         Rect padding = this.mTempRect;
-        int trackHeight = 0;
         if (this.mThumbDrawable != null) {
             this.mThumbDrawable.getPadding(padding);
             thumbWidth = (this.mThumbDrawable.getIntrinsicWidth() - padding.left) - padding.right;
@@ -181,6 +181,7 @@ public class Switch extends CompoundButton {
             trackHeight = this.mTrackDrawable.getIntrinsicHeight();
         } else {
             padding.setEmpty();
+            trackHeight = 0;
         }
         int paddingLeft = padding.left;
         int paddingRight = padding.right;
@@ -189,7 +190,7 @@ public class Switch extends CompoundButton {
             paddingLeft = Math.max(paddingLeft, inset.left);
             paddingRight = Math.max(paddingRight, inset.right);
         }
-        int switchWidth = Math.max(this.mSwitchMinWidth, ((2 * this.mThumbWidth) + paddingLeft) + paddingRight);
+        int switchWidth = Math.max(this.mSwitchMinWidth, ((this.mThumbWidth * 2) + paddingLeft) + paddingRight);
         int switchHeight = Math.max(trackHeight, thumbHeight);
         this.mSwitchWidth = switchWidth;
         this.mSwitchHeight = switchHeight;
@@ -231,25 +232,29 @@ public class Switch extends CompoundButton {
                 super.onTouchEvent(ev);
                 return true;
             case 2:
-                float y2;
                 switch (this.mTouchMode) {
                     case 0:
                         break;
                     case 1:
-                        y = ev.getX();
-                        y2 = ev.getY();
-                        if (Math.abs(y - this.mTouchX) > ((float) this.mTouchSlop) || Math.abs(y2 - this.mTouchY) > ((float) this.mTouchSlop)) {
+                        x = ev.getX();
+                        y = ev.getY();
+                        if (Math.abs(x - this.mTouchX) > ((float) this.mTouchSlop) || Math.abs(y - this.mTouchY) > ((float) this.mTouchSlop)) {
                             this.mTouchMode = 2;
                             getParent().requestDisallowInterceptTouchEvent(true);
-                            this.mTouchX = y;
-                            this.mTouchY = y2;
+                            this.mTouchX = x;
+                            this.mTouchY = y;
                             return true;
                         }
                     case 2:
+                        float dPos;
                         x = ev.getX();
                         int thumbScrollRange = getThumbScrollRange();
-                        y2 = x - this.mTouchX;
-                        float dPos = thumbScrollRange != 0 ? y2 / ((float) thumbScrollRange) : y2 > 0.0f ? 1.0f : -1.0f;
+                        float thumbScrollOffset = x - this.mTouchX;
+                        if (thumbScrollRange != 0) {
+                            dPos = thumbScrollOffset / ((float) thumbScrollRange);
+                        } else {
+                            dPos = thumbScrollOffset > 0.0f ? 1.0f : -1.0f;
+                        }
                         if (LocaleController.isRTL) {
                             dPos = -dPos;
                         }
@@ -263,8 +268,6 @@ public class Switch extends CompoundButton {
                         break;
                 }
                 break;
-            default:
-                break;
         }
         return super.onTouchEvent(ev);
     }
@@ -276,28 +279,31 @@ public class Switch extends CompoundButton {
         cancel.recycle();
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void stopDrag(MotionEvent ev) {
-        boolean z = false;
+        boolean commitChange;
+        boolean newState = true;
         this.mTouchMode = 0;
-        boolean commitChange = ev.getAction() == 1 && isEnabled();
+        if (ev.getAction() == 1 && isEnabled()) {
+            commitChange = true;
+        } else {
+            commitChange = false;
+        }
         if (commitChange) {
             this.mVelocityTracker.computeCurrentVelocity(1000);
             float xvel = this.mVelocityTracker.getXVelocity();
-            if (Math.abs(xvel) > ((float) this.mMinFlingVelocity)) {
-                if (!LocaleController.isRTL) {
-                    if (xvel > 0.0f) {
-                    }
+            if (Math.abs(xvel) <= ((float) this.mMinFlingVelocity)) {
+                newState = getTargetCheckedState();
+            } else if (LocaleController.isRTL) {
+                if (xvel >= 0.0f) {
+                    newState = false;
                 }
-                z = true;
-            } else {
-                z = getTargetCheckedState();
+            } else if (xvel <= 0.0f) {
+                newState = false;
             }
         } else {
-            z = isChecked();
+            newState = isChecked();
         }
-        setChecked(z);
+        setChecked(newState);
         cancelSuperTouch(ev);
     }
 
@@ -329,7 +335,7 @@ public class Switch extends CompoundButton {
     }
 
     public void toggle() {
-        setChecked(isChecked() ^ 1);
+        setChecked(!isChecked());
     }
 
     protected void onAttachedToWindow() {
@@ -358,25 +364,26 @@ public class Switch extends CompoundButton {
             setThumbPosition(checked ? 1.0f : 0.0f);
         }
         if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(checked ? Theme.key_switchTrackChecked : Theme.key_switchTrack), Mode.MULTIPLY));
+            this.mTrackDrawable.setColorFilter(new PorterDuffColorFilter(checked ? Theme.getColor(Theme.key_switchTrackChecked) : Theme.getColor(Theme.key_switchTrack), Mode.MULTIPLY));
         }
         if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(checked ? Theme.key_switchThumbChecked : Theme.key_switchThumb), Mode.MULTIPLY));
+            this.mThumbDrawable.setColorFilter(new PorterDuffColorFilter(checked ? Theme.getColor(Theme.key_switchThumbChecked) : Theme.getColor(Theme.key_switchThumb), Mode.MULTIPLY));
         }
     }
 
     public void checkColorFilters() {
         if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(isChecked() ? Theme.key_switchTrackChecked : Theme.key_switchTrack), Mode.MULTIPLY));
+            this.mTrackDrawable.setColorFilter(new PorterDuffColorFilter(isChecked() ? Theme.getColor(Theme.key_switchTrackChecked) : Theme.getColor(Theme.key_switchTrack), Mode.MULTIPLY));
         }
         if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(isChecked() ? Theme.key_switchThumbChecked : Theme.key_switchThumb), Mode.MULTIPLY));
+            this.mThumbDrawable.setColorFilter(new PorterDuffColorFilter(isChecked() ? Theme.getColor(Theme.key_switchThumbChecked) : Theme.getColor(Theme.key_switchThumb), Mode.MULTIPLY));
         }
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int switchLeft;
         int switchRight;
+        int switchTop;
         int switchBottom;
         super.onLayout(changed, left, top, right, bottom);
         this.wasLayout = true;
@@ -400,34 +407,34 @@ public class Switch extends CompoundButton {
             switchRight = (getWidth() - getPaddingRight()) - opticalInsetRight;
             switchLeft = ((switchRight - this.mSwitchWidth) + opticalInsetLeft) + opticalInsetRight;
         }
-        int gravity = getGravity() & 112;
-        if (gravity == 16) {
-            gravity = (((getPaddingTop() + getHeight()) - getPaddingBottom()) / 2) - (this.mSwitchHeight / 2);
-            switchBottom = this.mSwitchHeight + gravity;
-        } else if (gravity != 80) {
-            gravity = getPaddingTop();
-            switchBottom = this.mSwitchHeight + gravity;
-        } else {
-            switchBottom = getHeight() - getPaddingBottom();
-            gravity = switchBottom - this.mSwitchHeight;
+        switch (getGravity() & 112) {
+            case 16:
+                switchTop = (((getPaddingTop() + getHeight()) - getPaddingBottom()) / 2) - (this.mSwitchHeight / 2);
+                switchBottom = switchTop + this.mSwitchHeight;
+                break;
+            case 80:
+                switchBottom = getHeight() - getPaddingBottom();
+                switchTop = switchBottom - this.mSwitchHeight;
+                break;
+            default:
+                switchTop = getPaddingTop();
+                switchBottom = switchTop + this.mSwitchHeight;
+                break;
         }
         this.mSwitchLeft = switchLeft;
-        this.mSwitchTop = gravity;
+        this.mSwitchTop = switchTop;
         this.mSwitchBottom = switchBottom;
         this.mSwitchRight = switchRight;
     }
 
     public void draw(Canvas c) {
         Insets thumbInsets;
-        int trackLeft;
-        int trackTop;
-        int trackRight;
         Rect padding = this.mTempRect;
         int switchLeft = this.mSwitchLeft;
         int switchTop = this.mSwitchTop;
         int switchRight = this.mSwitchRight;
         int switchBottom = this.mSwitchBottom;
-        int thumbInitialLeft = getThumbOffset() + switchLeft;
+        int thumbInitialLeft = switchLeft + getThumbOffset();
         if (this.mThumbDrawable != null) {
             thumbInsets = Insets.NONE;
         } else {
@@ -436,9 +443,9 @@ public class Switch extends CompoundButton {
         if (this.mTrackDrawable != null) {
             this.mTrackDrawable.getPadding(padding);
             thumbInitialLeft += padding.left;
-            trackLeft = switchLeft;
-            trackTop = switchTop;
-            trackRight = switchRight;
+            int trackLeft = switchLeft;
+            int trackTop = switchTop;
+            int trackRight = switchRight;
             int trackBottom = switchBottom;
             if (thumbInsets != Insets.NONE) {
                 if (thumbInsets.left > padding.left) {
@@ -458,19 +465,20 @@ public class Switch extends CompoundButton {
         }
         if (this.mThumbDrawable != null) {
             this.mThumbDrawable.getPadding(padding);
-            trackLeft = thumbInitialLeft - padding.left;
-            trackTop = (this.mThumbWidth + thumbInitialLeft) + padding.right;
-            trackRight = AndroidUtilities.density == 1.5f ? AndroidUtilities.dp(1.0f) : 0;
-            this.mThumbDrawable.setBounds(trackLeft, switchTop + trackRight, trackTop, switchBottom + trackRight);
+            int thumbLeft = thumbInitialLeft - padding.left;
+            int thumbRight = (this.mThumbWidth + thumbInitialLeft) + padding.right;
+            int offset = AndroidUtilities.density == 1.5f ? AndroidUtilities.dp(1.0f) : 0;
+            this.mThumbDrawable.setBounds(thumbLeft, switchTop + offset, thumbRight, switchBottom + offset);
             Drawable background = getBackground();
             if (background != null && VERSION.SDK_INT >= 21) {
-                background.setHotspotBounds(trackLeft, switchTop, trackTop, switchBottom);
+                background.setHotspotBounds(thumbLeft, switchTop, thumbRight, switchBottom);
             }
         }
         super.draw(c);
     }
 
     protected void onDraw(Canvas canvas) {
+        int saveCount;
         super.onDraw(canvas);
         Rect padding = this.mTempRect;
         Drawable trackDrawable = this.mTrackDrawable;
@@ -490,17 +498,17 @@ public class Switch extends CompoundButton {
                 thumbDrawable.copyBounds(padding);
                 padding.left += insets.left;
                 padding.right -= insets.right;
-                int saveCount = canvas.save();
+                saveCount = canvas.save();
                 canvas.clipRect(padding, Op.DIFFERENCE);
                 trackDrawable.draw(canvas);
                 canvas.restoreToCount(saveCount);
             }
         }
-        int saveCount2 = canvas.save();
+        saveCount = canvas.save();
         if (thumbDrawable != null) {
             thumbDrawable.draw(canvas);
         }
-        canvas.restoreToCount(saveCount2);
+        canvas.restoreToCount(saveCount);
     }
 
     public int getCompoundPaddingLeft() {
@@ -566,12 +574,7 @@ public class Switch extends CompoundButton {
     }
 
     protected boolean verifyDrawable(Drawable who) {
-        if (!(super.verifyDrawable(who) || who == this.mThumbDrawable)) {
-            if (who != this.mTrackDrawable) {
-                return false;
-            }
-        }
-        return true;
+        return super.verifyDrawable(who) || who == this.mThumbDrawable || who == this.mTrackDrawable;
     }
 
     public void jumpDrawablesToCurrentState() {

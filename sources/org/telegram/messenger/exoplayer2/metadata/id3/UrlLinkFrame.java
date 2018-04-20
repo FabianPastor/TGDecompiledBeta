@@ -36,29 +36,33 @@ public final class UrlLinkFrame extends Id3Frame {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                UrlLinkFrame other = (UrlLinkFrame) obj;
-                if (!this.id.equals(other.id) || !Util.areEqual(this.description, other.description) || !Util.areEqual(this.url, other.url)) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        UrlLinkFrame other = (UrlLinkFrame) obj;
+        if (this.id.equals(other.id) && Util.areEqual(this.description, other.description) && Util.areEqual(this.url, other.url)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
+        int hashCode;
         int i = 0;
-        int result = 31 * ((31 * ((31 * 17) + this.id.hashCode())) + (this.description != null ? this.description.hashCode() : 0));
+        int hashCode2 = (this.id.hashCode() + 527) * 31;
+        if (this.description != null) {
+            hashCode = this.description.hashCode();
+        } else {
+            hashCode = 0;
+        }
+        hashCode = (hashCode2 + hashCode) * 31;
         if (this.url != null) {
             i = this.url.hashCode();
         }
-        return result + i;
+        return hashCode + i;
     }
 
     public void writeToParcel(Parcel dest, int flags) {

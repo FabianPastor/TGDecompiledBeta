@@ -40,45 +40,23 @@ public final class SingleSampleMediaChunk extends BaseMediaChunk {
     }
 
     public void load() throws IOException, InterruptedException {
-        Throwable th;
-        DataSpec loadDataSpec = this.dataSpec.subrange((long) this.bytesLoaded);
-        DataSpec dataSpec;
         try {
-            long length = r1.dataSource.open(loadDataSpec);
+            long length = this.dataSource.open(this.dataSpec.subrange((long) this.bytesLoaded));
             if (length != -1) {
-                try {
-                    length += (long) r1.bytesLoaded;
-                } catch (Throwable th2) {
-                    th = th2;
-                }
+                length += (long) this.bytesLoaded;
             }
-            ExtractorInput defaultExtractorInput = new DefaultExtractorInput(r1.dataSource, (long) r1.bytesLoaded, length);
+            ExtractorInput extractorInput = new DefaultExtractorInput(this.dataSource, (long) this.bytesLoaded, length);
             BaseMediaChunkOutput output = getOutput();
             output.setSampleOffsetUs(0);
-            int result = 0;
-            TrackOutput trackOutput = output.track(0, r1.trackType);
-            trackOutput.format(r1.sampleFormat);
-            while (result != -1) {
-                r1.bytesLoaded += result;
-                result = trackOutput.sampleData(defaultExtractorInput, ConnectionsManager.DEFAULT_DATACENTER_ID, true);
+            TrackOutput trackOutput = output.track(0, this.trackType);
+            trackOutput.format(this.sampleFormat);
+            for (int result = 0; result != -1; result = trackOutput.sampleData(extractorInput, ConnectionsManager.DEFAULT_DATACENTER_ID, true)) {
+                this.bytesLoaded += result;
             }
-            dataSpec = loadDataSpec;
-            boolean z = true;
-            try {
-                trackOutput.sampleMetadata(r1.startTimeUs, 1, r1.bytesLoaded, 0, null);
-                Util.closeQuietly(r1.dataSource);
-                r1.loadCompleted = z;
-            } catch (Throwable th3) {
-                th = th3;
-                loadDataSpec = th;
-                Util.closeQuietly(r1.dataSource);
-                throw loadDataSpec;
-            }
-        } catch (Throwable th4) {
-            dataSpec = loadDataSpec;
-            loadDataSpec = th4;
-            Util.closeQuietly(r1.dataSource);
-            throw loadDataSpec;
+            trackOutput.sampleMetadata(this.startTimeUs, 1, this.bytesLoaded, 0, null);
+            this.loadCompleted = true;
+        } finally {
+            Util.closeQuietly(this.dataSource);
         }
     }
 }

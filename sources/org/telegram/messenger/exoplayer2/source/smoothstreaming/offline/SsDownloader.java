@@ -36,15 +36,13 @@ public final class SsDownloader extends SegmentDownloader<SsManifest, TrackKey> 
     }
 
     protected List<Segment> getSegments(DataSource dataSource, SsManifest manifest, TrackKey[] keys, boolean allowIndexLoadErrors) throws InterruptedException, IOException {
-        TrackKey[] trackKeyArr = keys;
         ArrayList<Segment> segments = new ArrayList();
-        for (TrackKey key : trackKeyArr) {
+        for (TrackKey key : keys) {
             StreamElement streamElement = manifest.streamElements[key.streamElementIndex];
             for (int i = 0; i < streamElement.chunkCount; i++) {
                 segments.add(new Segment(streamElement.getStartTimeUs(i), new DataSpec(streamElement.buildRequestUri(key.trackIndex, i))));
             }
         }
-        SsManifest ssManifest = manifest;
         return segments;
     }
 }

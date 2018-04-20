@@ -36,44 +36,36 @@ public class IdenticonDrawable extends Drawable {
 
     public void draw(Canvas canvas) {
         if (this.data != null) {
+            int bitPointer;
             float rectSize;
             float xOffset;
             float yOffset;
-            int bitPointer;
             int iy;
-            int bitPointer2;
-            if (r0.data.length == 16) {
+            int ix;
+            if (this.data.length == 16) {
+                bitPointer = 0;
                 rectSize = (float) Math.floor((double) (((float) Math.min(getBounds().width(), getBounds().height())) / 8.0f));
-                xOffset = Math.max(0.0f, (((float) getBounds().width()) - (rectSize * 8.0f)) / 2.0f);
+                xOffset = Math.max(0.0f, (((float) getBounds().width()) - (8.0f * rectSize)) / 2.0f);
                 yOffset = Math.max(0.0f, (((float) getBounds().height()) - (8.0f * rectSize)) / 2.0f);
-                bitPointer = 0;
-                iy = 0;
-                while (iy < 8) {
-                    bitPointer2 = bitPointer;
-                    for (bitPointer = 0; bitPointer < 8; bitPointer++) {
-                        int byteValue = getBits(bitPointer2);
-                        bitPointer2 += 2;
-                        r0.paint.setColor(r0.colors[Math.abs(byteValue) % 4]);
-                        canvas.drawRect(xOffset + (((float) bitPointer) * rectSize), (((float) iy) * rectSize) + yOffset, ((((float) bitPointer) * rectSize) + xOffset) + rectSize, ((((float) iy) * rectSize) + rectSize) + yOffset, r0.paint);
+                for (iy = 0; iy < 8; iy++) {
+                    for (ix = 0; ix < 8; ix++) {
+                        int byteValue = getBits(bitPointer);
+                        bitPointer += 2;
+                        this.paint.setColor(this.colors[Math.abs(byteValue) % 4]);
+                        canvas.drawRect(xOffset + (((float) ix) * rectSize), (((float) iy) * rectSize) + yOffset, ((((float) ix) * rectSize) + xOffset) + rectSize, ((((float) iy) * rectSize) + rectSize) + yOffset, this.paint);
                     }
-                    iy++;
-                    bitPointer = bitPointer2;
                 }
-            } else {
-                rectSize = (float) Math.floor((double) (((float) Math.min(getBounds().width(), getBounds().height())) / 12.0f));
-                xOffset = Math.max(0.0f, (((float) getBounds().width()) - (rectSize * 12.0f)) / 2.0f);
-                yOffset = Math.max(0.0f, (((float) getBounds().height()) - (12.0f * rectSize)) / 2.0f);
-                bitPointer = 0;
-                iy = 0;
-                while (iy < 12) {
-                    bitPointer2 = bitPointer;
-                    for (bitPointer = 0; bitPointer < 12; bitPointer++) {
-                        r0.paint.setColor(r0.colors[Math.abs(getBits(bitPointer2)) % 4]);
-                        canvas.drawRect(xOffset + (((float) bitPointer) * rectSize), (((float) iy) * rectSize) + yOffset, ((((float) bitPointer) * rectSize) + xOffset) + rectSize, ((((float) iy) * rectSize) + rectSize) + yOffset, r0.paint);
-                        bitPointer2 += 2;
-                    }
-                    iy++;
-                    bitPointer = bitPointer2;
+                return;
+            }
+            bitPointer = 0;
+            rectSize = (float) Math.floor((double) (((float) Math.min(getBounds().width(), getBounds().height())) / 12.0f));
+            xOffset = Math.max(0.0f, (((float) getBounds().width()) - (12.0f * rectSize)) / 2.0f);
+            yOffset = Math.max(0.0f, (((float) getBounds().height()) - (12.0f * rectSize)) / 2.0f);
+            for (iy = 0; iy < 12; iy++) {
+                for (ix = 0; ix < 12; ix++) {
+                    this.paint.setColor(this.colors[Math.abs(getBits(bitPointer)) % 4]);
+                    canvas.drawRect(xOffset + (((float) ix) * rectSize), (((float) iy) * rectSize) + yOffset, ((((float) ix) * rectSize) + xOffset) + rectSize, ((((float) iy) * rectSize) + rectSize) + yOffset, this.paint);
+                    bitPointer += 2;
                 }
             }
         }

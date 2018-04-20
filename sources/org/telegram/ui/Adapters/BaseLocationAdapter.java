@@ -21,7 +21,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
-import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.TL_geoPoint;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
@@ -52,44 +51,42 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
     }
 
     public void searchDelayed(final String query, final Location coordinate) {
-        if (query != null) {
-            if (query.length() != 0) {
+        if (query == null || query.length() == 0) {
+            this.places.clear();
+            notifyDataSetChanged();
+            return;
+        }
+        try {
+            if (this.searchTimer != null) {
+                this.searchTimer.cancel();
+            }
+        } catch (Throwable e) {
+            FileLog.m3e(e);
+        }
+        this.searchTimer = new Timer();
+        this.searchTimer.schedule(new TimerTask() {
+
+            /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$1$1 */
+            class C07691 implements Runnable {
+                C07691() {
+                }
+
+                public void run() {
+                    BaseLocationAdapter.this.lastSearchLocation = null;
+                    BaseLocationAdapter.this.searchGooglePlacesWithQuery(query, coordinate);
+                }
+            }
+
+            public void run() {
                 try {
-                    if (this.searchTimer != null) {
-                        this.searchTimer.cancel();
-                    }
+                    BaseLocationAdapter.this.searchTimer.cancel();
+                    BaseLocationAdapter.this.searchTimer = null;
                 } catch (Throwable e) {
                     FileLog.m3e(e);
                 }
-                this.searchTimer = new Timer();
-                this.searchTimer.schedule(new TimerTask() {
-
-                    /* renamed from: org.telegram.ui.Adapters.BaseLocationAdapter$1$1 */
-                    class C07681 implements Runnable {
-                        C07681() {
-                        }
-
-                        public void run() {
-                            BaseLocationAdapter.this.lastSearchLocation = null;
-                            BaseLocationAdapter.this.searchGooglePlacesWithQuery(query, coordinate);
-                        }
-                    }
-
-                    public void run() {
-                        try {
-                            BaseLocationAdapter.this.searchTimer.cancel();
-                            BaseLocationAdapter.this.searchTimer = null;
-                        } catch (Throwable e) {
-                            FileLog.m3e(e);
-                        }
-                        AndroidUtilities.runOnUIThread(new C07681());
-                    }
-                }, 200, 500);
-                return;
+                AndroidUtilities.runOnUIThread(new C07691());
             }
-        }
-        this.places.clear();
-        notifyDataSetChanged();
+        }, 200, 500);
     }
 
     public void searchGooglePlacesWithQuery(String query, Location coordinate) {
@@ -105,24 +102,24 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
             try {
                 String str;
                 this.searching = true;
-                String url = Locale.US;
+                Locale locale = Locale.US;
                 String str2 = "https://api.foursquare.com/v2/venues/search/?v=%s&locale=en&limit=25&client_id=%s&client_secret=%s&ll=%s%s";
                 r5 = new Object[5];
                 r5[3] = String.format(Locale.US, "%f,%f", new Object[]{Double.valueOf(coordinate.getLatitude()), Double.valueOf(coordinate.getLongitude())});
                 if (query == null || query.length() <= 0) {
                     str = TtmlNode.ANONYMOUS_REGION_ID;
                 } else {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("&query=");
-                    stringBuilder.append(URLEncoder.encode(query, C0542C.UTF8_NAME));
-                    str = stringBuilder.toString();
+                    str = "&query=" + URLEncoder.encode(query, C0542C.UTF8_NAME);
                 }
                 r5[4] = str;
-                url = String.format(url, str2, r5);
+                final String url = String.format(locale, str2, r5);
                 this.currentTask = new AsyncTask<Void, Void, JSONObject>() {
                     private boolean canRetry = true;
 
+                    /* JADX WARNING: inconsistent code. */
+                    /* Code decompiled incorrectly, please refer to instructions dump. */
                     private String downloadUrlContent(String url) {
+                        Throwable e;
                         boolean canRetry = true;
                         InputStream httpConnectionStream = null;
                         boolean done = false;
@@ -153,61 +150,99 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                             }
                             httpConnection.connect();
                             httpConnectionStream = httpConnection.getInputStream();
-                        } catch (Throwable e) {
-                            if (e instanceof SocketTimeoutException) {
+                        } catch (Throwable e2) {
+                            if (e2 instanceof SocketTimeoutException) {
                                 if (ConnectionsManager.isNetworkOnline()) {
                                     canRetry = false;
                                 }
-                            } else if (e instanceof UnknownHostException) {
+                            } else if (e2 instanceof UnknownHostException) {
                                 canRetry = false;
-                            } else if (e instanceof SocketException) {
-                                if (e.getMessage() != null && e.getMessage().contains("ECONNRESET")) {
+                            } else if (e2 instanceof SocketException) {
+                                if (e2.getMessage() != null && e2.getMessage().contains("ECONNRESET")) {
                                     canRetry = false;
                                 }
-                            } else if (e instanceof FileNotFoundException) {
+                            } else if (e2 instanceof FileNotFoundException) {
                                 canRetry = false;
                             }
-                            FileLog.m3e(e);
+                            FileLog.m3e(e2);
                         }
                         if (canRetry) {
                             if (httpConnection != null) {
                                 try {
                                     if (httpConnection instanceof HttpURLConnection) {
                                         int code = ((HttpURLConnection) httpConnection).getResponseCode();
-                                        if (!(code == Callback.DEFAULT_DRAG_ANIMATION_DURATION || code == 202)) {
-                                        }
-                                    }
-                                } catch (Throwable e2) {
-                                    FileLog.m3e(e2);
-                                }
-                            }
-                            if (httpConnectionStream != null) {
-                                try {
-                                    byte[] data = new byte[32768];
-                                    while (!isCancelled()) {
-                                        int read = httpConnectionStream.read(data);
-                                        if (read > 0) {
-                                            if (result == null) {
-                                                result = new StringBuilder();
+                                        if (code != 200) {
+                                            if (code != 202) {
                                             }
-                                            result.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                                        } else if (read == -1) {
-                                            done = true;
                                         }
                                     }
-                                } catch (Throwable e3) {
-                                    FileLog.m3e(e3);
                                 } catch (Throwable e22) {
                                     FileLog.m3e(e22);
                                 }
                             }
                             if (httpConnectionStream != null) {
                                 try {
-                                    httpConnectionStream.close();
-                                } catch (Throwable e222) {
-                                    FileLog.m3e(e222);
+                                    byte[] data = new byte[32768];
+                                    StringBuilder result2 = null;
+                                    while (!isCancelled()) {
+                                        try {
+                                            try {
+                                                int read = httpConnectionStream.read(data);
+                                                if (read > 0) {
+                                                    if (result2 == null) {
+                                                        result = new StringBuilder();
+                                                    } else {
+                                                        result = result2;
+                                                    }
+                                                    try {
+                                                        result.append(new String(data, 0, read, C0542C.UTF8_NAME));
+                                                        result2 = result;
+                                                    } catch (Exception e3) {
+                                                        e22 = e3;
+                                                    }
+                                                } else if (read == -1) {
+                                                    done = true;
+                                                    result = result2;
+                                                } else {
+                                                    result = result2;
+                                                }
+                                            } catch (Exception e4) {
+                                                e22 = e4;
+                                                result = result2;
+                                            }
+                                        } catch (Throwable th) {
+                                            e22 = th;
+                                            result = result2;
+                                        }
+                                    }
+                                    result = result2;
+                                } catch (Throwable th2) {
+                                    e22 = th2;
+                                    FileLog.m3e(e22);
+                                    if (httpConnectionStream != null) {
+                                        try {
+                                            httpConnectionStream.close();
+                                        } catch (Throwable e222) {
+                                            FileLog.m3e(e222);
+                                        }
+                                    }
+                                    if (done) {
+                                        return null;
+                                    }
+                                    return result.toString();
                                 }
                             }
+                            if (httpConnectionStream != null) {
+                                httpConnectionStream.close();
+                            }
+                        }
+                        if (done) {
+                            return result.toString();
+                        }
+                        return null;
+                        FileLog.m3e(e222);
+                        if (httpConnectionStream != null) {
+                            httpConnectionStream.close();
                         }
                         if (done) {
                             return result.toString();

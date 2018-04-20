@@ -149,34 +149,43 @@ public final class AdtsReader implements ElementaryStreamReader {
         byte[] adtsData = pesBuffer.data;
         int position = pesBuffer.getPosition();
         int endOffset = pesBuffer.limit();
-        while (position < endOffset) {
-            int position2 = position + 1;
-            position = adtsData[position] & 255;
-            if (this.matchState != 512 || position < PsExtractor.VIDEO_STREAM_MASK || position == 255) {
-                int i = this.matchState | position;
-                if (i == 329) {
-                    this.matchState = MATCH_STATE_I;
-                } else if (i == 511) {
-                    this.matchState = 512;
-                } else if (i == 836) {
-                    this.matchState = 1024;
-                } else if (i == 1075) {
-                    setReadingId3HeaderState();
-                    pesBuffer.setPosition(position2);
-                    return;
-                } else if (this.matchState != 256) {
-                    this.matchState = 256;
-                    position2--;
+        int position2 = position;
+        while (position2 < endOffset) {
+            position = position2 + 1;
+            int data = adtsData[position2] & 255;
+            if (this.matchState != 512 || data < PsExtractor.VIDEO_STREAM_MASK || data == 255) {
+                switch (this.matchState | data) {
+                    case 329:
+                        this.matchState = MATCH_STATE_I;
+                        break;
+                    case 511:
+                        this.matchState = 512;
+                        break;
+                    case 836:
+                        this.matchState = 1024;
+                        break;
+                    case 1075:
+                        setReadingId3HeaderState();
+                        pesBuffer.setPosition(position);
+                        return;
+                    default:
+                        if (this.matchState == 256) {
+                            break;
+                        }
+                        this.matchState = 256;
+                        position--;
+                        break;
                 }
-                position = position2;
+                position2 = position;
             } else {
-                this.hasCrc = (position & 1) == 0;
+                this.hasCrc = (data & 1) == 0;
                 setReadingAdtsHeaderState();
-                pesBuffer.setPosition(position2);
+                pesBuffer.setPosition(position);
                 return;
             }
         }
-        pesBuffer.setPosition(position);
+        pesBuffer.setPosition(position2);
+        position = position2;
     }
 
     private void parseId3Header() {
@@ -186,36 +195,30 @@ public final class AdtsReader implements ElementaryStreamReader {
     }
 
     private void parseAdtsHeader() throws ParserException {
-        int audioObjectType;
         this.adtsScratch.setPosition(0);
         if (this.hasOutputFormat) {
-            r6.adtsScratch.skipBits(10);
+            this.adtsScratch.skipBits(10);
         } else {
-            audioObjectType = r6.adtsScratch.readBits(2) + 1;
+            int audioObjectType = this.adtsScratch.readBits(2) + 1;
             if (audioObjectType != 2) {
-                String str = TAG;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Detected audio object type: ");
-                stringBuilder.append(audioObjectType);
-                stringBuilder.append(", but assuming AAC LC.");
-                Log.w(str, stringBuilder.toString());
+                Log.w(TAG, "Detected audio object type: " + audioObjectType + ", but assuming AAC LC.");
                 audioObjectType = 2;
             }
-            int sampleRateIndex = r6.adtsScratch.readBits(4);
-            r6.adtsScratch.skipBits(1);
-            byte[] audioSpecificConfig = CodecSpecificDataUtil.buildAacAudioSpecificConfig(audioObjectType, sampleRateIndex, r6.adtsScratch.readBits(3));
+            int sampleRateIndex = this.adtsScratch.readBits(4);
+            this.adtsScratch.skipBits(1);
+            byte[] audioSpecificConfig = CodecSpecificDataUtil.buildAacAudioSpecificConfig(audioObjectType, sampleRateIndex, this.adtsScratch.readBits(3));
             Pair<Integer, Integer> audioParams = CodecSpecificDataUtil.parseAacAudioSpecificConfig(audioSpecificConfig);
-            Format format = Format.createAudioSampleFormat(r6.formatId, MimeTypes.AUDIO_AAC, null, -1, -1, ((Integer) audioParams.second).intValue(), ((Integer) audioParams.first).intValue(), Collections.singletonList(audioSpecificConfig), null, 0, r6.language);
-            r6.sampleDurationUs = NUM / ((long) format.sampleRate);
-            r6.output.format(format);
-            r6.hasOutputFormat = true;
+            Format format = Format.createAudioSampleFormat(this.formatId, MimeTypes.AUDIO_AAC, null, -1, -1, ((Integer) audioParams.second).intValue(), ((Integer) audioParams.first).intValue(), Collections.singletonList(audioSpecificConfig), null, 0, this.language);
+            this.sampleDurationUs = NUM / ((long) format.sampleRate);
+            this.output.format(format);
+            this.hasOutputFormat = true;
         }
-        r6.adtsScratch.skipBits(4);
-        audioObjectType = (r6.adtsScratch.readBits(13) - 2) - 5;
-        if (r6.hasCrc) {
-            audioObjectType -= 2;
+        this.adtsScratch.skipBits(4);
+        int sampleSize = (this.adtsScratch.readBits(13) - 2) - 5;
+        if (this.hasCrc) {
+            sampleSize -= 2;
         }
-        setReadingSampleState(r6.output, r6.sampleDurationUs, 0, audioObjectType);
+        setReadingSampleState(this.output, this.sampleDurationUs, 0, sampleSize);
     }
 
     private void readSample(ParsableByteArray data) {

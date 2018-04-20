@@ -20,17 +20,7 @@ public interface AudioSink {
         public final int audioTrackState;
 
         public InitializationException(int audioTrackState, int sampleRate, int channelConfig, int bufferSize) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("AudioTrack init failed: ");
-            stringBuilder.append(audioTrackState);
-            stringBuilder.append(", Config(");
-            stringBuilder.append(sampleRate);
-            stringBuilder.append(", ");
-            stringBuilder.append(channelConfig);
-            stringBuilder.append(", ");
-            stringBuilder.append(bufferSize);
-            stringBuilder.append(")");
-            super(stringBuilder.toString());
+            super("AudioTrack init failed: " + audioTrackState + ", Config(" + sampleRate + ", " + channelConfig + ", " + bufferSize + ")");
             this.audioTrackState = audioTrackState;
         }
     }
@@ -47,10 +37,7 @@ public interface AudioSink {
         public final int errorCode;
 
         public WriteException(int errorCode) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("AudioTrack write failed: ");
-            stringBuilder.append(errorCode);
-            super(stringBuilder.toString());
+            super("AudioTrack write failed: " + errorCode);
             this.errorCode = errorCode;
         }
     }

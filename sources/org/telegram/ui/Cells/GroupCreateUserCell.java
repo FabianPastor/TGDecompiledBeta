@@ -36,30 +36,55 @@ public class GroupCreateUserCell extends FrameLayout {
     private SimpleTextView statusTextView;
 
     public GroupCreateUserCell(Context context, boolean needCheck) {
-        Context context2 = context;
+        int i;
+        int i2;
+        int i3 = 5;
         super(context);
-        this.avatarImageView = new BackupImageView(context2);
+        this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
-        int i = 3;
         addView(this.avatarImageView, LayoutHelper.createFrame(50, 50.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 11.0f, 11.0f, LocaleController.isRTL ? 11.0f : 0.0f, 0.0f));
-        r0.nameTextView = new SimpleTextView(context2);
-        r0.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        r0.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        r0.nameTextView.setTextSize(17);
-        r0.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(r0.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 14.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
-        r0.statusTextView = new SimpleTextView(context2);
-        r0.statusTextView.setTextSize(16);
-        r0.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(r0.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
+        this.nameTextView = new SimpleTextView(context);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.nameTextView.setTextSize(17);
+        SimpleTextView simpleTextView = this.nameTextView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        simpleTextView.setGravity(i | 48);
+        View view = this.nameTextView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 28.0f : 72.0f, 14.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
+        this.statusTextView = new SimpleTextView(context);
+        this.statusTextView.setTextSize(16);
+        simpleTextView = this.statusTextView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        simpleTextView.setGravity(i | 48);
+        view = this.statusTextView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 28.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
         if (needCheck) {
-            r0.checkBox = new GroupCreateCheckBox(context2);
-            r0.checkBox.setVisibility(0);
-            View view = r0.checkBox;
-            if (LocaleController.isRTL) {
-                i = 5;
+            this.checkBox = new GroupCreateCheckBox(context);
+            this.checkBox.setVisibility(0);
+            View view2 = this.checkBox;
+            if (!LocaleController.isRTL) {
+                i3 = 3;
             }
-            addView(view, LayoutHelper.createFrame(24, 24.0f, i | 48, LocaleController.isRTL ? 0.0f : 41.0f, 41.0f, LocaleController.isRTL ? 41.0f : 0.0f, 0.0f));
+            addView(view2, LayoutHelper.createFrame(24, 24.0f, i3 | 48, LocaleController.isRTL ? 0.0f : 41.0f, 41.0f, LocaleController.isRTL ? 41.0f : 0.0f, 0.0f));
         }
     }
 
@@ -123,7 +148,10 @@ public class GroupCreateUserCell extends FrameLayout {
                 this.lastName = null;
                 this.nameTextView.setText(this.currentName, true);
             } else {
-                this.lastName = newName == null ? UserObject.getUserName(this.currentUser) : newName;
+                if (newName == null) {
+                    newName = UserObject.getUserName(this.currentUser);
+                }
+                this.lastName = newName;
                 this.nameTextView.setText(this.lastName);
             }
             if (this.currentStatus != null) {
@@ -134,17 +162,14 @@ public class GroupCreateUserCell extends FrameLayout {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
                 this.statusTextView.setText(LocaleController.getString("Bot", R.string.Bot));
-            } else {
-                if (this.currentUser.id != UserConfig.getInstance(this.currentAccount).getClientUserId() && (this.currentUser.status == null || this.currentUser.status.expires <= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime())) {
-                    if (!MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id))) {
-                        this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
-                        this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
-                        this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, this.currentUser));
-                    }
-                }
+            } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
                 this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
                 this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_onlineText));
                 this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
+            } else {
+                this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
+                this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
+                this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, this.currentUser));
             }
             this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);
         }

@@ -39,8 +39,8 @@ public class JoinGroupAlert extends BottomSheet {
     private String hash;
 
     /* renamed from: org.telegram.ui.Components.JoinGroupAlert$1 */
-    class C11921 implements OnClickListener {
-        C11921() {
+    class C11941 implements OnClickListener {
+        C11941() {
         }
 
         public void onClick(View view) {
@@ -49,8 +49,8 @@ public class JoinGroupAlert extends BottomSheet {
     }
 
     /* renamed from: org.telegram.ui.Components.JoinGroupAlert$2 */
-    class C11942 implements OnClickListener {
-        C11942() {
+    class C11962 implements OnClickListener {
+        C11962() {
         }
 
         public void onClick(View v) {
@@ -64,26 +64,26 @@ public class JoinGroupAlert extends BottomSheet {
                     }
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            if (JoinGroupAlert.this.fragment != null) {
-                                if (JoinGroupAlert.this.fragment.getParentActivity() != null) {
-                                    if (error == null) {
-                                        Updates updates = response;
-                                        if (!updates.chats.isEmpty()) {
-                                            Chat chat = (Chat) updates.chats.get(0);
-                                            chat.left = false;
-                                            chat.kicked = false;
-                                            MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putUsers(updates.users, false);
-                                            MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putChats(updates.chats, false);
-                                            Bundle args = new Bundle();
-                                            args.putInt("chat_id", chat.id);
-                                            if (MessagesController.getInstance(JoinGroupAlert.this.currentAccount).checkCanOpenChat(args, JoinGroupAlert.this.fragment)) {
-                                                JoinGroupAlert.this.fragment.presentFragment(new ChatActivity(args), JoinGroupAlert.this.fragment instanceof ChatActivity);
-                                            }
+                            if (JoinGroupAlert.this.fragment != null && JoinGroupAlert.this.fragment.getParentActivity() != null) {
+                                if (error == null) {
+                                    Updates updates = response;
+                                    if (!updates.chats.isEmpty()) {
+                                        Chat chat = (Chat) updates.chats.get(0);
+                                        chat.left = false;
+                                        chat.kicked = false;
+                                        MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putUsers(updates.users, false);
+                                        MessagesController.getInstance(JoinGroupAlert.this.currentAccount).putChats(updates.chats, false);
+                                        Bundle args = new Bundle();
+                                        args.putInt("chat_id", chat.id);
+                                        if (MessagesController.getInstance(JoinGroupAlert.this.currentAccount).checkCanOpenChat(args, JoinGroupAlert.this.fragment)) {
+                                            JoinGroupAlert.this.fragment.presentFragment(new ChatActivity(args), JoinGroupAlert.this.fragment instanceof ChatActivity);
+                                            return;
                                         }
-                                    } else {
-                                        AlertsCreator.processError(JoinGroupAlert.this.currentAccount, error, JoinGroupAlert.this.fragment, req, new Object[0]);
+                                        return;
                                     }
+                                    return;
                                 }
+                                AlertsCreator.processError(JoinGroupAlert.this.currentAccount, error, JoinGroupAlert.this.fragment, req, new Object[0]);
                             }
                         }
                     });
@@ -151,40 +151,38 @@ public class JoinGroupAlert extends BottomSheet {
         Drawable avatarDrawable;
         String title;
         int participants_count;
-        Context context2 = context;
-        ChatInvite chatInvite = invite;
-        super(context2, false);
+        super(context, false);
         setApplyBottomPadding(false);
         setApplyTopPadding(false);
         this.fragment = parentFragment;
-        this.chatInvite = chatInvite;
+        this.chatInvite = invite;
         this.hash = group;
-        LinearLayout linearLayout = new LinearLayout(context2);
+        LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
         linearLayout.setClickable(true);
         setCustomView(linearLayout);
         TLObject photo = null;
-        if (chatInvite.chat != null) {
-            avatarDrawable = new AvatarDrawable(chatInvite.chat);
-            if (r0.chatInvite.chat.photo != null) {
-                photo = r0.chatInvite.chat.photo.photo_small;
+        if (invite.chat != null) {
+            avatarDrawable = new AvatarDrawable(invite.chat);
+            if (this.chatInvite.chat.photo != null) {
+                photo = this.chatInvite.chat.photo.photo_small;
             }
-            title = chatInvite.chat.title;
-            participants_count = chatInvite.chat.participants_count;
+            title = invite.chat.title;
+            participants_count = invite.chat.participants_count;
         } else {
             avatarDrawable = new AvatarDrawable();
-            avatarDrawable.setInfo(0, chatInvite.title, null, false);
-            if (r0.chatInvite.photo != null) {
-                photo = r0.chatInvite.photo.photo_small;
+            avatarDrawable.setInfo(0, invite.title, null, false);
+            if (this.chatInvite.photo != null) {
+                photo = this.chatInvite.photo.photo_small;
             }
-            title = chatInvite.title;
-            participants_count = chatInvite.participants_count;
+            title = invite.title;
+            participants_count = invite.participants_count;
         }
-        BackupImageView avatarImageView = new BackupImageView(context2);
+        BackupImageView avatarImageView = new BackupImageView(context);
         avatarImageView.setRoundRadius(AndroidUtilities.dp(35.0f));
         avatarImageView.setImage(photo, "50_50", avatarDrawable);
         linearLayout.addView(avatarImageView, LayoutHelper.createLinear(70, 70, 49, 0, 12, 0, 0));
-        TextView textView = new TextView(context2);
+        View textView = new TextView(context);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextSize(1, 17.0f);
         textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -193,7 +191,7 @@ public class JoinGroupAlert extends BottomSheet {
         textView.setEllipsize(TruncateAt.END);
         linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 10, 10, 10, participants_count > 0 ? 0 : 10));
         if (participants_count > 0) {
-            textView = new TextView(context2);
+            textView = new TextView(context);
             textView.setTextSize(1, 14.0f);
             textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
             textView.setSingleLine(true);
@@ -201,32 +199,32 @@ public class JoinGroupAlert extends BottomSheet {
             textView.setText(LocaleController.formatPluralString("Members", participants_count));
             linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 10, 4, 10, 10));
         }
-        if (!chatInvite.participants.isEmpty()) {
-            RecyclerListView listView = new RecyclerListView(context2);
+        if (!invite.participants.isEmpty()) {
+            RecyclerListView listView = new RecyclerListView(context);
             listView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
             listView.setNestedScrollingEnabled(false);
             listView.setClipToPadding(false);
             listView.setLayoutManager(new LinearLayoutManager(getContext(), 0, false));
             listView.setHorizontalScrollBarEnabled(false);
             listView.setVerticalScrollBarEnabled(false);
-            listView.setAdapter(new UsersAdapter(context2));
+            listView.setAdapter(new UsersAdapter(context));
             listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
             linearLayout.addView(listView, LayoutHelper.createLinear(-2, 90, 49, 0, 0, 0, 0));
         }
-        View shadow = new View(context2);
-        shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
-        linearLayout.addView(shadow, LayoutHelper.createLinear(-1, 3));
-        PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context2, false);
+        textView = new View(context);
+        textView.setBackgroundResource(R.drawable.header_shadow_reverse);
+        linearLayout.addView(textView, LayoutHelper.createLinear(-1, 3));
+        PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
         linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(new C11921());
+        pickerBottomLayout.cancelButton.setOnClickListener(new C11941());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.doneButton.setVisibility(0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", R.string.JoinGroup));
-        pickerBottomLayout.doneButton.setOnClickListener(new C11942());
+        pickerBottomLayout.doneButton.setOnClickListener(new C11962());
     }
 }

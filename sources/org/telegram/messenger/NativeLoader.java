@@ -23,119 +23,136 @@ public class NativeLoader {
     private static native void init(String str, boolean z);
 
     private static File getNativeLibraryDir(Context context) {
-        File f = null;
+        File file = null;
         if (context != null) {
             try {
-                f = new File((String) ApplicationInfo.class.getField("nativeLibraryDir").get(context.getApplicationInfo()));
+                file = new File((String) ApplicationInfo.class.getField("nativeLibraryDir").get(context.getApplicationInfo()));
             } catch (Throwable th) {
                 th.printStackTrace();
             }
         }
-        if (f == null) {
-            f = new File(context.getApplicationInfo().dataDir, "lib");
+        if (file == null) {
+            file = new File(context.getApplicationInfo().dataDir, "lib");
         }
-        if (f.isDirectory()) {
-            return f;
-        }
-        return null;
+        return file.isDirectory() ? file : null;
     }
 
     @SuppressLint({"UnsafeDynamicallyLoadedCode", "SetWorldReadable"})
     private static boolean loadFromZip(Context context, File destDir, File destLocalFile, String folder) {
+        Throwable th;
         try {
             for (File file : destDir.listFiles()) {
                 file.delete();
             }
         } catch (Throwable e) {
-            FileLog.m3e(e);
+            Throwable e2;
+            FileLog.m3e(e2);
         }
         ZipFile zipFile = null;
         InputStream stream = null;
         try {
-            zipFile = new ZipFile(context.getApplicationInfo().sourceDir);
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("lib/");
-            stringBuilder.append(folder);
-            stringBuilder.append("/");
-            stringBuilder.append(LIB_SO_NAME);
-            ZipEntry entry = zipFile.getEntry(stringBuilder.toString());
-            if (entry == null) {
-                StringBuilder stringBuilder2 = new StringBuilder();
-                stringBuilder2.append("Unable to find file in apk:lib/");
-                stringBuilder2.append(folder);
-                stringBuilder2.append("/");
-                stringBuilder2.append(LIB_NAME);
-                throw new Exception(stringBuilder2.toString());
-            }
-            stream = zipFile.getInputStream(entry);
-            OutputStream out = new FileOutputStream(destLocalFile);
-            byte[] buf = new byte[4096];
-            while (true) {
-                int read = stream.read(buf);
-                int len = read;
-                if (read <= 0) {
-                    break;
-                }
-                Thread.yield();
-                out.write(buf, 0, len);
-            }
-            out.close();
-            destLocalFile.setReadable(true, false);
-            destLocalFile.setExecutable(true, false);
-            destLocalFile.setWritable(true);
+            ZipFile zipFile2 = new ZipFile(context.getApplicationInfo().sourceDir);
             try {
-                System.load(destLocalFile.getAbsolutePath());
-                nativeLoaded = true;
-            } catch (Throwable e2) {
-                FileLog.m3e(e2);
-            }
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (Throwable e3) {
-                    FileLog.m3e(e3);
+                ZipEntry entry = zipFile2.getEntry("lib/" + folder + "/" + LIB_SO_NAME);
+                if (entry == null) {
+                    throw new Exception("Unable to find file in apk:lib/" + folder + "/" + LIB_NAME);
                 }
+                stream = zipFile2.getInputStream(entry);
+                OutputStream out = new FileOutputStream(destLocalFile);
+                byte[] buf = new byte[4096];
+                while (true) {
+                    int len = stream.read(buf);
+                    if (len <= 0) {
+                        break;
+                    }
+                    Thread.yield();
+                    out.write(buf, 0, len);
+                }
+                out.close();
+                destLocalFile.setReadable(true, false);
+                destLocalFile.setExecutable(true, false);
+                destLocalFile.setWritable(true);
+                try {
+                    System.load(destLocalFile.getAbsolutePath());
+                    nativeLoaded = true;
+                } catch (Throwable e22) {
+                    FileLog.m3e(e22);
+                }
+                if (stream != null) {
+                    try {
+                        stream.close();
+                    } catch (Throwable e222) {
+                        FileLog.m3e(e222);
+                    }
+                }
+                if (zipFile2 != null) {
+                    try {
+                        zipFile2.close();
+                    } catch (Throwable e2222) {
+                        FileLog.m3e(e2222);
+                    }
+                }
+                zipFile = zipFile2;
+                return true;
+            } catch (Exception e3) {
+                e2222 = e3;
+                zipFile = zipFile2;
+                try {
+                    FileLog.m3e(e2222);
+                    if (stream != null) {
+                        try {
+                            stream.close();
+                        } catch (Throwable e22222) {
+                            FileLog.m3e(e22222);
+                        }
+                    }
+                    if (zipFile != null) {
+                        try {
+                            zipFile.close();
+                        } catch (Throwable e222222) {
+                            FileLog.m3e(e222222);
+                        }
+                    }
+                    return false;
+                } catch (Throwable th2) {
+                    th = th2;
+                    if (stream != null) {
+                        try {
+                            stream.close();
+                        } catch (Throwable e2222222) {
+                            FileLog.m3e(e2222222);
+                        }
+                    }
+                    if (zipFile != null) {
+                        try {
+                            zipFile.close();
+                        } catch (Throwable e22222222) {
+                            FileLog.m3e(e22222222);
+                        }
+                    }
+                    throw th;
+                }
+            } catch (Throwable th3) {
+                th = th3;
+                zipFile = zipFile2;
+                if (stream != null) {
+                    stream.close();
+                }
+                if (zipFile != null) {
+                    zipFile.close();
+                }
+                throw th;
+            }
+        } catch (Exception e4) {
+            e22222222 = e4;
+            FileLog.m3e(e22222222);
+            if (stream != null) {
+                stream.close();
             }
             if (zipFile != null) {
-                try {
-                    zipFile.close();
-                } catch (Throwable e32) {
-                    FileLog.m3e(e32);
-                }
-            }
-            return true;
-        } catch (Throwable e4) {
-            FileLog.m3e(e4);
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (Throwable e42) {
-                    FileLog.m3e(e42);
-                }
-            }
-            if (zipFile != null) {
-                try {
-                    zipFile.close();
-                } catch (Throwable e422) {
-                    FileLog.m3e(e422);
-                }
+                zipFile.close();
             }
             return false;
-        } catch (Throwable th) {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (Throwable e4222) {
-                    FileLog.m3e(e4222);
-                }
-            }
-            if (zipFile != null) {
-                try {
-                    zipFile.close();
-                } catch (Throwable e42222) {
-                    FileLog.m3e(e42222);
-                }
-            }
         }
     }
 
@@ -143,27 +160,20 @@ public class NativeLoader {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     @SuppressLint({"UnsafeDynamicallyLoadedCode"})
     public static synchronized void initNativeLibs(Context context) {
-        StringBuilder stringBuilder;
+        String folder;
         synchronized (NativeLoader.class) {
-            if (nativeLoaded) {
-                return;
-            }
-            Constants.loadFromContext(context);
-            try {
-                System.loadLibrary(LIB_NAME);
-                nativeLoaded = true;
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m0d("loaded normal lib");
-                }
-            } catch (Throwable e) {
-                Throwable e2;
+            if (!nativeLoaded) {
+                Constants.loadFromContext(context);
                 try {
-                    String folder;
-                    File destDir;
-                    File destLocalFile;
-                    FileLog.m3e(e2);
+                    System.loadLibrary(LIB_NAME);
+                    nativeLoaded = true;
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m0d("loaded normal lib");
+                    }
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
                     try {
-                        e2 = Build.CPU_ABI;
+                        String str = Build.CPU_ABI;
                         if (Build.CPU_ABI.equalsIgnoreCase("x86_64")) {
                             folder = "x86_64";
                         } else if (Build.CPU_ABI.equalsIgnoreCase("arm64-v8a")) {
@@ -179,95 +189,48 @@ public class NativeLoader {
                         } else {
                             folder = "armeabi";
                             if (BuildVars.LOGS_ENABLED) {
-                                StringBuilder stringBuilder2 = new StringBuilder();
-                                stringBuilder2.append("Unsupported arch: ");
-                                stringBuilder2.append(Build.CPU_ABI);
-                                FileLog.m1e(stringBuilder2.toString());
+                                FileLog.m1e("Unsupported arch: " + Build.CPU_ABI);
                             }
-                            e2 = folder;
-                            folder = System.getProperty("os.arch");
-                            if (folder != null && folder.contains("686")) {
-                                e2 = "x86";
-                            }
-                            destDir = new File(context.getFilesDir(), "lib");
-                            destDir.mkdirs();
-                            destLocalFile = new File(destDir, LOCALE_LIB_SO_NAME);
-                            if (destLocalFile.exists()) {
-                                try {
-                                    if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.m0d("Load local lib");
-                                    }
-                                    System.load(destLocalFile.getAbsolutePath());
-                                    nativeLoaded = true;
-                                    return;
-                                } catch (Throwable e3) {
-                                    FileLog.m3e(e3);
-                                    destLocalFile.delete();
-                                    if (BuildVars.LOGS_ENABLED) {
-                                        stringBuilder = new StringBuilder();
-                                        stringBuilder.append("Library not found, arch = ");
-                                        stringBuilder.append(e2);
-                                        FileLog.m1e(stringBuilder.toString());
-                                    }
-                                    if (loadFromZip(context, destDir, destLocalFile, e2)) {
-                                        try {
-                                            System.loadLibrary(LIB_NAME);
-                                            nativeLoaded = true;
-                                        } catch (Throwable e4) {
-                                            FileLog.m3e(e4);
-                                        }
-                                        return;
-                                    }
-                                    return;
-                                }
-                            }
-                            if (BuildVars.LOGS_ENABLED) {
-                                stringBuilder = new StringBuilder();
-                                stringBuilder.append("Library not found, arch = ");
-                                stringBuilder.append(e2);
-                                FileLog.m1e(stringBuilder.toString());
-                            }
-                            if (loadFromZip(context, destDir, destLocalFile, e2)) {
-                                System.loadLibrary(LIB_NAME);
-                                nativeLoaded = true;
-                                return;
-                            }
-                            return;
                         }
-                    } catch (Throwable e22) {
-                        FileLog.m3e(e22);
+                    } catch (Throwable e2) {
+                        FileLog.m3e(e2);
                         folder = "armeabi";
                     }
-                    e22 = folder;
-                    folder = System.getProperty("os.arch");
-                    e22 = "x86";
-                    destDir = new File(context.getFilesDir(), "lib");
+                    String javaArch = System.getProperty("os.arch");
+                    if (javaArch != null && javaArch.contains("686")) {
+                        folder = "x86";
+                    }
+                    File destDir = new File(context.getFilesDir(), "lib");
                     destDir.mkdirs();
-                    destLocalFile = new File(destDir, LOCALE_LIB_SO_NAME);
+                    File destLocalFile = new File(destDir, LOCALE_LIB_SO_NAME);
                     if (destLocalFile.exists()) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("Load local lib");
+                        try {
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.m0d("Load local lib");
+                            }
+                            System.load(destLocalFile.getAbsolutePath());
+                            nativeLoaded = true;
+                        } catch (Throwable e22) {
+                            FileLog.m3e(e22);
+                            destLocalFile.delete();
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.m1e("Library not found, arch = " + folder);
+                            }
                         }
-                        System.load(destLocalFile.getAbsolutePath());
-                        nativeLoaded = true;
-                        return;
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("Library not found, arch = ");
-                        stringBuilder.append(e22);
-                        FileLog.m1e(stringBuilder.toString());
+                        FileLog.m1e("Library not found, arch = " + folder);
                     }
-                    if (loadFromZip(context, destDir, destLocalFile, e22)) {
-                        System.loadLibrary(LIB_NAME);
-                        nativeLoaded = true;
-                        return;
-                    }
-                    return;
                 } catch (Throwable e222) {
                     e222.printStackTrace();
                 }
             }
+        }
+        try {
+            System.loadLibrary(LIB_NAME);
+            nativeLoaded = true;
+        } catch (Throwable e2222) {
+            FileLog.m3e(e2222);
         }
     }
 }

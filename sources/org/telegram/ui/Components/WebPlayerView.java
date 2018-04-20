@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -54,7 +53,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -75,7 +73,6 @@ import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
-import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
@@ -154,30 +151,28 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     private WebView webView;
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$1 */
-    class C13361 implements Runnable {
-        C13361() {
+    class C13381 implements Runnable {
+        C13381() {
         }
 
         public void run() {
-            if (WebPlayerView.this.videoPlayer != null) {
-                if (WebPlayerView.this.videoPlayer.isPlaying()) {
-                    WebPlayerView.this.controlsView.setProgress((int) (WebPlayerView.this.videoPlayer.getCurrentPosition() / 1000));
-                    WebPlayerView.this.controlsView.setBufferedProgress((int) (WebPlayerView.this.videoPlayer.getBufferedPosition() / 1000));
-                    AndroidUtilities.runOnUIThread(WebPlayerView.this.progressRunnable, 1000);
-                }
+            if (WebPlayerView.this.videoPlayer != null && WebPlayerView.this.videoPlayer.isPlaying()) {
+                WebPlayerView.this.controlsView.setProgress((int) (WebPlayerView.this.videoPlayer.getCurrentPosition() / 1000));
+                WebPlayerView.this.controlsView.setBufferedProgress((int) (WebPlayerView.this.videoPlayer.getBufferedPosition() / 1000));
+                AndroidUtilities.runOnUIThread(WebPlayerView.this.progressRunnable, 1000);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$2 */
-    class C13392 implements SurfaceTextureListener {
+    class C13412 implements SurfaceTextureListener {
 
         /* renamed from: org.telegram.ui.Components.WebPlayerView$2$1 */
-        class C13381 implements OnPreDrawListener {
+        class C13401 implements OnPreDrawListener {
 
             /* renamed from: org.telegram.ui.Components.WebPlayerView$2$1$1 */
-            class C13371 implements Runnable {
-                C13371() {
+            class C13391 implements Runnable {
+                C13391() {
                 }
 
                 public void run() {
@@ -185,7 +180,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 }
             }
 
-            C13381() {
+            C13401() {
             }
 
             public boolean onPreDraw() {
@@ -198,13 +193,13 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         WebPlayerView.this.currentBitmap = null;
                     }
                 }
-                AndroidUtilities.runOnUIThread(new C13371());
+                AndroidUtilities.runOnUIThread(new C13391());
                 WebPlayerView.this.waitingForFirstTextureUpload = 0;
                 return true;
             }
         }
 
-        C13392() {
+        C13412() {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -228,15 +223,15 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
 
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
             if (WebPlayerView.this.waitingForFirstTextureUpload == 1) {
-                WebPlayerView.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new C13381());
+                WebPlayerView.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new C13401());
                 WebPlayerView.this.changedTextureView.invalidate();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$3 */
-    class C13403 implements Runnable {
-        C13403() {
+    class C13423 implements Runnable {
+        C13423() {
         }
 
         public void run() {
@@ -284,102 +279,96 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$6 */
-    class C13416 implements OnClickListener {
-        C13416() {
+    class C13436 implements OnClickListener {
+        C13436() {
         }
 
         public void onClick(View v) {
-            if (!(!WebPlayerView.this.initied || WebPlayerView.this.changingTextureView || WebPlayerView.this.switchingInlineMode)) {
-                if (WebPlayerView.this.firstFrameRendered) {
-                    WebPlayerView.this.inFullscreen = WebPlayerView.this.inFullscreen ^ true;
-                    WebPlayerView.this.updateFullscreenState(true);
-                }
+            if (WebPlayerView.this.initied && !WebPlayerView.this.changingTextureView && !WebPlayerView.this.switchingInlineMode && WebPlayerView.this.firstFrameRendered) {
+                WebPlayerView.this.inFullscreen = !WebPlayerView.this.inFullscreen;
+                WebPlayerView.this.updateFullscreenState(true);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$7 */
-    class C13427 implements OnClickListener {
-        C13427() {
+    class C13447 implements OnClickListener {
+        C13447() {
         }
 
         public void onClick(View v) {
-            if (WebPlayerView.this.initied) {
-                if (WebPlayerView.this.playVideoUrl != null) {
-                    if (!WebPlayerView.this.videoPlayer.isPlayerPrepared()) {
-                        WebPlayerView.this.preparePlayer();
-                    }
-                    if (WebPlayerView.this.videoPlayer.isPlaying()) {
-                        WebPlayerView.this.videoPlayer.pause();
-                    } else {
-                        WebPlayerView.this.isCompleted = false;
-                        WebPlayerView.this.videoPlayer.play();
-                    }
-                    WebPlayerView.this.updatePlayButton();
+            if (WebPlayerView.this.initied && WebPlayerView.this.playVideoUrl != null) {
+                if (!WebPlayerView.this.videoPlayer.isPlayerPrepared()) {
+                    WebPlayerView.this.preparePlayer();
                 }
+                if (WebPlayerView.this.videoPlayer.isPlaying()) {
+                    WebPlayerView.this.videoPlayer.pause();
+                } else {
+                    WebPlayerView.this.isCompleted = false;
+                    WebPlayerView.this.videoPlayer.play();
+                }
+                WebPlayerView.this.updatePlayButton();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$8 */
-    class C13438 implements OnClickListener {
-        C13438() {
+    class C13458 implements OnClickListener {
+        C13458() {
         }
 
         public void onClick(View v) {
-            if (!(WebPlayerView.this.textureView == null || !WebPlayerView.this.delegate.checkInlinePermissions() || WebPlayerView.this.changingTextureView || WebPlayerView.this.switchingInlineMode)) {
-                if (WebPlayerView.this.firstFrameRendered) {
-                    WebPlayerView.this.switchingInlineMode = true;
-                    if (WebPlayerView.this.isInline) {
-                        ViewGroup parent = (ViewGroup) WebPlayerView.this.aspectRatioFrameLayout.getParent();
-                        if (parent != WebPlayerView.this) {
-                            if (parent != null) {
-                                parent.removeView(WebPlayerView.this.aspectRatioFrameLayout);
-                            }
-                            WebPlayerView.this.addView(WebPlayerView.this.aspectRatioFrameLayout, 0, LayoutHelper.createFrame(-1, -1, 17));
-                            WebPlayerView.this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredHeight() - AndroidUtilities.dp(10.0f), NUM));
+            if (WebPlayerView.this.textureView != null && WebPlayerView.this.delegate.checkInlinePermissions() && !WebPlayerView.this.changingTextureView && !WebPlayerView.this.switchingInlineMode && WebPlayerView.this.firstFrameRendered) {
+                WebPlayerView.this.switchingInlineMode = true;
+                if (WebPlayerView.this.isInline) {
+                    ViewGroup parent = (ViewGroup) WebPlayerView.this.aspectRatioFrameLayout.getParent();
+                    if (parent != WebPlayerView.this) {
+                        if (parent != null) {
+                            parent.removeView(WebPlayerView.this.aspectRatioFrameLayout);
                         }
-                        if (WebPlayerView.this.currentBitmap != null) {
-                            WebPlayerView.this.currentBitmap.recycle();
-                            WebPlayerView.this.currentBitmap = null;
-                        }
-                        WebPlayerView.this.changingTextureView = true;
-                        WebPlayerView.this.isInline = false;
-                        WebPlayerView.this.updatePlayButton();
-                        WebPlayerView.this.updateShareButton();
-                        WebPlayerView.this.updateFullscreenButton();
-                        WebPlayerView.this.updateInlineButton();
-                        WebPlayerView.this.textureView.setVisibility(4);
-                        if (WebPlayerView.this.textureViewContainer != null) {
-                            WebPlayerView.this.textureViewContainer.addView(WebPlayerView.this.textureView);
-                        } else {
-                            WebPlayerView.this.aspectRatioFrameLayout.addView(WebPlayerView.this.textureView);
-                        }
-                        parent = (ViewGroup) WebPlayerView.this.controlsView.getParent();
-                        if (parent != WebPlayerView.this) {
-                            if (parent != null) {
-                                parent.removeView(WebPlayerView.this.controlsView);
-                            }
-                            if (WebPlayerView.this.textureViewContainer != null) {
-                                WebPlayerView.this.textureViewContainer.addView(WebPlayerView.this.controlsView);
-                            } else {
-                                WebPlayerView.this.addView(WebPlayerView.this.controlsView, 1);
-                            }
-                        }
-                        WebPlayerView.this.controlsView.show(false, false);
-                        WebPlayerView.this.delegate.prepareToSwitchInlineMode(false, null, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
-                    } else {
-                        WebPlayerView.this.inFullscreen = false;
-                        WebPlayerView.this.delegate.prepareToSwitchInlineMode(true, WebPlayerView.this.switchToInlineRunnable, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
+                        WebPlayerView.this.addView(WebPlayerView.this.aspectRatioFrameLayout, 0, LayoutHelper.createFrame(-1, -1, 17));
+                        WebPlayerView.this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredHeight() - AndroidUtilities.dp(10.0f), NUM));
                     }
+                    if (WebPlayerView.this.currentBitmap != null) {
+                        WebPlayerView.this.currentBitmap.recycle();
+                        WebPlayerView.this.currentBitmap = null;
+                    }
+                    WebPlayerView.this.changingTextureView = true;
+                    WebPlayerView.this.isInline = false;
+                    WebPlayerView.this.updatePlayButton();
+                    WebPlayerView.this.updateShareButton();
+                    WebPlayerView.this.updateFullscreenButton();
+                    WebPlayerView.this.updateInlineButton();
+                    WebPlayerView.this.textureView.setVisibility(4);
+                    if (WebPlayerView.this.textureViewContainer != null) {
+                        WebPlayerView.this.textureViewContainer.addView(WebPlayerView.this.textureView);
+                    } else {
+                        WebPlayerView.this.aspectRatioFrameLayout.addView(WebPlayerView.this.textureView);
+                    }
+                    parent = (ViewGroup) WebPlayerView.this.controlsView.getParent();
+                    if (parent != WebPlayerView.this) {
+                        if (parent != null) {
+                            parent.removeView(WebPlayerView.this.controlsView);
+                        }
+                        if (WebPlayerView.this.textureViewContainer != null) {
+                            WebPlayerView.this.textureViewContainer.addView(WebPlayerView.this.controlsView);
+                        } else {
+                            WebPlayerView.this.addView(WebPlayerView.this.controlsView, 1);
+                        }
+                    }
+                    WebPlayerView.this.controlsView.show(false, false);
+                    WebPlayerView.this.delegate.prepareToSwitchInlineMode(false, null, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
+                    return;
                 }
+                WebPlayerView.this.inFullscreen = false;
+                WebPlayerView.this.delegate.prepareToSwitchInlineMode(true, WebPlayerView.this.switchToInlineRunnable, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$9 */
-    class C13449 implements OnClickListener {
-        C13449() {
+    class C13469 implements OnClickListener {
+        C13469() {
         }
 
         public void onClick(View v) {
@@ -400,7 +389,6 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
 
         protected String doInBackground(Void... voids) {
             String playerCode = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "http://www.aparat.com/video/video/embed/vt/frame/showvideo/yes/videohash/%s", new Object[]{this.videoId}));
-            String str = null;
             if (isCancelled()) {
                 return null;
             }
@@ -422,10 +410,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
-            if (!isCancelled()) {
-                str = this.results[0];
-            }
-            return str;
+            return isCancelled() ? null : this.results[0];
         }
 
         protected void onPostExecute(String result) {
@@ -455,7 +440,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         private int duration;
         private StaticLayout durationLayout;
         private int durationWidth;
-        private Runnable hideRunnable = new C13451();
+        private Runnable hideRunnable = new C13471();
         private ImageReceiver imageReceiver;
         private boolean isVisible = true;
         private int lastProgressX;
@@ -468,8 +453,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         private TextPaint textPaint;
 
         /* renamed from: org.telegram.ui.Components.WebPlayerView$ControlsView$1 */
-        class C13451 implements Runnable {
-            C13451() {
+        class C13471 implements Runnable {
+            C13471() {
             }
 
             public void run() {
@@ -478,8 +463,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         }
 
         /* renamed from: org.telegram.ui.Components.WebPlayerView$ControlsView$2 */
-        class C13462 extends AnimatorListenerAdapter {
-            C13462() {
+        class C13482 extends AnimatorListenerAdapter {
+            C13482() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -488,8 +473,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         }
 
         /* renamed from: org.telegram.ui.Components.WebPlayerView$ControlsView$3 */
-        class C13473 extends AnimatorListenerAdapter {
-            C13473() {
+        class C13493 extends AnimatorListenerAdapter {
+            C13493() {
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -513,15 +498,13 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         }
 
         public void setDuration(int value) {
-            if (this.duration != value && value >= 0) {
-                if (!WebPlayerView.this.isStream) {
-                    this.duration = value;
-                    this.durationLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.duration / 60), Integer.valueOf(this.duration % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    if (this.durationLayout.getLineCount() > 0) {
-                        this.durationWidth = (int) Math.ceil((double) this.durationLayout.getLineWidth(0));
-                    }
-                    invalidate();
+            if (this.duration != value && value >= 0 && !WebPlayerView.this.isStream) {
+                this.duration = value;
+                this.durationLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.duration / 60), Integer.valueOf(this.duration % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                if (this.durationLayout.getLineCount() > 0) {
+                    this.durationWidth = (int) Math.ceil((double) this.durationLayout.getLineWidth(0));
                 }
+                invalidate();
             }
         }
 
@@ -531,12 +514,10 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         }
 
         public void setProgress(int value) {
-            if (!this.progressPressed && value >= 0) {
-                if (!WebPlayerView.this.isStream) {
-                    this.progress = value;
-                    this.progressLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.progress / 60), Integer.valueOf(this.progress % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                    invalidate();
-                }
+            if (!this.progressPressed && value >= 0 && !WebPlayerView.this.isStream) {
+                this.progress = value;
+                this.progressLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.progress / 60), Integer.valueOf(this.progress % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                invalidate();
             }
         }
 
@@ -556,7 +537,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f});
                         animatorSet.playTogether(animatorArr);
                         this.currentAnimation.setDuration(150);
-                        this.currentAnimation.addListener(new C13462());
+                        this.currentAnimation.addListener(new C13482());
                         this.currentAnimation.start();
                     } else {
                         setAlpha(1.0f);
@@ -568,7 +549,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                     this.currentAnimation.setDuration(150);
-                    this.currentAnimation.addListener(new C13473());
+                    this.currentAnimation.addListener(new C13493());
                     this.currentAnimation.start();
                 } else {
                     setAlpha(0.0f);
@@ -604,6 +585,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         public boolean onTouchEvent(MotionEvent event) {
             int progressLineX;
             int progressLineEndX;
+            int i;
             int progressY;
             if (WebPlayerView.this.inFullscreen) {
                 progressLineX = AndroidUtilities.dp(36.0f) + this.durationWidth;
@@ -614,7 +596,12 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 progressLineEndX = getMeasuredWidth();
                 progressY = getMeasuredHeight() - AndroidUtilities.dp(12.0f);
             }
-            int progressX = (this.duration != 0 ? (int) (((float) (progressLineEndX - progressLineX)) * (((float) this.progress) / ((float) this.duration))) : 0) + progressLineX;
+            if (this.duration != 0) {
+                i = (int) (((float) (progressLineEndX - progressLineX)) * (((float) this.progress) / ((float) this.duration)));
+            } else {
+                i = 0;
+            }
+            int progressX = progressLineX + i;
             int x;
             if (event.getAction() == 0) {
                 if (!this.isVisible || WebPlayerView.this.isInline || WebPlayerView.this.isStream) {
@@ -631,23 +618,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     }
                 }
                 AndroidUtilities.cancelRunOnUIThread(this.hideRunnable);
-            } else {
-                if (event.getAction() != 1) {
-                    if (event.getAction() != 3) {
-                        if (event.getAction() == 2 && this.progressPressed) {
-                            x = (int) event.getX();
-                            this.currentProgressX -= this.lastProgressX - x;
-                            this.lastProgressX = x;
-                            if (this.currentProgressX < progressLineX) {
-                                this.currentProgressX = progressLineX;
-                            } else if (this.currentProgressX > progressLineEndX) {
-                                this.currentProgressX = progressLineEndX;
-                            }
-                            setProgress((int) (((float) (this.duration * 1000)) * (((float) (this.currentProgressX - progressLineX)) / ((float) (progressLineEndX - progressLineX)))));
-                            invalidate();
-                        }
-                    }
-                }
+            } else if (event.getAction() == 1 || event.getAction() == 3) {
                 if (WebPlayerView.this.initied && WebPlayerView.this.videoPlayer.isPlaying()) {
                     AndroidUtilities.runOnUIThread(this.hideRunnable, 3000);
                 }
@@ -658,13 +629,23 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         WebPlayerView.this.videoPlayer.seekTo(((long) this.progress) * 1000);
                     }
                 }
+            } else if (event.getAction() == 2 && this.progressPressed) {
+                x = (int) event.getX();
+                this.currentProgressX -= this.lastProgressX - x;
+                this.lastProgressX = x;
+                if (this.currentProgressX < progressLineX) {
+                    this.currentProgressX = progressLineX;
+                } else if (this.currentProgressX > progressLineEndX) {
+                    this.currentProgressX = progressLineEndX;
+                }
+                setProgress((int) (((float) (this.duration * 1000)) * (((float) (this.currentProgressX - progressLineX)) / ((float) (progressLineEndX - progressLineX)))));
+                invalidate();
             }
             super.onTouchEvent(event);
             return true;
         }
 
         protected void onDraw(Canvas canvas) {
-            Canvas canvas2 = canvas;
             if (WebPlayerView.this.drawImage) {
                 if (WebPlayerView.this.firstFrameRendered && WebPlayerView.this.currentAlpha != 0.0f) {
                     long newTime = System.currentTimeMillis();
@@ -676,75 +657,62 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     }
                     invalidate();
                 }
-                r0.imageReceiver.setAlpha(WebPlayerView.this.currentAlpha);
-                r0.imageReceiver.draw(canvas2);
+                this.imageReceiver.setAlpha(WebPlayerView.this.currentAlpha);
+                this.imageReceiver.draw(canvas);
             }
             if (WebPlayerView.this.videoPlayer.isPlayerPrepared() && !WebPlayerView.this.isStream) {
-                int i;
                 int width = getMeasuredWidth();
                 int height = getMeasuredHeight();
                 if (!WebPlayerView.this.isInline) {
-                    i = 10;
-                    if (r0.durationLayout != null) {
+                    if (this.durationLayout != null) {
                         canvas.save();
-                        canvas2.translate((float) ((width - AndroidUtilities.dp(58.0f)) - r0.durationWidth), (float) (height - AndroidUtilities.dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
-                        r0.durationLayout.draw(canvas2);
+                        canvas.translate((float) ((width - AndroidUtilities.dp(58.0f)) - this.durationWidth), (float) (height - AndroidUtilities.dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
+                        this.durationLayout.draw(canvas);
                         canvas.restore();
                     }
-                    if (r0.progressLayout != null) {
+                    if (this.progressLayout != null) {
                         canvas.save();
-                        float dp = (float) AndroidUtilities.dp(18.0f);
-                        if (WebPlayerView.this.inFullscreen) {
-                            i = 6;
-                        }
-                        canvas2.translate(dp, (float) (height - AndroidUtilities.dp((float) (29 + i))));
-                        r0.progressLayout.draw(canvas2);
+                        canvas.translate((float) AndroidUtilities.dp(18.0f), (float) (height - AndroidUtilities.dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
+                        this.progressLayout.draw(canvas);
                         canvas.restore();
                     }
                 }
-                if (r0.duration != 0) {
+                if (this.duration != 0) {
                     int progressLineY;
+                    int progressLineX;
                     int progressLineEndX;
                     int cy;
                     int progressX;
                     if (WebPlayerView.this.isInline) {
                         progressLineY = height - AndroidUtilities.dp(3.0f);
-                        i = 0;
+                        progressLineX = 0;
                         progressLineEndX = width;
                         cy = height - AndroidUtilities.dp(7.0f);
                     } else if (WebPlayerView.this.inFullscreen) {
                         progressLineY = height - AndroidUtilities.dp(29.0f);
-                        i = AndroidUtilities.dp(36.0f) + r0.durationWidth;
-                        progressLineEndX = (width - AndroidUtilities.dp(76.0f)) - r0.durationWidth;
+                        progressLineX = AndroidUtilities.dp(36.0f) + this.durationWidth;
+                        progressLineEndX = (width - AndroidUtilities.dp(76.0f)) - this.durationWidth;
                         cy = height - AndroidUtilities.dp(28.0f);
                     } else {
                         progressLineY = height - AndroidUtilities.dp(13.0f);
-                        i = 0;
+                        progressLineX = 0;
                         progressLineEndX = width;
                         cy = height - AndroidUtilities.dp(12.0f);
                     }
-                    int progressLineY2 = progressLineY;
-                    int progressLineX = i;
-                    int progressLineEndX2 = progressLineEndX;
-                    int cy2 = cy;
                     if (WebPlayerView.this.inFullscreen) {
-                        canvas2.drawRect((float) progressLineX, (float) progressLineY2, (float) progressLineEndX2, (float) (AndroidUtilities.dp(3.0f) + progressLineY2), r0.progressInnerPaint);
+                        canvas.drawRect((float) progressLineX, (float) progressLineY, (float) progressLineEndX, (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressInnerPaint);
                     }
-                    if (r0.progressPressed) {
-                        progressLineY = r0.currentProgressX;
+                    if (this.progressPressed) {
+                        progressX = this.currentProgressX;
                     } else {
-                        progressLineY = ((int) (((float) (progressLineEndX2 - progressLineX)) * (((float) r0.progress) / ((float) r0.duration)))) + progressLineX;
+                        progressX = progressLineX + ((int) (((float) (progressLineEndX - progressLineX)) * (((float) this.progress) / ((float) this.duration))));
                     }
-                    int progressX2 = progressLineY;
-                    if (r0.bufferedPosition == 0 || r0.duration == 0) {
-                        progressX = progressX2;
-                    } else {
-                        progressX = progressX2;
-                        canvas2.drawRect((float) progressLineX, (float) progressLineY2, (((float) (progressLineEndX2 - progressLineX)) * (((float) r0.bufferedPosition) / ((float) r0.duration))) + ((float) progressLineX), (float) (AndroidUtilities.dp(3.0f) + progressLineY2), WebPlayerView.this.inFullscreen ? r0.progressBufferedPaint : r0.progressInnerPaint);
+                    if (!(this.bufferedPosition == 0 || this.duration == 0)) {
+                        canvas.drawRect((float) progressLineX, (float) progressLineY, (((float) (progressLineEndX - progressLineX)) * (((float) this.bufferedPosition) / ((float) this.duration))) + ((float) progressLineX), (float) (AndroidUtilities.dp(3.0f) + progressLineY), WebPlayerView.this.inFullscreen ? this.progressBufferedPaint : this.progressInnerPaint);
                     }
-                    canvas2.drawRect((float) progressLineX, (float) progressLineY2, (float) progressX, (float) (AndroidUtilities.dp(3.0f) + progressLineY2), r0.progressPaint);
+                    canvas.drawRect((float) progressLineX, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressPaint);
                     if (!WebPlayerView.this.isInline) {
-                        canvas2.drawCircle((float) progressX, (float) cy2, (float) AndroidUtilities.dp(r0.progressPressed ? 7.0f : 5.0f), r0.progressPaint);
+                        canvas.drawCircle((float) progressX, (float) cy, (float) AndroidUtilities.dp(this.progressPressed ? 7.0f : 5.0f), this.progressPaint);
                     }
                 }
             }
@@ -765,7 +733,10 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             for (int a = 0; a < source.length(); a++) {
                 char c = source.charAt(a);
                 char lower = Character.toLowerCase(c);
-                source.setCharAt(a, c == lower ? Character.toUpperCase(c) : lower);
+                if (c == lower) {
+                    lower = Character.toUpperCase(c);
+                }
+                source.setCharAt(a, lower);
             }
             try {
                 return new String(Base64.decode(source.toString(), 0), C0542C.UTF8_NAME);
@@ -776,7 +747,6 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
 
         protected String doInBackground(Void... voids) {
             String playerCode = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://coub.com/api/v2/coubs/%s.json", new Object[]{this.videoId}));
-            String str = null;
             if (isCancelled()) {
                 return null;
             }
@@ -793,10 +763,10 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
-            if (!isCancelled()) {
-                str = this.results[0];
+            if (isCancelled()) {
+                return null;
             }
-            return str;
+            return this.results[0];
         }
 
         protected void onPostExecute(String result) {
@@ -830,14 +800,10 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
-                int parens_count;
-                String remaining_expr;
-                String func;
-                String index;
-                int a = 0;
+                Matcher matcher;
                 if (expr.charAt(0) == '(') {
-                    parens_count = 0;
-                    Matcher matcher = WebPlayerView.exprParensPattern.matcher(expr);
+                    int parens_count = 0;
+                    matcher = WebPlayerView.exprParensPattern.matcher(expr);
                     while (matcher.find()) {
                         if (matcher.group(0).indexOf(48) == 40) {
                             parens_count++;
@@ -845,7 +811,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             parens_count--;
                             if (parens_count == 0) {
                                 interpretExpression(expr.substring(1, matcher.start()), localVars, allowRecursion);
-                                remaining_expr = expr.substring(matcher.end()).trim();
+                                String remaining_expr = expr.substring(matcher.end()).trim();
                                 if (!TextUtils.isEmpty(remaining_expr)) {
                                     expr = remaining_expr;
                                     if (parens_count != 0) {
@@ -860,16 +826,16 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         throw new Exception(String.format("Premature end of parens in %s", new Object[]{expr}));
                     }
                 }
-                for (String func2 : this.assign_operators) {
-                    Matcher matcher2 = Pattern.compile(String.format(Locale.US, "(?x)(%s)(?:\\[([^\\]]+?)\\])?\\s*%s(.*)$", new Object[]{WebPlayerView.exprName, Pattern.quote(func2)})).matcher(expr);
-                    if (matcher2.find()) {
-                        interpretExpression(matcher2.group(3), localVars, allowRecursion - 1);
-                        index = matcher2.group(2);
+                for (String func : this.assign_operators) {
+                    matcher = Pattern.compile(String.format(Locale.US, "(?x)(%s)(?:\\[([^\\]]+?)\\])?\\s*%s(.*)$", new Object[]{WebPlayerView.exprName, Pattern.quote(func)})).matcher(expr);
+                    if (matcher.find()) {
+                        interpretExpression(matcher.group(3), localVars, allowRecursion - 1);
+                        String index = matcher.group(2);
                         if (TextUtils.isEmpty(index)) {
-                            localVars.put(matcher2.group(1), TtmlNode.ANONYMOUS_REGION_ID);
-                        } else {
-                            interpretExpression(index, localVars, allowRecursion);
+                            localVars.put(matcher.group(1), TtmlNode.ANONYMOUS_REGION_ID);
+                            return;
                         }
+                        interpretExpression(index, localVars, allowRecursion);
                         return;
                     }
                 }
@@ -881,59 +847,63 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                             try {
                                 new JSONObject(expr).toString();
                             } catch (Exception e2) {
-                                Matcher matcher3 = Pattern.compile(String.format(Locale.US, "(%s)\\[(.+)\\]$", new Object[]{WebPlayerView.exprName})).matcher(expr);
-                                if (matcher3.find()) {
-                                    index = matcher3.group(1);
-                                    interpretExpression(matcher3.group(2), localVars, allowRecursion - 1);
+                                matcher = Pattern.compile(String.format(Locale.US, "(%s)\\[(.+)\\]$", new Object[]{WebPlayerView.exprName})).matcher(expr);
+                                if (matcher.find()) {
+                                    String val = matcher.group(1);
+                                    interpretExpression(matcher.group(2), localVars, allowRecursion - 1);
                                     return;
                                 }
-                                matcher3 = Pattern.compile(String.format(Locale.US, "(%s)(?:\\.([^(]+)|\\[([^]]+)\\])\\s*(?:\\(+([^()]*)\\))?$", new Object[]{WebPlayerView.exprName})).matcher(expr);
-                                if (matcher3.find()) {
-                                    func2 = matcher3.group(1);
-                                    String m1 = matcher3.group(2);
-                                    remaining_expr = (TextUtils.isEmpty(m1) ? matcher3.group(3) : m1).replace("\"", TtmlNode.ANONYMOUS_REGION_ID);
-                                    String arg_str = matcher3.group(4);
-                                    if (localVars.get(func2) == null) {
-                                        extractObject(func2);
+                                matcher = Pattern.compile(String.format(Locale.US, "(%s)(?:\\.([^(]+)|\\[([^]]+)\\])\\s*(?:\\(+([^()]*)\\))?$", new Object[]{WebPlayerView.exprName})).matcher(expr);
+                                if (matcher.find()) {
+                                    String variable = matcher.group(1);
+                                    String m1 = matcher.group(2);
+                                    String m2 = matcher.group(3);
+                                    if (!TextUtils.isEmpty(m1)) {
+                                        m2 = m1;
                                     }
-                                    if (arg_str != null) {
-                                        if (expr.charAt(expr.length() - 1) != ')') {
-                                            throw new Exception("last char not ')'");
-                                        }
-                                        if (arg_str.length() != 0) {
-                                            String[] args = arg_str.split(",");
-                                            while (a < args.length) {
-                                                interpretExpression(args[a], localVars, allowRecursion);
-                                                a++;
-                                            }
-                                        }
+                                    String member = m2.replace("\"", TtmlNode.ANONYMOUS_REGION_ID);
+                                    String arg_str = matcher.group(4);
+                                    if (localVars.get(variable) == null) {
+                                        extractObject(variable);
+                                    }
+                                    if (arg_str == null) {
                                         return;
                                     }
-                                    return;
-                                }
-                                matcher3 = Pattern.compile(String.format(Locale.US, "(%s)\\[(.+)\\]$", new Object[]{WebPlayerView.exprName})).matcher(expr);
-                                if (matcher3.find()) {
-                                    Object val = localVars.get(matcher3.group(1));
-                                    interpretExpression(matcher3.group(2), localVars, allowRecursion - 1);
-                                    return;
-                                }
-                                for (String func3 : this.operators) {
-                                    Matcher matcher4 = Pattern.compile(String.format(Locale.US, "(.+?)%s(.+)", new Object[]{Pattern.quote(func3)})).matcher(expr);
-                                    if (matcher4.find()) {
-                                        boolean[] abort = new boolean[1];
-                                        interpretStatement(matcher4.group(1), localVars, abort, allowRecursion - 1);
-                                        if (abort[0]) {
-                                            throw new Exception(String.format("Premature left-side return of %s in %s", new Object[]{func3, expr}));
+                                    if (expr.charAt(expr.length() - 1) != ')') {
+                                        throw new Exception("last char not ')'");
+                                    } else if (arg_str.length() != 0) {
+                                        String[] args = arg_str.split(",");
+                                        for (String interpretExpression : args) {
+                                            interpretExpression(interpretExpression, localVars, allowRecursion);
                                         }
-                                        interpretStatement(matcher4.group(2), localVars, abort, allowRecursion - 1);
+                                        return;
+                                    } else {
+                                        return;
+                                    }
+                                }
+                                matcher = Pattern.compile(String.format(Locale.US, "(%s)\\[(.+)\\]$", new Object[]{WebPlayerView.exprName})).matcher(expr);
+                                if (matcher.find()) {
+                                    Object val2 = localVars.get(matcher.group(1));
+                                    interpretExpression(matcher.group(2), localVars, allowRecursion - 1);
+                                    return;
+                                }
+                                for (String func2 : this.operators) {
+                                    matcher = Pattern.compile(String.format(Locale.US, "(.+?)%s(.+)", new Object[]{Pattern.quote(func2)})).matcher(expr);
+                                    if (matcher.find()) {
+                                        boolean[] abort = new boolean[1];
+                                        interpretStatement(matcher.group(1), localVars, abort, allowRecursion - 1);
                                         if (abort[0]) {
-                                            throw new Exception(String.format("Premature right-side return of %s in %s", new Object[]{func3, expr}));
+                                            throw new Exception(String.format("Premature left-side return of %s in %s", new Object[]{func2, expr}));
+                                        }
+                                        interpretStatement(matcher.group(2), localVars, abort, allowRecursion - 1);
+                                        if (abort[0]) {
+                                            throw new Exception(String.format("Premature right-side return of %s in %s", new Object[]{func2, expr}));
                                         }
                                     }
                                 }
-                                matcher3 = Pattern.compile(String.format(Locale.US, "^(%s)\\(([a-zA-Z0-9_$,]*)\\)$", new Object[]{WebPlayerView.exprName})).matcher(expr);
-                                if (matcher3.find()) {
-                                    extractFunction(matcher3.group(1));
+                                matcher = Pattern.compile(String.format(Locale.US, "^(%s)\\(([a-zA-Z0-9_$,]*)\\)$", new Object[]{WebPlayerView.exprName})).matcher(expr);
+                                if (matcher.find()) {
+                                    extractFunction(matcher.group(1));
                                 }
                                 throw new Exception(String.format("Unsupported JS expression %s", new Object[]{expr}));
                             }
@@ -956,9 +926,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             } else {
                 matcher = WebPlayerView.stmtReturnPattern.matcher(stmt);
                 if (matcher.find()) {
-                    String expr2 = stmt.substring(matcher.group(0).length());
+                    expr = stmt.substring(matcher.group(0).length());
                     abort[0] = true;
-                    expr = expr2;
                 } else {
                     expr = stmt;
                 }
@@ -1017,11 +986,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 if (matcher.find()) {
                     String group = matcher.group();
                     if (!this.codeLines.contains(group)) {
-                        ArrayList arrayList = this.codeLines;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(group);
-                        stringBuilder.append(";");
-                        arrayList.add(stringBuilder.toString());
+                        this.codeLines.add(group + ";");
                     }
                     buildFunction(matcher.group(1).split(","), matcher.group(2));
                 }
@@ -1058,7 +1023,6 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         }
 
         protected String doInBackground(Void... voids) {
-            String str = null;
             String playerCode = WebPlayerView.this.downloadUrlContent(this, this.currentUrl, null, false);
             if (isCancelled()) {
                 return null;
@@ -1072,10 +1036,10 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
-            if (!isCancelled()) {
-                str = this.results[0];
+            if (isCancelled()) {
+                return null;
             }
-            return str;
+            return this.results[0];
         }
 
         protected void onPostExecute(String result) {
@@ -1108,38 +1072,27 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         protected String doInBackground(Void... voids) {
             HashMap<String, String> headers = new HashMap();
             headers.put("Client-ID", "jzkbprff40iqj646a697cyrvl0zt2m6");
-            int indexOf = this.videoId.indexOf(38);
-            int idx = indexOf;
-            if (indexOf > 0) {
-                r1.videoId = r1.videoId.substring(0, idx);
+            int idx = this.videoId.indexOf(38);
+            if (idx > 0) {
+                this.videoId = this.videoId.substring(0, idx);
             }
-            String streamCode = WebPlayerView.this.downloadUrlContent(r1, String.format(Locale.US, "https://api.twitch.tv/kraken/streams/%s?stream_type=all", new Object[]{r1.videoId}), headers, false);
+            String streamCode = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://api.twitch.tv/kraken/streams/%s?stream_type=all", new Object[]{this.videoId}), headers, false);
             if (isCancelled()) {
                 return null;
             }
             try {
                 JSONObject stream = new JSONObject(streamCode).getJSONObject("stream");
-                JSONObject accessToken = new JSONObject(WebPlayerView.this.downloadUrlContent(r1, String.format(Locale.US, "https://api.twitch.tv/api/channels/%s/access_token", new Object[]{r1.videoId}), headers, false));
+                JSONObject accessToken = new JSONObject(WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://api.twitch.tv/api/channels/%s/access_token", new Object[]{this.videoId}), headers, false));
                 String sig = URLEncoder.encode(accessToken.getString("sig"), C0542C.UTF8_NAME);
                 String token = URLEncoder.encode(accessToken.getString("token"), C0542C.UTF8_NAME);
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("https://youtube.googleapis.com/v/");
-                stringBuilder.append(r1.videoId);
-                URLEncoder.encode(stringBuilder.toString(), C0542C.UTF8_NAME);
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("allow_source=true&allow_audio_only=true&allow_spectre=true&player=twitchweb&segment_preference=4&p=");
-                stringBuilder.append((int) (Math.random() * 1.0E7d));
-                stringBuilder.append("&sig=");
-                stringBuilder.append(sig);
-                stringBuilder.append("&token=");
-                stringBuilder.append(token);
-                String params = stringBuilder.toString();
-                r1.results[0] = String.format(Locale.US, "https://usher.ttvnw.net/api/channel/hls/%s.m3u8?%s", new Object[]{r1.videoId, params});
-                r1.results[1] = "hls";
+                URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, C0542C.UTF8_NAME);
+                String params = "allow_source=true&allow_audio_only=true&allow_spectre=true&player=twitchweb&segment_preference=4&p=" + ((int) (Math.random() * 1.0E7d)) + "&sig=" + sig + "&token=" + token;
+                this.results[0] = String.format(Locale.US, "https://usher.ttvnw.net/api/channel/hls/%s.m3u8?%s", new Object[]{this.videoId, params});
+                this.results[1] = "hls";
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
-            return isCancelled() ? null : r1.results[0];
+            return isCancelled() ? null : this.results[0];
         }
 
         protected void onPostExecute(String result) {
@@ -1169,7 +1122,6 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
 
         protected String doInBackground(Void... voids) {
             String playerCode = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://player.vimeo.com/video/%s/config", new Object[]{this.videoId}));
-            String str = null;
             if (isCancelled()) {
                 return null;
             }
@@ -1183,17 +1135,22 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         this.results[0] = hls.getJSONObject("cdns").getJSONObject(hls.getString("default_cdn")).getString(UpdateFragment.FRAGMENT_URL);
                     }
                     this.results[1] = "hls";
-                } else if (files.has("progressive")) {
+                    if (isCancelled()) {
+                        return this.results[0];
+                    }
+                    return null;
+                }
+                if (files.has("progressive")) {
                     this.results[1] = "other";
                     this.results[0] = files.getJSONArray("progressive").getJSONObject(0).getString(UpdateFragment.FRAGMENT_URL);
                 }
+                if (isCancelled()) {
+                    return this.results[0];
+                }
+                return null;
             } catch (Throwable e2) {
                 FileLog.m3e(e2);
             }
-            if (!isCancelled()) {
-                str = this.results[0];
-            }
-            return str;
         }
 
         protected void onPostExecute(String result) {
@@ -1245,578 +1202,242 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             this.videoId = vid;
         }
 
-        /* JADX WARNING: inconsistent code. */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
         protected String[] doInBackground(Void... voids) {
-            Throwable params;
-            Throwable embedCode;
-            int i;
-            String embedCode2 = WebPlayerView.this;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("https://www.youtube.com/embed/");
-            stringBuilder.append(this.videoId);
-            embedCode2 = embedCode2.downloadUrlContent(this, stringBuilder.toString());
-            String[] strArr = null;
+            String embedCode = WebPlayerView.this.downloadUrlContent(this, "https://www.youtube.com/embed/" + this.videoId);
             if (isCancelled()) {
                 return null;
             }
-            String currentUrl;
-            String[] strArr2;
-            String params2 = new StringBuilder();
-            params2.append("video_id=");
-            params2.append(r1.videoId);
-            params2.append("&ps=default&gl=US&hl=en");
-            params2 = params2.toString();
+            Matcher matcher;
+            String params = "video_id=" + this.videoId + "&ps=default&gl=US&hl=en";
             try {
-                StringBuilder stringBuilder2 = new StringBuilder();
-                stringBuilder2.append(params2);
-                stringBuilder2.append("&eurl=");
-                StringBuilder stringBuilder3 = new StringBuilder();
-                stringBuilder3.append("https://youtube.googleapis.com/v/");
-                stringBuilder3.append(r1.videoId);
-                stringBuilder2.append(URLEncoder.encode(stringBuilder3.toString(), C0542C.UTF8_NAME));
-                params2 = stringBuilder2.toString();
+                params = params + "&eurl=" + URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, C0542C.UTF8_NAME);
             } catch (Throwable e) {
                 FileLog.m3e(e);
             }
-            if (embedCode2 != null) {
-                Matcher matcher = WebPlayerView.stsPattern.matcher(embedCode2);
+            if (embedCode != null) {
+                matcher = WebPlayerView.stsPattern.matcher(embedCode);
                 if (matcher.find()) {
-                    stringBuilder3 = new StringBuilder();
-                    stringBuilder3.append(params2);
-                    stringBuilder3.append("&sts=");
-                    stringBuilder3.append(embedCode2.substring(matcher.start() + 6, matcher.end()));
-                    params2 = stringBuilder3.toString();
+                    params = params + "&sts=" + embedCode.substring(matcher.start() + 6, matcher.end());
                 } else {
-                    stringBuilder3 = new StringBuilder();
-                    stringBuilder3.append(params2);
-                    stringBuilder3.append("&sts=");
-                    params2 = stringBuilder3.toString();
+                    params = params + "&sts=";
                 }
             }
-            int i2 = 1;
-            r1.result[1] = "dash";
-            String otherUrl = null;
-            extra = new String[5];
-            int i3 = 0;
-            extra[0] = TtmlNode.ANONYMOUS_REGION_ID;
-            extra[1] = "&el=leanback";
-            int i4 = 2;
-            extra[2] = "&el=embedded";
-            extra[3] = "&el=detailpage";
-            extra[4] = "&el=vevo";
+            this.result[1] = "dash";
             boolean encrypted = false;
-            int i5 = 0;
-            while (i5 < extra.length) {
-                String videoInfo = WebPlayerView.this;
-                StringBuilder stringBuilder4 = new StringBuilder();
-                stringBuilder4.append("https://www.youtube.com/get_video_info?");
-                stringBuilder4.append(params2);
-                stringBuilder4.append(extra[i5]);
-                videoInfo = videoInfo.downloadUrlContent(r1, stringBuilder4.toString());
+            String otherUrl = null;
+            String[] extra = new String[]{TtmlNode.ANONYMOUS_REGION_ID, "&el=leanback", "&el=embedded", "&el=detailpage", "&el=vevo"};
+            for (String str : extra) {
+                String videoInfo = WebPlayerView.this.downloadUrlContent(this, "https://www.youtube.com/get_video_info?" + params + str);
                 if (isCancelled()) {
-                    return strArr;
+                    return null;
                 }
-                String params3;
                 boolean exists = false;
                 String hls = null;
                 boolean isLive = false;
                 if (videoInfo != null) {
                     String[] args = videoInfo.split("&");
-                    String otherUrl2 = otherUrl;
-                    int a = i3;
-                    while (a < args.length) {
+                    for (int a = 0; a < args.length; a++) {
+                        String[] args2;
                         if (args[a].startsWith("dashmpd")) {
                             exists = true;
-                            strArr = args[a].split("=");
-                            if (strArr.length == i4) {
+                            args2 = args[a].split("=");
+                            if (args2.length == 2) {
                                 try {
-                                    r1.result[0] = URLDecoder.decode(strArr[i2], C0542C.UTF8_NAME);
+                                    this.result[0] = URLDecoder.decode(args2[1], C0542C.UTF8_NAME);
                                 } catch (Throwable e2) {
                                     FileLog.m3e(e2);
                                 }
                             }
-                            params3 = params2;
                         } else if (args[a].startsWith("url_encoded_fmt_stream_map")) {
-                            strArr = args[a].split("=");
-                            if (strArr.length == 2) {
-                                String[] args2;
+                            args2 = args[a].split("=");
+                            if (args2.length == 2) {
                                 try {
-                                    String[] args3 = URLDecoder.decode(strArr[1], C0542C.UTF8_NAME).split("[&,]");
+                                    String[] args3 = URLDecoder.decode(args2[1], C0542C.UTF8_NAME).split("[&,]");
+                                    String currentUrl = null;
                                     boolean isMp4 = false;
-                                    currentUrl = null;
-                                    i3 = 0;
-                                    while (true) {
-                                        params3 = params2;
-                                        try {
-                                            if (i3 >= args3.length) {
-                                                break;
+                                    for (String split : args3) {
+                                        String[] args4 = split.split("=");
+                                        if (args4[0].startsWith("type")) {
+                                            if (URLDecoder.decode(args4[1], C0542C.UTF8_NAME).contains(MimeTypes.VIDEO_MP4)) {
+                                                isMp4 = true;
                                             }
-                                            args2 = strArr;
-                                            try {
-                                                params2 = args3[i3].split("=");
-                                                String[] args32 = args3;
-                                                if (params2[null].startsWith("type") != null) {
-                                                    if (URLDecoder.decode(params2[1], C0542C.UTF8_NAME).contains(MimeTypes.VIDEO_MP4)) {
-                                                        isMp4 = true;
-                                                    }
-                                                } else if (params2[null].startsWith(UpdateFragment.FRAGMENT_URL) != null) {
-                                                    currentUrl = URLDecoder.decode(params2[1], C0542C.UTF8_NAME);
-                                                } else if (params2[null].startsWith("itag") != null) {
-                                                    currentUrl = null;
-                                                    isMp4 = false;
-                                                }
-                                                if (isMp4 && currentUrl != null) {
-                                                    break;
-                                                }
-                                                i3++;
-                                                params2 = params3;
-                                                strArr = args2;
-                                                args3 = args32;
-                                            } catch (Throwable e22) {
-                                                params = e22;
-                                            }
-                                        } catch (Throwable e222) {
-                                            args2 = strArr;
-                                            params = e222;
+                                        } else if (args4[0].startsWith(UpdateFragment.FRAGMENT_URL)) {
+                                            currentUrl = URLDecoder.decode(args4[1], C0542C.UTF8_NAME);
+                                        } else if (args4[0].startsWith("itag")) {
+                                            currentUrl = null;
+                                            isMp4 = false;
+                                        }
+                                        if (isMp4 && currentUrl != null) {
+                                            otherUrl = currentUrl;
+                                            break;
                                         }
                                     }
-                                } catch (Throwable e2222) {
-                                    params3 = params2;
-                                    args2 = strArr;
-                                    params = e2222;
-                                    FileLog.m3e(params);
-                                    a++;
-                                    params2 = params3;
-                                    i2 = 1;
-                                    i4 = 2;
+                                } catch (Throwable e22) {
+                                    FileLog.m3e(e22);
                                 }
-                            } else {
-                                params3 = params2;
                             }
-                        } else {
-                            params3 = params2;
-                            if (args[a].startsWith("use_cipher_signature") != null) {
-                                params2 = args[a].split("=");
-                                if (params2.length == 2 && params2[1].toLowerCase().equals("true")) {
-                                    encrypted = true;
+                        } else if (args[a].startsWith("use_cipher_signature")) {
+                            args2 = args[a].split("=");
+                            if (args2.length == 2 && args2[1].toLowerCase().equals("true")) {
+                                encrypted = true;
+                            }
+                        } else if (args[a].startsWith("hlsvp")) {
+                            args2 = args[a].split("=");
+                            if (args2.length == 2) {
+                                try {
+                                    hls = URLDecoder.decode(args2[1], C0542C.UTF8_NAME);
+                                } catch (Throwable e222) {
+                                    FileLog.m3e(e222);
                                 }
-                            } else if (args[a].startsWith("hlsvp") != null) {
-                                params2 = args[a].split("=");
-                                if (params2.length == 2) {
-                                    try {
-                                        hls = URLDecoder.decode(params2[1], C0542C.UTF8_NAME);
-                                    } catch (Throwable e22222) {
-                                        FileLog.m3e(e22222);
-                                    }
-                                }
-                            } else if (args[a].startsWith("livestream") != null) {
-                                params2 = args[a].split("=");
-                                if (params2.length == 2 && params2[1].toLowerCase().equals("1")) {
-                                    isLive = true;
-                                }
+                            }
+                        } else if (args[a].startsWith("livestream")) {
+                            args2 = args[a].split("=");
+                            if (args2.length == 2 && args2[1].toLowerCase().equals("1")) {
+                                isLive = true;
                             }
                         }
-                        a++;
-                        params2 = params3;
-                        i2 = 1;
-                        i4 = 2;
                     }
-                    params3 = params2;
-                    otherUrl = otherUrl2;
-                } else {
-                    params3 = params2;
                 }
                 if (isLive) {
-                    if (!(hls == null || encrypted)) {
-                        if (!hls.contains("/s/")) {
-                            r1.result[0] = hls;
-                            r1.result[1] = "hls";
-                        }
+                    if (hls == null || encrypted || hls.contains("/s/")) {
+                        return null;
                     }
-                    return null;
+                    this.result[0] = hls;
+                    this.result[1] = "hls";
                 }
                 if (exists) {
                     break;
                 }
-                i5++;
-                params2 = params3;
-                strArr = null;
-                i2 = 1;
-                i3 = 0;
-                i4 = 2;
             }
-            if (r1.result[0] == null && otherUrl != null) {
-                r1.result[0] = otherUrl;
-                r1.result[1] = "other";
+            if (this.result[0] == null && otherUrl != null) {
+                this.result[0] = otherUrl;
+                this.result[1] = "other";
             }
-            if (r1.result[0] != null) {
-                String str;
-                if (!encrypted) {
-                    if (!r1.result[0].contains("/s/")) {
-                        str = embedCode2;
-                        if (!isCancelled()) {
-                            if (encrypted) {
-                                strArr2 = r1.result;
-                                return strArr2;
+            if (this.result[0] != null && ((encrypted || this.result[0].contains("/s/")) && embedCode != null)) {
+                encrypted = true;
+                int index = this.result[0].indexOf("/s/");
+                int index2 = this.result[0].indexOf(47, index + 10);
+                if (index != -1) {
+                    if (index2 == -1) {
+                        index2 = this.result[0].length();
+                    }
+                    this.sig = this.result[0].substring(index, index2);
+                    String jsUrl = null;
+                    matcher = WebPlayerView.jsPattern.matcher(embedCode);
+                    if (matcher.find()) {
+                        try {
+                            Object value = new JSONTokener(matcher.group(1)).nextValue();
+                            if (value instanceof String) {
+                                jsUrl = (String) value;
+                            }
+                        } catch (Throwable e2222) {
+                            FileLog.m3e(e2222);
+                        }
+                    }
+                    if (jsUrl != null) {
+                        String playerId;
+                        matcher = WebPlayerView.playerIdPattern.matcher(jsUrl);
+                        if (matcher.find()) {
+                            playerId = matcher.group(1) + matcher.group(2);
+                        } else {
+                            playerId = null;
+                        }
+                        String functionCode = null;
+                        String functionName = null;
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("youtubecode", 0);
+                        if (playerId != null) {
+                            functionCode = preferences.getString(playerId, null);
+                            functionName = preferences.getString(playerId + "n", null);
+                        }
+                        if (functionCode == null) {
+                            if (jsUrl.startsWith("//")) {
+                                jsUrl = "https:" + jsUrl;
+                            } else if (jsUrl.startsWith("/")) {
+                                jsUrl = "https://www.youtube.com" + jsUrl;
+                            }
+                            String jsCode = WebPlayerView.this.downloadUrlContent(this, jsUrl);
+                            if (isCancelled()) {
+                                return null;
+                            }
+                            if (jsCode != null) {
+                                matcher = WebPlayerView.sigPattern.matcher(jsCode);
+                                if (matcher.find()) {
+                                    functionName = matcher.group(1);
+                                } else {
+                                    matcher = WebPlayerView.sigPattern2.matcher(jsCode);
+                                    if (matcher.find()) {
+                                        functionName = matcher.group(1);
+                                    }
+                                }
+                                if (functionName != null) {
+                                    try {
+                                        functionCode = new JSExtractor(jsCode).extractFunction(functionName);
+                                        if (!(TextUtils.isEmpty(functionCode) || playerId == null)) {
+                                            preferences.edit().putString(playerId, functionCode).putString(playerId + "n", functionName).commit();
+                                        }
+                                    } catch (Throwable e22222) {
+                                        FileLog.m3e(e22222);
+                                    }
+                                }
                             }
                         }
-                        strArr2 = null;
-                        return strArr2;
-                    }
-                }
-                if (embedCode2 != null) {
-                    encrypted = true;
-                    int index = r1.result[0].indexOf("/s/");
-                    int index2 = r1.result[0].indexOf(47, index + 10);
-                    if (index != -1) {
-                        if (index2 == -1) {
-                            i2 = 0;
-                            index2 = r1.result[0].length();
-                        } else {
-                            i2 = 0;
-                        }
-                        r1.sig = r1.result[i2].substring(index, index2);
-                        String jsUrl = null;
-                        Matcher matcher2 = WebPlayerView.jsPattern.matcher(embedCode2);
-                        if (matcher2.find()) {
+                        if (!TextUtils.isEmpty(functionCode)) {
+                            if (VERSION.SDK_INT >= 21) {
+                                functionCode = functionCode + functionName + "('" + this.sig.substring(3) + "');";
+                            } else {
+                                functionCode = functionCode + "window." + WebPlayerView.this.interfaceName + ".returnResultToJava(" + functionName + "('" + this.sig.substring(3) + "'));";
+                            }
                             try {
-                                Object value = new JSONTokener(matcher2.group(1)).nextValue();
-                                if (value instanceof String) {
-                                    jsUrl = (String) value;
-                                }
+                                final String str2 = functionCode;
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+
+                                    /* renamed from: org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask$1$1 */
+                                    class C13501 implements ValueCallback<String> {
+                                        C13501() {
+                                        }
+
+                                        public void onReceiveValue(String value) {
+                                            YoutubeVideoTask.this.result[0] = YoutubeVideoTask.this.result[0].replace(YoutubeVideoTask.this.sig, "/signature/" + value.substring(1, value.length() - 1));
+                                            YoutubeVideoTask.this.countDownLatch.countDown();
+                                        }
+                                    }
+
+                                    public void run() {
+                                        if (VERSION.SDK_INT >= 21) {
+                                            WebPlayerView.this.webView.evaluateJavascript(str2, new C13501());
+                                            return;
+                                        }
+                                        try {
+                                            WebPlayerView.this.webView.loadUrl("data:text/html;charset=utf-8;base64," + Base64.encodeToString(("<script>" + str2 + "</script>").getBytes(C0542C.UTF8_NAME), 0));
+                                        } catch (Throwable e) {
+                                            FileLog.m3e(e);
+                                        }
+                                    }
+                                });
+                                this.countDownLatch.await();
+                                encrypted = false;
                             } catch (Throwable e222222) {
                                 FileLog.m3e(e222222);
                             }
                         }
-                        if (jsUrl != null) {
-                            String playerId;
-                            matcher2 = WebPlayerView.playerIdPattern.matcher(jsUrl);
-                            if (matcher2.find()) {
-                                playerId = new StringBuilder();
-                                playerId.append(matcher2.group(1));
-                                playerId.append(matcher2.group(2));
-                                playerId = playerId.toString();
-                            } else {
-                                playerId = null;
-                            }
-                            currentUrl = null;
-                            String functionName = null;
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("youtubecode", 0);
-                            if (playerId != null) {
-                                currentUrl = preferences.getString(playerId, null);
-                                StringBuilder stringBuilder5 = new StringBuilder();
-                                stringBuilder5.append(playerId);
-                                stringBuilder5.append("n");
-                                functionName = preferences.getString(stringBuilder5.toString(), null);
-                            }
-                            if (currentUrl == null) {
-                                if (jsUrl.startsWith("//")) {
-                                    stringBuilder4 = new StringBuilder();
-                                    stringBuilder4.append("https:");
-                                    stringBuilder4.append(jsUrl);
-                                    jsUrl = stringBuilder4.toString();
-                                } else if (jsUrl.startsWith("/")) {
-                                    stringBuilder4 = new StringBuilder();
-                                    stringBuilder4.append("https://www.youtube.com");
-                                    stringBuilder4.append(jsUrl);
-                                    jsUrl = stringBuilder4.toString();
-                                }
-                                String jsCode = WebPlayerView.this.downloadUrlContent(r1, jsUrl);
-                                if (isCancelled()) {
-                                    return null;
-                                }
-                                if (jsCode != null) {
-                                    matcher2 = WebPlayerView.sigPattern.matcher(jsCode);
-                                    if (matcher2.find()) {
-                                        functionName = matcher2.group(1);
-                                    } else {
-                                        matcher2 = WebPlayerView.sigPattern2.matcher(jsCode);
-                                        if (matcher2.find()) {
-                                            functionName = matcher2.group(1);
-                                        }
-                                    }
-                                    if (functionName != null) {
-                                        try {
-                                            try {
-                                                JSExtractor embedCode3 = new JSExtractor(jsCode);
-                                                currentUrl = embedCode3.extractFunction(functionName);
-                                                if (TextUtils.isEmpty(currentUrl) || playerId == null) {
-                                                } else {
-                                                    Editor putString = preferences.edit().putString(playerId, currentUrl);
-                                                    JSExtractor extractor = embedCode3;
-                                                    embedCode2 = new StringBuilder();
-                                                    embedCode2.append(playerId);
-                                                    try {
-                                                        embedCode2.append("n");
-                                                        putString.putString(embedCode2.toString(), functionName).commit();
-                                                    } catch (Throwable e2222222) {
-                                                        embedCode = e2222222;
-                                                        FileLog.m3e(embedCode);
-                                                        if (TextUtils.isEmpty(currentUrl) == null) {
-                                                            if (VERSION.SDK_INT >= 21) {
-                                                                embedCode2 = new StringBuilder();
-                                                                embedCode2.append(currentUrl);
-                                                                embedCode2.append("window.");
-                                                                embedCode2.append(WebPlayerView.this.interfaceName);
-                                                                embedCode2.append(".returnResultToJava(");
-                                                                embedCode2.append(functionName);
-                                                                embedCode2.append("('");
-                                                                embedCode2.append(r1.sig.substring(3));
-                                                                embedCode2.append("'));");
-                                                                embedCode2 = embedCode2.toString();
-                                                            } else {
-                                                                embedCode2 = new StringBuilder();
-                                                                embedCode2.append(currentUrl);
-                                                                embedCode2.append(functionName);
-                                                                embedCode2.append("('");
-                                                                embedCode2.append(r1.sig.substring(3));
-                                                                embedCode2.append("');");
-                                                                embedCode2 = embedCode2.toString();
-                                                            }
-                                                            params2 = embedCode2;
-                                                            try {
-                                                                AndroidUtilities.runOnUIThread(new Runnable() {
-
-                                                                    /* renamed from: org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask$1$1 */
-                                                                    class C13481 implements ValueCallback<String> {
-                                                                        C13481() {
-                                                                        }
-
-                                                                        public void onReceiveValue(String value) {
-                                                                            String[] access$1300 = YoutubeVideoTask.this.result;
-                                                                            String str = YoutubeVideoTask.this.result[0];
-                                                                            CharSequence access$1400 = YoutubeVideoTask.this.sig;
-                                                                            StringBuilder stringBuilder = new StringBuilder();
-                                                                            stringBuilder.append("/signature/");
-                                                                            stringBuilder.append(value.substring(1, value.length() - 1));
-                                                                            access$1300[0] = str.replace(access$1400, stringBuilder.toString());
-                                                                            YoutubeVideoTask.this.countDownLatch.countDown();
-                                                                        }
-                                                                    }
-
-                                                                    public void run() {
-                                                                        if (VERSION.SDK_INT >= 21) {
-                                                                            WebPlayerView.this.webView.evaluateJavascript(params2, new C13481());
-                                                                            return;
-                                                                        }
-                                                                        try {
-                                                                            String javascript = new StringBuilder();
-                                                                            javascript.append("<script>");
-                                                                            javascript.append(params2);
-                                                                            javascript.append("</script>");
-                                                                            String base64 = Base64.encodeToString(javascript.toString().getBytes(C0542C.UTF8_NAME), null);
-                                                                            WebView access$1600 = WebPlayerView.this.webView;
-                                                                            StringBuilder stringBuilder = new StringBuilder();
-                                                                            stringBuilder.append("data:text/html;charset=utf-8;base64,");
-                                                                            stringBuilder.append(base64);
-                                                                            access$1600.loadUrl(stringBuilder.toString());
-                                                                        } catch (Throwable e) {
-                                                                            FileLog.m3e(e);
-                                                                        }
-                                                                    }
-                                                                });
-                                                                r1.countDownLatch.await();
-                                                                encrypted = false;
-                                                            } catch (Throwable e22222222) {
-                                                                FileLog.m3e(e22222222);
-                                                            }
-                                                        }
-                                                        if (isCancelled()) {
-                                                            if (encrypted) {
-                                                                strArr2 = r1.result;
-                                                                return strArr2;
-                                                            }
-                                                        }
-                                                        strArr2 = null;
-                                                        return strArr2;
-                                                    }
-                                                }
-                                            } catch (Throwable e222222222) {
-                                                i = index;
-                                                embedCode = e222222222;
-                                                FileLog.m3e(embedCode);
-                                                if (TextUtils.isEmpty(currentUrl) == null) {
-                                                    if (VERSION.SDK_INT >= 21) {
-                                                        embedCode2 = new StringBuilder();
-                                                        embedCode2.append(currentUrl);
-                                                        embedCode2.append(functionName);
-                                                        embedCode2.append("('");
-                                                        embedCode2.append(r1.sig.substring(3));
-                                                        embedCode2.append("');");
-                                                        embedCode2 = embedCode2.toString();
-                                                    } else {
-                                                        embedCode2 = new StringBuilder();
-                                                        embedCode2.append(currentUrl);
-                                                        embedCode2.append("window.");
-                                                        embedCode2.append(WebPlayerView.this.interfaceName);
-                                                        embedCode2.append(".returnResultToJava(");
-                                                        embedCode2.append(functionName);
-                                                        embedCode2.append("('");
-                                                        embedCode2.append(r1.sig.substring(3));
-                                                        embedCode2.append("'));");
-                                                        embedCode2 = embedCode2.toString();
-                                                    }
-                                                    params2 = embedCode2;
-                                                    AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
-                                                    r1.countDownLatch.await();
-                                                    encrypted = false;
-                                                }
-                                                if (isCancelled()) {
-                                                    if (encrypted) {
-                                                        strArr2 = r1.result;
-                                                        return strArr2;
-                                                    }
-                                                }
-                                                strArr2 = null;
-                                                return strArr2;
-                                            }
-                                        } catch (Throwable eNUM) {
-                                            str = embedCode2;
-                                            i = index;
-                                            embedCode = eNUM;
-                                            FileLog.m3e(embedCode);
-                                            if (TextUtils.isEmpty(currentUrl) == null) {
-                                                if (VERSION.SDK_INT >= 21) {
-                                                    embedCode2 = new StringBuilder();
-                                                    embedCode2.append(currentUrl);
-                                                    embedCode2.append(functionName);
-                                                    embedCode2.append("('");
-                                                    embedCode2.append(r1.sig.substring(3));
-                                                    embedCode2.append("');");
-                                                    embedCode2 = embedCode2.toString();
-                                                } else {
-                                                    embedCode2 = new StringBuilder();
-                                                    embedCode2.append(currentUrl);
-                                                    embedCode2.append("window.");
-                                                    embedCode2.append(WebPlayerView.this.interfaceName);
-                                                    embedCode2.append(".returnResultToJava(");
-                                                    embedCode2.append(functionName);
-                                                    embedCode2.append("('");
-                                                    embedCode2.append(r1.sig.substring(3));
-                                                    embedCode2.append("'));");
-                                                    embedCode2 = embedCode2.toString();
-                                                }
-                                                params2 = embedCode2;
-                                                AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
-                                                r1.countDownLatch.await();
-                                                encrypted = false;
-                                            }
-                                            if (isCancelled()) {
-                                                if (encrypted) {
-                                                    strArr2 = r1.result;
-                                                    return strArr2;
-                                                }
-                                            }
-                                            strArr2 = null;
-                                            return strArr2;
-                                        }
-                                        if (TextUtils.isEmpty(currentUrl) == null) {
-                                            if (VERSION.SDK_INT >= 21) {
-                                                embedCode2 = new StringBuilder();
-                                                embedCode2.append(currentUrl);
-                                                embedCode2.append(functionName);
-                                                embedCode2.append("('");
-                                                embedCode2.append(r1.sig.substring(3));
-                                                embedCode2.append("');");
-                                                embedCode2 = embedCode2.toString();
-                                            } else {
-                                                embedCode2 = new StringBuilder();
-                                                embedCode2.append(currentUrl);
-                                                embedCode2.append("window.");
-                                                embedCode2.append(WebPlayerView.this.interfaceName);
-                                                embedCode2.append(".returnResultToJava(");
-                                                embedCode2.append(functionName);
-                                                embedCode2.append("('");
-                                                embedCode2.append(r1.sig.substring(3));
-                                                embedCode2.append("'));");
-                                                embedCode2 = embedCode2.toString();
-                                            }
-                                            params2 = embedCode2;
-                                            AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
-                                            r1.countDownLatch.await();
-                                            encrypted = false;
-                                        }
-                                        if (isCancelled()) {
-                                            if (encrypted) {
-                                                strArr2 = r1.result;
-                                                return strArr2;
-                                            }
-                                        }
-                                        strArr2 = null;
-                                        return strArr2;
-                                    }
-                                }
-                            }
-                            i = index;
-                            if (TextUtils.isEmpty(currentUrl) == null) {
-                                if (VERSION.SDK_INT >= 21) {
-                                    embedCode2 = new StringBuilder();
-                                    embedCode2.append(currentUrl);
-                                    embedCode2.append("window.");
-                                    embedCode2.append(WebPlayerView.this.interfaceName);
-                                    embedCode2.append(".returnResultToJava(");
-                                    embedCode2.append(functionName);
-                                    embedCode2.append("('");
-                                    embedCode2.append(r1.sig.substring(3));
-                                    embedCode2.append("'));");
-                                    embedCode2 = embedCode2.toString();
-                                } else {
-                                    embedCode2 = new StringBuilder();
-                                    embedCode2.append(currentUrl);
-                                    embedCode2.append(functionName);
-                                    embedCode2.append("('");
-                                    embedCode2.append(r1.sig.substring(3));
-                                    embedCode2.append("');");
-                                    embedCode2 = embedCode2.toString();
-                                }
-                                params2 = embedCode2;
-                                AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
-                                r1.countDownLatch.await();
-                                encrypted = false;
-                            }
-                            if (isCancelled()) {
-                                if (encrypted) {
-                                    strArr2 = r1.result;
-                                    return strArr2;
-                                }
-                            }
-                            strArr2 = null;
-                            return strArr2;
-                        }
                     }
                 }
             }
-            if (isCancelled()) {
-                if (encrypted) {
-                    strArr2 = r1.result;
-                    return strArr2;
-                }
+            if (isCancelled() || encrypted) {
+                return null;
             }
-            strArr2 = null;
-            return strArr2;
+            return this.result;
         }
 
         private void onInterfaceResult(String value) {
-            String[] strArr = this.result;
-            String str = this.result[0];
-            CharSequence charSequence = this.sig;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("/signature/");
-            stringBuilder.append(value);
-            strArr[0] = str.replace(charSequence, stringBuilder.toString());
+            this.result[0] = this.result[0].replace(this.sig, "/signature/" + value);
             this.countDownLatch.countDown();
         }
 
         protected void onPostExecute(String[] result) {
             if (result[0] != null) {
                 if (BuildVars.LOGS_ENABLED) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("start play youtube video ");
-                    stringBuilder.append(result[1]);
-                    stringBuilder.append(" ");
-                    stringBuilder.append(result[0]);
-                    FileLog.m0d(stringBuilder.toString());
+                    FileLog.m0d("start play youtube video " + result[1] + " " + result[0]);
                 }
                 WebPlayerView.this.initied = true;
                 WebPlayerView.this.playVideoUrl = result[0];
@@ -1843,8 +1464,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     /* renamed from: org.telegram.ui.Components.WebPlayerView$5 */
-    class C21045 implements CallJavaResultInterface {
-        C21045() {
+    class C21055 implements CallJavaResultInterface {
+        C21055() {
         }
 
         public void jsCallFinished(String value) {
@@ -1858,216 +1479,38 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         return downloadUrlContent(parentTask, url, null, true);
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     protected String downloadUrlContent(AsyncTask parentTask, String url, HashMap<String, String> headers, boolean tryGzip) {
         Throwable e;
-        Throwable th;
-        boolean canRetry;
-        int code;
-        byte[] data;
-        int read;
-        StringBuilder result;
-        boolean canRetry2 = true;
+        boolean canRetry = true;
         InputStream httpConnectionStream = null;
         boolean done = false;
-        StringBuilder result2 = null;
+        StringBuilder result = null;
         URLConnection httpConnection = null;
+        URL downloadUrl;
         try {
-            URL downloadUrl = new URL(url);
+            downloadUrl = new URL(url);
             httpConnection = downloadUrl.openConnection();
             httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
             if (tryGzip) {
-                try {
-                    httpConnection.addRequestProperty("Accept-Encoding", "gzip, deflate");
-                } catch (Throwable th2) {
-                    e = th2;
-                    canRetry = true;
-                    if (!(e instanceof SocketTimeoutException)) {
-                        if (ConnectionsManager.isNetworkOnline()) {
-                            canRetry2 = false;
-                        }
-                        canRetry2 = canRetry;
-                        FileLog.m3e(e);
-                        if (canRetry2) {
-                            if (httpConnection != null) {
-                                try {
-                                    if (httpConnection instanceof HttpURLConnection) {
-                                        code = ((HttpURLConnection) httpConnection).getResponseCode();
-                                    }
-                                } catch (Throwable th22) {
-                                    FileLog.m3e(th22);
-                                }
-                            }
-                            if (httpConnectionStream != null) {
-                                try {
-                                    data = new byte[32768];
-                                    while (!parentTask.isCancelled()) {
-                                        try {
-                                            read = httpConnectionStream.read(data);
-                                            if (read > 0) {
-                                                if (result2 == null) {
-                                                    result2 = new StringBuilder();
-                                                }
-                                                result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                                            } else if (read == -1) {
-                                                done = true;
-                                            }
-                                        } catch (Throwable th222) {
-                                            result = result2;
-                                            FileLog.m3e(th222);
-                                            result2 = result;
-                                        } catch (Throwable th2222) {
-                                            e = th2222;
-                                            result2 = result;
-                                            FileLog.m3e(e);
-                                            if (httpConnectionStream != null) {
-                                                try {
-                                                    httpConnectionStream.close();
-                                                } catch (Throwable th22222) {
-                                                    FileLog.m3e(th22222);
-                                                }
-                                            }
-                                            return done ? null : result2.toString();
-                                        }
-                                    }
-                                } catch (Throwable th222222) {
-                                    e = th222222;
-                                    FileLog.m3e(e);
-                                    if (httpConnectionStream != null) {
-                                        httpConnectionStream.close();
-                                    }
-                                    if (done) {
-                                    }
-                                }
-                            }
-                            if (httpConnectionStream != null) {
-                                httpConnectionStream.close();
-                            }
-                        }
-                        if (done) {
-                        }
-                    } else if (!(e instanceof UnknownHostException)) {
-                        canRetry2 = false;
-                    } else if (e instanceof SocketException) {
-                        canRetry2 = false;
-                    } else {
-                        if (e instanceof FileNotFoundException) {
-                            canRetry2 = false;
-                        }
-                        canRetry2 = canRetry;
-                        FileLog.m3e(e);
-                        if (canRetry2) {
-                            if (httpConnection != null) {
-                                if (httpConnection instanceof HttpURLConnection) {
-                                    code = ((HttpURLConnection) httpConnection).getResponseCode();
-                                }
-                            }
-                            if (httpConnectionStream != null) {
-                                data = new byte[32768];
-                                while (!parentTask.isCancelled()) {
-                                    read = httpConnectionStream.read(data);
-                                    if (read > 0) {
-                                        if (result2 == null) {
-                                            result2 = new StringBuilder();
-                                        }
-                                        result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                                    } else if (read == -1) {
-                                        done = true;
-                                    }
-                                }
-                            }
-                            if (httpConnectionStream != null) {
-                                httpConnectionStream.close();
-                            }
-                        }
-                        if (done) {
-                        }
-                    }
-                    FileLog.m3e(e);
-                    if (canRetry2) {
-                        if (httpConnection != null) {
-                            if (httpConnection instanceof HttpURLConnection) {
-                                code = ((HttpURLConnection) httpConnection).getResponseCode();
-                            }
-                        }
-                        if (httpConnectionStream != null) {
-                            data = new byte[32768];
-                            while (!parentTask.isCancelled()) {
-                                read = httpConnectionStream.read(data);
-                                if (read > 0) {
-                                    if (result2 == null) {
-                                        result2 = new StringBuilder();
-                                    }
-                                    result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                                } else if (read == -1) {
-                                    done = true;
-                                }
-                            }
-                        }
-                        if (httpConnectionStream != null) {
-                            httpConnectionStream.close();
-                        }
-                    }
-                    if (done) {
-                    }
+                httpConnection.addRequestProperty("Accept-Encoding", "gzip, deflate");
+            }
+            httpConnection.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
+            httpConnection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+            httpConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
+            if (headers != null) {
+                for (Entry<String, String> entry : headers.entrySet()) {
+                    httpConnection.addRequestProperty((String) entry.getKey(), (String) entry.getValue());
                 }
             }
-            try {
-                InputStream inputStream;
-                httpConnection.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
-                httpConnection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-                httpConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-                if (headers != null) {
-                    for (Entry<String, String> entry : headers.entrySet()) {
-                        httpConnection.addRequestProperty((String) entry.getKey(), (String) entry.getValue());
-                    }
-                }
-                httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
-                httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
-                if (httpConnection instanceof HttpURLConnection) {
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) httpConnection;
-                    httpURLConnection.setInstanceFollowRedirects(true);
-                    int status = httpURLConnection.getResponseCode();
-                    if (!(status == 302 || status == 301)) {
-                        if (status != 303) {
-                            canRetry = true;
-                            httpConnection.connect();
-                            if (tryGzip) {
-                                inputStream = httpConnection.getInputStream();
-                            } else {
-                                inputStream = new GZIPInputStream(httpConnection.getInputStream());
-                            }
-                            httpConnectionStream = inputStream;
-                            canRetry2 = canRetry;
-                            if (canRetry2) {
-                                if (httpConnection != null) {
-                                    if (httpConnection instanceof HttpURLConnection) {
-                                        code = ((HttpURLConnection) httpConnection).getResponseCode();
-                                        if (!(code == Callback.DEFAULT_DRAG_ANIMATION_DURATION || code == 202)) {
-                                        }
-                                    }
-                                }
-                                if (httpConnectionStream != null) {
-                                    data = new byte[32768];
-                                    while (!parentTask.isCancelled()) {
-                                        read = httpConnectionStream.read(data);
-                                        if (read > 0) {
-                                            if (result2 == null) {
-                                                result2 = new StringBuilder();
-                                            }
-                                            result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                                        } else if (read == -1) {
-                                            done = true;
-                                        }
-                                    }
-                                }
-                                if (httpConnectionStream != null) {
-                                    httpConnectionStream.close();
-                                }
-                            }
-                            if (done) {
-                            }
-                        }
-                    }
+            httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+            httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+            if (httpConnection instanceof HttpURLConnection) {
+                HttpURLConnection httpURLConnection = (HttpURLConnection) httpConnection;
+                httpURLConnection.setInstanceFollowRedirects(true);
+                int status = httpURLConnection.getResponseCode();
+                if (status == 302 || status == 301 || status == 303) {
                     String newUrl = httpURLConnection.getHeaderField("Location");
                     String cookies = httpURLConnection.getHeaderField("Set-Cookie");
                     downloadUrl = new URL(newUrl);
@@ -2082,317 +1525,107 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                     httpConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
                     if (headers != null) {
                         for (Entry<String, String> entry2 : headers.entrySet()) {
-                            canRetry = canRetry2;
-                            try {
-                                httpConnection.addRequestProperty((String) entry2.getKey(), (String) entry2.getValue());
-                                canRetry2 = canRetry;
-                            } catch (Exception e2) {
-                                if (httpConnectionStream != null) {
-                                    try {
-                                        httpConnectionStream.close();
-                                    } catch (Exception e3) {
-                                        httpConnection = downloadUrl.openConnection();
-                                        httpConnection.connect();
-                                        inputStream = httpConnection.getInputStream();
-                                        httpConnectionStream = inputStream;
-                                        canRetry2 = canRetry;
-                                        if (canRetry2) {
-                                            if (httpConnection != null) {
-                                                if (httpConnection instanceof HttpURLConnection) {
-                                                    code = ((HttpURLConnection) httpConnection).getResponseCode();
-                                                }
-                                            }
-                                            if (httpConnectionStream != null) {
-                                                data = new byte[32768];
-                                                while (!parentTask.isCancelled()) {
-                                                    read = httpConnectionStream.read(data);
-                                                    if (read > 0) {
-                                                        if (result2 == null) {
-                                                            result2 = new StringBuilder();
-                                                        }
-                                                        result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                                                    } else if (read == -1) {
-                                                        done = true;
-                                                    }
-                                                }
-                                            }
-                                            if (httpConnectionStream != null) {
-                                                httpConnectionStream.close();
-                                            }
-                                        }
-                                        if (done) {
-                                        }
-                                    }
-                                }
-                                httpConnection = downloadUrl.openConnection();
-                                httpConnection.connect();
-                                inputStream = httpConnection.getInputStream();
-                            } catch (Throwable th2222222) {
-                                e = th2222222;
-                            }
+                            httpConnection.addRequestProperty((String) entry2.getKey(), (String) entry2.getValue());
                         }
                     }
-                }
-                canRetry = canRetry2;
-                httpConnection.connect();
-                if (tryGzip) {
-                    inputStream = httpConnection.getInputStream();
-                } else {
-                    inputStream = new GZIPInputStream(httpConnection.getInputStream());
-                }
-                httpConnectionStream = inputStream;
-                canRetry2 = canRetry;
-            } catch (Throwable th3) {
-                th2222222 = th3;
-                canRetry = true;
-                e = th2222222;
-                if (!(e instanceof SocketTimeoutException)) {
-                    if (ConnectionsManager.isNetworkOnline()) {
-                        canRetry2 = false;
-                    }
-                    canRetry2 = canRetry;
-                    FileLog.m3e(e);
-                    if (canRetry2) {
-                        if (httpConnection != null) {
-                            if (httpConnection instanceof HttpURLConnection) {
-                                code = ((HttpURLConnection) httpConnection).getResponseCode();
-                            }
-                        }
-                        if (httpConnectionStream != null) {
-                            data = new byte[32768];
-                            while (!parentTask.isCancelled()) {
-                                read = httpConnectionStream.read(data);
-                                if (read > 0) {
-                                    if (result2 == null) {
-                                        result2 = new StringBuilder();
-                                    }
-                                    result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                                } else if (read == -1) {
-                                    done = true;
-                                }
-                            }
-                        }
-                        if (httpConnectionStream != null) {
-                            httpConnectionStream.close();
-                        }
-                    }
-                    if (done) {
-                    }
-                } else if (!(e instanceof UnknownHostException)) {
-                    canRetry2 = false;
-                } else if (e instanceof SocketException) {
-                    if (e.getMessage() != null && e.getMessage().contains("ECONNRESET")) {
-                        canRetry2 = false;
-                    }
-                    canRetry2 = canRetry;
-                    FileLog.m3e(e);
-                    if (canRetry2) {
-                        if (httpConnection != null) {
-                            if (httpConnection instanceof HttpURLConnection) {
-                                code = ((HttpURLConnection) httpConnection).getResponseCode();
-                            }
-                        }
-                        if (httpConnectionStream != null) {
-                            data = new byte[32768];
-                            while (!parentTask.isCancelled()) {
-                                read = httpConnectionStream.read(data);
-                                if (read > 0) {
-                                    if (result2 == null) {
-                                        result2 = new StringBuilder();
-                                    }
-                                    result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                                } else if (read == -1) {
-                                    done = true;
-                                }
-                            }
-                        }
-                        if (httpConnectionStream != null) {
-                            httpConnectionStream.close();
-                        }
-                    }
-                    if (done) {
-                    }
-                } else {
-                    if (e instanceof FileNotFoundException) {
-                        canRetry2 = false;
-                    }
-                    canRetry2 = canRetry;
-                    FileLog.m3e(e);
-                    if (canRetry2) {
-                        if (httpConnection != null) {
-                            if (httpConnection instanceof HttpURLConnection) {
-                                code = ((HttpURLConnection) httpConnection).getResponseCode();
-                            }
-                        }
-                        if (httpConnectionStream != null) {
-                            data = new byte[32768];
-                            while (!parentTask.isCancelled()) {
-                                read = httpConnectionStream.read(data);
-                                if (read > 0) {
-                                    if (result2 == null) {
-                                        result2 = new StringBuilder();
-                                    }
-                                    result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                                } else if (read == -1) {
-                                    done = true;
-                                }
-                            }
-                        }
-                        if (httpConnectionStream != null) {
-                            httpConnectionStream.close();
-                        }
-                    }
-                    if (done) {
-                    }
-                }
-                FileLog.m3e(e);
-                if (canRetry2) {
-                    if (httpConnection != null) {
-                        if (httpConnection instanceof HttpURLConnection) {
-                            code = ((HttpURLConnection) httpConnection).getResponseCode();
-                        }
-                    }
-                    if (httpConnectionStream != null) {
-                        data = new byte[32768];
-                        while (!parentTask.isCancelled()) {
-                            read = httpConnectionStream.read(data);
-                            if (read > 0) {
-                                if (result2 == null) {
-                                    result2 = new StringBuilder();
-                                }
-                                result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                            } else if (read == -1) {
-                                done = true;
-                            }
-                        }
-                    }
-                    if (httpConnectionStream != null) {
-                        httpConnectionStream.close();
-                    }
-                }
-                if (done) {
                 }
             }
-        } catch (Throwable th4) {
-            th2222222 = th4;
-            String str = url;
-            canRetry = true;
-            e = th2222222;
-            if (!(e instanceof SocketTimeoutException)) {
-                if (ConnectionsManager.isNetworkOnline()) {
-                    canRetry2 = false;
-                }
-                canRetry2 = canRetry;
-                FileLog.m3e(e);
-                if (canRetry2) {
-                    if (httpConnection != null) {
-                        if (httpConnection instanceof HttpURLConnection) {
-                            code = ((HttpURLConnection) httpConnection).getResponseCode();
-                        }
-                    }
-                    if (httpConnectionStream != null) {
-                        data = new byte[32768];
-                        while (!parentTask.isCancelled()) {
-                            read = httpConnectionStream.read(data);
-                            if (read > 0) {
-                                if (result2 == null) {
-                                    result2 = new StringBuilder();
-                                }
-                                result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                            } else if (read == -1) {
-                                done = true;
-                            }
-                        }
-                    }
-                    if (httpConnectionStream != null) {
-                        httpConnectionStream.close();
-                    }
-                }
-                if (done) {
-                }
-            } else if (!(e instanceof UnknownHostException)) {
-                canRetry2 = false;
-            } else if (e instanceof SocketException) {
-                if (e instanceof FileNotFoundException) {
-                    canRetry2 = false;
-                }
-                canRetry2 = canRetry;
-                FileLog.m3e(e);
-                if (canRetry2) {
-                    if (httpConnection != null) {
-                        if (httpConnection instanceof HttpURLConnection) {
-                            code = ((HttpURLConnection) httpConnection).getResponseCode();
-                        }
-                    }
-                    if (httpConnectionStream != null) {
-                        data = new byte[32768];
-                        while (!parentTask.isCancelled()) {
-                            read = httpConnectionStream.read(data);
-                            if (read > 0) {
-                                if (result2 == null) {
-                                    result2 = new StringBuilder();
-                                }
-                                result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                            } else if (read == -1) {
-                                done = true;
-                            }
-                        }
-                    }
-                    if (httpConnectionStream != null) {
-                        httpConnectionStream.close();
-                    }
-                }
-                if (done) {
-                }
+            httpConnection.connect();
+            if (tryGzip) {
+                httpConnectionStream = new GZIPInputStream(httpConnection.getInputStream());
             } else {
-                canRetry2 = false;
+                httpConnectionStream = httpConnection.getInputStream();
             }
-            FileLog.m3e(e);
-            if (canRetry2) {
-                if (httpConnection != null) {
-                    if (httpConnection instanceof HttpURLConnection) {
-                        code = ((HttpURLConnection) httpConnection).getResponseCode();
-                    }
+        } catch (Exception e2) {
+            if (httpConnectionStream != null) {
+                try {
+                    httpConnectionStream.close();
+                } catch (Exception e3) {
                 }
-                if (httpConnectionStream != null) {
-                    data = new byte[32768];
-                    while (!parentTask.isCancelled()) {
-                        read = httpConnectionStream.read(data);
-                        if (read > 0) {
-                            if (result2 == null) {
-                                result2 = new StringBuilder();
+            }
+            httpConnection = downloadUrl.openConnection();
+            httpConnection.connect();
+            httpConnectionStream = httpConnection.getInputStream();
+        } catch (Throwable e4) {
+            if (e4 instanceof SocketTimeoutException) {
+                if (ConnectionsManager.isNetworkOnline()) {
+                    canRetry = false;
+                }
+            } else if (e4 instanceof UnknownHostException) {
+                canRetry = false;
+            } else if (e4 instanceof SocketException) {
+                if (e4.getMessage() != null && e4.getMessage().contains("ECONNRESET")) {
+                    canRetry = false;
+                }
+            } else if (e4 instanceof FileNotFoundException) {
+                canRetry = false;
+            }
+            FileLog.m3e(e4);
+        }
+        if (canRetry) {
+            if (httpConnection != null) {
+                try {
+                    if (httpConnection instanceof HttpURLConnection) {
+                        int code = ((HttpURLConnection) httpConnection).getResponseCode();
+                        if (code != 200) {
+                            if (code != 202) {
                             }
-                            result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                        } else if (read == -1) {
-                            done = true;
                         }
                     }
-                }
-                if (httpConnectionStream != null) {
-                    httpConnectionStream.close();
-                }
-            }
-            if (done) {
-            }
-        }
-        if (canRetry2) {
-            if (httpConnection != null) {
-                if (httpConnection instanceof HttpURLConnection) {
-                    code = ((HttpURLConnection) httpConnection).getResponseCode();
+                } catch (Throwable e42) {
+                    FileLog.m3e(e42);
                 }
             }
             if (httpConnectionStream != null) {
-                data = new byte[32768];
-                while (!parentTask.isCancelled()) {
-                    read = httpConnectionStream.read(data);
-                    if (read > 0) {
-                        if (result2 == null) {
-                            result2 = new StringBuilder();
+                try {
+                    byte[] data = new byte[32768];
+                    StringBuilder result2 = null;
+                    while (!parentTask.isCancelled()) {
+                        try {
+                            try {
+                                int read = httpConnectionStream.read(data);
+                                if (read > 0) {
+                                    if (result2 == null) {
+                                        result = new StringBuilder();
+                                    } else {
+                                        result = result2;
+                                    }
+                                    try {
+                                        result.append(new String(data, 0, read, C0542C.UTF8_NAME));
+                                        result2 = result;
+                                    } catch (Exception e5) {
+                                        e42 = e5;
+                                    }
+                                } else if (read == -1) {
+                                    done = true;
+                                    result = result2;
+                                } else {
+                                    result = result2;
+                                }
+                            } catch (Exception e6) {
+                                e42 = e6;
+                                result = result2;
+                            }
+                        } catch (Throwable th) {
+                            e42 = th;
+                            result = result2;
                         }
-                        result2.append(new String(data, 0, read, C0542C.UTF8_NAME));
-                    } else if (read == -1) {
-                        done = true;
                     }
+                    result = result2;
+                } catch (Throwable th2) {
+                    e42 = th2;
+                    FileLog.m3e(e42);
+                    if (httpConnectionStream != null) {
+                        try {
+                            httpConnectionStream.close();
+                        } catch (Throwable e422) {
+                            FileLog.m3e(e422);
+                        }
+                    }
+                    if (done) {
+                        return null;
+                    }
+                    return result.toString();
                 }
             }
             if (httpConnectionStream != null) {
@@ -2400,25 +1633,40 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             }
         }
         if (done) {
+            return result.toString();
         }
+        return null;
+        FileLog.m3e(e422);
+        if (httpConnectionStream != null) {
+            httpConnectionStream.close();
+        }
+        if (done) {
+            return result.toString();
+        }
+        return null;
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public WebPlayerView(Context context, boolean allowInline, boolean allowShare, WebPlayerViewDelegate webPlayerViewDelegate) {
-        Context context2 = context;
+        boolean z;
         super(context);
         int i = lastContainerId;
         lastContainerId = i + 1;
         this.fragment_container_id = i;
-        r0.allowInlineAnimation = VERSION.SDK_INT >= 21;
-        r0.backgroundPaint = new Paint();
-        r0.progressRunnable = new C13361();
-        r0.surfaceTextureListener = new C13392();
-        r0.switchToInlineRunnable = new C13403();
+        if (VERSION.SDK_INT >= 21) {
+            z = true;
+        } else {
+            z = false;
+        }
+        this.allowInlineAnimation = z;
+        this.backgroundPaint = new Paint();
+        this.progressRunnable = new C13381();
+        this.surfaceTextureListener = new C13412();
+        this.switchToInlineRunnable = new C13423();
         setWillNotDraw(false);
-        r0.delegate = webPlayerViewDelegate;
-        r0.backgroundPaint.setColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
-        r0.aspectRatioFrameLayout = new AspectRatioFrameLayout(context2) {
+        this.delegate = webPlayerViewDelegate;
+        this.backgroundPaint.setColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
+        this.aspectRatioFrameLayout = new AspectRatioFrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 if (WebPlayerView.this.textureViewContainer != null) {
@@ -2433,62 +1681,62 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 }
             }
         };
-        addView(r0.aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
-        r0.interfaceName = "JavaScriptInterface";
-        r0.webView = new WebView(context2);
-        r0.webView.addJavascriptInterface(new JavaScriptInterface(new C21045()), r0.interfaceName);
-        WebSettings webSettings = r0.webView.getSettings();
+        addView(this.aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
+        this.interfaceName = "JavaScriptInterface";
+        this.webView = new WebView(context);
+        this.webView.addJavascriptInterface(new JavaScriptInterface(new C21055()), this.interfaceName);
+        WebSettings webSettings = this.webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDefaultTextEncodingName("utf-8");
-        r0.textureViewContainer = r0.delegate.getTextureViewContainer();
-        r0.textureView = new TextureView(context2);
-        r0.textureView.setPivotX(0.0f);
-        r0.textureView.setPivotY(0.0f);
-        if (r0.textureViewContainer != null) {
-            r0.textureViewContainer.addView(r0.textureView);
+        this.textureViewContainer = this.delegate.getTextureViewContainer();
+        this.textureView = new TextureView(context);
+        this.textureView.setPivotX(0.0f);
+        this.textureView.setPivotY(0.0f);
+        if (this.textureViewContainer != null) {
+            this.textureViewContainer.addView(this.textureView);
         } else {
-            r0.aspectRatioFrameLayout.addView(r0.textureView, LayoutHelper.createFrame(-1, -1, 17));
+            this.aspectRatioFrameLayout.addView(this.textureView, LayoutHelper.createFrame(-1, -1, 17));
         }
-        if (r0.allowInlineAnimation && r0.textureViewContainer != null) {
-            r0.textureImageView = new ImageView(context2);
-            r0.textureImageView.setBackgroundColor(-65536);
-            r0.textureImageView.setPivotX(0.0f);
-            r0.textureImageView.setPivotY(0.0f);
-            r0.textureImageView.setVisibility(4);
-            r0.textureViewContainer.addView(r0.textureImageView);
+        if (this.allowInlineAnimation && this.textureViewContainer != null) {
+            this.textureImageView = new ImageView(context);
+            this.textureImageView.setBackgroundColor(-65536);
+            this.textureImageView.setPivotX(0.0f);
+            this.textureImageView.setPivotY(0.0f);
+            this.textureImageView.setVisibility(4);
+            this.textureViewContainer.addView(this.textureImageView);
         }
-        r0.videoPlayer = new VideoPlayer();
-        r0.videoPlayer.setDelegate(r0);
-        r0.videoPlayer.setTextureView(r0.textureView);
-        r0.controlsView = new ControlsView(context2);
-        if (r0.textureViewContainer != null) {
-            r0.textureViewContainer.addView(r0.controlsView);
+        this.videoPlayer = new VideoPlayer();
+        this.videoPlayer.setDelegate(this);
+        this.videoPlayer.setTextureView(this.textureView);
+        this.controlsView = new ControlsView(context);
+        if (this.textureViewContainer != null) {
+            this.textureViewContainer.addView(this.controlsView);
         } else {
-            addView(r0.controlsView, LayoutHelper.createFrame(-1, -1.0f));
+            addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
         }
-        r0.progressView = new RadialProgressView(context2);
-        r0.progressView.setProgressColor(-1);
-        addView(r0.progressView, LayoutHelper.createFrame(48, 48, 17));
-        r0.fullscreenButton = new ImageView(context2);
-        r0.fullscreenButton.setScaleType(ScaleType.CENTER);
-        r0.controlsView.addView(r0.fullscreenButton, LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
-        r0.fullscreenButton.setOnClickListener(new C13416());
-        r0.playButton = new ImageView(context2);
-        r0.playButton.setScaleType(ScaleType.CENTER);
-        r0.controlsView.addView(r0.playButton, LayoutHelper.createFrame(48, 48, 17));
-        r0.playButton.setOnClickListener(new C13427());
+        this.progressView = new RadialProgressView(context);
+        this.progressView.setProgressColor(-1);
+        addView(this.progressView, LayoutHelper.createFrame(48, 48, 17));
+        this.fullscreenButton = new ImageView(context);
+        this.fullscreenButton.setScaleType(ScaleType.CENTER);
+        this.controlsView.addView(this.fullscreenButton, LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
+        this.fullscreenButton.setOnClickListener(new C13436());
+        this.playButton = new ImageView(context);
+        this.playButton.setScaleType(ScaleType.CENTER);
+        this.controlsView.addView(this.playButton, LayoutHelper.createFrame(48, 48, 17));
+        this.playButton.setOnClickListener(new C13447());
         if (allowInline) {
-            r0.inlineButton = new ImageView(context2);
-            r0.inlineButton.setScaleType(ScaleType.CENTER);
-            r0.controlsView.addView(r0.inlineButton, LayoutHelper.createFrame(56, 48, 53));
-            r0.inlineButton.setOnClickListener(new C13438());
+            this.inlineButton = new ImageView(context);
+            this.inlineButton.setScaleType(ScaleType.CENTER);
+            this.controlsView.addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
+            this.inlineButton.setOnClickListener(new C13458());
         }
         if (allowShare) {
-            r0.shareButton = new ImageView(context2);
-            r0.shareButton.setScaleType(ScaleType.CENTER);
-            r0.shareButton.setImageResource(R.drawable.ic_share_video);
-            r0.controlsView.addView(r0.shareButton, LayoutHelper.createFrame(56, 48, 53));
-            r0.shareButton.setOnClickListener(new C13449());
+            this.shareButton = new ImageView(context);
+            this.shareButton.setScaleType(ScaleType.CENTER);
+            this.shareButton.setImageResource(R.drawable.ic_share_video);
+            this.controlsView.addView(this.shareButton, LayoutHelper.createFrame(56, 48, 53));
+            this.shareButton.setOnClickListener(new C13469());
         }
         updatePlayButton();
         updateFullscreenButton();
@@ -2518,9 +1766,9 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             if (this.currentBitmap != null) {
                 this.textureImageView.setVisibility(0);
                 this.textureImageView.setImageBitmap(this.currentBitmap);
-            } else {
-                this.textureImageView.setImageDrawable(null);
+                return;
             }
+            this.textureImageView.setImageDrawable(null);
         }
     }
 
@@ -2621,9 +1869,9 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         if (this.controlsView.getParent() == this) {
             this.controlsView.layout(0, 0, this.controlsView.getMeasuredWidth(), this.controlsView.getMeasuredHeight());
         }
-        int x2 = ((r - l) - this.progressView.getMeasuredWidth()) / 2;
-        x = ((b - t) - this.progressView.getMeasuredHeight()) / 2;
-        this.progressView.layout(x2, x, this.progressView.getMeasuredWidth() + x2, this.progressView.getMeasuredHeight() + x);
+        x = ((r - l) - this.progressView.getMeasuredWidth()) / 2;
+        y = ((b - t) - this.progressView.getMeasuredHeight()) / 2;
+        this.progressView.layout(x, y, this.progressView.getMeasuredWidth() + x, this.progressView.getMeasuredHeight() + y);
         this.controlsView.imageReceiver.setImageCoords(0, 0, getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(10.0f));
     }
 
@@ -2689,33 +1937,24 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     private void updateFullscreenButton() {
-        if (this.videoPlayer.isPlayerPrepared()) {
-            if (!this.isInline) {
-                this.fullscreenButton.setVisibility(0);
-                if (this.inFullscreen) {
-                    this.fullscreenButton.setImageResource(R.drawable.ic_outfullscreen);
-                    this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 1.0f));
-                } else {
-                    this.fullscreenButton.setImageResource(R.drawable.ic_gofullscreen);
-                    this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
-                }
-                return;
-            }
+        if (!this.videoPlayer.isPlayerPrepared() || this.isInline) {
+            this.fullscreenButton.setVisibility(8);
+            return;
         }
-        this.fullscreenButton.setVisibility(8);
+        this.fullscreenButton.setVisibility(0);
+        if (this.inFullscreen) {
+            this.fullscreenButton.setImageResource(R.drawable.ic_outfullscreen);
+            this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 1.0f));
+            return;
+        }
+        this.fullscreenButton.setImageResource(R.drawable.ic_gofullscreen);
+        this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
     }
 
     private void updateShareButton() {
         if (this.shareButton != null) {
-            int i;
             ImageView imageView = this.shareButton;
-            if (!this.isInline) {
-                if (this.videoPlayer.isPlayerPrepared()) {
-                    i = 0;
-                    imageView.setVisibility(i);
-                }
-            }
-            i = 8;
+            int i = (this.isInline || !this.videoPlayer.isPlayerPrepared()) ? 8 : 0;
             imageView.setVisibility(i);
         }
     }
@@ -2774,6 +2013,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         if (this.textureView != null) {
             updateFullscreenButton();
             ViewGroup viewGroup;
+            ViewGroup parent;
             if (this.textureViewContainer == null) {
                 this.changingTextureView = true;
                 if (!this.inFullscreen) {
@@ -2789,7 +2029,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                         viewGroup.removeView(this.controlsView);
                     }
                 } else {
-                    ViewGroup parent = (ViewGroup) this.controlsView.getParent();
+                    parent = (ViewGroup) this.controlsView.getParent();
                     if (parent != this) {
                         if (parent != null) {
                             parent.removeView(this.controlsView);
@@ -2804,29 +2044,29 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
                 this.changedTextureView = this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), byButton);
                 this.changedTextureView.setVisibility(4);
                 if (this.inFullscreen && this.changedTextureView != null) {
-                    viewGroup = (ViewGroup) this.textureView.getParent();
-                    if (viewGroup != null) {
-                        viewGroup.removeView(this.textureView);
+                    parent = (ViewGroup) this.textureView.getParent();
+                    if (parent != null) {
+                        parent.removeView(this.textureView);
                     }
                 }
                 this.controlsView.checkNeedHide();
-            } else {
-                if (this.inFullscreen) {
-                    viewGroup = (ViewGroup) this.aspectRatioFrameLayout.getParent();
-                    if (viewGroup != null) {
-                        viewGroup.removeView(this.aspectRatioFrameLayout);
-                    }
-                } else {
-                    viewGroup = (ViewGroup) this.aspectRatioFrameLayout.getParent();
-                    if (viewGroup != this) {
-                        if (viewGroup != null) {
-                            viewGroup.removeView(this.aspectRatioFrameLayout);
-                        }
-                        addView(this.aspectRatioFrameLayout, 0);
-                    }
-                }
-                this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), byButton);
+                return;
             }
+            if (this.inFullscreen) {
+                viewGroup = (ViewGroup) this.aspectRatioFrameLayout.getParent();
+                if (viewGroup != null) {
+                    viewGroup.removeView(this.aspectRatioFrameLayout);
+                }
+            } else {
+                parent = (ViewGroup) this.aspectRatioFrameLayout.getParent();
+                if (parent != this) {
+                    if (parent != null) {
+                        parent.removeView(this.aspectRatioFrameLayout);
+                    }
+                    addView(this.aspectRatioFrameLayout, 0);
+                }
+            }
+            this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), byButton);
         }
     }
 
@@ -2843,12 +2083,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     public boolean isInline() {
-        if (!this.isInline) {
-            if (!this.switchingInlineMode) {
-                return false;
-            }
-        }
-        return true;
+        return this.isInline || this.switchingInlineMode;
     }
 
     public void enterFullscreen() {
@@ -2864,25 +2099,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     public boolean loadVideo(String url, Photo thumb, String originalUrl, boolean autoplay) {
-        String str;
-        Throwable e;
-        Throwable youtubeId;
-        Matcher matcher;
-        Matcher matcher2;
-        String id;
-        PhotoSize photoSize;
-        YoutubeVideoTask task;
-        VimeoVideoTask task2;
-        CoubVideoTask task3;
-        AparatVideoTask task4;
-        TwitchClipVideoTask task5;
-        TwitchStreamVideoTask task6;
-        Executor executor;
-        Void[] voidArr;
-        boolean z;
-        String str2 = url;
-        Photo photo = thumb;
-        String youtubeId2 = null;
+        String youtubeId = null;
         String vimeoId = null;
         String coubId = null;
         String twitchClipId = null;
@@ -2890,673 +2107,196 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
         String mp4File = null;
         String aparatId = null;
         this.seekToTime = -1;
-        if (str2 == null) {
-            str = null;
-        } else if (str2.endsWith(".mp4")) {
-            mp4File = str2;
-        } else {
-            String t;
-            if (originalUrl != null) {
-                try {
-                    Uri uri = Uri.parse(originalUrl);
-                    t = uri.getQueryParameter("t");
-                    if (t == null) {
-                        try {
+        if (url != null) {
+            if (url.endsWith(".mp4")) {
+                mp4File = url;
+            } else {
+                Matcher matcher;
+                String id;
+                if (originalUrl != null) {
+                    try {
+                        Uri uri = Uri.parse(originalUrl);
+                        String t = uri.getQueryParameter("t");
+                        if (t == null) {
                             t = uri.getQueryParameter("time_continue");
-                        } catch (Exception e2) {
-                            e = e2;
-                            str = null;
-                            youtubeId = e;
-                            try {
-                                FileLog.m3e(youtubeId);
-                                matcher = youtubeIdRegex.matcher(str2);
-                                t = null;
-                                if (matcher.find()) {
-                                    t = matcher.group(1);
-                                }
-                                if (t != null) {
-                                    str = t;
-                                }
-                            } catch (Throwable e3) {
-                                FileLog.m3e(e3);
-                            }
-                            youtubeId2 = str;
-                            if (youtubeId2 == null) {
-                                try {
-                                    matcher2 = vimeoIdRegex.matcher(str2);
-                                    id = null;
-                                    if (matcher2.find()) {
-                                        id = matcher2.group(3);
-                                    }
-                                    if (id != null) {
-                                        vimeoId = id;
-                                    }
-                                } catch (Throwable e32) {
-                                    FileLog.m3e(e32);
-                                }
-                            }
-                            if (vimeoId == null) {
-                                try {
-                                    matcher2 = aparatIdRegex.matcher(str2);
-                                    id = null;
-                                    if (matcher2.find()) {
-                                        id = matcher2.group(1);
-                                    }
-                                    if (id != null) {
-                                        aparatId = id;
-                                    }
-                                } catch (Throwable e322) {
-                                    FileLog.m3e(e322);
-                                }
-                            }
-                            if (aparatId == null) {
-                                try {
-                                    matcher2 = twitchClipIdRegex.matcher(str2);
-                                    id = null;
-                                    if (matcher2.find()) {
-                                        id = matcher2.group(1);
-                                    }
-                                    if (id != null) {
-                                        twitchClipId = id;
-                                    }
-                                } catch (Throwable e3222) {
-                                    FileLog.m3e(e3222);
-                                }
-                            }
-                            if (twitchClipId == null) {
-                                try {
-                                    matcher2 = twitchStreamIdRegex.matcher(str2);
-                                    id = null;
-                                    if (matcher2.find()) {
-                                        id = matcher2.group(1);
-                                    }
-                                    if (id != null) {
-                                        twitchStreamId = id;
-                                    }
-                                } catch (Throwable e32222) {
-                                    FileLog.m3e(e32222);
-                                }
-                            }
-                            if (twitchStreamId == null) {
-                                try {
-                                    matcher2 = coubIdRegex.matcher(str2);
-                                    id = null;
-                                    if (matcher2.find()) {
-                                        id = matcher2.group(1);
-                                    }
-                                    if (id != null) {
-                                        coubId = id;
-                                    }
-                                } catch (Throwable e322222) {
-                                    FileLog.m3e(e322222);
-                                }
-                            }
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = autoplay;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo == null) {
-                                photoSize = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, 80, true);
-                                if (photoSize != null) {
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo == null ? photoSize.location : null, photo == null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
-                            } else {
-                                r1.drawImage = false;
-                            }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = youtubeId2;
-                            youtubeId2 = null;
-                            if (mp4File == null) {
-                                r1.initied = true;
-                                r1.playVideoUrl = mp4File;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            } else {
-                                if (youtubeId2 == null) {
-                                    task = new YoutubeVideoTask(youtubeId2);
-                                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = task;
-                                } else if (vimeoId == null) {
-                                    task2 = new VimeoVideoTask(vimeoId);
-                                    task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = task2;
-                                } else if (coubId == null) {
-                                    task3 = new CoubVideoTask(coubId);
-                                    task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = task3;
-                                    r1.isStream = true;
-                                } else if (aparatId == null) {
-                                    task4 = new AparatVideoTask(aparatId);
-                                    task4.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = task4;
-                                } else if (twitchClipId == null) {
-                                    task5 = new TwitchClipVideoTask(str2, twitchClipId);
-                                    task5.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = task5;
-                                } else if (twitchStreamId != null) {
-                                    task6 = new TwitchStreamVideoTask(str2, twitchStreamId);
-                                    executor = AsyncTask.THREAD_POOL_EXECUTOR;
-                                    voidArr = new Void[3];
-                                    z = true;
-                                    voidArr[1] = null;
-                                    voidArr[2] = null;
-                                    task6.executeOnExecutor(executor, voidArr);
-                                    r1.currentTask = task6;
-                                    r1.isStream = true;
-                                    r1.controlsView.show(false, false);
-                                    showProgress(z, false);
-                                }
-                                z = true;
-                                r1.controlsView.show(false, false);
-                                showProgress(z, false);
-                            }
-                            if (twitchStreamId != null) {
-                                r1.controlsView.setVisibility(0);
-                                return true;
-                            }
-                            r1.controlsView.setVisibility(8);
-                            return false;
                         }
-                    }
-                    if (t == null) {
-                        str = null;
-                    } else if (t.contains("m")) {
-                        String[] args = t.split("m");
-                        str = null;
-                        try {
-                            r1.seekToTime = (Utilities.parseInt(args[0]).intValue() * 60) + Utilities.parseInt(args[1]).intValue();
-                        } catch (Exception e4) {
-                            e322222 = e4;
-                            youtubeId = e322222;
-                            FileLog.m3e(youtubeId);
-                            matcher = youtubeIdRegex.matcher(str2);
-                            t = null;
-                            if (matcher.find()) {
-                                t = matcher.group(1);
-                            }
-                            if (t != null) {
-                                str = t;
-                            }
-                            youtubeId2 = str;
-                            if (youtubeId2 == null) {
-                                matcher2 = vimeoIdRegex.matcher(str2);
-                                id = null;
-                                if (matcher2.find()) {
-                                    id = matcher2.group(3);
-                                }
-                                if (id != null) {
-                                    vimeoId = id;
-                                }
-                            }
-                            if (vimeoId == null) {
-                                matcher2 = aparatIdRegex.matcher(str2);
-                                id = null;
-                                if (matcher2.find()) {
-                                    id = matcher2.group(1);
-                                }
-                                if (id != null) {
-                                    aparatId = id;
-                                }
-                            }
-                            if (aparatId == null) {
-                                matcher2 = twitchClipIdRegex.matcher(str2);
-                                id = null;
-                                if (matcher2.find()) {
-                                    id = matcher2.group(1);
-                                }
-                                if (id != null) {
-                                    twitchClipId = id;
-                                }
-                            }
-                            if (twitchClipId == null) {
-                                matcher2 = twitchStreamIdRegex.matcher(str2);
-                                id = null;
-                                if (matcher2.find()) {
-                                    id = matcher2.group(1);
-                                }
-                                if (id != null) {
-                                    twitchStreamId = id;
-                                }
-                            }
-                            if (twitchStreamId == null) {
-                                matcher2 = coubIdRegex.matcher(str2);
-                                id = null;
-                                if (matcher2.find()) {
-                                    id = matcher2.group(1);
-                                }
-                                if (id != null) {
-                                    coubId = id;
-                                }
-                            }
-                            r1.initied = false;
-                            r1.isCompleted = false;
-                            r1.isAutoplay = autoplay;
-                            r1.playVideoUrl = null;
-                            r1.playAudioUrl = null;
-                            destroy();
-                            r1.firstFrameRendered = false;
-                            r1.currentAlpha = 1.0f;
-                            if (r1.currentTask != null) {
-                                r1.currentTask.cancel(true);
-                                r1.currentTask = null;
-                            }
-                            updateFullscreenButton();
-                            updateShareButton();
-                            updateInlineButton();
-                            updatePlayButton();
-                            if (photo == null) {
-                                r1.drawImage = false;
+                        if (t != null) {
+                            if (t.contains("m")) {
+                                String[] args = t.split("m");
+                                this.seekToTime = (Utilities.parseInt(args[0]).intValue() * 60) + Utilities.parseInt(args[1]).intValue();
                             } else {
-                                photoSize = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, 80, true);
-                                if (photoSize != null) {
-                                    if (photo == null) {
-                                    }
-                                    if (photo == null) {
-                                    }
-                                    r1.controlsView.imageReceiver.setImage(null, null, photo == null ? photoSize.location : null, photo == null ? "80_80_b" : null, 0, null, 1);
-                                    r1.drawImage = true;
-                                }
+                                this.seekToTime = Utilities.parseInt(t).intValue();
                             }
-                            if (r1.progressAnimation != null) {
-                                r1.progressAnimation.cancel();
-                                r1.progressAnimation = null;
-                            }
-                            r1.isLoading = true;
-                            r1.controlsView.setProgress(0);
-                            r1.currentYoutubeId = youtubeId2;
-                            youtubeId2 = null;
-                            if (mp4File == null) {
-                                if (youtubeId2 == null) {
-                                    task = new YoutubeVideoTask(youtubeId2);
-                                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = task;
-                                } else if (vimeoId == null) {
-                                    task2 = new VimeoVideoTask(vimeoId);
-                                    task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = task2;
-                                } else if (coubId == null) {
-                                    task3 = new CoubVideoTask(coubId);
-                                    task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = task3;
-                                    r1.isStream = true;
-                                } else if (aparatId == null) {
-                                    task4 = new AparatVideoTask(aparatId);
-                                    task4.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = task4;
-                                } else if (twitchClipId == null) {
-                                    task5 = new TwitchClipVideoTask(str2, twitchClipId);
-                                    task5.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                                    r1.currentTask = task5;
-                                } else if (twitchStreamId != null) {
-                                    task6 = new TwitchStreamVideoTask(str2, twitchStreamId);
-                                    executor = AsyncTask.THREAD_POOL_EXECUTOR;
-                                    voidArr = new Void[3];
-                                    z = true;
-                                    voidArr[1] = null;
-                                    voidArr[2] = null;
-                                    task6.executeOnExecutor(executor, voidArr);
-                                    r1.currentTask = task6;
-                                    r1.isStream = true;
-                                    r1.controlsView.show(false, false);
-                                    showProgress(z, false);
-                                }
-                                z = true;
-                                r1.controlsView.show(false, false);
-                                showProgress(z, false);
-                            } else {
-                                r1.initied = true;
-                                r1.playVideoUrl = mp4File;
-                                r1.playVideoType = "other";
-                                if (r1.isAutoplay) {
-                                    preparePlayer();
-                                }
-                                showProgress(false, false);
-                                r1.controlsView.show(true, true);
-                            }
-                            if (twitchStreamId != null) {
-                                r1.controlsView.setVisibility(8);
-                                return false;
-                            }
-                            r1.controlsView.setVisibility(0);
-                            return true;
                         }
-                    } else {
-                        str = null;
-                        r1.seekToTime = Utilities.parseInt(t).intValue();
+                    } catch (Throwable e) {
+                        FileLog.m3e(e);
                     }
-                } catch (Throwable e3222222) {
-                    str = null;
-                    youtubeId = e3222222;
-                    FileLog.m3e(youtubeId);
-                    matcher = youtubeIdRegex.matcher(str2);
-                    t = null;
+                }
+                try {
+                    matcher = youtubeIdRegex.matcher(url);
+                    id = null;
                     if (matcher.find()) {
-                        t = matcher.group(1);
+                        id = matcher.group(1);
                     }
-                    if (t != null) {
-                        str = t;
+                    if (id != null) {
+                        youtubeId = id;
                     }
-                    youtubeId2 = str;
-                    if (youtubeId2 == null) {
-                        matcher2 = vimeoIdRegex.matcher(str2);
+                } catch (Throwable e2) {
+                    FileLog.m3e(e2);
+                }
+                if (youtubeId == null) {
+                    try {
+                        matcher = vimeoIdRegex.matcher(url);
                         id = null;
-                        if (matcher2.find()) {
-                            id = matcher2.group(3);
+                        if (matcher.find()) {
+                            id = matcher.group(3);
                         }
                         if (id != null) {
                             vimeoId = id;
                         }
+                    } catch (Throwable e22) {
+                        FileLog.m3e(e22);
                     }
-                    if (vimeoId == null) {
-                        matcher2 = aparatIdRegex.matcher(str2);
+                }
+                if (vimeoId == null) {
+                    try {
+                        matcher = aparatIdRegex.matcher(url);
                         id = null;
-                        if (matcher2.find()) {
-                            id = matcher2.group(1);
+                        if (matcher.find()) {
+                            id = matcher.group(1);
                         }
                         if (id != null) {
                             aparatId = id;
                         }
+                    } catch (Throwable e222) {
+                        FileLog.m3e(e222);
                     }
-                    if (aparatId == null) {
-                        matcher2 = twitchClipIdRegex.matcher(str2);
+                }
+                if (aparatId == null) {
+                    try {
+                        matcher = twitchClipIdRegex.matcher(url);
                         id = null;
-                        if (matcher2.find()) {
-                            id = matcher2.group(1);
+                        if (matcher.find()) {
+                            id = matcher.group(1);
                         }
                         if (id != null) {
                             twitchClipId = id;
                         }
+                    } catch (Throwable e2222) {
+                        FileLog.m3e(e2222);
                     }
-                    if (twitchClipId == null) {
-                        matcher2 = twitchStreamIdRegex.matcher(str2);
+                }
+                if (twitchClipId == null) {
+                    try {
+                        matcher = twitchStreamIdRegex.matcher(url);
                         id = null;
-                        if (matcher2.find()) {
-                            id = matcher2.group(1);
+                        if (matcher.find()) {
+                            id = matcher.group(1);
                         }
                         if (id != null) {
                             twitchStreamId = id;
                         }
+                    } catch (Throwable e22222) {
+                        FileLog.m3e(e22222);
                     }
-                    if (twitchStreamId == null) {
-                        matcher2 = coubIdRegex.matcher(str2);
+                }
+                if (twitchStreamId == null) {
+                    try {
+                        matcher = coubIdRegex.matcher(url);
                         id = null;
-                        if (matcher2.find()) {
-                            id = matcher2.group(1);
+                        if (matcher.find()) {
+                            id = matcher.group(1);
                         }
                         if (id != null) {
                             coubId = id;
                         }
+                    } catch (Throwable e222222) {
+                        FileLog.m3e(e222222);
                     }
-                    r1.initied = false;
-                    r1.isCompleted = false;
-                    r1.isAutoplay = autoplay;
-                    r1.playVideoUrl = null;
-                    r1.playAudioUrl = null;
-                    destroy();
-                    r1.firstFrameRendered = false;
-                    r1.currentAlpha = 1.0f;
-                    if (r1.currentTask != null) {
-                        r1.currentTask.cancel(true);
-                        r1.currentTask = null;
-                    }
-                    updateFullscreenButton();
-                    updateShareButton();
-                    updateInlineButton();
-                    updatePlayButton();
-                    if (photo == null) {
-                        r1.drawImage = false;
-                    } else {
-                        photoSize = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, 80, true);
-                        if (photoSize != null) {
-                            if (photo == null) {
-                            }
-                            if (photo == null) {
-                            }
-                            r1.controlsView.imageReceiver.setImage(null, null, photo == null ? photoSize.location : null, photo == null ? "80_80_b" : null, 0, null, 1);
-                            r1.drawImage = true;
-                        }
-                    }
-                    if (r1.progressAnimation != null) {
-                        r1.progressAnimation.cancel();
-                        r1.progressAnimation = null;
-                    }
-                    r1.isLoading = true;
-                    r1.controlsView.setProgress(0);
-                    r1.currentYoutubeId = youtubeId2;
-                    youtubeId2 = null;
-                    if (mp4File == null) {
-                        if (youtubeId2 == null) {
-                            task = new YoutubeVideoTask(youtubeId2);
-                            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = task;
-                        } else if (vimeoId == null) {
-                            task2 = new VimeoVideoTask(vimeoId);
-                            task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = task2;
-                        } else if (coubId == null) {
-                            task3 = new CoubVideoTask(coubId);
-                            task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = task3;
-                            r1.isStream = true;
-                        } else if (aparatId == null) {
-                            task4 = new AparatVideoTask(aparatId);
-                            task4.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = task4;
-                        } else if (twitchClipId == null) {
-                            task5 = new TwitchClipVideoTask(str2, twitchClipId);
-                            task5.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                            r1.currentTask = task5;
-                        } else if (twitchStreamId != null) {
-                            task6 = new TwitchStreamVideoTask(str2, twitchStreamId);
-                            executor = AsyncTask.THREAD_POOL_EXECUTOR;
-                            voidArr = new Void[3];
-                            z = true;
-                            voidArr[1] = null;
-                            voidArr[2] = null;
-                            task6.executeOnExecutor(executor, voidArr);
-                            r1.currentTask = task6;
-                            r1.isStream = true;
-                            r1.controlsView.show(false, false);
-                            showProgress(z, false);
-                        }
-                        z = true;
-                        r1.controlsView.show(false, false);
-                        showProgress(z, false);
-                    } else {
-                        r1.initied = true;
-                        r1.playVideoUrl = mp4File;
-                        r1.playVideoType = "other";
-                        if (r1.isAutoplay) {
-                            preparePlayer();
-                        }
-                        showProgress(false, false);
-                        r1.controlsView.show(true, true);
-                    }
-                    if (twitchStreamId != null) {
-                        r1.controlsView.setVisibility(8);
-                        return false;
-                    }
-                    r1.controlsView.setVisibility(0);
-                    return true;
-                }
-            }
-            str = null;
-            matcher = youtubeIdRegex.matcher(str2);
-            t = null;
-            if (matcher.find()) {
-                t = matcher.group(1);
-            }
-            if (t != null) {
-                str = t;
-            }
-            youtubeId2 = str;
-            if (youtubeId2 == null) {
-                matcher2 = vimeoIdRegex.matcher(str2);
-                id = null;
-                if (matcher2.find()) {
-                    id = matcher2.group(3);
-                }
-                if (id != null) {
-                    vimeoId = id;
-                }
-            }
-            if (vimeoId == null) {
-                matcher2 = aparatIdRegex.matcher(str2);
-                id = null;
-                if (matcher2.find()) {
-                    id = matcher2.group(1);
-                }
-                if (id != null) {
-                    aparatId = id;
-                }
-            }
-            if (aparatId == null) {
-                matcher2 = twitchClipIdRegex.matcher(str2);
-                id = null;
-                if (matcher2.find()) {
-                    id = matcher2.group(1);
-                }
-                if (id != null) {
-                    twitchClipId = id;
-                }
-            }
-            if (twitchClipId == null) {
-                matcher2 = twitchStreamIdRegex.matcher(str2);
-                id = null;
-                if (matcher2.find()) {
-                    id = matcher2.group(1);
-                }
-                if (id != null) {
-                    twitchStreamId = id;
-                }
-            }
-            if (twitchStreamId == null) {
-                matcher2 = coubIdRegex.matcher(str2);
-                id = null;
-                if (matcher2.find()) {
-                    id = matcher2.group(1);
-                }
-                if (id != null) {
-                    coubId = id;
                 }
             }
         }
-        r1.initied = false;
-        r1.isCompleted = false;
-        r1.isAutoplay = autoplay;
-        r1.playVideoUrl = null;
-        r1.playAudioUrl = null;
+        this.initied = false;
+        this.isCompleted = false;
+        this.isAutoplay = autoplay;
+        this.playVideoUrl = null;
+        this.playAudioUrl = null;
         destroy();
-        r1.firstFrameRendered = false;
-        r1.currentAlpha = 1.0f;
-        if (r1.currentTask != null) {
-            r1.currentTask.cancel(true);
-            r1.currentTask = null;
+        this.firstFrameRendered = false;
+        this.currentAlpha = 1.0f;
+        if (this.currentTask != null) {
+            this.currentTask.cancel(true);
+            this.currentTask = null;
         }
         updateFullscreenButton();
         updateShareButton();
         updateInlineButton();
         updatePlayButton();
-        if (photo == null) {
-            photoSize = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, 80, true);
+        if (thumb != null) {
+            PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(thumb.sizes, 80, true);
             if (photoSize != null) {
-                if (photo == null) {
-                }
-                if (photo == null) {
-                }
-                r1.controlsView.imageReceiver.setImage(null, null, photo == null ? photoSize.location : null, photo == null ? "80_80_b" : null, 0, null, 1);
-                r1.drawImage = true;
+                this.controlsView.imageReceiver.setImage(null, null, thumb != null ? photoSize.location : null, thumb != null ? "80_80_b" : null, 0, null, 1);
+                this.drawImage = true;
             }
         } else {
-            r1.drawImage = false;
+            this.drawImage = false;
         }
-        if (r1.progressAnimation != null) {
-            r1.progressAnimation.cancel();
-            r1.progressAnimation = null;
+        if (this.progressAnimation != null) {
+            this.progressAnimation.cancel();
+            this.progressAnimation = null;
         }
-        r1.isLoading = true;
-        r1.controlsView.setProgress(0);
-        if (!(youtubeId2 == null || BuildVars.DEBUG_PRIVATE_VERSION)) {
-            r1.currentYoutubeId = youtubeId2;
-            youtubeId2 = null;
+        this.isLoading = true;
+        this.controlsView.setProgress(0);
+        if (!(youtubeId == null || BuildVars.DEBUG_PRIVATE_VERSION)) {
+            this.currentYoutubeId = youtubeId;
+            youtubeId = null;
         }
-        if (mp4File == null) {
-            r1.initied = true;
-            r1.playVideoUrl = mp4File;
-            r1.playVideoType = "other";
-            if (r1.isAutoplay) {
+        if (mp4File != null) {
+            this.initied = true;
+            this.playVideoUrl = mp4File;
+            this.playVideoType = "other";
+            if (this.isAutoplay) {
                 preparePlayer();
             }
             showProgress(false, false);
-            r1.controlsView.show(true, true);
+            this.controlsView.show(true, true);
         } else {
-            if (youtubeId2 == null) {
-                task = new YoutubeVideoTask(youtubeId2);
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                r1.currentTask = task;
-            } else if (vimeoId == null) {
-                task2 = new VimeoVideoTask(vimeoId);
-                task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                r1.currentTask = task2;
-            } else if (coubId == null) {
-                task3 = new CoubVideoTask(coubId);
-                task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                r1.currentTask = task3;
-                r1.isStream = true;
-            } else if (aparatId == null) {
-                task4 = new AparatVideoTask(aparatId);
-                task4.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                r1.currentTask = task4;
-            } else if (twitchClipId == null) {
-                task5 = new TwitchClipVideoTask(str2, twitchClipId);
-                task5.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-                r1.currentTask = task5;
+            AsyncTask youtubeVideoTask;
+            if (youtubeId != null) {
+                youtubeVideoTask = new YoutubeVideoTask(youtubeId);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
+            } else if (vimeoId != null) {
+                youtubeVideoTask = new VimeoVideoTask(vimeoId);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
+            } else if (coubId != null) {
+                youtubeVideoTask = new CoubVideoTask(coubId);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
+                this.isStream = true;
+            } else if (aparatId != null) {
+                youtubeVideoTask = new AparatVideoTask(aparatId);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
+            } else if (twitchClipId != null) {
+                youtubeVideoTask = new TwitchClipVideoTask(url, twitchClipId);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
             } else if (twitchStreamId != null) {
-                task6 = new TwitchStreamVideoTask(str2, twitchStreamId);
-                executor = AsyncTask.THREAD_POOL_EXECUTOR;
-                voidArr = new Void[3];
-                z = true;
-                voidArr[1] = null;
-                voidArr[2] = null;
-                task6.executeOnExecutor(executor, voidArr);
-                r1.currentTask = task6;
-                r1.isStream = true;
-                r1.controlsView.show(false, false);
-                showProgress(z, false);
+                youtubeVideoTask = new TwitchStreamVideoTask(url, twitchStreamId);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
+                this.isStream = true;
             }
-            z = true;
-            r1.controlsView.show(false, false);
-            showProgress(z, false);
+            this.controlsView.show(false, false);
+            showProgress(true, false);
         }
-        if (youtubeId2 == null && vimeoId == null && coubId == null && aparatId == null && mp4File == null && twitchClipId == null) {
-            if (twitchStreamId != null) {
-                r1.controlsView.setVisibility(8);
-                return false;
-            }
+        if (youtubeId == null && vimeoId == null && coubId == null && aparatId == null && mp4File == null && twitchClipId == null && twitchStreamId == null) {
+            this.controlsView.setVisibility(8);
+            return false;
         }
-        r1.controlsView.setVisibility(0);
+        this.controlsView.setVisibility(0);
         return true;
     }
 
@@ -3586,7 +2326,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     private void showProgress(boolean show, boolean animated) {
-        float f = 0.0f;
+        float f = 1.0f;
         if (animated) {
             if (this.progressAnimation != null) {
                 this.progressAnimation.cancel();
@@ -3597,8 +2337,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             RadialProgressView radialProgressView = this.progressView;
             String str = "alpha";
             float[] fArr = new float[1];
-            if (show) {
-                f = 1.0f;
+            if (!show) {
+                f = 0.0f;
             }
             fArr[0] = f;
             animatorArr[0] = ObjectAnimator.ofFloat(radialProgressView, str, fArr);
@@ -3613,8 +2353,8 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
             return;
         }
         RadialProgressView radialProgressView2 = this.progressView;
-        if (show) {
-            f = 1.0f;
+        if (!show) {
+            f = 0.0f;
         }
         radialProgressView2.setAlpha(f);
     }

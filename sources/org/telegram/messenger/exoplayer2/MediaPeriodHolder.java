@@ -49,7 +49,7 @@ final class MediaPeriodHolder {
     }
 
     public long toRendererTime(long periodTimeUs) {
-        return periodTimeUs + getRendererOffset();
+        return getRendererOffset() + periodTimeUs;
     }
 
     public long toPeriodTime(long rendererTimeUs) {
@@ -73,8 +73,7 @@ final class MediaPeriodHolder {
             return this.info.startPositionUs;
         }
         long bufferedPositionUs = this.mediaPeriod.getBufferedPositionUs();
-        long j = (bufferedPositionUs == Long.MIN_VALUE && convertEosToDuration) ? this.info.durationUs : bufferedPositionUs;
-        return j;
+        return (bufferedPositionUs == Long.MIN_VALUE && convertEosToDuration) ? this.info.durationUs : bufferedPositionUs;
     }
 
     public long getNextLoadPositionUs() {
@@ -101,8 +100,8 @@ final class MediaPeriodHolder {
     }
 
     public boolean selectTracks(float playbackSpeed) throws ExoPlaybackException {
-        TrackSelectorResult selectorResult = this.trackSelector.selectTracks(this.rendererCapabilities, this.mediaPeriod.getTrackGroups());
         int i = 0;
+        TrackSelectorResult selectorResult = this.trackSelector.selectTracks(this.rendererCapabilities, this.mediaPeriod.getTrackGroups());
         if (selectorResult.isEquivalent(this.periodTrackSelectorResult)) {
             return false;
         }
@@ -126,34 +125,33 @@ final class MediaPeriodHolder {
     public long applyTrackSelection(long positionUs, boolean forceRecreateStreams, boolean[] streamResetFlags) {
         TrackSelectionArray trackSelections = this.trackSelectorResult.selections;
         int i = 0;
-        while (true) {
-            boolean z = true;
-            if (i >= trackSelections.length) {
-                break;
-            }
-            boolean[] zArr = r0.mayRetainStreamFlags;
-            if (forceRecreateStreams || !r0.trackSelectorResult.isEquivalent(r0.periodTrackSelectorResult, i)) {
+        while (i < trackSelections.length) {
+            boolean z;
+            boolean[] zArr = this.mayRetainStreamFlags;
+            if (forceRecreateStreams || !this.trackSelectorResult.isEquivalent(this.periodTrackSelectorResult, i)) {
                 z = false;
+            } else {
+                z = true;
             }
             zArr[i] = z;
             i++;
         }
-        disassociateNoSampleRenderersWithEmptySampleStream(r0.sampleStreams);
-        updatePeriodTrackSelectorResult(r0.trackSelectorResult);
-        long positionUs2 = r0.mediaPeriod.selectTracks(trackSelections.getAll(), r0.mayRetainStreamFlags, r0.sampleStreams, streamResetFlags, positionUs);
-        associateNoSampleRenderersWithEmptySampleStream(r0.sampleStreams);
-        r0.hasEnabledTracks = false;
-        for (int i2 = 0; i2 < r0.sampleStreams.length; i2++) {
-            if (r0.sampleStreams[i2] != null) {
-                Assertions.checkState(r0.trackSelectorResult.renderersEnabled[i2]);
-                if (r0.rendererCapabilities[i2].getTrackType() != 5) {
-                    r0.hasEnabledTracks = true;
+        disassociateNoSampleRenderersWithEmptySampleStream(this.sampleStreams);
+        updatePeriodTrackSelectorResult(this.trackSelectorResult);
+        positionUs = this.mediaPeriod.selectTracks(trackSelections.getAll(), this.mayRetainStreamFlags, this.sampleStreams, streamResetFlags, positionUs);
+        associateNoSampleRenderersWithEmptySampleStream(this.sampleStreams);
+        this.hasEnabledTracks = false;
+        for (i = 0; i < this.sampleStreams.length; i++) {
+            if (this.sampleStreams[i] != null) {
+                Assertions.checkState(this.trackSelectorResult.renderersEnabled[i]);
+                if (this.rendererCapabilities[i].getTrackType() != 5) {
+                    this.hasEnabledTracks = true;
                 }
             } else {
-                Assertions.checkState(trackSelections.get(i2) == null);
+                Assertions.checkState(trackSelections.get(i) == null);
             }
         }
-        return positionUs2;
+        return positionUs;
     }
 
     public void release() {

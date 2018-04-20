@@ -28,8 +28,8 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     private boolean zoomOnSelect;
 
     /* renamed from: org.telegram.ui.Cells.PhotoPickerPhotoCell$1 */
-    class C08891 extends AnimatorListenerAdapter {
-        C08891() {
+    class C08901 extends AnimatorListenerAdapter {
+        C08901() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -70,6 +70,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     }
 
     public void showCheck(boolean show) {
+        float f = 1.0f;
         if (this.animatorSet != null) {
             this.animatorSet.cancel();
             this.animatorSet = null;
@@ -82,19 +83,18 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         FrameLayout frameLayout = this.videoInfoContainer;
         String str = "alpha";
         float[] fArr = new float[1];
-        float f = 0.0f;
         fArr[0] = show ? 1.0f : 0.0f;
         animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
         CheckBox checkBox = this.checkBox;
-        str = "alpha";
-        fArr = new float[1];
-        if (show) {
-            f = 1.0f;
+        String str2 = "alpha";
+        float[] fArr2 = new float[1];
+        if (!show) {
+            f = 0.0f;
         }
-        fArr[0] = f;
-        animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str, fArr);
+        fArr2[0] = f;
+        animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str2, fArr2);
         animatorSet.playTogether(animatorArr);
-        this.animatorSet.addListener(new C08891());
+        this.animatorSet.addListener(new C08901());
         this.animatorSet.start();
     }
 
@@ -103,65 +103,73 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     }
 
     public void setChecked(int num, final boolean checked, boolean animated) {
+        int i = -16119286;
+        float f = 0.85f;
         this.checkBox.setChecked(num, checked, animated);
         if (this.animator != null) {
             this.animator.cancel();
             this.animator = null;
         }
-        if (this.zoomOnSelect) {
-            int i = -16119286;
-            float f = 1.0f;
-            if (animated) {
-                if (checked) {
-                    setBackgroundColor(-16119286);
-                }
-                this.animator = new AnimatorSet();
-                AnimatorSet animatorSet = this.animator;
-                Animator[] animatorArr = new Animator[2];
-                BackupImageView backupImageView = this.photoImage;
-                String str = "scaleX";
-                float[] fArr = new float[1];
-                fArr[0] = checked ? 0.85f : 1.0f;
-                animatorArr[0] = ObjectAnimator.ofFloat(backupImageView, str, fArr);
-                backupImageView = this.photoImage;
-                str = "scaleY";
-                fArr = new float[1];
-                if (checked) {
-                    f = 0.85f;
-                }
-                fArr[0] = f;
-                animatorArr[1] = ObjectAnimator.ofFloat(backupImageView, str, fArr);
-                animatorSet.playTogether(animatorArr);
-                this.animator.setDuration(200);
-                this.animator.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        if (PhotoPickerPhotoCell.this.animator != null && PhotoPickerPhotoCell.this.animator.equals(animation)) {
-                            PhotoPickerPhotoCell.this.animator = null;
-                            if (!checked) {
-                                PhotoPickerPhotoCell.this.setBackgroundColor(0);
-                            }
-                        }
-                    }
-
-                    public void onAnimationCancel(Animator animation) {
-                        if (PhotoPickerPhotoCell.this.animator != null && PhotoPickerPhotoCell.this.animator.equals(animation)) {
-                            PhotoPickerPhotoCell.this.animator = null;
-                        }
-                    }
-                });
-                this.animator.start();
-                return;
-            }
-            if (!checked) {
-                i = 0;
-            }
-            setBackgroundColor(i);
-            this.photoImage.setScaleX(checked ? 0.85f : 1.0f);
-            BackupImageView backupImageView2 = this.photoImage;
-            if (checked) {
-                f = 0.85f;
-            }
-            backupImageView2.setScaleY(f);
+        if (!this.zoomOnSelect) {
+            return;
         }
+        if (animated) {
+            if (checked) {
+                setBackgroundColor(-16119286);
+            }
+            this.animator = new AnimatorSet();
+            AnimatorSet animatorSet = this.animator;
+            Animator[] animatorArr = new Animator[2];
+            BackupImageView backupImageView = this.photoImage;
+            String str = "scaleX";
+            float[] fArr = new float[1];
+            fArr[0] = checked ? 0.85f : 1.0f;
+            animatorArr[0] = ObjectAnimator.ofFloat(backupImageView, str, fArr);
+            BackupImageView backupImageView2 = this.photoImage;
+            String str2 = "scaleY";
+            float[] fArr2 = new float[1];
+            if (!checked) {
+                f = 1.0f;
+            }
+            fArr2[0] = f;
+            animatorArr[1] = ObjectAnimator.ofFloat(backupImageView2, str2, fArr2);
+            animatorSet.playTogether(animatorArr);
+            this.animator.setDuration(200);
+            this.animator.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    if (PhotoPickerPhotoCell.this.animator != null && PhotoPickerPhotoCell.this.animator.equals(animation)) {
+                        PhotoPickerPhotoCell.this.animator = null;
+                        if (!checked) {
+                            PhotoPickerPhotoCell.this.setBackgroundColor(0);
+                        }
+                    }
+                }
+
+                public void onAnimationCancel(Animator animation) {
+                    if (PhotoPickerPhotoCell.this.animator != null && PhotoPickerPhotoCell.this.animator.equals(animation)) {
+                        PhotoPickerPhotoCell.this.animator = null;
+                    }
+                }
+            });
+            this.animator.start();
+            return;
+        }
+        float f2;
+        if (!checked) {
+            i = 0;
+        }
+        setBackgroundColor(i);
+        BackupImageView backupImageView3 = this.photoImage;
+        if (checked) {
+            f2 = 0.85f;
+        } else {
+            f2 = 1.0f;
+        }
+        backupImageView3.setScaleX(f2);
+        backupImageView2 = this.photoImage;
+        if (!checked) {
+            f = 1.0f;
+        }
+        backupImageView2.setScaleY(f);
     }
 }

@@ -29,7 +29,6 @@ public final class DashUtil {
     }
 
     public static DrmInitData loadDrmInitData(DataSource dataSource, Period period) throws IOException, InterruptedException {
-        DrmInitData drmInitData;
         int primaryTrackType = 2;
         Representation representation = getFirstRepresentation(period, 2);
         if (representation == null) {
@@ -42,11 +41,9 @@ public final class DashUtil {
         Format manifestFormat = representation.format;
         Format sampleFormat = loadSampleFormat(dataSource, primaryTrackType, representation);
         if (sampleFormat == null) {
-            drmInitData = manifestFormat.drmInitData;
-        } else {
-            drmInitData = sampleFormat.copyWithManifestFormatInfo(manifestFormat).drmInitData;
+            return manifestFormat.drmInitData;
         }
-        return drmInitData;
+        return sampleFormat.copyWithManifestFormatInfo(manifestFormat).drmInitData;
     }
 
     public static Format loadSampleFormat(DataSource dataSource, int trackType, Representation representation) throws IOException, InterruptedException {
@@ -88,31 +85,18 @@ public final class DashUtil {
     }
 
     private static ChunkExtractorWrapper newWrappedExtractor(int trackType, Format format) {
-        boolean isWebm;
         String mimeType = format.containerMimeType;
-        if (!mimeType.startsWith(MimeTypes.VIDEO_WEBM)) {
-            if (!mimeType.startsWith(MimeTypes.AUDIO_WEBM)) {
-                isWebm = false;
-                return new ChunkExtractorWrapper(isWebm ? new MatroskaExtractor() : new FragmentedMp4Extractor(), trackType, format);
-            }
-        }
-        isWebm = true;
-        if (isWebm) {
-        }
+        boolean isWebm = mimeType.startsWith(MimeTypes.VIDEO_WEBM) || mimeType.startsWith(MimeTypes.AUDIO_WEBM);
         return new ChunkExtractorWrapper(isWebm ? new MatroskaExtractor() : new FragmentedMp4Extractor(), trackType, format);
     }
 
     private static Representation getFirstRepresentation(Period period, int type) {
         int index = period.getAdaptationSetIndex(type);
-        Representation representation = null;
         if (index == -1) {
             return null;
         }
         List<Representation> representations = ((AdaptationSet) period.adaptationSets.get(index)).representations;
-        if (!representations.isEmpty()) {
-            representation = (Representation) representations.get(0);
-        }
-        return representation;
+        return representations.isEmpty() ? null : (Representation) representations.get(0);
     }
 
     private DashUtil() {

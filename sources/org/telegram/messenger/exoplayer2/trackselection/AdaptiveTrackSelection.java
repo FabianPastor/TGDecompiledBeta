@@ -75,8 +75,8 @@ public class AdaptiveTrackSelection extends BaseTrackSelection {
         super(group, tracks);
         this.bandwidthMeter = bandwidthMeter;
         this.maxInitialBitrate = maxInitialBitrate;
-        this.minDurationForQualityIncreaseUs = minDurationForQualityIncreaseMs * 1000;
-        this.maxDurationForQualityDecreaseUs = maxDurationForQualityDecreaseMs * 1000;
+        this.minDurationForQualityIncreaseUs = 1000 * minDurationForQualityIncreaseMs;
+        this.maxDurationForQualityDecreaseUs = 1000 * maxDurationForQualityDecreaseMs;
         this.minDurationToRetainAfterDiscardUs = 1000 * minDurationToRetainAfterDiscardMs;
         this.bandwidthFraction = bandwidthFraction;
         this.bufferedFractionToLiveEdgeForQualityIncrease = bufferedFractionToLiveEdgeForQualityIncrease;
@@ -129,42 +129,26 @@ public class AdaptiveTrackSelection extends BaseTrackSelection {
     }
 
     public int evaluateQueueSize(long playbackPositionUs, List<? extends MediaChunk> queue) {
-        List list = queue;
         long nowMs = this.clock.elapsedRealtime();
-        if (this.lastBufferEvaluationMs != C0542C.TIME_UNSET && nowMs - r0.lastBufferEvaluationMs < r0.minTimeBetweenBufferReevaluationMs) {
+        if (this.lastBufferEvaluationMs != C0542C.TIME_UNSET && nowMs - this.lastBufferEvaluationMs < this.minTimeBetweenBufferReevaluationMs) {
             return queue.size();
         }
-        r0.lastBufferEvaluationMs = nowMs;
-        int i = 0;
+        this.lastBufferEvaluationMs = nowMs;
         if (queue.isEmpty()) {
             return 0;
         }
         int queueSize = queue.size();
-        MediaChunk lastChunk = (MediaChunk) list.get(queueSize - 1);
-        long playoutBufferedDurationBeforeLastChunkUs = Util.getPlayoutDurationForMediaDuration(lastChunk.startTimeUs - playbackPositionUs, r0.playbackSpeed);
-        if (playoutBufferedDurationBeforeLastChunkUs < r0.minDurationToRetainAfterDiscardUs) {
+        if (Util.getPlayoutDurationForMediaDuration(((MediaChunk) queue.get(queueSize - 1)).startTimeUs - playbackPositionUs, this.playbackSpeed) < this.minDurationToRetainAfterDiscardUs) {
             return queueSize;
         }
-        MediaChunk lastChunk2;
-        long playoutBufferedDurationBeforeLastChunkUs2;
         Format idealFormat = getFormat(determineIdealSelectedIndex(nowMs));
-        while (i < queueSize) {
-            MediaChunk chunk = (MediaChunk) list.get(i);
+        for (int i = 0; i < queueSize; i++) {
+            MediaChunk chunk = (MediaChunk) queue.get(i);
             Format format = chunk.trackFormat;
-            long nowMs2 = nowMs;
-            lastChunk2 = lastChunk;
-            playoutBufferedDurationBeforeLastChunkUs2 = playoutBufferedDurationBeforeLastChunkUs;
-            if (Util.getPlayoutDurationForMediaDuration(chunk.startTimeUs - playbackPositionUs, r0.playbackSpeed) >= r0.minDurationToRetainAfterDiscardUs && format.bitrate < idealFormat.bitrate && format.height != -1 && format.height < 720 && format.width != -1 && format.width < 1280 && format.height < idealFormat.height) {
+            if (Util.getPlayoutDurationForMediaDuration(chunk.startTimeUs - playbackPositionUs, this.playbackSpeed) >= this.minDurationToRetainAfterDiscardUs && format.bitrate < idealFormat.bitrate && format.height != -1 && format.height < 720 && format.width != -1 && format.width < 1280 && format.height < idealFormat.height) {
                 return i;
             }
-            i++;
-            nowMs = nowMs2;
-            lastChunk = lastChunk2;
-            playoutBufferedDurationBeforeLastChunkUs = playoutBufferedDurationBeforeLastChunkUs2;
-            List<? extends MediaChunk> list2 = queue;
         }
-        lastChunk2 = lastChunk;
-        playoutBufferedDurationBeforeLastChunkUs2 = playoutBufferedDurationBeforeLastChunkUs;
         return queueSize;
     }
 

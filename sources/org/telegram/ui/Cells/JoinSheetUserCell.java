@@ -54,11 +54,7 @@ public class JoinSheetUserCell extends FrameLayout {
 
     public void setCount(int count) {
         this.nameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
-        AvatarDrawable avatarDrawable = this.avatarDrawable;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("+");
-        stringBuilder.append(LocaleController.formatShortNumber(count, this.result));
-        avatarDrawable.setInfo(0, null, null, false, stringBuilder.toString());
+        this.avatarDrawable.setInfo(0, null, null, false, "+" + LocaleController.formatShortNumber(count, this.result));
         this.imageView.setImage((FileLocation) null, "50_50", this.avatarDrawable);
     }
 }

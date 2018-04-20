@@ -22,19 +22,14 @@ public class CubicBezierInterpolator implements Interpolator {
         this.f15a = new PointF();
         this.f16b = new PointF();
         this.f17c = new PointF();
-        if (start.x >= 0.0f) {
-            if (start.x <= 1.0f) {
-                if (end.x >= 0.0f) {
-                    if (end.x <= 1.0f) {
-                        this.start = start;
-                        this.end = end;
-                        return;
-                    }
-                }
-                throw new IllegalArgumentException("endX value must be in the range [0, 1]");
-            }
+        if (start.x < 0.0f || start.x > 1.0f) {
+            throw new IllegalArgumentException("startX value must be in the range [0, 1]");
+        } else if (end.x < 0.0f || end.x > 1.0f) {
+            throw new IllegalArgumentException("endX value must be in the range [0, 1]");
+        } else {
+            this.start = start;
+            this.end = end;
         }
-        throw new IllegalArgumentException("startX value must be in the range [0, 1]");
     }
 
     public CubicBezierInterpolator(float startX, float startY, float endX, float endY) {
@@ -51,7 +46,7 @@ public class CubicBezierInterpolator implements Interpolator {
 
     protected float getBezierCoordinateY(float time) {
         this.f17c.y = this.start.y * 3.0f;
-        this.f16b.y = (3.0f * (this.end.y - this.start.y)) - this.f17c.y;
+        this.f16b.y = ((this.end.y - this.start.y) * 3.0f) - this.f17c.y;
         this.f15a.y = (1.0f - this.f17c.y) - this.f16b.y;
         return (this.f17c.y + ((this.f16b.y + (this.f15a.y * time)) * time)) * time;
     }
@@ -74,7 +69,7 @@ public class CubicBezierInterpolator implements Interpolator {
 
     private float getBezierCoordinateX(float time) {
         this.f17c.x = this.start.x * 3.0f;
-        this.f16b.x = (3.0f * (this.end.x - this.start.x)) - this.f17c.x;
+        this.f16b.x = ((this.end.x - this.start.x) * 3.0f) - this.f17c.x;
         this.f15a.x = (1.0f - this.f17c.x) - this.f16b.x;
         return (this.f17c.x + ((this.f16b.x + (this.f15a.x * time)) * time)) * time;
     }

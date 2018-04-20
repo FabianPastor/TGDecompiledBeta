@@ -140,14 +140,17 @@ public class SharedConfig {
     }
 
     public static boolean checkPasscode(String passcode) {
+        boolean result = false;
+        byte[] passcodeBytes;
+        byte[] bytes;
         if (passcodeSalt.length == 0) {
-            boolean result = Utilities.MD5(passcode).equals(passcodeHash);
+            result = Utilities.MD5(passcode).equals(passcodeHash);
             if (result) {
                 try {
                     passcodeSalt = new byte[16];
                     Utilities.random.nextBytes(passcodeSalt);
-                    byte[] passcodeBytes = passcode.getBytes(C0542C.UTF8_NAME);
-                    byte[] bytes = new byte[(32 + passcodeBytes.length)];
+                    passcodeBytes = passcode.getBytes(C0542C.UTF8_NAME);
+                    bytes = new byte[(passcodeBytes.length + 32)];
                     System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                     System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
                     System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
@@ -157,19 +160,19 @@ public class SharedConfig {
                     FileLog.m3e(e);
                 }
             }
-            return result;
+        } else {
+            try {
+                passcodeBytes = passcode.getBytes(C0542C.UTF8_NAME);
+                bytes = new byte[(passcodeBytes.length + 32)];
+                System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
+                System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
+                System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
+                result = passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length)));
+            } catch (Throwable e2) {
+                FileLog.m3e(e2);
+            }
         }
-        try {
-            byte[] passcodeBytes2 = passcode.getBytes(C0542C.UTF8_NAME);
-            bytes = new byte[(32 + passcodeBytes2.length)];
-            System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
-            System.arraycopy(passcodeBytes2, 0, bytes, 16, passcodeBytes2.length);
-            System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes2.length + 16, 16);
-            return passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length)));
-        } catch (Throwable e2) {
-            FileLog.m3e(e2);
-            return false;
-        }
+        return result;
     }
 
     public static void clearConfig() {
@@ -195,10 +198,17 @@ public class SharedConfig {
     }
 
     public static void toggleShuffleMusic(int type) {
+        boolean z = true;
         if (type == 2) {
-            shuffleMusic ^= 1;
+            if (shuffleMusic) {
+                z = false;
+            }
+            shuffleMusic = z;
         } else {
-            playOrderReversed ^= 1;
+            if (playOrderReversed) {
+                z = false;
+            }
+            playOrderReversed = z;
         }
         MediaController.getInstance().checkIsNextMediaFileDownloaded();
         Editor editor = MessagesController.getGlobalMainSettings().edit();
@@ -218,7 +228,7 @@ public class SharedConfig {
     }
 
     public static void toggleSaveToGallery() {
-        saveToGallery ^= 1;
+        saveToGallery = !saveToGallery;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("save_gallery", saveToGallery);
         editor.commit();
@@ -226,70 +236,70 @@ public class SharedConfig {
     }
 
     public static void toggleAutoplayGifs() {
-        autoplayGifs ^= 1;
+        autoplayGifs = !autoplayGifs;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("autoplay_gif", autoplayGifs);
         editor.commit();
     }
 
     public static void toogleRaiseToSpeak() {
-        raiseToSpeak ^= 1;
+        raiseToSpeak = !raiseToSpeak;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("raise_to_speak", raiseToSpeak);
         editor.commit();
     }
 
     public static void toggleCustomTabs() {
-        customTabs ^= 1;
+        customTabs = !customTabs;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("custom_tabs", customTabs);
         editor.commit();
     }
 
     public static void toggleDirectShare() {
-        directShare ^= 1;
+        directShare = !directShare;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("direct_share", directShare);
         editor.commit();
     }
 
     public static void toggleStreamMedia() {
-        streamMedia ^= 1;
+        streamMedia = !streamMedia;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("streamMedia", streamMedia);
         editor.commit();
     }
 
     public static void toggleStreamAllVideo() {
-        streamAllVideo ^= 1;
+        streamAllVideo = !streamAllVideo;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("streamAllVideo", streamAllVideo);
         editor.commit();
     }
 
     public static void toggleSaveStreamMedia() {
-        saveStreamMedia ^= 1;
+        saveStreamMedia = !saveStreamMedia;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("saveStreamMedia", saveStreamMedia);
         editor.commit();
     }
 
     public static void toggleInappCamera() {
-        inappCamera ^= 1;
+        inappCamera = !inappCamera;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("direct_share", inappCamera);
         editor.commit();
     }
 
     public static void toggleRoundCamera16to9() {
-        roundCamera16to9 ^= 1;
+        roundCamera16to9 = !roundCamera16to9;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("roundCamera16to9", roundCamera16to9);
         editor.commit();
     }
 
     public static void toggleGroupPhotosEnabled() {
-        groupPhotosEnabled ^= 1;
+        groupPhotosEnabled = !groupPhotosEnabled;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("groupPhotosEnabled", groupPhotosEnabled);
         editor.commit();
@@ -308,14 +318,15 @@ public class SharedConfig {
                 }
                 if (videoPath.isDirectory()) {
                     new File(videoPath, ".nomedia").delete();
+                    return;
                 }
-            } else {
-                if (imagePath.isDirectory()) {
-                    new File(imagePath, ".nomedia").createNewFile();
-                }
-                if (videoPath.isDirectory()) {
-                    new File(videoPath, ".nomedia").createNewFile();
-                }
+                return;
+            }
+            if (imagePath.isDirectory()) {
+                new File(imagePath, ".nomedia").createNewFile();
+            }
+            if (videoPath.isDirectory()) {
+                new File(videoPath, ".nomedia").createNewFile();
             }
         } catch (Throwable e) {
             FileLog.m3e(e);

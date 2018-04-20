@@ -63,11 +63,7 @@ public class MentionCell extends LinearLayout {
         }
         this.nameTextView.setText(UserObject.getUserName(user));
         if (user.username != null) {
-            TextView textView = this.usernameTextView;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("@");
-            stringBuilder.append(user.username);
-            textView.setText(stringBuilder.toString());
+            this.usernameTextView.setText("@" + user.username);
         } else {
             this.usernameTextView.setText(TtmlNode.ANONYMOUS_REGION_ID);
         }

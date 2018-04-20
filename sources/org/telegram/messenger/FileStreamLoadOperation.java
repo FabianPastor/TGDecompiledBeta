@@ -71,13 +71,13 @@ public class FileStreamLoadOperation implements DataSource {
     }
 
     public int read(byte[] buffer, int offset, int readLength) throws IOException {
-        int availableLength = 0;
         if (readLength == 0) {
             return 0;
         }
         if (this.bytesRemaining == 0) {
             return -1;
         }
+        int availableLength = 0;
         try {
             if (this.bytesRemaining < ((long) readLength)) {
                 readLength = (int) this.bytesRemaining;
@@ -95,9 +95,10 @@ public class FileStreamLoadOperation implements DataSource {
             this.file.readFully(buffer, offset, availableLength);
             this.currentOffset += availableLength;
             this.bytesRemaining -= (long) availableLength;
-            if (this.listener != null) {
-                this.listener.onBytesTransferred(this, availableLength);
+            if (this.listener == null) {
+                return availableLength;
             }
+            this.listener.onBytesTransferred(this, availableLength);
             return availableLength;
         } catch (Exception e) {
             throw new IOException(e);

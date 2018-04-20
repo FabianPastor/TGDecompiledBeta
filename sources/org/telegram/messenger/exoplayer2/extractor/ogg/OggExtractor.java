@@ -11,15 +11,15 @@ import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
 public class OggExtractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C18421();
+    public static final ExtractorsFactory FACTORY = new C18441();
     private static final int MAX_VERIFICATION_BYTES = 8;
     private ExtractorOutput output;
     private StreamReader streamReader;
     private boolean streamReaderInitialized;
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.ogg.OggExtractor$1 */
-    static class C18421 implements ExtractorsFactory {
-        C18421() {
+    static class C18441 implements ExtractorsFactory {
+        C18441() {
         }
 
         public Extractor[] createExtractors() {
@@ -67,24 +67,22 @@ public class OggExtractor implements Extractor {
 
     private boolean sniffInternal(ExtractorInput input) throws IOException, InterruptedException {
         OggPageHeader header = new OggPageHeader();
-        if (header.populate(input, true)) {
-            if ((header.type & 2) == 2) {
-                int length = Math.min(header.bodySize, 8);
-                ParsableByteArray scratch = new ParsableByteArray(length);
-                input.peekFully(scratch.data, 0, length);
-                if (FlacReader.verifyBitstreamType(resetPosition(scratch))) {
-                    this.streamReader = new FlacReader();
-                } else if (VorbisReader.verifyBitstreamType(resetPosition(scratch))) {
-                    this.streamReader = new VorbisReader();
-                } else if (!OpusReader.verifyBitstreamType(resetPosition(scratch))) {
-                    return false;
-                } else {
-                    this.streamReader = new OpusReader();
-                }
-                return true;
-            }
+        if (!header.populate(input, true) || (header.type & 2) != 2) {
+            return false;
         }
-        return false;
+        int length = Math.min(header.bodySize, 8);
+        ParsableByteArray scratch = new ParsableByteArray(length);
+        input.peekFully(scratch.data, 0, length);
+        if (FlacReader.verifyBitstreamType(resetPosition(scratch))) {
+            this.streamReader = new FlacReader();
+        } else if (VorbisReader.verifyBitstreamType(resetPosition(scratch))) {
+            this.streamReader = new VorbisReader();
+        } else if (!OpusReader.verifyBitstreamType(resetPosition(scratch))) {
+            return false;
+        } else {
+            this.streamReader = new OpusReader();
+        }
+        return true;
     }
 
     private static ParsableByteArray resetPosition(ParsableByteArray scratch) {

@@ -42,9 +42,10 @@ public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto
 
     private FrameworkMediaDrm(UUID uuid) throws UnsupportedSchemeException {
         Assertions.checkNotNull(uuid);
-        Assertions.checkArgument(C0542C.COMMON_PSSH_UUID.equals(uuid) ^ 1, "Use C.CLEARKEY_UUID instead");
-        UUID uuid2 = (Util.SDK_INT >= 27 || !C0542C.CLEARKEY_UUID.equals(uuid)) ? uuid : C0542C.COMMON_PSSH_UUID;
-        uuid = uuid2;
+        Assertions.checkArgument(!C0542C.COMMON_PSSH_UUID.equals(uuid), "Use C.CLEARKEY_UUID instead");
+        if (Util.SDK_INT < 27 && C0542C.CLEARKEY_UUID.equals(uuid)) {
+            uuid = C0542C.COMMON_PSSH_UUID;
+        }
         this.uuid = uuid;
         this.mediaDrm = new MediaDrm(uuid);
     }
@@ -61,15 +62,22 @@ public final class FrameworkMediaDrm implements ExoMediaDrm<FrameworkMediaCrypto
         if (Util.SDK_INT < 23) {
             throw new UnsupportedOperationException();
         }
-        this.mediaDrm.setOnKeyStatusChangeListener(listener == null ? null : new MediaDrm.OnKeyStatusChangeListener() {
-            public void onKeyStatusChange(MediaDrm md, byte[] sessionId, List<KeyStatus> keyInfo, boolean hasNewUsableKey) {
-                List<ExoMediaDrm.KeyStatus> exoKeyInfo = new ArrayList();
-                for (KeyStatus keyStatus : keyInfo) {
-                    exoKeyInfo.add(new DefaultKeyStatus(keyStatus.getStatusCode(), keyStatus.getKeyId()));
+        MediaDrm.OnKeyStatusChangeListener onKeyStatusChangeListener;
+        MediaDrm mediaDrm = this.mediaDrm;
+        if (listener == null) {
+            onKeyStatusChangeListener = null;
+        } else {
+            onKeyStatusChangeListener = new MediaDrm.OnKeyStatusChangeListener() {
+                public void onKeyStatusChange(MediaDrm md, byte[] sessionId, List<KeyStatus> keyInfo, boolean hasNewUsableKey) {
+                    List<ExoMediaDrm.KeyStatus> exoKeyInfo = new ArrayList();
+                    for (KeyStatus keyStatus : keyInfo) {
+                        exoKeyInfo.add(new DefaultKeyStatus(keyStatus.getStatusCode(), keyStatus.getKeyId()));
+                    }
+                    listener.onKeyStatusChange(FrameworkMediaDrm.this, sessionId, exoKeyInfo, hasNewUsableKey);
                 }
-                listener.onKeyStatusChange(FrameworkMediaDrm.this, sessionId, exoKeyInfo, hasNewUsableKey);
-            }
-        }, null);
+            };
+        }
+        mediaDrm.setOnKeyStatusChangeListener(onKeyStatusChangeListener, null);
     }
 
     public byte[] openSession() throws MediaDrmException {

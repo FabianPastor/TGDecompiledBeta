@@ -54,7 +54,6 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         }
 
         public boolean equals(Object obj) {
-            boolean z = true;
             if (this == obj) {
                 return true;
             }
@@ -62,10 +61,10 @@ public class FastDatePrinter implements Serializable, DatePrinter {
                 return false;
             }
             TimeZoneDisplayKey other = (TimeZoneDisplayKey) obj;
-            if (!this.mTimeZone.equals(other.mTimeZone) || this.mStyle != other.mStyle || !this.mLocale.equals(other.mLocale)) {
-                z = false;
+            if (this.mTimeZone.equals(other.mTimeZone) && this.mStyle == other.mStyle && this.mLocale.equals(other.mLocale)) {
+                return true;
             }
-            return z;
+            return false;
         }
     }
 
@@ -188,7 +187,7 @@ public class FastDatePrinter implements Serializable, DatePrinter {
             if (this.mColon) {
                 buffer.append(':');
             }
-            int minutes = (offset / 60000) - (60 * hours);
+            int minutes = (offset / 60000) - (hours * 60);
             buffer.append((char) ((minutes / 10) + 48));
             buffer.append((char) ((minutes % 10) + 48));
         }
@@ -229,15 +228,16 @@ public class FastDatePrinter implements Serializable, DatePrinter {
                     }
                 }
             }
+            int digits;
             if (value < 1000) {
-                i = 3;
+                digits = 3;
             } else {
-                i = Integer.toString(value).length();
+                digits = Integer.toString(value).length();
             }
-            int i2 = this.mSize;
+            i = this.mSize;
             while (true) {
-                i2--;
-                if (i2 >= i) {
+                i--;
+                if (i >= digits) {
                     buffer.append('0');
                 } else {
                     buffer.append(Integer.toString(value));
@@ -434,10 +434,7 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     protected List<Rule> parsePattern() {
-        String[] strArr;
         DateFormatSymbols symbols = new DateFormatSymbols(this.mLocale);
         List<Rule> rules = new ArrayList();
         String[] ERAs = symbols.getEras();
@@ -447,207 +444,155 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         String[] shortWeekdays = symbols.getShortWeekdays();
         String[] AmPmStrings = symbols.getAmPmStrings();
         int length = this.mPattern.length();
-        int i = 1;
         int[] indexRef = new int[1];
-        int i2 = 0;
-        int i3 = 0;
-        while (i3 < length) {
-            indexRef[i2] = i3;
-            String token = parseToken(r0.mPattern, indexRef);
-            i3 = indexRef[i2];
+        int i = 0;
+        while (i < length) {
+            indexRef[0] = i;
+            String token = parseToken(this.mPattern, indexRef);
+            i = indexRef[0];
             int tokenLen = token.length();
             if (tokenLen == 0) {
-                DateFormatSymbols dateFormatSymbols = symbols;
-                strArr = weekdays;
                 return rules;
             }
-            char c = token.charAt(i2);
-            i2 = 4;
-            switch (c) {
+            Rule rule;
+            switch (token.charAt(0)) {
                 case '\'':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
                     String sub = token.substring(1);
-                    if (sub.length() == 1) {
-                        i2 = 0;
-                        symbols = new CharacterLiteral(sub.charAt(0));
+                    if (sub.length() != 1) {
+                        rule = new StringLiteral(sub);
                         break;
                     }
-                    i2 = 0;
-                    symbols = new StringLiteral(sub);
-                    continue;
+                    rule = new CharacterLiteral(sub.charAt(0));
+                    break;
                 case 'D':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = selectNumberRule(6, tokenLen);
+                    rule = selectNumberRule(6, tokenLen);
                     break;
                 case 'E':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = new TextField(7, tokenLen < 4 ? shortWeekdays : strArr);
+                    String[] strArr;
+                    if (tokenLen < 4) {
+                        strArr = shortWeekdays;
+                    } else {
+                        strArr = weekdays;
+                    }
+                    rule = new TextField(7, strArr);
                     break;
                 case 'F':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = selectNumberRule(8, tokenLen);
+                    rule = selectNumberRule(8, tokenLen);
                     break;
                 case 'G':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = new TextField(0, ERAs);
+                    rule = new TextField(0, ERAs);
                     break;
                 case 'H':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = selectNumberRule(11, tokenLen);
+                    rule = selectNumberRule(11, tokenLen);
                     break;
                 case 'K':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = selectNumberRule(10, tokenLen);
+                    rule = selectNumberRule(10, tokenLen);
                     break;
                 case 'M':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
                     if (tokenLen < 4) {
                         if (tokenLen != 3) {
                             if (tokenLen != 2) {
-                                symbols = UnpaddedMonthField.INSTANCE;
+                                rule = UnpaddedMonthField.INSTANCE;
                                 break;
                             }
-                            symbols = TwoDigitMonthField.INSTANCE;
-                        } else {
-                            symbols = new TextField(2, shortMonths);
+                            rule = TwoDigitMonthField.INSTANCE;
+                            break;
                         }
-                    } else {
-                        symbols = new TextField(2, months);
+                        rule = new TextField(2, shortMonths);
+                        break;
                     }
+                    rule = new TextField(2, months);
+                    break;
                 case 'S':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = selectNumberRule(14, tokenLen);
+                    rule = selectNumberRule(14, tokenLen);
                     break;
                 case 'W':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = selectNumberRule(4, tokenLen);
+                    rule = selectNumberRule(4, tokenLen);
                     break;
                 case 'Z':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
                     if (tokenLen != 1) {
-                        symbols = TimeZoneNumberRule.INSTANCE_COLON;
+                        rule = TimeZoneNumberRule.INSTANCE_COLON;
                         break;
                     }
-                    symbols = TimeZoneNumberRule.INSTANCE_NO_COLON;
+                    rule = TimeZoneNumberRule.INSTANCE_NO_COLON;
+                    break;
                 case 'a':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = new TextField(9, AmPmStrings);
+                    rule = new TextField(9, AmPmStrings);
                     break;
                 case 'd':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = selectNumberRule(5, tokenLen);
+                    rule = selectNumberRule(5, tokenLen);
                     break;
                 case 'h':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = new TwelveHourField(selectNumberRule(10, tokenLen));
+                    rule = new TwelveHourField(selectNumberRule(10, tokenLen));
                     break;
                 case 'k':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = new TwentyFourHourField(selectNumberRule(11, tokenLen));
+                    rule = new TwentyFourHourField(selectNumberRule(11, tokenLen));
                     break;
                 case 'm':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = selectNumberRule(12, tokenLen);
+                    rule = selectNumberRule(12, tokenLen);
                     break;
                 case 's':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = selectNumberRule(13, tokenLen);
+                    rule = selectNumberRule(13, tokenLen);
                     break;
                 case 'w':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = selectNumberRule(3, tokenLen);
+                    rule = selectNumberRule(3, tokenLen);
                     break;
                 case 'y':
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
                     if (tokenLen != 2) {
-                        if (tokenLen >= 4) {
-                            i2 = tokenLen;
+                        if (tokenLen < 4) {
+                            tokenLen = 4;
                         }
-                        symbols = selectNumberRule(1, i2);
+                        rule = selectNumberRule(1, tokenLen);
                         break;
                     }
-                    symbols = TwoDigitYearField.INSTANCE;
+                    rule = TwoDigitYearField.INSTANCE;
+                    break;
                 case 'z':
                     if (tokenLen < 4) {
-                        dateFormatSymbols = symbols;
-                        strArr = weekdays;
-                        symbols = new TimeZoneNameRule(r0.mTimeZone, r0.mLocale, 0);
+                        rule = new TimeZoneNameRule(this.mTimeZone, this.mLocale, 0);
                         break;
                     }
-                    dateFormatSymbols = symbols;
-                    strArr = weekdays;
-                    symbols = new TimeZoneNameRule(r0.mTimeZone, r0.mLocale, i);
+                    rule = new TimeZoneNameRule(this.mTimeZone, this.mLocale, 1);
+                    break;
                 default:
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("Illegal pattern component: ");
-                    stringBuilder.append(token);
-                    throw new IllegalArgumentException(stringBuilder.toString());
+                    throw new IllegalArgumentException("Illegal pattern component: " + token);
             }
-            i2 = 0;
-            rules.add(symbols);
-            i3++;
-            symbols = dateFormatSymbols;
-            weekdays = strArr;
-            i = 1;
+            rules.add(rule);
+            i++;
         }
-        strArr = weekdays;
         return rules;
     }
 
     protected String parseToken(String pattern, int[] indexRef) {
-        int i;
         StringBuilder buf = new StringBuilder();
-        int i2 = indexRef[0];
+        int i = indexRef[0];
         int length = pattern.length();
-        char c = pattern.charAt(i2);
-        char c2;
+        char c = pattern.charAt(i);
         if ((c < 'A' || c > 'Z') && (c < 'a' || c > 'z')) {
             buf.append('\'');
-            i = i2;
             boolean inLiteral = false;
             while (i < length) {
-                c2 = pattern.charAt(i);
-                if (c2 != '\'') {
-                    if (!inLiteral && ((c2 >= 'A' && c2 <= 'Z') || (c2 >= 'a' && c2 <= 'z'))) {
+                c = pattern.charAt(i);
+                if (c != '\'') {
+                    if (!inLiteral && ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
                         i--;
                         break;
                     }
-                    buf.append(c2);
+                    buf.append(c);
                 } else if (i + 1 >= length || pattern.charAt(i + 1) != '\'') {
                     inLiteral = !inLiteral;
                 } else {
                     i++;
-                    buf.append(c2);
+                    buf.append(c);
                 }
                 i++;
             }
         } else {
             buf.append(c);
-            while (i2 + 1 < length && pattern.charAt(i2 + 1) == c) {
+            while (i + 1 < length && pattern.charAt(i + 1) == c) {
                 buf.append(c);
-                i2++;
+                i++;
             }
-            c2 = c;
-            i = i2;
         }
         indexRef[0] = i;
         return buf.toString();
@@ -675,15 +620,13 @@ public class FastDatePrinter implements Serializable, DatePrinter {
             return format(((Long) obj).longValue(), toAppendTo);
         }
         String str;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Unknown class: ");
+        StringBuilder append = new StringBuilder().append("Unknown class: ");
         if (obj == null) {
             str = "<null>";
         } else {
             str = obj.getClass().getName();
         }
-        stringBuilder.append(str);
-        throw new IllegalArgumentException(stringBuilder.toString());
+        throw new IllegalArgumentException(append.append(str).toString());
     }
 
     public String format(long millis) {
@@ -748,31 +691,22 @@ public class FastDatePrinter implements Serializable, DatePrinter {
     }
 
     public boolean equals(Object obj) {
-        boolean z = false;
         if (!(obj instanceof FastDatePrinter)) {
             return false;
         }
         FastDatePrinter other = (FastDatePrinter) obj;
         if (this.mPattern.equals(other.mPattern) && this.mTimeZone.equals(other.mTimeZone) && this.mLocale.equals(other.mLocale)) {
-            z = true;
+            return true;
         }
-        return z;
+        return false;
     }
 
     public int hashCode() {
-        return this.mPattern.hashCode() + (13 * (this.mTimeZone.hashCode() + (this.mLocale.hashCode() * 13)));
+        return this.mPattern.hashCode() + ((this.mTimeZone.hashCode() + (this.mLocale.hashCode() * 13)) * 13);
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("FastDatePrinter[");
-        stringBuilder.append(this.mPattern);
-        stringBuilder.append(",");
-        stringBuilder.append(this.mLocale);
-        stringBuilder.append(",");
-        stringBuilder.append(this.mTimeZone.getID());
-        stringBuilder.append("]");
-        return stringBuilder.toString();
+        return "FastDatePrinter[" + this.mPattern + "," + this.mLocale + "," + this.mTimeZone.getID() + "]";
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {

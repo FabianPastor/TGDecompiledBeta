@@ -14,41 +14,52 @@ public class PhoneRule {
     public int prefixLen;
 
     String format(String str, String intlPrefix, String trunkPrefix) {
+        boolean hadC = false;
+        boolean hadN = false;
+        boolean hasOpen = false;
         int spot = 0;
         StringBuilder res = new StringBuilder(20);
-        boolean hasOpen = false;
-        boolean hadN = false;
-        boolean hadC = false;
         int i = 0;
         while (i < this.format.length()) {
             char ch = this.format.charAt(i);
-            if (ch != '#') {
-                if (ch != '(') {
-                    if (ch == 'c') {
-                        hadC = true;
-                        if (intlPrefix != null) {
-                            res.append(intlPrefix);
+            switch (ch) {
+                case '#':
+                    if (spot >= str.length()) {
+                        if (!hasOpen) {
+                            break;
                         }
-                    } else if (ch == 'n') {
-                        hadN = true;
-                        if (trunkPrefix != null) {
-                            res.append(trunkPrefix);
-                        }
+                        res.append(" ");
+                        break;
                     }
-                } else if (spot < str.length()) {
-                    hasOpen = true;
-                }
-                if (!(ch == ' ' && i > 0 && ((this.format.charAt(i - 1) == 'n' && trunkPrefix == null) || (this.format.charAt(i - 1) == 'c' && intlPrefix == null))) && (spot < str.length() || (hasOpen && ch == ')'))) {
-                    res.append(this.format.substring(i, i + 1));
-                    if (ch == ')') {
-                        hasOpen = false;
+                    res.append(str.substring(spot, spot + 1));
+                    spot++;
+                    continue;
+                case '(':
+                    if (spot < str.length()) {
+                        hasOpen = true;
+                        break;
                     }
+                    break;
+                case 'c':
+                    hadC = true;
+                    if (intlPrefix != null) {
+                        res.append(intlPrefix);
+                        break;
+                    }
+                    continue;
+                case 'n':
+                    hadN = true;
+                    if (trunkPrefix != null) {
+                        res.append(trunkPrefix);
+                        break;
+                    }
+                    continue;
+            }
+            if (!(ch == ' ' && i > 0 && ((this.format.charAt(i - 1) == 'n' && trunkPrefix == null) || (this.format.charAt(i - 1) == 'c' && intlPrefix == null))) && (spot < str.length() || (hasOpen && ch == ')'))) {
+                res.append(this.format.substring(i, i + 1));
+                if (ch == ')') {
+                    hasOpen = false;
                 }
-            } else if (spot < str.length()) {
-                res.append(str.substring(spot, spot + 1));
-                spot++;
-            } else if (hasOpen) {
-                res.append(" ");
             }
             i++;
         }

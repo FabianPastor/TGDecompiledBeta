@@ -11,12 +11,7 @@ import org.telegram.tgnet.TLRPC.User;
 
 public class UserObject {
     public static boolean isDeleted(User user) {
-        if (!(user == null || (user instanceof TL_userDeleted_old2) || (user instanceof TL_userEmpty))) {
-            if (!user.deleted) {
-                return false;
-            }
-        }
-        return true;
+        return user == null || (user instanceof TL_userDeleted_old2) || (user instanceof TL_userEmpty) || user.deleted;
     }
 
     public static boolean isContact(User user) {
@@ -28,37 +23,21 @@ public class UserObject {
     }
 
     public static String getUserName(User user) {
-        if (user != null) {
-            if (!isDeleted(user)) {
-                String format;
-                String name = ContactsController.formatName(user.first_name, user.last_name);
-                if (name.length() == 0 && user.phone != null) {
-                    if (user.phone.length() != 0) {
-                        PhoneFormat instance = PhoneFormat.getInstance();
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("+");
-                        stringBuilder.append(user.phone);
-                        format = instance.format(stringBuilder.toString());
-                        return format;
-                    }
-                }
-                format = name;
-                return format;
-            }
+        if (user == null || isDeleted(user)) {
+            return LocaleController.getString("HiddenName", R.string.HiddenName);
         }
-        return LocaleController.getString("HiddenName", R.string.HiddenName);
+        String name = ContactsController.formatName(user.first_name, user.last_name);
+        return (name.length() != 0 || user.phone == null || user.phone.length() == 0) ? name : PhoneFormat.getInstance().format("+" + user.phone);
     }
 
     public static String getFirstName(User user) {
-        if (user != null) {
-            if (!isDeleted(user)) {
-                String name = user.first_name;
-                if (name == null || name.length() == 0) {
-                    name = user.last_name;
-                }
-                return !TextUtils.isEmpty(name) ? name : LocaleController.getString("HiddenName", R.string.HiddenName);
-            }
+        if (user == null || isDeleted(user)) {
+            return "DELETED";
         }
-        return "DELETED";
+        String name = user.first_name;
+        if (name == null || name.length() == 0) {
+            name = user.last_name;
+        }
+        return TextUtils.isEmpty(name) ? LocaleController.getString("HiddenName", R.string.HiddenName) : name;
     }
 }

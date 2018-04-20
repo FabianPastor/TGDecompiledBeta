@@ -44,29 +44,33 @@ public final class ApicFrame extends Id3Frame {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                ApicFrame other = (ApicFrame) obj;
-                if (this.pictureType != other.pictureType || !Util.areEqual(this.mimeType, other.mimeType) || !Util.areEqual(this.description, other.description) || !Arrays.equals(this.pictureData, other.pictureData)) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        ApicFrame other = (ApicFrame) obj;
+        if (this.pictureType == other.pictureType && Util.areEqual(this.mimeType, other.mimeType) && Util.areEqual(this.description, other.description) && Arrays.equals(this.pictureData, other.pictureData)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
+        int hashCode;
         int i = 0;
-        int hashCode = 31 * ((31 * ((31 * 17) + this.pictureType)) + (this.mimeType != null ? this.mimeType.hashCode() : 0));
+        int i2 = (this.pictureType + 527) * 31;
+        if (this.mimeType != null) {
+            hashCode = this.mimeType.hashCode();
+        } else {
+            hashCode = 0;
+        }
+        hashCode = (i2 + hashCode) * 31;
         if (this.description != null) {
             i = this.description.hashCode();
         }
-        return (31 * (hashCode + i)) + Arrays.hashCode(this.pictureData);
+        return ((hashCode + i) * 31) + Arrays.hashCode(this.pictureData);
     }
 
     public void writeToParcel(Parcel dest, int flags) {

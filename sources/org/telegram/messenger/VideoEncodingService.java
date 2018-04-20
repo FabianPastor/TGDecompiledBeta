@@ -33,9 +33,8 @@ public class VideoEncodingService extends Service implements NotificationCenterD
 
     public void didReceivedNotification(int id, int account, Object... args) {
         boolean z = true;
-        String fileName;
         if (id == NotificationCenter.FileUploadProgressChanged) {
-            fileName = args[0];
+            String fileName = args[0];
             if (account == this.currentAccount && this.path != null && this.path.equals(fileName)) {
                 Boolean enc = args[2];
                 this.currentProgress = (int) (args[1].floatValue() * 100.0f);
@@ -52,17 +51,18 @@ public class VideoEncodingService extends Service implements NotificationCenterD
                 }
             }
         } else if (id == NotificationCenter.stopEncodingService) {
-            fileName = args[0];
+            String filepath = args[0];
             if (((Integer) args[1]).intValue() != this.currentAccount) {
                 return;
             }
-            if (fileName == null || fileName.equals(this.path)) {
+            if (filepath == null || filepath.equals(this.path)) {
                 stopSelf();
             }
         }
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
+        boolean z = false;
         this.path = intent.getStringExtra("path");
         int oldAccount = this.currentAccount;
         this.currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
@@ -70,38 +70,37 @@ public class VideoEncodingService extends Service implements NotificationCenterD
             NotificationCenter.getInstance(oldAccount).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
         }
-        boolean z = false;
         boolean isGif = intent.getBooleanExtra("gif", false);
         if (this.path == null) {
             stopSelf();
-            return 2;
-        }
-        if (BuildVars.LOGS_ENABLED) {
-            FileLog.m0d("start video service");
-        }
-        if (this.builder == null) {
-            this.builder = new Builder(ApplicationLoader.applicationContext);
-            this.builder.setSmallIcon(17301640);
-            this.builder.setWhen(System.currentTimeMillis());
-            this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-            this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
-            if (isGif) {
-                this.builder.setTicker(LocaleController.getString("SendingGif", R.string.SendingGif));
-                this.builder.setContentText(LocaleController.getString("SendingGif", R.string.SendingGif));
-            } else {
-                this.builder.setTicker(LocaleController.getString("SendingVideo", R.string.SendingVideo));
-                this.builder.setContentText(LocaleController.getString("SendingVideo", R.string.SendingVideo));
+        } else {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.m0d("start video service");
             }
+            if (this.builder == null) {
+                this.builder = new Builder(ApplicationLoader.applicationContext);
+                this.builder.setSmallIcon(17301640);
+                this.builder.setWhen(System.currentTimeMillis());
+                this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
+                this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
+                if (isGif) {
+                    this.builder.setTicker(LocaleController.getString("SendingGif", R.string.SendingGif));
+                    this.builder.setContentText(LocaleController.getString("SendingGif", R.string.SendingGif));
+                } else {
+                    this.builder.setTicker(LocaleController.getString("SendingVideo", R.string.SendingVideo));
+                    this.builder.setContentText(LocaleController.getString("SendingVideo", R.string.SendingVideo));
+                }
+            }
+            this.currentProgress = 0;
+            Builder builder = this.builder;
+            int i = this.currentProgress;
+            if (this.currentProgress == 0) {
+                z = true;
+            }
+            builder.setProgress(100, i, z);
+            startForeground(4, this.builder.build());
+            NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
         }
-        this.currentProgress = 0;
-        Builder builder = this.builder;
-        int i = this.currentProgress;
-        if (this.currentProgress == 0) {
-            z = true;
-        }
-        builder.setProgress(100, i, z);
-        startForeground(4, this.builder.build());
-        NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
         return 2;
     }
 }

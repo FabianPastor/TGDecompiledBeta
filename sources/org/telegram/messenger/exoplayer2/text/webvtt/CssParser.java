@@ -29,41 +29,27 @@ final class CssParser {
         this.styleInput.reset(input.data, input.getPosition());
         this.styleInput.setPosition(initialInputPosition);
         String selector = parseSelector(this.styleInput, this.stringBuilder);
-        WebvttCssStyle webvttCssStyle = null;
-        if (selector != null) {
-            if (BLOCK_START.equals(parseNextToken(this.styleInput, this.stringBuilder))) {
-                WebvttCssStyle style = new WebvttCssStyle();
-                applySelectorToStyle(style, selector);
-                String token = null;
-                boolean blockEndFound = false;
-                while (!blockEndFound) {
-                    boolean z;
-                    int position = this.styleInput.getPosition();
-                    token = parseNextToken(this.styleInput, this.stringBuilder);
-                    if (token != null) {
-                        if (!BLOCK_END.equals(token)) {
-                            z = false;
-                            blockEndFound = z;
-                            if (!blockEndFound) {
-                                this.styleInput.setPosition(position);
-                                parseStyleDeclaration(this.styleInput, style, this.stringBuilder);
-                            }
-                        }
-                    }
-                    z = true;
-                    blockEndFound = z;
-                    if (!blockEndFound) {
-                        this.styleInput.setPosition(position);
-                        parseStyleDeclaration(this.styleInput, style, this.stringBuilder);
-                    }
-                }
-                if (BLOCK_END.equals(token)) {
-                    webvttCssStyle = style;
-                }
-                return webvttCssStyle;
+        if (selector == null || !BLOCK_START.equals(parseNextToken(this.styleInput, this.stringBuilder))) {
+            return null;
+        }
+        WebvttCssStyle style = new WebvttCssStyle();
+        applySelectorToStyle(style, selector);
+        String token = null;
+        boolean blockEndFound = false;
+        while (!blockEndFound) {
+            int position = this.styleInput.getPosition();
+            token = parseNextToken(this.styleInput, this.stringBuilder);
+            if (token == null || BLOCK_END.equals(token)) {
+                blockEndFound = true;
+            } else {
+                blockEndFound = false;
+            }
+            if (!blockEndFound) {
+                this.styleInput.setPosition(position);
+                parseStyleDeclaration(this.styleInput, style, this.stringBuilder);
             }
         }
-        return null;
+        return !BLOCK_END.equals(token) ? null : style;
     }
 
     private static String parseSelector(ParsableByteArray input, StringBuilder stringBuilder) {
@@ -88,22 +74,21 @@ final class CssParser {
             target = readCueTarget(input);
         }
         token = parseNextToken(input, stringBuilder);
-        if (")".equals(token)) {
-            if (token != null) {
-                return target;
-            }
+        if (!")".equals(token) || token == null) {
+            return null;
         }
-        return null;
+        return target;
     }
 
     private static String readCueTarget(ParsableByteArray input) {
         int position = input.getPosition();
         int limit = input.limit();
-        int position2 = position;
         boolean cueTargetEndFound = false;
+        int position2 = position;
         while (position2 < limit && !cueTargetEndFound) {
+            position = position2 + 1;
             cueTargetEndFound = ((char) input.data[position2]) == ')';
-            position2++;
+            position2 = position;
         }
         return input.readString((position2 - 1) - input.getPosition()).trim();
     }
@@ -114,34 +99,32 @@ final class CssParser {
         if (!TtmlNode.ANONYMOUS_REGION_ID.equals(property) && ":".equals(parseNextToken(input, stringBuilder))) {
             skipWhitespaceAndComments(input);
             String value = parsePropertyValue(input, stringBuilder);
-            if (value != null) {
-                if (!TtmlNode.ANONYMOUS_REGION_ID.equals(value)) {
-                    int position = input.getPosition();
-                    String token = parseNextToken(input, stringBuilder);
-                    if (!";".equals(token)) {
-                        if (BLOCK_END.equals(token)) {
-                            input.setPosition(position);
-                        } else {
-                            return;
-                        }
+            if (value != null && !TtmlNode.ANONYMOUS_REGION_ID.equals(value)) {
+                int position = input.getPosition();
+                String token = parseNextToken(input, stringBuilder);
+                if (!";".equals(token)) {
+                    if (BLOCK_END.equals(token)) {
+                        input.setPosition(position);
+                    } else {
+                        return;
                     }
-                    if (TtmlNode.ATTR_TTS_COLOR.equals(property)) {
-                        style.setFontColor(ColorParser.parseCssColor(value));
-                    } else if (PROPERTY_BGCOLOR.equals(property)) {
-                        style.setBackgroundColor(ColorParser.parseCssColor(value));
-                    } else if (PROPERTY_TEXT_DECORATION.equals(property)) {
-                        if ("underline".equals(value)) {
-                            style.setUnderline(true);
-                        }
-                    } else if (PROPERTY_FONT_FAMILY.equals(property)) {
-                        style.setFontFamily(value);
-                    } else if (PROPERTY_FONT_WEIGHT.equals(property)) {
-                        if ("bold".equals(value)) {
-                            style.setBold(true);
-                        }
-                    } else if (PROPERTY_FONT_STYLE.equals(property) && "italic".equals(value)) {
-                        style.setItalic(true);
+                }
+                if (TtmlNode.ATTR_TTS_COLOR.equals(property)) {
+                    style.setFontColor(ColorParser.parseCssColor(value));
+                } else if (PROPERTY_BGCOLOR.equals(property)) {
+                    style.setBackgroundColor(ColorParser.parseCssColor(value));
+                } else if (PROPERTY_TEXT_DECORATION.equals(property)) {
+                    if ("underline".equals(value)) {
+                        style.setUnderline(true);
                     }
+                } else if (PROPERTY_FONT_FAMILY.equals(property)) {
+                    style.setFontFamily(value);
+                } else if (PROPERTY_FONT_WEIGHT.equals(property)) {
+                    if ("bold".equals(value)) {
+                        style.setBold(true);
+                    }
+                } else if (PROPERTY_FONT_STYLE.equals(property) && "italic".equals(value)) {
+                    style.setItalic(true);
                 }
             }
         }
@@ -150,15 +133,7 @@ final class CssParser {
     static void skipWhitespaceAndComments(ParsableByteArray input) {
         boolean skipping = true;
         while (input.bytesLeft() > 0 && skipping) {
-            boolean z;
-            if (!maybeSkipWhitespace(input)) {
-                if (!maybeSkipComment(input)) {
-                    z = false;
-                    skipping = z;
-                }
-            }
-            z = true;
-            skipping = z;
+            skipping = maybeSkipWhitespace(input) || maybeSkipComment(input);
         }
     }
 
@@ -168,13 +143,7 @@ final class CssParser {
             return null;
         }
         String identifier = parseIdentifier(input, stringBuilder);
-        if (!TtmlNode.ANONYMOUS_REGION_ID.equals(identifier)) {
-            return identifier;
-        }
-        StringBuilder stringBuilder2 = new StringBuilder();
-        stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-        stringBuilder2.append((char) input.readUnsignedByte());
-        return stringBuilder2.toString();
+        return TtmlNode.ANONYMOUS_REGION_ID.equals(identifier) ? TtmlNode.ANONYMOUS_REGION_ID + ((char) input.readUnsignedByte()) : identifier;
     }
 
     private static boolean maybeSkipWhitespace(ParsableByteArray input) {
@@ -209,13 +178,12 @@ final class CssParser {
             if (token == null) {
                 return null;
             }
-            if (!BLOCK_END.equals(token)) {
-                if (!";".equals(token)) {
-                    expressionBuilder.append(token);
-                }
+            if (BLOCK_END.equals(token) || ";".equals(token)) {
+                input.setPosition(position);
+                expressionEndFound = true;
+            } else {
+                expressionBuilder.append(token);
             }
-            input.setPosition(position);
-            expressionEndFound = true;
         }
         return expressionBuilder.toString();
     }
@@ -229,16 +197,17 @@ final class CssParser {
             if (data[position] == (byte) 47) {
                 position = position2 + 1;
                 if (data[position2] == (byte) 42) {
-                    while (position + 1 < limit) {
-                        position2 = position + 1;
-                        if (((char) data[position]) == '*' && ((char) data[position2]) == '/') {
-                            position = position2 + 1;
+                    position2 = position;
+                    while (position2 + 1 < limit) {
+                        position = position2 + 1;
+                        if (((char) data[position2]) == '*' && ((char) data[position]) == '/') {
+                            position++;
                             limit = position;
-                        } else {
-                            position = position2;
                         }
+                        position2 = position;
                     }
                     input.skipBytes(limit - input.getPosition());
+                    position = position2;
                     return true;
                 }
             }
@@ -247,19 +216,18 @@ final class CssParser {
     }
 
     private static String parseIdentifier(ParsableByteArray input, StringBuilder stringBuilder) {
-        boolean identifierEndFound = false;
         stringBuilder.setLength(0);
         int position = input.getPosition();
         int limit = input.limit();
+        boolean identifierEndFound = false;
         while (position < limit && !identifierEndFound) {
             char c = (char) input.data[position];
-            if ((c < 'A' || c > 'Z') && ((c < 'a' || c > 'z') && !((c >= '0' && c <= '9') || c == '#' || c == '-' || c == '.'))) {
-                if (c != '_') {
-                    identifierEndFound = true;
-                }
+            if ((c < 'A' || c > 'Z') && ((c < 'a' || c > 'z') && !((c >= '0' && c <= '9') || c == '#' || c == '-' || c == '.' || c == '_'))) {
+                identifierEndFound = true;
+            } else {
+                position++;
+                stringBuilder.append(c);
             }
-            position++;
-            stringBuilder.append(c);
         }
         input.skipBytes(position - input.getPosition());
         return stringBuilder.toString();

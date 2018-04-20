@@ -18,18 +18,25 @@ public class TextInfoPrivacyCell extends FrameLayout {
     private TextView textView;
 
     public TextInfoPrivacyCell(Context context) {
+        int i;
+        int i2 = 5;
         super(context);
         this.textView = new TextView(context);
         this.textView.setTextSize(1, 14.0f);
-        int i = 3;
-        this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
+        TextView textView = this.textView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        textView.setGravity(i);
         this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(17.0f));
         this.textView.setMovementMethod(LinkMovementMethod.getInstance());
         View view = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
+        if (!LocaleController.isRTL) {
+            i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i2 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
     }
 
     protected void onAttachedToWindow() {
@@ -60,21 +67,21 @@ public class TextInfoPrivacyCell extends FrameLayout {
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
-        float f = 0.5f;
+        float f = 1.0f;
         if (animators != null) {
             TextView textView = this.textView;
             String str = "alpha";
             float[] fArr = new float[1];
-            if (value) {
-                f = 1.0f;
+            if (!value) {
+                f = 0.5f;
             }
             fArr[0] = f;
             animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
             return;
         }
         textView = this.textView;
-        if (value) {
-            f = 1.0f;
+        if (!value) {
+            f = 0.5f;
         }
         textView.setAlpha(f);
     }

@@ -38,21 +38,25 @@ public final class ChapterTocFrame extends Id3Frame {
     }
 
     ChapterTocFrame(Parcel in) {
+        boolean z;
+        boolean z2 = true;
         super(ID);
         this.elementId = in.readString();
-        int i = 0;
-        boolean z = true;
-        this.isRoot = in.readByte() != (byte) 0;
-        if (in.readByte() == (byte) 0) {
+        if (in.readByte() != (byte) 0) {
+            z = true;
+        } else {
             z = false;
         }
-        this.isOrdered = z;
+        this.isRoot = z;
+        if (in.readByte() == (byte) 0) {
+            z2 = false;
+        }
+        this.isOrdered = z2;
         this.children = in.createStringArray();
         int subFrameCount = in.readInt();
         this.subFrames = new Id3Frame[subFrameCount];
-        while (i < subFrameCount) {
+        for (int i = 0; i < subFrameCount; i++) {
             this.subFrames[i] = (Id3Frame) in.readParcelable(Id3Frame.class.getClassLoader());
-            i++;
         }
     }
 
@@ -65,30 +69,53 @@ public final class ChapterTocFrame extends Id3Frame {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                ChapterTocFrame other = (ChapterTocFrame) obj;
-                if (this.isRoot != other.isRoot || this.isOrdered != other.isOrdered || !Util.areEqual(this.elementId, other.elementId) || !Arrays.equals(this.children, other.children) || !Arrays.equals(this.subFrames, other.subFrames)) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        ChapterTocFrame other = (ChapterTocFrame) obj;
+        if (this.isRoot == other.isRoot && this.isOrdered == other.isOrdered && Util.areEqual(this.elementId, other.elementId) && Arrays.equals(this.children, other.children) && Arrays.equals(this.subFrames, other.subFrames)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * ((31 * ((31 * 17) + this.isRoot)) + this.isOrdered)) + (this.elementId != null ? this.elementId.hashCode() : 0);
+        int i;
+        int i2 = 1;
+        int i3 = 0;
+        if (this.isRoot) {
+            i = 1;
+        } else {
+            i = 0;
+        }
+        i = (i + 527) * 31;
+        if (!this.isOrdered) {
+            i2 = 0;
+        }
+        i = (i + i2) * 31;
+        if (this.elementId != null) {
+            i3 = this.elementId.hashCode();
+        }
+        return i + i3;
     }
 
     public void writeToParcel(Parcel dest, int flags) {
+        int i;
+        int i2 = 1;
         dest.writeString(this.elementId);
-        dest.writeByte((byte) this.isRoot);
-        dest.writeByte((byte) this.isOrdered);
+        if (this.isRoot) {
+            i = 1;
+        } else {
+            i = 0;
+        }
+        dest.writeByte((byte) i);
+        if (!this.isOrdered) {
+            i2 = 0;
+        }
+        dest.writeByte((byte) i2);
         dest.writeStringArray(this.children);
         dest.writeInt(this.subFrames.length);
         for (Id3Frame subFrame : this.subFrames) {

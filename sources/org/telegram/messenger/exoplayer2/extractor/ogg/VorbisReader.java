@@ -56,9 +56,15 @@ final class VorbisReader extends StreamReader {
     }
 
     protected void onSeekEnd(long currentGranule) {
-        super.onSeekEnd(currentGranule);
+        boolean z;
         int i = 0;
-        this.seenFirstAudioPacket = currentGranule != 0;
+        super.onSeekEnd(currentGranule);
+        if (currentGranule != 0) {
+            z = true;
+        } else {
+            z = false;
+        }
+        this.seenFirstAudioPacket = z;
         if (this.vorbisIdHeader != null) {
             i = this.vorbisIdHeader.blockSize0;
         }
@@ -84,14 +90,14 @@ final class VorbisReader extends StreamReader {
         if (this.vorbisSetup != null) {
             return false;
         }
-        r0.vorbisSetup = readSetupHeaders(packet);
-        if (r0.vorbisSetup == null) {
+        this.vorbisSetup = readSetupHeaders(packet);
+        if (this.vorbisSetup == null) {
             return true;
         }
         ArrayList<byte[]> codecInitialisationData = new ArrayList();
-        codecInitialisationData.add(r0.vorbisSetup.idHeader.data);
-        codecInitialisationData.add(r0.vorbisSetup.setupHeaderData);
-        setupData.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_VORBIS, null, r0.vorbisSetup.idHeader.bitrateNominal, -1, r0.vorbisSetup.idHeader.channels, (int) r0.vorbisSetup.idHeader.sampleRate, codecInitialisationData, null, 0, null);
+        codecInitialisationData.add(this.vorbisSetup.idHeader.data);
+        codecInitialisationData.add(this.vorbisSetup.setupHeaderData);
+        setupData.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_VORBIS, null, this.vorbisSetup.idHeader.bitrateNominal, -1, this.vorbisSetup.idHeader.channels, (int) this.vorbisSetup.idHeader.sampleRate, codecInitialisationData, null, 0, null);
         return true;
     }
 

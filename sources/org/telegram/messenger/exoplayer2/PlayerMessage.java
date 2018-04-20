@@ -42,7 +42,7 @@ public final class PlayerMessage {
     }
 
     public PlayerMessage setType(int messageType) {
-        Assertions.checkState(this.isSent ^ 1);
+        Assertions.checkState(!this.isSent);
         this.type = messageType;
         return this;
     }
@@ -52,7 +52,7 @@ public final class PlayerMessage {
     }
 
     public PlayerMessage setPayload(Object payload) {
-        Assertions.checkState(this.isSent ^ 1);
+        Assertions.checkState(!this.isSent);
         this.payload = payload;
         return this;
     }
@@ -62,7 +62,7 @@ public final class PlayerMessage {
     }
 
     public PlayerMessage setHandler(Handler handler) {
-        Assertions.checkState(this.isSent ^ 1);
+        Assertions.checkState(!this.isSent);
         this.handler = handler;
         return this;
     }
@@ -72,7 +72,7 @@ public final class PlayerMessage {
     }
 
     public PlayerMessage setPosition(long positionMs) {
-        Assertions.checkState(this.isSent ^ 1);
+        Assertions.checkState(!this.isSent);
         this.positionMs = positionMs;
         return this;
     }
@@ -82,20 +82,24 @@ public final class PlayerMessage {
     }
 
     public PlayerMessage setPosition(int windowIndex, long positionMs) {
-        boolean z = true;
-        Assertions.checkState(this.isSent ^ true);
-        if (positionMs == C0542C.TIME_UNSET) {
+        boolean z;
+        boolean z2 = true;
+        if (this.isSent) {
             z = false;
+        } else {
+            z = true;
         }
-        Assertions.checkArgument(z);
-        if (windowIndex >= 0) {
-            if (this.timeline.isEmpty() || windowIndex < this.timeline.getWindowCount()) {
-                this.windowIndex = windowIndex;
-                this.positionMs = positionMs;
-                return this;
-            }
+        Assertions.checkState(z);
+        if (positionMs == C0542C.TIME_UNSET) {
+            z2 = false;
         }
-        throw new IllegalSeekPositionException(this.timeline, windowIndex, positionMs);
+        Assertions.checkArgument(z2);
+        if (windowIndex < 0 || (!this.timeline.isEmpty() && windowIndex >= this.timeline.getWindowCount())) {
+            throw new IllegalSeekPositionException(this.timeline, windowIndex, positionMs);
+        }
+        this.windowIndex = windowIndex;
+        this.positionMs = positionMs;
+        return this;
     }
 
     public int getWindowIndex() {
@@ -103,7 +107,7 @@ public final class PlayerMessage {
     }
 
     public PlayerMessage setDeleteAfterDelivery(boolean deleteAfterDelivery) {
-        Assertions.checkState(this.isSent ^ 1);
+        Assertions.checkState(!this.isSent);
         this.deleteAfterDelivery = deleteAfterDelivery;
         return this;
     }
@@ -113,7 +117,7 @@ public final class PlayerMessage {
     }
 
     public PlayerMessage send() {
-        Assertions.checkState(this.isSent ^ true);
+        Assertions.checkState(!this.isSent);
         if (this.positionMs == C0542C.TIME_UNSET) {
             Assertions.checkArgument(this.deleteAfterDelivery);
         }

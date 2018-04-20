@@ -56,31 +56,31 @@ public final class HlsMediaSource implements MediaSource, PrimaryPlaylistListene
         }
 
         public Factory setExtractorFactory(HlsExtractorFactory extractorFactory) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
+            Assertions.checkState(!this.isCreateCalled);
             this.extractorFactory = (HlsExtractorFactory) Assertions.checkNotNull(extractorFactory);
             return this;
         }
 
         public Factory setMinLoadableRetryCount(int minLoadableRetryCount) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
+            Assertions.checkState(!this.isCreateCalled);
             this.minLoadableRetryCount = minLoadableRetryCount;
             return this;
         }
 
         public Factory setPlaylistParser(Parser<HlsPlaylist> playlistParser) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
+            Assertions.checkState(!this.isCreateCalled);
             this.playlistParser = (Parser) Assertions.checkNotNull(playlistParser);
             return this;
         }
 
         public Factory setCompositeSequenceableLoaderFactory(CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
+            Assertions.checkState(!this.isCreateCalled);
             this.compositeSequenceableLoaderFactory = (CompositeSequenceableLoaderFactory) Assertions.checkNotNull(compositeSequenceableLoaderFactory);
             return this;
         }
 
         public Factory setAllowChunklessPreparation(boolean allowChunklessPreparation) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
+            Assertions.checkState(!this.isCreateCalled);
             this.allowChunklessPreparation = allowChunklessPreparation;
             return this;
         }
@@ -159,10 +159,10 @@ public final class HlsMediaSource implements MediaSource, PrimaryPlaylistListene
         }
     }
 
-    public void onPrimaryPlaylistRefreshed(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist r32) {
+    public void onPrimaryPlaylistRefreshed(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist r33) {
         /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r2_9 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline) in PHI: PHI: (r2_10 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline) = (r2_7 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline), (r2_9 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline) binds: {(r2_7 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline)=B:22:0x0059, (r2_9 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline)=B:26:0x0079}
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor block by arg (r3_2 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline) in PHI: PHI: (r3_1 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline) = (r3_0 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline), (r3_2 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline) binds: {(r3_0 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline)=B:19:0x005f, (r3_2 'timeline' org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline)=B:30:0x00af}
 	at jadx.core.dex.instructions.PhiInsn.replaceArg(PhiInsn.java:79)
 	at jadx.core.dex.visitors.ModVisitor.processInvoke(ModVisitor.java:222)
 	at jadx.core.dex.visitors.ModVisitor.replaceStep(ModVisitor.java:83)
@@ -175,108 +175,123 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Unknown predecessor bloc
 	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
 */
         /*
-        r31 = this;
-        r0 = r31;
-        r1 = r32;
-        r2 = r1.hasProgramDateTime;
-        r5 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
-        if (r2 == 0) goto L_0x0010;
-    L_0x000d:
-        r8 = 0;
-        goto L_0x0011;
-    L_0x0010:
-        r8 = r5;
-    L_0x0011:
-        r2 = r1.hasProgramDateTime;
-        if (r2 == 0) goto L_0x001c;
-    L_0x0015:
-        r10 = r1.startTimeUs;
-        r10 = org.telegram.messenger.exoplayer2.C0542C.usToMs(r10);
-        goto L_0x001d;
-    L_0x001c:
-        r10 = r5;
-    L_0x001d:
-        r14 = r1.startOffsetUs;
-        r2 = r0.playlistTracker;
-        r2 = r2.isLive();
-        if (r2 == 0) goto L_0x0073;
-    L_0x0027:
-        r2 = r1.hasEndTag;
-        if (r2 == 0) goto L_0x0034;
-    L_0x002b:
-        r12 = r1.startTimeUs;
-        r3 = r1.durationUs;
-        r16 = r12 + r3;
-        r12 = r16;
-        goto L_0x0035;
+        r32 = this;
+        r0 = r33;
+        r10 = r0.hasProgramDateTime;
+        if (r10 == 0) goto L_0x007b;
+    L_0x0006:
+        r4 = 0;
+    L_0x0008:
+        r0 = r33;
+        r10 = r0.hasProgramDateTime;
+        if (r10 == 0) goto L_0x0081;
+    L_0x000e:
+        r0 = r33;
+        r10 = r0.startTimeUs;
+        r6 = org.telegram.messenger.exoplayer2.C0542C.usToMs(r10);
+    L_0x0016:
+        r0 = r33;
+        r14 = r0.startOffsetUs;
+        r0 = r32;
+        r10 = r0.playlistTracker;
+        r10 = r10.isLive();
+        if (r10 == 0) goto L_0x00a4;
+    L_0x0024:
+        r0 = r33;
+        r10 = r0.hasEndTag;
+        if (r10 == 0) goto L_0x0087;
+    L_0x002a:
+        r0 = r33;
+        r10 = r0.startTimeUs;
+        r0 = r33;
+        r12 = r0.durationUs;
+        r8 = r10 + r12;
     L_0x0034:
-        r12 = r5;
-    L_0x0035:
-        r2 = r1.segments;
-        r3 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1));
-        if (r3 != 0) goto L_0x0058;
-    L_0x003b:
-        r3 = r2.isEmpty();
-        if (r3 == 0) goto L_0x0044;
+        r0 = r33;
+        r2 = r0.segments;
+        r10 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        r10 = (r14 > r10 ? 1 : (r14 == r10 ? 0 : -1));
+        if (r10 != 0) goto L_0x0049;
     L_0x0041:
-        r3 = 0;
-        goto L_0x0057;
-    L_0x0044:
-        r3 = 0;
-        r4 = r2.size();
-        r4 = r4 + -3;
-        r3 = java.lang.Math.max(r3, r4);
-        r3 = r2.get(r3);
-        r3 = (org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist.Segment) r3;
-        r3 = r3.relativeStartTimeUs;
-    L_0x0057:
-        goto L_0x0059;
-    L_0x0058:
-        r3 = r14;
-    L_0x0059:
-        r5 = new org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline;
-        r14 = r1.durationUs;
-        r6 = r1.startTimeUs;
-        r20 = 1;
-        r24 = r2;
-        r2 = r1.hasEndTag;
-        r21 = r2 ^ 1;
-        r16 = r6;
-        r7 = r5;
-        r18 = r3;
-        r7.<init>(r8, r10, r12, r14, r16, r18, r20, r21);
-        r2 = r5;
-        r14 = r3;
-        goto L_0x0098;
-    L_0x0073:
-        r2 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1));
-        if (r2 != 0) goto L_0x0079;
-    L_0x0077:
+        r10 = r2.isEmpty();
+        if (r10 == 0) goto L_0x008d;
+    L_0x0047:
         r14 = 0;
-    L_0x0079:
-        r2 = new org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline;
-        r3 = r1.startTimeUs;
-        r5 = r1.durationUs;
-        r21 = r3 + r5;
-        r3 = r1.durationUs;
-        r5 = r1.startTimeUs;
-        r29 = 1;
-        r30 = 0;
-        r16 = r2;
-        r17 = r8;
-        r19 = r10;
-        r23 = r3;
-        r25 = r5;
-        r27 = r14;
-        r16.<init>(r17, r19, r21, r23, r25, r27, r29, r30);
-    L_0x0098:
-        r3 = r0.sourceListener;
-        r4 = new org.telegram.messenger.exoplayer2.source.hls.HlsManifest;
-        r5 = r0.playlistTracker;
-        r5 = r5.getMasterPlaylist();
-        r4.<init>(r5, r1);
-        r3.onSourceInfoRefreshed(r0, r2, r4);
+    L_0x0049:
+        r3 = new org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline;
+        r0 = r33;
+        r10 = r0.durationUs;
+        r0 = r33;
+        r12 = r0.startTimeUs;
+        r16 = 1;
+        r0 = r33;
+        r0 = r0.hasEndTag;
+        r17 = r0;
+        if (r17 != 0) goto L_0x00a1;
+    L_0x005d:
+        r17 = 1;
+    L_0x005f:
+        r3.<init>(r4, r6, r8, r10, r12, r14, r16, r17);
+    L_0x0062:
+        r0 = r32;
+        r10 = r0.sourceListener;
+        r11 = new org.telegram.messenger.exoplayer2.source.hls.HlsManifest;
+        r0 = r32;
+        r12 = r0.playlistTracker;
+        r12 = r12.getMasterPlaylist();
+        r0 = r33;
+        r11.<init>(r12, r0);
+        r0 = r32;
+        r10.onSourceInfoRefreshed(r0, r3, r11);
         return;
+    L_0x007b:
+        r4 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        goto L_0x0008;
+    L_0x0081:
+        r6 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        goto L_0x0016;
+    L_0x0087:
+        r8 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        goto L_0x0034;
+    L_0x008d:
+        r10 = 0;
+        r11 = r2.size();
+        r11 = r11 + -3;
+        r10 = java.lang.Math.max(r10, r11);
+        r10 = r2.get(r10);
+        r10 = (org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist.Segment) r10;
+        r14 = r10.relativeStartTimeUs;
+        goto L_0x0049;
+    L_0x00a1:
+        r17 = 0;
+        goto L_0x005f;
+    L_0x00a4:
+        r10 = -922337203NUM; // 0x800000NUM float:1.4E-45 double:-4.9E-324;
+        r10 = (r14 > r10 ? 1 : (r14 == r10 ? 0 : -1));
+        if (r10 != 0) goto L_0x00af;
+    L_0x00ad:
+        r14 = 0;
+    L_0x00af:
+        r3 = new org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline;
+        r0 = r33;
+        r10 = r0.startTimeUs;
+        r0 = r33;
+        r12 = r0.durationUs;
+        r22 = r10 + r12;
+        r0 = r33;
+        r0 = r0.durationUs;
+        r24 = r0;
+        r0 = r33;
+        r0 = r0.startTimeUs;
+        r26 = r0;
+        r30 = 1;
+        r31 = 0;
+        r17 = r3;
+        r18 = r4;
+        r20 = r6;
+        r28 = r14;
+        r17.<init>(r18, r20, r22, r24, r26, r28, r30, r31);
+        goto L_0x0062;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.exoplayer2.source.hls.HlsMediaSource.onPrimaryPlaylistRefreshed(org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist):void");
     }

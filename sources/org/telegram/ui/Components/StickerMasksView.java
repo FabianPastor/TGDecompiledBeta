@@ -55,8 +55,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     private int stickersTabOffset;
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$3 */
-    class C13093 implements OnTouchListener {
-        C13093() {
+    class C13113 implements OnTouchListener {
+        C13113() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -65,8 +65,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$7 */
-    class C13107 implements Runnable {
-        C13107() {
+    class C13127 implements Runnable {
+        C13127() {
         }
 
         public void run() {
@@ -82,8 +82,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$2 */
-    class C20862 extends SpanSizeLookup {
-        C20862() {
+    class C20872 extends SpanSizeLookup {
+        C20872() {
         }
 
         public int getSpanSize(int position) {
@@ -95,8 +95,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$4 */
-    class C20874 implements OnItemClickListener {
-        C20874() {
+    class C20884 implements OnItemClickListener {
+        C20884() {
         }
 
         public void onItemClick(View view, int position) {
@@ -114,8 +114,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$5 */
-    class C20885 implements ScrollSlidingTabStripDelegate {
-        C20885() {
+    class C20895 implements ScrollSlidingTabStripDelegate {
+        C20895() {
         }
 
         public void onPageSelected(int page) {
@@ -148,8 +148,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
     }
 
     /* renamed from: org.telegram.ui.Components.StickerMasksView$6 */
-    class C20896 extends OnScrollListener {
-        C20896() {
+    class C20906 extends OnScrollListener {
+        C20906() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -220,8 +220,6 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                 case 1:
                     view = new EmptyCell(this.context);
                     break;
-                default:
-                    break;
             }
             return new Holder(view);
         }
@@ -234,17 +232,16 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                 case 1:
                     if (position == this.totalItems) {
                         TL_messages_stickerSet pack = (TL_messages_stickerSet) this.rowStartPack.get((position - 1) / this.stickersPerRow);
-                        int i = 1;
                         if (pack == null) {
                             ((EmptyCell) holder.itemView).setHeight(1);
-                        } else {
-                            int height = StickerMasksView.this.stickersGridView.getMeasuredHeight() - (((int) Math.ceil((double) (((float) pack.documents.size()) / ((float) this.stickersPerRow)))) * AndroidUtilities.dp(82.0f));
-                            EmptyCell emptyCell = (EmptyCell) holder.itemView;
-                            if (height > 0) {
-                                i = height;
-                            }
-                            emptyCell.setHeight(i);
+                            return;
                         }
+                        int height = StickerMasksView.this.stickersGridView.getMeasuredHeight() - (((int) Math.ceil((double) (((float) pack.documents.size()) / ((float) this.stickersPerRow)))) * AndroidUtilities.dp(82.0f));
+                        EmptyCell emptyCell = (EmptyCell) holder.itemView;
+                        if (height <= 0) {
+                            height = 1;
+                        }
+                        emptyCell.setHeight(height);
                         return;
                     }
                     ((EmptyCell) holder.itemView).setHeight(AndroidUtilities.dp(82.0f));
@@ -301,28 +298,22 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         DataQuery.getInstance(this.currentAccount).checkStickers(1);
         this.stickersGridView = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent event) {
-                boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), null);
-                if (!super.onInterceptTouchEvent(event)) {
-                    if (!result) {
-                        return false;
-                    }
-                }
-                return true;
+                return super.onInterceptTouchEvent(event) || StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), null);
             }
         };
         RecyclerListView recyclerListView = this.stickersGridView;
         LayoutManager gridLayoutManager = new GridLayoutManager(context, 5);
         this.stickersLayoutManager = gridLayoutManager;
         recyclerListView.setLayoutManager(gridLayoutManager);
-        this.stickersLayoutManager.setSpanSizeLookup(new C20862());
+        this.stickersLayoutManager.setSpanSizeLookup(new C20872());
         this.stickersGridView.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
         this.stickersGridView.setClipToPadding(false);
         recyclerListView = this.stickersGridView;
         Adapter stickersGridAdapter = new StickersGridAdapter(context);
         this.stickersGridAdapter = stickersGridAdapter;
         recyclerListView.setAdapter(stickersGridAdapter);
-        this.stickersGridView.setOnTouchListener(new C13093());
-        this.stickersOnItemClickListener = new C20874();
+        this.stickersGridView.setOnTouchListener(new C13113());
+        this.stickersOnItemClickListener = new C20884();
         this.stickersGridView.setOnItemClickListener(this.stickersOnItemClickListener);
         this.stickersGridView.setGlowColor(-657673);
         addView(this.stickersGridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
@@ -339,8 +330,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         this.scrollSlidingTabStrip.setIndicatorHeight(AndroidUtilities.dp(1.0f) + 1);
         addView(this.scrollSlidingTabStrip, LayoutHelper.createFrame(-1, 48, 51));
         updateStickerTabs();
-        this.scrollSlidingTabStrip.setDelegate(new C20885());
-        this.stickersGridView.setOnScrollListener(new C20896());
+        this.scrollSlidingTabStrip.setDelegate(new C20895());
+        this.stickersGridView.setOnScrollListener(new C20906());
     }
 
     private void checkScroll() {
@@ -388,10 +379,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
             ArrayList<TL_messages_stickerSet> packs = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
             for (a = 0; a < packs.size(); a++) {
                 TL_messages_stickerSet pack = (TL_messages_stickerSet) packs.get(a);
-                if (!(pack.set.archived || pack.documents == null)) {
-                    if (!pack.documents.isEmpty()) {
-                        this.stickerSets[this.currentType].add(pack);
-                    }
+                if (!(pack.set.archived || pack.documents == null || pack.documents.isEmpty())) {
+                    this.stickerSets[this.currentType].add(pack);
                 }
             }
             for (a = 0; a < this.stickerSets[this.currentType].size(); a++) {
@@ -454,7 +443,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         super.onAttachedToWindow();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoaded);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentImagesDidLoaded);
-        AndroidUtilities.runOnUIThread(new C13107());
+        AndroidUtilities.runOnUIThread(new C13127());
     }
 
     public void setVisibility(int visibility) {

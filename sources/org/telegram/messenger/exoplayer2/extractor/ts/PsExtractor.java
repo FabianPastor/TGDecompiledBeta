@@ -18,7 +18,7 @@ import org.telegram.messenger.exoplayer2.util.TimestampAdjuster;
 public final class PsExtractor implements Extractor {
     public static final int AUDIO_STREAM = 192;
     public static final int AUDIO_STREAM_MASK = 224;
-    public static final ExtractorsFactory FACTORY = new C18451();
+    public static final ExtractorsFactory FACTORY = new C18471();
     private static final long MAX_SEARCH_LENGTH = 1048576;
     private static final int MAX_STREAM_ID_PLUS_ONE = 256;
     private static final int MPEG_PROGRAM_END_CODE = 441;
@@ -83,29 +83,29 @@ public final class PsExtractor implements Extractor {
                 this.pesScratch.skipBits(4);
                 long pts = ((long) this.pesScratch.readBits(3)) << 30;
                 this.pesScratch.skipBits(1);
-                long pts2 = pts | ((long) (this.pesScratch.readBits(15) << 15));
+                pts |= (long) (this.pesScratch.readBits(15) << 15);
                 this.pesScratch.skipBits(1);
-                long pts3 = pts2 | ((long) this.pesScratch.readBits(15));
+                pts |= (long) this.pesScratch.readBits(15);
                 this.pesScratch.skipBits(1);
                 if (!this.seenFirstDts && this.dtsFlag) {
                     this.pesScratch.skipBits(4);
                     long dts = ((long) this.pesScratch.readBits(3)) << 30;
                     this.pesScratch.skipBits(1);
-                    long dts2 = dts | ((long) (this.pesScratch.readBits(15) << 15));
+                    dts |= (long) (this.pesScratch.readBits(15) << 15);
                     this.pesScratch.skipBits(1);
-                    long dts3 = dts2 | ((long) this.pesScratch.readBits(15));
+                    dts |= (long) this.pesScratch.readBits(15);
                     this.pesScratch.skipBits(1);
-                    this.timestampAdjuster.adjustTsTimestamp(dts3);
+                    this.timestampAdjuster.adjustTsTimestamp(dts);
                     this.seenFirstDts = true;
                 }
-                this.timeUs = this.timestampAdjuster.adjustTsTimestamp(pts3);
+                this.timeUs = this.timestampAdjuster.adjustTsTimestamp(pts);
             }
         }
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor$1 */
-    static class C18451 implements ExtractorsFactory {
-        C18451() {
+    static class C18471 implements ExtractorsFactory {
+        C18471() {
         }
 
         public Extractor[] createExtractors() {
@@ -124,16 +124,16 @@ public final class PsExtractor implements Extractor {
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
+        boolean z = true;
         byte[] scratch = new byte[14];
-        boolean z = false;
         input.peekFully(scratch, 0, 14);
         if (PACK_START_CODE != (((((scratch[0] & 255) << 24) | ((scratch[1] & 255) << 16)) | ((scratch[2] & 255) << 8)) | (scratch[3] & 255)) || (scratch[4] & 196) != 68 || (scratch[6] & 4) != 4 || (scratch[8] & 4) != 4 || (scratch[9] & 1) != 1 || (scratch[12] & 3) != 3) {
             return false;
         }
         input.advancePeekPosition(scratch[13] & 7);
         input.peekFully(scratch, 0, 3);
-        if (1 == ((scratch[2] & 255) | (((scratch[0] & 255) << 16) | ((scratch[1] & 255) << 8)))) {
-            z = true;
+        if (1 != ((((scratch[0] & 255) << 16) | ((scratch[1] & 255) << 8)) | (scratch[2] & 255))) {
+            z = false;
         }
         return z;
     }

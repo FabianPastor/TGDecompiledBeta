@@ -71,20 +71,24 @@ public abstract class SegmentDownloader<M, K> implements Downloader {
 
     public final void init() throws InterruptedException, IOException {
         try {
+            Exception e;
             getManifestIfNeeded(true);
             try {
                 initStatus(true);
-            } catch (Exception e) {
-                resetCounters();
-                throw e;
+                return;
+            } catch (IOException e2) {
+                e = e2;
+            } catch (InterruptedException e3) {
+                e = e3;
             }
-        } catch (IOException e2) {
+            resetCounters();
+            throw e;
+        } catch (IOException e4) {
         }
     }
 
     public final synchronized void download(ProgressListener listener) throws IOException, InterruptedException {
         this.priorityTaskManager.add(C0542C.PRIORITY_DOWNLOAD);
-        int i = 0;
         try {
             getManifestIfNeeded(false);
             List<Segment> segments = initStatus(false);
@@ -92,14 +96,14 @@ public abstract class SegmentDownloader<M, K> implements Downloader {
             Collections.sort(segments);
             byte[] buffer = new byte[131072];
             CachingCounters cachingCounters = new CachingCounters();
-            while (i < segments.size()) {
+            for (int i = 0; i < segments.size(); i++) {
                 CacheUtil.cache(((Segment) segments.get(i)).dataSpec, this.cache, this.dataSource, buffer, this.priorityTaskManager, C0542C.PRIORITY_DOWNLOAD, cachingCounters, true);
                 this.downloadedBytes += cachingCounters.newlyCachedBytes;
                 this.downloadedSegments++;
                 notifyListener(listener);
-                i++;
             }
-        } finally {
+            this.priorityTaskManager.remove(C0542C.PRIORITY_DOWNLOAD);
+        } catch (Throwable th) {
             this.priorityTaskManager.remove(C0542C.PRIORITY_DOWNLOAD);
         }
     }
@@ -119,16 +123,13 @@ public abstract class SegmentDownloader<M, K> implements Downloader {
     public float getDownloadPercentage() {
         int totalSegments = this.totalSegments;
         int downloadedSegments = this.downloadedSegments;
-        if (totalSegments != -1) {
-            if (downloadedSegments != -1) {
-                float f = 100.0f;
-                if (totalSegments != 0) {
-                    f = (((float) downloadedSegments) * 100.0f) / ((float) totalSegments);
-                }
-                return f;
-            }
+        if (totalSegments == -1 || downloadedSegments == -1) {
+            return Float.NaN;
         }
-        return Float.NaN;
+        if (totalSegments != 0) {
+            return (100.0f * ((float) downloadedSegments)) / ((float) totalSegments);
+        }
+        return 100.0f;
     }
 
     public final void remove() throws InterruptedException {

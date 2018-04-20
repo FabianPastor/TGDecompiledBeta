@@ -16,18 +16,16 @@ public class KeepAliveJob extends JobIntentService {
         }
 
         public void run() {
-            if (!KeepAliveJob.startingJob) {
-                if (KeepAliveJob.countDownLatch == null) {
-                    try {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.m0d("starting keep-alive job");
-                        }
-                        synchronized (KeepAliveJob.sync) {
-                            KeepAliveJob.startingJob = true;
-                        }
-                        JobIntentService.enqueueWork(ApplicationLoader.applicationContext, KeepAliveJob.class, 1000, new Intent());
-                    } catch (Exception e) {
+            if (!KeepAliveJob.startingJob && KeepAliveJob.countDownLatch == null) {
+                try {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.m0d("starting keep-alive job");
                     }
+                    synchronized (KeepAliveJob.sync) {
+                        KeepAliveJob.startingJob = true;
+                    }
+                    JobIntentService.enqueueWork(ApplicationLoader.applicationContext, KeepAliveJob.class, 1000, new Intent());
+                } catch (Exception e) {
                 }
             }
         }

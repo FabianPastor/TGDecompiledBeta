@@ -61,11 +61,11 @@ public class SsManifestParser implements Parser<SsManifest> {
                                 if (skippingElementDepth <= 0) {
                                     if (!handleChildInline(tagName)) {
                                         ElementParser childElementParser = newChildParser(this, tagName, this.baseUri);
-                                        if (childElementParser == null) {
-                                            skippingElementDepth = 1;
-                                        } else {
+                                        if (childElementParser != null) {
                                             addChild(childElementParser.parse(xmlParser));
+                                            break;
                                         }
+                                        skippingElementDepth = 1;
                                         break;
                                     }
                                     parseStartTag(xmlParser);
@@ -158,14 +158,14 @@ public class SsManifestParser implements Parser<SsManifest> {
 
         protected final int parseInt(XmlPullParser parser, String key, int defaultValue) throws ParserException {
             String value = parser.getAttributeValue(null, key);
-            if (value == null) {
-                return defaultValue;
+            if (value != null) {
+                try {
+                    defaultValue = Integer.parseInt(value);
+                } catch (Throwable e) {
+                    throw new ParserException(e);
+                }
             }
-            try {
-                return Integer.parseInt(value);
-            } catch (Throwable e) {
-                throw new ParserException(e);
-            }
+            return defaultValue;
         }
 
         protected final int parseRequiredInt(XmlPullParser parser, String key) throws ParserException {
@@ -182,14 +182,14 @@ public class SsManifestParser implements Parser<SsManifest> {
 
         protected final long parseLong(XmlPullParser parser, String key, long defaultValue) throws ParserException {
             String value = parser.getAttributeValue(null, key);
-            if (value == null) {
-                return defaultValue;
+            if (value != null) {
+                try {
+                    defaultValue = Long.parseLong(value);
+                } catch (Throwable e) {
+                    throw new ParserException(e);
+                }
             }
-            try {
-                return Long.parseLong(value);
-            } catch (Throwable e) {
-                throw new ParserException(e);
-            }
+            return defaultValue;
         }
 
         protected final long parseRequiredLong(XmlPullParser parser, String key) throws ParserException {
@@ -215,10 +215,7 @@ public class SsManifestParser implements Parser<SsManifest> {
 
     public static class MissingFieldException extends ParserException {
         public MissingFieldException(String fieldName) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Missing required field: ");
-            stringBuilder.append(fieldName);
-            super(stringBuilder.toString());
+            super("Missing required field: " + fieldName);
         }
     }
 
@@ -288,27 +285,29 @@ public class SsManifestParser implements Parser<SsManifest> {
         }
 
         public void parseStartTag(XmlPullParser parser) throws ParserException {
-            XmlPullParser xmlPullParser = parser;
             int type = ((Integer) getNormalizedAttribute(KEY_TYPE)).intValue();
-            String id = xmlPullParser.getAttributeValue(null, KEY_INDEX);
-            int bitrate = parseRequiredInt(xmlPullParser, KEY_BITRATE);
-            String sampleMimeType = fourCCToMimeType(parseRequiredString(xmlPullParser, KEY_FOUR_CC));
+            String id = parser.getAttributeValue(null, KEY_INDEX);
+            int bitrate = parseRequiredInt(parser, KEY_BITRATE);
+            String sampleMimeType = fourCCToMimeType(parseRequiredString(parser, KEY_FOUR_CC));
             if (type == 2) {
-                r0.format = Format.createVideoContainerFormat(id, MimeTypes.VIDEO_MP4, sampleMimeType, null, bitrate, parseRequiredInt(xmlPullParser, KEY_MAX_WIDTH), parseRequiredInt(xmlPullParser, KEY_MAX_HEIGHT), -1.0f, buildCodecSpecificData(xmlPullParser.getAttributeValue(null, KEY_CODEC_PRIVATE_DATA)), 0);
+                this.format = Format.createVideoContainerFormat(id, MimeTypes.VIDEO_MP4, sampleMimeType, null, bitrate, parseRequiredInt(parser, KEY_MAX_WIDTH), parseRequiredInt(parser, KEY_MAX_HEIGHT), -1.0f, buildCodecSpecificData(parser.getAttributeValue(null, KEY_CODEC_PRIVATE_DATA)), 0);
             } else if (type == 1) {
-                String sampleMimeType2 = sampleMimeType == null ? MimeTypes.AUDIO_AAC : sampleMimeType;
-                int channels = parseRequiredInt(xmlPullParser, KEY_CHANNELS);
-                int samplingRate = parseRequiredInt(xmlPullParser, KEY_SAMPLING_RATE);
-                List<byte[]> codecSpecificData = buildCodecSpecificData(xmlPullParser.getAttributeValue(null, KEY_CODEC_PRIVATE_DATA));
-                if (codecSpecificData.isEmpty() && MimeTypes.AUDIO_AAC.equals(sampleMimeType2)) {
+                if (sampleMimeType == null) {
+                    sampleMimeType = MimeTypes.AUDIO_AAC;
+                }
+                int channels = parseRequiredInt(parser, KEY_CHANNELS);
+                int samplingRate = parseRequiredInt(parser, KEY_SAMPLING_RATE);
+                List<byte[]> codecSpecificData = buildCodecSpecificData(parser.getAttributeValue(null, KEY_CODEC_PRIVATE_DATA));
+                if (codecSpecificData.isEmpty() && MimeTypes.AUDIO_AAC.equals(sampleMimeType)) {
                     codecSpecificData = Collections.singletonList(CodecSpecificDataUtil.buildAacLcAudioSpecificConfig(samplingRate, channels));
                 }
-                String sampleMimeType3 = sampleMimeType2;
-                r0.format = Format.createAudioContainerFormat(id, MimeTypes.AUDIO_MP4, sampleMimeType2, null, bitrate, channels, samplingRate, codecSpecificData, 0, (String) getNormalizedAttribute(KEY_LANGUAGE));
+                String str = id;
+                this.format = Format.createAudioContainerFormat(str, MimeTypes.AUDIO_MP4, sampleMimeType, null, bitrate, channels, samplingRate, codecSpecificData, 0, (String) getNormalizedAttribute(KEY_LANGUAGE));
             } else if (type == 3) {
-                r0.format = Format.createTextContainerFormat(id, MimeTypes.APPLICATION_MP4, sampleMimeType, null, bitrate, 0, (String) getNormalizedAttribute(KEY_LANGUAGE));
+                String str2 = id;
+                this.format = Format.createTextContainerFormat(str2, MimeTypes.APPLICATION_MP4, sampleMimeType, null, bitrate, 0, (String) getNormalizedAttribute(KEY_LANGUAGE));
             } else {
-                r0.format = Format.createContainerFormat(id, MimeTypes.APPLICATION_MP4, sampleMimeType, null, bitrate, 0, null);
+                this.format = Format.createContainerFormat(id, MimeTypes.APPLICATION_MP4, sampleMimeType, null, bitrate, 0, null);
             }
         }
 
@@ -331,44 +330,34 @@ public class SsManifestParser implements Parser<SsManifest> {
         }
 
         private static String fourCCToMimeType(String fourCC) {
-            if (!(fourCC.equalsIgnoreCase("H264") || fourCC.equalsIgnoreCase("X264") || fourCC.equalsIgnoreCase("AVC1"))) {
-                if (!fourCC.equalsIgnoreCase("DAVC")) {
-                    if (!(fourCC.equalsIgnoreCase("AAC") || fourCC.equalsIgnoreCase("AACL") || fourCC.equalsIgnoreCase("AACH"))) {
-                        if (!fourCC.equalsIgnoreCase("AACP")) {
-                            if (fourCC.equalsIgnoreCase("TTML")) {
-                                return MimeTypes.APPLICATION_TTML;
-                            }
-                            if (!fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE8)) {
-                                if (!fourCC.equalsIgnoreCase("dac3")) {
-                                    if (!fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE9)) {
-                                        if (!fourCC.equalsIgnoreCase("dec3")) {
-                                            if (fourCC.equalsIgnoreCase("dtsc")) {
-                                                return MimeTypes.AUDIO_DTS;
-                                            }
-                                            if (!fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE12)) {
-                                                if (!fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE11)) {
-                                                    if (fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE13)) {
-                                                        return MimeTypes.AUDIO_DTS_EXPRESS;
-                                                    }
-                                                    if (fourCC.equalsIgnoreCase("opus")) {
-                                                        return MimeTypes.AUDIO_OPUS;
-                                                    }
-                                                    return null;
-                                                }
-                                            }
-                                            return MimeTypes.AUDIO_DTS_HD;
-                                        }
-                                    }
-                                    return MimeTypes.AUDIO_E_AC3;
-                                }
-                            }
-                            return MimeTypes.AUDIO_AC3;
-                        }
-                    }
-                    return MimeTypes.AUDIO_AAC;
-                }
+            if (fourCC.equalsIgnoreCase("H264") || fourCC.equalsIgnoreCase("X264") || fourCC.equalsIgnoreCase("AVC1") || fourCC.equalsIgnoreCase("DAVC")) {
+                return "video/avc";
             }
-            return "video/avc";
+            if (fourCC.equalsIgnoreCase("AAC") || fourCC.equalsIgnoreCase("AACL") || fourCC.equalsIgnoreCase("AACH") || fourCC.equalsIgnoreCase("AACP")) {
+                return MimeTypes.AUDIO_AAC;
+            }
+            if (fourCC.equalsIgnoreCase("TTML")) {
+                return MimeTypes.APPLICATION_TTML;
+            }
+            if (fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE8) || fourCC.equalsIgnoreCase("dac3")) {
+                return MimeTypes.AUDIO_AC3;
+            }
+            if (fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE9) || fourCC.equalsIgnoreCase("dec3")) {
+                return MimeTypes.AUDIO_E_AC3;
+            }
+            if (fourCC.equalsIgnoreCase("dtsc")) {
+                return MimeTypes.AUDIO_DTS;
+            }
+            if (fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE12) || fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE11)) {
+                return MimeTypes.AUDIO_DTS_HD;
+            }
+            if (fourCC.equalsIgnoreCase(AudioSampleEntry.TYPE13)) {
+                return MimeTypes.AUDIO_DTS_EXPRESS;
+            }
+            if (fourCC.equalsIgnoreCase("opus")) {
+                return MimeTypes.AUDIO_OPUS;
+            }
+            return null;
         }
     }
 
@@ -493,16 +482,14 @@ public class SsManifestParser implements Parser<SsManifest> {
                     throw new ParserException("Unable to infer start time");
                 }
             }
-            int i = 1;
             chunkIndex++;
             this.startTimes.add(Long.valueOf(startTime));
             this.lastChunkDuration = parseLong(parser, KEY_FRAGMENT_DURATION, C0542C.TIME_UNSET);
             long repeatCount = parseLong(parser, KEY_FRAGMENT_REPEAT_COUNT, 1);
             if (repeatCount <= 1 || this.lastChunkDuration != C0542C.TIME_UNSET) {
-                while (((long) i) < repeatCount) {
+                for (int i = 1; ((long) i) < repeatCount; i++) {
                     chunkIndex++;
-                    this.startTimes.add(Long.valueOf(startTime + (this.lastChunkDuration * ((long) i))));
-                    i++;
+                    this.startTimes.add(Long.valueOf((this.lastChunkDuration * ((long) i)) + startTime));
                 }
                 return;
             }
@@ -545,11 +532,7 @@ public class SsManifestParser implements Parser<SsManifest> {
                 if ("text".equalsIgnoreCase(value)) {
                     return 3;
                 }
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Invalid key value[");
-                stringBuilder.append(value);
-                stringBuilder.append("]");
-                throw new ParserException(stringBuilder.toString());
+                throw new ParserException("Invalid key value[" + value + "]");
             }
         }
 

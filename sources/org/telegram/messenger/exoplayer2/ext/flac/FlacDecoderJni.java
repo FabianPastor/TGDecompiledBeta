@@ -57,12 +57,11 @@ final class FlacDecoderJni {
     }
 
     public boolean isEndOfData() {
-        boolean z = true;
         if (this.byteBufferData != null) {
-            if (this.byteBufferData.remaining() != 0) {
-                z = false;
+            if (this.byteBufferData.remaining() == 0) {
+                return true;
             }
-            return z;
+            return false;
         } else if (this.extractorInput != null) {
             return this.endOfExtractorInput;
         } else {
@@ -78,9 +77,7 @@ final class FlacDecoderJni {
             this.byteBufferData.limit(this.byteBufferData.position() + byteCount);
             target.put(this.byteBufferData);
             this.byteBufferData.limit(originalLimit);
-        } else if (this.extractorInput == null) {
-            return -1;
-        } else {
+        } else if (this.extractorInput != null) {
             byteCount = Math.min(byteCount, 8192);
             int read = readFromExtractorInput(0, byteCount);
             if (read < 4) {
@@ -88,6 +85,9 @@ final class FlacDecoderJni {
             }
             byteCount = read;
             target.put(this.tempBuffer, 0, byteCount);
+        } else {
+            int i = byteCount;
+            return -1;
         }
         return byteCount;
     }

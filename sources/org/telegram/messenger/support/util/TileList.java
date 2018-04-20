@@ -62,9 +62,10 @@ class TileList<T> {
         }
         Tile<T> oldTile = (Tile) this.mTiles.valueAt(index);
         this.mTiles.setValueAt(index, newTile);
-        if (this.mLastAccessedTile == oldTile) {
-            this.mLastAccessedTile = newTile;
+        if (this.mLastAccessedTile != oldTile) {
+            return oldTile;
         }
+        this.mLastAccessedTile = newTile;
         return oldTile;
     }
 

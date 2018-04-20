@@ -12,7 +12,10 @@ public abstract class SubtitleOutputBuffer extends OutputBuffer implements Subti
     public void setContent(long timeUs, Subtitle subtitle, long subsampleOffsetUs) {
         this.timeUs = timeUs;
         this.subtitle = subtitle;
-        this.subsampleOffsetUs = subsampleOffsetUs == Long.MAX_VALUE ? this.timeUs : subsampleOffsetUs;
+        if (subsampleOffsetUs == Long.MAX_VALUE) {
+            subsampleOffsetUs = this.timeUs;
+        }
+        this.subsampleOffsetUs = subsampleOffsetUs;
     }
 
     public int getEventTimeCount() {

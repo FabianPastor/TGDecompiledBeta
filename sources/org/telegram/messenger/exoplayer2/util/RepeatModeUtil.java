@@ -26,20 +26,16 @@ public final class RepeatModeUtil {
     }
 
     public static boolean isRepeatModeEnabled(int repeatMode, int enabledModes) {
-        boolean z = false;
         switch (repeatMode) {
             case 0:
                 return true;
             case 1:
-                if ((enabledModes & 1) != 0) {
-                    z = true;
+                if ((enabledModes & 1) == 0) {
+                    return false;
                 }
-                return z;
+                return true;
             case 2:
-                if ((enabledModes & 2) != 0) {
-                    z = true;
-                }
-                return z;
+                return (enabledModes & 2) != 0;
             default:
                 return false;
         }

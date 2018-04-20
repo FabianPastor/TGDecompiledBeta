@@ -111,9 +111,6 @@ final class ScriptTagPayloadReader extends TagPayloadReader {
     }
 
     private static Object readAmfData(ParsableByteArray data, int type) {
-        if (type == 8) {
-            return readAmfEcmaArray(data);
-        }
         switch (type) {
             case 0:
                 return readAmfDouble(data);
@@ -123,15 +120,14 @@ final class ScriptTagPayloadReader extends TagPayloadReader {
                 return readAmfString(data);
             case 3:
                 return readAmfObject(data);
+            case 8:
+                return readAmfEcmaArray(data);
+            case 10:
+                return readAmfStrictArray(data);
+            case 11:
+                return readAmfDate(data);
             default:
-                switch (type) {
-                    case 10:
-                        return readAmfStrictArray(data);
-                    case 11:
-                        return readAmfDate(data);
-                    default:
-                        return null;
-                }
+                return null;
         }
     }
 }

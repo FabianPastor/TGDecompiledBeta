@@ -19,8 +19,8 @@ public class TypingDotsDrawable extends StatusDrawable {
     private boolean started = false;
 
     /* renamed from: org.telegram.ui.Components.TypingDotsDrawable$1 */
-    class C13321 implements Runnable {
-        C13321() {
+    class C13341 implements Runnable {
+        C13341() {
         }
 
         public void run() {
@@ -48,7 +48,7 @@ public class TypingDotsDrawable extends StatusDrawable {
             } else if (timeSinceStart <= 320.0f) {
                 this.scales[a] = 1.33f + this.decelerateInterpolator.getInterpolation(timeSinceStart / 320.0f);
             } else if (timeSinceStart <= 640.0f) {
-                this.scales[a] = 1.33f + (1.0f - this.decelerateInterpolator.getInterpolation((timeSinceStart - 320.0f) / 320.0f));
+                this.scales[a] = (1.0f - this.decelerateInterpolator.getInterpolation((timeSinceStart - 320.0f) / 320.0f)) + 1.33f;
             } else if (timeSinceStart >= 800.0f) {
                 this.elapsedTimes[a] = 0.0f;
                 this.startTimes[a] = 0.0f;
@@ -96,7 +96,7 @@ public class TypingDotsDrawable extends StatusDrawable {
             return;
         }
         if (NotificationCenter.getInstance(this.currentAccount).isAnimationInProgress()) {
-            AndroidUtilities.runOnUIThread(new C13321(), 100);
+            AndroidUtilities.runOnUIThread(new C13341(), 100);
         } else {
             update();
         }

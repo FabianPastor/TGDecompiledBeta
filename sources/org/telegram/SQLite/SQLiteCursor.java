@@ -35,7 +35,10 @@ public class SQLiteCursor {
 
     public boolean isNull(int columnIndex) throws SQLiteException {
         checkRow();
-        return columnIsNull(this.preparedStatement.getStatementHandle(), columnIndex) == 1;
+        if (columnIsNull(this.preparedStatement.getStatementHandle(), columnIndex) == 1) {
+            return true;
+        }
+        return false;
     }
 
     public int intValue(int columnIndex) throws SQLiteException {
@@ -82,7 +85,7 @@ public class SQLiteCursor {
         if (res == -1) {
             int repeatCount = 6;
             while (true) {
-                int i = repeatCount - 1;
+                int repeatCount2 = repeatCount - 1;
                 if (repeatCount == 0) {
                     break;
                 }
@@ -95,9 +98,10 @@ public class SQLiteCursor {
                     if (res == 0) {
                         break;
                     }
-                    repeatCount = i;
-                } catch (Throwable repeatCount2) {
-                    FileLog.m3e(repeatCount2);
+                    repeatCount = repeatCount2;
+                } catch (Throwable e) {
+                    FileLog.m3e(e);
+                    repeatCount = repeatCount2;
                 }
             }
             if (res == -1) {

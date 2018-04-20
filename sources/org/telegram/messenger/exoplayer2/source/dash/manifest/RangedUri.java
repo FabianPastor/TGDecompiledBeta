@@ -10,7 +10,10 @@ public final class RangedUri {
     public final long start;
 
     public RangedUri(String referenceUri, long start, long length) {
-        this.referenceUri = referenceUri == null ? TtmlNode.ANONYMOUS_REGION_ID : referenceUri;
+        if (referenceUri == null) {
+            referenceUri = TtmlNode.ANONYMOUS_REGION_ID;
+        }
+        this.referenceUri = referenceUri;
         this.start = start;
         this.length = length;
     }
@@ -24,41 +27,45 @@ public final class RangedUri {
     }
 
     public RangedUri attemptMerge(RangedUri other, String baseUri) {
+        RangedUri rangedUri = null;
+        long j = -1;
         String resolvedUri = resolveUriString(baseUri);
-        if (other != null) {
-            if (resolvedUri.equals(other.resolveUriString(baseUri))) {
-                if (this.length != -1 && this.start + this.length == other.start) {
-                    return new RangedUri(resolvedUri, this.start, other.length == -1 ? -1 : this.length + other.length);
-                } else if (other.length == -1 || other.start + other.length != this.start) {
-                    return null;
-                } else {
-                    return new RangedUri(resolvedUri, other.start, this.length == -1 ? -1 : other.length + this.length);
+        if (other != null && resolvedUri.equals(other.resolveUriString(baseUri))) {
+            long j2;
+            if (this.length != -1 && this.start + this.length == other.start) {
+                j2 = this.start;
+                if (other.length != -1) {
+                    j = this.length + other.length;
                 }
+                rangedUri = new RangedUri(resolvedUri, j2, j);
+            } else if (other.length != -1 && other.start + other.length == this.start) {
+                j2 = other.start;
+                if (this.length != -1) {
+                    j = other.length + this.length;
+                }
+                rangedUri = new RangedUri(resolvedUri, j2, j);
             }
         }
-        return null;
+        return rangedUri;
     }
 
     public int hashCode() {
         if (this.hashCode == 0) {
-            this.hashCode = (31 * ((31 * ((31 * 17) + ((int) this.start))) + ((int) this.length))) + this.referenceUri.hashCode();
+            this.hashCode = ((((((int) this.start) + 527) * 31) + ((int) this.length)) * 31) + this.referenceUri.hashCode();
         }
         return this.hashCode;
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                RangedUri other = (RangedUri) obj;
-                if (this.start != other.start || this.length != other.length || !this.referenceUri.equals(other.referenceUri)) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        RangedUri other = (RangedUri) obj;
+        if (this.start == other.start && this.length == other.length && this.referenceUri.equals(other.referenceUri)) {
+            return true;
         }
         return false;
     }

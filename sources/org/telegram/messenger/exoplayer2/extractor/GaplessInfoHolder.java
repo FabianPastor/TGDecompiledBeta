@@ -10,13 +10,13 @@ import org.telegram.messenger.exoplayer2.metadata.id3.Id3Decoder.FramePredicate;
 public final class GaplessInfoHolder {
     private static final String GAPLESS_COMMENT_ID = "iTunSMPB";
     private static final Pattern GAPLESS_COMMENT_PATTERN = Pattern.compile("^ [0-9a-fA-F]{8} ([0-9a-fA-F]{8}) ([0-9a-fA-F]{8})");
-    public static final FramePredicate GAPLESS_INFO_ID3_FRAME_PREDICATE = new C18361();
+    public static final FramePredicate GAPLESS_INFO_ID3_FRAME_PREDICATE = new C18381();
     public int encoderDelay = -1;
     public int encoderPadding = -1;
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.GaplessInfoHolder$1 */
-    static class C18361 implements FramePredicate {
-        C18361() {
+    static class C18381 implements FramePredicate {
+        C18381() {
         }
 
         public boolean evaluate(int majorVersion, int id0, int id1, int id2, int id3) {
@@ -27,10 +27,8 @@ public final class GaplessInfoHolder {
     public boolean setFromXingHeaderValue(int value) {
         int encoderDelay = value >> 12;
         int encoderPadding = value & 4095;
-        if (encoderDelay <= 0) {
-            if (encoderPadding <= 0) {
-                return false;
-            }
+        if (encoderDelay <= 0 && encoderPadding <= 0) {
+            return false;
         }
         this.encoderDelay = encoderDelay;
         this.encoderPadding = encoderPadding;
@@ -55,21 +53,21 @@ public final class GaplessInfoHolder {
             return false;
         }
         Matcher matcher = GAPLESS_COMMENT_PATTERN.matcher(data);
-        if (matcher.find()) {
-            try {
-                int encoderDelay = Integer.parseInt(matcher.group(1), 16);
-                int encoderPadding = Integer.parseInt(matcher.group(2), 16);
-                if (encoderDelay <= 0) {
-                    if (encoderPadding > 0) {
-                    }
-                }
-                this.encoderDelay = encoderDelay;
-                this.encoderPadding = encoderPadding;
-                return true;
-            } catch (NumberFormatException e) {
-            }
+        if (!matcher.find()) {
+            return false;
         }
-        return false;
+        try {
+            int encoderDelay = Integer.parseInt(matcher.group(1), 16);
+            int encoderPadding = Integer.parseInt(matcher.group(2), 16);
+            if (encoderDelay <= 0 && encoderPadding <= 0) {
+                return false;
+            }
+            this.encoderDelay = encoderDelay;
+            this.encoderPadding = encoderPadding;
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public boolean hasGaplessInfo() {

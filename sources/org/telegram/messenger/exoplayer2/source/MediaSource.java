@@ -37,24 +37,21 @@ public interface MediaSource {
         }
 
         public boolean equals(Object obj) {
-            boolean z = true;
             if (this == obj) {
                 return true;
             }
-            if (obj != null) {
-                if (getClass() == obj.getClass()) {
-                    MediaPeriodId periodId = (MediaPeriodId) obj;
-                    if (this.periodIndex != periodId.periodIndex || this.adGroupIndex != periodId.adGroupIndex || this.adIndexInAdGroup != periodId.adIndexInAdGroup) {
-                        z = false;
-                    }
-                    return z;
-                }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            MediaPeriodId periodId = (MediaPeriodId) obj;
+            if (this.periodIndex == periodId.periodIndex && this.adGroupIndex == periodId.adGroupIndex && this.adIndexInAdGroup == periodId.adIndexInAdGroup) {
+                return true;
             }
             return false;
         }
 
         public int hashCode() {
-            return (31 * ((31 * ((31 * 17) + this.periodIndex)) + this.adGroupIndex)) + this.adIndexInAdGroup;
+            return ((((this.periodIndex + 527) * 31) + this.adGroupIndex) * 31) + this.adIndexInAdGroup;
         }
     }
 

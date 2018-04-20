@@ -44,18 +44,12 @@ final class OpusReader extends StreamReader {
     }
 
     protected boolean readHeaders(ParsableByteArray packet, long position, SetupData setupData) throws IOException, InterruptedException {
-        ParsableByteArray parsableByteArray = packet;
-        boolean z = true;
         if (this.headerRead) {
-            SetupData setupData2 = setupData;
-            if (packet.readInt() != OPUS_CODE) {
-                z = false;
-            }
-            boolean headerPacket = z;
-            parsableByteArray.setPosition(0);
-            return headerPacket;
+            boolean z = packet.readInt() == OPUS_CODE;
+            packet.setPosition(0);
+            return z;
         }
-        byte[] metadata = Arrays.copyOf(parsableByteArray.data, packet.limit());
+        byte[] metadata = Arrays.copyOf(packet.data, packet.limit());
         int channelCount = metadata[9] & 255;
         int preskip = ((metadata[11] & 255) << 8) | (metadata[10] & 255);
         List<byte[]> initializationData = new ArrayList(3);
@@ -63,7 +57,7 @@ final class OpusReader extends StreamReader {
         putNativeOrderLong(initializationData, preskip);
         putNativeOrderLong(initializationData, DEFAULT_SEEK_PRE_ROLL_SAMPLES);
         setupData.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_OPUS, null, -1, -1, channelCount, SAMPLE_RATE, initializationData, null, 0, null);
-        r0.headerRead = true;
+        this.headerRead = true;
         return true;
     }
 

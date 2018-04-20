@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -46,11 +47,18 @@ public class AboutLinkCell extends FrameLayout {
     }
 
     public AboutLinkCell(Context context) {
+        float f = 16.0f;
         super(context);
         this.imageView = new ImageView(context);
         this.imageView.setScaleType(ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), Mode.MULTIPLY));
-        addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 5.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
+        View view = this.imageView;
+        int i = (LocaleController.isRTL ? 5 : 3) | 48;
+        float f2 = LocaleController.isRTL ? 0.0f : 16.0f;
+        if (!LocaleController.isRTL) {
+            f = 0.0f;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, f2, 5.0f, f, 0.0f));
         setWillNotDraw(false);
     }
 
@@ -93,72 +101,64 @@ public class AboutLinkCell extends FrameLayout {
         float y = event.getY();
         boolean result = false;
         if (this.textLayout != null) {
-            if (event.getAction() != 0) {
-                if (r1.pressedLink == null || event.getAction() != 1) {
-                    if (event.getAction() == 3) {
-                        resetPressedLink();
-                    }
-                }
-            }
-            if (event.getAction() == 0) {
-                resetPressedLink();
-                try {
-                    int x2 = (int) (x - ((float) r1.textX));
-                    int line = r1.textLayout.getLineForVertical((int) (y - ((float) r1.textY)));
-                    int off = r1.textLayout.getOffsetForHorizontal(line, (float) x2);
-                    float left = r1.textLayout.getLineLeft(line);
-                    if (left > ((float) x2) || r1.textLayout.getLineWidth(line) + left < ((float) x2)) {
-                        resetPressedLink();
-                    } else {
-                        Spannable buffer = (Spannable) r1.textLayout.getText();
-                        ClickableSpan[] link = (ClickableSpan[]) buffer.getSpans(off, off, ClickableSpan.class);
-                        if (link.length != 0) {
-                            resetPressedLink();
-                            r1.pressedLink = link[0];
-                            result = true;
-                            try {
-                                int start = buffer.getSpanStart(r1.pressedLink);
-                                r1.urlPath.setCurrentLayout(r1.textLayout, start, 0.0f);
-                                r1.textLayout.getSelectionPath(start, buffer.getSpanEnd(r1.pressedLink), r1.urlPath);
-                            } catch (Throwable e) {
-                                FileLog.m3e(e);
-                            }
-                        } else {
-                            resetPressedLink();
-                        }
-                    }
-                } catch (Throwable e2) {
-                    boolean result2 = result;
-                    Throwable e3 = e2;
+            if (event.getAction() == 0 || (this.pressedLink != null && event.getAction() == 1)) {
+                if (event.getAction() == 0) {
                     resetPressedLink();
-                    FileLog.m3e(e3);
-                    result = result2;
-                }
-            } else if (r1.pressedLink != null) {
-                try {
-                    if (r1.pressedLink instanceof URLSpanNoUnderline) {
-                        String url = ((URLSpanNoUnderline) r1.pressedLink).getURL();
-                        if ((url.startsWith("@") || url.startsWith("#") || url.startsWith("/")) && r1.delegate != null) {
-                            r1.delegate.didPressUrl(url);
+                    try {
+                        int x2 = (int) (x - ((float) this.textX));
+                        int line = this.textLayout.getLineForVertical((int) (y - ((float) this.textY)));
+                        int off = this.textLayout.getOffsetForHorizontal(line, (float) x2);
+                        float left = this.textLayout.getLineLeft(line);
+                        if (left > ((float) x2) || this.textLayout.getLineWidth(line) + left < ((float) x2)) {
+                            resetPressedLink();
+                        } else {
+                            Spannable buffer = (Spannable) this.textLayout.getText();
+                            ClickableSpan[] link = (ClickableSpan[]) buffer.getSpans(off, off, ClickableSpan.class);
+                            if (link.length != 0) {
+                                resetPressedLink();
+                                this.pressedLink = link[0];
+                                result = true;
+                                try {
+                                    int start = buffer.getSpanStart(this.pressedLink);
+                                    this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
+                                    this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
+                                } catch (Throwable e) {
+                                    FileLog.m3e(e);
+                                }
+                            } else {
+                                resetPressedLink();
+                            }
                         }
-                    } else if (r1.pressedLink instanceof URLSpan) {
-                        Browser.openUrl(getContext(), ((URLSpan) r1.pressedLink).getURL());
-                    } else {
-                        r1.pressedLink.onClick(r1);
+                    } catch (Throwable e2) {
+                        resetPressedLink();
+                        FileLog.m3e(e2);
                     }
-                } catch (Throwable e22) {
-                    FileLog.m3e(e22);
+                } else if (this.pressedLink != null) {
+                    try {
+                        if (this.pressedLink instanceof URLSpanNoUnderline) {
+                            String url = ((URLSpanNoUnderline) this.pressedLink).getURL();
+                            if ((url.startsWith("@") || url.startsWith("#") || url.startsWith("/")) && this.delegate != null) {
+                                this.delegate.didPressUrl(url);
+                            }
+                        } else if (this.pressedLink instanceof URLSpan) {
+                            Browser.openUrl(getContext(), ((URLSpan) this.pressedLink).getURL());
+                        } else {
+                            this.pressedLink.onClick(this);
+                        }
+                    } catch (Throwable e22) {
+                        FileLog.m3e(e22);
+                    }
+                    resetPressedLink();
+                    result = true;
                 }
+            } else if (event.getAction() == 3) {
                 resetPressedLink();
-                result = true;
             }
         }
-        if (!result) {
-            if (!super.onTouchEvent(event)) {
-                return false;
-            }
+        if (result || super.onTouchEvent(event)) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     @SuppressLint({"DrawAllocation"})

@@ -20,7 +20,7 @@ public class ID3v2TagHeader {
     }
 
     ID3v2TagHeader(PositionInputStream input) throws IOException, ID3v2Exception {
-        boolean z = false;
+        boolean z = true;
         this.version = 0;
         this.revision = 0;
         this.headerSize = 0;
@@ -38,13 +38,13 @@ public class ID3v2TagHeader {
                 this.totalTagSize = data.readSyncsafeInt() + 10;
                 if (this.version == 2) {
                     this.unsynchronization = (flags & 128) != 0;
-                    if ((flags & 64) != 0) {
-                        z = true;
+                    if ((flags & 64) == 0) {
+                        z = false;
                     }
                     this.compression = z;
                 } else {
-                    if ((flags & 128) != 0) {
-                        z = true;
+                    if ((flags & 128) == 0) {
+                        z = false;
                     }
                     this.unsynchronization = z;
                     if ((flags & 64) != 0) {
@@ -66,15 +66,9 @@ public class ID3v2TagHeader {
                 this.headerSize = (int) (input.getPosition() - startPosition);
                 return;
             }
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Unsupported ID3v2 version: ");
-            stringBuilder.append(this.version);
-            throw new ID3v2Exception(stringBuilder.toString());
+            throw new ID3v2Exception("Unsupported ID3v2 version: " + this.version);
         }
-        stringBuilder = new StringBuilder();
-        stringBuilder.append("Invalid ID3 identifier: ");
-        stringBuilder.append(id);
-        throw new ID3v2Exception(stringBuilder.toString());
+        throw new ID3v2Exception("Invalid ID3 identifier: " + id);
     }
 
     public ID3v2TagBody tagBody(InputStream input) throws IOException, ID3v2Exception {

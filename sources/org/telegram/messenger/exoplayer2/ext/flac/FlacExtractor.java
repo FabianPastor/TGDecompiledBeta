@@ -20,7 +20,7 @@ import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class FlacExtractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C18351();
+    public static final ExtractorsFactory FACTORY = new C18371();
     private static final byte[] FLAC_SIGNATURE = new byte[]{(byte) 102, (byte) 76, (byte) 97, (byte) 67, (byte) 0, (byte) 0, (byte) 0, (byte) 34};
     private FlacDecoderJni decoderJni;
     private ExtractorOutput extractorOutput;
@@ -30,8 +30,8 @@ public final class FlacExtractor implements Extractor {
     private TrackOutput trackOutput;
 
     /* renamed from: org.telegram.messenger.exoplayer2.ext.flac.FlacExtractor$1 */
-    static class C18351 implements ExtractorsFactory {
-        C18351() {
+    static class C18371 implements ExtractorsFactory {
+        C18371() {
         }
 
         public Extractor[] createExtractors() {
@@ -79,56 +79,46 @@ public final class FlacExtractor implements Extractor {
     }
 
     public int read(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
-        ExtractorInput extractorInput = input;
-        this.decoderJni.setData(extractorInput);
-        int i = 0;
+        this.decoderJni.setData(input);
         if (!this.metadataParsed) {
             try {
-                FlacStreamInfo streamInfo = r1.decoderJni.decodeMetadata();
+                FlacStreamInfo streamInfo = this.decoderJni.decodeMetadata();
                 if (streamInfo == null) {
                     throw new IOException("Metadata decoding failed");
                 }
                 SeekMap flacSeekMap;
-                boolean isSeekable = true;
-                r1.metadataParsed = true;
-                if (r1.decoderJni.getSeekPosition(0) == -1) {
-                    isSeekable = false;
-                }
-                ExtractorOutput extractorOutput = r1.extractorOutput;
+                this.metadataParsed = true;
+                boolean isSeekable = this.decoderJni.getSeekPosition(0) != -1;
+                ExtractorOutput extractorOutput = this.extractorOutput;
                 if (isSeekable) {
-                    flacSeekMap = new FlacSeekMap(streamInfo.durationUs(), r1.decoderJni);
+                    flacSeekMap = new FlacSeekMap(streamInfo.durationUs(), this.decoderJni);
                 } else {
                     flacSeekMap = new Unseekable(streamInfo.durationUs(), 0);
                 }
                 extractorOutput.seekMap(flacSeekMap);
-                r1.trackOutput.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_RAW, null, streamInfo.bitRate(), -1, streamInfo.channels, streamInfo.sampleRate, Util.getPcmEncoding(streamInfo.bitsPerSample), null, null, 0, null));
-                r1.outputBuffer = new ParsableByteArray(streamInfo.maxDecodedFrameSize());
-                r1.outputByteBuffer = ByteBuffer.wrap(r1.outputBuffer.data);
-            } catch (IOException e) {
-                IOException e2 = e;
-                r1.decoderJni.reset(0);
-                extractorInput.setRetryPosition(0, e2);
-                throw e2;
+                this.trackOutput.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_RAW, null, streamInfo.bitRate(), -1, streamInfo.channels, streamInfo.sampleRate, Util.getPcmEncoding(streamInfo.bitsPerSample), null, null, 0, null));
+                this.outputBuffer = new ParsableByteArray(streamInfo.maxDecodedFrameSize());
+                this.outputByteBuffer = ByteBuffer.wrap(this.outputBuffer.data);
+            } catch (Throwable e) {
+                this.decoderJni.reset(0);
+                input.setRetryPosition(0, e);
+                throw e;
             }
         }
-        r1.outputBuffer.reset();
-        long lastDecodePosition = r1.decoderJni.getDecodePosition();
+        this.outputBuffer.reset();
+        long lastDecodePosition = this.decoderJni.getDecodePosition();
         try {
-            int size = r1.decoderJni.decodeSample(r1.outputByteBuffer);
+            int size = this.decoderJni.decodeSample(this.outputByteBuffer);
             if (size <= 0) {
                 return -1;
             }
-            r1.trackOutput.sampleData(r1.outputBuffer, size);
-            r1.trackOutput.sampleMetadata(r1.decoderJni.getLastSampleTimestamp(), 1, size, 0, null);
-            if (r1.decoderJni.isEndOfData()) {
-                i = -1;
-            }
-            return i;
-        } catch (IOException e3) {
-            e2 = e3;
+            this.trackOutput.sampleData(this.outputBuffer, size);
+            this.trackOutput.sampleMetadata(this.decoderJni.getLastSampleTimestamp(), 1, size, 0, null);
+            return this.decoderJni.isEndOfData() ? -1 : 0;
+        } catch (Throwable e2) {
             if (lastDecodePosition >= 0) {
-                r1.decoderJni.reset(lastDecodePosition);
-                extractorInput.setRetryPosition(lastDecodePosition, e2);
+                this.decoderJni.reset(lastDecodePosition);
+                input.setRetryPosition(lastDecodePosition, e2);
             }
             throw e2;
         }

@@ -8,7 +8,6 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
@@ -42,6 +41,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
@@ -155,44 +155,40 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     private User user;
 
     /* renamed from: org.telegram.ui.VoIPActivity$2 */
-    class C17522 implements OnClickListener {
+    class C17542 implements OnClickListener {
         private int tapCount = 0;
 
-        C17522() {
+        C17542() {
         }
 
         public void onClick(View v) {
-            if (!BuildVars.DEBUG_VERSION) {
-                if (this.tapCount != 9) {
-                    this.tapCount++;
-                    return;
-                }
+            if (BuildVars.DEBUG_VERSION || this.tapCount == 9) {
+                VoIPActivity.this.showDebugAlert();
+                this.tapCount = 0;
+                return;
             }
-            VoIPActivity.this.showDebugAlert();
-            this.tapCount = 0;
+            this.tapCount++;
         }
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$3 */
-    class C17593 implements OnClickListener {
+    class C17613 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.VoIPActivity$3$1 */
-        class C17531 implements Runnable {
-            C17531() {
+        class C17551 implements Runnable {
+            C17551() {
             }
 
             public void run() {
-                if (VoIPService.getSharedInstance() != null || VoIPActivity.this.isFinishing()) {
-                    if (VoIPService.getSharedInstance() != null) {
-                        VoIPService.getSharedInstance().registerStateListener(VoIPActivity.this);
-                    }
-                    return;
+                if (VoIPService.getSharedInstance() == null && !VoIPActivity.this.isFinishing()) {
+                    VoIPActivity.this.endBtn.postDelayed(this, 100);
+                } else if (VoIPService.getSharedInstance() != null) {
+                    VoIPService.getSharedInstance().registerStateListener(VoIPActivity.this);
                 }
-                VoIPActivity.this.endBtn.postDelayed(this, 100);
             }
         }
 
-        C17593() {
+        C17613() {
         }
 
         public void onClick(View v) {
@@ -209,18 +205,16 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                     FileLog.m3e(e);
                 }
                 VoIPActivity.this.hideRetry();
-                VoIPActivity.this.endBtn.postDelayed(new C17531(), 100);
-                return;
-            }
-            if (VoIPService.getSharedInstance() != null) {
+                VoIPActivity.this.endBtn.postDelayed(new C17551(), 100);
+            } else if (VoIPService.getSharedInstance() != null) {
                 VoIPService.getSharedInstance().hangUp();
             }
         }
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$4 */
-    class C17604 implements OnClickListener {
-        C17604() {
+    class C17624 implements OnClickListener {
+        C17624() {
         }
 
         public void onClick(View v) {
@@ -232,8 +226,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$5 */
-    class C17615 implements OnClickListener {
-        C17615() {
+    class C17635 implements OnClickListener {
+        C17635() {
         }
 
         public void onClick(View v) {
@@ -241,15 +235,15 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 VoIPActivity.this.finish();
                 return;
             }
-            boolean checked = VoIPActivity.this.micToggle.isChecked() ^ 1;
+            boolean checked = !VoIPActivity.this.micToggle.isChecked();
             VoIPActivity.this.micToggle.setChecked(checked);
             VoIPService.getSharedInstance().setMicMute(checked);
         }
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$6 */
-    class C17626 implements OnClickListener {
-        C17626() {
+    class C17646 implements OnClickListener {
+        C17646() {
         }
 
         public void onClick(View v) {
@@ -258,11 +252,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 return;
             }
             Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("com.tmessages.openchat");
-            stringBuilder.append(Math.random());
-            stringBuilder.append(ConnectionsManager.DEFAULT_DATACENTER_ID);
-            intent.setAction(stringBuilder.toString());
+            intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
             intent.putExtra("currentAccount", VoIPActivity.this.currentAccount);
             intent.setFlags(32768);
             intent.putExtra("userId", VoIPActivity.this.user.id);
@@ -272,8 +262,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$9 */
-    class C17679 implements OnClickListener {
-        C17679() {
+    class C17699 implements OnClickListener {
+        C17699() {
         }
 
         public void onClick(View v) {
@@ -301,7 +291,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 int y = getBounds().top;
                 for (int i = 0; i < 4; i++) {
                     this.paint.setAlpha(i + 1 <= VoIPActivity.this.signalBarsCount ? 242 : 102);
-                    this.rect.set((float) (AndroidUtilities.dp((float) (4 * i)) + x), (float) ((getIntrinsicHeight() + y) - this.barHeights[i]), (float) (((AndroidUtilities.dp(4.0f) * i) + x) + AndroidUtilities.dp(3.0f)), (float) (getIntrinsicHeight() + y));
+                    this.rect.set((float) (AndroidUtilities.dp((float) (i * 4)) + x), (float) ((getIntrinsicHeight() + y) - this.barHeights[i]), (float) (((AndroidUtilities.dp(4.0f) * i) + x) + AndroidUtilities.dp(3.0f)), (float) (getIntrinsicHeight() + y));
                     canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(0.3f), (float) AndroidUtilities.dp(0.3f), this.paint);
                 }
             }
@@ -314,7 +304,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
 
         public int getIntrinsicWidth() {
-            return AndroidUtilities.dp((float) (15 + this.offsetStart));
+            return AndroidUtilities.dp((float) (this.offsetStart + 15));
         }
 
         public int getIntrinsicHeight() {
@@ -327,7 +317,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     private class TextAlphaSpan extends CharacterStyle {
-        private int alpha = null;
+        private int alpha = 0;
 
         public int getAlpha() {
             return this.alpha;
@@ -345,8 +335,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$1 */
-    class C23101 implements ImageReceiverDelegate {
-        C23101() {
+    class C23111 implements ImageReceiverDelegate {
+        C23111() {
         }
 
         public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
@@ -358,11 +348,11 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$7 */
-    class C23117 implements Listener {
+    class C23127 implements Listener {
 
         /* renamed from: org.telegram.ui.VoIPActivity$7$1 */
-        class C17631 extends AnimatorListenerAdapter {
-            C17631() {
+        class C17651 extends AnimatorListenerAdapter {
+            C17651() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -371,8 +361,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
 
         /* renamed from: org.telegram.ui.VoIPActivity$7$2 */
-        class C17642 extends AnimatorListenerAdapter {
-            C17642() {
+        class C17662 extends AnimatorListenerAdapter {
+            C17662() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -380,7 +370,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
         }
 
-        C23117() {
+        C23127() {
         }
 
         public void onDragComplete() {
@@ -394,9 +384,9 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             if (VERSION.SDK_INT < 23 || VoIPActivity.this.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
                 VoIPService.getSharedInstance().acceptIncomingCall();
                 VoIPActivity.this.callAccepted();
-            } else {
-                VoIPActivity.this.requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 101);
+                return;
             }
+            VoIPActivity.this.requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 101);
         }
 
         public void onDragStart() {
@@ -410,7 +400,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             set.playTogether(r1);
             set.setDuration(200);
             set.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            set.addListener(new C17631());
+            set.addListener(new C17651());
             VoIPActivity.this.currentDeclineAnim = set;
             set.start();
             VoIPActivity.this.declineSwipe.stopAnimatingArrows();
@@ -427,7 +417,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             set.playTogether(r1);
             set.setDuration(200);
             set.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            set.addListener(new C17642());
+            set.addListener(new C17662());
             VoIPActivity.this.currentDeclineAnim = set;
             set.start();
             VoIPActivity.this.declineSwipe.startAnimatingArrows();
@@ -435,11 +425,11 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     /* renamed from: org.telegram.ui.VoIPActivity$8 */
-    class C23128 implements Listener {
+    class C23138 implements Listener {
 
         /* renamed from: org.telegram.ui.VoIPActivity$8$1 */
-        class C17651 extends AnimatorListenerAdapter {
-            C17651() {
+        class C17671 extends AnimatorListenerAdapter {
+            C17671() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -448,8 +438,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
 
         /* renamed from: org.telegram.ui.VoIPActivity$8$2 */
-        class C17662 extends AnimatorListenerAdapter {
-            C17662() {
+        class C17682 extends AnimatorListenerAdapter {
+            C17682() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -457,7 +447,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
         }
 
-        C23128() {
+        C23138() {
         }
 
         public void onDragComplete() {
@@ -481,7 +471,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             set.playTogether(r1);
             set.setDuration(200);
             set.setInterpolator(new DecelerateInterpolator());
-            set.addListener(new C17651());
+            set.addListener(new C17671());
             VoIPActivity.this.currentAcceptAnim = set;
             set.start();
             VoIPActivity.this.acceptSwipe.stopAnimatingArrows();
@@ -498,7 +488,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             set.playTogether(r1);
             set.setDuration(200);
             set.setInterpolator(CubicBezierInterpolator.DEFAULT);
-            set.addListener(new C17662());
+            set.addListener(new C17682());
             VoIPActivity.this.currentAcceptAnim = set;
             set.start();
             VoIPActivity.this.acceptSwipe.startAnimatingArrows();
@@ -521,9 +511,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         if ((getResources().getConfiguration().screenLayout & 15) < 3) {
             setRequestedOrientation(1);
         }
-        View createContentView = createContentView();
-        View contentView = createContentView;
-        setContentView(createContentView);
+        View contentView = createContentView();
+        setContentView(contentView);
         if (VERSION.SDK_INT >= 21) {
             getWindow().addFlags(Integer.MIN_VALUE);
             getWindow().setStatusBarColor(0);
@@ -535,7 +524,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
         this.user = VoIPService.getSharedInstance().getUser();
         if (this.user.photo != null) {
-            this.photoView.getImageReceiver().setDelegate(new C23101());
+            this.photoView.getImageReceiver().setDelegate(new C23111());
             this.photoView.setImage(this.user.photo.photo_big, null, new ColorDrawable(Theme.ACTION_BAR_VIDEO_EDIT_COLOR));
             this.photoView.setLayerType(2, null);
         } else {
@@ -544,19 +533,19 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         }
         getWindow().setBackgroundDrawable(new ColorDrawable(0));
         setVolumeControlStream(0);
-        this.nameText.setOnClickListener(new C17522());
-        this.endBtn.setOnClickListener(new C17593());
-        this.spkToggle.setOnClickListener(new C17604());
-        this.micToggle.setOnClickListener(new C17615());
-        this.chatBtn.setOnClickListener(new C17626());
+        this.nameText.setOnClickListener(new C17542());
+        this.endBtn.setOnClickListener(new C17613());
+        this.spkToggle.setOnClickListener(new C17624());
+        this.micToggle.setOnClickListener(new C17635());
+        this.chatBtn.setOnClickListener(new C17646());
         this.spkToggle.setChecked(((AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO)).isSpeakerphoneOn());
         this.micToggle.setChecked(VoIPService.getSharedInstance().isMicMute());
         onAudioSettingsChanged();
         this.nameText.setText(ContactsController.formatName(this.user.first_name, this.user.last_name));
         VoIPService.getSharedInstance().registerStateListener(this);
-        this.acceptSwipe.setListener(new C23117());
-        this.declineSwipe.setListener(new C23128());
-        this.cancelBtn.setOnClickListener(new C17679());
+        this.acceptSwipe.setListener(new C23127());
+        this.declineSwipe.setListener(new C23138());
+        this.cancelBtn.setOnClickListener(new C17699());
         getWindow().getDecorView().setKeepScreenOn(true);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.closeInCallActivity);
@@ -565,7 +554,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     private View createContentView() {
-        FrameLayout content = new FrameLayout(this) {
+        Drawable drawable;
+        FrameLayout anonymousClass10 = new FrameLayout(this) {
             private void setNegativeMargins(Rect insets, LayoutParams lp) {
                 lp.topMargin = -insets.top;
                 lp.bottomMargin = -insets.bottom;
@@ -580,10 +570,10 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 return super.fitSystemWindows(insets);
             }
         };
-        content.setBackgroundColor(0);
-        content.setFitsSystemWindows(true);
-        content.setClipToPadding(false);
-        BackupImageView photo = new BackupImageView(this) {
+        anonymousClass10.setBackgroundColor(0);
+        anonymousClass10.setFitsSystemWindows(true);
+        anonymousClass10.setClipToPadding(false);
+        View anonymousClass11 = new BackupImageView(this) {
             private Drawable bottomGradient = getResources().getDrawable(R.drawable.gradient_bottom);
             private Paint paint = new Paint();
             private Drawable topGradient = getResources().getDrawable(R.drawable.gradient_top);
@@ -600,197 +590,189 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 this.bottomGradient.draw(canvas);
             }
         };
-        this.photoView = photo;
-        content.addView(photo);
+        this.photoView = anonymousClass11;
+        anonymousClass10.addView(anonymousClass11);
         this.blurOverlayView1 = new ImageView(this);
         this.blurOverlayView1.setScaleType(ScaleType.CENTER_CROP);
         this.blurOverlayView1.setAlpha(0.0f);
-        content.addView(this.blurOverlayView1);
+        anonymousClass10.addView(this.blurOverlayView1);
         this.blurOverlayView2 = new ImageView(this);
         this.blurOverlayView2.setScaleType(ScaleType.CENTER_CROP);
         this.blurOverlayView2.setAlpha(0.0f);
-        content.addView(this.blurOverlayView2);
+        anonymousClass10.addView(this.blurOverlayView2);
         TextView branding = new TextView(this);
         branding.setTextColor(-855638017);
         branding.setText(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding));
         Drawable logo = getResources().getDrawable(R.drawable.notification).mutate();
         logo.setAlpha(204);
         logo.setBounds(0, 0, AndroidUtilities.dp(15.0f), AndroidUtilities.dp(15.0f));
+        VoIPActivity voIPActivity = this;
         this.signalBarsDrawable = new SignalBarsDrawable();
         this.signalBarsDrawable.setBounds(0, 0, this.signalBarsDrawable.getIntrinsicWidth(), this.signalBarsDrawable.getIntrinsicHeight());
-        branding.setCompoundDrawables(LocaleController.isRTL ? r6.signalBarsDrawable : logo, null, LocaleController.isRTL ? logo : r6.signalBarsDrawable, null);
+        if (LocaleController.isRTL) {
+            drawable = this.signalBarsDrawable;
+        } else {
+            drawable = logo;
+        }
+        if (!LocaleController.isRTL) {
+            logo = this.signalBarsDrawable;
+        }
+        branding.setCompoundDrawables(drawable, null, logo, null);
         branding.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         branding.setGravity(LocaleController.isRTL ? 5 : 3);
         branding.setCompoundDrawablePadding(AndroidUtilities.dp(5.0f));
         branding.setTextSize(1, 14.0f);
-        content.addView(branding, LayoutHelper.createFrame(-2, -2.0f, 48 | (LocaleController.isRTL ? 5 : 3), 18.0f, 18.0f, 18.0f, 0.0f));
-        r6.brandingText = branding;
-        TextView name = new TextView(r6);
-        name.setSingleLine();
-        name.setTextColor(-1);
-        name.setTextSize(1, 40.0f);
-        name.setEllipsize(TruncateAt.END);
-        name.setGravity(LocaleController.isRTL ? 5 : 3);
-        name.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
-        name.setTypeface(Typeface.create("sans-serif-light", 0));
-        r6.nameText = name;
-        content.addView(name, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 43.0f, 18.0f, 0.0f));
-        TextView state = new TextView(r6);
-        state.setTextColor(-855638017);
-        state.setSingleLine();
-        state.setEllipsize(TruncateAt.END);
-        state.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        state.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
-        state.setTextSize(1, 15.0f);
-        state.setGravity(LocaleController.isRTL ? 5 : 3);
-        r6.stateText = state;
-        content.addView(state, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
-        r6.durationText = state;
-        TextView state2 = new TextView(r6);
-        state2.setTextColor(-855638017);
-        state2.setSingleLine();
-        state2.setEllipsize(TruncateAt.END);
-        state2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        state2.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
-        state2.setTextSize(1, 15.0f);
-        state2.setGravity(LocaleController.isRTL ? 5 : 3);
-        state2.setVisibility(8);
-        r6.stateText2 = state2;
-        content.addView(state2, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
-        r6.ellSpans = new TextAlphaSpan[]{new TextAlphaSpan(), new TextAlphaSpan(), new TextAlphaSpan()};
-        LinearLayout buttons = new LinearLayout(r6);
+        anonymousClass10.addView(branding, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 18.0f, 18.0f, 18.0f, 0.0f));
+        this.brandingText = branding;
+        anonymousClass11 = new TextView(this);
+        anonymousClass11.setSingleLine();
+        anonymousClass11.setTextColor(-1);
+        anonymousClass11.setTextSize(1, 40.0f);
+        anonymousClass11.setEllipsize(TruncateAt.END);
+        anonymousClass11.setGravity(LocaleController.isRTL ? 5 : 3);
+        anonymousClass11.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
+        anonymousClass11.setTypeface(Typeface.create("sans-serif-light", 0));
+        this.nameText = anonymousClass11;
+        anonymousClass10.addView(anonymousClass11, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 43.0f, 18.0f, 0.0f));
+        anonymousClass11 = new TextView(this);
+        anonymousClass11.setTextColor(-855638017);
+        anonymousClass11.setSingleLine();
+        anonymousClass11.setEllipsize(TruncateAt.END);
+        anonymousClass11.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        anonymousClass11.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
+        anonymousClass11.setTextSize(1, 15.0f);
+        anonymousClass11.setGravity(LocaleController.isRTL ? 5 : 3);
+        this.stateText = anonymousClass11;
+        anonymousClass10.addView(anonymousClass11, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
+        this.durationText = anonymousClass11;
+        anonymousClass11 = new TextView(this);
+        anonymousClass11.setTextColor(-855638017);
+        anonymousClass11.setSingleLine();
+        anonymousClass11.setEllipsize(TruncateAt.END);
+        anonymousClass11.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        anonymousClass11.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
+        anonymousClass11.setTextSize(1, 15.0f);
+        anonymousClass11.setGravity(LocaleController.isRTL ? 5 : 3);
+        anonymousClass11.setVisibility(8);
+        this.stateText2 = anonymousClass11;
+        anonymousClass10.addView(anonymousClass11, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
+        this.ellSpans = new TextAlphaSpan[]{new TextAlphaSpan(), new TextAlphaSpan(), new TextAlphaSpan()};
+        LinearLayout buttons = new LinearLayout(this);
         buttons.setOrientation(0);
-        content.addView(buttons, LayoutHelper.createFrame(-1, -2, 80));
-        TextView accountName = new TextView(r6);
+        anonymousClass10.addView(buttons, LayoutHelper.createFrame(-1, -2, 80));
+        TextView accountName = new TextView(this);
         accountName.setTextColor(-855638017);
         accountName.setSingleLine();
         accountName.setEllipsize(TruncateAt.END);
         accountName.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
         accountName.setTextSize(1, 15.0f);
         accountName.setGravity(LocaleController.isRTL ? 5 : 3);
-        r6.accountNameText = accountName;
-        content.addView(accountName, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 120.0f, 18.0f, 0.0f));
-        CheckableImageView mic = new CheckableImageView(r6);
-        mic.setBackgroundResource(R.drawable.bg_voip_icon_btn);
+        this.accountNameText = accountName;
+        anonymousClass10.addView(accountName, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 120.0f, 18.0f, 0.0f));
+        anonymousClass11 = new CheckableImageView(this);
+        anonymousClass11.setBackgroundResource(R.drawable.bg_voip_icon_btn);
         Drawable micIcon = getResources().getDrawable(R.drawable.ic_mic_off_white_24dp).mutate();
-        mic.setAlpha(204);
-        mic.setImageDrawable(micIcon);
-        mic.setScaleType(ScaleType.CENTER);
-        FrameLayout wrap = new FrameLayout(r6);
-        r6.micToggle = mic;
-        wrap.addView(mic, LayoutHelper.createFrame(38, 38.0f, 81, 0.0f, 0.0f, 0.0f, 10.0f));
-        buttons.addView(wrap, LayoutHelper.createLinear(0, -2, 1.0f));
-        ImageView chat = new ImageView(r6);
+        anonymousClass11.setAlpha(204);
+        anonymousClass11.setImageDrawable(micIcon);
+        anonymousClass11.setScaleType(ScaleType.CENTER);
+        anonymousClass11 = new FrameLayout(this);
+        this.micToggle = anonymousClass11;
+        anonymousClass11.addView(anonymousClass11, LayoutHelper.createFrame(38, 38.0f, 81, 0.0f, 0.0f, 0.0f, 10.0f));
+        buttons.addView(anonymousClass11, LayoutHelper.createLinear(0, -2, 1.0f));
+        anonymousClass11 = new ImageView(this);
         Drawable chatIcon = getResources().getDrawable(R.drawable.ic_chat_bubble_white_24dp).mutate();
         chatIcon.setAlpha(204);
-        chat.setImageDrawable(chatIcon);
-        chat.setScaleType(ScaleType.CENTER);
-        wrap = new FrameLayout(r6);
-        r6.chatBtn = chat;
-        wrap.addView(chat, LayoutHelper.createFrame(38, 38.0f, 81, 0.0f, 0.0f, 0.0f, 10.0f));
-        Drawable chatIcon2 = chatIcon;
-        buttons.addView(wrap, LayoutHelper.createLinear(0, -2, 1.0f));
-        CheckableImageView speaker = new CheckableImageView(r6);
-        speaker.setBackgroundResource(R.drawable.bg_voip_icon_btn);
+        anonymousClass11.setImageDrawable(chatIcon);
+        anonymousClass11.setScaleType(ScaleType.CENTER);
+        anonymousClass11 = new FrameLayout(this);
+        this.chatBtn = anonymousClass11;
+        anonymousClass11.addView(anonymousClass11, LayoutHelper.createFrame(38, 38.0f, 81, 0.0f, 0.0f, 0.0f, 10.0f));
+        buttons.addView(anonymousClass11, LayoutHelper.createLinear(0, -2, 1.0f));
+        anonymousClass11 = new CheckableImageView(this);
+        anonymousClass11.setBackgroundResource(R.drawable.bg_voip_icon_btn);
         Drawable speakerIcon = getResources().getDrawable(R.drawable.ic_volume_up_white_24dp).mutate();
-        speaker.setAlpha(204);
-        speaker.setImageDrawable(speakerIcon);
-        speaker.setScaleType(ScaleType.CENTER);
-        FrameLayout wrap2 = new FrameLayout(r6);
-        r6.spkToggle = speaker;
-        wrap2.addView(speaker, LayoutHelper.createFrame(38, 38.0f, 81, 0.0f, 0.0f, 0.0f, 10.0f));
-        CheckableImageView speaker2 = speaker;
-        Drawable micIcon2 = micIcon;
-        buttons.addView(wrap2, LayoutHelper.createLinear(0, -2, 1.0f));
-        r6.bottomButtons = buttons;
-        LinearLayout swipesWrap = new LinearLayout(r6);
-        swipesWrap.setOrientation(0);
-        CallSwipeView acceptSwipe = new CallSwipeView(r6);
+        anonymousClass11.setAlpha(204);
+        anonymousClass11.setImageDrawable(speakerIcon);
+        anonymousClass11.setScaleType(ScaleType.CENTER);
+        anonymousClass11 = new FrameLayout(this);
+        this.spkToggle = anonymousClass11;
+        anonymousClass11.addView(anonymousClass11, LayoutHelper.createFrame(38, 38.0f, 81, 0.0f, 0.0f, 0.0f, 10.0f));
+        buttons.addView(anonymousClass11, LayoutHelper.createLinear(0, -2, 1.0f));
+        this.bottomButtons = buttons;
+        anonymousClass11 = new LinearLayout(this);
+        anonymousClass11.setOrientation(0);
+        CallSwipeView acceptSwipe = new CallSwipeView(this);
         acceptSwipe.setColor(-12207027);
-        r6.acceptSwipe = acceptSwipe;
-        swipesWrap.addView(acceptSwipe, LayoutHelper.createLinear(-1, 70, 1.0f, 4, 4, -35, 4));
-        CallSwipeView declineSwipe = new CallSwipeView(r6);
-        FrameLayout wrap3 = wrap2;
-        declineSwipe.setColor(-1696188);
-        r6.declineSwipe = declineSwipe;
-        swipesWrap.addView(declineSwipe, LayoutHelper.createLinear(-1, 70, 1.0f, -35, 4, 4, 4));
-        r6.swipeViewsWrap = swipesWrap;
-        content.addView(swipesWrap, LayoutHelper.createFrame(-1, -2.0f, 80, 20.0f, 0.0f, 20.0f, 68.0f));
-        ImageView acceptBtn = new ImageView(r6);
-        LinearLayout swipesWrap2 = swipesWrap;
+        this.acceptSwipe = acceptSwipe;
+        anonymousClass11.addView(acceptSwipe, LayoutHelper.createLinear(-1, 70, 1.0f, 4, 4, -35, 4));
+        anonymousClass11 = new CallSwipeView(this);
+        anonymousClass11.setColor(-1696188);
+        this.declineSwipe = anonymousClass11;
+        anonymousClass11.addView(anonymousClass11, LayoutHelper.createLinear(-1, 70, 1.0f, -35, 4, 4, 4));
+        this.swipeViewsWrap = anonymousClass11;
+        anonymousClass10.addView(anonymousClass11, LayoutHelper.createFrame(-1, -2.0f, 80, 20.0f, 0.0f, 20.0f, 68.0f));
+        ImageView acceptBtn = new ImageView(this);
         FabBackgroundDrawable acceptBtnBg = new FabBackgroundDrawable();
-        Drawable speakerIcon2 = speakerIcon;
         acceptBtnBg.setColor(-12207027);
         acceptBtn.setBackgroundDrawable(acceptBtnBg);
         acceptBtn.setImageResource(R.drawable.ic_call_end_white_36dp);
         acceptBtn.setScaleType(ScaleType.MATRIX);
         Matrix matrix = new Matrix();
-        FabBackgroundDrawable acceptBtnBg2 = acceptBtnBg;
-        LinearLayout buttons2 = buttons;
         matrix.setTranslate((float) AndroidUtilities.dp(17.0f), (float) AndroidUtilities.dp(17.0f));
         matrix.postRotate(-135.0f, (float) AndroidUtilities.dp(35.0f), (float) AndroidUtilities.dp(35.0f));
         acceptBtn.setImageMatrix(matrix);
-        r6.acceptBtn = acceptBtn;
-        content.addView(acceptBtn, LayoutHelper.createFrame(78, 78.0f, 83, 20.0f, 0.0f, 0.0f, 68.0f));
-        ImageView declineBtn = new ImageView(r6);
-        FabBackgroundDrawable rejectBtnBg = new FabBackgroundDrawable();
+        this.acceptBtn = acceptBtn;
+        anonymousClass10.addView(acceptBtn, LayoutHelper.createFrame(78, 78.0f, 83, 20.0f, 0.0f, 0.0f, 68.0f));
+        anonymousClass11 = new ImageView(this);
+        Drawable rejectBtnBg = new FabBackgroundDrawable();
         rejectBtnBg.setColor(-1696188);
-        declineBtn.setBackgroundDrawable(rejectBtnBg);
-        declineBtn.setImageResource(R.drawable.ic_call_end_white_36dp);
-        declineBtn.setScaleType(ScaleType.CENTER);
-        r6.declineBtn = declineBtn;
-        content.addView(declineBtn, LayoutHelper.createFrame(78, 78.0f, 85, 0.0f, 0.0f, 20.0f, 68.0f));
+        anonymousClass11.setBackgroundDrawable(rejectBtnBg);
+        anonymousClass11.setImageResource(R.drawable.ic_call_end_white_36dp);
+        anonymousClass11.setScaleType(ScaleType.CENTER);
+        this.declineBtn = anonymousClass11;
+        anonymousClass10.addView(anonymousClass11, LayoutHelper.createFrame(78, 78.0f, 85, 0.0f, 0.0f, 20.0f, 68.0f));
         acceptSwipe.setViewToDrag(acceptBtn, false);
-        declineSwipe.setViewToDrag(declineBtn, true);
-        FrameLayout end = new FrameLayout(r6);
-        CallSwipeView declineSwipe2 = declineSwipe;
+        anonymousClass11.setViewToDrag(anonymousClass11, true);
+        anonymousClass11 = new FrameLayout(this);
         FabBackgroundDrawable endBtnBg = new FabBackgroundDrawable();
-        ImageView acceptBtn2 = acceptBtn;
         endBtnBg.setColor(-1696188);
-        r6.endBtnBg = endBtnBg;
-        end.setBackgroundDrawable(endBtnBg);
-        acceptBtn = new ImageView(r6);
-        FabBackgroundDrawable endBtnBg2 = endBtnBg;
-        acceptBtn.setImageResource(R.drawable.ic_call_end_white_36dp);
-        acceptBtn.setScaleType(ScaleType.CENTER);
-        r6.endBtnIcon = acceptBtn;
-        CallSwipeView acceptSwipe2 = acceptSwipe;
-        end.addView(acceptBtn, LayoutHelper.createFrame(70, 70.0f));
-        end.setForeground(getResources().getDrawable(R.drawable.fab_highlight_dark));
-        r6.endBtn = end;
-        content.addView(end, LayoutHelper.createFrame(78, 78.0f, 81, 0.0f, 0.0f, 0.0f, 68.0f));
-        ImageView cancelBtn = new ImageView(r6);
-        endBtnBg = new FabBackgroundDrawable();
-        ImageView endInner = acceptBtn;
-        endBtnBg.setColor(-1);
-        cancelBtn.setBackgroundDrawable(endBtnBg);
-        cancelBtn.setImageResource(R.drawable.edit_cancel);
-        cancelBtn.setColorFilter(-NUM);
-        cancelBtn.setScaleType(ScaleType.CENTER);
-        cancelBtn.setVisibility(8);
-        r6.cancelBtn = cancelBtn;
-        content.addView(cancelBtn, LayoutHelper.createFrame(78, 78.0f, 83, 52.0f, 0.0f, 0.0f, 68.0f));
-        r6.emojiWrap = new LinearLayout(r6);
-        FabBackgroundDrawable cancelBtnBg = endBtnBg;
-        r6.emojiWrap.setOrientation(0);
-        r6.emojiWrap.setClipToPadding(false);
-        r6.emojiWrap.setPivotX(0.0f);
-        r6.emojiWrap.setPivotY(0.0f);
-        ImageView cancelBtn2 = cancelBtn;
-        FrameLayout end2 = end;
-        Matrix matrix2 = matrix;
-        FabBackgroundDrawable rejectBtnBg2 = rejectBtnBg;
-        r6.emojiWrap.setPadding(AndroidUtilities.dp(14.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(14.0f), AndroidUtilities.dp(10.0f));
+        this.endBtnBg = endBtnBg;
+        anonymousClass11.setBackgroundDrawable(endBtnBg);
+        anonymousClass11 = new ImageView(this);
+        anonymousClass11.setImageResource(R.drawable.ic_call_end_white_36dp);
+        anonymousClass11.setScaleType(ScaleType.CENTER);
+        this.endBtnIcon = anonymousClass11;
+        anonymousClass11.addView(anonymousClass11, LayoutHelper.createFrame(70, 70.0f));
+        anonymousClass11.setForeground(getResources().getDrawable(R.drawable.fab_highlight_dark));
+        this.endBtn = anonymousClass11;
+        anonymousClass10.addView(anonymousClass11, LayoutHelper.createFrame(78, 78.0f, 81, 0.0f, 0.0f, 0.0f, 68.0f));
+        anonymousClass11 = new ImageView(this);
+        FabBackgroundDrawable cancelBtnBg = new FabBackgroundDrawable();
+        cancelBtnBg.setColor(-1);
+        anonymousClass11.setBackgroundDrawable(cancelBtnBg);
+        anonymousClass11.setImageResource(R.drawable.edit_cancel);
+        anonymousClass11.setColorFilter(-NUM);
+        anonymousClass11.setScaleType(ScaleType.CENTER);
+        anonymousClass11.setVisibility(8);
+        this.cancelBtn = anonymousClass11;
+        anonymousClass10.addView(anonymousClass11, LayoutHelper.createFrame(78, 78.0f, 83, 52.0f, 0.0f, 0.0f, 68.0f));
+        this.emojiWrap = new LinearLayout(this);
+        this.emojiWrap.setOrientation(0);
+        this.emojiWrap.setClipToPadding(false);
+        this.emojiWrap.setPivotX(0.0f);
+        this.emojiWrap.setPivotY(0.0f);
+        this.emojiWrap.setPadding(AndroidUtilities.dp(14.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(14.0f), AndroidUtilities.dp(10.0f));
         int i = 0;
         while (i < 4) {
-            acceptBtn = new ImageView(r6);
-            acceptBtn.setScaleType(ScaleType.FIT_XY);
-            r6.emojiWrap.addView(acceptBtn, LayoutHelper.createLinear(22, 22, i == 0 ? 0.0f : 4.0f, 0.0f, 0.0f, 0.0f));
-            r6.keyEmojiViews[i] = acceptBtn;
+            anonymousClass11 = new ImageView(this);
+            anonymousClass11.setScaleType(ScaleType.FIT_XY);
+            this.emojiWrap.addView(anonymousClass11, LayoutHelper.createLinear(22, 22, i == 0 ? 0.0f : 4.0f, 0.0f, 0.0f, 0.0f));
+            this.keyEmojiViews[i] = anonymousClass11;
             i++;
         }
-        r6.emojiWrap.setOnClickListener(new OnClickListener() {
+        this.emojiWrap.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+                boolean z = false;
                 if (VoIPActivity.this.emojiTooltipVisible) {
                     VoIPActivity.this.setEmojiTooltipVisible(false);
                     if (VoIPActivity.this.tooltipHider != null) {
@@ -798,15 +780,19 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                         VoIPActivity.this.tooltipHider = null;
                     }
                 }
-                VoIPActivity.this.setEmojiExpanded(VoIPActivity.this.emojiExpanded ^ 1);
+                VoIPActivity voIPActivity = VoIPActivity.this;
+                if (!VoIPActivity.this.emojiExpanded) {
+                    z = true;
+                }
+                voIPActivity.setEmojiExpanded(z);
             }
         });
-        content.addView(r6.emojiWrap, LayoutHelper.createFrame(-2, -2, 48 | (LocaleController.isRTL ? 3 : 5)));
-        r6.emojiWrap.setOnLongClickListener(new OnLongClickListener() {
+        anonymousClass10.addView(this.emojiWrap, LayoutHelper.createFrame(-2, -2, (LocaleController.isRTL ? 3 : 5) | 48));
+        this.emojiWrap.setOnLongClickListener(new OnLongClickListener() {
 
             /* renamed from: org.telegram.ui.VoIPActivity$13$1 */
-            class C17471 implements Runnable {
-                C17471() {
+            class C17491 implements Runnable {
+                C17491() {
                 }
 
                 public void run() {
@@ -816,6 +802,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
 
             public boolean onLongClick(View v) {
+                boolean z = false;
                 if (VoIPActivity.this.emojiExpanded) {
                     return false;
                 }
@@ -823,48 +810,49 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                     VoIPActivity.this.hintTextView.removeCallbacks(VoIPActivity.this.tooltipHider);
                     VoIPActivity.this.tooltipHider = null;
                 }
-                VoIPActivity.this.setEmojiTooltipVisible(VoIPActivity.this.emojiTooltipVisible ^ true);
+                VoIPActivity voIPActivity = VoIPActivity.this;
+                if (!VoIPActivity.this.emojiTooltipVisible) {
+                    z = true;
+                }
+                voIPActivity.setEmojiTooltipVisible(z);
                 if (VoIPActivity.this.emojiTooltipVisible) {
-                    VoIPActivity.this.hintTextView.postDelayed(VoIPActivity.this.tooltipHider = new C17471(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                    VoIPActivity.this.hintTextView.postDelayed(VoIPActivity.this.tooltipHider = new C17491(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                 }
                 return true;
             }
         });
-        r6.emojiExpandedText = new TextView(r6);
-        r6.emojiExpandedText.setTextSize(1, 16.0f);
-        r6.emojiExpandedText.setTextColor(-1);
-        r6.emojiExpandedText.setGravity(17);
-        r6.emojiExpandedText.setAlpha(0.0f);
-        content.addView(r6.emojiExpandedText, LayoutHelper.createFrame(-1, -2.0f, 17, 10.0f, 32.0f, 10.0f, 0.0f));
-        r6.hintTextView = new CorrectlyMeasuringTextView(r6);
-        r6.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), -231525581));
-        r6.hintTextView.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
-        r6.hintTextView.setTextSize(1, 14.0f);
-        r6.hintTextView.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
-        r6.hintTextView.setGravity(17);
-        r6.hintTextView.setMaxWidth(AndroidUtilities.dp(300.0f));
-        r6.hintTextView.setAlpha(0.0f);
-        content.addView(r6.hintTextView, LayoutHelper.createFrame(-2, -2.0f, 53, 0.0f, 42.0f, 10.0f, 0.0f));
-        int ellMaxAlpha = r6.stateText.getPaint().getAlpha();
-        r6.ellAnimator = new AnimatorSet();
-        AnimatorSet animatorSet = r6.ellAnimator;
-        Animator[] animatorArr = new Animator[6];
-        animatorArr[0] = createAlphaAnimator(r6.ellSpans[0], 0, ellMaxAlpha, 0, 300);
-        int i2 = ellMaxAlpha;
-        Animator[] animatorArr2 = animatorArr;
-        animatorArr2[1] = createAlphaAnimator(r6.ellSpans[1], 0, i2, 150, 300);
-        animatorArr2[2] = createAlphaAnimator(r6.ellSpans[2], 0, i2, 300, 300);
-        int i3 = ellMaxAlpha;
-        animatorArr2[3] = createAlphaAnimator(r6.ellSpans[0], i3, 0, 1000, 400);
-        animatorArr2[4] = createAlphaAnimator(r6.ellSpans[1], i3, 0, 1000, 400);
-        animatorArr2[5] = createAlphaAnimator(r6.ellSpans[2], i3, 0, 1000, 400);
-        animatorSet.playTogether(animatorArr2);
-        r6.ellAnimator.addListener(new AnimatorListenerAdapter() {
-            private Runnable restarter = new C17481();
+        this.emojiExpandedText = new TextView(this);
+        this.emojiExpandedText.setTextSize(1, 16.0f);
+        this.emojiExpandedText.setTextColor(-1);
+        this.emojiExpandedText.setGravity(17);
+        this.emojiExpandedText.setAlpha(0.0f);
+        anonymousClass10.addView(this.emojiExpandedText, LayoutHelper.createFrame(-1, -2.0f, 17, 10.0f, 32.0f, 10.0f, 0.0f));
+        this.hintTextView = new CorrectlyMeasuringTextView(this);
+        this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), -231525581));
+        this.hintTextView.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
+        this.hintTextView.setTextSize(1, 14.0f);
+        this.hintTextView.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
+        this.hintTextView.setGravity(17);
+        this.hintTextView.setMaxWidth(AndroidUtilities.dp(300.0f));
+        this.hintTextView.setAlpha(0.0f);
+        anonymousClass10.addView(this.hintTextView, LayoutHelper.createFrame(-2, -2.0f, 53, 0.0f, 42.0f, 10.0f, 0.0f));
+        int ellMaxAlpha = this.stateText.getPaint().getAlpha();
+        this.ellAnimator = new AnimatorSet();
+        AnimatorSet animatorSet = this.ellAnimator;
+        r41 = new Animator[6];
+        r41[0] = createAlphaAnimator(this.ellSpans[0], 0, ellMaxAlpha, 0, 300);
+        r41[1] = createAlphaAnimator(this.ellSpans[1], 0, ellMaxAlpha, 150, 300);
+        r41[2] = createAlphaAnimator(this.ellSpans[2], 0, ellMaxAlpha, 300, 300);
+        r41[3] = createAlphaAnimator(this.ellSpans[0], ellMaxAlpha, 0, 1000, 400);
+        r41[4] = createAlphaAnimator(this.ellSpans[1], ellMaxAlpha, 0, 1000, 400);
+        r41[5] = createAlphaAnimator(this.ellSpans[2], ellMaxAlpha, 0, 1000, 400);
+        animatorSet.playTogether(r41);
+        this.ellAnimator.addListener(new AnimatorListenerAdapter() {
+            private Runnable restarter = new C17501();
 
             /* renamed from: org.telegram.ui.VoIPActivity$14$1 */
-            class C17481 implements Runnable {
-                C17481() {
+            class C17501 implements Runnable {
+                C17501() {
                 }
 
                 public void run() {
@@ -880,9 +868,9 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 }
             }
         });
-        content.setClipChildren(false);
-        r6.content = content;
-        return content;
+        anonymousClass10.setClipChildren(false);
+        this.content = anonymousClass10;
+        return anonymousClass10;
     }
 
     @SuppressLint({"ObjectAnimatorBinding"})
@@ -906,9 +894,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     public void onBackPressed() {
         if (this.emojiExpanded) {
             setEmojiExpanded(false);
-            return;
-        }
-        if (!this.isIncomingWaiting) {
+        } else if (!this.isIncomingWaiting) {
             super.onBackPressed();
         }
     }
@@ -932,22 +918,23 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
 
     @TargetApi(23)
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 101) {
-            if (VoIPService.getSharedInstance() == null) {
-                finish();
-            } else if (grantResults.length > 0 && grantResults[0] == 0) {
-                VoIPService.getSharedInstance().acceptIncomingCall();
-                callAccepted();
-            } else if (shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO")) {
-                this.acceptSwipe.reset();
-            } else {
-                VoIPService.getSharedInstance().declineIncomingCall();
-                VoIPHelper.permissionDenied(this, new Runnable() {
-                    public void run() {
-                        VoIPActivity.this.finish();
-                    }
-                });
-            }
+        if (requestCode != 101) {
+            return;
+        }
+        if (VoIPService.getSharedInstance() == null) {
+            finish();
+        } else if (grantResults.length > 0 && grantResults[0] == 0) {
+            VoIPService.getSharedInstance().acceptIncomingCall();
+            callAccepted();
+        } else if (shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO")) {
+            this.acceptSwipe.reset();
+        } else {
+            VoIPService.getSharedInstance().declineIncomingCall();
+            VoIPHelper.permissionDenied(this, new Runnable() {
+                public void run() {
+                    VoIPActivity.this.finish();
+                }
+            });
         }
     }
 
@@ -977,45 +964,39 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         String in = VoIPService.getSharedInstance().getDebugString();
         SpannableString ss = new SpannableString(in);
         int offset = 0;
-        int indexOf;
         do {
-            indexOf = in.indexOf(10, offset + 1);
-            if (indexOf == -1) {
-                indexOf = in.length();
+            int lineEnd = in.indexOf(10, offset + 1);
+            if (lineEnd == -1) {
+                lineEnd = in.length();
             }
-            String line = in.substring(offset, indexOf);
+            String line = in.substring(offset, lineEnd);
             if (line.contains("IN_USE")) {
-                ss.setSpan(new ForegroundColorSpan(-16711936), offset, indexOf, 0);
+                ss.setSpan(new ForegroundColorSpan(-16711936), offset, lineEnd, 0);
             } else if (line.contains(": ")) {
                 ss.setSpan(new ForegroundColorSpan(-NUM), offset, (line.indexOf(58) + offset) + 1, 0);
             }
-            indexOf = in.indexOf(10, offset + 1);
-            offset = indexOf;
-        } while (indexOf != -1);
+            offset = in.indexOf(10, offset + 1);
+        } while (offset != -1);
         return ss;
     }
 
     private void showDebugAlert() {
-        Context context = this;
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().forceRating();
-            final LinearLayout debugOverlay = new LinearLayout(context);
+            final LinearLayout debugOverlay = new LinearLayout(this);
             debugOverlay.setOrientation(1);
             debugOverlay.setBackgroundColor(-872415232);
-            int pad = AndroidUtilities.dp(NUM);
+            int pad = AndroidUtilities.dp(16.0f);
             debugOverlay.setPadding(pad, pad * 2, pad, pad * 2);
-            TextView title = new TextView(context);
+            TextView title = new TextView(this);
             title.setTextColor(-1);
             title.setTextSize(1, 15.0f);
             title.setTypeface(Typeface.DEFAULT_BOLD);
             title.setGravity(17);
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("libtgvoip v");
-            stringBuilder.append(VoIPController.getVersion());
-            title.setText(stringBuilder.toString());
+            title.setText("libtgvoip v" + VoIPController.getVersion());
             debugOverlay.addView(title, LayoutHelper.createLinear(-1, -2, 0.0f, 0.0f, 0.0f, 16.0f));
-            ScrollView scroll = new ScrollView(context);
-            final TextView debugText = new TextView(context);
+            ScrollView scroll = new ScrollView(this);
+            final TextView debugText = new TextView(this);
             debugText.setTypeface(Typeface.MONOSPACE);
             debugText.setTextSize(1, 11.0f);
             debugText.setMaxWidth(AndroidUtilities.dp(350.0f));
@@ -1023,7 +1004,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             debugText.setText(getFormattedDebugString());
             scroll.addView(debugText);
             debugOverlay.addView(scroll, LayoutHelper.createLinear(-1, -1, 1.0f));
-            TextView closeBtn = new TextView(context);
+            TextView closeBtn = new TextView(this);
             closeBtn.setBackgroundColor(-1);
             closeBtn.setTextColor(Theme.ACTION_BAR_VIDEO_EDIT_COLOR);
             closeBtn.setPadding(pad, pad, pad, pad);
@@ -1039,11 +1020,9 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             });
             debugOverlay.postDelayed(new Runnable() {
                 public void run() {
-                    if (!VoIPActivity.this.isFinishing()) {
-                        if (VoIPService.getSharedInstance() != null) {
-                            debugText.setText(VoIPActivity.this.getFormattedDebugString());
-                            debugOverlay.postDelayed(this, 500);
-                        }
+                    if (!VoIPActivity.this.isFinishing() && VoIPService.getSharedInstance() != null) {
+                        debugText.setText(VoIPActivity.this.getFormattedDebugString());
+                        debugOverlay.postDelayed(this, 500);
                     }
                 }
             }, 500);
@@ -1056,20 +1035,18 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     private void startUpdatingCallDuration() {
         new Runnable() {
             public void run() {
-                if (!VoIPActivity.this.isFinishing()) {
-                    if (VoIPService.getSharedInstance() != null) {
-                        if (VoIPActivity.this.callState == 3 || VoIPActivity.this.callState == 5) {
-                            CharSequence format;
-                            long duration = VoIPService.getSharedInstance().getCallDuration() / 1000;
-                            TextView access$3000 = VoIPActivity.this.durationText;
-                            if (duration > 3600) {
-                                format = String.format("%d:%02d:%02d", new Object[]{Long.valueOf(duration / 3600), Long.valueOf((duration % 3600) / 60), Long.valueOf(duration % 60)});
-                            } else {
-                                format = String.format("%d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60)});
-                            }
-                            access$3000.setText(format);
-                            VoIPActivity.this.durationText.postDelayed(this, 500);
+                if (!VoIPActivity.this.isFinishing() && VoIPService.getSharedInstance() != null) {
+                    if (VoIPActivity.this.callState == 3 || VoIPActivity.this.callState == 5) {
+                        CharSequence format;
+                        long duration = VoIPService.getSharedInstance().getCallDuration() / 1000;
+                        TextView access$3000 = VoIPActivity.this.durationText;
+                        if (duration > 3600) {
+                            format = String.format("%d:%02d:%02d", new Object[]{Long.valueOf(duration / 3600), Long.valueOf((duration % 3600) / 60), Long.valueOf(duration % 60)});
+                        } else {
+                            format = String.format("%d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60)});
                         }
+                        access$3000.setText(format);
+                        VoIPActivity.this.durationText.postDelayed(this, 500);
                     }
                 }
             }
@@ -1091,30 +1068,30 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     private void callAccepted() {
         this.endBtn.setVisibility(0);
         if (VoIPService.getSharedInstance().hasEarpiece()) {
-            r0.spkToggle.setVisibility(0);
+            this.spkToggle.setVisibility(0);
         } else {
-            r0.spkToggle.setVisibility(8);
+            this.spkToggle.setVisibility(8);
         }
-        r0.bottomButtons.setVisibility(0);
-        if (r0.didAcceptFromHere) {
+        this.bottomButtons.setVisibility(0);
+        if (this.didAcceptFromHere) {
             ObjectAnimator colorAnim;
-            r0.acceptBtn.setVisibility(8);
+            this.acceptBtn.setVisibility(8);
             if (VERSION.SDK_INT >= 21) {
-                colorAnim = ObjectAnimator.ofArgb(r0.endBtnBg, TtmlNode.ATTR_TTS_COLOR, new int[]{-12207027, -1696188});
+                colorAnim = ObjectAnimator.ofArgb(this.endBtnBg, TtmlNode.ATTR_TTS_COLOR, new int[]{-12207027, -1696188});
             } else {
-                colorAnim = ObjectAnimator.ofInt(r0.endBtnBg, TtmlNode.ATTR_TTS_COLOR, new int[]{-12207027, -1696188});
+                colorAnim = ObjectAnimator.ofInt(this.endBtnBg, TtmlNode.ATTR_TTS_COLOR, new int[]{-12207027, -1696188});
                 colorAnim.setEvaluator(new ArgbEvaluator());
             }
             AnimatorSet set = new AnimatorSet();
             AnimatorSet decSet = new AnimatorSet();
-            decSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(r0.endBtnIcon, "rotation", new float[]{-135.0f, 0.0f}), colorAnim});
+            decSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.endBtnIcon, "rotation", new float[]{-135.0f, 0.0f}), colorAnim});
             decSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
             decSet.setDuration(500);
             AnimatorSet accSet = new AnimatorSet();
-            r5 = new Animator[3];
-            r5[1] = ObjectAnimator.ofFloat(r0.declineBtn, "alpha", new float[]{0.0f});
-            r5[2] = ObjectAnimator.ofFloat(r0.accountNameText, "alpha", new float[]{0.0f});
-            accSet.playTogether(r5);
+            r4 = new Animator[3];
+            r4[1] = ObjectAnimator.ofFloat(this.declineBtn, "alpha", new float[]{0.0f});
+            r4[2] = ObjectAnimator.ofFloat(this.accountNameText, "alpha", new float[]{0.0f});
+            accSet.playTogether(r4);
             accSet.setInterpolator(CubicBezierInterpolator.EASE_IN);
             accSet.setDuration(125);
             set.playTogether(new Animator[]{decSet, accSet});
@@ -1128,21 +1105,21 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             set.start();
             return;
         }
-        AnimatorSet set2 = new AnimatorSet();
         set = new AnimatorSet();
-        set.playTogether(new Animator[]{ObjectAnimator.ofFloat(r0.bottomButtons, "alpha", new float[]{0.0f, 1.0f})});
-        set.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-        set.setDuration(500);
+        decSet = new AnimatorSet();
+        decSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.bottomButtons, "alpha", new float[]{0.0f, 1.0f})});
+        decSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+        decSet.setDuration(500);
         accSet = new AnimatorSet();
-        r5 = new Animator[4];
-        r5[1] = ObjectAnimator.ofFloat(r0.declineBtn, "alpha", new float[]{0.0f});
-        r5[2] = ObjectAnimator.ofFloat(r0.acceptBtn, "alpha", new float[]{0.0f});
-        r5[3] = ObjectAnimator.ofFloat(r0.accountNameText, "alpha", new float[]{0.0f});
-        accSet.playTogether(r5);
+        r4 = new Animator[4];
+        r4[1] = ObjectAnimator.ofFloat(this.declineBtn, "alpha", new float[]{0.0f});
+        r4[2] = ObjectAnimator.ofFloat(this.acceptBtn, "alpha", new float[]{0.0f});
+        r4[3] = ObjectAnimator.ofFloat(this.accountNameText, "alpha", new float[]{0.0f});
+        accSet.playTogether(r4);
         accSet.setInterpolator(CubicBezierInterpolator.EASE_IN);
         accSet.setDuration(125);
-        set2.playTogether(new Animator[]{set, accSet});
-        set2.addListener(new AnimatorListenerAdapter() {
+        set.playTogether(new Animator[]{decSet, accSet});
+        set.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 VoIPActivity.this.swipeViewsWrap.setVisibility(8);
                 VoIPActivity.this.declineBtn.setVisibility(8);
@@ -1150,7 +1127,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 VoIPActivity.this.accountNameText.setVisibility(8);
             }
         });
-        set2.start();
+        set.start();
     }
 
     private void showRetry() {
@@ -1169,11 +1146,11 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             colorAnim = ObjectAnimator.ofInt(this.endBtnBg, TtmlNode.ATTR_TTS_COLOR, new int[]{-1696188, -12207027});
             colorAnim.setEvaluator(new ArgbEvaluator());
         }
-        r5 = new Animator[4];
-        r5[1] = ObjectAnimator.ofFloat(this.endBtn, "translationX", new float[]{0.0f, (float) (((this.content.getWidth() / 2) - AndroidUtilities.dp(52.0f)) - (this.endBtn.getWidth() / 2))});
-        r5[2] = colorAnim;
-        r5[3] = ObjectAnimator.ofFloat(this.endBtnIcon, "rotation", new float[]{0.0f, -135.0f});
-        set.playTogether(r5);
+        r2 = new Animator[4];
+        r2[1] = ObjectAnimator.ofFloat(this.endBtn, "translationX", new float[]{0.0f, (float) (((this.content.getWidth() / 2) - AndroidUtilities.dp(52.0f)) - (this.endBtn.getWidth() / 2))});
+        r2[2] = colorAnim;
+        r2[3] = ObjectAnimator.ofFloat(this.endBtnIcon, "rotation", new float[]{0.0f, -135.0f});
+        set.playTogether(r2);
         set.setStartDelay(200);
         set.setDuration(300);
         set.setInterpolator(CubicBezierInterpolator.DEFAULT);
@@ -1200,10 +1177,10 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             colorAnim.setEvaluator(new ArgbEvaluator());
         }
         AnimatorSet set = new AnimatorSet();
-        r4 = new Animator[4];
-        r4[2] = ObjectAnimator.ofFloat(this.endBtn, "translationX", new float[]{0.0f});
-        r4[3] = ObjectAnimator.ofFloat(this.cancelBtn, "alpha", new float[]{0.0f});
-        set.playTogether(r4);
+        r2 = new Animator[4];
+        r2[2] = ObjectAnimator.ofFloat(this.endBtn, "translationX", new float[]{0.0f});
+        r2[3] = ObjectAnimator.ofFloat(this.cancelBtn, "alpha", new float[]{0.0f});
+        set.playTogether(r2);
         set.setStartDelay(200);
         set.setDuration(300);
         set.setInterpolator(CubicBezierInterpolator.DEFAULT);
@@ -1224,8 +1201,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         runOnUiThread(new Runnable() {
 
             /* renamed from: org.telegram.ui.VoIPActivity$23$1 */
-            class C17491 implements Runnable {
-                C17491() {
+            class C17511 implements Runnable {
+                C17511() {
                 }
 
                 public void run() {
@@ -1234,8 +1211,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
 
             /* renamed from: org.telegram.ui.VoIPActivity$23$2 */
-            class C17502 implements Runnable {
-                C17502() {
+            class C17522 implements Runnable {
+                C17522() {
                 }
 
                 public void run() {
@@ -1245,8 +1222,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
 
             /* renamed from: org.telegram.ui.VoIPActivity$23$3 */
-            class C17513 implements Runnable {
-                C17513() {
+            class C17533 implements Runnable {
+                C17533() {
                 }
 
                 public void run() {
@@ -1291,74 +1268,68 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 if (state == 15) {
                     VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipIncoming", R.string.VoipIncoming), false);
                     VoIPActivity.this.getWindow().addFlags(2097152);
-                } else {
-                    if (state != 1) {
-                        if (state != 2) {
-                            if (state == 12) {
-                                VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipExchangingKeys", R.string.VoipExchangingKeys), true);
-                            } else if (state == 13) {
-                                VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipWaiting", R.string.VoipWaiting), true);
-                            } else if (state == 16) {
-                                VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipRinging", R.string.VoipRinging), true);
-                            } else if (state == 14) {
-                                VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipRequesting", R.string.VoipRequesting), true);
-                            } else if (state == 10) {
-                                VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipHangingUp", R.string.VoipHangingUp), true);
-                                VoIPActivity.this.endBtnIcon.setAlpha(0.5f);
-                                VoIPActivity.this.endBtn.setEnabled(false);
-                            } else if (state == 11) {
-                                VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipCallEnded", R.string.VoipCallEnded), false);
-                                VoIPActivity.this.stateText.postDelayed(new C17491(), 200);
-                            } else if (state == 17) {
-                                VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipBusy", R.string.VoipBusy), false);
-                                VoIPActivity.this.showRetry();
-                            } else {
-                                int lastError;
-                                if (state != 3) {
-                                    if (state != 5) {
-                                        if (state == 4) {
-                                            VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipFailed", R.string.VoipFailed), false);
-                                            lastError = VoIPService.getSharedInstance() != null ? VoIPService.getSharedInstance().getLastError() : 0;
-                                            if (lastError == 1) {
-                                                VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
-                                            } else if (lastError == -1) {
-                                                VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
-                                            } else if (lastError == -2) {
-                                                VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("CallNotAvailable", R.string.CallNotAvailable, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
-                                            } else if (lastError == 3) {
-                                                VoIPActivity.this.showErrorDialog("Error initializing audio hardware");
-                                            } else if (lastError == -3) {
-                                                VoIPActivity.this.finish();
-                                            } else if (lastError == -5) {
-                                                VoIPActivity.this.showErrorDialog(LocaleController.getString("VoipErrorUnknown", R.string.VoipErrorUnknown));
-                                            } else {
-                                                VoIPActivity.this.stateText.postDelayed(new C17513(), 1000);
-                                            }
-                                        }
-                                    }
-                                }
-                                if (!wasFirstStateChange && state == 3) {
-                                    lastError = MessagesController.getGlobalMainSettings().getInt("call_emoji_tooltip_count", 0);
-                                    if (lastError < 3) {
-                                        VoIPActivity.this.setEmojiTooltipVisible(true);
-                                        VoIPActivity.this.hintTextView.postDelayed(VoIPActivity.this.tooltipHider = new C17502(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
-                                        MessagesController.getGlobalMainSettings().edit().putInt("call_emoji_tooltip_count", lastError + 1).commit();
-                                    }
-                                }
-                                if (!(prevState == 3 || prevState == 5)) {
-                                    VoIPActivity.this.setStateTextAnimated("0:00", false);
-                                    VoIPActivity.this.startUpdatingCallDuration();
-                                    VoIPActivity.this.updateKeyView();
-                                    if (VoIPActivity.this.emojiWrap.getVisibility() != 0) {
-                                        VoIPActivity.this.emojiWrap.setVisibility(0);
-                                        VoIPActivity.this.emojiWrap.setAlpha(0.0f);
-                                        VoIPActivity.this.emojiWrap.animate().alpha(1.0f).setDuration(200).setInterpolator(new DecelerateInterpolator()).start();
-                                    }
-                                }
-                            }
+                } else if (state == 1 || state == 2) {
+                    VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipConnecting", R.string.VoipConnecting), true);
+                } else if (state == 12) {
+                    VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipExchangingKeys", R.string.VoipExchangingKeys), true);
+                } else if (state == 13) {
+                    VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipWaiting", R.string.VoipWaiting), true);
+                } else if (state == 16) {
+                    VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipRinging", R.string.VoipRinging), true);
+                } else if (state == 14) {
+                    VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipRequesting", R.string.VoipRequesting), true);
+                } else if (state == 10) {
+                    VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipHangingUp", R.string.VoipHangingUp), true);
+                    VoIPActivity.this.endBtnIcon.setAlpha(0.5f);
+                    VoIPActivity.this.endBtn.setEnabled(false);
+                } else if (state == 11) {
+                    VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipCallEnded", R.string.VoipCallEnded), false);
+                    VoIPActivity.this.stateText.postDelayed(new C17511(), 200);
+                } else if (state == 17) {
+                    VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipBusy", R.string.VoipBusy), false);
+                    VoIPActivity.this.showRetry();
+                } else if (state == 3 || state == 5) {
+                    if (!wasFirstStateChange && state == 3) {
+                        int count = MessagesController.getGlobalMainSettings().getInt("call_emoji_tooltip_count", 0);
+                        if (count < 3) {
+                            VoIPActivity.this.setEmojiTooltipVisible(true);
+                            VoIPActivity.this.hintTextView.postDelayed(VoIPActivity.this.tooltipHider = new C17522(), DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
+                            MessagesController.getGlobalMainSettings().edit().putInt("call_emoji_tooltip_count", count + 1).commit();
                         }
                     }
-                    VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipConnecting", R.string.VoipConnecting), true);
+                    if (!(prevState == 3 || prevState == 5)) {
+                        VoIPActivity.this.setStateTextAnimated("0:00", false);
+                        VoIPActivity.this.startUpdatingCallDuration();
+                        VoIPActivity.this.updateKeyView();
+                        if (VoIPActivity.this.emojiWrap.getVisibility() != 0) {
+                            VoIPActivity.this.emojiWrap.setVisibility(0);
+                            VoIPActivity.this.emojiWrap.setAlpha(0.0f);
+                            VoIPActivity.this.emojiWrap.animate().alpha(1.0f).setDuration(200).setInterpolator(new DecelerateInterpolator()).start();
+                        }
+                    }
+                } else if (state == 4) {
+                    int lastError;
+                    VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipFailed", R.string.VoipFailed), false);
+                    if (VoIPService.getSharedInstance() != null) {
+                        lastError = VoIPService.getSharedInstance().getLastError();
+                    } else {
+                        lastError = 0;
+                    }
+                    if (lastError == 1) {
+                        VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
+                    } else if (lastError == -1) {
+                        VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
+                    } else if (lastError == -2) {
+                        VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("CallNotAvailable", R.string.CallNotAvailable, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
+                    } else if (lastError == 3) {
+                        VoIPActivity.this.showErrorDialog("Error initializing audio hardware");
+                    } else if (lastError == -3) {
+                        VoIPActivity.this.finish();
+                    } else if (lastError == -5) {
+                        VoIPActivity.this.showErrorDialog(LocaleController.getString("VoipErrorUnknown", R.string.VoipErrorUnknown));
+                    } else {
+                        VoIPActivity.this.stateText.postDelayed(new C17533(), 1000);
+                    }
                 }
                 VoIPActivity.this.brandingText.invalidate();
             }
@@ -1393,6 +1364,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 if (!svc.hasEarpiece()) {
                     this.spkToggle.setImageResource(R.drawable.ic_bluetooth_white_24dp);
                     this.spkToggle.setChecked(svc.isSpeakerphoneOn());
+                    return;
                 } else if (svc.isBluetoothHeadsetConnected()) {
                     switch (svc.getCurrentAudioRoute()) {
                         case 0:
@@ -1404,17 +1376,16 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                         case 2:
                             this.spkToggle.setImageResource(R.drawable.ic_bluetooth_white_24dp);
                             break;
-                        default:
-                            break;
                     }
                     this.spkToggle.setChecked(false);
+                    return;
                 } else {
                     this.spkToggle.setImageResource(R.drawable.ic_volume_up_white_24dp);
                     this.spkToggle.setChecked(svc.isSpeakerphoneOn());
+                    return;
                 }
-            } else {
-                this.spkToggle.setVisibility(4);
             }
+            this.spkToggle.setVisibility(4);
         }
     }
 
@@ -1429,7 +1400,7 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 if (!this.ellAnimator.isRunning()) {
                     this.ellAnimator.start();
                 }
-                newText = new SpannableStringBuilder(_newText.toUpperCase());
+                SpannableStringBuilder ssb = new SpannableStringBuilder(_newText.toUpperCase());
                 for (TextAlphaSpan s : this.ellSpans) {
                     s.setAlpha(0);
                 }
@@ -1437,7 +1408,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 ell.setSpan(this.ellSpans[0], 0, 1, 0);
                 ell.setSpan(this.ellSpans[1], 1, 2, 0);
                 ell.setSpan(this.ellSpans[2], 2, 3, 0);
-                newText.append(ell);
+                ssb.append(ell);
+                newText = ssb;
             } else {
                 if (this.ellAnimator.isRunning()) {
                     this.ellAnimator.cancel();
@@ -1452,15 +1424,15 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             this.stateText2.setPivotY((float) (this.stateText.getHeight() / 2));
             this.durationText = this.stateText2;
             AnimatorSet set = new AnimatorSet();
-            r6 = new Animator[8];
-            r6[1] = ObjectAnimator.ofFloat(this.stateText2, "translationY", new float[]{(float) (this.stateText.getHeight() / 2), 0.0f});
-            r6[2] = ObjectAnimator.ofFloat(this.stateText2, "scaleX", new float[]{0.7f, 1.0f});
-            r6[3] = ObjectAnimator.ofFloat(this.stateText2, "scaleY", new float[]{0.7f, 1.0f});
-            r6[4] = ObjectAnimator.ofFloat(this.stateText, "alpha", new float[]{1.0f, 0.0f});
-            r6[5] = ObjectAnimator.ofFloat(this.stateText, "translationY", new float[]{0.0f, (float) ((-this.stateText.getHeight()) / 2)});
-            r6[6] = ObjectAnimator.ofFloat(this.stateText, "scaleX", new float[]{1.0f, 0.7f});
-            r6[7] = ObjectAnimator.ofFloat(this.stateText, "scaleY", new float[]{1.0f, 0.7f});
-            set.playTogether(r6);
+            r5 = new Animator[8];
+            r5[1] = ObjectAnimator.ofFloat(this.stateText2, "translationY", new float[]{(float) (this.stateText.getHeight() / 2), 0.0f});
+            r5[2] = ObjectAnimator.ofFloat(this.stateText2, "scaleX", new float[]{0.7f, 1.0f});
+            r5[3] = ObjectAnimator.ofFloat(this.stateText2, "scaleY", new float[]{0.7f, 1.0f});
+            r5[4] = ObjectAnimator.ofFloat(this.stateText, "alpha", new float[]{1.0f, 0.0f});
+            r5[5] = ObjectAnimator.ofFloat(this.stateText, "translationY", new float[]{0.0f, (float) ((-this.stateText.getHeight()) / 2)});
+            r5[6] = ObjectAnimator.ofFloat(this.stateText, "scaleX", new float[]{1.0f, 0.7f});
+            r5[7] = ObjectAnimator.ofFloat(this.stateText, "scaleY", new float[]{1.0f, 0.7f});
+            set.playTogether(r5);
             set.setDuration(200);
             set.setInterpolator(CubicBezierInterpolator.DEFAULT);
             set.addListener(new AnimatorListenerAdapter() {
@@ -1497,11 +1469,11 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             this.tooltipAnim.cancel();
         }
         this.hintTextView.setVisibility(0);
-        ObjectAnimator oa = this.hintTextView;
+        TextView textView = this.hintTextView;
         String str = "alpha";
         float[] fArr = new float[1];
         fArr[0] = visible ? 1.0f : 0.0f;
-        oa = ObjectAnimator.ofFloat(oa, str, fArr);
+        ObjectAnimator oa = ObjectAnimator.ofFloat(textView, str, fArr);
         oa.setDuration(300);
         oa.setInterpolator(CubicBezierInterpolator.DEFAULT);
         oa.addListener(new AnimatorListenerAdapter() {
@@ -1514,61 +1486,62 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     private void setEmojiExpanded(boolean expanded) {
-        boolean z = expanded;
-        if (this.emojiExpanded != z) {
-            r0.emojiExpanded = z;
-            if (r0.emojiAnimator != null) {
-                r0.emojiAnimator.cancel();
+        if (this.emojiExpanded != expanded) {
+            this.emojiExpanded = expanded;
+            if (this.emojiAnimator != null) {
+                this.emojiAnimator.cancel();
             }
-            if (z) {
+            AnimatorSet set;
+            Animator[] animatorArr;
+            if (expanded) {
                 int[] loc = new int[]{0, 0};
                 int[] loc2 = new int[]{0, 0};
-                r0.emojiWrap.getLocationInWindow(loc);
-                r0.emojiExpandedText.getLocationInWindow(loc2);
+                this.emojiWrap.getLocationInWindow(loc);
+                this.emojiExpandedText.getLocationInWindow(loc2);
                 Rect rect = new Rect();
                 getWindow().getDecorView().getGlobalVisibleRect(rect);
-                int offsetY = ((loc2[1] - (loc[1] + r0.emojiWrap.getHeight())) - AndroidUtilities.dp(32.0f)) - r0.emojiWrap.getHeight();
-                int firstOffsetX = ((rect.width() / 2) - (Math.round(((float) r0.emojiWrap.getWidth()) * 2.5f) / 2)) - loc[0];
-                AnimatorSet set = new AnimatorSet();
-                Animator[] animatorArr = new Animator[7];
-                animatorArr[0] = ObjectAnimator.ofFloat(r0.emojiWrap, "translationY", new float[]{(float) offsetY});
-                animatorArr[1] = ObjectAnimator.ofFloat(r0.emojiWrap, "translationX", new float[]{(float) firstOffsetX});
-                animatorArr[2] = ObjectAnimator.ofFloat(r0.emojiWrap, "scaleX", new float[]{2.5f});
-                animatorArr[3] = ObjectAnimator.ofFloat(r0.emojiWrap, "scaleY", new float[]{2.5f});
-                animatorArr[4] = ObjectAnimator.ofFloat(r0.blurOverlayView1, "alpha", new float[]{r0.blurOverlayView1.getAlpha(), 1.0f, 1.0f});
-                animatorArr[5] = ObjectAnimator.ofFloat(r0.blurOverlayView2, "alpha", new float[]{r0.blurOverlayView2.getAlpha(), r0.blurOverlayView2.getAlpha(), 1.0f});
-                animatorArr[6] = ObjectAnimator.ofFloat(r0.emojiExpandedText, "alpha", new float[]{1.0f});
+                int offsetY = ((loc2[1] - (loc[1] + this.emojiWrap.getHeight())) - AndroidUtilities.dp(32.0f)) - this.emojiWrap.getHeight();
+                int firstOffsetX = ((rect.width() / 2) - (Math.round(((float) this.emojiWrap.getWidth()) * 2.5f) / 2)) - loc[0];
+                set = new AnimatorSet();
+                animatorArr = new Animator[7];
+                animatorArr[0] = ObjectAnimator.ofFloat(this.emojiWrap, "translationY", new float[]{(float) offsetY});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.emojiWrap, "translationX", new float[]{(float) firstOffsetX});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.emojiWrap, "scaleX", new float[]{2.5f});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.emojiWrap, "scaleY", new float[]{2.5f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.blurOverlayView1, "alpha", new float[]{this.blurOverlayView1.getAlpha(), 1.0f, 1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.blurOverlayView2, "alpha", new float[]{this.blurOverlayView2.getAlpha(), this.blurOverlayView2.getAlpha(), 1.0f});
+                animatorArr[6] = ObjectAnimator.ofFloat(this.emojiExpandedText, "alpha", new float[]{1.0f});
                 set.playTogether(animatorArr);
                 set.setDuration(300);
                 set.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                r0.emojiAnimator = set;
+                this.emojiAnimator = set;
                 set.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         VoIPActivity.this.emojiAnimator = null;
                     }
                 });
                 set.start();
-            } else {
-                AnimatorSet set2 = new AnimatorSet();
-                Animator[] animatorArr2 = new Animator[7];
-                animatorArr2[0] = ObjectAnimator.ofFloat(r0.emojiWrap, "translationX", new float[]{0.0f});
-                animatorArr2[1] = ObjectAnimator.ofFloat(r0.emojiWrap, "translationY", new float[]{0.0f});
-                animatorArr2[2] = ObjectAnimator.ofFloat(r0.emojiWrap, "scaleX", new float[]{1.0f});
-                animatorArr2[3] = ObjectAnimator.ofFloat(r0.emojiWrap, "scaleY", new float[]{1.0f});
-                animatorArr2[4] = ObjectAnimator.ofFloat(r0.blurOverlayView1, "alpha", new float[]{r0.blurOverlayView1.getAlpha(), r0.blurOverlayView1.getAlpha(), 0.0f});
-                animatorArr2[5] = ObjectAnimator.ofFloat(r0.blurOverlayView2, "alpha", new float[]{r0.blurOverlayView2.getAlpha(), 0.0f, 0.0f});
-                animatorArr2[6] = ObjectAnimator.ofFloat(r0.emojiExpandedText, "alpha", new float[]{0.0f});
-                set2.playTogether(animatorArr2);
-                set2.setDuration(300);
-                set2.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                r0.emojiAnimator = set2;
-                set2.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        VoIPActivity.this.emojiAnimator = null;
-                    }
-                });
-                set2.start();
+                return;
             }
+            set = new AnimatorSet();
+            animatorArr = new Animator[7];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.emojiWrap, "translationX", new float[]{0.0f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.emojiWrap, "translationY", new float[]{0.0f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.emojiWrap, "scaleX", new float[]{1.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.emojiWrap, "scaleY", new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.blurOverlayView1, "alpha", new float[]{this.blurOverlayView1.getAlpha(), this.blurOverlayView1.getAlpha(), 0.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.blurOverlayView2, "alpha", new float[]{this.blurOverlayView2.getAlpha(), 0.0f, 0.0f});
+            animatorArr[6] = ObjectAnimator.ofFloat(this.emojiExpandedText, "alpha", new float[]{0.0f});
+            set.playTogether(animatorArr);
+            set.setDuration(300);
+            set.setInterpolator(CubicBezierInterpolator.DEFAULT);
+            this.emojiAnimator = set;
+            set.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    VoIPActivity.this.emojiAnimator = null;
+                }
+            });
+            set.start();
         }
     }
 
@@ -1576,8 +1549,8 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         new Thread(new Runnable() {
 
             /* renamed from: org.telegram.ui.VoIPActivity$30$1 */
-            class C17541 implements Runnable {
-                C17541() {
+            class C17561 implements Runnable {
+                C17561() {
                 }
 
                 public void run() {
@@ -1598,15 +1571,14 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
                 canvas.drawColor(637534208);
                 canvas.drawRect(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), paint);
                 Bitmap blur2 = Bitmap.createBitmap(50, 50, Config.ARGB_8888);
-                canvas = new Canvas(blur2);
-                canvas.drawBitmap(src.bitmap, null, new Rect(0, 0, 50, 50), new Paint(2));
+                Canvas canvas2 = new Canvas(blur2);
+                canvas2.drawBitmap(src.bitmap, null, new Rect(0, 0, 50, 50), new Paint(2));
                 Utilities.blurBitmap(blur2, 3, 0, blur2.getWidth(), blur2.getHeight(), blur2.getRowBytes());
                 paint.setAlpha(102);
-                Bitmap blur22 = blur2;
-                canvas.drawRect(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), paint);
+                canvas2.drawRect(0.0f, 0.0f, (float) canvas2.getWidth(), (float) canvas2.getHeight(), paint);
                 VoIPActivity.this.blurredPhoto1 = blur1;
-                VoIPActivity.this.blurredPhoto2 = blur22;
-                VoIPActivity.this.runOnUiThread(new C17541());
+                VoIPActivity.this.blurredPhoto2 = blur2;
+                VoIPActivity.this.runOnUiThread(new C17561());
             }
         }).start();
     }
@@ -1620,26 +1592,31 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
     }
 
     private void showMessagesSheet() {
-        Context context = this;
+        BottomSheetCell cell;
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().stopRinging();
         }
         SharedPreferences prefs = getSharedPreferences("mainconfig", 0);
-        String[] msgs = new String[]{prefs.getString("quick_reply_msg1", LocaleController.getString("QuickReplyDefault1", R.string.QuickReplyDefault1)), prefs.getString("quick_reply_msg2", LocaleController.getString("QuickReplyDefault2", R.string.QuickReplyDefault2)), prefs.getString("quick_reply_msg3", LocaleController.getString("QuickReplyDefault3", R.string.QuickReplyDefault3)), prefs.getString("quick_reply_msg4", LocaleController.getString("QuickReplyDefault4", R.string.QuickReplyDefault4))};
-        LinearLayout sheetView = new LinearLayout(context);
+        msgs = new String[4];
+        msgs[0] = prefs.getString("quick_reply_msg1", LocaleController.getString("QuickReplyDefault1", R.string.QuickReplyDefault1));
+        msgs[1] = prefs.getString("quick_reply_msg2", LocaleController.getString("QuickReplyDefault2", R.string.QuickReplyDefault2));
+        msgs[2] = prefs.getString("quick_reply_msg3", LocaleController.getString("QuickReplyDefault3", R.string.QuickReplyDefault3));
+        msgs[3] = prefs.getString("quick_reply_msg4", LocaleController.getString("QuickReplyDefault4", R.string.QuickReplyDefault4));
+        LinearLayout sheetView = new LinearLayout(this);
         sheetView.setOrientation(1);
-        final BottomSheet sheet = new BottomSheet(context, true);
+        BottomSheet bottomSheet = new BottomSheet(this, true);
         if (VERSION.SDK_INT >= 21) {
             getWindow().setNavigationBarColor(-13948117);
-            sheet.setOnDismissListener(new OnDismissListener() {
+            bottomSheet.setOnDismissListener(new OnDismissListener() {
                 public void onDismiss(DialogInterface dialog) {
                     VoIPActivity.this.getWindow().setNavigationBarColor(0);
                 }
             });
         }
+        final BottomSheet bottomSheet2 = bottomSheet;
         OnClickListener listener = new OnClickListener() {
             public void onClick(final View v) {
-                sheet.dismiss();
+                bottomSheet2.dismiss();
                 if (VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().declineIncomingCall(4, new Runnable() {
                         public void run() {
@@ -1650,20 +1627,20 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
         };
         for (String msg : msgs) {
-            BottomSheetCell cell = new BottomSheetCell(context, 0);
+            cell = new BottomSheetCell(this, 0);
             cell.setTextAndIcon(msg, 0);
             cell.setTextColor(-1);
             cell.setTag(msg);
             cell.setOnClickListener(listener);
             sheetView.addView(cell);
         }
-        FrameLayout customWrap = new FrameLayout(context);
-        final BottomSheetCell cell2 = new BottomSheetCell(context, 0);
-        cell2.setTextAndIcon(LocaleController.getString("QuickReplyCustom", R.string.QuickReplyCustom), 0);
-        cell2.setTextColor(-1);
-        customWrap.addView(cell2);
-        final FrameLayout editor = new FrameLayout(context);
-        final EditText field = new EditText(context);
+        FrameLayout customWrap = new FrameLayout(this);
+        cell = new BottomSheetCell(this, 0);
+        cell.setTextAndIcon(LocaleController.getString("QuickReplyCustom", R.string.QuickReplyCustom), 0);
+        cell.setTextColor(-1);
+        customWrap.addView(cell);
+        final FrameLayout editor = new FrameLayout(this);
+        final EditText field = new EditText(this);
         field.setTextSize(1, 16.0f);
         field.setTextColor(-1);
         field.setHintTextColor(DarkTheme.getColor(Theme.key_chat_messagePanelHint));
@@ -1676,22 +1653,23 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
         field.setSingleLine(false);
         field.setInputType((field.getInputType() | MessagesController.UPDATE_MASK_CHAT_ADMINS) | 131072);
         editor.addView(field, LayoutHelper.createFrame(-1, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 48.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 48.0f, 0.0f));
-        final ImageView sendBtn = new ImageView(context);
-        sendBtn.setScaleType(ScaleType.CENTER);
-        sendBtn.setImageDrawable(DarkTheme.getThemedDrawable(context, R.drawable.ic_send, Theme.key_chat_messagePanelSend));
+        View imageView = new ImageView(this);
+        imageView.setScaleType(ScaleType.CENTER);
+        imageView.setImageDrawable(DarkTheme.getThemedDrawable(this, R.drawable.ic_send, Theme.key_chat_messagePanelSend));
         if (LocaleController.isRTL) {
-            sendBtn.setScaleX(-0.1f);
+            imageView.setScaleX(-0.1f);
         } else {
-            sendBtn.setScaleX(0.1f);
+            imageView.setScaleX(0.1f);
         }
-        sendBtn.setScaleY(0.1f);
-        sendBtn.setAlpha(0.0f);
-        editor.addView(sendBtn, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
-        sendBtn.setOnClickListener(new OnClickListener() {
+        imageView.setScaleY(0.1f);
+        imageView.setAlpha(0.0f);
+        editor.addView(imageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
+        bottomSheet2 = bottomSheet;
+        imageView.setOnClickListener(new OnClickListener() {
 
             /* renamed from: org.telegram.ui.VoIPActivity$34$1 */
-            class C17561 implements Runnable {
-                C17561() {
+            class C17581 implements Runnable {
+                C17581() {
                 }
 
                 public void run() {
@@ -1701,32 +1679,33 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
 
             public void onClick(View v) {
                 if (field.length() != 0) {
-                    sheet.dismiss();
+                    bottomSheet2.dismiss();
                     if (VoIPService.getSharedInstance() != null) {
-                        VoIPService.getSharedInstance().declineIncomingCall(4, new C17561());
+                        VoIPService.getSharedInstance().declineIncomingCall(4, new C17581());
                     }
                 }
             }
         });
-        sendBtn.setVisibility(4);
-        final ImageView cancelBtn = new ImageView(context);
+        imageView.setVisibility(4);
+        final ImageView cancelBtn = new ImageView(this);
         cancelBtn.setScaleType(ScaleType.CENTER);
-        cancelBtn.setImageDrawable(DarkTheme.getThemedDrawable(context, R.drawable.edit_cancel, Theme.key_chat_messagePanelIcons));
-        editor.addView(cancelBtn, LayoutHelper.createFrame(48, 48, 80 | (LocaleController.isRTL ? 3 : 5)));
+        cancelBtn.setImageDrawable(DarkTheme.getThemedDrawable(this, R.drawable.edit_cancel, Theme.key_chat_messagePanelIcons));
+        editor.addView(cancelBtn, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
         cancelBtn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 editor.setVisibility(8);
-                cell2.setVisibility(0);
+                cell.setVisibility(0);
                 field.setText(TtmlNode.ANONYMOUS_REGION_ID);
                 ((InputMethodManager) VoIPActivity.this.getSystemService("input_method")).hideSoftInputFromWindow(field.getWindowToken(), 0);
             }
         });
+        final View view = imageView;
         field.addTextChangedListener(new TextWatcher() {
-            boolean prevState = null;
+            boolean prevState = false;
 
             /* renamed from: org.telegram.ui.VoIPActivity$36$1 */
-            class C17571 implements Runnable {
-                C17571() {
+            class C17591 implements Runnable {
+                C17591() {
                 }
 
                 public void run() {
@@ -1735,12 +1714,12 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
 
             /* renamed from: org.telegram.ui.VoIPActivity$36$2 */
-            class C17582 implements Runnable {
-                C17582() {
+            class C17602 implements Runnable {
+                C17602() {
                 }
 
                 public void run() {
-                    sendBtn.setVisibility(4);
+                    view.setVisibility(4);
                 }
             }
 
@@ -1751,34 +1730,46 @@ public class VoIPActivity extends Activity implements NotificationCenterDelegate
             }
 
             public void afterTextChanged(Editable s) {
-                boolean hasText = s.length() > 0;
+                boolean hasText;
+                if (s.length() > 0) {
+                    hasText = true;
+                } else {
+                    hasText = false;
+                }
                 if (this.prevState != hasText) {
                     this.prevState = hasText;
                     if (hasText) {
-                        sendBtn.setVisibility(0);
-                        sendBtn.animate().alpha(1.0f).scaleX(LocaleController.isRTL ? -1.0f : 1.0f).scaleY(1.0f).setDuration(200).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
-                        cancelBtn.animate().alpha(0.0f).scaleX(0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new C17571()).start();
+                        float f;
+                        view.setVisibility(0);
+                        ViewPropertyAnimator alpha = view.animate().alpha(1.0f);
+                        if (LocaleController.isRTL) {
+                            f = -1.0f;
+                        } else {
+                            f = 1.0f;
+                        }
+                        alpha.scaleX(f).scaleY(1.0f).setDuration(200).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+                        cancelBtn.animate().alpha(0.0f).scaleX(0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new C17591()).start();
                         return;
                     }
                     cancelBtn.setVisibility(0);
                     cancelBtn.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(200).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
-                    sendBtn.animate().alpha(0.0f).scaleX(LocaleController.isRTL ? -0.1f : 0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new C17582()).start();
+                    view.animate().alpha(0.0f).scaleX(LocaleController.isRTL ? -0.1f : 0.1f).scaleY(0.1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(200).withEndAction(new C17602()).start();
                 }
             }
         });
         editor.setVisibility(8);
         customWrap.addView(editor);
-        cell2.setOnClickListener(new OnClickListener() {
+        cell.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 editor.setVisibility(0);
-                cell2.setVisibility(4);
+                cell.setVisibility(4);
                 field.requestFocus();
                 ((InputMethodManager) VoIPActivity.this.getSystemService("input_method")).showSoftInput(field, 0);
             }
         });
         sheetView.addView(customWrap);
-        sheet.setCustomView(sheetView);
-        sheet.setBackgroundColor(-13948117);
-        sheet.show();
+        bottomSheet.setCustomView(sheetView);
+        bottomSheet.setBackgroundColor(-13948117);
+        bottomSheet.show();
     }
 }

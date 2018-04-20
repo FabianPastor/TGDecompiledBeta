@@ -126,11 +126,11 @@ public class HintDialogCell extends FrameLayout {
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (child == this.imageView && this.countLayout != null) {
-            int top = AndroidUtilities.dp(NUM);
-            int left = AndroidUtilities.dp(NUM);
+            int top = AndroidUtilities.dp(6.0f);
+            int left = AndroidUtilities.dp(54.0f);
             int x = left - AndroidUtilities.dp(5.5f);
             this.rect.set((float) x, (float) top, (float) ((this.countWidth + x) + AndroidUtilities.dp(11.0f)), (float) (AndroidUtilities.dp(23.0f) + top));
-            canvas.drawRoundRect(this.rect, AndroidUtilities.density * 11.5f, 11.5f * AndroidUtilities.density, MessagesController.getInstance(this.currentAccount).isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
+            canvas.drawRoundRect(this.rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, MessagesController.getInstance(this.currentAccount).isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
             canvas.save();
             canvas.translate((float) left, (float) (AndroidUtilities.dp(4.0f) + top));
             this.countLayout.draw(canvas);

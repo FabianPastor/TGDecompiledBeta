@@ -3,7 +3,6 @@ package org.telegram.messenger.exoplayer2.upstream.cache;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.TreeSet;
 import org.telegram.messenger.exoplayer2.upstream.cache.Cache.CacheException;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -73,30 +72,30 @@ final class CachedContent {
     }
 
     public long getCachedBytesLength(long position, long length) {
-        long j = length;
         SimpleCacheSpan span = getSpan(position);
         if (span.isHoleSpan()) {
-            return -Math.min(span.isOpenEnded() ? Long.MAX_VALUE : span.length, j);
+            long j;
+            if (span.isOpenEnded()) {
+                j = Long.MAX_VALUE;
+            } else {
+                j = span.length;
+            }
+            return -Math.min(j, length);
         }
-        long queryEndPosition = position + j;
+        long queryEndPosition = position + length;
         long currentEndPosition = span.position + span.length;
         if (currentEndPosition < queryEndPosition) {
-            Iterator it = this.cachedSpans.tailSet(span, false).iterator();
-            while (it.hasNext()) {
-                SimpleCacheSpan next = (SimpleCacheSpan) it.next();
-                if (next.position > currentEndPosition) {
-                    break;
+            for (SimpleCacheSpan next : this.cachedSpans.tailSet(span, false)) {
+                if (next.position <= currentEndPosition) {
+                    currentEndPosition = Math.max(currentEndPosition, next.position + next.length);
+                    if (currentEndPosition >= queryEndPosition) {
+                        break;
+                    }
                 }
-                Iterator it2 = it;
-                currentEndPosition = Math.max(currentEndPosition, next.position + next.length);
-                if (currentEndPosition >= queryEndPosition) {
-                    break;
-                }
-                it = it2;
-                CachedContent cachedContent = this;
+                break;
             }
         }
-        return Math.min(currentEndPosition - position, j);
+        return Math.min(currentEndPosition - position, length);
     }
 
     public SimpleCacheSpan touch(SimpleCacheSpan cacheSpan) throws CacheException {
@@ -106,13 +105,7 @@ final class CachedContent {
             this.cachedSpans.add(newCacheSpan);
             return newCacheSpan;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Renaming of ");
-        stringBuilder.append(cacheSpan.file);
-        stringBuilder.append(" to ");
-        stringBuilder.append(newCacheSpan.file);
-        stringBuilder.append(" failed.");
-        throw new CacheException(stringBuilder.toString());
+        throw new CacheException("Renaming of " + cacheSpan.file + " to " + newCacheSpan.file + " failed.");
     }
 
     public boolean isEmpty() {
@@ -128,6 +121,6 @@ final class CachedContent {
     }
 
     public int headerHashCode() {
-        return (31 * ((31 * this.id) + this.key.hashCode())) + ((int) (this.length ^ (this.length >>> 32)));
+        return (((this.id * 31) + this.key.hashCode()) * 31) + ((int) (this.length ^ (this.length >>> 32)));
     }
 }

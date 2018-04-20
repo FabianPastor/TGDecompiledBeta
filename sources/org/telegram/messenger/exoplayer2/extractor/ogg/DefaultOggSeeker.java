@@ -64,12 +64,11 @@ final class DefaultOggSeeker implements OggSeeker {
     }
 
     public long read(ExtractorInput input) throws IOException, InterruptedException {
-        long lastPageSearchPosition;
         switch (this.state) {
             case 0:
                 this.positionBeforeSeekToEnd = input.getPosition();
                 this.state = 1;
-                lastPageSearchPosition = this.endPosition - 65307;
+                long lastPageSearchPosition = this.endPosition - 65307;
                 if (lastPageSearchPosition > this.positionBeforeSeekToEnd) {
                     return lastPageSearchPosition;
                 }
@@ -81,14 +80,15 @@ final class DefaultOggSeeker implements OggSeeker {
                 if (this.targetGranule == 0) {
                     currentGranule = 0;
                 } else {
-                    lastPageSearchPosition = getNextSeekPosition(this.targetGranule, input);
-                    if (lastPageSearchPosition >= 0) {
-                        return lastPageSearchPosition;
+                    long position = getNextSeekPosition(this.targetGranule, input);
+                    if (position >= 0) {
+                        return position;
                     }
-                    currentGranule = skipToPageOfGranule(input, this.targetGranule, -(lastPageSearchPosition + 2));
+                    ExtractorInput extractorInput = input;
+                    currentGranule = skipToPageOfGranule(extractorInput, this.targetGranule, -(2 + position));
                 }
                 this.state = 3;
-                return -(currentGranule + 2);
+                return -(2 + currentGranule);
             case 3:
                 return -1;
             default:
@@ -100,29 +100,9 @@ final class DefaultOggSeeker implements OggSeeker {
     }
 
     public long startSeek(long timeUs) {
-        boolean z;
-        long j;
-        if (this.state != 3) {
-            if (this.state != 2) {
-                z = false;
-                Assertions.checkArgument(z);
-                j = 0;
-                if (timeUs == 0) {
-                    j = this.streamReader.convertTimeToGranule(timeUs);
-                }
-                this.targetGranule = j;
-                this.state = 2;
-                resetSeeking();
-                return this.targetGranule;
-            }
-        }
-        z = true;
+        boolean z = this.state == 3 || this.state == 2;
         Assertions.checkArgument(z);
-        j = 0;
-        if (timeUs == 0) {
-            j = this.streamReader.convertTimeToGranule(timeUs);
-        }
-        this.targetGranule = j;
+        this.targetGranule = timeUs == 0 ? 0 : this.streamReader.convertTimeToGranule(timeUs);
         this.state = 2;
         resetSeeking();
         return this.targetGranule;
@@ -140,61 +120,51 @@ final class DefaultOggSeeker implements OggSeeker {
     }
 
     public long getNextSeekPosition(long targetGranule, ExtractorInput input) throws IOException, InterruptedException {
-        ExtractorInput extractorInput = input;
         if (this.start == this.end) {
-            return -(r0.startGranule + 2);
+            return -(this.startGranule + 2);
         }
         long initialPosition = input.getPosition();
-        if (skipToNextPage(extractorInput, r0.end)) {
-            long j;
-            r0.pageHeader.populate(extractorInput, false);
+        if (skipToNextPage(input, this.end)) {
+            this.pageHeader.populate(input, false);
             input.resetPeekPosition();
-            long granuleDistance = targetGranule - r0.pageHeader.granulePosition;
-            int pageSize = r0.pageHeader.headerSize + r0.pageHeader.bodySize;
-            if (granuleDistance >= 0) {
-                if (granuleDistance <= 72000) {
-                    extractorInput.skipFully(pageSize);
-                    return -(r0.pageHeader.granulePosition + 2);
+            long granuleDistance = targetGranule - this.pageHeader.granulePosition;
+            int pageSize = this.pageHeader.headerSize + this.pageHeader.bodySize;
+            if (granuleDistance < 0 || granuleDistance > 72000) {
+                if (granuleDistance < 0) {
+                    this.end = initialPosition;
+                    this.endGranule = this.pageHeader.granulePosition;
+                } else {
+                    this.start = input.getPosition() + ((long) pageSize);
+                    this.startGranule = this.pageHeader.granulePosition;
+                    if ((this.end - this.start) + ((long) pageSize) < 100000) {
+                        input.skipFully(pageSize);
+                        return -(this.startGranule + 2);
+                    }
                 }
-            }
-            if (granuleDistance < 0) {
-                r0.end = initialPosition;
-                r0.endGranule = r0.pageHeader.granulePosition;
-                j = 2;
-            } else {
-                r0.start = input.getPosition() + ((long) pageSize);
-                r0.startGranule = r0.pageHeader.granulePosition;
-                if ((r0.end - r0.start) + ((long) pageSize) < 100000) {
-                    extractorInput.skipFully(pageSize);
-                    return -(r0.startGranule + 2);
+                if (this.end - this.start < 100000) {
+                    this.end = this.start;
+                    return this.start;
                 }
-                j = 2;
+                return Math.min(Math.max((input.getPosition() - (((long) pageSize) * (granuleDistance <= 0 ? 2 : 1))) + (((this.end - this.start) * granuleDistance) / (this.endGranule - this.startGranule)), this.start), this.end - 1);
             }
-            if (r0.end - r0.start < 100000) {
-                r0.end = r0.start;
-                return r0.start;
-            }
-            long offset = (long) pageSize;
-            if (granuleDistance > 0) {
-                j = 1;
-            }
-            return Math.min(Math.max((input.getPosition() - (offset * j)) + (((r0.end - r0.start) * granuleDistance) / (r0.endGranule - r0.startGranule)), r0.start), r0.end - 1);
-        } else if (r0.start != initialPosition) {
-            return r0.start;
+            input.skipFully(pageSize);
+            return -(this.pageHeader.granulePosition + 2);
+        } else if (this.start != initialPosition) {
+            return this.start;
         } else {
             throw new IOException("No ogg page can be found.");
         }
     }
 
     private long getEstimatedPosition(long position, long granuleDistance, long offset) {
-        long position2 = position + ((((this.endPosition - this.startPosition) * granuleDistance) / this.totalGranules) - offset);
-        if (position2 < this.startPosition) {
-            position2 = this.startPosition;
+        position += (((this.endPosition - this.startPosition) * granuleDistance) / this.totalGranules) - offset;
+        if (position < this.startPosition) {
+            position = this.startPosition;
         }
-        if (position2 >= this.endPosition) {
+        if (position >= this.endPosition) {
             return this.endPosition - 1;
         }
-        return position2;
+        return position;
     }
 
     void skipToNextPage(ExtractorInput input) throws IOException, InterruptedException {
@@ -204,11 +174,10 @@ final class DefaultOggSeeker implements OggSeeker {
     }
 
     boolean skipToNextPage(ExtractorInput input, long until) throws IOException, InterruptedException {
-        until = Math.min(until + 3, this.endPosition);
+        until = Math.min(3 + until, this.endPosition);
         byte[] buffer = new byte[2048];
         int peekLength = buffer.length;
         while (true) {
-            int i = 0;
             if (input.getPosition() + ((long) peekLength) > until) {
                 peekLength = (int) (until - input.getPosition());
                 if (peekLength < 4) {
@@ -216,16 +185,13 @@ final class DefaultOggSeeker implements OggSeeker {
                 }
             }
             input.peekFully(buffer, 0, peekLength, false);
-            while (true) {
-                int i2 = i;
-                if (i2 >= peekLength - 3) {
-                    break;
-                } else if (buffer[i2] == (byte) 79 && buffer[i2 + 1] == (byte) 103 && buffer[i2 + 2] == (byte) 103 && buffer[i2 + 3] == (byte) 83) {
-                    input.skipFully(i2);
+            int i = 0;
+            while (i < peekLength - 3) {
+                if (buffer[i] == (byte) 79 && buffer[i + 1] == (byte) 103 && buffer[i + 2] == (byte) 103 && buffer[i + 3] == (byte) 83) {
+                    input.skipFully(i);
                     return true;
-                } else {
-                    i = i2 + 1;
                 }
+                i++;
             }
             input.skipFully(peekLength - 3);
         }

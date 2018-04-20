@@ -39,10 +39,8 @@ public class FileLoadOperation {
     }
 
     public void cancel() {
-        if (this.started) {
-            if (this.address != 0) {
-                native_cancelLoadOperation(this.address);
-            }
+        if (this.started && this.address != 0) {
+            native_cancelLoadOperation(this.address);
         }
     }
 

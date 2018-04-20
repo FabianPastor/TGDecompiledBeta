@@ -35,8 +35,8 @@ public class ChangePhoneHelpActivity extends BaseFragment {
     private TextView textView2;
 
     /* renamed from: org.telegram.ui.ChangePhoneHelpActivity$2 */
-    class C09382 implements OnTouchListener {
-        C09382() {
+    class C09392 implements OnTouchListener {
+        C09392() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -45,11 +45,11 @@ public class ChangePhoneHelpActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangePhoneHelpActivity$3 */
-    class C09403 implements OnClickListener {
+    class C09413 implements OnClickListener {
 
         /* renamed from: org.telegram.ui.ChangePhoneHelpActivity$3$1 */
-        class C09391 implements DialogInterface.OnClickListener {
-            C09391() {
+        class C09401 implements DialogInterface.OnClickListener {
+            C09401() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -57,7 +57,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
             }
         }
 
-        C09403() {
+        C09413() {
         }
 
         public void onClick(View v) {
@@ -65,7 +65,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
                 Builder builder = new Builder(ChangePhoneHelpActivity.this.getParentActivity());
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setMessage(LocaleController.getString("PhoneNumberAlert", R.string.PhoneNumberAlert));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C09391());
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new C09401());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 ChangePhoneHelpActivity.this.showDialog(builder.create());
             }
@@ -73,8 +73,8 @@ public class ChangePhoneHelpActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangePhoneHelpActivity$1 */
-    class C19591 extends ActionBarMenuOnItemClick {
-        C19591() {
+    class C19611 extends ActionBarMenuOnItemClick {
+        C19611() {
         }
 
         public void onItemClick(int id) {
@@ -86,32 +86,27 @@ public class ChangePhoneHelpActivity extends BaseFragment {
 
     public View createView(Context context) {
         String value;
-        Context context2 = context;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         User user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         if (user == null || user.phone == null || user.phone.length() == 0) {
             value = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
         } else {
-            value = PhoneFormat.getInstance();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("+");
-            stringBuilder.append(user.phone);
-            value = value.format(stringBuilder.toString());
+            value = PhoneFormat.getInstance().format("+" + user.phone);
         }
-        r1.actionBar.setTitle(value);
-        r1.actionBar.setActionBarMenuOnItemClick(new C19591());
-        r1.fragmentView = new RelativeLayout(context2);
-        r1.fragmentView.setOnTouchListener(new C09382());
-        RelativeLayout relativeLayout = r1.fragmentView;
-        ScrollView scrollView = new ScrollView(context2);
+        this.actionBar.setTitle(value);
+        this.actionBar.setActionBarMenuOnItemClick(new C19611());
+        this.fragmentView = new RelativeLayout(context);
+        this.fragmentView.setOnTouchListener(new C09392());
+        RelativeLayout relativeLayout = this.fragmentView;
+        ScrollView scrollView = new ScrollView(context);
         relativeLayout.addView(scrollView);
         LayoutParams layoutParams3 = (LayoutParams) scrollView.getLayoutParams();
         layoutParams3.width = -1;
         layoutParams3.height = -2;
         layoutParams3.addRule(15, -1);
         scrollView.setLayoutParams(layoutParams3);
-        LinearLayout linearLayout = new LinearLayout(context2);
+        LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
         linearLayout.setPadding(0, AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f));
         scrollView.addView(linearLayout);
@@ -119,34 +114,43 @@ public class ChangePhoneHelpActivity extends BaseFragment {
         layoutParams.width = -1;
         layoutParams.height = -2;
         linearLayout.setLayoutParams(layoutParams);
-        r1.imageView = new ImageView(context2);
-        r1.imageView.setImageResource(R.drawable.phone_change);
-        r1.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image), Mode.MULTIPLY));
-        linearLayout.addView(r1.imageView, LayoutHelper.createLinear(-2, -2, 1));
-        r1.textView1 = new TextView(context2);
-        r1.textView1.setTextSize(1, 16.0f);
-        r1.textView1.setGravity(1);
-        r1.textView1.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.imageView = new ImageView(context);
+        this.imageView.setImageResource(R.drawable.phone_change);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image), Mode.MULTIPLY));
+        linearLayout.addView(this.imageView, LayoutHelper.createLinear(-2, -2, 1));
+        this.textView1 = new TextView(context);
+        this.textView1.setTextSize(1, 16.0f);
+        this.textView1.setGravity(1);
+        this.textView1.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         try {
-            r1.textView1.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", R.string.PhoneNumberHelp)));
+            this.textView1.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", R.string.PhoneNumberHelp)));
         } catch (Throwable e) {
             FileLog.m3e(e);
-            r1.textView1.setText(LocaleController.getString("PhoneNumberHelp", R.string.PhoneNumberHelp));
+            this.textView1.setText(LocaleController.getString("PhoneNumberHelp", R.string.PhoneNumberHelp));
         }
-        linearLayout.addView(r1.textView1, LayoutHelper.createLinear(-2, -2, 1, 20, 56, 20, 0));
-        r1.textView2 = new TextView(context2);
-        r1.textView2.setTextSize(1, 18.0f);
-        r1.textView2.setGravity(1);
-        r1.textView2.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
-        r1.textView2.setText(LocaleController.getString("PhoneNumberChange", R.string.PhoneNumberChange));
-        r1.textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        r1.textView2.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f));
-        linearLayout.addView(r1.textView2, LayoutHelper.createLinear(-2, -2, 1, 20, 46, 20, 0));
-        r1.textView2.setOnClickListener(new C09403());
-        return r1.fragmentView;
+        linearLayout.addView(this.textView1, LayoutHelper.createLinear(-2, -2, 1, 20, 56, 20, 0));
+        this.textView2 = new TextView(context);
+        this.textView2.setTextSize(1, 18.0f);
+        this.textView2.setGravity(1);
+        this.textView2.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
+        this.textView2.setText(LocaleController.getString("PhoneNumberChange", R.string.PhoneNumberChange));
+        this.textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.textView2.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f));
+        linearLayout.addView(this.textView2, LayoutHelper.createLinear(-2, -2, 1, 20, 46, 20, 0));
+        this.textView2.setOnClickListener(new C09413());
+        return this.fragmentView;
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector), new ThemeDescription(this.textView1, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText), new ThemeDescription(this.textView2, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4), new ThemeDescription(this.imageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_changephoneinfo_image)};
+        r8 = new ThemeDescription[8];
+        r8[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        r8[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r8[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r8[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r8[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r8[5] = new ThemeDescription(this.textView1, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r8[6] = new ThemeDescription(this.textView2, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        r8[7] = new ThemeDescription(this.imageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_changephoneinfo_image);
+        return r8;
     }
 }

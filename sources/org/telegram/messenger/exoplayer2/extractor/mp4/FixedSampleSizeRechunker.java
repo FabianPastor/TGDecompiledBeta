@@ -25,43 +25,33 @@ final class FixedSampleSizeRechunker {
     }
 
     public static Results rechunk(int fixedSampleSize, long[] chunkOffsets, int[] chunkSampleCounts, long timestampDeltaInTimeUnits) {
-        int[] iArr = chunkSampleCounts;
         int maxSampleCount = 8192 / fixedSampleSize;
-        int chunkIndex = 0;
         int rechunkedSampleCount = 0;
-        for (int chunkSampleCount : iArr) {
-            int chunkSampleCount2;
-            rechunkedSampleCount += Util.ceilDivide(chunkSampleCount2, maxSampleCount);
+        for (int chunkSampleCount : chunkSampleCounts) {
+            rechunkedSampleCount += Util.ceilDivide(chunkSampleCount, maxSampleCount);
         }
         long[] offsets = new long[rechunkedSampleCount];
         int[] sizes = new int[rechunkedSampleCount];
+        int maximumSize = 0;
         long[] timestamps = new long[rechunkedSampleCount];
         int[] flags = new int[rechunkedSampleCount];
-        int maximumSize = 0;
         int originalSampleIndex = 0;
         int newSampleIndex = 0;
-        while (chunkIndex < iArr.length) {
-            chunkSampleCount2 = iArr[chunkIndex];
+        for (int chunkIndex = 0; chunkIndex < chunkSampleCounts.length; chunkIndex++) {
+            int chunkSamplesRemaining = chunkSampleCounts[chunkIndex];
             long sampleOffset = chunkOffsets[chunkIndex];
-            int maximumSize2 = maximumSize;
-            int originalSampleIndex2 = originalSampleIndex;
-            while (chunkSampleCount2 > 0) {
-                int bufferSampleCount = Math.min(maxSampleCount, chunkSampleCount2);
+            while (chunkSamplesRemaining > 0) {
+                int bufferSampleCount = Math.min(maxSampleCount, chunkSamplesRemaining);
                 offsets[newSampleIndex] = sampleOffset;
                 sizes[newSampleIndex] = fixedSampleSize * bufferSampleCount;
-                maximumSize2 = Math.max(maximumSize2, sizes[newSampleIndex]);
-                timestamps[newSampleIndex] = ((long) originalSampleIndex2) * timestampDeltaInTimeUnits;
+                maximumSize = Math.max(maximumSize, sizes[newSampleIndex]);
+                timestamps[newSampleIndex] = ((long) originalSampleIndex) * timestampDeltaInTimeUnits;
                 flags[newSampleIndex] = 1;
-                originalSampleIndex2 += bufferSampleCount;
-                chunkSampleCount2 -= bufferSampleCount;
-                newSampleIndex++;
                 sampleOffset += (long) sizes[newSampleIndex];
-                iArr = chunkSampleCounts;
+                originalSampleIndex += bufferSampleCount;
+                chunkSamplesRemaining -= bufferSampleCount;
+                newSampleIndex++;
             }
-            chunkIndex++;
-            maximumSize = maximumSize2;
-            originalSampleIndex = originalSampleIndex2;
-            iArr = chunkSampleCounts;
         }
         return new Results(offsets, sizes, maximumSize, timestamps, flags);
     }

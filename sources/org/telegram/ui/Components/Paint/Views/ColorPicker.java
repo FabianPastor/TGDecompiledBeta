@@ -10,7 +10,6 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
-import android.graphics.Shader;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
@@ -48,8 +47,8 @@ public class ColorPicker extends FrameLayout {
     private float weight = 0.27f;
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.ColorPicker$1 */
-    class C12201 implements OnClickListener {
-        C12201() {
+    class C12221 implements OnClickListener {
+        C12221() {
         }
 
         public void onClick(View v) {
@@ -60,8 +59,8 @@ public class ColorPicker extends FrameLayout {
     }
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.ColorPicker$2 */
-    class C12212 implements OnClickListener {
-        C12212() {
+    class C12232 implements OnClickListener {
+        C12232() {
         }
 
         public void onClick(View v) {
@@ -94,12 +93,12 @@ public class ColorPicker extends FrameLayout {
         this.settingsButton.setScaleType(ScaleType.CENTER);
         this.settingsButton.setImageResource(R.drawable.photo_paint_brush);
         addView(this.settingsButton, LayoutHelper.createFrame(60, 52.0f));
-        this.settingsButton.setOnClickListener(new C12201());
+        this.settingsButton.setOnClickListener(new C12221());
         this.undoButton = new ImageView(context);
         this.undoButton.setScaleType(ScaleType.CENTER);
         this.undoButton.setImageResource(R.drawable.photo_undo);
         addView(this.undoButton, LayoutHelper.createFrame(60, 52.0f));
-        this.undoButton.setOnClickListener(new C12212());
+        this.undoButton.setOnClickListener(new C12232());
         this.location = context.getSharedPreferences("paint", 0).getFloat("last_color_location", 1.0f);
         setLocation(this.location);
     }
@@ -134,19 +133,17 @@ public class ColorPicker extends FrameLayout {
         if (location <= 0.0f) {
             return COLORS[0];
         }
-        int i = 1;
         if (location >= 1.0f) {
             return COLORS[COLORS.length - 1];
         }
         int leftIndex = -1;
         int rightIndex = -1;
-        while (i < LOCATIONS.length) {
+        for (int i = 1; i < LOCATIONS.length; i++) {
             if (LOCATIONS[i] > location) {
                 leftIndex = i - 1;
                 rightIndex = i;
                 break;
             }
-            i++;
         }
         float leftLocation = LOCATIONS[leftIndex];
         return interpolateColors(COLORS[leftIndex], COLORS[rightIndex], (location - leftLocation) / (LOCATIONS[rightIndex] - leftLocation));
@@ -192,48 +189,43 @@ public class ColorPicker extends FrameLayout {
             return false;
         }
         int action = event.getActionMasked();
-        if (!(action == 3 || action == 1)) {
-            if (action != 6) {
-                if (action == 0 || action == 2) {
-                    if (!this.interacting) {
-                        this.interacting = true;
-                        if (this.delegate != null) {
-                            this.delegate.onBeganColorPicking();
-                        }
-                    }
-                    setLocation(Math.max(0.0f, Math.min(1.0f, x / this.rectF.width())));
-                    setDragging(true, true);
-                    if (y < ((float) (-AndroidUtilities.dp(10.0f)))) {
-                        this.changingWeight = true;
-                        setWeight(Math.max(0.0f, Math.min(1.0f, ((-y) - ((float) AndroidUtilities.dp(10.0f))) / ((float) AndroidUtilities.dp(190.0f)))));
-                    }
-                    if (this.delegate != null) {
-                        this.delegate.onColorValueChanged();
-                    }
-                    return true;
-                }
-                return false;
+        if (action == 3 || action == 1 || action == 6) {
+            if (this.interacting && this.delegate != null) {
+                this.delegate.onFinishedColorPicking();
+                getContext().getSharedPreferences("paint", 0).edit().putFloat("last_color_location", this.location).commit();
             }
+            this.interacting = false;
+            this.wasChangingWeight = this.changingWeight;
+            this.changingWeight = false;
+            setDragging(false, true);
+            return false;
+        } else if (action != 0 && action != 2) {
+            return false;
+        } else {
+            if (!this.interacting) {
+                this.interacting = true;
+                if (this.delegate != null) {
+                    this.delegate.onBeganColorPicking();
+                }
+            }
+            setLocation(Math.max(0.0f, Math.min(1.0f, x / this.rectF.width())));
+            setDragging(true, true);
+            if (y < ((float) (-AndroidUtilities.dp(10.0f)))) {
+                this.changingWeight = true;
+                setWeight(Math.max(0.0f, Math.min(1.0f, ((-y) - ((float) AndroidUtilities.dp(10.0f))) / ((float) AndroidUtilities.dp(190.0f)))));
+            }
+            if (this.delegate != null) {
+                this.delegate.onColorValueChanged();
+            }
+            return true;
         }
-        if (this.interacting && this.delegate != null) {
-            this.delegate.onFinishedColorPicking();
-            getContext().getSharedPreferences("paint", 0).edit().putFloat("last_color_location", this.location).commit();
-        }
-        this.interacting = false;
-        this.wasChangingWeight = this.changingWeight;
-        this.changingWeight = false;
-        setDragging(false, true);
-        return false;
     }
 
     @SuppressLint({"DrawAllocation"})
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int width = right - left;
         int height = bottom - top;
-        Paint paint = this.gradientPaint;
-        Shader shader = r5;
-        Shader linearGradient = new LinearGradient((float) AndroidUtilities.dp(56.0f), 0.0f, (float) (width - AndroidUtilities.dp(56.0f)), 0.0f, COLORS, LOCATIONS, TileMode.REPEAT);
-        paint.setShader(shader);
+        this.gradientPaint.setShader(new LinearGradient((float) AndroidUtilities.dp(56.0f), 0.0f, (float) (width - AndroidUtilities.dp(56.0f)), 0.0f, COLORS, LOCATIONS, TileMode.REPEAT));
         int y = height - AndroidUtilities.dp(32.0f);
         this.rectF.set((float) AndroidUtilities.dp(56.0f), (float) y, (float) (width - AndroidUtilities.dp(56.0f)), (float) (AndroidUtilities.dp(12.0f) + y));
         this.settingsButton.layout(width - this.settingsButton.getMeasuredWidth(), height - AndroidUtilities.dp(52.0f), width, height);
@@ -243,7 +235,7 @@ public class ColorPicker extends FrameLayout {
     protected void onDraw(Canvas canvas) {
         canvas.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.gradientPaint);
         int cx = (int) (this.rectF.left + (this.rectF.width() * this.location));
-        int cy = (int) ((this.rectF.centerY() + (this.draggingFactor * ((float) (-AndroidUtilities.dp(70.0f))))) - (this.changingWeight ? this.weight * ((float) AndroidUtilities.dp(190.0f)) : 0.0f));
+        int cy = (int) (((this.draggingFactor * ((float) (-AndroidUtilities.dp(70.0f)))) + this.rectF.centerY()) - (this.changingWeight ? this.weight * ((float) AndroidUtilities.dp(190.0f)) : 0.0f));
         int side = (int) (((float) AndroidUtilities.dp(24.0f)) * ((this.draggingFactor + 1.0f) * 0.5f));
         this.shadowDrawable.setBounds(cx - side, cy - side, cx + side, cy + side);
         this.shadowDrawable.draw(canvas);
@@ -275,9 +267,9 @@ public class ColorPicker extends FrameLayout {
                 }
                 a.setDuration((long) duration);
                 a.start();
-            } else {
-                setDraggingFactor(target);
+                return;
             }
+            setDraggingFactor(target);
         }
     }
 }

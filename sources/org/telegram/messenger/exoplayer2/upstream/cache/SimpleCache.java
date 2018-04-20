@@ -76,12 +76,11 @@ public final class SimpleCache implements Cache {
     public synchronized NavigableSet<CacheSpan> getCachedSpans(String key) {
         NavigableSet<CacheSpan> treeSet;
         CachedContent cachedContent = this.index.get(key);
-        if (cachedContent != null) {
-            if (!cachedContent.isEmpty()) {
-                treeSet = new TreeSet(cachedContent.getSpans());
-            }
+        if (cachedContent == null || cachedContent.isEmpty()) {
+            treeSet = new TreeSet();
+        } else {
+            treeSet = new TreeSet(cachedContent.getSpans());
         }
-        treeSet = new TreeSet();
         return treeSet;
     }
 
@@ -105,18 +104,21 @@ public final class SimpleCache implements Cache {
     }
 
     public synchronized SimpleCacheSpan startReadWriteNonBlocking(String key, long position) throws CacheException {
+        SimpleCacheSpan newCacheSpan;
         SimpleCacheSpan cacheSpan = getSpan(key, position);
         if (cacheSpan.isCached) {
-            SimpleCacheSpan newCacheSpan = this.index.get(key).touch(cacheSpan);
+            newCacheSpan = this.index.get(key).touch(cacheSpan);
             notifySpanTouched(cacheSpan, newCacheSpan);
-            return newCacheSpan;
+        } else {
+            CachedContent cachedContent = this.index.getOrAdd(key);
+            if (cachedContent.isLocked()) {
+                newCacheSpan = null;
+            } else {
+                cachedContent.setLocked(true);
+                newCacheSpan = cacheSpan;
+            }
         }
-        CachedContent cachedContent = this.index.getOrAdd(key);
-        if (cachedContent.isLocked()) {
-            return null;
-        }
-        cachedContent.setLocked(true);
-        return cacheSpan;
+        return newCacheSpan;
     }
 
     public synchronized File startFile(String key, long position, long maxLength) throws CacheException {
@@ -133,29 +135,36 @@ public final class SimpleCache implements Cache {
     }
 
     public synchronized void commitFile(File file) throws CacheException {
-        SimpleCacheSpan span = SimpleCacheSpan.createCacheEntry(file, this.index);
-        boolean z = false;
-        Assertions.checkState(span != null);
-        CachedContent cachedContent = this.index.get(span.key);
-        Assertions.checkNotNull(cachedContent);
-        Assertions.checkState(cachedContent.isLocked());
-        if (!file.exists()) {
-            return;
-        }
-        if (file.length() == 0) {
-            file.delete();
-            return;
-        }
-        Long length = Long.valueOf(cachedContent.getLength());
-        if (length.longValue() != -1) {
-            if (span.position + span.length <= length.longValue()) {
-                z = true;
+        boolean z = true;
+        synchronized (this) {
+            boolean z2;
+            SimpleCacheSpan span = SimpleCacheSpan.createCacheEntry(file, this.index);
+            if (span != null) {
+                z2 = true;
+            } else {
+                z2 = false;
             }
-            Assertions.checkState(z);
+            Assertions.checkState(z2);
+            CachedContent cachedContent = this.index.get(span.key);
+            Assertions.checkNotNull(cachedContent);
+            Assertions.checkState(cachedContent.isLocked());
+            if (file.exists()) {
+                if (file.length() == 0) {
+                    file.delete();
+                } else {
+                    Long length = Long.valueOf(cachedContent.getLength());
+                    if (length.longValue() != -1) {
+                        if (span.position + span.length > length.longValue()) {
+                            z = false;
+                        }
+                        Assertions.checkState(z);
+                    }
+                    addSpan(span);
+                    this.index.store();
+                    notifyAll();
+                }
+            }
         }
-        addSpan(span);
-        this.index.store();
-        notifyAll();
     }
 
     public synchronized void releaseHoleSpan(CacheSpan holeSpan) {
@@ -171,15 +180,13 @@ public final class SimpleCache implements Cache {
         if (cachedContent == null) {
             return SimpleCacheSpan.createOpenHole(key, position);
         }
-        SimpleCacheSpan span;
         while (true) {
-            span = cachedContent.getSpan(position);
+            SimpleCacheSpan span = cachedContent.getSpan(position);
             if (!span.isCached || span.file.exists()) {
                 return span;
             }
             removeStaleSpansAndCachedContents();
         }
-        return span;
     }
 
     private void initialize() {
@@ -200,10 +207,11 @@ public final class SimpleCache implements Cache {
                 this.index.removeEmpty();
                 try {
                     this.index.store();
+                    return;
                 } catch (CacheException e) {
                     Log.e(TAG, "Storing index file failed", e);
+                    return;
                 }
-                return;
             }
             return;
         }
@@ -218,19 +226,17 @@ public final class SimpleCache implements Cache {
 
     private void removeSpan(CacheSpan span, boolean removeEmptyCachedContent) throws CacheException {
         CachedContent cachedContent = this.index.get(span.key);
-        if (cachedContent != null) {
-            if (cachedContent.removeSpan(span)) {
-                this.totalSpace -= span.length;
-                if (removeEmptyCachedContent) {
-                    try {
-                        this.index.maybeRemove(cachedContent.key);
-                        this.index.store();
-                    } catch (Throwable th) {
-                        notifySpanRemoved(span);
-                    }
+        if (cachedContent != null && cachedContent.removeSpan(span)) {
+            this.totalSpace -= span.length;
+            if (removeEmptyCachedContent) {
+                try {
+                    this.index.maybeRemove(cachedContent.key);
+                    this.index.store();
+                } catch (Throwable th) {
+                    notifySpanRemoved(span);
                 }
-                notifySpanRemoved(span);
             }
+            notifySpanRemoved(span);
         }
     }
 

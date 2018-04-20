@@ -14,14 +14,14 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
     public static final int LONG = 1;
     public static final int MEDIUM = 2;
     public static final int SHORT = 3;
-    private static final FormatCache<FastDateFormat> cache = new C18781();
+    private static final FormatCache<FastDateFormat> cache = new C18801();
     private static final long serialVersionUID = 2;
     private final FastDateParser parser;
     private final FastDatePrinter printer;
 
     /* renamed from: org.telegram.messenger.time.FastDateFormat$1 */
-    static class C18781 extends FormatCache<FastDateFormat> {
-        C18781() {
+    static class C18801 extends FormatCache<FastDateFormat> {
+        C18801() {
         }
 
         protected FastDateFormat createInstance(String pattern, TimeZone timeZone, Locale locale) {
@@ -174,15 +174,7 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("FastDateFormat[");
-        stringBuilder.append(this.printer.getPattern());
-        stringBuilder.append(",");
-        stringBuilder.append(this.printer.getLocale());
-        stringBuilder.append(",");
-        stringBuilder.append(this.printer.getTimeZone().getID());
-        stringBuilder.append("]");
-        return stringBuilder.toString();
+        return "FastDateFormat[" + this.printer.getPattern() + "," + this.printer.getLocale() + "," + this.printer.getTimeZone().getID() + "]";
     }
 
     protected StringBuffer applyRules(Calendar calendar, StringBuffer buf) {

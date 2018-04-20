@@ -48,7 +48,6 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
     }
 
     public TsPayloadReader createPayloadReader(int streamType, EsInfo esInfo) {
-        TsPayloadReader tsPayloadReader = null;
         switch (streamType) {
             case 2:
                 return new PesReader(new H262Reader());
@@ -56,22 +55,22 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
             case 4:
                 return new PesReader(new MpegAudioReader(esInfo.language));
             case 15:
-                if (!isSet(2)) {
-                    tsPayloadReader = new PesReader(new AdtsReader(false, esInfo.language));
+                if (isSet(2)) {
+                    return null;
                 }
-                return tsPayloadReader;
+                return new PesReader(new AdtsReader(false, esInfo.language));
             case 17:
-                if (!isSet(2)) {
-                    tsPayloadReader = new PesReader(new LatmReader(esInfo.language));
+                if (isSet(2)) {
+                    return null;
                 }
-                return tsPayloadReader;
+                return new PesReader(new LatmReader(esInfo.language));
             case 21:
                 return new PesReader(new Id3Reader());
             case 27:
-                if (!isSet(4)) {
-                    tsPayloadReader = new PesReader(new H264Reader(buildSeiReader(esInfo), isSet(1), isSet(8)));
+                if (isSet(4)) {
+                    return null;
                 }
-                return tsPayloadReader;
+                return new PesReader(new H264Reader(buildSeiReader(esInfo), isSet(1), isSet(8)));
             case TsExtractor.TS_STREAM_TYPE_H265 /*36*/:
                 return new PesReader(new H265Reader(buildSeiReader(esInfo)));
             case TsExtractor.TS_STREAM_TYPE_DVBSUBS /*89*/:
@@ -83,10 +82,10 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
             case TsExtractor.TS_STREAM_TYPE_DTS /*138*/:
                 return new PesReader(new DtsReader(esInfo.language));
             case 134:
-                if (!isSet(16)) {
-                    tsPayloadReader = new SectionReader(new SpliceInfoSectionReader());
+                if (isSet(16)) {
+                    return null;
                 }
-                return tsPayloadReader;
+                return new SectionReader(new SpliceInfoSectionReader());
             default:
                 return null;
         }
@@ -94,31 +93,32 @@ public final class DefaultTsPayloadReaderFactory implements Factory {
 
     private SeiReader buildSeiReader(EsInfo esInfo) {
         if (isSet(32)) {
-            return new SeiReader(r0.closedCaptionFormats);
+            return new SeiReader(this.closedCaptionFormats);
         }
-        ParsableByteArray scratchDescriptorData = new ParsableByteArray(esInfo.descriptorBytes);
-        List<Format> closedCaptionFormats = r0.closedCaptionFormats;
-        while (scratchDescriptorData.bytesLeft() > 0) {
-            int nextDescriptorPosition = scratchDescriptorData.getPosition() + scratchDescriptorData.readUnsignedByte();
-            if (scratchDescriptorData.readUnsignedByte() == 134) {
+        ParsableByteArray parsableByteArray = new ParsableByteArray(esInfo.descriptorBytes);
+        List<Format> closedCaptionFormats = this.closedCaptionFormats;
+        while (parsableByteArray.bytesLeft() > 0) {
+            int nextDescriptorPosition = parsableByteArray.getPosition() + parsableByteArray.readUnsignedByte();
+            if (parsableByteArray.readUnsignedByte() == 134) {
                 closedCaptionFormats = new ArrayList();
-                int numberOfServices = scratchDescriptorData.readUnsignedByte() & 31;
+                int numberOfServices = parsableByteArray.readUnsignedByte() & 31;
                 for (int i = 0; i < numberOfServices; i++) {
                     String mimeType;
-                    String language = scratchDescriptorData.readString(3);
-                    int captionTypeByte = scratchDescriptorData.readUnsignedByte();
-                    int i2 = 1;
+                    int accessibilityChannel;
+                    String language = parsableByteArray.readString(3);
+                    int captionTypeByte = parsableByteArray.readUnsignedByte();
                     if ((captionTypeByte & 128) != 0) {
                         mimeType = MimeTypes.APPLICATION_CEA708;
-                        i2 = captionTypeByte & 63;
+                        accessibilityChannel = captionTypeByte & 63;
                     } else {
                         mimeType = MimeTypes.APPLICATION_CEA608;
+                        accessibilityChannel = 1;
                     }
-                    closedCaptionFormats.add(Format.createTextSampleFormat(null, mimeType, null, -1, 0, language, i2, null));
-                    scratchDescriptorData.skipBytes(2);
+                    closedCaptionFormats.add(Format.createTextSampleFormat(null, mimeType, null, -1, 0, language, accessibilityChannel, null));
+                    parsableByteArray.skipBytes(2);
                 }
             }
-            scratchDescriptorData.setPosition(nextDescriptorPosition);
+            parsableByteArray.setPosition(nextDescriptorPosition);
         }
         return new SeiReader(closedCaptionFormats);
     }

@@ -52,17 +52,29 @@ class CachedContentIndex {
     }
 
     public CachedContentIndex(File cacheDir, byte[] secretKey, boolean encrypt) {
+        GeneralSecurityException e;
+        boolean z = true;
         this.encrypt = encrypt;
         if (secretKey != null) {
-            Assertions.checkArgument(secretKey.length == 16);
+            if (secretKey.length != 16) {
+                z = false;
+            }
+            Assertions.checkArgument(z);
             try {
                 this.cipher = getCipher();
                 this.secretKeySpec = new SecretKeySpec(secretKey, "AES");
-            } catch (GeneralSecurityException e) {
+            } catch (NoSuchAlgorithmException e2) {
+                e = e2;
+                throw new IllegalStateException(e);
+            } catch (NoSuchPaddingException e3) {
+                e = e3;
                 throw new IllegalStateException(e);
             }
         }
-        Assertions.checkState(encrypt ^ 1);
+        if (encrypt) {
+            z = false;
+        }
+        Assertions.checkState(z);
         this.cipher = null;
         this.secretKeySpec = null;
         this.keyToContent = new HashMap();
@@ -71,7 +83,7 @@ class CachedContentIndex {
     }
 
     public void load() {
-        Assertions.checkState(this.changed ^ 1);
+        Assertions.checkState(!this.changed);
         if (!readFile()) {
             this.atomicFile.delete();
             this.keyToContent.clear();
@@ -147,104 +159,179 @@ class CachedContentIndex {
     }
 
     private boolean readFile() {
-        Closeable input = null;
+        GeneralSecurityException e;
+        IOException e2;
+        Throwable th;
+        Closeable closeable = null;
         try {
             InputStream inputStream = new BufferedInputStream(this.atomicFile.openRead());
-            input = new DataInputStream(inputStream);
-            if (input.readInt() != 1) {
-                if (input != null) {
-                    Util.closeQuietly(input);
-                }
-                return false;
-            }
-            if ((input.readInt() & 1) != 0) {
-                if (this.cipher == null) {
+            Closeable input = new DataInputStream(inputStream);
+            try {
+                if (input.readInt() != 1) {
                     if (input != null) {
                         Util.closeQuietly(input);
                     }
+                    closeable = input;
                     return false;
                 }
-                byte[] initializationVector = new byte[16];
-                input.readFully(initializationVector);
-                this.cipher.init(2, this.secretKeySpec, new IvParameterSpec(initializationVector));
-                input = new DataInputStream(new CipherInputStream(inputStream, this.cipher));
-            } else if (this.encrypt) {
-                this.changed = true;
-            }
-            int count = input.readInt();
-            int hashCode = 0;
-            for (int i = 0; i < count; i++) {
-                CachedContent cachedContent = new CachedContent(input);
-                add(cachedContent);
-                hashCode += cachedContent.headerHashCode();
-            }
-            if (input.readInt() != hashCode) {
-                if (input != null) {
-                    Util.closeQuietly(input);
+                if ((input.readInt() & 1) == 0) {
+                    if (this.encrypt) {
+                        this.changed = true;
+                    }
+                    closeable = input;
+                } else if (this.cipher == null) {
+                    if (input != null) {
+                        Util.closeQuietly(input);
+                    }
+                    closeable = input;
+                    return false;
+                } else {
+                    byte[] initializationVector = new byte[16];
+                    input.readFully(initializationVector);
+                    try {
+                        this.cipher.init(2, this.secretKeySpec, new IvParameterSpec(initializationVector));
+                        closeable = new DataInputStream(new CipherInputStream(inputStream, this.cipher));
+                    } catch (GeneralSecurityException e3) {
+                        e = e3;
+                        throw new IllegalStateException(e);
+                    } catch (GeneralSecurityException e32) {
+                        e = e32;
+                        throw new IllegalStateException(e);
+                    }
                 }
+                int count = closeable.readInt();
+                int hashCode = 0;
+                for (int i = 0; i < count; i++) {
+                    CachedContent cachedContent = new CachedContent(closeable);
+                    add(cachedContent);
+                    hashCode += cachedContent.headerHashCode();
+                }
+                if (closeable.readInt() == hashCode) {
+                    if (closeable != null) {
+                        Util.closeQuietly(closeable);
+                    }
+                    return true;
+                } else if (closeable == null) {
+                    return false;
+                } else {
+                    Util.closeQuietly(closeable);
+                    return false;
+                }
+            } catch (FileNotFoundException e4) {
+                closeable = input;
+                if (closeable != null) {
+                    return false;
+                }
+                Util.closeQuietly(closeable);
+                return false;
+            } catch (IOException e5) {
+                e2 = e5;
+                closeable = input;
+                try {
+                    Log.e(TAG, "Error reading cache content index file.", e2);
+                    if (closeable != null) {
+                        return false;
+                    }
+                    Util.closeQuietly(closeable);
+                    return false;
+                } catch (Throwable th2) {
+                    th = th2;
+                    if (closeable != null) {
+                        Util.closeQuietly(closeable);
+                    }
+                    throw th;
+                }
+            } catch (Throwable th3) {
+                th = th3;
+                closeable = input;
+                if (closeable != null) {
+                    Util.closeQuietly(closeable);
+                }
+                throw th;
+            }
+        } catch (FileNotFoundException e6) {
+            if (closeable != null) {
                 return false;
             }
-            if (input != null) {
-                Util.closeQuietly(input);
-            }
-            return true;
-        } catch (GeneralSecurityException e) {
-            throw new IllegalStateException(e);
-        } catch (FileNotFoundException e2) {
-            if (input != null) {
-                Util.closeQuietly(input);
-            }
+            Util.closeQuietly(closeable);
             return false;
-        } catch (IOException e3) {
-            try {
-                Log.e(TAG, "Error reading cache content index file.", e3);
+        } catch (IOException e7) {
+            e2 = e7;
+            Log.e(TAG, "Error reading cache content index file.", e2);
+            if (closeable != null) {
                 return false;
-            } finally {
-                if (input != null) {
-                    Util.closeQuietly(input);
-                }
             }
+            Util.closeQuietly(closeable);
+            return false;
         }
     }
 
     private void writeFile() throws CacheException {
-        Closeable output = null;
+        GeneralSecurityException e;
+        Throwable e2;
+        Throwable th;
+        int flags = 1;
+        Closeable closeable = null;
         try {
-            DataOutputStream output2;
             OutputStream outputStream = this.atomicFile.startWrite();
             if (this.bufferedOutputStream == null) {
                 this.bufferedOutputStream = new ReusableBufferedOutputStream(outputStream);
             } else {
                 this.bufferedOutputStream.reset(outputStream);
             }
-            output = new DataOutputStream(this.bufferedOutputStream);
-            output.writeInt(1);
-            output.writeInt(this.encrypt);
-            if (this.encrypt) {
-                byte[] initializationVector = new byte[16];
-                new Random().nextBytes(initializationVector);
-                output.write(initializationVector);
-                this.cipher.init(1, this.secretKeySpec, new IvParameterSpec(initializationVector));
-                output.flush();
-                output2 = new DataOutputStream(new CipherOutputStream(this.bufferedOutputStream, this.cipher));
-            }
-            output2.writeInt(this.keyToContent.size());
-            int hashCode = 0;
-            for (CachedContent cachedContent : this.keyToContent.values()) {
-                cachedContent.writeToStream(output2);
-                hashCode += cachedContent.headerHashCode();
-            }
-            output2.writeInt(hashCode);
-            this.atomicFile.endWrite(output2);
-            Util.closeQuietly((Closeable) null);
-        } catch (GeneralSecurityException e) {
-            throw new IllegalStateException(e);
-        } catch (Throwable e2) {
+            DataOutputStream output = new DataOutputStream(this.bufferedOutputStream);
+            Object output2;
             try {
-                throw new CacheException(e2);
-            } catch (Throwable th) {
-                Util.closeQuietly(output);
+                output.writeInt(1);
+                if (!this.encrypt) {
+                    flags = 0;
+                }
+                output.writeInt(flags);
+                if (this.encrypt) {
+                    byte[] initializationVector = new byte[16];
+                    new Random().nextBytes(initializationVector);
+                    output.write(initializationVector);
+                    try {
+                        this.cipher.init(1, this.secretKeySpec, new IvParameterSpec(initializationVector));
+                        output.flush();
+                        closeable = new DataOutputStream(new CipherOutputStream(this.bufferedOutputStream, this.cipher));
+                    } catch (GeneralSecurityException e3) {
+                        e = e3;
+                        throw new IllegalStateException(e);
+                    } catch (GeneralSecurityException e32) {
+                        e = e32;
+                        throw new IllegalStateException(e);
+                    }
+                }
+                output2 = output;
+                closeable.writeInt(this.keyToContent.size());
+                int hashCode = 0;
+                for (CachedContent cachedContent : this.keyToContent.values()) {
+                    cachedContent.writeToStream(closeable);
+                    hashCode += cachedContent.headerHashCode();
+                }
+                closeable.writeInt(hashCode);
+                this.atomicFile.endWrite(closeable);
+                Util.closeQuietly((Closeable) null);
+            } catch (IOException e4) {
+                e2 = e4;
+                output2 = output;
+                try {
+                    throw new CacheException(e2);
+                } catch (Throwable th2) {
+                    th = th2;
+                    Util.closeQuietly(closeable);
+                    throw th;
+                }
+            } catch (Throwable th3) {
+                th = th3;
+                output2 = output;
+                Util.closeQuietly(closeable);
+                throw th;
             }
+        } catch (IOException e5) {
+            e2 = e5;
+            throw new CacheException(e2);
         }
     }
 
@@ -279,10 +366,7 @@ class CachedContentIndex {
         int id = size == 0 ? 0 : idToKey.keyAt(size - 1) + 1;
         if (id < 0) {
             id = 0;
-            while (id < size) {
-                if (id != idToKey.keyAt(id)) {
-                    break;
-                }
+            while (id < size && id == idToKey.keyAt(id)) {
                 id++;
             }
         }

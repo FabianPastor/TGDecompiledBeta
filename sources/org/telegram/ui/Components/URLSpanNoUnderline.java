@@ -14,10 +14,7 @@ public class URLSpanNoUnderline extends URLSpan {
     public void onClick(View widget) {
         String url = getURL();
         if (url.startsWith("@")) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("https://t.me/");
-            stringBuilder.append(url.substring(1));
-            Browser.openUrl(widget.getContext(), Uri.parse(stringBuilder.toString()));
+            Browser.openUrl(widget.getContext(), Uri.parse("https://t.me/" + url.substring(1)));
             return;
         }
         Browser.openUrl(widget.getContext(), url);

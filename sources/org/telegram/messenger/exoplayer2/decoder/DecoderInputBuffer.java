@@ -70,13 +70,6 @@ public class DecoderInputBuffer extends Buffer {
         if (this.bufferReplacementMode == 2) {
             return ByteBuffer.allocateDirect(requiredCapacity);
         }
-        int currentCapacity = this.data == null ? 0 : this.data.capacity();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Buffer too small (");
-        stringBuilder.append(currentCapacity);
-        stringBuilder.append(" < ");
-        stringBuilder.append(requiredCapacity);
-        stringBuilder.append(")");
-        throw new IllegalStateException(stringBuilder.toString());
+        throw new IllegalStateException("Buffer too small (" + (this.data == null ? 0 : this.data.capacity()) + " < " + requiredCapacity + ")");
     }
 }

@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2.ext.flac;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
@@ -12,6 +13,7 @@ final class FlacDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
     private final int maxOutputBufferSize;
 
     public FlacDecoder(int numInputBuffers, int numOutputBuffers, List<byte[]> initializationData) throws FlacDecoderException {
+        Exception e;
         super(new DecoderInputBuffer[numInputBuffers], new SimpleOutputBuffer[numOutputBuffers]);
         if (initializationData.size() != 1) {
             throw new FlacDecoderException("Initialization data must be of length 1");
@@ -25,7 +27,11 @@ final class FlacDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
             }
             setInitialInputBufferSize(streamInfo.maxFrameSize);
             this.maxOutputBufferSize = streamInfo.maxDecodedFrameSize();
-        } catch (Exception e) {
+        } catch (IOException e2) {
+            e = e2;
+            throw new IllegalStateException(e);
+        } catch (InterruptedException e3) {
+            e = e3;
             throw new IllegalStateException(e);
         }
     }
@@ -47,6 +53,7 @@ final class FlacDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
     }
 
     protected FlacDecoderException decode(DecoderInputBuffer inputBuffer, SimpleOutputBuffer outputBuffer, boolean reset) {
+        Exception e;
         if (reset) {
             this.decoderJni.flush();
         }
@@ -60,7 +67,11 @@ final class FlacDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
             outputData.position(0);
             outputData.limit(result);
             return null;
-        } catch (Exception e) {
+        } catch (IOException e2) {
+            e = e2;
+            throw new IllegalStateException(e);
+        } catch (InterruptedException e3) {
+            e = e3;
             throw new IllegalStateException(e);
         }
     }

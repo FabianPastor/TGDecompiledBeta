@@ -51,6 +51,7 @@ public class AudioRecordJNI {
     }
 
     private boolean tryInit(int source, int sampleRate) {
+        boolean z;
         if (this.audioRecord != null) {
             try {
                 this.audioRecord.release();
@@ -58,19 +59,19 @@ public class AudioRecordJNI {
             }
         }
         if (BuildVars.LOGS_ENABLED) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Trying to initialize AudioRecord with source=");
-            stringBuilder.append(source);
-            stringBuilder.append(" and sample rate=");
-            stringBuilder.append(sampleRate);
-            FileLog.m0d(stringBuilder.toString());
+            FileLog.m0d("Trying to initialize AudioRecord with source=" + source + " and sample rate=" + sampleRate);
         }
         try {
             this.audioRecord = new AudioRecord(source, sampleRate, 16, 2, getBufferSize(this.bufferSize, 48000));
         } catch (Exception x) {
             FileLog.m2e("AudioRecord init failed!", x);
         }
-        this.needResampling = sampleRate != 48000;
+        if (sampleRate != 48000) {
+            z = true;
+        } else {
+            z = false;
+        }
+        this.needResampling = z;
         if (this.audioRecord == null || this.audioRecord.getState() != 1) {
             return false;
         }
@@ -167,9 +168,10 @@ public class AudioRecordJNI {
             }
             return true;
         } catch (Exception x3) {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.m2e("Error initializing AudioRecord", x3);
+            if (!BuildVars.LOGS_ENABLED) {
+                return false;
             }
+            FileLog.m2e("Error initializing AudioRecord", x3);
             return false;
         }
     }

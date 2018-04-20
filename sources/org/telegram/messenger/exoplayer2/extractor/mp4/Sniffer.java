@@ -19,70 +19,50 @@ final class Sniffer {
     }
 
     private static boolean sniffInternal(ExtractorInput input, boolean fragmented) throws IOException, InterruptedException {
-        boolean z;
-        ExtractorInput extractorInput = input;
         long inputLength = input.getLength();
-        long j = -1;
-        long j2 = 4096;
-        if (inputLength != -1) {
-            if (inputLength <= 4096) {
-                j2 = inputLength;
-            }
+        if (inputLength == -1 || inputLength > 4096) {
+            inputLength = 4096;
         }
-        int bytesToSearch = (int) j2;
+        int bytesToSearch = (int) inputLength;
         ParsableByteArray buffer = new ParsableByteArray(64);
-        boolean z2 = false;
-        boolean foundGoodFileType = false;
         int bytesSearched = 0;
+        boolean foundGoodFileType = false;
         boolean isFragmented = false;
         while (bytesSearched < bytesToSearch) {
             int headerSize = 8;
             buffer.reset(8);
-            extractorInput.peekFully(buffer.data, z2, 8);
+            input.peekFully(buffer.data, 0, 8);
             long atomSize = buffer.readUnsignedInt();
             int atomType = buffer.readInt();
             if (atomSize == 1) {
                 headerSize = 16;
-                extractorInput.peekFully(buffer.data, 8, 8);
+                input.peekFully(buffer.data, 8, 8);
                 buffer.setLimit(16);
                 atomSize = buffer.readUnsignedLongToLong();
             } else if (atomSize == 0) {
                 long endPosition = input.getLength();
-                if (endPosition != j) {
+                if (endPosition != -1) {
                     atomSize = (endPosition - input.getPosition()) + ((long) 8);
                 }
             }
             if (atomSize >= ((long) headerSize)) {
                 bytesSearched += headerSize;
                 if (atomType != Atom.TYPE_moov) {
-                    int i;
-                    if (atomType == Atom.TYPE_moof) {
-                        i = headerSize;
-                        z2 = false;
-                        z = true;
-                    } else if (atomType == Atom.TYPE_mvex) {
-                        i = headerSize;
-                        z2 = false;
-                        z = true;
-                    } else if ((((long) bytesSearched) + atomSize) - ((long) headerSize) >= ((long) bytesToSearch)) {
-                        z2 = false;
-                        break;
-                    } else {
+                    if (atomType != Atom.TYPE_moof && atomType != Atom.TYPE_mvex) {
+                        if ((((long) bytesSearched) + atomSize) - ((long) headerSize) >= ((long) bytesToSearch)) {
+                            break;
+                        }
                         int atomDataSize = (int) (atomSize - ((long) headerSize));
                         bytesSearched += atomDataSize;
-                        if (atomType != Atom.TYPE_ftyp) {
-                            z2 = false;
-                            if (atomDataSize != 0) {
-                                extractorInput.advancePeekPosition(atomDataSize);
+                        if (atomType == Atom.TYPE_ftyp) {
+                            if (atomDataSize < 8) {
+                                return false;
                             }
-                        } else if (atomDataSize < 8) {
-                            return false;
-                        } else {
                             buffer.reset(atomDataSize);
-                            extractorInput.peekFully(buffer.data, 0, atomDataSize);
+                            input.peekFully(buffer.data, 0, atomDataSize);
                             int brandsCount = atomDataSize / 4;
-                            for (int i2 = 0; i2 < brandsCount; i2++) {
-                                if (i2 == 1) {
+                            for (int i = 0; i < brandsCount; i++) {
+                                if (i == 1) {
                                     buffer.skipBytes(4);
                                 } else if (isCompatibleBrand(buffer.readInt())) {
                                     foundGoodFileType = true;
@@ -92,26 +72,22 @@ final class Sniffer {
                             if (!foundGoodFileType) {
                                 return false;
                             }
-                            z2 = false;
+                        } else if (atomDataSize != 0) {
+                            input.advancePeekPosition(atomDataSize);
                         }
-                        j = -1;
+                    } else {
+                        isFragmented = true;
+                        break;
                     }
-                    isFragmented = true;
-                    break;
                 }
-                j = -1;
-                z2 = false;
             } else {
                 return false;
             }
         }
-        z = true;
-        if (!foundGoodFileType) {
-            boolean z3 = fragmented;
-        } else if (fragmented == isFragmented) {
-            z2 = z;
+        if (foundGoodFileType && fragmented == isFragmented) {
+            return true;
         }
-        return z2;
+        return false;
     }
 
     private static boolean isCompatibleBrand(int brand) {

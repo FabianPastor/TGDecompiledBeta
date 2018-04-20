@@ -22,9 +22,10 @@ public class SparseLongArray implements Cloneable {
             clone = (SparseLongArray) super.clone();
             clone.mKeys = (int[]) this.mKeys.clone();
             clone.mValues = (long[]) this.mValues.clone();
+            return clone;
         } catch (CloneNotSupportedException e) {
+            return clone;
         }
-        return clone;
     }
 
     public long get(int key) {
@@ -33,10 +34,7 @@ public class SparseLongArray implements Cloneable {
 
     public long get(int key, long valueIfKeyNotFound) {
         int i = binarySearch(this.mKeys, 0, this.mSize, (long) key);
-        if (i < 0) {
-            return valueIfKeyNotFound;
-        }
-        return this.mValues[i];
+        return i < 0 ? valueIfKeyNotFound : this.mValues[i];
     }
 
     public void delete(int key) {
@@ -138,9 +136,6 @@ public class SparseLongArray implements Cloneable {
         if (high == start + len) {
             return (start + len) ^ -1;
         }
-        if (((long) a[high]) == key) {
-            return high;
-        }
-        return high ^ -1;
+        return ((long) a[high]) != key ? high ^ -1 : high;
     }
 }

@@ -39,13 +39,11 @@ final class ConstantBitrateSeeker implements Seeker {
         long seekPosition = this.firstFramePosition + positionOffset;
         long seekTimeUs = getTimeUs(seekPosition);
         SeekPoint seekPoint = new SeekPoint(seekTimeUs, seekPosition);
-        if (seekTimeUs < timeUs) {
-            if (positionOffset != this.dataSize - ((long) this.frameSize)) {
-                long secondSeekPosition = seekPosition + ((long) this.frameSize);
-                return new SeekPoints(seekPoint, new SeekPoint(getTimeUs(secondSeekPosition), secondSeekPosition));
-            }
+        if (seekTimeUs >= timeUs || positionOffset == this.dataSize - ((long) this.frameSize)) {
+            return new SeekPoints(seekPoint);
         }
-        return new SeekPoints(seekPoint);
+        long secondSeekPosition = seekPosition + ((long) this.frameSize);
+        return new SeekPoints(seekPoint, new SeekPoint(getTimeUs(secondSeekPosition), secondSeekPosition));
     }
 
     public long getTimeUs(long position) {

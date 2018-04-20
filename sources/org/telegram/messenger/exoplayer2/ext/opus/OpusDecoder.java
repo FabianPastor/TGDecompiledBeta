@@ -39,21 +39,16 @@ final class OpusDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
     private native int opusSecureDecode(long j, long j2, ByteBuffer byteBuffer, int i, SimpleOutputBuffer simpleOutputBuffer, int i2, ExoMediaCrypto exoMediaCrypto, int i3, byte[] bArr, byte[] bArr2, int i4, int[] iArr, int[] iArr2);
 
     public OpusDecoder(int numInputBuffers, int numOutputBuffers, int initialInputBufferSize, List<byte[]> initializationData, ExoMediaCrypto exoMediaCrypto) throws OpusDecoderException {
-        List<byte[]> list = initializationData;
-        ExoMediaCrypto exoMediaCrypto2 = exoMediaCrypto;
         super(new DecoderInputBuffer[numInputBuffers], new SimpleOutputBuffer[numOutputBuffers]);
-        this.exoMediaCrypto = exoMediaCrypto2;
-        if (exoMediaCrypto2 == null || OpusLibrary.opusIsSecureDecodeSupported()) {
-            byte[] headerBytes = (byte[]) list.get(0);
+        this.exoMediaCrypto = exoMediaCrypto;
+        if (exoMediaCrypto == null || OpusLibrary.opusIsSecureDecodeSupported()) {
+            byte[] headerBytes = (byte[]) initializationData.get(0);
             if (headerBytes.length < 19) {
                 throw new OpusDecoderException("Header size is too small.");
             }
-            r7.channelCount = headerBytes[9] & 255;
-            if (r7.channelCount > 8) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Invalid channel count: ");
-                stringBuilder.append(r7.channelCount);
-                throw new OpusDecoderException(stringBuilder.toString());
+            this.channelCount = headerBytes[9] & 255;
+            if (this.channelCount > 8) {
+                throw new OpusDecoderException("Invalid channel count: " + this.channelCount);
             }
             int numStreams;
             int numCoupled;
@@ -61,38 +56,33 @@ final class OpusDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
             int gain = readLittleEndian16(headerBytes, 16);
             byte[] streamMap = new byte[8];
             if (headerBytes[18] == (byte) 0) {
-                if (r7.channelCount > 2) {
+                if (this.channelCount > 2) {
                     throw new OpusDecoderException("Invalid Header, missing stream map.");
                 }
-                int numCoupled2 = r7.channelCount == 2 ? 1 : 0;
+                numStreams = 1;
+                numCoupled = this.channelCount == 2 ? 1 : 0;
                 streamMap[0] = (byte) 0;
                 streamMap[1] = (byte) 1;
-                numStreams = 1;
-                numCoupled = numCoupled2;
-            } else if (headerBytes.length < r7.channelCount + 21) {
+            } else if (headerBytes.length < this.channelCount + 21) {
                 throw new OpusDecoderException("Header size is too small.");
             } else {
-                int numStreams2 = headerBytes[19] & 255;
-                int numCoupled3 = headerBytes[20] & 255;
-                System.arraycopy(headerBytes, 21, streamMap, 0, r7.channelCount);
-                numStreams = numStreams2;
-                numCoupled = numCoupled3;
+                numStreams = headerBytes[19] & 255;
+                numCoupled = headerBytes[20] & 255;
+                System.arraycopy(headerBytes, 21, streamMap, 0, this.channelCount);
             }
-            if (initializationData.size() == 3) {
-                if (((byte[]) list.get(1)).length == 8) {
-                    if (((byte[]) list.get(2)).length == 8) {
-                        long codecDelayNs = ByteBuffer.wrap((byte[]) list.get(1)).order(ByteOrder.nativeOrder()).getLong();
-                        long seekPreRollNs = ByteBuffer.wrap((byte[]) list.get(2)).order(ByteOrder.nativeOrder()).getLong();
-                        r7.headerSkipSamples = nsToSamples(codecDelayNs);
-                        r7.headerSeekPreRollSamples = nsToSamples(seekPreRollNs);
-                    }
-                }
+            if (initializationData.size() != 3) {
+                this.headerSkipSamples = preskip;
+                this.headerSeekPreRollSamples = DEFAULT_SEEK_PRE_ROLL_SAMPLES;
+            } else if (((byte[]) initializationData.get(1)).length == 8 && ((byte[]) initializationData.get(2)).length == 8) {
+                long codecDelayNs = ByteBuffer.wrap((byte[]) initializationData.get(1)).order(ByteOrder.nativeOrder()).getLong();
+                long seekPreRollNs = ByteBuffer.wrap((byte[]) initializationData.get(2)).order(ByteOrder.nativeOrder()).getLong();
+                this.headerSkipSamples = nsToSamples(codecDelayNs);
+                this.headerSeekPreRollSamples = nsToSamples(seekPreRollNs);
+            } else {
                 throw new OpusDecoderException("Invalid Codec Delay or Seek Preroll");
             }
-            r7.headerSkipSamples = preskip;
-            r7.headerSeekPreRollSamples = DEFAULT_SEEK_PRE_ROLL_SAMPLES;
-            r7.nativeDecoderContext = opusInit(SAMPLE_RATE, r7.channelCount, numStreams, numCoupled, gain, streamMap);
-            if (r7.nativeDecoderContext == 0) {
+            this.nativeDecoderContext = opusInit(SAMPLE_RATE, this.channelCount, numStreams, numCoupled, gain, streamMap);
+            if (this.nativeDecoderContext == 0) {
                 throw new OpusDecoderException("Failed to initialize decoder");
             }
             setInitialInputBufferSize(initialInputBufferSize);
@@ -102,10 +92,7 @@ final class OpusDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
     }
 
     public String getName() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("libopus");
-        stringBuilder.append(OpusLibrary.getVersion());
-        return stringBuilder.toString();
+        return "libopus" + OpusLibrary.getVersion();
     }
 
     protected DecoderInputBuffer createInputBuffer() {
@@ -122,64 +109,39 @@ final class OpusDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutputBu
 
     protected OpusDecoderException decode(DecoderInputBuffer inputBuffer, SimpleOutputBuffer outputBuffer, boolean reset) {
         int result;
-        OpusDecoder opusDecoder = this;
-        DecoderInputBuffer decoderInputBuffer = inputBuffer;
-        SimpleOutputBuffer simpleOutputBuffer = outputBuffer;
         if (reset) {
-            opusReset(opusDecoder.nativeDecoderContext);
-            opusDecoder.skipSamples = decoderInputBuffer.timeUs == 0 ? opusDecoder.headerSkipSamples : opusDecoder.headerSeekPreRollSamples;
+            opusReset(this.nativeDecoderContext);
+            this.skipSamples = inputBuffer.timeUs == 0 ? this.headerSkipSamples : this.headerSeekPreRollSamples;
         }
-        ByteBuffer inputData = decoderInputBuffer.data;
-        CryptoInfo cryptoInfo = decoderInputBuffer.cryptoInfo;
-        ByteBuffer byteBuffer;
+        ByteBuffer inputData = inputBuffer.data;
+        CryptoInfo cryptoInfo = inputBuffer.cryptoInfo;
         if (inputBuffer.isEncrypted()) {
-            long j = opusDecoder.nativeDecoderContext;
-            long j2 = decoderInputBuffer.timeUs;
-            int limit = inputData.limit();
-            ExoMediaCrypto exoMediaCrypto = opusDecoder.exoMediaCrypto;
-            int i = cryptoInfo.mode;
-            byte[] bArr = cryptoInfo.key;
-            byte[] bArr2 = cryptoInfo.iv;
-            byte[] bArr3 = bArr2;
-            byte[] bArr4 = bArr;
-            ByteBuffer inputData2 = inputData;
-            result = opusSecureDecode(j, j2, inputData, limit, simpleOutputBuffer, SAMPLE_RATE, exoMediaCrypto, i, bArr4, bArr3, cryptoInfo.numSubSamples, cryptoInfo.numBytesOfClearData, cryptoInfo.numBytesOfEncryptedData);
-            byteBuffer = inputData2;
-            OpusDecoder opusDecoder2 = this;
-            DecoderInputBuffer decoderInputBuffer2 = inputBuffer;
+            result = opusSecureDecode(this.nativeDecoderContext, inputBuffer.timeUs, inputData, inputData.limit(), outputBuffer, SAMPLE_RATE, this.exoMediaCrypto, cryptoInfo.mode, cryptoInfo.key, cryptoInfo.iv, cryptoInfo.numSubSamples, cryptoInfo.numBytesOfClearData, cryptoInfo.numBytesOfEncryptedData);
         } else {
-            byteBuffer = inputData;
-            result = opusDecode(this.nativeDecoderContext, inputBuffer.timeUs, byteBuffer, byteBuffer.limit(), outputBuffer);
+            result = opusDecode(this.nativeDecoderContext, inputBuffer.timeUs, inputData, inputData.limit(), outputBuffer);
         }
         if (result >= 0) {
-            SimpleOutputBuffer simpleOutputBuffer2 = outputBuffer;
-            ByteBuffer outputData = simpleOutputBuffer2.data;
+            ByteBuffer outputData = outputBuffer.data;
             outputData.position(0);
             outputData.limit(result);
-            if (opusDecoder2.skipSamples > 0) {
-                int bytesPerSample = opusDecoder2.channelCount * 2;
-                int skipBytes = opusDecoder2.skipSamples * bytesPerSample;
+            if (this.skipSamples > 0) {
+                int bytesPerSample = this.channelCount * 2;
+                int skipBytes = this.skipSamples * bytesPerSample;
                 if (result <= skipBytes) {
-                    opusDecoder2.skipSamples -= result / bytesPerSample;
-                    simpleOutputBuffer2.addFlag(Integer.MIN_VALUE);
+                    this.skipSamples -= result / bytesPerSample;
+                    outputBuffer.addFlag(Integer.MIN_VALUE);
                     outputData.position(result);
                 } else {
-                    opusDecoder2.skipSamples = 0;
+                    this.skipSamples = 0;
                     outputData.position(skipBytes);
                 }
             }
             return null;
         } else if (result == -2) {
-            String message = new StringBuilder();
-            message.append("Drm error: ");
-            message.append(opusDecoder2.opusGetErrorMessage(opusDecoder2.nativeDecoderContext));
-            message = message.toString();
-            return new OpusDecoderException(message, new DecryptionException(opusDecoder2.opusGetErrorCode(opusDecoder2.nativeDecoderContext), message));
+            String message = "Drm error: " + opusGetErrorMessage(this.nativeDecoderContext);
+            return new OpusDecoderException(message, new DecryptionException(opusGetErrorCode(this.nativeDecoderContext), message));
         } else {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Decode error: ");
-            stringBuilder.append(opusDecoder2.opusGetErrorMessage((long) result));
-            return new OpusDecoderException(stringBuilder.toString());
+            return new OpusDecoderException("Decode error: " + opusGetErrorMessage((long) result));
         }
     }
 

@@ -59,11 +59,7 @@ public final class HttpMediaDrmCallback implements MediaDrmCallback {
     }
 
     public byte[] executeProvisionRequest(UUID uuid, ProvisionRequest request) throws IOException {
-        String url = new StringBuilder();
-        url.append(request.getDefaultUrl());
-        url.append("&signedRequest=");
-        url.append(new String(request.getData()));
-        return executePost(this.dataSourceFactory, url.toString(), new byte[0], null);
+        return executePost(this.dataSourceFactory, request.getDefaultUrl() + "&signedRequest=" + new String(request.getData()), new byte[0], null);
     }
 
     public byte[] executeKeyRequest(UUID uuid, KeyRequest request) throws Exception {
@@ -87,14 +83,13 @@ public final class HttpMediaDrmCallback implements MediaDrmCallback {
         HttpDataSource dataSource = dataSourceFactory.createDataSource();
         if (requestProperties != null) {
             for (Entry<String, String> requestProperty : requestProperties.entrySet()) {
-                byte[] bArr = (String) requestProperty.getKey();
-                dataSource.setRequestProperty(bArr, (String) requestProperty.getValue());
+                dataSource.setRequestProperty((String) requestProperty.getKey(), (String) requestProperty.getValue());
             }
         }
         Closeable inputStream = new DataSourceInputStream(dataSource, new DataSpec(Uri.parse(url), data, 0, 0, -1, null, 1));
         try {
-            bArr = Util.toByteArray(inputStream);
-            return bArr;
+            byte[] toByteArray = Util.toByteArray(inputStream);
+            return toByteArray;
         } finally {
             Util.closeQuietly(inputStream);
         }

@@ -15,10 +15,7 @@ public class CompositeSequenceableLoader implements SequenceableLoader {
                 bufferedPositionUs = Math.min(bufferedPositionUs, loaderBufferedPositionUs);
             }
         }
-        if (bufferedPositionUs == Long.MAX_VALUE) {
-            return Long.MIN_VALUE;
-        }
-        return bufferedPositionUs;
+        return bufferedPositionUs == Long.MAX_VALUE ? Long.MIN_VALUE : bufferedPositionUs;
     }
 
     public final long getNextLoadPositionUs() {
@@ -29,10 +26,7 @@ public class CompositeSequenceableLoader implements SequenceableLoader {
                 nextLoadPositionUs = Math.min(nextLoadPositionUs, loaderNextLoadPositionUs);
             }
         }
-        if (nextLoadPositionUs == Long.MAX_VALUE) {
-            return Long.MIN_VALUE;
-        }
-        return nextLoadPositionUs;
+        return nextLoadPositionUs == Long.MAX_VALUE ? Long.MIN_VALUE : nextLoadPositionUs;
     }
 
     public final void reevaluateBuffer(long positionUs) {
@@ -42,22 +36,19 @@ public class CompositeSequenceableLoader implements SequenceableLoader {
     }
 
     public boolean continueLoading(long positionUs) {
-        long j = positionUs;
         boolean madeProgress = false;
         boolean madeProgressThisIteration;
         do {
+            madeProgressThisIteration = false;
             long nextLoadPositionUs = getNextLoadPositionUs();
             if (nextLoadPositionUs == Long.MIN_VALUE) {
-                CompositeSequenceableLoader compositeSequenceableLoader = this;
-                madeProgressThisIteration = false;
                 break;
             }
-            madeProgressThisIteration = false;
             for (SequenceableLoader loader : this.loaders) {
                 long loaderNextLoadPositionUs = loader.getNextLoadPositionUs();
-                boolean isLoaderBehind = loaderNextLoadPositionUs != Long.MIN_VALUE && loaderNextLoadPositionUs <= j;
+                boolean isLoaderBehind = loaderNextLoadPositionUs != Long.MIN_VALUE && loaderNextLoadPositionUs <= positionUs;
                 if (loaderNextLoadPositionUs == nextLoadPositionUs || isLoaderBehind) {
-                    madeProgressThisIteration |= loader.continueLoading(j);
+                    madeProgressThisIteration |= loader.continueLoading(positionUs);
                 }
             }
             madeProgress |= madeProgressThisIteration;

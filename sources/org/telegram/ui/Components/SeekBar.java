@@ -48,25 +48,23 @@ public class SeekBar {
                 this.thumbDX = (int) (x - ((float) this.thumbX));
                 return true;
             }
-        } else {
-            if (action != 1) {
-                if (action != 3) {
-                    if (action == 2 && this.pressed) {
-                        this.thumbX = (int) (x - ((float) this.thumbDX));
-                        if (this.thumbX < 0) {
-                            this.thumbX = 0;
-                        } else if (this.thumbX > this.width - thumbWidth) {
-                            this.thumbX = this.width - thumbWidth;
-                        }
-                        return true;
-                    }
-                }
-            }
+        } else if (action == 1 || action == 3) {
             if (this.pressed) {
                 if (action == 1 && this.delegate != null) {
                     this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (this.width - thumbWidth)));
                 }
                 this.pressed = false;
+                return true;
+            }
+        } else if (action == 2 && this.pressed) {
+            this.thumbX = (int) (x - ((float) this.thumbDX));
+            if (this.thumbX < 0) {
+                this.thumbX = 0;
+                return true;
+            } else if (this.thumbX <= this.width - thumbWidth) {
+                return true;
+            } else {
+                this.thumbX = this.width - thumbWidth;
                 return true;
             }
         }

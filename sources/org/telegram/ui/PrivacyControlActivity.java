@@ -99,8 +99,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.PrivacyControlActivity$1 */
-    class C22411 extends ActionBarMenuOnItemClick {
-        C22411() {
+    class C22421 extends ActionBarMenuOnItemClick {
+        C22421() {
         }
 
         public void onItemClick(int id) {
@@ -134,97 +134,101 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     }
 
     /* renamed from: org.telegram.ui.PrivacyControlActivity$2 */
-    class C22442 implements OnItemClickListener {
-        C22442() {
+    class C22452 implements OnItemClickListener {
+        C22452() {
         }
 
         public void onItemClick(View view, final int position) {
-            boolean z = false;
-            if (!(position == PrivacyControlActivity.this.nobodyRow || position == PrivacyControlActivity.this.everybodyRow)) {
-                if (position != PrivacyControlActivity.this.myContactsRow) {
-                    if (position == PrivacyControlActivity.this.neverShareRow || position == PrivacyControlActivity.this.alwaysShareRow) {
-                        ArrayList<Integer> createFromArray;
-                        if (position == PrivacyControlActivity.this.neverShareRow) {
-                            createFromArray = PrivacyControlActivity.this.currentMinus;
-                        } else {
-                            createFromArray = PrivacyControlActivity.this.currentPlus;
-                        }
-                        if (createFromArray.isEmpty()) {
-                            Bundle args = new Bundle();
-                            args.putBoolean(position == PrivacyControlActivity.this.neverShareRow ? "isNeverShare" : "isAlwaysShare", true);
-                            String str = "isGroup";
-                            if (PrivacyControlActivity.this.rulesType != 0) {
-                                z = true;
-                            }
-                            args.putBoolean(str, z);
-                            GroupCreateActivity fragment = new GroupCreateActivity(args);
-                            fragment.setDelegate(new GroupCreateActivityDelegate() {
-                                public void didSelectUsers(ArrayList<Integer> ids) {
-                                    int a;
-                                    if (position == PrivacyControlActivity.this.neverShareRow) {
-                                        PrivacyControlActivity.this.currentMinus = ids;
-                                        for (a = 0; a < PrivacyControlActivity.this.currentMinus.size(); a++) {
-                                            PrivacyControlActivity.this.currentPlus.remove(PrivacyControlActivity.this.currentMinus.get(a));
-                                        }
-                                    } else {
-                                        PrivacyControlActivity.this.currentPlus = ids;
-                                        for (a = 0; a < PrivacyControlActivity.this.currentPlus.size(); a++) {
-                                            PrivacyControlActivity.this.currentMinus.remove(PrivacyControlActivity.this.currentPlus.get(a));
-                                        }
-                                    }
-                                    PrivacyControlActivity.this.doneButton.setVisibility(0);
-                                    PrivacyControlActivity.this.lastCheckedType = -1;
-                                    PrivacyControlActivity.this.listAdapter.notifyDataSetChanged();
-                                }
-                            });
-                            PrivacyControlActivity.this.presentFragment(fragment);
-                        } else {
-                            boolean z2 = PrivacyControlActivity.this.rulesType != 0;
-                            if (position == PrivacyControlActivity.this.alwaysShareRow) {
-                                z = true;
-                            }
-                            PrivacyUsersActivity fragment2 = new PrivacyUsersActivity(createFromArray, z2, z);
-                            fragment2.setDelegate(new PrivacyActivityDelegate() {
-                                public void didUpdatedUserList(ArrayList<Integer> ids, boolean added) {
-                                    int a;
-                                    if (position == PrivacyControlActivity.this.neverShareRow) {
-                                        PrivacyControlActivity.this.currentMinus = ids;
-                                        if (added) {
-                                            for (a = 0; a < PrivacyControlActivity.this.currentMinus.size(); a++) {
-                                                PrivacyControlActivity.this.currentPlus.remove(PrivacyControlActivity.this.currentMinus.get(a));
-                                            }
-                                        }
-                                    } else {
-                                        PrivacyControlActivity.this.currentPlus = ids;
-                                        if (added) {
-                                            for (a = 0; a < PrivacyControlActivity.this.currentPlus.size(); a++) {
-                                                PrivacyControlActivity.this.currentMinus.remove(PrivacyControlActivity.this.currentPlus.get(a));
-                                            }
-                                        }
-                                    }
-                                    PrivacyControlActivity.this.doneButton.setVisibility(0);
-                                    PrivacyControlActivity.this.listAdapter.notifyDataSetChanged();
-                                }
-                            });
-                            PrivacyControlActivity.this.presentFragment(fragment2);
-                        }
-                    }
+            boolean z = true;
+            if (position == PrivacyControlActivity.this.nobodyRow || position == PrivacyControlActivity.this.everybodyRow || position == PrivacyControlActivity.this.myContactsRow) {
+                int newType = PrivacyControlActivity.this.currentType;
+                if (position == PrivacyControlActivity.this.nobodyRow) {
+                    newType = 1;
+                } else if (position == PrivacyControlActivity.this.everybodyRow) {
+                    newType = 0;
+                } else if (position == PrivacyControlActivity.this.myContactsRow) {
+                    newType = 2;
                 }
-            }
-            int newType = PrivacyControlActivity.this.currentType;
-            if (position == PrivacyControlActivity.this.nobodyRow) {
-                newType = 1;
-            } else if (position == PrivacyControlActivity.this.everybodyRow) {
-                newType = 0;
-            } else if (position == PrivacyControlActivity.this.myContactsRow) {
-                newType = 2;
-            }
-            if (newType != PrivacyControlActivity.this.currentType) {
-                PrivacyControlActivity.this.enableAnimation = true;
-                PrivacyControlActivity.this.doneButton.setVisibility(0);
-                PrivacyControlActivity.this.lastCheckedType = PrivacyControlActivity.this.currentType;
-                PrivacyControlActivity.this.currentType = newType;
-                PrivacyControlActivity.this.updateRows();
+                if (newType != PrivacyControlActivity.this.currentType) {
+                    PrivacyControlActivity.this.enableAnimation = true;
+                    PrivacyControlActivity.this.doneButton.setVisibility(0);
+                    PrivacyControlActivity.this.lastCheckedType = PrivacyControlActivity.this.currentType;
+                    PrivacyControlActivity.this.currentType = newType;
+                    PrivacyControlActivity.this.updateRows();
+                }
+            } else if (position == PrivacyControlActivity.this.neverShareRow || position == PrivacyControlActivity.this.alwaysShareRow) {
+                ArrayList<Integer> createFromArray;
+                if (position == PrivacyControlActivity.this.neverShareRow) {
+                    createFromArray = PrivacyControlActivity.this.currentMinus;
+                } else {
+                    createFromArray = PrivacyControlActivity.this.currentPlus;
+                }
+                boolean z2;
+                if (createFromArray.isEmpty()) {
+                    Bundle args = new Bundle();
+                    args.putBoolean(position == PrivacyControlActivity.this.neverShareRow ? "isNeverShare" : "isAlwaysShare", true);
+                    String str = "isGroup";
+                    if (PrivacyControlActivity.this.rulesType != 0) {
+                        z2 = true;
+                    } else {
+                        z2 = false;
+                    }
+                    args.putBoolean(str, z2);
+                    GroupCreateActivity fragment = new GroupCreateActivity(args);
+                    fragment.setDelegate(new GroupCreateActivityDelegate() {
+                        public void didSelectUsers(ArrayList<Integer> ids) {
+                            int a;
+                            if (position == PrivacyControlActivity.this.neverShareRow) {
+                                PrivacyControlActivity.this.currentMinus = ids;
+                                for (a = 0; a < PrivacyControlActivity.this.currentMinus.size(); a++) {
+                                    PrivacyControlActivity.this.currentPlus.remove(PrivacyControlActivity.this.currentMinus.get(a));
+                                }
+                            } else {
+                                PrivacyControlActivity.this.currentPlus = ids;
+                                for (a = 0; a < PrivacyControlActivity.this.currentPlus.size(); a++) {
+                                    PrivacyControlActivity.this.currentMinus.remove(PrivacyControlActivity.this.currentPlus.get(a));
+                                }
+                            }
+                            PrivacyControlActivity.this.doneButton.setVisibility(0);
+                            PrivacyControlActivity.this.lastCheckedType = -1;
+                            PrivacyControlActivity.this.listAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    PrivacyControlActivity.this.presentFragment(fragment);
+                    return;
+                }
+                if (PrivacyControlActivity.this.rulesType != 0) {
+                    z2 = true;
+                } else {
+                    z2 = false;
+                }
+                if (position != PrivacyControlActivity.this.alwaysShareRow) {
+                    z = false;
+                }
+                PrivacyUsersActivity fragment2 = new PrivacyUsersActivity(createFromArray, z2, z);
+                fragment2.setDelegate(new PrivacyActivityDelegate() {
+                    public void didUpdatedUserList(ArrayList<Integer> ids, boolean added) {
+                        int a;
+                        if (position == PrivacyControlActivity.this.neverShareRow) {
+                            PrivacyControlActivity.this.currentMinus = ids;
+                            if (added) {
+                                for (a = 0; a < PrivacyControlActivity.this.currentMinus.size(); a++) {
+                                    PrivacyControlActivity.this.currentPlus.remove(PrivacyControlActivity.this.currentMinus.get(a));
+                                }
+                            }
+                        } else {
+                            PrivacyControlActivity.this.currentPlus = ids;
+                            if (added) {
+                                for (a = 0; a < PrivacyControlActivity.this.currentPlus.size(); a++) {
+                                    PrivacyControlActivity.this.currentMinus.remove(PrivacyControlActivity.this.currentPlus.get(a));
+                                }
+                            }
+                        }
+                        PrivacyControlActivity.this.doneButton.setVisibility(0);
+                        PrivacyControlActivity.this.listAdapter.notifyDataSetChanged();
+                    }
+                });
+                PrivacyControlActivity.this.presentFragment(fragment2);
             }
         }
     }
@@ -238,12 +242,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
 
         public boolean isEnabled(ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            if (!(position == PrivacyControlActivity.this.nobodyRow || position == PrivacyControlActivity.this.everybodyRow || position == PrivacyControlActivity.this.myContactsRow || position == PrivacyControlActivity.this.neverShareRow)) {
-                if (position != PrivacyControlActivity.this.alwaysShareRow) {
-                    return false;
-                }
-            }
-            return true;
+            return position == PrivacyControlActivity.this.nobodyRow || position == PrivacyControlActivity.this.everybodyRow || position == PrivacyControlActivity.this.myContactsRow || position == PrivacyControlActivity.this.neverShareRow || position == PrivacyControlActivity.this.alwaysShareRow;
         }
 
         public int getItemCount() {
@@ -273,12 +272,12 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            boolean z = false;
+            boolean z = true;
             switch (holder.getItemViewType()) {
                 case 0:
                     TextSettingsCell textCell = holder.itemView;
+                    String value;
                     if (position == PrivacyControlActivity.this.alwaysShareRow) {
-                        String value;
                         if (PrivacyControlActivity.this.currentPlus.size() != 0) {
                             value = LocaleController.formatPluralString("Users", PrivacyControlActivity.this.currentPlus.size());
                         } else {
@@ -287,31 +286,31 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                         String string;
                         if (PrivacyControlActivity.this.rulesType != 0) {
                             string = LocaleController.getString("AlwaysAllow", R.string.AlwaysAllow);
-                            if (PrivacyControlActivity.this.neverShareRow != -1) {
-                                z = true;
+                            if (PrivacyControlActivity.this.neverShareRow == -1) {
+                                z = false;
                             }
                             textCell.setTextAndValue(string, value, z);
-                        } else {
-                            string = LocaleController.getString("AlwaysShareWith", R.string.AlwaysShareWith);
-                            if (PrivacyControlActivity.this.neverShareRow != -1) {
-                                z = true;
-                            }
-                            textCell.setTextAndValue(string, value, z);
+                            return;
                         }
+                        string = LocaleController.getString("AlwaysShareWith", R.string.AlwaysShareWith);
+                        if (PrivacyControlActivity.this.neverShareRow == -1) {
+                            z = false;
+                        }
+                        textCell.setTextAndValue(string, value, z);
                         return;
                     } else if (position == PrivacyControlActivity.this.neverShareRow) {
-                        String value2;
                         if (PrivacyControlActivity.this.currentMinus.size() != 0) {
-                            value2 = LocaleController.formatPluralString("Users", PrivacyControlActivity.this.currentMinus.size());
+                            value = LocaleController.formatPluralString("Users", PrivacyControlActivity.this.currentMinus.size());
                         } else {
-                            value2 = LocaleController.getString("EmpryUsersPlaceholder", R.string.EmpryUsersPlaceholder);
+                            value = LocaleController.getString("EmpryUsersPlaceholder", R.string.EmpryUsersPlaceholder);
                         }
                         if (PrivacyControlActivity.this.rulesType != 0) {
-                            textCell.setTextAndValue(LocaleController.getString("NeverAllow", R.string.NeverAllow), value2, false);
+                            textCell.setTextAndValue(LocaleController.getString("NeverAllow", R.string.NeverAllow), value, false);
+                            return;
                         } else {
-                            textCell.setTextAndValue(LocaleController.getString("NeverShareWith", R.string.NeverShareWith), value2, false);
+                            textCell.setTextAndValue(LocaleController.getString("NeverShareWith", R.string.NeverShareWith), value, false);
+                            return;
                         }
-                        return;
                     } else {
                         return;
                     }
@@ -366,10 +365,22 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                         radioCell.setText(LocaleController.getString("LastSeenEverybody", R.string.LastSeenEverybody), PrivacyControlActivity.this.lastCheckedType == 0, true);
                         checkedType = 0;
                     } else if (position == PrivacyControlActivity.this.myContactsRow) {
-                        radioCell.setText(LocaleController.getString("LastSeenContacts", R.string.LastSeenContacts), PrivacyControlActivity.this.lastCheckedType == 2, PrivacyControlActivity.this.nobodyRow != -1);
+                        String string2 = LocaleController.getString("LastSeenContacts", R.string.LastSeenContacts);
+                        if (PrivacyControlActivity.this.lastCheckedType == 2) {
+                            r8 = true;
+                        } else {
+                            r8 = false;
+                        }
+                        radioCell.setText(string2, r8, PrivacyControlActivity.this.nobodyRow != -1);
                         checkedType = 2;
                     } else if (position == PrivacyControlActivity.this.nobodyRow) {
-                        radioCell.setText(LocaleController.getString("LastSeenNobody", R.string.LastSeenNobody), PrivacyControlActivity.this.lastCheckedType == 1, false);
+                        String string3 = LocaleController.getString("LastSeenNobody", R.string.LastSeenNobody);
+                        if (PrivacyControlActivity.this.lastCheckedType == 1) {
+                            r8 = true;
+                        } else {
+                            r8 = false;
+                        }
+                        radioCell.setText(string3, r8, false);
                         checkedType = 1;
                     }
                     if (PrivacyControlActivity.this.lastCheckedType == checkedType) {
@@ -387,25 +398,17 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         }
 
         public int getItemViewType(int position) {
-            if (position != PrivacyControlActivity.this.alwaysShareRow) {
-                if (position != PrivacyControlActivity.this.neverShareRow) {
-                    if (position != PrivacyControlActivity.this.shareDetailRow) {
-                        if (position != PrivacyControlActivity.this.detailRow) {
-                            if (position != PrivacyControlActivity.this.sectionRow) {
-                                if (position != PrivacyControlActivity.this.shareSectionRow) {
-                                    if (!(position == PrivacyControlActivity.this.everybodyRow || position == PrivacyControlActivity.this.myContactsRow)) {
-                                        if (position != PrivacyControlActivity.this.nobodyRow) {
-                                            return 0;
-                                        }
-                                    }
-                                    return 3;
-                                }
-                            }
-                            return 2;
-                        }
-                    }
-                    return 1;
-                }
+            if (position == PrivacyControlActivity.this.alwaysShareRow || position == PrivacyControlActivity.this.neverShareRow) {
+                return 0;
+            }
+            if (position == PrivacyControlActivity.this.shareDetailRow || position == PrivacyControlActivity.this.detailRow) {
+                return 1;
+            }
+            if (position == PrivacyControlActivity.this.sectionRow || position == PrivacyControlActivity.this.shareSectionRow) {
+                return 2;
+            }
+            if (position == PrivacyControlActivity.this.everybodyRow || position == PrivacyControlActivity.this.myContactsRow || position == PrivacyControlActivity.this.nobodyRow) {
+                return 3;
             }
             return 0;
         }
@@ -438,7 +441,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         } else {
             this.actionBar.setTitle(LocaleController.getString("PrivacyLastSeen", R.string.PrivacyLastSeen));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22411());
+        this.actionBar.setActionBarMenuOnItemClick(new C22421());
         int visibility = this.doneButton != null ? this.doneButton.getVisibility() : 8;
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         this.doneButton.setVisibility(visibility);
@@ -451,7 +454,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C22442());
+        this.listView.setOnItemClickListener(new C22452());
         return this.fragmentView;
     }
 
@@ -554,54 +557,36 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         this.currentPlus = new ArrayList();
         this.currentMinus = new ArrayList();
         ArrayList<PrivacyRule> privacyRules = ContactsController.getInstance(this.currentAccount).getPrivacyRules(this.rulesType);
-        if (privacyRules != null) {
-            if (privacyRules.size() != 0) {
-                int type = -1;
-                for (int a = 0; a < privacyRules.size(); a++) {
-                    PrivacyRule rule = (PrivacyRule) privacyRules.get(a);
-                    if (rule instanceof TL_privacyValueAllowUsers) {
-                        this.currentPlus.addAll(rule.users);
-                    } else if (rule instanceof TL_privacyValueDisallowUsers) {
-                        this.currentMinus.addAll(rule.users);
-                    } else if (rule instanceof TL_privacyValueAllowAll) {
-                        type = 0;
-                    } else if (rule instanceof TL_privacyValueDisallowAll) {
-                        type = 1;
-                    } else {
-                        type = 2;
-                    }
-                }
-                if (type != 0) {
-                    if (type != -1 || this.currentMinus.size() <= 0) {
-                        if (type != 2) {
-                            if (type != -1 || this.currentMinus.size() <= 0 || this.currentPlus.size() <= 0) {
-                                if (type == 1 || (type == -1 && this.currentPlus.size() > 0)) {
-                                    this.currentType = 1;
-                                }
-                                if (this.doneButton != null) {
-                                    this.doneButton.setVisibility(8);
-                                }
-                                updateRows();
-                                return;
-                            }
-                        }
-                        this.currentType = 2;
-                        if (this.doneButton != null) {
-                            this.doneButton.setVisibility(8);
-                        }
-                        updateRows();
-                        return;
-                    }
-                }
-                this.currentType = 0;
-                if (this.doneButton != null) {
-                    this.doneButton.setVisibility(8);
-                }
-                updateRows();
-                return;
+        if (privacyRules == null || privacyRules.size() == 0) {
+            this.currentType = 1;
+            return;
+        }
+        int type = -1;
+        for (int a = 0; a < privacyRules.size(); a++) {
+            PrivacyRule rule = (PrivacyRule) privacyRules.get(a);
+            if (rule instanceof TL_privacyValueAllowUsers) {
+                this.currentPlus.addAll(rule.users);
+            } else if (rule instanceof TL_privacyValueDisallowUsers) {
+                this.currentMinus.addAll(rule.users);
+            } else if (rule instanceof TL_privacyValueAllowAll) {
+                type = 0;
+            } else if (rule instanceof TL_privacyValueDisallowAll) {
+                type = 1;
+            } else {
+                type = 2;
             }
         }
-        this.currentType = 1;
+        if (type == 0 || (type == -1 && this.currentMinus.size() > 0)) {
+            this.currentType = 0;
+        } else if (type == 2 || (type == -1 && this.currentMinus.size() > 0 && this.currentPlus.size() > 0)) {
+            this.currentType = 2;
+        } else if (type == 1 || (type == -1 && this.currentPlus.size() > 0)) {
+            this.currentType = 1;
+        }
+        if (this.doneButton != null) {
+            this.doneButton.setVisibility(8);
+        }
+        updateRows();
     }
 
     private void updateRows() {
@@ -628,52 +613,24 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         i = this.rowCount;
         this.rowCount = i + 1;
         this.shareSectionRow = i;
-        if (this.currentType != 1) {
-            if (this.currentType != 2) {
-                this.alwaysShareRow = -1;
-                if (this.currentType != 0) {
-                    if (this.currentType == 2) {
-                        this.neverShareRow = -1;
-                        i = this.rowCount;
-                        this.rowCount = i + 1;
-                        this.shareDetailRow = i;
-                        if (this.listAdapter == null) {
-                            this.listAdapter.notifyDataSetChanged();
-                        }
-                    }
-                }
-                i = this.rowCount;
-                this.rowCount = i + 1;
-                this.neverShareRow = i;
-                i = this.rowCount;
-                this.rowCount = i + 1;
-                this.shareDetailRow = i;
-                if (this.listAdapter == null) {
-                    this.listAdapter.notifyDataSetChanged();
-                }
-            }
+        if (this.currentType == 1 || this.currentType == 2) {
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.alwaysShareRow = i;
+        } else {
+            this.alwaysShareRow = -1;
         }
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.alwaysShareRow = i;
-        if (this.currentType != 0) {
-            if (this.currentType == 2) {
-                this.neverShareRow = -1;
-                i = this.rowCount;
-                this.rowCount = i + 1;
-                this.shareDetailRow = i;
-                if (this.listAdapter == null) {
-                    this.listAdapter.notifyDataSetChanged();
-                }
-            }
+        if (this.currentType == 0 || this.currentType == 2) {
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.neverShareRow = i;
+        } else {
+            this.neverShareRow = -1;
         }
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.neverShareRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.shareDetailRow = i;
-        if (this.listAdapter == null) {
+        if (this.listAdapter != null) {
             this.listAdapter.notifyDataSetChanged();
         }
     }
@@ -685,24 +642,24 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[17];
-        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, HeaderCell.class, RadioCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
-        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        themeDescriptionArr[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
-        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
-        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{RadioCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackground);
-        themeDescriptionArr[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackgroundChecked);
-        return themeDescriptionArr;
+        r9 = new ThemeDescription[17];
+        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, HeaderCell.class, RadioCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r9[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r9[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r9[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r9[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r9[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r9[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[11] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
+        r9[12] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        r9[13] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
+        r9[14] = new ThemeDescription(this.listView, 0, new Class[]{RadioCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackground);
+        r9[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackgroundChecked);
+        return r9;
     }
 }

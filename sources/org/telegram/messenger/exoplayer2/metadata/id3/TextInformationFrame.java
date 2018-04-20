@@ -36,29 +36,33 @@ public final class TextInformationFrame extends Id3Frame {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                TextInformationFrame other = (TextInformationFrame) obj;
-                if (!this.id.equals(other.id) || !Util.areEqual(this.description, other.description) || !Util.areEqual(this.value, other.value)) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        TextInformationFrame other = (TextInformationFrame) obj;
+        if (this.id.equals(other.id) && Util.areEqual(this.description, other.description) && Util.areEqual(this.value, other.value)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
+        int hashCode;
         int i = 0;
-        int result = 31 * ((31 * ((31 * 17) + this.id.hashCode())) + (this.description != null ? this.description.hashCode() : 0));
+        int hashCode2 = (this.id.hashCode() + 527) * 31;
+        if (this.description != null) {
+            hashCode = this.description.hashCode();
+        } else {
+            hashCode = 0;
+        }
+        hashCode = (hashCode2 + hashCode) * 31;
         if (this.value != null) {
             i = this.value.hashCode();
         }
-        return result + i;
+        return hashCode + i;
     }
 
     public void writeToParcel(Parcel dest, int flags) {

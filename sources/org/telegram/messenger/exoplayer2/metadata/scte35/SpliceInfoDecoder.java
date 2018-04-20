@@ -37,24 +37,22 @@ public final class SpliceInfoDecoder implements MetadataDecoder {
         int spliceCommandType = this.sectionHeader.readBits(8);
         SpliceCommand command = null;
         this.sectionData.skipBytes(14);
-        if (spliceCommandType == 0) {
-            command = new SpliceNullCommand();
-        } else if (spliceCommandType != 255) {
-            switch (spliceCommandType) {
-                case 4:
-                    command = SpliceScheduleCommand.parseFromSection(this.sectionData);
-                    break;
-                case 5:
-                    command = SpliceInsertCommand.parseFromSection(this.sectionData, ptsAdjustment, this.timestampAdjuster);
-                    break;
-                case 6:
-                    command = TimeSignalCommand.parseFromSection(this.sectionData, ptsAdjustment, this.timestampAdjuster);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            command = PrivateCommand.parseFromSection(this.sectionData, spliceCommandLength, ptsAdjustment);
+        switch (spliceCommandType) {
+            case 0:
+                command = new SpliceNullCommand();
+                break;
+            case 4:
+                command = SpliceScheduleCommand.parseFromSection(this.sectionData);
+                break;
+            case 5:
+                command = SpliceInsertCommand.parseFromSection(this.sectionData, ptsAdjustment, this.timestampAdjuster);
+                break;
+            case 6:
+                command = TimeSignalCommand.parseFromSection(this.sectionData, ptsAdjustment, this.timestampAdjuster);
+                break;
+            case 255:
+                command = PrivateCommand.parseFromSection(this.sectionData, spliceCommandLength, ptsAdjustment);
+                break;
         }
         if (command == null) {
             return new Metadata(new Entry[0]);

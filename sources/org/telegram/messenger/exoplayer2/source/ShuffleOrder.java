@@ -54,42 +54,40 @@ public interface ShuffleOrder {
         }
 
         public ShuffleOrder cloneAndInsert(int insertionIndex, int insertionCount) {
-            int swapIndex;
+            int i;
             int[] insertionPoints = new int[insertionCount];
             int[] insertionValues = new int[insertionCount];
-            int i = 0;
-            for (int i2 = 0; i2 < insertionCount; i2++) {
-                insertionPoints[i2] = this.random.nextInt(this.shuffled.length + 1);
-                swapIndex = this.random.nextInt(i2 + 1);
-                insertionValues[i2] = insertionValues[swapIndex];
-                insertionValues[swapIndex] = i2 + insertionIndex;
+            for (i = 0; i < insertionCount; i++) {
+                insertionPoints[i] = this.random.nextInt(this.shuffled.length + 1);
+                int swapIndex = this.random.nextInt(i + 1);
+                insertionValues[i] = insertionValues[swapIndex];
+                insertionValues[swapIndex] = i + insertionIndex;
             }
             Arrays.sort(insertionPoints);
             int[] newShuffled = new int[(this.shuffled.length + insertionCount)];
-            swapIndex = 0;
+            int indexInOldShuffled = 0;
             int indexInInsertionList = 0;
-            while (i < this.shuffled.length + insertionCount) {
-                if (indexInInsertionList >= insertionCount || swapIndex != insertionPoints[indexInInsertionList]) {
-                    int indexInOldShuffled = swapIndex + 1;
-                    newShuffled[i] = this.shuffled[swapIndex];
+            for (i = 0; i < this.shuffled.length + insertionCount; i++) {
+                if (indexInInsertionList >= insertionCount || indexInOldShuffled != insertionPoints[indexInInsertionList]) {
+                    int indexInOldShuffled2 = indexInOldShuffled + 1;
+                    newShuffled[i] = this.shuffled[indexInOldShuffled];
                     if (newShuffled[i] >= insertionIndex) {
                         newShuffled[i] = newShuffled[i] + insertionCount;
                     }
-                    swapIndex = indexInOldShuffled;
+                    indexInOldShuffled = indexInOldShuffled2;
                 } else {
                     int indexInInsertionList2 = indexInInsertionList + 1;
                     newShuffled[i] = insertionValues[indexInInsertionList];
                     indexInInsertionList = indexInInsertionList2;
                 }
-                i++;
             }
             return new DefaultShuffleOrder(newShuffled, new Random(this.random.nextLong()));
         }
 
         public ShuffleOrder cloneAndRemove(int removalIndex) {
-            int i = 0;
             int[] newShuffled = new int[(this.shuffled.length - 1)];
             boolean foundRemovedElement = false;
+            int i = 0;
             while (i < this.shuffled.length) {
                 if (this.shuffled[i] == removalIndex) {
                     foundRemovedElement = true;

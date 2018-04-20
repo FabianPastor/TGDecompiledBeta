@@ -41,20 +41,32 @@ public class SendingFileDrawable extends StatusDrawable {
 
     public void draw(Canvas canvas) {
         for (int a = 0; a < 3; a++) {
+            float f;
             if (a == 0) {
-                Theme.chat_statusRecordPaint.setAlpha((int) (255.0f * this.progress));
+                Theme.chat_statusRecordPaint.setAlpha((int) (this.progress * 255.0f));
             } else if (a == 2) {
-                Theme.chat_statusRecordPaint.setAlpha((int) (255.0f * (1.0f - this.progress)));
+                Theme.chat_statusRecordPaint.setAlpha((int) ((1.0f - this.progress) * 255.0f));
             } else {
                 Theme.chat_statusRecordPaint.setAlpha(255);
             }
-            float side = (((float) AndroidUtilities.dp(5.0f)) * this.progress) + ((float) (AndroidUtilities.dp(5.0f) * a));
-            float f = 8.0f;
-            canvas.drawLine(side, (float) AndroidUtilities.dp(this.isChat ? 3.0f : 4.0f), side + ((float) AndroidUtilities.dp(4.0f)), (float) AndroidUtilities.dp(this.isChat ? 7.0f : 8.0f), Theme.chat_statusRecordPaint);
-            float dp = (float) AndroidUtilities.dp(this.isChat ? 11.0f : 12.0f);
+            float side = ((float) (AndroidUtilities.dp(5.0f) * a)) + (((float) AndroidUtilities.dp(5.0f)) * this.progress);
+            if (this.isChat) {
+                f = 3.0f;
+            } else {
+                f = 4.0f;
+            }
+            canvas.drawLine(side, (float) AndroidUtilities.dp(f), side + ((float) AndroidUtilities.dp(4.0f)), (float) AndroidUtilities.dp(this.isChat ? 7.0f : 8.0f), Theme.chat_statusRecordPaint);
+            if (this.isChat) {
+                f = 11.0f;
+            } else {
+                f = 12.0f;
+            }
+            float dp = (float) AndroidUtilities.dp(f);
             float dp2 = side + ((float) AndroidUtilities.dp(4.0f));
             if (this.isChat) {
                 f = 7.0f;
+            } else {
+                f = 8.0f;
             }
             canvas.drawLine(side, dp, dp2, (float) AndroidUtilities.dp(f), Theme.chat_statusRecordPaint);
         }

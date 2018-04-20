@@ -116,23 +116,26 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     public void switchCamera() {
+        boolean z = false;
         if (this.cameraSession != null) {
             CameraController.getInstance().close(this.cameraSession, null, null);
             this.cameraSession = null;
         }
         this.initied = false;
-        this.isFrontface ^= 1;
+        if (!this.isFrontface) {
+            z = true;
+        }
+        this.isFrontface = z;
         initCamera(this.isFrontface);
     }
 
     private void initCamera(boolean front) {
-        CameraView cameraView = this;
         CameraInfo info = null;
         ArrayList<CameraInfo> cameraInfos = CameraController.getInstance().getCameras();
         if (cameraInfos != null) {
             for (int a = 0; a < cameraInfos.size(); a++) {
                 CameraInfo cameraInfo = (CameraInfo) cameraInfos.get(a);
-                if ((cameraView.isFrontface && cameraInfo.frontCamera != 0) || (!cameraView.isFrontface && cameraInfo.frontCamera == 0)) {
+                if ((this.isFrontface && cameraInfo.frontCamera != 0) || (!this.isFrontface && cameraInfo.frontCamera == 0)) {
                     info = cameraInfo;
                     break;
                 }
@@ -141,12 +144,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                 Size aspectRatio;
                 int wantedWidth;
                 int wantedHeight;
-                int width;
-                Size pictureSize;
-                Size pictureSize2;
-                SurfaceTexture surfaceTexture;
                 float screenSize = ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y));
-                if (cameraView.initialFrontface) {
+                if (this.initialFrontface) {
                     aspectRatio = new Size(16, 9);
                     wantedWidth = 480;
                     wantedHeight = 270;
@@ -158,43 +157,29 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                     aspectRatio = new Size(16, 9);
                     wantedWidth = 1280;
                     wantedHeight = 720;
-                    if (cameraView.textureView.getWidth() > 0 && cameraView.textureView.getHeight() > 0) {
-                        width = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
-                        cameraView.previewSize = CameraController.chooseOptimalSize(info.getPreviewSizes(), width, (aspectRatio.getHeight() * width) / aspectRatio.getWidth(), aspectRatio);
+                }
+                if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
+                    int width = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
+                    this.previewSize = CameraController.chooseOptimalSize(info.getPreviewSizes(), width, (aspectRatio.getHeight() * width) / aspectRatio.getWidth(), aspectRatio);
+                }
+                Size pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedWidth, wantedHeight, aspectRatio);
+                if (pictureSize.getWidth() >= 1280 && pictureSize.getHeight() >= 1280) {
+                    if (Math.abs(screenSize - 1.3333334f) < 0.1f) {
+                        aspectRatio = new Size(3, 4);
+                    } else {
+                        aspectRatio = new Size(9, 16);
                     }
-                    pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedWidth, wantedHeight, aspectRatio);
-                    if (pictureSize.getWidth() >= 1280 && pictureSize.getHeight() >= 1280) {
-                        if (Math.abs(screenSize - 1.3333334f) >= 0.1f) {
-                            aspectRatio = new Size(3, 4);
-                        } else {
-                            aspectRatio = new Size(9, 16);
-                        }
-                        pictureSize2 = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedHeight, wantedWidth, aspectRatio);
-                        if (pictureSize2.getWidth() < 1280 || pictureSize2.getHeight() < 1280) {
-                            pictureSize = pictureSize2;
-                        }
-                    }
-                    surfaceTexture = cameraView.textureView.getSurfaceTexture();
-                    if (!(cameraView.previewSize == null || surfaceTexture == null)) {
-                        surfaceTexture.setDefaultBufferSize(cameraView.previewSize.getWidth(), cameraView.previewSize.getHeight());
-                        cameraView.cameraSession = new CameraSession(info, cameraView.previewSize, pictureSize, 256);
-                        CameraController.getInstance().open(cameraView.cameraSession, surfaceTexture, new C05401(), new C05412());
+                    Size pictureSize2 = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedHeight, wantedWidth, aspectRatio);
+                    if (pictureSize2.getWidth() < 1280 || pictureSize2.getHeight() < 1280) {
+                        pictureSize = pictureSize2;
                     }
                 }
-                width = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
-                cameraView.previewSize = CameraController.chooseOptimalSize(info.getPreviewSizes(), width, (aspectRatio.getHeight() * width) / aspectRatio.getWidth(), aspectRatio);
-                pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedWidth, wantedHeight, aspectRatio);
-                if (Math.abs(screenSize - 1.3333334f) >= 0.1f) {
-                    aspectRatio = new Size(9, 16);
-                } else {
-                    aspectRatio = new Size(3, 4);
+                SurfaceTexture surfaceTexture = this.textureView.getSurfaceTexture();
+                if (this.previewSize != null && surfaceTexture != null) {
+                    surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
+                    this.cameraSession = new CameraSession(info, this.previewSize, pictureSize, 256);
+                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new C05401(), new C05412());
                 }
-                pictureSize2 = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedHeight, wantedWidth, aspectRatio);
-                pictureSize = pictureSize2;
-                surfaceTexture = cameraView.textureView.getSurfaceTexture();
-                surfaceTexture.setDefaultBufferSize(cameraView.previewSize.getWidth(), cameraView.previewSize.getHeight());
-                cameraView.cameraSession = new CameraSession(info, cameraView.previewSize, pictureSize, 256);
-                CameraController.getInstance().open(cameraView.cameraSession, surfaceTexture, new C05401(), new C05412());
             }
         }
     }
@@ -243,81 +228,34 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
 
     private void adjustAspectRatio(int previewWidth, int previewHeight, int rotation) {
         float scale;
-        Matrix matrix;
-        int i = previewWidth;
-        int i2 = previewHeight;
-        int i3 = rotation;
         this.txform.reset();
         int viewWidth = getWidth();
         int viewHeight = getHeight();
         float viewCenterX = (float) (viewWidth / 2);
         float viewCenterY = (float) (viewHeight / 2);
-        if (i3 != 0) {
-            if (i3 != 2) {
-                scale = Math.max(((float) (r0.clipTop + viewHeight)) / ((float) i2), ((float) (r0.clipLeft + viewWidth)) / ((float) i));
-                r0.txform.postScale((((float) i2) * scale) / ((float) viewWidth), (((float) i) * scale) / ((float) viewHeight), viewCenterX, viewCenterY);
-                if (1 != i3) {
-                    if (3 == i3) {
-                        if (2 == i3) {
-                            r0.txform.postRotate(180.0f, viewCenterX, viewCenterY);
-                        }
-                        if (r0.mirror) {
-                            r0.txform.postScale(-1.0f, 1.0f, viewCenterX, viewCenterY);
-                        }
-                        if (!(r0.clipTop == 0 && r0.clipLeft == 0)) {
-                            r0.txform.postTranslate((float) ((-r0.clipLeft) / 2), (float) ((-r0.clipTop) / 2));
-                        }
-                        r0.textureView.setTransform(r0.txform);
-                        matrix = new Matrix();
-                        matrix.postRotate((float) r0.cameraSession.getDisplayOrientation());
-                        matrix.postScale(((float) viewWidth) / 2000.0f, ((float) viewHeight) / 2000.0f);
-                        matrix.postTranslate(((float) viewWidth) / 2.0f, ((float) viewHeight) / 2.0f);
-                        matrix.invert(r0.matrix);
-                    }
-                }
-                r0.txform.postRotate((float) (90 * (i3 - 2)), viewCenterX, viewCenterY);
-                if (r0.mirror) {
-                    r0.txform.postScale(-1.0f, 1.0f, viewCenterX, viewCenterY);
-                }
-                r0.txform.postTranslate((float) ((-r0.clipLeft) / 2), (float) ((-r0.clipTop) / 2));
-                r0.textureView.setTransform(r0.txform);
-                matrix = new Matrix();
-                matrix.postRotate((float) r0.cameraSession.getDisplayOrientation());
-                matrix.postScale(((float) viewWidth) / 2000.0f, ((float) viewHeight) / 2000.0f);
-                matrix.postTranslate(((float) viewWidth) / 2.0f, ((float) viewHeight) / 2.0f);
-                matrix.invert(r0.matrix);
-            }
+        if (rotation == 0 || rotation == 2) {
+            scale = Math.max(((float) (this.clipTop + viewHeight)) / ((float) previewWidth), ((float) (this.clipLeft + viewWidth)) / ((float) previewHeight));
+        } else {
+            scale = Math.max(((float) (this.clipTop + viewHeight)) / ((float) previewHeight), ((float) (this.clipLeft + viewWidth)) / ((float) previewWidth));
         }
-        scale = Math.max(((float) (r0.clipTop + viewHeight)) / ((float) i), ((float) (r0.clipLeft + viewWidth)) / ((float) i2));
-        r0.txform.postScale((((float) i2) * scale) / ((float) viewWidth), (((float) i) * scale) / ((float) viewHeight), viewCenterX, viewCenterY);
-        if (1 != i3) {
-            if (3 == i3) {
-                if (2 == i3) {
-                    r0.txform.postRotate(180.0f, viewCenterX, viewCenterY);
-                }
-                if (r0.mirror) {
-                    r0.txform.postScale(-1.0f, 1.0f, viewCenterX, viewCenterY);
-                }
-                r0.txform.postTranslate((float) ((-r0.clipLeft) / 2), (float) ((-r0.clipTop) / 2));
-                r0.textureView.setTransform(r0.txform);
-                matrix = new Matrix();
-                matrix.postRotate((float) r0.cameraSession.getDisplayOrientation());
-                matrix.postScale(((float) viewWidth) / 2000.0f, ((float) viewHeight) / 2000.0f);
-                matrix.postTranslate(((float) viewWidth) / 2.0f, ((float) viewHeight) / 2.0f);
-                matrix.invert(r0.matrix);
-            }
+        this.txform.postScale((((float) previewHeight) * scale) / ((float) viewWidth), (((float) previewWidth) * scale) / ((float) viewHeight), viewCenterX, viewCenterY);
+        if (1 == rotation || 3 == rotation) {
+            this.txform.postRotate((float) ((rotation - 2) * 90), viewCenterX, viewCenterY);
+        } else if (2 == rotation) {
+            this.txform.postRotate(180.0f, viewCenterX, viewCenterY);
         }
-        r0.txform.postRotate((float) (90 * (i3 - 2)), viewCenterX, viewCenterY);
-        if (r0.mirror) {
-            r0.txform.postScale(-1.0f, 1.0f, viewCenterX, viewCenterY);
+        if (this.mirror) {
+            this.txform.postScale(-1.0f, 1.0f, viewCenterX, viewCenterY);
         }
-        r0.txform.postTranslate((float) ((-r0.clipLeft) / 2), (float) ((-r0.clipTop) / 2));
-        r0.textureView.setTransform(r0.txform);
-        matrix = new Matrix();
-        matrix.postRotate((float) r0.cameraSession.getDisplayOrientation());
+        if (!(this.clipTop == 0 && this.clipLeft == 0)) {
+            this.txform.postTranslate((float) ((-this.clipLeft) / 2), (float) ((-this.clipTop) / 2));
+        }
+        this.textureView.setTransform(this.txform);
+        Matrix matrix = new Matrix();
+        matrix.postRotate((float) this.cameraSession.getDisplayOrientation());
         matrix.postScale(((float) viewWidth) / 2000.0f, ((float) viewHeight) / 2000.0f);
         matrix.postTranslate(((float) viewWidth) / 2.0f, ((float) viewHeight) / 2.0f);
-        matrix.invert(r0.matrix);
+        matrix.invert(this.matrix);
     }
 
     private Rect calculateTapArea(float x, float y, float coefficient) {
@@ -374,37 +312,36 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-        Canvas canvas2 = canvas;
         boolean result = super.drawChild(canvas, child, drawingTime);
-        if (!(this.focusProgress == 1.0f && r0.innerAlpha == 0.0f && r0.outerAlpha == 0.0f)) {
-            int baseRad = AndroidUtilities.dp(NUM);
+        if (!(this.focusProgress == 1.0f && this.innerAlpha == 0.0f && this.outerAlpha == 0.0f)) {
+            int baseRad = AndroidUtilities.dp(30.0f);
             long newTime = System.currentTimeMillis();
-            long dt = newTime - r0.lastDrawTime;
+            long dt = newTime - this.lastDrawTime;
             if (dt < 0 || dt > 17) {
                 dt = 17;
             }
-            r0.lastDrawTime = newTime;
-            r0.outerPaint.setAlpha((int) (r0.interpolator.getInterpolation(r0.outerAlpha) * 255.0f));
-            r0.innerPaint.setAlpha((int) (r0.interpolator.getInterpolation(r0.innerAlpha) * 127.0f));
-            float interpolated = r0.interpolator.getInterpolation(r0.focusProgress);
-            canvas2.drawCircle((float) r0.cx, (float) r0.cy, ((float) baseRad) + (((float) baseRad) * (1.0f - interpolated)), r0.outerPaint);
-            canvas2.drawCircle((float) r0.cx, (float) r0.cy, ((float) baseRad) * interpolated, r0.innerPaint);
-            if (r0.focusProgress < 1.0f) {
-                r0.focusProgress += ((float) dt) / 200.0f;
-                if (r0.focusProgress > 1.0f) {
-                    r0.focusProgress = 1.0f;
+            this.lastDrawTime = newTime;
+            this.outerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.outerAlpha) * 255.0f));
+            this.innerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.innerAlpha) * 127.0f));
+            float interpolated = this.interpolator.getInterpolation(this.focusProgress);
+            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) + (((float) baseRad) * (1.0f - interpolated)), this.outerPaint);
+            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) * interpolated, this.innerPaint);
+            if (this.focusProgress < 1.0f) {
+                this.focusProgress += ((float) dt) / 200.0f;
+                if (this.focusProgress > 1.0f) {
+                    this.focusProgress = 1.0f;
                 }
                 invalidate();
-            } else if (r0.innerAlpha != 0.0f) {
-                r0.innerAlpha -= ((float) dt) / 150.0f;
-                if (r0.innerAlpha < 0.0f) {
-                    r0.innerAlpha = 0.0f;
+            } else if (this.innerAlpha != 0.0f) {
+                this.innerAlpha -= ((float) dt) / 150.0f;
+                if (this.innerAlpha < 0.0f) {
+                    this.innerAlpha = 0.0f;
                 }
                 invalidate();
-            } else if (r0.outerAlpha != 0.0f) {
-                r0.outerAlpha -= ((float) dt) / 150.0f;
-                if (r0.outerAlpha < 0.0f) {
-                    r0.outerAlpha = 0.0f;
+            } else if (this.outerAlpha != 0.0f) {
+                this.outerAlpha -= ((float) dt) / 150.0f;
+                if (this.outerAlpha < 0.0f) {
+                    this.outerAlpha = 0.0f;
                 }
                 invalidate();
             }

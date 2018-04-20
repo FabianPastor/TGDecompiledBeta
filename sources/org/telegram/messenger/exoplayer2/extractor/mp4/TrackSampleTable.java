@@ -12,13 +12,19 @@ final class TrackSampleTable {
     public final long[] timestampsUs;
 
     public TrackSampleTable(long[] offsets, int[] sizes, int maximumSize, long[] timestampsUs, int[] flags) {
-        boolean z = false;
+        boolean z;
+        boolean z2 = true;
         Assertions.checkArgument(sizes.length == timestampsUs.length);
-        Assertions.checkArgument(offsets.length == timestampsUs.length);
-        if (flags.length == timestampsUs.length) {
+        if (offsets.length == timestampsUs.length) {
             z = true;
+        } else {
+            z = false;
         }
         Assertions.checkArgument(z);
+        if (flags.length != timestampsUs.length) {
+            z2 = false;
+        }
+        Assertions.checkArgument(z2);
         this.offsets = offsets;
         this.sizes = sizes;
         this.maximumSize = maximumSize;

@@ -63,8 +63,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     private boolean lastNameAvailable;
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$2 */
-    class C09412 implements OnTouchListener {
-        C09412() {
+    class C09422 implements OnTouchListener {
+        C09422() {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -73,8 +73,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$3 */
-    class C09423 implements OnEditorActionListener {
-        C09423() {
+    class C09433 implements OnEditorActionListener {
+        C09433() {
         }
 
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -87,8 +87,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$4 */
-    class C09434 implements TextWatcher {
-        C09434() {
+    class C09444 implements TextWatcher {
+        C09444() {
         }
 
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -102,12 +102,7 @@ public class ChangeUsernameActivity extends BaseFragment {
 
         public void afterTextChanged(Editable editable) {
             if (ChangeUsernameActivity.this.firstNameField.length() > 0) {
-                String url = new StringBuilder();
-                url.append("https://");
-                url.append(MessagesController.getInstance(ChangeUsernameActivity.this.currentAccount).linkPrefix);
-                url.append("/");
-                url.append(ChangeUsernameActivity.this.firstNameField.getText());
-                url = url.toString();
+                String url = "https://" + MessagesController.getInstance(ChangeUsernameActivity.this.currentAccount).linkPrefix + "/" + ChangeUsernameActivity.this.firstNameField.getText();
                 String text = LocaleController.formatString("UsernameHelpLink", R.string.UsernameHelpLink, url);
                 int index = text.indexOf(url);
                 SpannableStringBuilder textSpan = new SpannableStringBuilder(text);
@@ -128,9 +123,10 @@ public class ChangeUsernameActivity extends BaseFragment {
         public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
             try {
                 boolean result = super.onTouchEvent(widget, buffer, event);
-                if (event.getAction() == 1 || event.getAction() == 3) {
-                    Selection.removeSelection(buffer);
+                if (event.getAction() != 1 && event.getAction() != 3) {
+                    return result;
                 }
+                Selection.removeSelection(buffer);
                 return result;
             } catch (Throwable e) {
                 FileLog.m3e(e);
@@ -162,8 +158,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* renamed from: org.telegram.ui.ChangeUsernameActivity$1 */
-    class C19601 extends ActionBarMenuOnItemClick {
-        C19601() {
+    class C19621 extends ActionBarMenuOnItemClick {
+        C19621() {
         }
 
         public void onItemClick(int id) {
@@ -176,63 +172,62 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        Context context2 = context;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("Username", R.string.Username));
-        this.actionBar.setActionBarMenuOnItemClick(new C19601());
+        this.actionBar.setActionBarMenuOnItemClick(new C19621());
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
         if (user == null) {
-            user = UserConfig.getInstance(r0.currentAccount).getCurrentUser();
+            user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
         }
-        r0.fragmentView = new LinearLayout(context2);
-        LinearLayout linearLayout = r0.fragmentView;
+        this.fragmentView = new LinearLayout(context);
+        LinearLayout linearLayout = this.fragmentView;
         linearLayout.setOrientation(1);
-        r0.fragmentView.setOnTouchListener(new C09412());
-        r0.firstNameField = new EditTextBoldCursor(context2);
-        r0.firstNameField.setTextSize(1, 18.0f);
-        r0.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-        r0.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        r0.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
-        r0.firstNameField.setMaxLines(1);
-        r0.firstNameField.setLines(1);
-        r0.firstNameField.setPadding(0, 0, 0, 0);
-        r0.firstNameField.setSingleLine(true);
-        r0.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
-        r0.firstNameField.setInputType(180224);
-        r0.firstNameField.setImeOptions(6);
-        r0.firstNameField.setHint(LocaleController.getString("UsernamePlaceholder", R.string.UsernamePlaceholder));
-        r0.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        r0.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
-        r0.firstNameField.setCursorWidth(1.5f);
-        r0.firstNameField.setOnEditorActionListener(new C09423());
-        r0.firstNameField.addTextChangedListener(new C09434());
-        linearLayout.addView(r0.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
-        r0.checkTextView = new TextView(context2);
-        r0.checkTextView.setTextSize(1, 15.0f);
-        r0.checkTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        linearLayout.addView(r0.checkTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 12, 24, 0));
-        r0.helpTextView = new TextView(context2);
-        r0.helpTextView.setTextSize(1, 15.0f);
-        r0.helpTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
-        r0.helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        TextView textView = r0.helpTextView;
+        this.fragmentView.setOnTouchListener(new C09422());
+        this.firstNameField = new EditTextBoldCursor(context);
+        this.firstNameField.setTextSize(1, 18.0f);
+        this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+        this.firstNameField.setMaxLines(1);
+        this.firstNameField.setLines(1);
+        this.firstNameField.setPadding(0, 0, 0, 0);
+        this.firstNameField.setSingleLine(true);
+        this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
+        this.firstNameField.setInputType(180224);
+        this.firstNameField.setImeOptions(6);
+        this.firstNameField.setHint(LocaleController.getString("UsernamePlaceholder", R.string.UsernamePlaceholder));
+        this.firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
+        this.firstNameField.setCursorWidth(1.5f);
+        this.firstNameField.setOnEditorActionListener(new C09433());
+        this.firstNameField.addTextChangedListener(new C09444());
+        linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
+        this.checkTextView = new TextView(context);
+        this.checkTextView.setTextSize(1, 15.0f);
+        this.checkTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        linearLayout.addView(this.checkTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 12, 24, 0));
+        this.helpTextView = new TextView(context);
+        this.helpTextView.setTextSize(1, 15.0f);
+        this.helpTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
+        this.helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        TextView textView = this.helpTextView;
         CharSequence replaceTags = AndroidUtilities.replaceTags(LocaleController.getString("UsernameHelp", R.string.UsernameHelp));
-        r0.infoText = replaceTags;
+        this.infoText = replaceTags;
         textView.setText(replaceTags);
-        r0.helpTextView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
-        r0.helpTextView.setHighlightColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
-        r0.helpTextView.setMovementMethod(new LinkMovementMethodMy());
-        linearLayout.addView(r0.helpTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 10, 24, 0));
-        r0.checkTextView.setVisibility(8);
+        this.helpTextView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
+        this.helpTextView.setHighlightColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
+        this.helpTextView.setMovementMethod(new LinkMovementMethodMy());
+        linearLayout.addView(this.helpTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 10, 24, 0));
+        this.checkTextView.setVisibility(8);
         if (!(user == null || user.username == null || user.username.length() <= 0)) {
-            r0.ignoreCheck = true;
-            r0.firstNameField.setText(user.username);
-            r0.firstNameField.setSelection(r0.firstNameField.length());
-            r0.ignoreCheck = false;
+            this.ignoreCheck = true;
+            this.firstNameField.setText(user.username);
+            this.firstNameField.setSelection(this.firstNameField.length());
+            this.ignoreCheck = false;
         }
-        return r0.fragmentView;
+        return this.fragmentView;
     }
 
     public void onResume() {
@@ -262,159 +257,137 @@ public class ChangeUsernameActivity extends BaseFragment {
         }
         this.lastNameAvailable = false;
         if (name != null) {
-            if (!name.startsWith("_")) {
-                if (!name.endsWith("_")) {
-                    int a = 0;
-                    while (a < name.length()) {
-                        char ch = name.charAt(a);
-                        if (a == 0 && ch >= '0' && ch <= '9') {
-                            if (alert) {
-                                AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
-                            } else {
-                                this.checkTextView.setText(LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
-                                this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
-                                this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
-                            }
-                            return false;
-                        } else if ((ch < '0' || ch > '9') && ((ch < 'a' || ch > 'z') && ((ch < 'A' || ch > 'Z') && ch != '_'))) {
-                            if (alert) {
-                                AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
-                            } else {
-                                this.checkTextView.setText(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
-                                this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
-                                this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
-                            }
-                            return false;
-                        } else {
-                            a++;
-                        }
-                    }
-                }
+            if (name.startsWith("_") || name.endsWith("_")) {
+                this.checkTextView.setText(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
+                this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
+                this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
+                return false;
             }
-            this.checkTextView.setText(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
-            this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
-            this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
-            return false;
-        }
-        if (name != null) {
-            if (name.length() >= 5) {
-                if (name.length() > 32) {
+            int a = 0;
+            while (a < name.length()) {
+                char ch = name.charAt(a);
+                if (a == 0 && ch >= '0' && ch <= '9') {
                     if (alert) {
-                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
+                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
                     } else {
-                        this.checkTextView.setText(LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
+                        this.checkTextView.setText(LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
                         this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                         this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                     }
                     return false;
-                }
-                if (!alert) {
-                    String currentName = UserConfig.getInstance(this.currentAccount).getCurrentUser().username;
-                    if (currentName == null) {
-                        currentName = TtmlNode.ANONYMOUS_REGION_ID;
+                } else if ((ch < '0' || ch > '9') && ((ch < 'a' || ch > 'z') && ((ch < 'A' || ch > 'Z') && ch != '_'))) {
+                    if (alert) {
+                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
+                    } else {
+                        this.checkTextView.setText(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
+                        this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
+                        this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                     }
-                    if (name.equals(currentName)) {
-                        this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, name));
-                        this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
-                        this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
-                        return true;
-                    }
-                    this.checkTextView.setText(LocaleController.getString("UsernameChecking", R.string.UsernameChecking));
-                    this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGrayText8);
-                    this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
-                    this.lastCheckName = name;
-                    this.checkRunnable = new Runnable() {
-
-                        /* renamed from: org.telegram.ui.ChangeUsernameActivity$5$1 */
-                        class C19611 implements RequestDelegate {
-                            C19611() {
-                            }
-
-                            public void run(final TLObject response, final TL_error error) {
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        ChangeUsernameActivity.this.checkReqId = 0;
-                                        if (ChangeUsernameActivity.this.lastCheckName != null && ChangeUsernameActivity.this.lastCheckName.equals(name)) {
-                                            if (error == null && (response instanceof TL_boolTrue)) {
-                                                ChangeUsernameActivity.this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, name));
-                                                ChangeUsernameActivity.this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
-                                                ChangeUsernameActivity.this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
-                                                ChangeUsernameActivity.this.lastNameAvailable = true;
-                                                return;
-                                            }
-                                            ChangeUsernameActivity.this.checkTextView.setText(LocaleController.getString("UsernameInUse", R.string.UsernameInUse));
-                                            ChangeUsernameActivity.this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
-                                            ChangeUsernameActivity.this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
-                                            ChangeUsernameActivity.this.lastNameAvailable = false;
-                                        }
-                                    }
-                                });
-                            }
-                        }
-
-                        public void run() {
-                            TL_account_checkUsername req = new TL_account_checkUsername();
-                            req.username = name;
-                            ChangeUsernameActivity.this.checkReqId = ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).sendRequest(req, new C19611(), 2);
-                        }
-                    };
-                    AndroidUtilities.runOnUIThread(this.checkRunnable, 300);
+                    return false;
+                } else {
+                    a++;
                 }
-                return true;
             }
         }
-        if (alert) {
-            AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
+        if (name == null || name.length() < 5) {
+            if (alert) {
+                AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
+            } else {
+                this.checkTextView.setText(LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
+                this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
+                this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
+            }
+            return false;
+        } else if (name.length() > 32) {
+            if (alert) {
+                AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
+            } else {
+                this.checkTextView.setText(LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
+                this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
+                this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
+            }
+            return false;
+        } else if (alert) {
+            return true;
         } else {
-            this.checkTextView.setText(LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
-            this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
-            this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
+            String currentName = UserConfig.getInstance(this.currentAccount).getCurrentUser().username;
+            if (currentName == null) {
+                currentName = TtmlNode.ANONYMOUS_REGION_ID;
+            }
+            if (name.equals(currentName)) {
+                this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, name));
+                this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
+                this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
+                return true;
+            }
+            this.checkTextView.setText(LocaleController.getString("UsernameChecking", R.string.UsernameChecking));
+            this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGrayText8);
+            this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
+            this.lastCheckName = name;
+            this.checkRunnable = new Runnable() {
+
+                /* renamed from: org.telegram.ui.ChangeUsernameActivity$5$1 */
+                class C19631 implements RequestDelegate {
+                    C19631() {
+                    }
+
+                    public void run(final TLObject response, final TL_error error) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                ChangeUsernameActivity.this.checkReqId = 0;
+                                if (ChangeUsernameActivity.this.lastCheckName != null && ChangeUsernameActivity.this.lastCheckName.equals(name)) {
+                                    if (error == null && (response instanceof TL_boolTrue)) {
+                                        ChangeUsernameActivity.this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, name));
+                                        ChangeUsernameActivity.this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
+                                        ChangeUsernameActivity.this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
+                                        ChangeUsernameActivity.this.lastNameAvailable = true;
+                                        return;
+                                    }
+                                    ChangeUsernameActivity.this.checkTextView.setText(LocaleController.getString("UsernameInUse", R.string.UsernameInUse));
+                                    ChangeUsernameActivity.this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
+                                    ChangeUsernameActivity.this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
+                                    ChangeUsernameActivity.this.lastNameAvailable = false;
+                                }
+                            }
+                        });
+                    }
+                }
+
+                public void run() {
+                    TL_account_checkUsername req = new TL_account_checkUsername();
+                    req.username = name;
+                    ChangeUsernameActivity.this.checkReqId = ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).sendRequest(req, new C19631(), 2);
+                }
+            };
+            AndroidUtilities.runOnUIThread(this.checkRunnable, 300);
+            return true;
         }
-        return false;
     }
 
     private void saveName() {
         if (checkUserName(this.firstNameField.getText().toString(), true)) {
             User user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
-            if (getParentActivity() != null) {
-                if (user != null) {
-                    String currentName = user.username;
-                    if (currentName == null) {
-                        currentName = TtmlNode.ANONYMOUS_REGION_ID;
-                    }
-                    String newName = this.firstNameField.getText().toString();
-                    if (currentName.equals(newName)) {
-                        finishFragment();
-                        return;
-                    }
-                    final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
-                    progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    progressDialog.setCancelable(false);
-                    final TL_account_updateUsername req = new TL_account_updateUsername();
-                    req.username = newName;
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
-                    final int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
-                        public void run(TLObject response, final TL_error error) {
-                            if (error == null) {
-                                final User user = (User) response;
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        try {
-                                            progressDialog.dismiss();
-                                        } catch (Throwable e) {
-                                            FileLog.m3e(e);
-                                        }
-                                        ArrayList<User> users = new ArrayList();
-                                        users.add(user);
-                                        MessagesController.getInstance(ChangeUsernameActivity.this.currentAccount).putUsers(users, false);
-                                        MessagesStorage.getInstance(ChangeUsernameActivity.this.currentAccount).putUsersAndChats(users, null, false, true);
-                                        UserConfig.getInstance(ChangeUsernameActivity.this.currentAccount).saveConfig(true);
-                                        ChangeUsernameActivity.this.finishFragment();
-                                    }
-                                });
-                                return;
-                            }
+            if (getParentActivity() != null && user != null) {
+                String currentName = user.username;
+                if (currentName == null) {
+                    currentName = TtmlNode.ANONYMOUS_REGION_ID;
+                }
+                String newName = this.firstNameField.getText().toString();
+                if (currentName.equals(newName)) {
+                    finishFragment();
+                    return;
+                }
+                final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
+                progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(false);
+                final TL_account_updateUsername req = new TL_account_updateUsername();
+                req.username = newName;
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
+                final int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new RequestDelegate() {
+                    public void run(TLObject response, final TL_error error) {
+                        if (error == null) {
+                            final User user = (User) response;
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
                                     try {
@@ -422,24 +395,40 @@ public class ChangeUsernameActivity extends BaseFragment {
                                     } catch (Throwable e) {
                                         FileLog.m3e(e);
                                     }
-                                    AlertsCreator.processError(ChangeUsernameActivity.this.currentAccount, error, ChangeUsernameActivity.this, req, new Object[0]);
+                                    ArrayList<User> users = new ArrayList();
+                                    users.add(user);
+                                    MessagesController.getInstance(ChangeUsernameActivity.this.currentAccount).putUsers(users, false);
+                                    MessagesStorage.getInstance(ChangeUsernameActivity.this.currentAccount).putUsersAndChats(users, null, false, true);
+                                    UserConfig.getInstance(ChangeUsernameActivity.this.currentAccount).saveConfig(true);
+                                    ChangeUsernameActivity.this.finishFragment();
                                 }
                             });
+                            return;
                         }
-                    }, 2);
-                    ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(reqId, this.classGuid);
-                    progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).cancelRequest(reqId, true);
-                            try {
-                                dialog.dismiss();
-                            } catch (Throwable e) {
-                                FileLog.m3e(e);
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                try {
+                                    progressDialog.dismiss();
+                                } catch (Throwable e) {
+                                    FileLog.m3e(e);
+                                }
+                                AlertsCreator.processError(ChangeUsernameActivity.this.currentAccount, error, ChangeUsernameActivity.this, req, new Object[0]);
                             }
+                        });
+                    }
+                }, 2);
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(reqId, this.classGuid);
+                progressDialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ConnectionsManager.getInstance(ChangeUsernameActivity.this.currentAccount).cancelRequest(reqId, true);
+                        try {
+                            dialog.dismiss();
+                        } catch (Throwable e) {
+                            FileLog.m3e(e);
                         }
-                    });
-                    progressDialog.show();
-                }
+                    }
+                });
+                progressDialog.show();
             }
         }
     }
@@ -452,6 +441,20 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated), new ThemeDescription(this.helpTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText8), new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteRedText4), new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteGreenText), new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText8)};
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[13];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[5] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[6] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[7] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField);
+        themeDescriptionArr[8] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated);
+        themeDescriptionArr[9] = new ThemeDescription(this.helpTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText8);
+        themeDescriptionArr[10] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteRedText4);
+        themeDescriptionArr[11] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteGreenText);
+        themeDescriptionArr[12] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText8);
+        return themeDescriptionArr;
     }
 }

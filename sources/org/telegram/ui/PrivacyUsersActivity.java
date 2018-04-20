@@ -53,11 +53,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$1 */
-    class C22511 extends ActionBarMenuOnItemClick {
+    class C22521 extends ActionBarMenuOnItemClick {
 
         /* renamed from: org.telegram.ui.PrivacyUsersActivity$1$1 */
-        class C22501 implements GroupCreateActivityDelegate {
-            C22501() {
+        class C22511 implements GroupCreateActivityDelegate {
+            C22511() {
             }
 
             public void didSelectUsers(ArrayList<Integer> ids) {
@@ -75,7 +75,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C22511() {
+        C22521() {
         }
 
         public void onItemClick(int id) {
@@ -86,15 +86,15 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 args.putBoolean(PrivacyUsersActivity.this.isAlwaysShare ? "isAlwaysShare" : "isNeverShare", true);
                 args.putBoolean("isGroup", PrivacyUsersActivity.this.isGroup);
                 GroupCreateActivity fragment = new GroupCreateActivity(args);
-                fragment.setDelegate(new C22501());
+                fragment.setDelegate(new C22511());
                 PrivacyUsersActivity.this.presentFragment(fragment);
             }
         }
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$2 */
-    class C22522 implements OnItemClickListener {
-        C22522() {
+    class C22532 implements OnItemClickListener {
+        C22532() {
         }
 
         public void onItemClick(View view, int position) {
@@ -107,11 +107,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$3 */
-    class C22533 implements OnItemLongClickListener {
+    class C22543 implements OnItemLongClickListener {
 
         /* renamed from: org.telegram.ui.PrivacyUsersActivity$3$1 */
-        class C16381 implements OnClickListener {
-            C16381() {
+        class C16401 implements OnClickListener {
+            C16401() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -125,26 +125,24 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             }
         }
 
-        C22533() {
+        C22543() {
         }
 
         public boolean onItemClick(View view, int position) {
-            if (position >= 0 && position < PrivacyUsersActivity.this.uidArray.size()) {
-                if (PrivacyUsersActivity.this.getParentActivity() != null) {
-                    PrivacyUsersActivity.this.selectedUserId = ((Integer) PrivacyUsersActivity.this.uidArray.get(position)).intValue();
-                    Builder builder = new Builder(PrivacyUsersActivity.this.getParentActivity());
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)}, new C16381());
-                    PrivacyUsersActivity.this.showDialog(builder.create());
-                    return true;
-                }
+            if (position < 0 || position >= PrivacyUsersActivity.this.uidArray.size() || PrivacyUsersActivity.this.getParentActivity() == null) {
+                return false;
             }
-            return false;
+            PrivacyUsersActivity.this.selectedUserId = ((Integer) PrivacyUsersActivity.this.uidArray.get(position)).intValue();
+            Builder builder = new Builder(PrivacyUsersActivity.this.getParentActivity());
+            builder.setItems(new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)}, new C16401());
+            PrivacyUsersActivity.this.showDialog(builder.create());
+            return true;
         }
     }
 
     /* renamed from: org.telegram.ui.PrivacyUsersActivity$4 */
-    class C22544 implements ThemeDescriptionDelegate {
-        C22544() {
+    class C22554 implements ThemeDescriptionDelegate {
+        C22554() {
         }
 
         public void didSetColor() {
@@ -180,29 +178,23 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view;
-            if (viewType != 0) {
-                view = new TextInfoCell(this.mContext);
-                ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", R.string.RemoveFromListText));
-            } else {
-                view = new UserCell(this.mContext, 1, 0, false);
+            switch (viewType) {
+                case 0:
+                    view = new UserCell(this.mContext, 1, 0, false);
+                    break;
+                default:
+                    view = new TextInfoCell(this.mContext);
+                    ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", R.string.RemoveFromListText));
+                    break;
             }
             return new Holder(view);
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             if (holder.getItemViewType() == 0) {
-                CharSequence string;
                 User user = MessagesController.getInstance(PrivacyUsersActivity.this.currentAccount).getUser((Integer) PrivacyUsersActivity.this.uidArray.get(position));
                 UserCell userCell = (UserCell) holder.itemView;
-                if (user.phone == null || user.phone.length() == 0) {
-                    string = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
-                } else {
-                    PhoneFormat instance = PhoneFormat.getInstance();
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("+");
-                    stringBuilder.append(user.phone);
-                    string = instance.format(stringBuilder.toString());
-                }
+                CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", R.string.NumberUnknown) : PhoneFormat.getInstance().format("+" + user.phone);
                 userCell.setData(user, null, string, 0);
             }
         }
@@ -233,8 +225,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         int i = 1;
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.isGroup) {
             if (this.isAlwaysShare) {
@@ -247,7 +239,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         } else {
             this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", R.string.NeverShareWithTitle));
         }
-        this.actionBar.setActionBarMenuOnItemClick(new C22511());
+        this.actionBar.setActionBarMenuOnItemClick(new C22521());
         this.actionBar.createMenu().addItem(1, (int) R.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -269,8 +261,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
         recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new C22522());
-        this.listView.setOnItemLongClickListener(new C22533());
+        this.listView.setOnItemClickListener(new C22532());
+        this.listView.setOnItemLongClickListener(new C22543());
         return this.fragmentView;
     }
 
@@ -307,24 +299,19 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate сellDelegate = new C22544();
+        ThemeDescriptionDelegate сellDelegate = new C22554();
         r10 = new ThemeDescription[19];
-        r10[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        r10[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        r10[6] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        r10[7] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
         r10[8] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText5);
         r10[9] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         r10[10] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteGrayText);
         r10[11] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, Theme.key_avatar_text);
-        ThemeDescriptionDelegate themeDescriptionDelegate = сellDelegate;
-        r10[12] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundRed);
-        r10[13] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundOrange);
-        r10[14] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundViolet);
-        r10[15] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundGreen);
-        r10[16] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundCyan);
-        r10[17] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundBlue);
-        r10[18] = new ThemeDescription(null, 0, null, null, null, themeDescriptionDelegate, Theme.key_avatar_backgroundPink);
+        r10[12] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
+        r10[13] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
+        r10[14] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
+        r10[15] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
+        r10[16] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
+        r10[17] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
+        r10[18] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
         return r10;
     }
 }

@@ -14,28 +14,38 @@ public final class Descriptor {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                Descriptor other = (Descriptor) obj;
-                if (!Util.areEqual(this.schemeIdUri, other.schemeIdUri) || !Util.areEqual(this.value, other.value) || !Util.areEqual(this.id, other.id)) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Descriptor other = (Descriptor) obj;
+        if (Util.areEqual(this.schemeIdUri, other.schemeIdUri) && Util.areEqual(this.value, other.value) && Util.areEqual(this.id, other.id)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
+        int result;
+        int hashCode;
         int i = 0;
-        int result = 31 * ((31 * (this.schemeIdUri != null ? this.schemeIdUri.hashCode() : 0)) + (this.value != null ? this.value.hashCode() : 0));
+        if (this.schemeIdUri != null) {
+            result = this.schemeIdUri.hashCode();
+        } else {
+            result = 0;
+        }
+        int i2 = result * 31;
+        if (this.value != null) {
+            hashCode = this.value.hashCode();
+        } else {
+            hashCode = 0;
+        }
+        hashCode = (i2 + hashCode) * 31;
         if (this.id != null) {
             i = this.id.hashCode();
         }
-        return result + i;
+        return hashCode + i;
     }
 }

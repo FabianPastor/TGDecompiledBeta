@@ -48,6 +48,9 @@ public final class DownloaderConstructorHelper {
         }
         DataSink cacheWriteDataSink = this.cacheWriteDataSinkFactory != null ? this.cacheWriteDataSinkFactory.createDataSink() : new CacheDataSink(this.cache, CacheDataSource.DEFAULT_MAX_CACHE_FILE_SIZE);
         DataSource upstream = this.upstreamDataSourceFactory.createDataSource();
-        return new CacheDataSource(this.cache, this.priorityTaskManager == null ? upstream : new PriorityDataSource(upstream, this.priorityTaskManager, C0542C.PRIORITY_DOWNLOAD), cacheReadDataSource, cacheWriteDataSink, 1, null);
+        if (this.priorityTaskManager != null) {
+            Object upstream2 = new PriorityDataSource(upstream, this.priorityTaskManager, C0542C.PRIORITY_DOWNLOAD);
+        }
+        return new CacheDataSource(this.cache, upstream, cacheReadDataSource, cacheWriteDataSink, 1, null);
     }
 }

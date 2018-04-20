@@ -62,8 +62,8 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     private int shareLinkRow;
 
     /* renamed from: org.telegram.ui.GroupInviteActivity$1 */
-    class C21461 extends ActionBarMenuOnItemClick {
-        C21461() {
+    class C21471 extends ActionBarMenuOnItemClick {
+        C21471() {
         }
 
         public void onItemClick(int id) {
@@ -74,11 +74,11 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     }
 
     /* renamed from: org.telegram.ui.GroupInviteActivity$2 */
-    class C21472 implements OnItemClickListener {
+    class C21482 implements OnItemClickListener {
 
         /* renamed from: org.telegram.ui.GroupInviteActivity$2$1 */
-        class C14121 implements OnClickListener {
-            C14121() {
+        class C14141 implements OnClickListener {
+            C14141() {
             }
 
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -86,43 +86,38 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
             }
         }
 
-        C21472() {
+        C21482() {
         }
 
         public void onItemClick(View view, int position) {
             if (GroupInviteActivity.this.getParentActivity() != null) {
-                if (position != GroupInviteActivity.this.copyLinkRow) {
-                    if (position != GroupInviteActivity.this.linkRow) {
-                        if (position == GroupInviteActivity.this.shareLinkRow) {
-                            if (GroupInviteActivity.this.invite != null) {
-                                try {
-                                    Intent intent = new Intent("android.intent.action.SEND");
-                                    intent.setType("text/plain");
-                                    intent.putExtra("android.intent.extra.TEXT", GroupInviteActivity.this.invite.link);
-                                    GroupInviteActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink)), 500);
-                                } catch (Throwable e) {
-                                    FileLog.m3e(e);
-                                }
-                            } else {
-                                return;
-                            }
-                        } else if (position == GroupInviteActivity.this.revokeLinkRow) {
-                            Builder builder = new Builder(GroupInviteActivity.this.getParentActivity());
-                            builder.setMessage(LocaleController.getString("RevokeAlert", R.string.RevokeAlert));
-                            builder.setTitle(LocaleController.getString("RevokeLink", R.string.RevokeLink));
-                            builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), new C14121());
-                            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                            GroupInviteActivity.this.showDialog(builder.create());
+                if (position == GroupInviteActivity.this.copyLinkRow || position == GroupInviteActivity.this.linkRow) {
+                    if (GroupInviteActivity.this.invite != null) {
+                        try {
+                            ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", GroupInviteActivity.this.invite.link));
+                            Toast.makeText(GroupInviteActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
+                        } catch (Throwable e) {
+                            FileLog.m3e(e);
                         }
                     }
-                }
-                if (GroupInviteActivity.this.invite != null) {
-                    try {
-                        ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", GroupInviteActivity.this.invite.link));
-                        Toast.makeText(GroupInviteActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
-                    } catch (Throwable e2) {
-                        FileLog.m3e(e2);
+                } else if (position == GroupInviteActivity.this.shareLinkRow) {
+                    if (GroupInviteActivity.this.invite != null) {
+                        try {
+                            Intent intent = new Intent("android.intent.action.SEND");
+                            intent.setType("text/plain");
+                            intent.putExtra("android.intent.extra.TEXT", GroupInviteActivity.this.invite.link);
+                            GroupInviteActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink)), 500);
+                        } catch (Throwable e2) {
+                            FileLog.m3e(e2);
+                        }
                     }
+                } else if (position == GroupInviteActivity.this.revokeLinkRow) {
+                    Builder builder = new Builder(GroupInviteActivity.this.getParentActivity());
+                    builder.setMessage(LocaleController.getString("RevokeAlert", R.string.RevokeAlert));
+                    builder.setTitle(LocaleController.getString("RevokeLink", R.string.RevokeLink));
+                    builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), new C14141());
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    GroupInviteActivity.this.showDialog(builder.create());
                 }
             }
         }
@@ -137,12 +132,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
 
         public boolean isEnabled(ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            if (!(position == GroupInviteActivity.this.revokeLinkRow || position == GroupInviteActivity.this.copyLinkRow || position == GroupInviteActivity.this.shareLinkRow)) {
-                if (position != GroupInviteActivity.this.linkRow) {
-                    return false;
-                }
-            }
-            return true;
+            return position == GroupInviteActivity.this.revokeLinkRow || position == GroupInviteActivity.this.copyLinkRow || position == GroupInviteActivity.this.shareLinkRow || position == GroupInviteActivity.this.linkRow;
         }
 
         public int getItemCount() {
@@ -210,18 +200,14 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         }
 
         public int getItemViewType(int position) {
-            if (!(position == GroupInviteActivity.this.copyLinkRow || position == GroupInviteActivity.this.shareLinkRow)) {
-                if (position != GroupInviteActivity.this.revokeLinkRow) {
-                    if (position != GroupInviteActivity.this.shadowRow) {
-                        if (position != GroupInviteActivity.this.linkInfoRow) {
-                            if (position == GroupInviteActivity.this.linkRow) {
-                                return 2;
-                            }
-                            return 0;
-                        }
-                    }
-                    return 1;
-                }
+            if (position == GroupInviteActivity.this.copyLinkRow || position == GroupInviteActivity.this.shareLinkRow || position == GroupInviteActivity.this.revokeLinkRow) {
+                return 0;
+            }
+            if (position == GroupInviteActivity.this.shadowRow || position == GroupInviteActivity.this.linkInfoRow) {
+                return 1;
+            }
+            if (position == GroupInviteActivity.this.linkRow) {
+                return 2;
             }
             return 0;
         }
@@ -266,7 +252,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("InviteLink", R.string.InviteLink));
-        this.actionBar.setActionBarMenuOnItemClick(new C21461());
+        this.actionBar.setActionBarMenuOnItemClick(new C21471());
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
@@ -280,7 +266,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new C21472());
+        this.listView.setOnItemClickListener(new C21482());
         return this.fragmentView;
     }
 
@@ -313,12 +299,15 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     private void generateLink(final boolean newRequest) {
         TLObject request;
         this.loading = true;
+        TLObject req;
         if (ChatObject.isChannel(this.chat_id, this.currentAccount)) {
-            request = new TL_channels_exportInvite();
-            request.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chat_id);
+            req = new TL_channels_exportInvite();
+            req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chat_id);
+            request = req;
         } else {
-            request = new TL_messages_exportChatInvite();
-            request.chat_id = this.chat_id;
+            req = new TL_messages_exportChatInvite();
+            req.chat_id = this.chat_id;
+            request = req;
         }
         ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new RequestDelegate() {
             public void run(final TLObject response, final TL_error error) {

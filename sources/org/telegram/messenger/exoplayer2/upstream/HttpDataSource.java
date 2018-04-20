@@ -13,7 +13,7 @@ import org.telegram.messenger.exoplayer2.util.Predicate;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public interface HttpDataSource extends DataSource {
-    public static final Predicate<String> REJECT_PAYWALL_TYPES = new C18571();
+    public static final Predicate<String> REJECT_PAYWALL_TYPES = new C18591();
 
     public static class HttpDataSourceException extends IOException {
         public static final int TYPE_CLOSE = 3;
@@ -89,8 +89,8 @@ public interface HttpDataSource extends DataSource {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.upstream.HttpDataSource$1 */
-    static class C18571 implements Predicate<String> {
-        C18571() {
+    static class C18591 implements Predicate<String> {
+        C18591() {
         }
 
         public boolean evaluate(String contentType) {
@@ -118,10 +118,7 @@ public interface HttpDataSource extends DataSource {
         public final String contentType;
 
         public InvalidContentTypeException(String contentType, DataSpec dataSpec) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Invalid content type: ");
-            stringBuilder.append(contentType);
-            super(stringBuilder.toString(), dataSpec, 1);
+            super("Invalid content type: " + contentType, dataSpec, 1);
             this.contentType = contentType;
         }
     }
@@ -131,10 +128,7 @@ public interface HttpDataSource extends DataSource {
         public final int responseCode;
 
         public InvalidResponseCodeException(int responseCode, Map<String, List<String>> headerFields, DataSpec dataSpec) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Response code: ");
-            stringBuilder.append(responseCode);
-            super(stringBuilder.toString(), dataSpec, 1);
+            super("Response code: " + responseCode, dataSpec, 1);
             this.responseCode = responseCode;
             this.headerFields = headerFields;
         }

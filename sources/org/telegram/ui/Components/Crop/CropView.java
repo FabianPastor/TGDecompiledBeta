@@ -53,8 +53,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     private CropRectangle tempRect = new CropRectangle();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$1 */
-    class C11231 implements OnPreDrawListener {
-        C11231() {
+    class C11241 implements OnPreDrawListener {
+        C11241() {
         }
 
         public boolean onPreDraw() {
@@ -65,8 +65,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     /* renamed from: org.telegram.ui.Components.Crop.CropView$7 */
-    class C11297 implements OnCancelListener {
-        C11297() {
+    class C11307 implements OnCancelListener {
+        C11307() {
         }
 
         public void onCancel(DialogInterface dialog) {
@@ -126,12 +126,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
 
         private boolean hasChanges() {
-            if (Math.abs(this.f13x) <= CropView.EPSILON && Math.abs(this.f14y) <= CropView.EPSILON && Math.abs(this.scale - this.minimumScale) <= CropView.EPSILON && Math.abs(this.rotation) <= CropView.EPSILON) {
-                if (Math.abs(this.orientation) <= CropView.EPSILON) {
-                    return false;
-                }
-            }
-            return true;
+            return Math.abs(this.f13x) > CropView.EPSILON || Math.abs(this.f14y) > CropView.EPSILON || Math.abs(this.scale - this.minimumScale) > CropView.EPSILON || Math.abs(this.rotation) > CropView.EPSILON || Math.abs(this.orientation) > CropView.EPSILON;
         }
 
         private float getWidth() {
@@ -267,7 +262,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         if (fform) {
             this.areaView.setDimVisibility(false);
         }
-        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C11231());
+        this.imageView.getViewTreeObserver().addOnPreDrawListener(new C11241());
         this.imageView.setImageBitmap(this.bitmap);
     }
 
@@ -317,41 +312,27 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     private void fillAreaView(RectF targetRect, boolean allowZoomOut) {
-        boolean ensureFit;
-        float scale;
-        RectF rectF = targetRect;
-        final float[] currentScale = new float[1];
-        int i = 0;
-        currentScale[0] = 1.0f;
-        float scale2 = Math.max(targetRect.width() / this.areaView.getCropWidth(), targetRect.height() / this.areaView.getCropHeight());
-        float newScale = this.state.getScale() * scale2;
-        if (newScale > MAX_SCALE) {
+        final float[] currentScale = new float[]{1.0f};
+        float scale = Math.max(targetRect.width() / this.areaView.getCropWidth(), targetRect.height() / this.areaView.getCropHeight());
+        boolean ensureFit = false;
+        if (this.state.getScale() * scale > MAX_SCALE) {
+            scale = MAX_SCALE / this.state.getScale();
             ensureFit = true;
-            scale = MAX_SCALE / r6.state.getScale();
-        } else {
-            scale = scale2;
-            ensureFit = false;
         }
-        if (VERSION.SDK_INT >= 21) {
-            i = AndroidUtilities.statusBarHeight;
-        }
-        float y = ((targetRect.centerY() - (((((float) r6.imageView.getHeight()) - r6.bottomPadding) + ((float) i)) / 2.0f)) / r6.areaView.getCropHeight()) * r6.state.getOrientedHeight();
+        final float x = ((targetRect.centerX() - ((float) (this.imageView.getWidth() / 2))) / this.areaView.getCropWidth()) * this.state.getOrientedWidth();
+        final float y = ((targetRect.centerY() - (((((float) this.imageView.getHeight()) - this.bottomPadding) + ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) / 2.0f)) / this.areaView.getCropHeight()) * this.state.getOrientedHeight();
         final float targetScale = scale;
         final boolean animEnsureFit = ensureFit;
-        C11242 c11242 = r0;
-        final float centerX = ((targetRect.centerX() - ((float) (r6.imageView.getWidth() / 2))) / r6.areaView.getCropWidth()) * r6.state.getOrientedWidth();
         ValueAnimator animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-        final ValueAnimator animator2 = y;
-        C11242 c112422 = new AnimatorUpdateListener() {
+        animator.addUpdateListener(new AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                float deltaScale = (1.0f + ((targetScale - 1.0f) * ((Float) animation.getAnimatedValue()).floatValue())) / currentScale[0];
+                float deltaScale = (((targetScale - 1.0f) * ((Float) animation.getAnimatedValue()).floatValue()) + 1.0f) / currentScale[0];
                 float[] fArr = currentScale;
                 fArr[0] = fArr[0] * deltaScale;
-                CropView.this.state.scale(deltaScale, centerX, animator2);
+                CropView.this.state.scale(deltaScale, x, y);
                 CropView.this.updateMatrix();
             }
-        };
-        animator.addUpdateListener(c11242);
+        });
         animator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 if (animEnsureFit) {
@@ -359,8 +340,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                 }
             }
         });
-        r6.areaView.fill(rectF, animator, true);
-        r6.initialAreaRect.set(rectF);
+        this.areaView.fill(targetRect, animator, true);
+        this.initialAreaRect.set(targetRect);
     }
 
     private float fitScale(RectF contentRect, float scale, float ratio) {
@@ -373,33 +354,30 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     private void fitTranslation(RectF contentRect, RectF boundsRect, PointF translation, float radians) {
-        RectF rectF = contentRect;
-        RectF rectF2 = boundsRect;
-        PointF pointF = translation;
-        float f = radians;
-        float frameLeft = rectF2.left;
-        float frameTop = rectF2.top;
-        float frameRight = rectF2.right;
-        float frameBottom = rectF2.bottom;
-        if (rectF.left > frameLeft) {
-            frameRight += rectF.left - frameLeft;
-            frameLeft = rectF.left;
+        float frameLeft = boundsRect.left;
+        float frameTop = boundsRect.top;
+        float frameRight = boundsRect.right;
+        float frameBottom = boundsRect.bottom;
+        if (contentRect.left > frameLeft) {
+            frameRight += contentRect.left - frameLeft;
+            frameLeft = contentRect.left;
         }
-        if (rectF.top > frameTop) {
-            frameBottom += rectF.top - frameTop;
-            frameTop = rectF.top;
+        if (contentRect.top > frameTop) {
+            frameBottom += contentRect.top - frameTop;
+            frameTop = contentRect.top;
         }
-        if (rectF.right < frameRight) {
-            frameLeft += rectF.right - frameRight;
+        if (contentRect.right < frameRight) {
+            frameLeft += contentRect.right - frameRight;
         }
-        if (rectF.bottom < frameBottom) {
-            frameTop += rectF.bottom - frameBottom;
+        if (contentRect.bottom < frameBottom) {
+            frameTop += contentRect.bottom - frameBottom;
         }
         float deltaX = boundsRect.centerX() - ((boundsRect.width() / 2.0f) + frameLeft);
         float deltaY = boundsRect.centerY() - ((boundsRect.height() / 2.0f) + frameTop);
-        float yCompX = (float) (Math.cos(((double) f) + 1.5707963267948966d) * ((double) deltaY));
-        float yCompY = (float) (Math.sin(((double) f) + 1.5707963267948966d) * ((double) deltaY));
-        pointF.set((pointF.x + ((float) (Math.sin(1.5707963267948966d - ((double) f)) * ((double) deltaX)))) + yCompX, (pointF.y + ((float) (Math.cos(1.5707963267948966d - ((double) f)) * ((double) deltaX)))) + yCompY);
+        float yCompX = (float) (Math.cos(1.5707963267948966d + ((double) radians)) * ((double) deltaY));
+        float yCompY = (float) (Math.sin(1.5707963267948966d + ((double) radians)) * ((double) deltaY));
+        PointF pointF = translation;
+        pointF.set((translation.x + ((float) (Math.sin(1.5707963267948966d - ((double) radians)) * ((double) deltaX)))) + yCompX, (translation.y + ((float) (Math.cos(1.5707963267948966d - ((double) radians)) * ((double) deltaX)))) + yCompY);
     }
 
     public RectF calculateBoundingBox(float w, float h, float rotation) {
@@ -422,10 +400,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         fitContentInBounds(allowScale, maximize, animated, false);
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void fitContentInBounds(boolean allowScale, boolean maximize, boolean animated, boolean fast) {
-        float ratio;
         float boundsW = this.areaView.getCropWidth();
         float boundsH = this.areaView.getCropHeight();
         float contentW = this.state.getOrientedWidth();
@@ -433,114 +408,94 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         float rotation = this.state.getRotation();
         float radians = (float) Math.toRadians((double) rotation);
         RectF boundsRect = calculateBoundingBox(boundsW, boundsH, rotation);
-        RectF contentRect = new RectF(0.0f, 0.0f, contentW, contentH);
+        RectF rectF = new RectF(0.0f, 0.0f, contentW, contentH);
         float initialX = (boundsW - contentW) / 2.0f;
         float initialY = (boundsH - contentH) / 2.0f;
         float scale = this.state.getScale();
-        this.tempRect.setRect(contentRect);
+        this.tempRect.setRect(rectF);
         Matrix matrix = this.state.getMatrix();
         matrix.preTranslate(initialX / scale, initialY / scale);
         this.tempMatrix.reset();
-        this.tempMatrix.setTranslate(contentRect.centerX(), contentRect.centerY());
+        this.tempMatrix.setTranslate(rectF.centerX(), rectF.centerY());
         this.tempMatrix.setConcat(this.tempMatrix, matrix);
-        this.tempMatrix.preTranslate(-contentRect.centerX(), -contentRect.centerY());
+        this.tempMatrix.preTranslate(-rectF.centerX(), -rectF.centerY());
         this.tempRect.applyMatrix(this.tempMatrix);
         this.tempMatrix.reset();
         this.tempMatrix.preRotate(-rotation, contentW / 2.0f, contentH / 2.0f);
         this.tempRect.applyMatrix(this.tempMatrix);
-        this.tempRect.getRect(contentRect);
-        PointF targetTranslation = new PointF(this.state.getX(), this.state.getY());
+        this.tempRect.getRect(rectF);
+        PointF pointF = new PointF(this.state.getX(), this.state.getY());
         float targetScale = scale;
-        if (!contentRect.contains(boundsRect)) {
-            if (allowScale && (boundsRect.width() > contentRect.width() || boundsRect.height() > contentRect.height())) {
-                targetScale = fitScale(contentRect, scale, boundsRect.width() / scaleWidthToMaxSize(boundsRect, contentRect));
+        if (!rectF.contains(boundsRect)) {
+            if (allowScale && (boundsRect.width() > rectF.width() || boundsRect.height() > rectF.height())) {
+                targetScale = fitScale(rectF, scale, boundsRect.width() / scaleWidthToMaxSize(boundsRect, rectF));
             }
-            fitTranslation(contentRect, boundsRect, targetTranslation, radians);
-        } else if (maximize && r10.rotationStartScale > 0.0f) {
-            ratio = boundsRect.width() / scaleWidthToMaxSize(boundsRect, contentRect);
-            if (r10.state.getScale() * ratio < r10.rotationStartScale) {
+            fitTranslation(rectF, boundsRect, pointF, radians);
+        } else if (maximize && this.rotationStartScale > 0.0f) {
+            float ratio = boundsRect.width() / scaleWidthToMaxSize(boundsRect, rectF);
+            if (this.state.getScale() * ratio < this.rotationStartScale) {
                 ratio = 1.0f;
             }
-            targetScale = fitScale(contentRect, scale, ratio);
-            fitTranslation(contentRect, boundsRect, targetTranslation, radians);
+            targetScale = fitScale(rectF, scale, ratio);
+            fitTranslation(rectF, boundsRect, pointF, radians);
         }
-        float targetScale2 = targetScale;
-        ratio = targetTranslation.x - r10.state.getX();
-        float dy = targetTranslation.y - r10.state.getY();
+        float dx = pointF.x - this.state.getX();
+        float dy = pointF.y - this.state.getY();
         if (animated) {
-            float animScale = targetScale2 / scale;
-            targetScale = ratio;
-            float animDY = dy;
-            float dy2 = dy;
-            if (Math.abs(animScale - 1.0f) >= EPSILON || Math.abs(targetScale) >= EPSILON || Math.abs(animDY) >= EPSILON) {
-                r10.animating = true;
-                float animDY2 = animDY;
+            final float animScale = targetScale / scale;
+            final float animDX = dx;
+            final float animDY = dy;
+            if (Math.abs(animScale - 1.0f) >= EPSILON || Math.abs(animDX) >= EPSILON || Math.abs(animDY) >= EPSILON) {
+                this.animating = true;
                 final float[] currentValues = new float[]{1.0f, 0.0f, 0.0f};
-                float scale2 = scale;
-                boundsW = dy2;
-                boundsH = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                contentW = ratio;
-                ratio = targetScale;
-                final float f = animDY2;
-                matrix = animScale;
-                boundsH.addUpdateListener(new AnimatorUpdateListener() {
+                ValueAnimator animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                animator.addUpdateListener(new AnimatorUpdateListener() {
                     public void onAnimationUpdate(ValueAnimator animation) {
                         float value = ((Float) animation.getAnimatedValue()).floatValue();
-                        float deltaX = (ratio * value) - currentValues[1];
+                        float deltaX = (animDX * value) - currentValues[1];
                         float[] fArr = currentValues;
                         fArr[1] = fArr[1] + deltaX;
-                        float deltaY = (f * value) - currentValues[2];
-                        float[] fArr2 = currentValues;
-                        fArr2[2] = fArr2[2] + deltaY;
+                        float deltaY = (animDY * value) - currentValues[2];
+                        fArr = currentValues;
+                        fArr[2] = fArr[2] + deltaY;
                         CropView.this.state.translate(currentValues[0] * deltaX, currentValues[0] * deltaY);
-                        float deltaScale = (1.0f + ((matrix - 1.0f) * value)) / currentValues[0];
-                        fArr2 = currentValues;
-                        fArr2[0] = fArr2[0] * deltaScale;
+                        float deltaScale = (((animScale - 1.0f) * value) + 1.0f) / currentValues[0];
+                        fArr = currentValues;
+                        fArr[0] = fArr[0] * deltaScale;
                         CropView.this.state.scale(deltaScale, 0.0f, 0.0f);
                         CropView.this.updateMatrix();
                     }
                 });
-                dy = scale2;
                 final boolean z = fast;
-                ratio = contentRect;
                 final boolean z2 = allowScale;
                 final boolean z3 = maximize;
-                final boolean radians2 = animated;
-                boundsH.addListener(new AnimatorListenerAdapter() {
+                final boolean z4 = animated;
+                animator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         CropView.this.animating = false;
                         if (!z) {
-                            CropView.this.fitContentInBounds(z2, z3, radians2, true);
+                            CropView.this.fitContentInBounds(z2, z3, z4, true);
                         }
                     }
                 });
-                boundsH.setInterpolator(r10.areaView.getInterpolator());
-                boundsH.setDuration(fast ? 100 : 200);
-                boundsH.start();
-            } else {
+                animator.setInterpolator(this.areaView.getInterpolator());
+                animator.setDuration(fast ? 100 : 200);
+                animator.start();
                 return;
             }
+            return;
         }
-        Matrix matrix2 = matrix;
-        RectF rectF = boundsRect;
-        float f2 = radians;
-        float f3 = boundsW;
-        float f4 = boundsH;
-        float f5 = contentW;
-        boundsW = dy;
-        contentW = ratio;
-        dy = scale;
-        r10.state.translate(contentW, boundsW);
-        r10.state.scale(targetScale2 / dy, 0.0f, 0.0f);
+        this.state.translate(dx, dy);
+        this.state.scale(targetScale / scale, 0.0f, 0.0f);
         updateMatrix();
     }
 
     public void rotate90Degrees() {
+        boolean z = true;
         this.areaView.resetAnimator();
         resetRotationStartScale();
         float orientation = ((this.state.getOrientation() - this.state.getBaseRotation()) - 90.0f) % 360.0f;
         boolean fform = this.freeform;
-        boolean z = false;
         if (!this.freeform || this.areaView.getLockAspectRatio() <= 0.0f) {
             this.areaView.setBitmap(this.bitmap, (this.state.getBaseRotation() + orientation) % 180.0f != 0.0f, this.freeform);
         } else {
@@ -552,8 +507,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         updateMatrix();
         if (this.listener != null) {
             CropViewListener cropViewListener = this.listener;
-            if (orientation == 0.0f && this.areaView.getLockAspectRatio() == 0.0f) {
-                z = true;
+            if (!(orientation == 0.0f && this.areaView.getLockAspectRatio() == 0.0f)) {
+                z = false;
             }
             cropViewListener.onChange(z);
         }
@@ -567,24 +522,20 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         if (this.areaView.onTouchEvent(event)) {
             return true;
         }
-        int action = event.getAction();
-        if (action != 3) {
-            switch (action) {
-                case 0:
-                    onScrollChangeBegan();
-                    break;
-                case 1:
-                    break;
-                default:
-                    break;
-            }
+        switch (event.getAction()) {
+            case 0:
+                onScrollChangeBegan();
+                break;
+            case 1:
+            case 3:
+                onScrollChangeEnded();
+                break;
         }
-        onScrollChangeEnded();
         try {
-            result = this.detector.onTouchEvent(event);
+            return this.detector.onTouchEvent(event);
         } catch (Exception e) {
+            return result;
         }
-        return result;
     }
 
     public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -642,7 +593,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             if (this.state.getScale() * scale > MAX_SCALE) {
                 scale = MAX_SCALE / this.state.getScale();
             }
-            this.state.scale(scale, ((x - ((float) (this.imageView.getWidth() / 2))) / this.areaView.getCropWidth()) * this.state.getOrientedWidth(), ((y - (((((float) this.imageView.getHeight()) - this.bottomPadding) - ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0.0f))) / 2.0f)) / this.areaView.getCropHeight()) * this.state.getOrientedHeight());
+            this.state.scale(scale, ((x - ((float) (this.imageView.getWidth() / 2))) / this.areaView.getCropWidth()) * this.state.getOrientedWidth(), ((y - (((((float) this.imageView.getHeight()) - this.bottomPadding) - ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) / 2.0f)) / this.areaView.getCropHeight()) * this.state.getOrientedHeight());
             updateMatrix();
         }
     }
@@ -748,7 +699,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                 }
             }).create();
             dialog.setCanceledOnTouchOutside(true);
-            dialog.setOnCancelListener(new C11297());
+            dialog.setOnCancelListener(new C11307());
             dialog.show();
         }
     }

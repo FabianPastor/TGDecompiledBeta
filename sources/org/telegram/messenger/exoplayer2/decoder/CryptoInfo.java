@@ -33,8 +33,18 @@ public final class CryptoInfo {
     }
 
     public CryptoInfo() {
-        this.frameworkCryptoInfo = Util.SDK_INT >= 16 ? newFrameworkCryptoInfoV16() : null;
-        this.patternHolder = Util.SDK_INT >= 24 ? new PatternHolderV24(this.frameworkCryptoInfo) : null;
+        android.media.MediaCodec.CryptoInfo newFrameworkCryptoInfoV16;
+        PatternHolderV24 patternHolderV24 = null;
+        if (Util.SDK_INT >= 16) {
+            newFrameworkCryptoInfoV16 = newFrameworkCryptoInfoV16();
+        } else {
+            newFrameworkCryptoInfoV16 = null;
+        }
+        this.frameworkCryptoInfo = newFrameworkCryptoInfoV16;
+        if (Util.SDK_INT >= 24) {
+            patternHolderV24 = new PatternHolderV24(this.frameworkCryptoInfo);
+        }
+        this.patternHolder = patternHolderV24;
     }
 
     public void set(int numSubSamples, int[] numBytesOfClearData, int[] numBytesOfEncryptedData, byte[] key, byte[] iv, int mode, int encryptedBlocks, int clearBlocks) {

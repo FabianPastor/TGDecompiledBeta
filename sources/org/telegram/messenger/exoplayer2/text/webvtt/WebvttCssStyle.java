@@ -85,23 +85,24 @@ public final class WebvttCssStyle {
     }
 
     public int getSpecificityScore(String id, String tag, String[] classes, String voice) {
-        if (this.targetId.isEmpty() && this.targetTag.isEmpty() && this.targetClasses.isEmpty() && this.targetVoice.isEmpty()) {
-            return tag.isEmpty();
-        }
-        int score = updateScoreForMatch(updateScoreForMatch(updateScoreForMatch(0, this.targetId, id, NUM), this.targetTag, tag, 2), this.targetVoice, voice, 4);
-        if (score != -1) {
-            if (Arrays.asList(classes).containsAll(this.targetClasses)) {
-                return score + (this.targetClasses.size() * 4);
+        if (!this.targetId.isEmpty() || !this.targetTag.isEmpty() || !this.targetClasses.isEmpty() || !this.targetVoice.isEmpty()) {
+            int score = updateScoreForMatch(updateScoreForMatch(updateScoreForMatch(0, this.targetId, id, NUM), this.targetTag, tag, 2), this.targetVoice, voice, 4);
+            if (score == -1 || !Arrays.asList(classes).containsAll(this.targetClasses)) {
+                return 0;
             }
+            return score + (this.targetClasses.size() * 4);
+        } else if (tag.isEmpty()) {
+            return 1;
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     public int getStyle() {
+        int i = 0;
         if (this.bold == -1 && this.italic == -1) {
             return -1;
         }
-        int i = 0;
         int i2 = this.bold == 1 ? 1 : 0;
         if (this.italic == 1) {
             i = 2;
@@ -114,7 +115,7 @@ public final class WebvttCssStyle {
     }
 
     public WebvttCssStyle setLinethrough(boolean linethrough) {
-        this.linethrough = linethrough;
+        this.linethrough = linethrough ? 1 : 0;
         return this;
     }
 
@@ -123,17 +124,17 @@ public final class WebvttCssStyle {
     }
 
     public WebvttCssStyle setUnderline(boolean underline) {
-        this.underline = underline;
+        this.underline = underline ? 1 : 0;
         return this;
     }
 
     public WebvttCssStyle setBold(boolean bold) {
-        this.bold = bold;
+        this.bold = bold ? 1 : 0;
         return this;
     }
 
     public WebvttCssStyle setItalic(boolean italic) {
-        this.italic = italic;
+        this.italic = italic ? 1 : 0;
         return this;
     }
 
@@ -239,15 +240,12 @@ public final class WebvttCssStyle {
     }
 
     private static int updateScoreForMatch(int currentScore, String target, String actual, int score) {
-        if (!target.isEmpty()) {
-            int i = -1;
-            if (currentScore != -1) {
-                if (target.equals(actual)) {
-                    i = currentScore + score;
-                }
-                return i;
-            }
+        if (target.isEmpty() || currentScore == -1) {
+            return currentScore;
         }
-        return currentScore;
+        if (target.equals(actual)) {
+            return currentScore + score;
+        }
+        return -1;
     }
 }

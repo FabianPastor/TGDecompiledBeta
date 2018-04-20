@@ -56,8 +56,8 @@ public final class CustomTabsIntent {
         }
 
         public Builder(CustomTabsSession session) {
-            this.mIntent = new Intent("android.intent.action.VIEW");
             IBinder iBinder = null;
+            this.mIntent = new Intent("android.intent.action.VIEW");
             this.mMenuItems = null;
             this.mStartAnimationBundle = null;
             this.mActionButtons = null;
@@ -90,7 +90,7 @@ public final class CustomTabsIntent {
         }
 
         public Builder setShowTitle(boolean showTitle) {
-            this.mIntent.putExtra(CustomTabsIntent.EXTRA_TITLE_VISIBILITY_STATE, showTitle);
+            this.mIntent.putExtra(CustomTabsIntent.EXTRA_TITLE_VISIBILITY_STATE, showTitle ? 1 : 0);
             return this;
         }
 

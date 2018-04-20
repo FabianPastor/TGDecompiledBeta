@@ -46,11 +46,12 @@ class ChildHelper {
         }
 
         boolean get(int index) {
-            if (index >= 64) {
+            if (index < 64) {
+                return (this.mData & (1 << index)) != 0;
+            } else {
                 ensureNext();
                 return this.mNext.get(index - 64);
             }
-            return (this.mData & (1 << index)) != 0;
         }
 
         void reset() {
@@ -68,7 +69,7 @@ class ChildHelper {
             }
             boolean lastBit = (this.mData & Long.MIN_VALUE) != 0;
             long mask = (1 << index) - 1;
-            this.mData = (this.mData & mask) | ((this.mData & (mask ^ -1)) << 1);
+            this.mData = (this.mData & mask) | ((this.mData & (-1 ^ mask)) << 1);
             if (value) {
                 set(index);
             } else {
@@ -81,24 +82,23 @@ class ChildHelper {
         }
 
         boolean remove(int index) {
-            Bucket bucket = this;
-            int i = index;
-            if (i >= 64) {
+            if (index >= 64) {
                 ensureNext();
-                return bucket.mNext.remove(i - 64);
+                return this.mNext.remove(index - 64);
             }
-            long mask = 1 << i;
-            boolean value = (bucket.mData & mask) != 0;
-            bucket.mData &= mask ^ -1;
-            long mask2 = mask - 1;
-            bucket.mData = (bucket.mData & mask2) | Long.rotateRight(bucket.mData & (mask2 ^ -1), 1);
-            if (bucket.mNext != null) {
-                if (bucket.mNext.get(0)) {
-                    set(63);
-                }
-                bucket.mNext.remove(0);
+            long mask = 1 << index;
+            boolean z = (this.mData & mask) != 0;
+            this.mData &= -1 ^ mask;
+            mask--;
+            this.mData = (this.mData & mask) | Long.rotateRight(this.mData & (-1 ^ mask), 1);
+            if (this.mNext == null) {
+                return z;
             }
-            return value;
+            if (this.mNext.get(0)) {
+                set(63);
+            }
+            this.mNext.remove(0);
+            return z;
         }
 
         int countOnesBefore(int index) {
@@ -118,11 +118,7 @@ class ChildHelper {
             if (this.mNext == null) {
                 return Long.toBinaryString(this.mData);
             }
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(this.mNext.toString());
-            stringBuilder.append("xx");
-            stringBuilder.append(Long.toBinaryString(this.mData));
-            return stringBuilder.toString();
+            return this.mNext.toString() + "xx" + Long.toBinaryString(this.mData);
         }
     }
 
@@ -172,12 +168,10 @@ class ChildHelper {
     }
 
     public View getHiddenChildAt(int index) {
-        if (index >= 0) {
-            if (index < this.mHiddenViews.size()) {
-                return (View) this.mHiddenViews.get(index);
-            }
+        if (index < 0 || index >= this.mHiddenViews.size()) {
+            return null;
         }
-        return null;
+        return (View) this.mHiddenViews.get(index);
     }
 
     void addView(View child, boolean hidden) {
@@ -310,10 +304,7 @@ class ChildHelper {
     void hide(View view) {
         int offset = this.mCallback.indexOfChild(view);
         if (offset < 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("view is not a child, cannot hide ");
-            stringBuilder.append(view);
-            throw new IllegalArgumentException(stringBuilder.toString());
+            throw new IllegalArgumentException("view is not a child, cannot hide " + view);
         }
         this.mBucket.set(offset);
         hideViewInternal(view);
@@ -321,42 +312,34 @@ class ChildHelper {
 
     void unhide(View view) {
         int offset = this.mCallback.indexOfChild(view);
-        StringBuilder stringBuilder;
         if (offset < 0) {
-            stringBuilder = new StringBuilder();
-            stringBuilder.append("view is not a child, cannot hide ");
-            stringBuilder.append(view);
-            throw new IllegalArgumentException(stringBuilder.toString());
+            throw new IllegalArgumentException("view is not a child, cannot hide " + view);
         } else if (this.mBucket.get(offset)) {
             this.mBucket.clear(offset);
             unhideViewInternal(view);
         } else {
-            stringBuilder = new StringBuilder();
-            stringBuilder.append("trying to unhide a view that was not hidden");
-            stringBuilder.append(view);
-            throw new RuntimeException(stringBuilder.toString());
+            throw new RuntimeException("trying to unhide a view that was not hidden" + view);
         }
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(this.mBucket.toString());
-        stringBuilder.append(", hidden list:");
-        stringBuilder.append(this.mHiddenViews.size());
-        return stringBuilder.toString();
+        return this.mBucket.toString() + ", hidden list:" + this.mHiddenViews.size();
     }
 
     boolean removeViewIfHidden(View view) {
         int index = this.mCallback.indexOfChild(view);
         if (index == -1) {
-            unhideViewInternal(view);
-            return true;
-        } else if (!this.mBucket.get(index)) {
-            return false;
+            return unhideViewInternal(view) ? true : true;
         } else {
+            if (!this.mBucket.get(index)) {
+                return false;
+            }
             this.mBucket.remove(index);
-            unhideViewInternal(view);
-            this.mCallback.removeViewAt(index);
+            if (unhideViewInternal(view)) {
+                this.mCallback.removeViewAt(index);
+            } else {
+                this.mCallback.removeViewAt(index);
+            }
             return true;
         }
     }

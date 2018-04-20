@@ -11,7 +11,7 @@ import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 final class WebvttSubtitle implements Subtitle {
-    private final long[] cueTimesUs = new long[(2 * this.numCues)];
+    private final long[] cueTimesUs = new long[(this.numCues * 2)];
     private final List<WebvttCue> cues;
     private final int numCues;
     private final long[] sortedCueTimesUs;
@@ -39,12 +39,18 @@ final class WebvttSubtitle implements Subtitle {
     }
 
     public long getEventTime(int index) {
-        boolean z = false;
-        Assertions.checkArgument(index >= 0);
-        if (index < this.sortedCueTimesUs.length) {
+        boolean z;
+        boolean z2 = true;
+        if (index >= 0) {
             z = true;
+        } else {
+            z = false;
         }
         Assertions.checkArgument(z);
+        if (index >= this.sortedCueTimesUs.length) {
+            z2 = false;
+        }
+        Assertions.checkArgument(z2);
         return this.sortedCueTimesUs[index];
     }
 
@@ -77,9 +83,6 @@ final class WebvttSubtitle implements Subtitle {
         } else if (firstNormalCue != null) {
             list.add(firstNormalCue);
         }
-        if (list != null) {
-            return list;
-        }
-        return Collections.emptyList();
+        return list != null ? list : Collections.emptyList();
     }
 }

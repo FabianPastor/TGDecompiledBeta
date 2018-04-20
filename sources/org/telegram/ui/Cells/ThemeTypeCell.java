@@ -22,6 +22,8 @@ public class ThemeTypeCell extends FrameLayout {
     private TextView textView;
 
     public ThemeTypeCell(Context context) {
+        int i;
+        int i2 = 3;
         super(context);
         setWillNotDraw(false);
         this.textView = new TextView(context);
@@ -31,28 +33,26 @@ public class ThemeTypeCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
-        int i = 3;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         View view = this.textView;
-        int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
-        float f = 17.0f;
-        float f2 = LocaleController.isRTL ? 71.0f : 17.0f;
-        if (!LocaleController.isRTL) {
-            f = 23.0f;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2, f2, 0.0f, f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 71.0f : 17.0f, 0.0f, LocaleController.isRTL ? 17.0f : 23.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
         this.checkImage.setImageResource(R.drawable.sticker_added);
         view = this.checkImage;
         if (!LocaleController.isRTL) {
-            i = 5;
+            i2 = 5;
         }
-        addView(view, LayoutHelper.createFrame(19, 14.0f, i | 16, 23.0f, 0.0f, 23.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 23.0f, 0.0f, 23.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f) + this.needDivider, NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(48.0f), NUM));
     }
 
     public void setValue(String name, boolean checked, boolean divider) {

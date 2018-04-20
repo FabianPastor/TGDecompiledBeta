@@ -49,14 +49,13 @@ final class HlsSampleStream implements SampleStream {
     }
 
     private boolean ensureBoundSampleQueue() {
-        boolean z = true;
         if (this.sampleQueueIndex != -1) {
             return true;
         }
         this.sampleQueueIndex = this.sampleStreamWrapper.bindSampleQueueToSampleStream(this.trackGroupIndex);
         if (this.sampleQueueIndex == -1) {
-            z = false;
+            return false;
         }
-        return z;
+        return true;
     }
 }

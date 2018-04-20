@@ -54,10 +54,7 @@ public final class AtomicFile {
 
     public AtomicFile(File baseName) {
         this.baseName = baseName;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(baseName.getPath());
-        stringBuilder.append(".bak");
-        this.backupName = new File(stringBuilder.toString());
+        this.backupName = new File(baseName.getPath() + ".bak");
     }
 
     public void delete() {
@@ -70,13 +67,7 @@ public final class AtomicFile {
             if (this.backupName.exists()) {
                 this.baseName.delete();
             } else if (!this.baseName.renameTo(this.backupName)) {
-                String str = TAG;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Couldn't rename file ");
-                stringBuilder.append(this.baseName);
-                stringBuilder.append(" to backup file ");
-                stringBuilder.append(this.backupName);
-                Log.w(str, stringBuilder.toString());
+                Log.w(TAG, "Couldn't rename file " + this.baseName + " to backup file " + this.backupName);
             }
         }
         try {
@@ -86,16 +77,10 @@ public final class AtomicFile {
                 try {
                     return new AtomicFileOutputStream(this.baseName);
                 } catch (FileNotFoundException e2) {
-                    StringBuilder stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append("Couldn't create ");
-                    stringBuilder2.append(this.baseName);
-                    throw new IOException(stringBuilder2.toString(), e2);
+                    throw new IOException("Couldn't create " + this.baseName, e2);
                 }
             }
-            StringBuilder stringBuilder3 = new StringBuilder();
-            stringBuilder3.append("Couldn't create directory ");
-            stringBuilder3.append(this.baseName);
-            throw new IOException(stringBuilder3.toString(), e);
+            throw new IOException("Couldn't create directory " + this.baseName, e);
         }
     }
 

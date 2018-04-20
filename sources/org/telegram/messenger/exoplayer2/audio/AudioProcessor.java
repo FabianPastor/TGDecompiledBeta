@@ -8,14 +8,7 @@ public interface AudioProcessor {
 
     public static final class UnhandledFormatException extends Exception {
         public UnhandledFormatException(int sampleRateHz, int channelCount, int encoding) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Unhandled format: ");
-            stringBuilder.append(sampleRateHz);
-            stringBuilder.append(" Hz, ");
-            stringBuilder.append(channelCount);
-            stringBuilder.append(" channels in encoding ");
-            stringBuilder.append(encoding);
-            super(stringBuilder.toString());
+            super("Unhandled format: " + sampleRateHz + " Hz, " + channelCount + " channels in encoding " + encoding);
         }
     }
 

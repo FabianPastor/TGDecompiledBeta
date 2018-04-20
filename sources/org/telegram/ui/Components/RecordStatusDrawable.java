@@ -43,12 +43,12 @@ public class RecordStatusDrawable extends StatusDrawable {
 
     public void draw(Canvas canvas) {
         canvas.save();
-        canvas.translate(0.0f, (float) ((getIntrinsicHeight() / 2) + AndroidUtilities.dp(this.isChat ? 1.0f : 2.0f)));
+        canvas.translate(0.0f, (float) (AndroidUtilities.dp(this.isChat ? 1.0f : 2.0f) + (getIntrinsicHeight() / 2)));
         for (int a = 0; a < 4; a++) {
             if (a == 0) {
-                Theme.chat_statusRecordPaint.setAlpha((int) (255.0f * this.progress));
+                Theme.chat_statusRecordPaint.setAlpha((int) (this.progress * 255.0f));
             } else if (a == 3) {
-                Theme.chat_statusRecordPaint.setAlpha((int) (255.0f * (1.0f - this.progress)));
+                Theme.chat_statusRecordPaint.setAlpha((int) ((1.0f - this.progress) * 255.0f));
             } else {
                 Theme.chat_statusRecordPaint.setAlpha(255);
             }

@@ -15,9 +15,9 @@ public class JNIUtilities {
             return null;
         }
         LinkProperties props = cm.getLinkProperties(net);
-        if (props == null) {
-            return null;
+        if (props != null) {
+            return props.getInterfaceName();
         }
-        return props.getInterfaceName();
+        return null;
     }
 }

@@ -88,7 +88,7 @@ public class LineProgressView extends View {
             canvas.drawRect((float) ((int) (((float) getWidth()) * this.animatedProgressValue)), 0.0f, (float) getWidth(), (float) getHeight(), progressPaint);
         }
         progressPaint.setColor(this.progressColor);
-        progressPaint.setAlpha((int) (255.0f * this.animatedAlphaValue));
+        progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
         canvas.drawRect(0.0f, 0.0f, ((float) getWidth()) * this.animatedProgressValue, (float) getHeight(), progressPaint);
         updateAnimation();
     }

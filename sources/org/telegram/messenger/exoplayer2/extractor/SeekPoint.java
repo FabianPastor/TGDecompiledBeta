@@ -11,33 +11,24 @@ public final class SeekPoint {
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("[timeUs=");
-        stringBuilder.append(this.timeUs);
-        stringBuilder.append(", position=");
-        stringBuilder.append(this.position);
-        stringBuilder.append("]");
-        return stringBuilder.toString();
+        return "[timeUs=" + this.timeUs + ", position=" + this.position + "]";
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                SeekPoint other = (SeekPoint) obj;
-                if (this.timeUs != other.timeUs || this.position != other.position) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        SeekPoint other = (SeekPoint) obj;
+        if (this.timeUs == other.timeUs && this.position == other.position) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * ((int) this.timeUs)) + ((int) this.position);
+        return (((int) this.timeUs) * 31) + ((int) this.position);
     }
 }

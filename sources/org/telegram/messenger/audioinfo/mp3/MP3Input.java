@@ -39,10 +39,6 @@ public class MP3Input extends PositionInputStream {
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("mp3[pos=");
-        stringBuilder.append(getPosition());
-        stringBuilder.append("]");
-        return stringBuilder.toString();
+        return "mp3[pos=" + getPosition() + "]";
     }
 }

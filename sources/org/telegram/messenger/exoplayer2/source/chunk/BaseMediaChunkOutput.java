@@ -22,11 +22,7 @@ final class BaseMediaChunkOutput implements TrackOutputProvider {
                 return this.sampleQueues[i];
             }
         }
-        String str = TAG;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Unmatched track of type: ");
-        stringBuilder.append(type);
-        Log.e(str, stringBuilder.toString());
+        Log.e(TAG, "Unmatched track of type: " + type);
         return new DummyTrackOutput();
     }
 

@@ -48,8 +48,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     private Pattern urlPattern;
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$5 */
-    class C13015 implements OnClickListener {
-        C13015() {
+    class C13035 implements OnClickListener {
+        C13035() {
         }
 
         public void onClick(View view) {
@@ -61,8 +61,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$6 */
-    class C13026 implements OnClickListener {
-        C13026() {
+    class C13046 implements OnClickListener {
+        C13046() {
         }
 
         public void onClick(View view) {
@@ -75,8 +75,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$3 */
-    class C20843 extends OnScrollListener {
-        C20843() {
+    class C20853 extends OnScrollListener {
+        C20853() {
         }
 
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -85,17 +85,15 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.Components.SharingLocationsAlert$4 */
-    class C20854 implements OnItemClickListener {
-        C20854() {
+    class C20864 implements OnItemClickListener {
+        C20864() {
         }
 
         public void onItemClick(View view, int position) {
             position--;
-            if (position >= 0) {
-                if (position < LocationController.getLocationsCount()) {
-                    SharingLocationsAlert.this.delegate.didSelectLocation(SharingLocationsAlert.this.getLocation(position));
-                    SharingLocationsAlert.this.dismiss();
-                }
+            if (position >= 0 && position < LocationController.getLocationsCount()) {
+                SharingLocationsAlert.this.delegate.didSelectLocation(SharingLocationsAlert.this.getLocation(position));
+                SharingLocationsAlert.this.dismiss();
             }
         }
     }
@@ -124,25 +122,29 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view;
-            if (viewType != 0) {
-                view = new FrameLayout(this.context) {
-                    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f) + 1, NUM));
-                    }
+            switch (viewType) {
+                case 0:
+                    view = new SharingLiveLocationCell(this.context, false);
+                    break;
+                default:
+                    View frameLayout = new FrameLayout(this.context) {
+                        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f) + 1, NUM));
+                        }
 
-                    protected void onDraw(Canvas canvas) {
-                        canvas.drawLine(0.0f, (float) AndroidUtilities.dp(40.0f), (float) getMeasuredWidth(), (float) AndroidUtilities.dp(40.0f), Theme.dividerPaint);
-                    }
-                };
-                view.setWillNotDraw(false);
-                SharingLocationsAlert.this.textView = new TextView(this.context);
-                SharingLocationsAlert.this.textView.setTextColor(Theme.getColor(Theme.key_dialogIcon));
-                SharingLocationsAlert.this.textView.setTextSize(1, 14.0f);
-                SharingLocationsAlert.this.textView.setGravity(17);
-                SharingLocationsAlert.this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
-                view.addView(SharingLocationsAlert.this.textView, LayoutHelper.createFrame(-1, 40.0f));
-            } else {
-                view = new SharingLiveLocationCell(this.context, false);
+                        protected void onDraw(Canvas canvas) {
+                            canvas.drawLine(0.0f, (float) AndroidUtilities.dp(40.0f), (float) getMeasuredWidth(), (float) AndroidUtilities.dp(40.0f), Theme.dividerPaint);
+                        }
+                    };
+                    frameLayout.setWillNotDraw(false);
+                    SharingLocationsAlert.this.textView = new TextView(this.context);
+                    SharingLocationsAlert.this.textView.setTextColor(Theme.getColor(Theme.key_dialogIcon));
+                    SharingLocationsAlert.this.textView.setTextSize(1, 14.0f);
+                    SharingLocationsAlert.this.textView.setGravity(17);
+                    SharingLocationsAlert.this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
+                    frameLayout.addView(SharingLocationsAlert.this.textView, LayoutHelper.createFrame(-1, 40.0f));
+                    view = frameLayout;
+                    break;
             }
             return new Holder(view);
         }
@@ -228,12 +230,10 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         this.listView = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent event) {
                 boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, SharingLocationsAlert.this.listView, 0, null);
-                if (!super.onInterceptTouchEvent(event)) {
-                    if (!result) {
-                        return false;
-                    }
+                if (super.onInterceptTouchEvent(event) || result) {
+                    return true;
                 }
-                return true;
+                return false;
             }
 
             public void requestLayout() {
@@ -251,8 +251,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         this.listView.setClipToPadding(false);
         this.listView.setEnabled(true);
         this.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
-        this.listView.setOnScrollListener(new C20843());
-        this.listView.setOnItemClickListener(new C20854());
+        this.listView.setOnScrollListener(new C20853());
+        this.listView.setOnItemClickListener(new C20864());
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View shadow = new View(context);
         shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
@@ -263,11 +263,11 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", R.string.StopAllLocationSharings));
-        pickerBottomLayout.cancelButton.setOnClickListener(new C13015());
+        pickerBottomLayout.cancelButton.setOnClickListener(new C13035());
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", R.string.Close).toUpperCase());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        pickerBottomLayout.doneButton.setOnClickListener(new C13026());
+        pickerBottomLayout.doneButton.setOnClickListener(new C13046());
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         this.adapter.notifyDataSetChanged();
     }
@@ -278,6 +278,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
 
     @SuppressLint({"NewApi"})
     private void updateLayout() {
+        int newOffset = 0;
         if (this.listView.getChildCount() <= 0) {
             RecyclerListView recyclerListView = this.listView;
             int paddingTop = this.listView.getPaddingTop();
@@ -286,17 +287,16 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
             this.containerView.invalidate();
             return;
         }
-        paddingTop = 0;
         View child = this.listView.getChildAt(0);
         Holder holder = (Holder) this.listView.findContainingViewHolder(child);
         int top = child.getTop() - AndroidUtilities.dp(8.0f);
         if (top > 0 && holder != null && holder.getAdapterPosition() == 0) {
-            paddingTop = top;
+            newOffset = top;
         }
-        if (this.scrollOffsetY != paddingTop) {
-            RecyclerListView recyclerListView2 = this.listView;
-            this.scrollOffsetY = paddingTop;
-            recyclerListView2.setTopGlowOffset(paddingTop);
+        if (this.scrollOffsetY != newOffset) {
+            recyclerListView = this.listView;
+            this.scrollOffsetY = newOffset;
+            recyclerListView.setTopGlowOffset(newOffset);
             this.containerView.invalidate();
         }
     }

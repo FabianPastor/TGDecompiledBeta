@@ -96,10 +96,7 @@ public final class Loader implements LoaderErrorThrower {
             try {
                 this.executorThread = Thread.currentThread();
                 if (!this.loadable.isLoadCanceled()) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("load:");
-                    stringBuilder.append(this.loadable.getClass().getSimpleName());
-                    TraceUtil.beginSection(stringBuilder.toString());
+                    TraceUtil.beginSection("load:" + this.loadable.getClass().getSimpleName());
                     this.loadable.load();
                     TraceUtil.endSection();
                 }
@@ -153,35 +150,37 @@ public final class Loader implements LoaderErrorThrower {
                     switch (msg.what) {
                         case 1:
                             this.callback.onLoadCanceled(this.loadable, nowMs, durationMs, false);
-                            break;
+                            return;
                         case 2:
                             try {
                                 this.callback.onLoadCompleted(this.loadable, nowMs, durationMs);
-                                break;
+                                return;
                             } catch (RuntimeException e) {
                                 Log.e(TAG, "Unexpected exception handling load completed", e);
                                 Loader.this.fatalError = new UnexpectedLoaderException(e);
-                                break;
+                                return;
                             }
                         case 3:
                             this.currentError = (IOException) msg.obj;
                             int retryAction = this.callback.onLoadError(this.loadable, nowMs, durationMs, this.currentError);
-                            if (retryAction != 3) {
-                                if (retryAction != 2) {
-                                    int i = 1;
-                                    if (retryAction != 1) {
-                                        i = 1 + this.errorCount;
-                                    }
-                                    this.errorCount = i;
-                                    start(getRetryDelayMillis());
-                                    break;
+                            if (retryAction == 3) {
+                                Loader.this.fatalError = this.currentError;
+                                return;
+                            } else if (retryAction != 2) {
+                                int i;
+                                if (retryAction == 1) {
+                                    i = 1;
+                                } else {
+                                    i = this.errorCount + 1;
                                 }
+                                this.errorCount = i;
+                                start(getRetryDelayMillis());
+                                return;
+                            } else {
+                                return;
                             }
-                            Loader.this.fatalError = this.currentError;
-                            break;
-                            break;
                         default:
-                            break;
+                            return;
                     }
                 }
             }
@@ -233,12 +232,7 @@ public final class Loader implements LoaderErrorThrower {
 
     public static final class UnexpectedLoaderException extends IOException {
         public UnexpectedLoaderException(Throwable cause) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Unexpected ");
-            stringBuilder.append(cause.getClass().getSimpleName());
-            stringBuilder.append(": ");
-            stringBuilder.append(cause.getMessage());
-            super(stringBuilder.toString(), cause);
+            super("Unexpected " + cause.getClass().getSimpleName() + ": " + cause.getMessage(), cause);
         }
     }
 
@@ -289,7 +283,11 @@ public final class Loader implements LoaderErrorThrower {
         if (this.fatalError != null) {
             throw this.fatalError;
         } else if (this.currentTask != null) {
-            this.currentTask.maybeThrowError(minRetryCount == Integer.MIN_VALUE ? this.currentTask.defaultMinRetryCount : minRetryCount);
+            LoadTask loadTask = this.currentTask;
+            if (minRetryCount == Integer.MIN_VALUE) {
+                minRetryCount = this.currentTask.defaultMinRetryCount;
+            }
+            loadTask.maybeThrowError(minRetryCount);
         }
     }
 }

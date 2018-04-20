@@ -14,25 +14,16 @@ public final class WebvttParserUtil {
 
     public static void validateWebvttHeaderLine(ParsableByteArray input) throws SubtitleDecoderException {
         String line = input.readLine();
-        if (line != null) {
-            if (HEADER.matcher(line).matches()) {
-                return;
-            }
+        if (line == null || !HEADER.matcher(line).matches()) {
+            throw new SubtitleDecoderException("Expected WEBVTT. Got " + line);
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Expected WEBVTT. Got ");
-        stringBuilder.append(line);
-        throw new SubtitleDecoderException(stringBuilder.toString());
     }
 
     public static long parseTimestampUs(String timestamp) throws NumberFormatException {
         long value = 0;
         String[] parts = timestamp.split("\\.", 2);
-        int i = 0;
-        String[] subparts = parts[0].split(":");
-        while (i < subparts.length) {
-            value = (60 * value) + Long.parseLong(subparts[i]);
-            i++;
+        for (String subpart : parts[0].split(":")) {
+            value = (60 * value) + Long.parseLong(subpart);
         }
         value *= 1000;
         if (parts.length == 2) {
@@ -50,16 +41,14 @@ public final class WebvttParserUtil {
 
     public static Matcher findNextCueHeader(ParsableByteArray input) {
         while (true) {
-            String readLine = input.readLine();
-            String line = readLine;
-            if (readLine == null) {
+            String line = input.readLine();
+            if (line == null) {
                 return null;
             }
             if (COMMENT.matcher(line).matches()) {
                 while (true) {
-                    readLine = input.readLine();
-                    line = readLine;
-                    if (readLine == null || line.isEmpty()) {
+                    line = input.readLine();
+                    if (line == null || line.isEmpty()) {
                         break;
                     }
                 }

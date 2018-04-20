@@ -66,18 +66,16 @@ public class LinearSmoothScrollerMiddle extends SmoothScroller {
 
     protected void updateActionForInterimTarget(Action action) {
         PointF scrollVector = computeScrollVectorForPosition(getTargetPosition());
-        if (scrollVector != null) {
-            if (scrollVector.x != 0.0f || scrollVector.y != 0.0f) {
-                normalize(scrollVector);
-                this.mTargetVector = scrollVector;
-                this.mInterimTargetDx = (int) (scrollVector.x * 10000.0f);
-                this.mInterimTargetDy = (int) (10000.0f * scrollVector.y);
-                action.update((int) (((float) this.mInterimTargetDx) * TARGET_SEEK_EXTRA_SCROLL_RATIO), (int) (((float) this.mInterimTargetDy) * TARGET_SEEK_EXTRA_SCROLL_RATIO), (int) (((float) calculateTimeForScrolling(10000)) * TARGET_SEEK_EXTRA_SCROLL_RATIO), this.mLinearInterpolator);
-                return;
-            }
+        if (scrollVector == null || (scrollVector.x == 0.0f && scrollVector.y == 0.0f)) {
+            action.jumpTo(getTargetPosition());
+            stop();
+            return;
         }
-        action.jumpTo(getTargetPosition());
-        stop();
+        normalize(scrollVector);
+        this.mTargetVector = scrollVector;
+        this.mInterimTargetDx = (int) (scrollVector.x * 10000.0f);
+        this.mInterimTargetDy = (int) (scrollVector.y * 10000.0f);
+        action.update((int) (((float) this.mInterimTargetDx) * TARGET_SEEK_EXTRA_SCROLL_RATIO), (int) (((float) this.mInterimTargetDy) * TARGET_SEEK_EXTRA_SCROLL_RATIO), (int) (((float) calculateTimeForScrolling(10000)) * TARGET_SEEK_EXTRA_SCROLL_RATIO), this.mLinearInterpolator);
     }
 
     private int clampApplyScroll(int tmpDt, int dt) {
@@ -91,29 +89,27 @@ public class LinearSmoothScrollerMiddle extends SmoothScroller {
 
     public int calculateDyToMakeVisible(View view) {
         LayoutManager layoutManager = getLayoutManager();
-        if (layoutManager != null) {
-            if (layoutManager.canScrollVertically()) {
-                LayoutParams params = (LayoutParams) view.getLayoutParams();
-                int top = layoutManager.getDecoratedTop(view) - params.topMargin;
-                int bottom = layoutManager.getDecoratedBottom(view) + params.bottomMargin;
-                int start = layoutManager.getPaddingTop();
-                int end = layoutManager.getHeight() - layoutManager.getPaddingBottom();
-                if (top > start && bottom < end) {
-                    return 0;
-                }
-                int viewSize = bottom - top;
-                int start2 = ((end - start) - viewSize) / 2;
-                start = start2 + viewSize;
-                end = start2 - top;
-                if (end > 0) {
-                    return end;
-                }
-                int dtEnd = start - bottom;
-                if (dtEnd < 0) {
-                    return dtEnd;
-                }
-                return 0;
-            }
+        if (layoutManager == null || !layoutManager.canScrollVertically()) {
+            return 0;
+        }
+        LayoutParams params = (LayoutParams) view.getLayoutParams();
+        int top = layoutManager.getDecoratedTop(view) - params.topMargin;
+        int bottom = layoutManager.getDecoratedBottom(view) + params.bottomMargin;
+        int start = layoutManager.getPaddingTop();
+        int end = layoutManager.getHeight() - layoutManager.getPaddingBottom();
+        if (top > start && bottom < end) {
+            return 0;
+        }
+        int viewSize = bottom - top;
+        start = ((end - start) - viewSize) / 2;
+        end = start + viewSize;
+        int dtStart = start - top;
+        if (dtStart > 0) {
+            return dtStart;
+        }
+        int dtEnd = end - bottom;
+        if (dtEnd < 0) {
+            return dtEnd;
         }
         return 0;
     }

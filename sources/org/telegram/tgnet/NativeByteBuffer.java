@@ -7,7 +7,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.exoplayer2.C0542C;
 
 public class NativeByteBuffer extends AbstractSerializedData {
-    private static final ThreadLocal<NativeByteBuffer> addressWrapper = new C07061();
+    private static final ThreadLocal<NativeByteBuffer> addressWrapper = new C07071();
     protected long address;
     public ByteBuffer buffer;
     private boolean justCalc;
@@ -15,8 +15,8 @@ public class NativeByteBuffer extends AbstractSerializedData {
     public boolean reused;
 
     /* renamed from: org.telegram.tgnet.NativeByteBuffer$1 */
-    static class C07061 extends ThreadLocal<NativeByteBuffer> {
-        C07061() {
+    static class C07071 extends ThreadLocal<NativeByteBuffer> {
+        C07071() {
         }
 
         protected NativeByteBuffer initialValue() {
@@ -240,14 +240,14 @@ public class NativeByteBuffer extends AbstractSerializedData {
         } else {
             this.buffer.put(b, offset, count);
         }
-        Exception e2 = count <= 253 ? 1 : 4;
-        while ((count + e2) % 4 != 0) {
+        int i = count <= 253 ? 1 : 4;
+        while ((count + i) % 4 != 0) {
             if (this.justCalc) {
                 this.len++;
             } else {
                 this.buffer.put((byte) 0);
             }
-            e2++;
+            i++;
         }
     }
 
@@ -393,11 +393,12 @@ public class NativeByteBuffer extends AbstractSerializedData {
         }
         if (exception) {
             throw new RuntimeException("Not bool value!");
-        }
-        if (BuildVars.LOGS_ENABLED) {
+        } else if (!BuildVars.LOGS_ENABLED) {
+            return false;
+        } else {
             FileLog.m1e("Not bool value!");
+            return false;
         }
-        return false;
     }
 
     public long readInt64(boolean exception) {
@@ -479,12 +480,12 @@ public class NativeByteBuffer extends AbstractSerializedData {
                 l = (getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8)) | (getIntFromByte(this.buffer.get()) << 16);
                 sl = 4;
             }
-            byte[] b = new byte[l];
-            this.buffer.get(b);
+            byte[] bArr = new byte[l];
+            this.buffer.get(bArr);
             for (int i = sl; (l + i) % 4 != 0; i++) {
                 this.buffer.get();
             }
-            return b;
+            return bArr;
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read byte array error", e);
@@ -504,16 +505,16 @@ public class NativeByteBuffer extends AbstractSerializedData {
                 l = (getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8)) | (getIntFromByte(this.buffer.get()) << 16);
                 sl = 4;
             }
-            NativeByteBuffer b = new NativeByteBuffer(l);
+            NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(l);
             int old = this.buffer.limit();
             this.buffer.limit(this.buffer.position() + l);
-            b.buffer.put(this.buffer);
+            nativeByteBuffer.buffer.put(this.buffer);
             this.buffer.limit(old);
-            b.buffer.position(0);
+            nativeByteBuffer.buffer.position(0);
             for (int i = sl; (l + i) % 4 != 0; i++) {
                 this.buffer.get();
             }
-            return b;
+            return nativeByteBuffer;
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read byte array error", e);

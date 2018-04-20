@@ -502,12 +502,23 @@ public class NotificationCenter {
         NotificationCenter localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (NotificationCenter.class) {
-                localInstance = Instance[num];
-                if (localInstance == null) {
-                    NotificationCenter[] notificationCenterArr = Instance;
-                    NotificationCenter notificationCenter = new NotificationCenter(num);
-                    localInstance = notificationCenter;
-                    notificationCenterArr[num] = notificationCenter;
+                try {
+                    localInstance = Instance[num];
+                    if (localInstance == null) {
+                        NotificationCenter[] notificationCenterArr = Instance;
+                        NotificationCenter localInstance2 = new NotificationCenter(num);
+                        try {
+                            notificationCenterArr[num] = localInstance2;
+                            localInstance = localInstance2;
+                        } catch (Throwable th) {
+                            Throwable th2 = th;
+                            localInstance = localInstance2;
+                            throw th2;
+                        }
+                    }
+                } catch (Throwable th3) {
+                    th2 = th3;
+                    throw th2;
                 }
             }
         }
@@ -518,11 +529,22 @@ public class NotificationCenter {
         NotificationCenter localInstance = globalInstance;
         if (localInstance == null) {
             synchronized (NotificationCenter.class) {
-                localInstance = globalInstance;
-                if (localInstance == null) {
-                    NotificationCenter notificationCenter = new NotificationCenter(-1);
-                    localInstance = notificationCenter;
-                    globalInstance = notificationCenter;
+                try {
+                    localInstance = globalInstance;
+                    if (localInstance == null) {
+                        NotificationCenter localInstance2 = new NotificationCenter(-1);
+                        try {
+                            globalInstance = localInstance2;
+                            localInstance = localInstance2;
+                        } catch (Throwable th) {
+                            Throwable th2 = th;
+                            localInstance = localInstance2;
+                            throw th2;
+                        }
+                    }
+                } catch (Throwable th3) {
+                    th2 = th3;
+                    throw th2;
                 }
             }
         }
@@ -606,12 +628,7 @@ public class NotificationCenter {
         } else {
             this.delayedPosts.add(new DelayedPost(id, args));
             if (BuildVars.LOGS_ENABLED) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("delay post notification ");
-                stringBuilder.append(id);
-                stringBuilder.append(" with args count = ");
-                stringBuilder.append(args.length);
-                FileLog.m1e(stringBuilder.toString());
+                FileLog.m1e("delay post notification " + id + " with args count = " + args.length);
             }
         }
     }
@@ -620,22 +637,21 @@ public class NotificationCenter {
         if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("addObserver allowed only from MAIN thread");
         } else if (this.broadcasting != 0) {
-            arrayList = (ArrayList) this.addAfterBroadcast.get(id);
+            ArrayList<Object> arrayList = (ArrayList) this.addAfterBroadcast.get(id);
             if (arrayList == null) {
                 arrayList = new ArrayList();
                 this.addAfterBroadcast.put(id, arrayList);
             }
             arrayList.add(observer);
         } else {
-            arrayList = (ArrayList) this.observers.get(id);
-            if (arrayList == null) {
+            ArrayList<Object> objects = (ArrayList) this.observers.get(id);
+            if (objects == null) {
                 SparseArray sparseArray = this.observers;
-                ArrayList<Object> arrayList = new ArrayList();
-                arrayList = arrayList;
-                sparseArray.put(id, arrayList);
+                objects = new ArrayList();
+                sparseArray.put(id, objects);
             }
-            if (!arrayList.contains(observer)) {
-                arrayList.add(observer);
+            if (!objects.contains(observer)) {
+                objects.add(observer);
             }
         }
     }
@@ -644,16 +660,16 @@ public class NotificationCenter {
         if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("removeObserver allowed only from MAIN thread");
         } else if (this.broadcasting != 0) {
-            arrayList = (ArrayList) this.removeAfterBroadcast.get(id);
+            ArrayList<Object> arrayList = (ArrayList) this.removeAfterBroadcast.get(id);
             if (arrayList == null) {
                 arrayList = new ArrayList();
                 this.removeAfterBroadcast.put(id, arrayList);
             }
             arrayList.add(observer);
         } else {
-            arrayList = (ArrayList) this.observers.get(id);
-            if (arrayList != null) {
-                arrayList.remove(observer);
+            ArrayList<Object> objects = (ArrayList) this.observers.get(id);
+            if (objects != null) {
+                objects.remove(observer);
             }
         }
     }

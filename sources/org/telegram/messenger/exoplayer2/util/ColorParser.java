@@ -176,18 +176,17 @@ public final class ColorParser {
     }
 
     private static int parseColorInternal(String colorExpression, boolean alphaHasFloatFormat) {
-        Assertions.checkArgument(TextUtils.isEmpty(colorExpression) ^ true);
+        Assertions.checkArgument(!TextUtils.isEmpty(colorExpression));
         colorExpression = colorExpression.replace(" ", TtmlNode.ANONYMOUS_REGION_ID);
         if (colorExpression.charAt(0) == '#') {
             int color = (int) Long.parseLong(colorExpression.substring(1), 16);
             if (colorExpression.length() == 7) {
-                color |= Theme.ACTION_BAR_VIDEO_EDIT_COLOR;
-            } else if (colorExpression.length() == 9) {
-                color = ((color & 255) << 24) | (color >>> 8);
-            } else {
-                throw new IllegalArgumentException();
+                return color | Theme.ACTION_BAR_VIDEO_EDIT_COLOR;
             }
-            return color;
+            if (colorExpression.length() == 9) {
+                return ((color & 255) << 24) | (color >>> 8);
+            }
+            throw new IllegalArgumentException();
         }
         Matcher matcher;
         if (colorExpression.startsWith(RGBA)) {

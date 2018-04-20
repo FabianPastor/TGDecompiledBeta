@@ -49,152 +49,128 @@ final class MetadataUtil {
     }
 
     public static Entry parseIlstElement(ParsableByteArray ilst) {
-        int endPosition = ilst.readInt() + ilst.getPosition();
+        int endPosition = ilst.getPosition() + ilst.readInt();
         int type = ilst.readInt();
         int typeTopByte = (type >> 24) & 255;
-        if (typeTopByte != 169) {
-            if (typeTopByte != 65533) {
-                try {
-                    Entry parseStandardGenreAttribute;
-                    if (type == TYPE_GENRE) {
-                        parseStandardGenreAttribute = parseStandardGenreAttribute(ilst);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_DISK_NUMBER) {
-                        parseStandardGenreAttribute = parseIndexAndCountAttribute(type, "TPOS", ilst);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_TRACK_NUMBER) {
-                        parseStandardGenreAttribute = parseIndexAndCountAttribute(type, "TRCK", ilst);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_TEMPO) {
-                        parseStandardGenreAttribute = parseUint8Attribute(type, "TBPM", ilst, true, false);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_COMPILATION) {
-                        parseStandardGenreAttribute = parseUint8Attribute(type, "TCMP", ilst, true, true);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_COVER_ART) {
-                        parseStandardGenreAttribute = parseCoverArt(ilst);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_ALBUM_ARTIST) {
-                        parseStandardGenreAttribute = parseTextAttribute(type, "TPE2", ilst);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_SORT_TRACK_NAME) {
-                        parseStandardGenreAttribute = parseTextAttribute(type, "TSOT", ilst);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_SORT_ALBUM) {
-                        parseStandardGenreAttribute = parseTextAttribute(type, "TSO2", ilst);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_SORT_ARTIST) {
-                        parseStandardGenreAttribute = parseTextAttribute(type, "TSOA", ilst);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_SORT_ALBUM_ARTIST) {
-                        parseStandardGenreAttribute = parseTextAttribute(type, "TSOP", ilst);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_SORT_COMPOSER) {
-                        parseStandardGenreAttribute = parseTextAttribute(type, "TSOC", ilst);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_RATING) {
-                        parseStandardGenreAttribute = parseUint8Attribute(type, "ITUNESADVISORY", ilst, false, false);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_GAPLESS_ALBUM) {
-                        parseStandardGenreAttribute = parseUint8Attribute(type, "ITUNESGAPLESS", ilst, false, true);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_TV_SORT_SHOW) {
-                        parseStandardGenreAttribute = parseTextAttribute(type, "TVSHOWSORT", ilst);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else if (type == TYPE_TV_SHOW) {
-                        parseStandardGenreAttribute = parseTextAttribute(type, "TVSHOW", ilst);
-                        ilst.setPosition(endPosition);
-                        return parseStandardGenreAttribute;
-                    } else {
-                        if (type == TYPE_INTERNAL) {
-                            parseStandardGenreAttribute = parseInternalAttribute(ilst, endPosition);
-                            ilst.setPosition(endPosition);
-                            return parseStandardGenreAttribute;
-                        }
-                        String str = TAG;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("Skipped unknown metadata entry: ");
-                        stringBuilder.append(Atom.getAtomTypeString(type));
-                        Log.d(str, stringBuilder.toString());
-                        ilst.setPosition(endPosition);
-                        return null;
-                    }
-                } finally {
+        Entry parseCommentAttribute;
+        if (typeTopByte == 169 || typeTopByte == 65533) {
+            int shortType = type & 16777215;
+            try {
+                if (shortType == SHORT_TYPE_COMMENT) {
+                    parseCommentAttribute = parseCommentAttribute(type, ilst);
+                    return parseCommentAttribute;
+                } else if (shortType == SHORT_TYPE_NAME_1 || shortType == SHORT_TYPE_NAME_2) {
+                    parseCommentAttribute = parseTextAttribute(type, "TIT2", ilst);
                     ilst.setPosition(endPosition);
+                    return parseCommentAttribute;
+                } else if (shortType == SHORT_TYPE_COMPOSER_1 || shortType == SHORT_TYPE_COMPOSER_2) {
+                    parseCommentAttribute = parseTextAttribute(type, "TCOM", ilst);
+                    ilst.setPosition(endPosition);
+                    return parseCommentAttribute;
+                } else if (shortType == SHORT_TYPE_YEAR) {
+                    parseCommentAttribute = parseTextAttribute(type, "TDRC", ilst);
+                    ilst.setPosition(endPosition);
+                    return parseCommentAttribute;
+                } else if (shortType == SHORT_TYPE_ARTIST) {
+                    parseCommentAttribute = parseTextAttribute(type, "TPE1", ilst);
+                    ilst.setPosition(endPosition);
+                    return parseCommentAttribute;
+                } else if (shortType == SHORT_TYPE_ENCODER) {
+                    parseCommentAttribute = parseTextAttribute(type, "TSSE", ilst);
+                    ilst.setPosition(endPosition);
+                    return parseCommentAttribute;
+                } else if (shortType == SHORT_TYPE_ALBUM) {
+                    parseCommentAttribute = parseTextAttribute(type, "TALB", ilst);
+                    ilst.setPosition(endPosition);
+                    return parseCommentAttribute;
+                } else if (shortType == SHORT_TYPE_LYRICS) {
+                    parseCommentAttribute = parseTextAttribute(type, "USLT", ilst);
+                    ilst.setPosition(endPosition);
+                    return parseCommentAttribute;
+                } else if (shortType == SHORT_TYPE_GENRE) {
+                    parseCommentAttribute = parseTextAttribute(type, "TCON", ilst);
+                    ilst.setPosition(endPosition);
+                    return parseCommentAttribute;
+                } else if (shortType == TYPE_GROUPING) {
+                    parseCommentAttribute = parseTextAttribute(type, "TIT1", ilst);
+                    ilst.setPosition(endPosition);
+                    return parseCommentAttribute;
                 }
+            } finally {
+                ilst.setPosition(endPosition);
             }
-        }
-        int shortType = 16777215 & type;
-        if (shortType == SHORT_TYPE_COMMENT) {
-            Entry parseCommentAttribute = parseCommentAttribute(type, ilst);
+        } else if (type == TYPE_GENRE) {
+            parseCommentAttribute = parseStandardGenreAttribute(ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_DISK_NUMBER) {
+            parseCommentAttribute = parseIndexAndCountAttribute(type, "TPOS", ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_TRACK_NUMBER) {
+            parseCommentAttribute = parseIndexAndCountAttribute(type, "TRCK", ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_TEMPO) {
+            parseCommentAttribute = parseUint8Attribute(type, "TBPM", ilst, true, false);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_COMPILATION) {
+            parseCommentAttribute = parseUint8Attribute(type, "TCMP", ilst, true, true);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_COVER_ART) {
+            parseCommentAttribute = parseCoverArt(ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_ALBUM_ARTIST) {
+            parseCommentAttribute = parseTextAttribute(type, "TPE2", ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_SORT_TRACK_NAME) {
+            parseCommentAttribute = parseTextAttribute(type, "TSOT", ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_SORT_ALBUM) {
+            parseCommentAttribute = parseTextAttribute(type, "TSO2", ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_SORT_ARTIST) {
+            parseCommentAttribute = parseTextAttribute(type, "TSOA", ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_SORT_ALBUM_ARTIST) {
+            parseCommentAttribute = parseTextAttribute(type, "TSOP", ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_SORT_COMPOSER) {
+            parseCommentAttribute = parseTextAttribute(type, "TSOC", ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_RATING) {
+            parseCommentAttribute = parseUint8Attribute(type, "ITUNESADVISORY", ilst, false, false);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_GAPLESS_ALBUM) {
+            parseCommentAttribute = parseUint8Attribute(type, "ITUNESGAPLESS", ilst, false, true);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_TV_SORT_SHOW) {
+            parseCommentAttribute = parseTextAttribute(type, "TVSHOWSORT", ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_TV_SHOW) {
+            parseCommentAttribute = parseTextAttribute(type, "TVSHOW", ilst);
+            ilst.setPosition(endPosition);
+            return parseCommentAttribute;
+        } else if (type == TYPE_INTERNAL) {
+            parseCommentAttribute = parseInternalAttribute(ilst, endPosition);
             ilst.setPosition(endPosition);
             return parseCommentAttribute;
         }
-        if (shortType != SHORT_TYPE_NAME_1) {
-            if (shortType != SHORT_TYPE_NAME_2) {
-                if (shortType != SHORT_TYPE_COMPOSER_1) {
-                    if (shortType != SHORT_TYPE_COMPOSER_2) {
-                        if (shortType == SHORT_TYPE_YEAR) {
-                            parseCommentAttribute = parseTextAttribute(type, "TDRC", ilst);
-                            ilst.setPosition(endPosition);
-                            return parseCommentAttribute;
-                        } else if (shortType == SHORT_TYPE_ARTIST) {
-                            parseCommentAttribute = parseTextAttribute(type, "TPE1", ilst);
-                            ilst.setPosition(endPosition);
-                            return parseCommentAttribute;
-                        } else if (shortType == SHORT_TYPE_ENCODER) {
-                            parseCommentAttribute = parseTextAttribute(type, "TSSE", ilst);
-                            ilst.setPosition(endPosition);
-                            return parseCommentAttribute;
-                        } else if (shortType == SHORT_TYPE_ALBUM) {
-                            parseCommentAttribute = parseTextAttribute(type, "TALB", ilst);
-                            ilst.setPosition(endPosition);
-                            return parseCommentAttribute;
-                        } else if (shortType == SHORT_TYPE_LYRICS) {
-                            parseCommentAttribute = parseTextAttribute(type, "USLT", ilst);
-                            ilst.setPosition(endPosition);
-                            return parseCommentAttribute;
-                        } else if (shortType == SHORT_TYPE_GENRE) {
-                            parseCommentAttribute = parseTextAttribute(type, "TCON", ilst);
-                            ilst.setPosition(endPosition);
-                            return parseCommentAttribute;
-                        } else if (shortType == TYPE_GROUPING) {
-                            parseCommentAttribute = parseTextAttribute(type, "TIT1", ilst);
-                            ilst.setPosition(endPosition);
-                            return parseCommentAttribute;
-                        } else {
-                            String str2 = TAG;
-                            StringBuilder stringBuilder2 = new StringBuilder();
-                            stringBuilder2.append("Skipped unknown metadata entry: ");
-                            stringBuilder2.append(Atom.getAtomTypeString(type));
-                            Log.d(str2, stringBuilder2.toString());
-                            ilst.setPosition(endPosition);
-                            return null;
-                        }
-                    }
-                }
-                parseCommentAttribute = parseTextAttribute(type, "TCOM", ilst);
-                ilst.setPosition(endPosition);
-                return parseCommentAttribute;
-            }
-        }
-        parseCommentAttribute = parseTextAttribute(type, "TIT2", ilst);
+        Log.d(TAG, "Skipped unknown metadata entry: " + Atom.getAtomTypeString(type));
         ilst.setPosition(endPosition);
-        return parseCommentAttribute;
+        return null;
     }
 
     private static TextInformationFrame parseTextAttribute(int type, String id, ParsableByteArray data) {
@@ -203,11 +179,7 @@ final class MetadataUtil {
             data.skipBytes(8);
             return new TextInformationFrame(id, null, data.readNullTerminatedString(atomSize - 16));
         }
-        String str = TAG;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Failed to parse text attribute: ");
-        stringBuilder.append(Atom.getAtomTypeString(type));
-        Log.w(str, stringBuilder.toString());
+        Log.w(TAG, "Failed to parse text attribute: " + Atom.getAtomTypeString(type));
         return null;
     }
 
@@ -218,11 +190,7 @@ final class MetadataUtil {
             String value = data.readNullTerminatedString(atomSize - 16);
             return new CommentFrame("und", value, value);
         }
-        value = TAG;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Failed to parse comment attribute: ");
-        stringBuilder.append(Atom.getAtomTypeString(type));
-        Log.w(value, stringBuilder.toString());
+        Log.w(TAG, "Failed to parse comment attribute: " + Atom.getAtomTypeString(type));
         return null;
     }
 
@@ -231,21 +199,14 @@ final class MetadataUtil {
         if (isBoolean) {
             value = Math.min(1, value);
         }
-        if (value >= 0) {
-            Id3Frame textInformationFrame;
-            if (isTextInformationFrame) {
-                textInformationFrame = new TextInformationFrame(id, null, Integer.toString(value));
-            } else {
-                textInformationFrame = new CommentFrame("und", id, Integer.toString(value));
-            }
-            return textInformationFrame;
+        if (value < 0) {
+            Log.w(TAG, "Failed to parse uint8 attribute: " + Atom.getAtomTypeString(type));
+            return null;
+        } else if (isTextInformationFrame) {
+            return new TextInformationFrame(id, null, Integer.toString(value));
+        } else {
+            return new CommentFrame("und", id, Integer.toString(value));
         }
-        String str = TAG;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Failed to parse uint8 attribute: ");
-        stringBuilder.append(Atom.getAtomTypeString(type));
-        Log.w(str, stringBuilder.toString());
-        return null;
     }
 
     private static TextInformationFrame parseIndexAndCountAttribute(int type, String attributeName, ParsableByteArray data) {
@@ -254,32 +215,26 @@ final class MetadataUtil {
             data.skipBytes(10);
             int index = data.readUnsignedShort();
             if (index > 0) {
-                String value = new StringBuilder();
-                value.append(TtmlNode.ANONYMOUS_REGION_ID);
-                value.append(index);
-                value = value.toString();
+                String value = TtmlNode.ANONYMOUS_REGION_ID + index;
                 int count = data.readUnsignedShort();
                 if (count > 0) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(value);
-                    stringBuilder.append("/");
-                    stringBuilder.append(count);
-                    value = stringBuilder.toString();
+                    value = value + "/" + count;
                 }
                 return new TextInformationFrame(attributeName, null, value);
             }
         }
-        String str = TAG;
-        StringBuilder stringBuilder2 = new StringBuilder();
-        stringBuilder2.append("Failed to parse index/count attribute: ");
-        stringBuilder2.append(Atom.getAtomTypeString(type));
-        Log.w(str, stringBuilder2.toString());
+        Log.w(TAG, "Failed to parse index/count attribute: " + Atom.getAtomTypeString(type));
         return null;
     }
 
     private static TextInformationFrame parseStandardGenreAttribute(ParsableByteArray data) {
+        String genreString;
         int genreCode = parseUint8AttributeValue(data);
-        String genreString = (genreCode <= 0 || genreCode > STANDARD_GENRES.length) ? null : STANDARD_GENRES[genreCode - 1];
+        if (genreCode <= 0 || genreCode > STANDARD_GENRES.length) {
+            genreString = null;
+        } else {
+            genreString = STANDARD_GENRES[genreCode - 1];
+        }
         if (genreString != null) {
             return new TextInformationFrame("TCON", null, genreString);
         }
@@ -293,11 +248,7 @@ final class MetadataUtil {
             int flags = Atom.parseFullAtomFlags(data.readInt());
             String mimeType = flags == 13 ? "image/jpeg" : flags == 14 ? "image/png" : null;
             if (mimeType == null) {
-                String str = TAG;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Unrecognized cover art flags: ");
-                stringBuilder.append(flags);
-                Log.w(str, stringBuilder.toString());
+                Log.w(TAG, "Unrecognized cover art flags: " + flags);
                 return null;
             }
             data.skipBytes(4);
@@ -310,9 +261,9 @@ final class MetadataUtil {
     }
 
     private static Id3Frame parseInternalAttribute(ParsableByteArray data, int endPosition) {
-        int dataAtomPosition = -1;
-        String name = null;
         String domain = null;
+        String name = null;
+        int dataAtomPosition = -1;
         int dataAtomSize = -1;
         while (data.getPosition() < endPosition) {
             int atomPosition = data.getPosition();
@@ -331,14 +282,12 @@ final class MetadataUtil {
                 data.skipBytes(atomSize - 12);
             }
         }
-        if ("com.apple.iTunes".equals(domain) && "iTunSMPB".equals(name)) {
-            if (dataAtomPosition != -1) {
-                data.setPosition(dataAtomPosition);
-                data.skipBytes(16);
-                return new CommentFrame("und", name, data.readNullTerminatedString(dataAtomSize - 16));
-            }
+        if (!"com.apple.iTunes".equals(domain) || !"iTunSMPB".equals(name) || dataAtomPosition == -1) {
+            return null;
         }
-        return null;
+        data.setPosition(dataAtomPosition);
+        data.skipBytes(16);
+        return new CommentFrame("und", name, data.readNullTerminatedString(dataAtomSize - 16));
     }
 
     private static int parseUint8AttributeValue(ParsableByteArray data) {

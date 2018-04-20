@@ -1,13 +1,13 @@
 package org.telegram.tgnet;
 
 public class TLObject {
-    private static final ThreadLocal<NativeByteBuffer> sizeCalculator = new C07071();
+    private static final ThreadLocal<NativeByteBuffer> sizeCalculator = new C07081();
     public boolean disableFree = false;
     public int networkType;
 
     /* renamed from: org.telegram.tgnet.TLObject$1 */
-    static class C07071 extends ThreadLocal<NativeByteBuffer> {
-        C07071() {
+    static class C07081 extends ThreadLocal<NativeByteBuffer> {
+        C07081() {
         }
 
         protected NativeByteBuffer initialValue() {

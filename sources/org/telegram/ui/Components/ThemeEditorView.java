@@ -92,8 +92,8 @@ public class ThemeEditorView {
     private FrameLayout windowView;
 
     /* renamed from: org.telegram.ui.Components.ThemeEditorView$3 */
-    class C13213 extends AnimatorListenerAdapter {
-        C13213() {
+    class C13233 extends AnimatorListenerAdapter {
+        C13233() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -104,8 +104,8 @@ public class ThemeEditorView {
     }
 
     /* renamed from: org.telegram.ui.Components.ThemeEditorView$4 */
-    class C13224 extends AnimatorListenerAdapter {
-        C13224() {
+    class C13244 extends AnimatorListenerAdapter {
+        C13244() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -132,12 +132,11 @@ public class ThemeEditorView {
         private View shadow;
         private Drawable shadowDrawable;
         private boolean startedColorChange;
-        final /* synthetic */ ThemeEditorView this$0;
         private int topBeforeSwitch;
 
         /* renamed from: org.telegram.ui.Components.ThemeEditorView$EditorAlert$9 */
-        class C13299 extends AnimatorListenerAdapter {
-            C13299() {
+        class C13319 extends AnimatorListenerAdapter {
+            C13319() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -165,14 +164,10 @@ public class ThemeEditorView {
             private float[] hsvTemp = new float[3];
             private LinearLayout linearLayout;
             private final int paramValueSliderWidth = AndroidUtilities.dp(20.0f);
-            final /* synthetic */ EditorAlert this$1;
             private Paint valueSliderPaint;
 
-            public ColorPicker(EditorAlert editorAlert, Context context) {
-                final EditorAlert editorAlert2 = editorAlert;
-                Context context2 = context;
-                this.this$1 = editorAlert2;
-                super(context2);
+            public ColorPicker(Context context) {
+                super(context);
                 setWillNotDraw(false);
                 this.circlePaint = new Paint(1);
                 this.circleDrawable = context.getResources().getDrawable(R.drawable.knob_shadow).mutate();
@@ -182,36 +177,36 @@ public class ThemeEditorView {
                 this.valueSliderPaint = new Paint();
                 this.valueSliderPaint.setAntiAlias(true);
                 this.valueSliderPaint.setDither(true);
-                this.linearLayout = new LinearLayout(context2);
+                this.linearLayout = new LinearLayout(context);
                 this.linearLayout.setOrientation(0);
                 addView(this.linearLayout, LayoutHelper.createFrame(-2, -2, 49));
                 int a = 0;
                 while (a < 4) {
-                    r0.colorEditText[a] = new EditTextBoldCursor(context2);
-                    r0.colorEditText[a].setInputType(2);
-                    r0.colorEditText[a].setTextColor(-14606047);
-                    r0.colorEditText[a].setCursorColor(-14606047);
-                    r0.colorEditText[a].setCursorSize(AndroidUtilities.dp(20.0f));
-                    r0.colorEditText[a].setCursorWidth(1.5f);
-                    r0.colorEditText[a].setTextSize(1, 18.0f);
-                    r0.colorEditText[a].setBackgroundDrawable(Theme.createEditTextDrawable(context2, true));
-                    r0.colorEditText[a].setMaxLines(1);
-                    r0.colorEditText[a].setTag(Integer.valueOf(a));
-                    r0.colorEditText[a].setGravity(17);
+                    this.colorEditText[a] = new EditTextBoldCursor(context);
+                    this.colorEditText[a].setInputType(2);
+                    this.colorEditText[a].setTextColor(-14606047);
+                    this.colorEditText[a].setCursorColor(-14606047);
+                    this.colorEditText[a].setCursorSize(AndroidUtilities.dp(20.0f));
+                    this.colorEditText[a].setCursorWidth(1.5f);
+                    this.colorEditText[a].setTextSize(1, 18.0f);
+                    this.colorEditText[a].setBackgroundDrawable(Theme.createEditTextDrawable(context, true));
+                    this.colorEditText[a].setMaxLines(1);
+                    this.colorEditText[a].setTag(Integer.valueOf(a));
+                    this.colorEditText[a].setGravity(17);
                     if (a == 0) {
-                        r0.colorEditText[a].setHint("red");
+                        this.colorEditText[a].setHint("red");
                     } else if (a == 1) {
-                        r0.colorEditText[a].setHint("green");
+                        this.colorEditText[a].setHint("green");
                     } else if (a == 2) {
-                        r0.colorEditText[a].setHint("blue");
+                        this.colorEditText[a].setHint("blue");
                     } else if (a == 3) {
-                        r0.colorEditText[a].setHint("alpha");
+                        this.colorEditText[a].setHint("alpha");
                     }
-                    r0.colorEditText[a].setImeOptions((a == 3 ? 6 : 5) | 268435456);
-                    r0.colorEditText[a].setFilters(new InputFilter[]{new LengthFilter(3)});
+                    this.colorEditText[a].setImeOptions((a == 3 ? 6 : 5) | 268435456);
+                    this.colorEditText[a].setFilters(new InputFilter[]{new LengthFilter(3)});
                     final int num = a;
-                    r0.linearLayout.addView(r0.colorEditText[a], LayoutHelper.createLinear(55, 36, 0.0f, 0.0f, a != 3 ? 16.0f : 0.0f, 0.0f));
-                    r0.colorEditText[a].addTextChangedListener(new TextWatcher() {
+                    this.linearLayout.addView(this.colorEditText[a], LayoutHelper.createLinear(55, 36, 0.0f, 0.0f, a != 3 ? 16.0f : 0.0f, 0.0f));
+                    this.colorEditText[a].addTextChangedListener(new TextWatcher(EditorAlert.this) {
                         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                         }
 
@@ -219,26 +214,16 @@ public class ThemeEditorView {
                         }
 
                         public void afterTextChanged(Editable editable) {
-                            if (!ColorPicker.this.this$1.ignoreTextChange) {
-                                ColorPicker.this.this$1.ignoreTextChange = true;
+                            if (!EditorAlert.this.ignoreTextChange) {
+                                EditorAlert.this.ignoreTextChange = true;
                                 int color = Utilities.parseInt(editable.toString()).intValue();
-                                EditTextBoldCursor editTextBoldCursor;
-                                StringBuilder stringBuilder;
                                 if (color < 0) {
                                     color = 0;
-                                    editTextBoldCursor = ColorPicker.this.colorEditText[num];
-                                    stringBuilder = new StringBuilder();
-                                    stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder.append(0);
-                                    editTextBoldCursor.setText(stringBuilder.toString());
+                                    ColorPicker.this.colorEditText[num].setText(TtmlNode.ANONYMOUS_REGION_ID + 0);
                                     ColorPicker.this.colorEditText[num].setSelection(ColorPicker.this.colorEditText[num].length());
                                 } else if (color > 255) {
                                     color = 255;
-                                    editTextBoldCursor = ColorPicker.this.colorEditText[num];
-                                    stringBuilder = new StringBuilder();
-                                    stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder.append(255);
-                                    editTextBoldCursor.setText(stringBuilder.toString());
+                                    ColorPicker.this.colorEditText[num].setText(TtmlNode.ANONYMOUS_REGION_ID + 255);
                                     ColorPicker.this.colorEditText[num].setSelection(ColorPicker.this.colorEditText[num].length());
                                 }
                                 int currentColor = ColorPicker.this.getColor();
@@ -252,14 +237,14 @@ public class ThemeEditorView {
                                     currentColor = (16777215 & currentColor) | ((color & 255) << 24);
                                 }
                                 ColorPicker.this.setColor(currentColor);
-                                for (int a = 0; a < ColorPicker.this.this$1.this$0.currentThemeDesription.size(); a++) {
-                                    ((ThemeDescription) ColorPicker.this.this$1.this$0.currentThemeDesription.get(a)).setColor(ColorPicker.this.getColor(), false);
+                                for (int a = 0; a < ThemeEditorView.this.currentThemeDesription.size(); a++) {
+                                    ((ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(a)).setColor(ColorPicker.this.getColor(), false);
                                 }
-                                ColorPicker.this.this$1.ignoreTextChange = false;
+                                EditorAlert.this.ignoreTextChange = false;
                             }
                         }
                     });
-                    r0.colorEditText[a].setOnEditorActionListener(new OnEditorActionListener() {
+                    this.colorEditText[a].setOnEditorActionListener(new OnEditorActionListener(EditorAlert.this) {
                         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                             if (i != 6) {
                                 return false;
@@ -279,10 +264,9 @@ public class ThemeEditorView {
             }
 
             protected void onDraw(Canvas canvas) {
-                Canvas canvas2 = canvas;
                 int centerX = (getWidth() / 2) - (this.paramValueSliderWidth * 2);
                 int centerY = (getHeight() / 2) - AndroidUtilities.dp(8.0f);
-                canvas2.drawBitmap(this.colorWheelBitmap, (float) (centerX - this.colorWheelRadius), (float) (centerY - this.colorWheelRadius), null);
+                canvas.drawBitmap(this.colorWheelBitmap, (float) (centerX - this.colorWheelRadius), (float) (centerY - this.colorWheelRadius), null);
                 float hueAngle = (float) Math.toRadians((double) this.colorHSV[0]);
                 int colorPointX = ((int) (((-Math.cos((double) hueAngle)) * ((double) this.colorHSV[1])) * ((double) this.colorWheelRadius))) + centerX;
                 int colorPointY = ((int) (((-Math.sin((double) hueAngle)) * ((double) this.colorHSV[1])) * ((double) this.colorWheelRadius))) + centerY;
@@ -290,36 +274,29 @@ public class ThemeEditorView {
                 this.hsvTemp[0] = this.colorHSV[0];
                 this.hsvTemp[1] = this.colorHSV[1];
                 this.hsvTemp[2] = 1.0f;
-                drawPointerArrow(canvas2, colorPointX, colorPointY, Color.HSVToColor(this.hsvTemp));
+                drawPointerArrow(canvas, colorPointX, colorPointY, Color.HSVToColor(this.hsvTemp));
                 int x = (this.colorWheelRadius + centerX) + this.paramValueSliderWidth;
                 int y = centerY - this.colorWheelRadius;
                 int width = AndroidUtilities.dp(9.0f);
                 int height = this.colorWheelRadius * 2;
                 if (this.colorGradient == null) {
-                    r0.colorGradient = new LinearGradient((float) x, (float) y, (float) (x + width), (float) (y + height), new int[]{Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Color.HSVToColor(r0.hsvTemp)}, null, TileMode.CLAMP);
+                    this.colorGradient = new LinearGradient((float) x, (float) y, (float) (x + width), (float) (y + height), new int[]{Theme.ACTION_BAR_VIDEO_EDIT_COLOR, Color.HSVToColor(this.hsvTemp)}, null, TileMode.CLAMP);
                 }
-                r0.valueSliderPaint.setShader(r0.colorGradient);
-                float f = (float) y;
-                float f2 = (float) (y + height);
-                int height2 = height;
-                float f3 = (float) (x + width);
-                int y2 = y;
-                float f4 = f2;
-                centerX = x;
-                canvas2.drawRect((float) x, f, f3, f4, r0.valueSliderPaint);
-                drawPointerArrow(canvas2, centerX + (width / 2), (int) (((float) y2) + (r0.colorHSV[2] * ((float) height2))), Color.HSVToColor(r0.colorHSV));
-                centerX += r0.paramValueSliderWidth * 2;
-                if (r0.alphaGradient == null) {
-                    int color = Color.HSVToColor(r0.hsvTemp);
-                    r0.alphaGradient = new LinearGradient((float) centerX, (float) y2, (float) (centerX + width), (float) (y2 + height2), new int[]{color, color & 16777215}, null, TileMode.CLAMP);
+                this.valueSliderPaint.setShader(this.colorGradient);
+                canvas.drawRect((float) x, (float) y, (float) (x + width), (float) (y + height), this.valueSliderPaint);
+                drawPointerArrow(canvas, (width / 2) + x, (int) (((float) y) + (this.colorHSV[2] * ((float) height))), Color.HSVToColor(this.colorHSV));
+                x += this.paramValueSliderWidth * 2;
+                if (this.alphaGradient == null) {
+                    int color = Color.HSVToColor(this.hsvTemp);
+                    this.alphaGradient = new LinearGradient((float) x, (float) y, (float) (x + width), (float) (y + height), new int[]{color, 16777215 & color}, null, TileMode.CLAMP);
                 }
-                r0.valueSliderPaint.setShader(r0.alphaGradient);
-                canvas2.drawRect((float) centerX, (float) y2, (float) (centerX + width), (float) (y2 + height2), r0.valueSliderPaint);
-                drawPointerArrow(canvas2, (width / 2) + centerX, (int) (((float) y2) + ((1.0f - r0.alpha) * ((float) height2))), (Color.HSVToColor(r0.colorHSV) & 16777215) | (((int) (255.0f * r0.alpha)) << 24));
+                this.valueSliderPaint.setShader(this.alphaGradient);
+                canvas.drawRect((float) x, (float) y, (float) (x + width), (float) (y + height), this.valueSliderPaint);
+                drawPointerArrow(canvas, (width / 2) + x, (int) (((float) y) + ((1.0f - this.alpha) * ((float) height))), (Color.HSVToColor(this.colorHSV) & 16777215) | (((int) (255.0f * this.alpha)) << 24));
             }
 
             private void drawPointerArrow(Canvas canvas, int x, int y, int color) {
-                int side = AndroidUtilities.dp(NUM);
+                int side = AndroidUtilities.dp(13.0f);
                 this.circleDrawable.setBounds(x - side, y - side, x + side, y + side);
                 this.circleDrawable.draw(canvas);
                 this.circlePaint.setColor(-1);
@@ -336,391 +313,115 @@ public class ThemeEditorView {
             }
 
             private Bitmap createColorWheelBitmap(int width, int height) {
-                ColorPicker colorPicker = this;
-                int i = width;
-                int i2 = height;
-                Bitmap bitmap = Bitmap.createBitmap(i, i2, Config.ARGB_8888);
-                int[] colors = new int[(12 + 1)];
+                Bitmap bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+                int[] colors = new int[13];
                 float[] hsv = new float[]{0.0f, 1.0f, 1.0f};
-                for (int i3 = 0; i3 < colors.length; i3++) {
-                    hsv[0] = (float) (((i3 * 30) + 180) % 360);
-                    colors[i3] = Color.HSVToColor(hsv);
+                for (int i = 0; i < colors.length; i++) {
+                    hsv[0] = (float) (((i * 30) + 180) % 360);
+                    colors[i] = Color.HSVToColor(hsv);
                 }
                 colors[12] = colors[0];
-                colorPicker.colorWheelPaint.setShader(new ComposeShader(new SweepGradient((float) (i / 2), (float) (i2 / 2), colors, null), new RadialGradient((float) (i / 2), (float) (i2 / 2), (float) colorPicker.colorWheelRadius, -1, 16777215, TileMode.CLAMP), Mode.SRC_OVER));
-                new Canvas(bitmap).drawCircle((float) (i / 2), (float) (i2 / 2), (float) colorPicker.colorWheelRadius, colorPicker.colorWheelPaint);
+                this.colorWheelPaint.setShader(new ComposeShader(new SweepGradient((float) (width / 2), (float) (height / 2), colors, null), new RadialGradient((float) (width / 2), (float) (height / 2), (float) this.colorWheelRadius, -1, 16777215, TileMode.CLAMP), Mode.SRC_OVER));
+                new Canvas(bitmap).drawCircle((float) (width / 2), (float) (height / 2), (float) this.colorWheelRadius, this.colorWheelPaint);
                 return bitmap;
             }
 
             private void startColorChange(boolean start) {
-                if (this.this$1.startedColorChange != start) {
-                    if (this.this$1.colorChangeAnimation != null) {
-                        this.this$1.colorChangeAnimation.cancel();
+                if (EditorAlert.this.startedColorChange != start) {
+                    if (EditorAlert.this.colorChangeAnimation != null) {
+                        EditorAlert.this.colorChangeAnimation.cancel();
                     }
-                    this.this$1.startedColorChange = start;
-                    this.this$1.colorChangeAnimation = new AnimatorSet();
-                    AnimatorSet access$400 = this.this$1.colorChangeAnimation;
+                    EditorAlert.this.startedColorChange = start;
+                    EditorAlert.this.colorChangeAnimation = new AnimatorSet();
+                    AnimatorSet access$400 = EditorAlert.this.colorChangeAnimation;
                     Animator[] animatorArr = new Animator[2];
-                    ColorDrawable access$500 = this.this$1.backDrawable;
+                    ColorDrawable access$500 = EditorAlert.this.backDrawable;
                     String str = "alpha";
                     int[] iArr = new int[1];
                     iArr[0] = start ? 0 : 51;
                     animatorArr[0] = ObjectAnimator.ofInt(access$500, str, iArr);
-                    ViewGroup access$600 = this.this$1.containerView;
+                    ViewGroup access$600 = EditorAlert.this.containerView;
                     str = "alpha";
                     float[] fArr = new float[1];
                     fArr[0] = start ? 0.2f : 1.0f;
                     animatorArr[1] = ObjectAnimator.ofFloat(access$600, str, fArr);
                     access$400.playTogether(animatorArr);
-                    this.this$1.colorChangeAnimation.setDuration(150);
-                    this.this$1.colorChangeAnimation.setInterpolator(this.decelerateInterpolator);
-                    this.this$1.colorChangeAnimation.start();
+                    EditorAlert.this.colorChangeAnimation.setDuration(150);
+                    EditorAlert.this.colorChangeAnimation.setInterpolator(this.decelerateInterpolator);
+                    EditorAlert.this.colorChangeAnimation.start();
                 }
             }
 
             public boolean onTouchEvent(MotionEvent event) {
-                ColorPicker colorPicker = this;
-                int action = event.getAction();
-                int i;
-                switch (action) {
+                switch (event.getAction()) {
                     case 0:
                     case 2:
-                        int centerY;
-                        int x;
-                        int x2;
-                        int color;
-                        int green;
-                        int blue;
-                        EditTextBoldCursor editTextBoldCursor;
-                        StringBuilder stringBuilder;
-                        StringBuilder stringBuilder2;
-                        float value;
-                        int x3 = (int) event.getX();
+                        int x = (int) event.getX();
                         int y = (int) event.getY();
-                        int centerX = (getWidth() / 2) - (colorPicker.paramValueSliderWidth * 2);
-                        int centerY2 = (getHeight() / 2) - AndroidUtilities.dp(8.0f);
-                        int cx = x3 - centerX;
-                        int cy = y - centerY2;
+                        int centerX = (getWidth() / 2) - (this.paramValueSliderWidth * 2);
+                        int centerY = (getHeight() / 2) - AndroidUtilities.dp(8.0f);
+                        int cx = x - centerX;
+                        int cy = y - centerY;
                         double d = Math.sqrt((double) ((cx * cx) + (cy * cy)));
-                        if (colorPicker.circlePressed) {
-                            centerY = centerY2;
-                        } else {
-                            if (colorPicker.alphaPressed || colorPicker.colorPressed) {
-                                centerY = centerY2;
-                            } else {
-                                centerY = centerY2;
-                                if (d <= ((double) colorPicker.colorWheelRadius)) {
-                                }
+                        if (this.circlePressed || !(this.alphaPressed || this.colorPressed || d > ((double) this.colorWheelRadius))) {
+                            if (d > ((double) this.colorWheelRadius)) {
+                                d = (double) this.colorWheelRadius;
                             }
-                            x = x3;
-                            if (!colorPicker.colorPressed) {
-                                x2 = x;
-                            } else if (!colorPicker.circlePressed || colorPicker.alphaPressed) {
-                                x2 = x;
-                                if (colorPicker.alphaPressed || (!colorPicker.circlePressed && !colorPicker.colorPressed && x >= (colorPicker.colorWheelRadius + centerX) + (colorPicker.paramValueSliderWidth * 3) && x <= (colorPicker.colorWheelRadius + centerX) + (colorPicker.paramValueSliderWidth * 4) && y >= centerY - colorPicker.colorWheelRadius && y <= centerY + colorPicker.colorWheelRadius)) {
-                                    colorPicker.alpha = 1.0f - (((float) (y - (centerY - colorPicker.colorWheelRadius))) / (((float) colorPicker.colorWheelRadius) * 2.0f));
-                                    if (colorPicker.alpha < 0.0f) {
-                                        colorPicker.alpha = 0.0f;
-                                    } else if (colorPicker.alpha > 1.0f) {
-                                        colorPicker.alpha = 1.0f;
-                                    }
-                                    colorPicker.alphaPressed = true;
-                                }
-                                if (!(colorPicker.alphaPressed || colorPicker.colorPressed)) {
-                                    if (!colorPicker.circlePressed) {
-                                        i = action;
-                                        return true;
-                                    }
-                                }
-                                startColorChange(true);
-                                color = getColor();
-                                for (x3 = 0; x3 < colorPicker.this$1.this$0.currentThemeDesription.size(); x3++) {
-                                    ((ThemeDescription) colorPicker.this$1.this$0.currentThemeDesription.get(x3)).setColor(color, false);
-                                }
-                                x3 = Color.red(color);
-                                green = Color.green(color);
-                                blue = Color.blue(color);
-                                centerY2 = Color.alpha(color);
-                                if (colorPicker.this$1.ignoreTextChange) {
-                                } else {
-                                    colorPicker.this$1.ignoreTextChange = true;
-                                    editTextBoldCursor = colorPicker.colorEditText[0];
-                                    stringBuilder = new StringBuilder();
-                                    i = action;
-                                    stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder.append(x3);
-                                    editTextBoldCursor.setText(stringBuilder.toString());
-                                    action = colorPicker.colorEditText[1];
-                                    stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder2.append(green);
-                                    action.setText(stringBuilder2.toString());
-                                    action = colorPicker.colorEditText[2];
-                                    stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder2.append(blue);
-                                    action.setText(stringBuilder2.toString());
-                                    action = colorPicker.colorEditText[3];
-                                    stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder2.append(centerY2);
-                                    action.setText(stringBuilder2.toString());
-                                    for (action = 0; action < 4; action++) {
-                                        colorPicker.colorEditText[action].setSelection(colorPicker.colorEditText[action].length());
-                                    }
-                                    colorPicker.this$1.ignoreTextChange = false;
-                                }
-                                invalidate();
-                                return true;
-                            } else {
-                                x2 = x;
-                                if (x2 >= (colorPicker.colorWheelRadius + centerX) + colorPicker.paramValueSliderWidth && x2 <= (colorPicker.colorWheelRadius + centerX) + (colorPicker.paramValueSliderWidth * 2) && y >= centerY - colorPicker.colorWheelRadius && y <= centerY + colorPicker.colorWheelRadius) {
-                                }
-                                colorPicker.alpha = 1.0f - (((float) (y - (centerY - colorPicker.colorWheelRadius))) / (((float) colorPicker.colorWheelRadius) * 2.0f));
-                                if (colorPicker.alpha < 0.0f) {
-                                    colorPicker.alpha = 0.0f;
-                                } else if (colorPicker.alpha > 1.0f) {
-                                    colorPicker.alpha = 1.0f;
-                                }
-                                colorPicker.alphaPressed = true;
-                                if (!colorPicker.circlePressed) {
-                                    i = action;
-                                    return true;
-                                }
-                                startColorChange(true);
-                                color = getColor();
-                                for (x3 = 0; x3 < colorPicker.this$1.this$0.currentThemeDesription.size(); x3++) {
-                                    ((ThemeDescription) colorPicker.this$1.this$0.currentThemeDesription.get(x3)).setColor(color, false);
-                                }
-                                x3 = Color.red(color);
-                                green = Color.green(color);
-                                blue = Color.blue(color);
-                                centerY2 = Color.alpha(color);
-                                if (colorPicker.this$1.ignoreTextChange) {
-                                } else {
-                                    colorPicker.this$1.ignoreTextChange = true;
-                                    editTextBoldCursor = colorPicker.colorEditText[0];
-                                    stringBuilder = new StringBuilder();
-                                    i = action;
-                                    stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder.append(x3);
-                                    editTextBoldCursor.setText(stringBuilder.toString());
-                                    action = colorPicker.colorEditText[1];
-                                    stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder2.append(green);
-                                    action.setText(stringBuilder2.toString());
-                                    action = colorPicker.colorEditText[2];
-                                    stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder2.append(blue);
-                                    action.setText(stringBuilder2.toString());
-                                    action = colorPicker.colorEditText[3];
-                                    stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder2.append(centerY2);
-                                    action.setText(stringBuilder2.toString());
-                                    for (action = 0; action < 4; action++) {
-                                        colorPicker.colorEditText[action].setSelection(colorPicker.colorEditText[action].length());
-                                    }
-                                    colorPicker.this$1.ignoreTextChange = false;
-                                }
-                                invalidate();
-                                return true;
-                            }
-                            value = ((float) (y - (centerY - colorPicker.colorWheelRadius))) / (((float) colorPicker.colorWheelRadius) * 2.0f);
+                            this.circlePressed = true;
+                            this.colorHSV[0] = (float) (Math.toDegrees(Math.atan2((double) cy, (double) cx)) + 180.0d);
+                            this.colorHSV[1] = Math.max(0.0f, Math.min(1.0f, (float) (d / ((double) this.colorWheelRadius))));
+                            this.colorGradient = null;
+                            this.alphaGradient = null;
+                        }
+                        if (this.colorPressed || (!this.circlePressed && !this.alphaPressed && x >= (this.colorWheelRadius + centerX) + this.paramValueSliderWidth && x <= (this.colorWheelRadius + centerX) + (this.paramValueSliderWidth * 2) && y >= centerY - this.colorWheelRadius && y <= this.colorWheelRadius + centerY)) {
+                            float value = ((float) (y - (centerY - this.colorWheelRadius))) / (((float) this.colorWheelRadius) * 2.0f);
                             if (value < 0.0f) {
                                 value = 0.0f;
                             } else if (value > 1.0f) {
                                 value = 1.0f;
                             }
-                            colorPicker.colorHSV[2] = value;
-                            colorPicker.colorPressed = true;
-                            colorPicker.alpha = 1.0f - (((float) (y - (centerY - colorPicker.colorWheelRadius))) / (((float) colorPicker.colorWheelRadius) * 2.0f));
-                            if (colorPicker.alpha < 0.0f) {
-                                colorPicker.alpha = 0.0f;
-                            } else if (colorPicker.alpha > 1.0f) {
-                                colorPicker.alpha = 1.0f;
-                            }
-                            colorPicker.alphaPressed = true;
-                            if (!colorPicker.circlePressed) {
-                                startColorChange(true);
-                                color = getColor();
-                                for (x3 = 0; x3 < colorPicker.this$1.this$0.currentThemeDesription.size(); x3++) {
-                                    ((ThemeDescription) colorPicker.this$1.this$0.currentThemeDesription.get(x3)).setColor(color, false);
-                                }
-                                x3 = Color.red(color);
-                                green = Color.green(color);
-                                blue = Color.blue(color);
-                                centerY2 = Color.alpha(color);
-                                if (colorPicker.this$1.ignoreTextChange) {
-                                    colorPicker.this$1.ignoreTextChange = true;
-                                    editTextBoldCursor = colorPicker.colorEditText[0];
-                                    stringBuilder = new StringBuilder();
-                                    i = action;
-                                    stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder.append(x3);
-                                    editTextBoldCursor.setText(stringBuilder.toString());
-                                    action = colorPicker.colorEditText[1];
-                                    stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder2.append(green);
-                                    action.setText(stringBuilder2.toString());
-                                    action = colorPicker.colorEditText[2];
-                                    stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder2.append(blue);
-                                    action.setText(stringBuilder2.toString());
-                                    action = colorPicker.colorEditText[3];
-                                    stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                    stringBuilder2.append(centerY2);
-                                    action.setText(stringBuilder2.toString());
-                                    for (action = 0; action < 4; action++) {
-                                        colorPicker.colorEditText[action].setSelection(colorPicker.colorEditText[action].length());
-                                    }
-                                    colorPicker.this$1.ignoreTextChange = false;
-                                }
-                                invalidate();
-                                return true;
-                            }
-                            i = action;
-                            return true;
+                            this.colorHSV[2] = value;
+                            this.colorPressed = true;
                         }
-                        if (d > ((double) colorPicker.colorWheelRadius)) {
-                            d = (double) colorPicker.colorWheelRadius;
+                        if (this.alphaPressed || (!this.circlePressed && !this.colorPressed && x >= (this.colorWheelRadius + centerX) + (this.paramValueSliderWidth * 3) && x <= (this.colorWheelRadius + centerX) + (this.paramValueSliderWidth * 4) && y >= centerY - this.colorWheelRadius && y <= this.colorWheelRadius + centerY)) {
+                            this.alpha = 1.0f - (((float) (y - (centerY - this.colorWheelRadius))) / (((float) this.colorWheelRadius) * 2.0f));
+                            if (this.alpha < 0.0f) {
+                                this.alpha = 0.0f;
+                            } else if (this.alpha > 1.0f) {
+                                this.alpha = 1.0f;
+                            }
+                            this.alphaPressed = true;
                         }
-                        colorPicker.circlePressed = true;
-                        x = x3;
-                        colorPicker.colorHSV[0] = (float) (Math.toDegrees(Math.atan2((double) cy, (double) cx)) + 180.0d);
-                        colorPicker.colorHSV[1] = Math.max(0.0f, Math.min(1.0f, (float) (d / ((double) colorPicker.colorWheelRadius))));
-                        colorPicker.colorGradient = null;
-                        colorPicker.alphaGradient = null;
-                        if (!colorPicker.colorPressed) {
-                            x2 = x;
-                        } else {
-                            if (colorPicker.circlePressed) {
-                                break;
-                            }
-                            x2 = x;
-                            colorPicker.alpha = 1.0f - (((float) (y - (centerY - colorPicker.colorWheelRadius))) / (((float) colorPicker.colorWheelRadius) * 2.0f));
-                            if (colorPicker.alpha < 0.0f) {
-                                colorPicker.alpha = 0.0f;
-                            } else if (colorPicker.alpha > 1.0f) {
-                                colorPicker.alpha = 1.0f;
-                            }
-                            colorPicker.alphaPressed = true;
-                            if (!colorPicker.circlePressed) {
-                                i = action;
-                                return true;
-                            }
+                        if (this.alphaPressed || this.colorPressed || this.circlePressed) {
+                            int a;
                             startColorChange(true);
-                            color = getColor();
-                            for (x3 = 0; x3 < colorPicker.this$1.this$0.currentThemeDesription.size(); x3++) {
-                                ((ThemeDescription) colorPicker.this$1.this$0.currentThemeDesription.get(x3)).setColor(color, false);
+                            int color = getColor();
+                            for (a = 0; a < ThemeEditorView.this.currentThemeDesription.size(); a++) {
+                                ((ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(a)).setColor(color, false);
                             }
-                            x3 = Color.red(color);
-                            green = Color.green(color);
-                            blue = Color.blue(color);
-                            centerY2 = Color.alpha(color);
-                            if (colorPicker.this$1.ignoreTextChange) {
-                            } else {
-                                colorPicker.this$1.ignoreTextChange = true;
-                                editTextBoldCursor = colorPicker.colorEditText[0];
-                                stringBuilder = new StringBuilder();
-                                i = action;
-                                stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                stringBuilder.append(x3);
-                                editTextBoldCursor.setText(stringBuilder.toString());
-                                action = colorPicker.colorEditText[1];
-                                stringBuilder2 = new StringBuilder();
-                                stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                stringBuilder2.append(green);
-                                action.setText(stringBuilder2.toString());
-                                action = colorPicker.colorEditText[2];
-                                stringBuilder2 = new StringBuilder();
-                                stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                stringBuilder2.append(blue);
-                                action.setText(stringBuilder2.toString());
-                                action = colorPicker.colorEditText[3];
-                                stringBuilder2 = new StringBuilder();
-                                stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                stringBuilder2.append(centerY2);
-                                action.setText(stringBuilder2.toString());
-                                for (action = 0; action < 4; action++) {
-                                    colorPicker.colorEditText[action].setSelection(colorPicker.colorEditText[action].length());
+                            int red = Color.red(color);
+                            int green = Color.green(color);
+                            int blue = Color.blue(color);
+                            a = Color.alpha(color);
+                            if (!EditorAlert.this.ignoreTextChange) {
+                                EditorAlert.this.ignoreTextChange = true;
+                                this.colorEditText[0].setText(TtmlNode.ANONYMOUS_REGION_ID + red);
+                                this.colorEditText[1].setText(TtmlNode.ANONYMOUS_REGION_ID + green);
+                                this.colorEditText[2].setText(TtmlNode.ANONYMOUS_REGION_ID + blue);
+                                this.colorEditText[3].setText(TtmlNode.ANONYMOUS_REGION_ID + a);
+                                for (int b = 0; b < 4; b++) {
+                                    this.colorEditText[b].setSelection(this.colorEditText[b].length());
                                 }
-                                colorPicker.this$1.ignoreTextChange = false;
+                                EditorAlert.this.ignoreTextChange = false;
                             }
                             invalidate();
-                            return true;
                         }
-                        value = ((float) (y - (centerY - colorPicker.colorWheelRadius))) / (((float) colorPicker.colorWheelRadius) * 2.0f);
-                        if (value < 0.0f) {
-                            value = 0.0f;
-                        } else if (value > 1.0f) {
-                            value = 1.0f;
-                        }
-                        colorPicker.colorHSV[2] = value;
-                        colorPicker.colorPressed = true;
-                        colorPicker.alpha = 1.0f - (((float) (y - (centerY - colorPicker.colorWheelRadius))) / (((float) colorPicker.colorWheelRadius) * 2.0f));
-                        if (colorPicker.alpha < 0.0f) {
-                            colorPicker.alpha = 0.0f;
-                        } else if (colorPicker.alpha > 1.0f) {
-                            colorPicker.alpha = 1.0f;
-                        }
-                        colorPicker.alphaPressed = true;
-                        if (!colorPicker.circlePressed) {
-                            startColorChange(true);
-                            color = getColor();
-                            for (x3 = 0; x3 < colorPicker.this$1.this$0.currentThemeDesription.size(); x3++) {
-                                ((ThemeDescription) colorPicker.this$1.this$0.currentThemeDesription.get(x3)).setColor(color, false);
-                            }
-                            x3 = Color.red(color);
-                            green = Color.green(color);
-                            blue = Color.blue(color);
-                            centerY2 = Color.alpha(color);
-                            if (colorPicker.this$1.ignoreTextChange) {
-                                colorPicker.this$1.ignoreTextChange = true;
-                                editTextBoldCursor = colorPicker.colorEditText[0];
-                                stringBuilder = new StringBuilder();
-                                i = action;
-                                stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                stringBuilder.append(x3);
-                                editTextBoldCursor.setText(stringBuilder.toString());
-                                action = colorPicker.colorEditText[1];
-                                stringBuilder2 = new StringBuilder();
-                                stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                stringBuilder2.append(green);
-                                action.setText(stringBuilder2.toString());
-                                action = colorPicker.colorEditText[2];
-                                stringBuilder2 = new StringBuilder();
-                                stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                stringBuilder2.append(blue);
-                                action.setText(stringBuilder2.toString());
-                                action = colorPicker.colorEditText[3];
-                                stringBuilder2 = new StringBuilder();
-                                stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                                stringBuilder2.append(centerY2);
-                                action.setText(stringBuilder2.toString());
-                                for (action = 0; action < 4; action++) {
-                                    colorPicker.colorEditText[action].setSelection(colorPicker.colorEditText[action].length());
-                                }
-                                colorPicker.this$1.ignoreTextChange = false;
-                            }
-                            invalidate();
-                            return true;
-                        }
-                        i = action;
                         return true;
                     case 1:
-                        colorPicker.alphaPressed = false;
-                        colorPicker.colorPressed = false;
-                        colorPicker.circlePressed = false;
+                        this.alphaPressed = false;
+                        this.colorPressed = false;
+                        this.circlePressed = false;
                         startColorChange(false);
-                        i = action;
-                        break;
-                    default:
                         break;
                 }
                 return super.onTouchEvent(event);
@@ -731,32 +432,16 @@ public class ThemeEditorView {
                 int green = Color.green(color);
                 int blue = Color.blue(color);
                 int a = Color.alpha(color);
-                if (!this.this$1.ignoreTextChange) {
-                    this.this$1.ignoreTextChange = true;
-                    EditTextBoldCursor editTextBoldCursor = this.colorEditText[0];
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-                    stringBuilder.append(red);
-                    editTextBoldCursor.setText(stringBuilder.toString());
-                    editTextBoldCursor = this.colorEditText[1];
-                    StringBuilder stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                    stringBuilder2.append(green);
-                    editTextBoldCursor.setText(stringBuilder2.toString());
-                    editTextBoldCursor = this.colorEditText[2];
-                    stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                    stringBuilder2.append(blue);
-                    editTextBoldCursor.setText(stringBuilder2.toString());
-                    editTextBoldCursor = this.colorEditText[3];
-                    stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-                    stringBuilder2.append(a);
-                    editTextBoldCursor.setText(stringBuilder2.toString());
+                if (!EditorAlert.this.ignoreTextChange) {
+                    EditorAlert.this.ignoreTextChange = true;
+                    this.colorEditText[0].setText(TtmlNode.ANONYMOUS_REGION_ID + red);
+                    this.colorEditText[1].setText(TtmlNode.ANONYMOUS_REGION_ID + green);
+                    this.colorEditText[2].setText(TtmlNode.ANONYMOUS_REGION_ID + blue);
+                    this.colorEditText[3].setText(TtmlNode.ANONYMOUS_REGION_ID + a);
                     for (int b = 0; b < 4; b++) {
                         this.colorEditText[b].setSelection(this.colorEditText[b].length());
                     }
-                    this.this$1.ignoreTextChange = false;
+                    EditorAlert.this.ignoreTextChange = false;
                 }
                 this.alphaGradient = null;
                 this.colorGradient = null;
@@ -795,12 +480,10 @@ public class ThemeEditorView {
             }
 
             public ArrayList<ThemeDescription> getItem(int i) {
-                if (i >= 0) {
-                    if (i < this.items.size()) {
-                        return (ArrayList) this.items.get(i);
-                    }
+                if (i < 0 || i >= this.items.size()) {
+                    return null;
                 }
-                return null;
+                return (ArrayList) this.items.get(i);
             }
 
             public boolean isEnabled(ViewHolder holder) {
@@ -829,14 +512,11 @@ public class ThemeEditorView {
             }
         }
 
-        public EditorAlert(ThemeEditorView this$0, Context context, ThemeDescription[] items) {
-            final ThemeEditorView themeEditorView = this$0;
-            Context context2 = context;
-            this.this$0 = themeEditorView;
-            super(context2, true);
+        public EditorAlert(Context context, ThemeDescription[] items) {
+            super(context, true);
             this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
-            this.containerView = new FrameLayout(context2) {
-                private boolean ignoreLayout = null;
+            this.containerView = new FrameLayout(context, ThemeEditorView.this) {
+                private boolean ignoreLayout = false;
 
                 public boolean onInterceptTouchEvent(MotionEvent ev) {
                     if (ev.getAction() != 0 || EditorAlert.this.scrollOffsetY == 0 || ev.getY() >= ((float) EditorAlert.this.scrollOffsetY)) {
@@ -890,7 +570,7 @@ public class ThemeEditorView {
             };
             this.containerView.setWillNotDraw(false);
             this.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
-            this.listView = new RecyclerListView(context2);
+            this.listView = new RecyclerListView(context);
             this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(48.0f));
             this.listView.setClipToPadding(false);
             RecyclerListView recyclerListView = this.listView;
@@ -901,20 +581,20 @@ public class ThemeEditorView {
             this.listView.setVerticalScrollBarEnabled(false);
             this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
             recyclerListView = this.listView;
-            Adapter listAdapter = new ListAdapter(context2, items);
+            Adapter listAdapter = new ListAdapter(context, items);
             this.listAdapter = listAdapter;
             recyclerListView.setAdapter(listAdapter);
             this.listView.setGlowColor(-657673);
             this.listView.setItemAnimator(null);
             this.listView.setLayoutAnimation(null);
-            this.listView.setOnItemClickListener(new OnItemClickListener() {
+            this.listView.setOnItemClickListener(new OnItemClickListener(ThemeEditorView.this) {
                 public void onItemClick(View view, int position) {
-                    EditorAlert.this.this$0.currentThemeDesription = EditorAlert.this.listAdapter.getItem(position);
-                    EditorAlert.this.this$0.currentThemeDesriptionPosition = position;
-                    for (int a = 0; a < EditorAlert.this.this$0.currentThemeDesription.size(); a++) {
-                        ThemeDescription description = (ThemeDescription) EditorAlert.this.this$0.currentThemeDesription.get(a);
+                    ThemeEditorView.this.currentThemeDesription = EditorAlert.this.listAdapter.getItem(position);
+                    ThemeEditorView.this.currentThemeDesriptionPosition = position;
+                    for (int a = 0; a < ThemeEditorView.this.currentThemeDesription.size(); a++) {
+                        ThemeDescription description = (ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(a);
                         if (description.getCurrentKey().equals(Theme.key_chat_wallpaper)) {
-                            EditorAlert.this.this$0.wallpaperUpdater.showAlert(true);
+                            ThemeEditorView.this.wallpaperUpdater.showAlert(true);
                             return;
                         }
                         description.startEditing();
@@ -925,21 +605,21 @@ public class ThemeEditorView {
                     EditorAlert.this.setColorPickerVisible(true);
                 }
             });
-            this.listView.setOnScrollListener(new OnScrollListener() {
+            this.listView.setOnScrollListener(new OnScrollListener(ThemeEditorView.this) {
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     EditorAlert.this.updateLayout();
                 }
             });
-            this.colorPicker = new ColorPicker(this, context2);
+            this.colorPicker = new ColorPicker(context);
             this.colorPicker.setVisibility(8);
             this.containerView.addView(this.colorPicker, LayoutHelper.createFrame(-1, -1, 1));
-            this.shadow = new View(context2);
+            this.shadow = new View(context);
             this.shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
             this.containerView.addView(this.shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
-            this.bottomSaveLayout = new FrameLayout(context2);
+            this.bottomSaveLayout = new FrameLayout(context);
             this.bottomSaveLayout.setBackgroundColor(-1);
             this.containerView.addView(this.bottomSaveLayout, LayoutHelper.createFrame(-1, 48, 83));
-            TextView closeButton = new TextView(context2);
+            TextView closeButton = new TextView(context);
             closeButton.setTextSize(1, 14.0f);
             closeButton.setTextColor(-15095832);
             closeButton.setGravity(17);
@@ -948,12 +628,12 @@ public class ThemeEditorView {
             closeButton.setText(LocaleController.getString("CloseEditor", R.string.CloseEditor).toUpperCase());
             closeButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.bottomSaveLayout.addView(closeButton, LayoutHelper.createFrame(-2, -1, 51));
-            closeButton.setOnClickListener(new OnClickListener() {
+            closeButton.setOnClickListener(new OnClickListener(ThemeEditorView.this) {
                 public void onClick(View v) {
                     EditorAlert.this.dismiss();
                 }
             });
-            TextView saveButton = new TextView(context2);
+            TextView saveButton = new TextView(context);
             saveButton.setTextSize(1, 14.0f);
             saveButton.setTextColor(-15095832);
             saveButton.setGravity(17);
@@ -962,19 +642,19 @@ public class ThemeEditorView {
             saveButton.setText(LocaleController.getString("SaveTheme", R.string.SaveTheme).toUpperCase());
             saveButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.bottomSaveLayout.addView(saveButton, LayoutHelper.createFrame(-2, -1, 53));
-            saveButton.setOnClickListener(new OnClickListener() {
+            saveButton.setOnClickListener(new OnClickListener(ThemeEditorView.this) {
                 public void onClick(View v) {
-                    Theme.saveCurrentTheme(EditorAlert.this.this$0.currentThemeName, true);
+                    Theme.saveCurrentTheme(ThemeEditorView.this.currentThemeName, true);
                     EditorAlert.this.setOnDismissListener(null);
                     EditorAlert.this.dismiss();
-                    EditorAlert.this.this$0.close();
+                    ThemeEditorView.this.close();
                 }
             });
-            this.bottomLayout = new FrameLayout(context2);
+            this.bottomLayout = new FrameLayout(context);
             this.bottomLayout.setVisibility(8);
             this.bottomLayout.setBackgroundColor(-1);
             this.containerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
-            this.cancelButton = new TextView(context2);
+            this.cancelButton = new TextView(context);
             this.cancelButton.setTextSize(1, 14.0f);
             this.cancelButton.setTextColor(-15095832);
             this.cancelButton.setGravity(17);
@@ -983,18 +663,18 @@ public class ThemeEditorView {
             this.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
             this.cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.bottomLayout.addView(this.cancelButton, LayoutHelper.createFrame(-2, -1, 51));
-            this.cancelButton.setOnClickListener(new OnClickListener() {
+            this.cancelButton.setOnClickListener(new OnClickListener(ThemeEditorView.this) {
                 public void onClick(View v) {
-                    for (int a = 0; a < EditorAlert.this.this$0.currentThemeDesription.size(); a++) {
-                        ((ThemeDescription) EditorAlert.this.this$0.currentThemeDesription.get(a)).setPreviousColor();
+                    for (int a = 0; a < ThemeEditorView.this.currentThemeDesription.size(); a++) {
+                        ((ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(a)).setPreviousColor();
                     }
                     EditorAlert.this.setColorPickerVisible(false);
                 }
             });
-            LinearLayout linearLayout = new LinearLayout(context2);
+            LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(0);
             this.bottomLayout.addView(linearLayout, LayoutHelper.createFrame(-2, -1, 53));
-            this.defaultButtom = new TextView(context2);
+            this.defaultButtom = new TextView(context);
             this.defaultButtom.setTextSize(1, 14.0f);
             this.defaultButtom.setTextColor(-15095832);
             this.defaultButtom.setGravity(17);
@@ -1003,15 +683,15 @@ public class ThemeEditorView {
             this.defaultButtom.setText(LocaleController.getString("Default", R.string.Default).toUpperCase());
             this.defaultButtom.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             linearLayout.addView(this.defaultButtom, LayoutHelper.createFrame(-2, -1, 51));
-            this.defaultButtom.setOnClickListener(new OnClickListener() {
+            this.defaultButtom.setOnClickListener(new OnClickListener(ThemeEditorView.this) {
                 public void onClick(View v) {
-                    for (int a = 0; a < EditorAlert.this.this$0.currentThemeDesription.size(); a++) {
-                        ((ThemeDescription) EditorAlert.this.this$0.currentThemeDesription.get(a)).setDefaultColor();
+                    for (int a = 0; a < ThemeEditorView.this.currentThemeDesription.size(); a++) {
+                        ((ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(a)).setDefaultColor();
                     }
                     EditorAlert.this.setColorPickerVisible(false);
                 }
             });
-            saveButton = new TextView(context2);
+            saveButton = new TextView(context);
             saveButton.setTextSize(1, 14.0f);
             saveButton.setTextColor(-15095832);
             saveButton.setGravity(17);
@@ -1020,7 +700,7 @@ public class ThemeEditorView {
             saveButton.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
             saveButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             linearLayout.addView(saveButton, LayoutHelper.createFrame(-2, -1, 51));
-            saveButton.setOnClickListener(new OnClickListener() {
+            saveButton.setOnClickListener(new OnClickListener(ThemeEditorView.this) {
                 public void onClick(View v) {
                     EditorAlert.this.setColorPickerVisible(false);
                 }
@@ -1035,39 +715,39 @@ public class ThemeEditorView {
                 this.colorPicker.setAlpha(0.0f);
                 this.bottomLayout.setAlpha(0.0f);
                 AnimatorSet animatorSet = new AnimatorSet();
-                r5 = new Animator[5];
-                r5[0] = ObjectAnimator.ofFloat(this.colorPicker, "alpha", new float[]{1.0f});
-                r5[1] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{1.0f});
-                r5[2] = ObjectAnimator.ofFloat(this.listView, "alpha", new float[]{0.0f});
-                r5[3] = ObjectAnimator.ofFloat(this.bottomSaveLayout, "alpha", new float[]{0.0f});
-                r5[4] = ObjectAnimator.ofInt(this, "scrollOffsetY", new int[]{this.listView.getPaddingTop()});
-                animatorSet.playTogether(r5);
+                r1 = new Animator[5];
+                r1[0] = ObjectAnimator.ofFloat(this.colorPicker, "alpha", new float[]{1.0f});
+                r1[1] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{1.0f});
+                r1[2] = ObjectAnimator.ofFloat(this.listView, "alpha", new float[]{0.0f});
+                r1[3] = ObjectAnimator.ofFloat(this.bottomSaveLayout, "alpha", new float[]{0.0f});
+                r1[4] = ObjectAnimator.ofInt(this, "scrollOffsetY", new int[]{this.listView.getPaddingTop()});
+                animatorSet.playTogether(r1);
                 animatorSet.setDuration(150);
-                animatorSet.setInterpolator(this.this$0.decelerateInterpolator);
-                animatorSet.addListener(new C13299());
+                animatorSet.setInterpolator(ThemeEditorView.this.decelerateInterpolator);
+                animatorSet.addListener(new C13319());
                 animatorSet.start();
                 this.previousScrollPosition = this.scrollOffsetY;
                 return;
             }
-            if (this.this$0.parentActivity != null) {
-                ((LaunchActivity) this.this$0.parentActivity).rebuildAllFragments(false);
+            if (ThemeEditorView.this.parentActivity != null) {
+                ((LaunchActivity) ThemeEditorView.this.parentActivity).rebuildAllFragments(false);
             }
-            Theme.saveCurrentTheme(this.this$0.currentThemeName, false);
+            Theme.saveCurrentTheme(ThemeEditorView.this.currentThemeName, false);
             AndroidUtilities.hideKeyboard(getCurrentFocus());
             this.animationInProgress = true;
             this.listView.setVisibility(0);
             this.bottomSaveLayout.setVisibility(0);
             this.listView.setAlpha(0.0f);
             animatorSet = new AnimatorSet();
-            r5 = new Animator[5];
-            r5[0] = ObjectAnimator.ofFloat(this.colorPicker, "alpha", new float[]{0.0f});
-            r5[1] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f});
-            r5[2] = ObjectAnimator.ofFloat(this.listView, "alpha", new float[]{1.0f});
-            r5[3] = ObjectAnimator.ofFloat(this.bottomSaveLayout, "alpha", new float[]{1.0f});
-            r5[4] = ObjectAnimator.ofInt(this, "scrollOffsetY", new int[]{this.previousScrollPosition});
-            animatorSet.playTogether(r5);
+            r1 = new Animator[5];
+            r1[0] = ObjectAnimator.ofFloat(this.colorPicker, "alpha", new float[]{0.0f});
+            r1[1] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f});
+            r1[2] = ObjectAnimator.ofFloat(this.listView, "alpha", new float[]{1.0f});
+            r1[3] = ObjectAnimator.ofFloat(this.bottomSaveLayout, "alpha", new float[]{1.0f});
+            r1[4] = ObjectAnimator.ofInt(this, "scrollOffsetY", new int[]{this.previousScrollPosition});
+            animatorSet.playTogether(r1);
             animatorSet.setDuration(150);
-            animatorSet.setInterpolator(this.this$0.decelerateInterpolator);
+            animatorSet.setInterpolator(ThemeEditorView.this.decelerateInterpolator);
             animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     EditorAlert.this.colorPicker.setVisibility(8);
@@ -1076,12 +756,12 @@ public class ThemeEditorView {
                 }
             });
             animatorSet.start();
-            this.listAdapter.notifyItemChanged(this.this$0.currentThemeDesriptionPosition);
+            this.listAdapter.notifyItemChanged(ThemeEditorView.this.currentThemeDesriptionPosition);
         }
 
         private int getCurrentTop() {
+            int i = 0;
             if (this.listView.getChildCount() != 0) {
-                int i = 0;
                 View child = this.listView.getChildAt(0);
                 Holder holder = (Holder) this.listView.findContainingViewHolder(child);
                 if (holder != null) {
@@ -1101,28 +781,21 @@ public class ThemeEditorView {
 
         @SuppressLint({"NewApi"})
         private void updateLayout() {
-            if (this.listView.getChildCount() > 0 && this.listView.getVisibility() == 0) {
-                if (!this.animationInProgress) {
-                    int top;
-                    int newOffset = 0;
-                    View child = this.listView.getChildAt(0);
-                    Holder holder = (Holder) this.listView.findContainingViewHolder(child);
-                    if (this.listView.getVisibility() == 0) {
-                        if (!this.animationInProgress) {
-                            top = child.getTop() - AndroidUtilities.dp(8.0f);
-                            if (top > 0 && holder != null && holder.getAdapterPosition() == 0) {
-                                newOffset = top;
-                            }
-                            if (this.scrollOffsetY != newOffset) {
-                                setScrollOffsetY(newOffset);
-                            }
-                        }
-                    }
+            int newOffset = 0;
+            if (this.listView.getChildCount() > 0 && this.listView.getVisibility() == 0 && !this.animationInProgress) {
+                int top;
+                View child = this.listView.getChildAt(0);
+                Holder holder = (Holder) this.listView.findContainingViewHolder(child);
+                if (this.listView.getVisibility() != 0 || this.animationInProgress) {
                     top = this.listView.getPaddingTop();
+                } else {
+                    top = child.getTop() - AndroidUtilities.dp(8.0f);
+                }
+                if (top > 0 && holder != null && holder.getAdapterPosition() == 0) {
                     newOffset = top;
-                    if (this.scrollOffsetY != newOffset) {
-                        setScrollOffsetY(newOffset);
-                    }
+                }
+                if (this.scrollOffsetY != newOffset) {
+                    setScrollOffsetY(newOffset);
                 }
             }
         }
@@ -1147,25 +820,23 @@ public class ThemeEditorView {
 
     public void destroy() {
         this.wallpaperUpdater.cleanup();
-        if (this.parentActivity != null) {
-            if (this.windowView != null) {
-                try {
-                    this.windowManager.removeViewImmediate(this.windowView);
-                    this.windowView = null;
-                } catch (Throwable e) {
-                    FileLog.m3e(e);
-                }
-                try {
-                    if (this.editorAlert != null) {
-                        this.editorAlert.dismiss();
-                        this.editorAlert = null;
-                    }
-                } catch (Throwable e2) {
-                    FileLog.m3e(e2);
-                }
-                this.parentActivity = null;
-                Instance = null;
+        if (this.parentActivity != null && this.windowView != null) {
+            try {
+                this.windowManager.removeViewImmediate(this.windowView);
+                this.windowView = null;
+            } catch (Throwable e) {
+                FileLog.m3e(e);
             }
+            try {
+                if (this.editorAlert != null) {
+                    this.editorAlert.dismiss();
+                    this.editorAlert = null;
+                }
+            } catch (Throwable e2) {
+                FileLog.m3e(e2);
+            }
+            this.parentActivity = null;
+            Instance = null;
         }
     }
 
@@ -1181,8 +852,8 @@ public class ThemeEditorView {
             private float startY;
 
             /* renamed from: org.telegram.ui.Components.ThemeEditorView$1$1 */
-            class C13181 implements OnDismissListener {
-                C13181() {
+            class C13201 implements OnDismissListener {
+                C13201() {
                 }
 
                 public void onDismiss(DialogInterface dialog) {
@@ -1190,8 +861,8 @@ public class ThemeEditorView {
             }
 
             /* renamed from: org.telegram.ui.Components.ThemeEditorView$1$2 */
-            class C13192 implements OnDismissListener {
-                C13192() {
+            class C13212 implements OnDismissListener {
+                C13212() {
                 }
 
                 public void onDismiss(DialogInterface dialog) {
@@ -1216,9 +887,9 @@ public class ThemeEditorView {
                         if (!actionBarLayout.fragmentsStack.isEmpty()) {
                             ThemeDescription[] items = ((BaseFragment) actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1)).getThemeDescriptions();
                             if (items != null) {
-                                ThemeEditorView.this.editorAlert = new EditorAlert(ThemeEditorView.this, ThemeEditorView.this.parentActivity, items);
-                                ThemeEditorView.this.editorAlert.setOnDismissListener(new C13181());
-                                ThemeEditorView.this.editorAlert.setOnDismissListener(new C13192());
+                                ThemeEditorView.this.editorAlert = new EditorAlert(ThemeEditorView.this.parentActivity, items);
+                                ThemeEditorView.this.editorAlert.setOnDismissListener(new C13201());
+                                ThemeEditorView.this.editorAlert.setOnDismissListener(new C13212());
                                 ThemeEditorView.this.editorAlert.show();
                                 ThemeEditorView.this.hide();
                             }
@@ -1331,11 +1002,7 @@ public class ThemeEditorView {
         } else if (side == 1) {
             result = total - AndroidUtilities.dp(10.0f);
         } else {
-            result = AndroidUtilities.dp(10.0f) + Math.round(((float) (total - AndroidUtilities.dp(20.0f))) * p);
-            if (isX) {
-                return result + ActionBar.getCurrentActionBarHeight();
-            }
-            return result;
+            result = Math.round(((float) (total - AndroidUtilities.dp(20.0f))) * p) + AndroidUtilities.dp(10.0f);
         }
         if (isX) {
             return result;
@@ -1350,7 +1017,7 @@ public class ThemeEditorView {
                 animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleX", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleY", new float[]{1.0f, 0.0f})});
                 animatorSet.setInterpolator(this.decelerateInterpolator);
                 animatorSet.setDuration(150);
-                animatorSet.addListener(new C13213());
+                animatorSet.addListener(new C13233());
                 animatorSet.start();
                 this.hidden = true;
             } catch (Exception e) {
@@ -1400,160 +1067,75 @@ public class ThemeEditorView {
     }
 
     private void animateToBoundsMaybe() {
-        AnimatorSet animatorSet;
         int startX = getSideCoord(true, 0, 0.0f, this.editorWidth);
         int endX = getSideCoord(true, 1, 0.0f, this.editorWidth);
         int startY = getSideCoord(false, 0, 0.0f, this.editorHeight);
         int endY = getSideCoord(false, 1, 0.0f, this.editorHeight);
         ArrayList<Animator> animators = null;
         Editor editor = this.preferences.edit();
-        int maxDiff = AndroidUtilities.dp(NUM);
+        int maxDiff = AndroidUtilities.dp(20.0f);
         boolean slideOut = false;
-        if (Math.abs(startX - this.windowLayoutParams.x) > maxDiff) {
-            if (r0.windowLayoutParams.x >= 0 || r0.windowLayoutParams.x <= (-r0.editorWidth) / 4) {
-                if (Math.abs(endX - r0.windowLayoutParams.x) > maxDiff) {
-                    if (r0.windowLayoutParams.x <= AndroidUtilities.displaySize.x - r0.editorWidth || r0.windowLayoutParams.x >= AndroidUtilities.displaySize.x - ((r0.editorWidth / 4) * 3)) {
-                        if (r0.windowView.getAlpha() != 1.0f) {
-                            if (null == null) {
-                                animators = new ArrayList();
-                            }
-                            if (r0.windowLayoutParams.x < 0) {
-                                animators.add(ObjectAnimator.ofInt(r0, "x", new int[]{-r0.editorWidth}));
-                            } else {
-                                animators.add(ObjectAnimator.ofInt(r0, "x", new int[]{AndroidUtilities.displaySize.x}));
-                            }
-                            slideOut = true;
-                        } else {
-                            editor.putFloat("px", ((float) (r0.windowLayoutParams.x - startX)) / ((float) (endX - startX)));
-                            editor.putInt("sidex", 2);
-                        }
-                        if (!slideOut) {
-                            if (Math.abs(startY - r0.windowLayoutParams.y) > maxDiff) {
-                                if (r0.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
-                                    if (Math.abs(endY - r0.windowLayoutParams.y) <= maxDiff) {
-                                        if (animators == null) {
-                                            animators = new ArrayList();
-                                        }
-                                        editor.putInt("sidey", 1);
-                                        animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{endY}));
-                                    } else {
-                                        editor.putFloat("py", ((float) (r0.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
-                                        editor.putInt("sidey", 2);
-                                    }
-                                    editor.commit();
-                                }
-                            }
-                            if (animators == null) {
-                                animators = new ArrayList();
-                            }
-                            editor.putInt("sidey", 0);
-                            animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{startY}));
-                            editor.commit();
-                        }
-                        if (animators == null) {
-                            if (r0.decelerateInterpolator == null) {
-                                r0.decelerateInterpolator = new DecelerateInterpolator();
-                            }
-                            animatorSet = new AnimatorSet();
-                            animatorSet.setInterpolator(r0.decelerateInterpolator);
-                            animatorSet.setDuration(150);
-                            if (slideOut) {
-                                animators.add(ObjectAnimator.ofFloat(r0.windowView, "alpha", new float[]{0.0f}));
-                                animatorSet.addListener(new C13224());
-                            }
-                            animatorSet.playTogether(animators);
-                            animatorSet.start();
-                        }
-                    }
-                }
-                if (null == null) {
-                    animators = new ArrayList();
-                }
-                editor.putInt("sidex", 1);
-                if (r0.windowView.getAlpha() != 1.0f) {
-                    animators.add(ObjectAnimator.ofFloat(r0.windowView, "alpha", new float[]{1.0f}));
-                }
-                animators.add(ObjectAnimator.ofInt(r0, "x", new int[]{endX}));
-                if (slideOut) {
-                    if (Math.abs(startY - r0.windowLayoutParams.y) > maxDiff) {
-                        if (r0.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
-                            if (Math.abs(endY - r0.windowLayoutParams.y) <= maxDiff) {
-                                editor.putFloat("py", ((float) (r0.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
-                                editor.putInt("sidey", 2);
-                            } else {
-                                if (animators == null) {
-                                    animators = new ArrayList();
-                                }
-                                editor.putInt("sidey", 1);
-                                animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{endY}));
-                            }
-                            editor.commit();
-                        }
-                    }
-                    if (animators == null) {
-                        animators = new ArrayList();
-                    }
-                    editor.putInt("sidey", 0);
-                    animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{startY}));
-                    editor.commit();
-                }
-                if (animators == null) {
-                    if (r0.decelerateInterpolator == null) {
-                        r0.decelerateInterpolator = new DecelerateInterpolator();
-                    }
-                    animatorSet = new AnimatorSet();
-                    animatorSet.setInterpolator(r0.decelerateInterpolator);
-                    animatorSet.setDuration(150);
-                    if (slideOut) {
-                        animators.add(ObjectAnimator.ofFloat(r0.windowView, "alpha", new float[]{0.0f}));
-                        animatorSet.addListener(new C13224());
-                    }
-                    animatorSet.playTogether(animators);
-                    animatorSet.start();
-                }
-            }
-        }
-        if (null == null) {
-            animators = new ArrayList();
-        }
-        editor.putInt("sidex", 0);
-        if (r0.windowView.getAlpha() != 1.0f) {
-            animators.add(ObjectAnimator.ofFloat(r0.windowView, "alpha", new float[]{1.0f}));
-        }
-        animators.add(ObjectAnimator.ofInt(r0, "x", new int[]{startX}));
-        if (slideOut) {
-            if (Math.abs(startY - r0.windowLayoutParams.y) > maxDiff) {
-                if (r0.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
-                    if (Math.abs(endY - r0.windowLayoutParams.y) <= maxDiff) {
-                        if (animators == null) {
-                            animators = new ArrayList();
-                        }
-                        editor.putInt("sidey", 1);
-                        animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{endY}));
-                    } else {
-                        editor.putFloat("py", ((float) (r0.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
-                        editor.putInt("sidey", 2);
-                    }
-                    editor.commit();
-                }
-            }
-            if (animators == null) {
+        if (Math.abs(startX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x < 0 && this.windowLayoutParams.x > (-this.editorWidth) / 4)) {
+            if (null == null) {
                 animators = new ArrayList();
             }
-            editor.putInt("sidey", 0);
-            animators.add(ObjectAnimator.ofInt(r0, "y", new int[]{startY}));
+            editor.putInt("sidex", 0);
+            if (this.windowView.getAlpha() != 1.0f) {
+                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
+            }
+            animators.add(ObjectAnimator.ofInt(this, "x", new int[]{startX}));
+        } else if (Math.abs(endX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x > AndroidUtilities.displaySize.x - this.editorWidth && this.windowLayoutParams.x < AndroidUtilities.displaySize.x - ((this.editorWidth / 4) * 3))) {
+            if (null == null) {
+                animators = new ArrayList();
+            }
+            editor.putInt("sidex", 1);
+            if (this.windowView.getAlpha() != 1.0f) {
+                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
+            }
+            animators.add(ObjectAnimator.ofInt(this, "x", new int[]{endX}));
+        } else if (this.windowView.getAlpha() != 1.0f) {
+            if (null == null) {
+                animators = new ArrayList();
+            }
+            if (this.windowLayoutParams.x < 0) {
+                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{-this.editorWidth}));
+            } else {
+                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{AndroidUtilities.displaySize.x}));
+            }
+            slideOut = true;
+        } else {
+            editor.putFloat("px", ((float) (this.windowLayoutParams.x - startX)) / ((float) (endX - startX)));
+            editor.putInt("sidex", 2);
+        }
+        if (!slideOut) {
+            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
+                if (animators == null) {
+                    animators = new ArrayList();
+                }
+                editor.putInt("sidey", 0);
+                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{startY}));
+            } else if (Math.abs(endY - this.windowLayoutParams.y) <= maxDiff) {
+                if (animators == null) {
+                    animators = new ArrayList();
+                }
+                editor.putInt("sidey", 1);
+                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{endY}));
+            } else {
+                editor.putFloat("py", ((float) (this.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
+                editor.putInt("sidey", 2);
+            }
             editor.commit();
         }
-        if (animators == null) {
-            if (r0.decelerateInterpolator == null) {
-                r0.decelerateInterpolator = new DecelerateInterpolator();
+        if (animators != null) {
+            if (this.decelerateInterpolator == null) {
+                this.decelerateInterpolator = new DecelerateInterpolator();
             }
-            animatorSet = new AnimatorSet();
-            animatorSet.setInterpolator(r0.decelerateInterpolator);
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.setInterpolator(this.decelerateInterpolator);
             animatorSet.setDuration(150);
             if (slideOut) {
-                animators.add(ObjectAnimator.ofFloat(r0.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new C13224());
+                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
+                animatorSet.addListener(new C13244());
             }
             animatorSet.playTogether(animators);
             animatorSet.start();

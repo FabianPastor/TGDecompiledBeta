@@ -84,19 +84,15 @@ public class DrawerUserCell extends FrameLayout {
     }
 
     protected void onDraw(Canvas canvas) {
-        if (UserConfig.getActivatedAccountsCount() > 1) {
-            if (NotificationsController.getInstance(this.accountNumber).showBadgeNumber) {
-                if (NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount() > 0) {
-                    String text = String.format("%d", new Object[]{Integer.valueOf(NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount())});
-                    int countTop = AndroidUtilities.dp(NUM);
-                    int textWidth = (int) Math.ceil((double) Theme.chat_livePaint.measureText(text));
-                    int countWidth = Math.max(AndroidUtilities.dp(12.0f), textWidth);
-                    int x = ((getMeasuredWidth() - countWidth) - AndroidUtilities.dp(25.0f)) - AndroidUtilities.dp(5.5f);
-                    this.rect.set((float) x, (float) countTop, (float) ((x + countWidth) + AndroidUtilities.dp(11.0f)), (float) (AndroidUtilities.dp(23.0f) + countTop));
-                    canvas.drawRoundRect(this.rect, AndroidUtilities.density * 11.5f, 11.5f * AndroidUtilities.density, Theme.dialogs_countPaint);
-                    canvas.drawText(text, (this.rect.left + ((this.rect.width() - ((float) textWidth)) / 2.0f)) - ((float) AndroidUtilities.dp(0.5f)), (float) (AndroidUtilities.dp(16.0f) + countTop), Theme.dialogs_countTextPaint);
-                }
-            }
+        if (UserConfig.getActivatedAccountsCount() > 1 && NotificationsController.getInstance(this.accountNumber).showBadgeNumber && NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount() > 0) {
+            String text = String.format("%d", new Object[]{Integer.valueOf(NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount())});
+            int countTop = AndroidUtilities.dp(12.5f);
+            int textWidth = (int) Math.ceil((double) Theme.chat_livePaint.measureText(text));
+            int countWidth = Math.max(AndroidUtilities.dp(12.0f), textWidth);
+            int x = ((getMeasuredWidth() - countWidth) - AndroidUtilities.dp(25.0f)) - AndroidUtilities.dp(5.5f);
+            this.rect.set((float) x, (float) countTop, (float) ((x + countWidth) + AndroidUtilities.dp(11.0f)), (float) (AndroidUtilities.dp(23.0f) + countTop));
+            canvas.drawRoundRect(this.rect, AndroidUtilities.density * 11.5f, AndroidUtilities.density * 11.5f, Theme.dialogs_countPaint);
+            canvas.drawText(text, (this.rect.left + ((this.rect.width() - ((float) textWidth)) / 2.0f)) - ((float) AndroidUtilities.dp(0.5f)), (float) (AndroidUtilities.dp(16.0f) + countTop), Theme.dialogs_countTextPaint);
         }
     }
 }

@@ -69,10 +69,7 @@ public class ApplicationLoader extends Application {
                         FileLog.m0d("GCM Registration not found.");
                     }
                 } else if (BuildVars.LOGS_ENABLED) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("GCM regId = ");
-                    stringBuilder.append(currentPushString);
-                    FileLog.m0d(stringBuilder.toString());
+                    FileLog.m0d("GCM regId = " + currentPushString);
                 }
                 Utilities.globalQueue.postRunnable(new C00681());
             } else if (BuildVars.LOGS_ENABLED) {
@@ -100,6 +97,7 @@ public class ApplicationLoader extends Application {
 
     public static void postInitApplication() {
         if (!applicationInited) {
+            int a;
             applicationInited = true;
             try {
                 LocaleController.getInstance();
@@ -116,36 +114,31 @@ public class ApplicationLoader extends Application {
             try {
                 isScreenOn = ((PowerManager) applicationContext.getSystemService("power")).isScreenOn();
                 if (BuildVars.LOGS_ENABLED) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("screen state = ");
-                    stringBuilder.append(isScreenOn);
-                    FileLog.m0d(stringBuilder.toString());
+                    FileLog.m0d("screen state = " + isScreenOn);
                 }
             } catch (Throwable e3) {
                 FileLog.m3e(e3);
             }
             SharedConfig.loadConfig();
-            int a = 0;
-            for (int a2 = 0; a2 < 3; a2++) {
-                UserConfig.getInstance(a2).loadConfig();
-                MessagesController.getInstance(a2);
-                ConnectionsManager.getInstance(a2);
-                User user = UserConfig.getInstance(a2).getCurrentUser();
+            for (a = 0; a < 3; a++) {
+                UserConfig.getInstance(a).loadConfig();
+                MessagesController.getInstance(a);
+                ConnectionsManager.getInstance(a);
+                User user = UserConfig.getInstance(a).getCurrentUser();
                 if (user != null) {
-                    MessagesController.getInstance(a2).putUser(user, true);
-                    MessagesController.getInstance(a2).getBlockedUsers(true);
-                    SendMessagesHelper.getInstance(a2).checkUnsentMessages();
+                    MessagesController.getInstance(a).putUser(user, true);
+                    MessagesController.getInstance(a).getBlockedUsers(true);
+                    SendMessagesHelper.getInstance(a).checkUnsentMessages();
                 }
             }
-            applicationContext.initPlayServices();
+            ((ApplicationLoader) applicationContext).initPlayServices();
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.m0d("app initied");
             }
             MediaController.getInstance();
-            while (a < 3) {
+            for (a = 0; a < 3; a++) {
                 ContactsController.getInstance(a).checkAppAccount();
                 DownloadController.getInstance(a);
-                a++;
             }
             WearDataLayerListenerService.updateWatchConnectionState();
         }
@@ -165,10 +158,11 @@ public class ApplicationLoader extends Application {
         if (MessagesController.getGlobalNotificationsSettings().getBoolean("pushService", true)) {
             try {
                 applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
+                return;
             } catch (Throwable e) {
                 FileLog.m3e(e);
+                return;
             }
-            return;
         }
         stopPushService();
     }
@@ -193,12 +187,11 @@ public class ApplicationLoader extends Application {
     }
 
     private boolean checkPlayServices() {
-        boolean z = true;
         try {
-            if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) != 0) {
-                z = false;
+            if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == 0) {
+                return true;
             }
-            return z;
+            return false;
         } catch (Throwable e) {
             FileLog.m3e(e);
             return true;

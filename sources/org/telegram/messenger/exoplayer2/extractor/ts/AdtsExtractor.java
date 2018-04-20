@@ -14,7 +14,7 @@ import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
 public final class AdtsExtractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C18441();
+    public static final ExtractorsFactory FACTORY = new C18461();
     private static final int ID3_TAG = Util.getIntegerCodeForString("ID3");
     private static final int MAX_PACKET_SIZE = 200;
     private static final int MAX_SNIFF_BYTES = 8192;
@@ -24,8 +24,8 @@ public final class AdtsExtractor implements Extractor {
     private boolean startedPacket;
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.ts.AdtsExtractor$1 */
-    static class C18441 implements ExtractorsFactory {
-        C18441() {
+    static class C18461 implements ExtractorsFactory {
+        C18461() {
         }
 
         public Extractor[] createExtractors() {
@@ -44,7 +44,6 @@ public final class AdtsExtractor implements Extractor {
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
-        int length;
         ParsableByteArray scratch = new ParsableByteArray(10);
         ParsableBitArray scratchBits = new ParsableBitArray(scratch.data);
         int startPosition = 0;
@@ -55,21 +54,21 @@ public final class AdtsExtractor implements Extractor {
                 break;
             }
             scratch.skipBytes(3);
-            length = scratch.readSynchSafeInt();
-            startPosition += 10 + length;
+            int length = scratch.readSynchSafeInt();
+            startPosition += length + 10;
             input.advancePeekPosition(length);
         }
         input.resetPeekPosition();
         input.advancePeekPosition(startPosition);
-        length = 0;
         int headerPosition = startPosition;
+        int validFramesSize = 0;
         int validFramesCount = 0;
         while (true) {
             input.peekFully(scratch.data, 0, 2);
             scratch.setPosition(0);
             if ((65526 & scratch.readUnsignedShort()) != 65520) {
                 validFramesCount = 0;
-                length = 0;
+                validFramesSize = 0;
                 input.resetPeekPosition();
                 headerPosition++;
                 if (headerPosition - startPosition >= 8192) {
@@ -78,7 +77,7 @@ public final class AdtsExtractor implements Extractor {
                 input.advancePeekPosition(headerPosition);
             } else {
                 validFramesCount++;
-                if (validFramesCount >= 4 && length > 188) {
+                if (validFramesCount >= 4 && validFramesSize > 188) {
                     return true;
                 }
                 input.peekFully(scratch.data, 0, 4);
@@ -88,7 +87,7 @@ public final class AdtsExtractor implements Extractor {
                     return false;
                 }
                 input.advancePeekPosition(frameSize - 6);
-                length += frameSize;
+                validFramesSize += frameSize;
             }
         }
     }

@@ -62,7 +62,7 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
     }
 
     public final void replaceStream(Format[] formats, SampleStream stream, long offsetUs) throws ExoPlaybackException {
-        Assertions.checkState(this.streamIsFinal ^ 1);
+        Assertions.checkState(!this.streamIsFinal);
         this.stream = stream;
         this.readEndOfStream = false;
         this.streamOffsetUs = offsetUs;
@@ -148,14 +148,13 @@ public abstract class BaseRenderer implements Renderer, RendererCapabilities {
 
     protected final int readSource(FormatHolder formatHolder, DecoderInputBuffer buffer, boolean formatRequired) {
         int result = this.stream.readData(formatHolder, buffer, formatRequired);
-        int i = -4;
         if (result == -4) {
             if (buffer.isEndOfStream()) {
                 this.readEndOfStream = true;
-                if (!this.streamIsFinal) {
-                    i = -3;
+                if (this.streamIsFinal) {
+                    return -4;
                 }
-                return i;
+                return -3;
             }
             buffer.timeUs += this.streamOffsetUs;
         } else if (result == -5) {

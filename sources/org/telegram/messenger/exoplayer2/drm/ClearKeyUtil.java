@@ -28,44 +28,39 @@ final class ClearKeyUtil {
             base64ToBase64Url(adjustedRequestBuilder, kidsStartIndex, kidsEndIndex);
             return Util.getUtf8Bytes(adjustedRequestBuilder.toString());
         }
-        String str = TAG;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Failed to adjust request data: ");
-        stringBuilder.append(requestString);
-        Log.e(str, stringBuilder.toString());
+        Log.e(TAG, "Failed to adjust request data: " + requestString);
         return request;
     }
 
     public static byte[] adjustResponseData(byte[] response) {
-        if (Util.SDK_INT >= 27) {
-            return response;
-        }
-        try {
-            JSONObject responseJson = new JSONObject(Util.fromUtf8Bytes(response));
-            JSONArray keysArray = responseJson.getJSONArray("keys");
-            for (int i = 0; i < keysArray.length(); i++) {
-                JSONObject key = keysArray.getJSONObject(i);
-                key.put("k", base64UrlToBase64(key.getString("k")));
-                key.put("kid", base64UrlToBase64(key.getString("kid")));
+        if (Util.SDK_INT < 27) {
+            try {
+                JSONObject responseJson = new JSONObject(Util.fromUtf8Bytes(response));
+                JSONArray keysArray = responseJson.getJSONArray("keys");
+                for (int i = 0; i < keysArray.length(); i++) {
+                    JSONObject key = keysArray.getJSONObject(i);
+                    key.put("k", base64UrlToBase64(key.getString("k")));
+                    key.put("kid", base64UrlToBase64(key.getString("kid")));
+                }
+                response = Util.getUtf8Bytes(responseJson.toString());
+            } catch (JSONException e) {
+                Log.e(TAG, "Failed to adjust response data: " + Util.fromUtf8Bytes(response), e);
             }
-            return Util.getUtf8Bytes(responseJson.toString());
-        } catch (JSONException e) {
-            String str = TAG;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Failed to adjust response data: ");
-            stringBuilder.append(Util.fromUtf8Bytes(response));
-            Log.e(str, stringBuilder.toString(), e);
-            return response;
         }
+        return response;
     }
 
     private static void base64ToBase64Url(StringBuilder base64, int startIndex, int endIndex) {
         for (int i = startIndex; i < endIndex; i++) {
-            char charAt = base64.charAt(i);
-            if (charAt == '+') {
-                base64.setCharAt(i, '-');
-            } else if (charAt == '/') {
-                base64.setCharAt(i, '_');
+            switch (base64.charAt(i)) {
+                case '+':
+                    base64.setCharAt(i, '-');
+                    break;
+                case '/':
+                    base64.setCharAt(i, '_');
+                    break;
+                default:
+                    break;
             }
         }
     }

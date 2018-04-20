@@ -40,10 +40,9 @@ public class CloseProgressDrawable extends Drawable {
         this.paint.setAlpha(255 - ((this.currentSegment % 4) * 40));
         canvas.drawLine((float) (-AndroidUtilities.dp(8.0f)), 0.0f, 0.0f, 0.0f, this.paint);
         this.paint.setAlpha(255 - (((this.currentSegment + 1) % 4) * 40));
-        Canvas canvas2 = canvas;
-        canvas2.drawLine(0.0f, (float) (-AndroidUtilities.dp(8.0f)), 0.0f, 0.0f, this.paint);
+        canvas.drawLine(0.0f, (float) (-AndroidUtilities.dp(8.0f)), 0.0f, 0.0f, this.paint);
         this.paint.setAlpha(255 - (((this.currentSegment + 2) % 4) * 40));
-        canvas2.drawLine(0.0f, 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
+        canvas.drawLine(0.0f, 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
         this.paint.setAlpha(255 - (((this.currentSegment + 3) % 4) * 40));
         canvas.drawLine(0.0f, 0.0f, 0.0f, (float) AndroidUtilities.dp(8.0f), this.paint);
         canvas.restore();

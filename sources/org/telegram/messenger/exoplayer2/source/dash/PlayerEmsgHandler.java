@@ -174,9 +174,10 @@ public final class PlayerEmsgHandler implements Callback {
                 manifestRefreshNeeded = true;
             }
         }
-        if (manifestRefreshNeeded) {
-            maybeNotifyDashManifestRefreshNeeded();
+        if (!manifestRefreshNeeded) {
+            return manifestRefreshNeeded;
         }
+        maybeNotifyDashManifestRefreshNeeded();
         return manifestRefreshNeeded;
     }
 
@@ -187,7 +188,12 @@ public final class PlayerEmsgHandler implements Callback {
         if (this.isWaitingForManifestRefresh) {
             return true;
         }
-        boolean isAfterForwardSeek = this.lastLoadedChunkEndTimeUs != C0542C.TIME_UNSET && this.lastLoadedChunkEndTimeUs < chunk.startTimeUs;
+        boolean isAfterForwardSeek;
+        if (this.lastLoadedChunkEndTimeUs == C0542C.TIME_UNSET || this.lastLoadedChunkEndTimeUs >= chunk.startTimeUs) {
+            isAfterForwardSeek = false;
+        } else {
+            isAfterForwardSeek = true;
+        }
         if (!isAfterForwardSeek) {
             return false;
         }

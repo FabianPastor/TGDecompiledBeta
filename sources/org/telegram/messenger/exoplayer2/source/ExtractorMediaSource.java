@@ -77,25 +77,25 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
         }
 
         public Factory setExtractorsFactory(ExtractorsFactory extractorsFactory) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
+            Assertions.checkState(!this.isCreateCalled);
             this.extractorsFactory = extractorsFactory;
             return this;
         }
 
         public Factory setCustomCacheKey(String customCacheKey) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
+            Assertions.checkState(!this.isCreateCalled);
             this.customCacheKey = customCacheKey;
             return this;
         }
 
         public Factory setMinLoadableRetryCount(int minLoadableRetryCount) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
+            Assertions.checkState(!this.isCreateCalled);
             this.minLoadableRetryCount = minLoadableRetryCount;
             return this;
         }
 
         public Factory setContinueLoadingCheckIntervalBytes(int continueLoadingCheckIntervalBytes) {
-            Assertions.checkState(this.isCreateCalled ^ 1);
+            Assertions.checkState(!this.isCreateCalled);
             this.continueLoadingCheckIntervalBytes = continueLoadingCheckIntervalBytes;
             return this;
         }
@@ -129,8 +129,7 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
 
     @Deprecated
     public ExtractorMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, ExtractorsFactory extractorsFactory, int minLoadableRetryCount, Handler eventHandler, EventListener eventListener, String customCacheKey, int continueLoadingCheckIntervalBytes) {
-        EventListener eventListener2 = eventListener;
-        this(uri, dataSourceFactory, extractorsFactory, minLoadableRetryCount, eventHandler, (MediaSourceEventListener) eventListener2 == null ? null : new EventListenerWrapper(eventListener2), customCacheKey, continueLoadingCheckIntervalBytes);
+        this(uri, dataSourceFactory, extractorsFactory, minLoadableRetryCount, eventHandler, eventListener == null ? null : new EventListenerWrapper(eventListener), customCacheKey, continueLoadingCheckIntervalBytes);
     }
 
     private ExtractorMediaSource(Uri uri, org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, ExtractorsFactory extractorsFactory, int minLoadableRetryCount, Handler eventHandler, MediaSourceEventListener eventListener, String customCacheKey, int continueLoadingCheckIntervalBytes) {
@@ -144,7 +143,13 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
     }
 
     public void prepareSource(ExoPlayer player, boolean isTopLevelSource, Listener listener) {
-        Assertions.checkState(this.sourceListener == null, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
+        boolean z;
+        if (this.sourceListener == null) {
+            z = true;
+        } else {
+            z = false;
+        }
+        Assertions.checkState(z, MediaSource.MEDIA_SOURCE_REUSED_ERROR_MESSAGE);
         this.sourceListener = listener;
         notifySourceInfoRefreshed(C0542C.TIME_UNSET, false);
     }
@@ -165,7 +170,9 @@ public final class ExtractorMediaSource implements Listener, MediaSource {
     }
 
     public void onSourceInfoRefreshed(long durationUs, boolean isSeekable) {
-        durationUs = durationUs == C0542C.TIME_UNSET ? this.timelineDurationUs : durationUs;
+        if (durationUs == C0542C.TIME_UNSET) {
+            durationUs = this.timelineDurationUs;
+        }
         if (this.timelineDurationUs != durationUs || this.timelineIsSeekable != isSeekable) {
             notifySourceInfoRefreshed(durationUs, isSeekable);
         }

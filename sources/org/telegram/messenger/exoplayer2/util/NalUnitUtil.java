@@ -3,7 +3,6 @@ package org.telegram.messenger.exoplayer2.util;
 import android.util.Log;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 public final class NalUnitUtil {
     public static final float[] ASPECT_RATIO_IDC_VALUES = new float[]{1.0f, 1.0f, 1.0909091f, 0.90909094f, 1.4545455f, 1.2121212f, 2.1818182f, 1.8181819f, 2.909091f, 2.4242425f, 1.6363636f, 1.3636364f, 1.939394f, 1.6161616f, 1.3333334f, 1.5f, 2.0f};
@@ -55,38 +54,47 @@ public final class NalUnitUtil {
     }
 
     public static int unescapeStream(byte[] data, int limit) {
-        int unescapedLength;
         synchronized (scratchEscapePositionsLock) {
             int position = 0;
             int scratchEscapeCount = 0;
             while (position < limit) {
-                position = findNextUnescapeIndex(data, position, limit);
-                if (position < limit) {
-                    if (scratchEscapePositions.length <= scratchEscapeCount) {
-                        scratchEscapePositions = Arrays.copyOf(scratchEscapePositions, scratchEscapePositions.length * 2);
+                try {
+                    position = findNextUnescapeIndex(data, position, limit);
+                    if (position < limit) {
+                        if (scratchEscapePositions.length <= scratchEscapeCount) {
+                            scratchEscapePositions = Arrays.copyOf(scratchEscapePositions, scratchEscapePositions.length * 2);
+                        }
+                        int scratchEscapeCount2 = scratchEscapeCount + 1;
+                        try {
+                            scratchEscapePositions[scratchEscapeCount] = position;
+                            position += 3;
+                            scratchEscapeCount = scratchEscapeCount2;
+                        } catch (Throwable th) {
+                            Throwable th2 = th;
+                            throw th2;
+                        }
                     }
-                    int scratchEscapeCount2 = scratchEscapeCount + 1;
-                    scratchEscapePositions[scratchEscapeCount] = position;
-                    position += 3;
-                    scratchEscapeCount = scratchEscapeCount2;
+                } catch (Throwable th3) {
+                    th2 = th3;
+                    scratchEscapeCount2 = scratchEscapeCount;
                 }
             }
-            unescapedLength = limit - scratchEscapeCount;
-            int unescapedPosition = 0;
+            int unescapedLength = limit - scratchEscapeCount;
             int escapedPosition = 0;
-            for (scratchEscapeCount2 = 0; scratchEscapeCount2 < scratchEscapeCount; scratchEscapeCount2++) {
-                int copyLength = scratchEscapePositions[scratchEscapeCount2] - escapedPosition;
+            int unescapedPosition = 0;
+            for (int i = 0; i < scratchEscapeCount; i++) {
+                int copyLength = scratchEscapePositions[i] - escapedPosition;
                 System.arraycopy(data, escapedPosition, data, unescapedPosition, copyLength);
                 unescapedPosition += copyLength;
-                int unescapedPosition2 = unescapedPosition + 1;
+                int i2 = unescapedPosition + 1;
                 data[unescapedPosition] = (byte) 0;
-                unescapedPosition = unescapedPosition2 + 1;
-                data[unescapedPosition2] = (byte) 0;
+                unescapedPosition = i2 + 1;
+                data[i2] = (byte) 0;
                 escapedPosition += copyLength + 3;
             }
             System.arraycopy(data, escapedPosition, data, unescapedPosition, unescapedLength - unescapedPosition);
+            return unescapedLength;
         }
-        return unescapedLength;
     }
 
     public static void discardToSps(ByteBuffer data) {
@@ -116,10 +124,7 @@ public final class NalUnitUtil {
     }
 
     public static boolean isNalUnitSei(String mimeType, byte nalUnitHeaderFirstByte) {
-        if (("video/avc".equals(mimeType) && (nalUnitHeaderFirstByte & 31) == 6) || (MimeTypes.VIDEO_H265.equals(mimeType) && ((nalUnitHeaderFirstByte & 126) >> 1) == H265_NAL_UNIT_TYPE_PREFIX_SEI)) {
-            return true;
-        }
-        return false;
+        return ("video/avc".equals(mimeType) && (nalUnitHeaderFirstByte & 31) == 6) || (MimeTypes.VIDEO_H265.equals(mimeType) && ((nalUnitHeaderFirstByte & 126) >> 1) == H265_NAL_UNIT_TYPE_PREFIX_SEI);
     }
 
     public static int getNalUnitType(byte[] data, int offset) {
@@ -131,119 +136,93 @@ public final class NalUnitUtil {
     }
 
     public static SpsData parseSpsNalUnit(byte[] nalData, int nalOffset, int nalLimit) {
-        int limit;
         int i;
-        boolean deltaPicOrderAlwaysZeroFlag;
-        int picOrderCntLsbLength;
-        int cropUnitX;
-        ParsableNalUnitBitArray data = new ParsableNalUnitBitArray(nalData, nalOffset, nalLimit);
-        data.skipBits(8);
-        int profileIdc = data.readBits(8);
-        data.skipBits(16);
-        int seqParameterSetId = data.readUnsignedExpGolombCodedInt();
+        ParsableNalUnitBitArray parsableNalUnitBitArray = new ParsableNalUnitBitArray(nalData, nalOffset, nalLimit);
+        parsableNalUnitBitArray.skipBits(8);
+        int profileIdc = parsableNalUnitBitArray.readBits(8);
+        parsableNalUnitBitArray.skipBits(16);
+        int seqParameterSetId = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
         int chromaFormatIdc = 1;
         boolean separateColorPlaneFlag = false;
-        int i2 = 0;
-        if (profileIdc == 100 || profileIdc == 110 || profileIdc == 122 || profileIdc == 244 || profileIdc == 44 || profileIdc == 83 || profileIdc == 86 || profileIdc == 118 || profileIdc == 128 || profileIdc == TsExtractor.TS_STREAM_TYPE_DTS) {
-            chromaFormatIdc = data.readUnsignedExpGolombCodedInt();
+        if (profileIdc == 100 || profileIdc == 110 || profileIdc == 122 || profileIdc == 244 || profileIdc == 44 || profileIdc == 83 || profileIdc == 86 || profileIdc == 118 || profileIdc == 128 || profileIdc == 138) {
+            chromaFormatIdc = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
             if (chromaFormatIdc == 3) {
-                separateColorPlaneFlag = data.readBit();
+                separateColorPlaneFlag = parsableNalUnitBitArray.readBit();
             }
-            data.readUnsignedExpGolombCodedInt();
-            data.readUnsignedExpGolombCodedInt();
-            data.skipBit();
-            if (data.readBit()) {
-                limit = chromaFormatIdc != 3 ? 8 : 12;
+            parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            parsableNalUnitBitArray.skipBit();
+            if (parsableNalUnitBitArray.readBit()) {
+                int limit = chromaFormatIdc != 3 ? 8 : 12;
                 i = 0;
                 while (i < limit) {
-                    if (data.readBit()) {
-                        skipScalingList(data, i < 6 ? 16 : 64);
+                    if (parsableNalUnitBitArray.readBit()) {
+                        skipScalingList(parsableNalUnitBitArray, i < 6 ? 16 : 64);
                     }
                     i++;
                 }
             }
         }
-        int chromaFormatIdc2 = chromaFormatIdc;
-        boolean separateColorPlaneFlag2 = separateColorPlaneFlag;
-        int frameNumLength = data.readUnsignedExpGolombCodedInt() + 4;
-        int picOrderCntType = data.readUnsignedExpGolombCodedInt();
-        chromaFormatIdc = 0;
-        int subHeightC = 1;
+        int frameNumLength = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 4;
+        int picOrderCntType = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+        int picOrderCntLsbLength = 0;
+        boolean deltaPicOrderAlwaysZeroFlag = false;
         if (picOrderCntType == 0) {
-            deltaPicOrderAlwaysZeroFlag = false;
-            picOrderCntLsbLength = data.readUnsignedExpGolombCodedInt() + 4;
+            picOrderCntLsbLength = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 4;
         } else if (picOrderCntType == 1) {
-            separateColorPlaneFlag = data.readBit();
-            data.readSignedExpGolombCodedInt();
-            data.readSignedExpGolombCodedInt();
-            long numRefFramesInPicOrderCntCycle = (long) data.readUnsignedExpGolombCodedInt();
-            while (true) {
-                picOrderCntLsbLength = chromaFormatIdc;
-                if (((long) i2) >= numRefFramesInPicOrderCntCycle) {
-                    break;
-                }
-                data.readUnsignedExpGolombCodedInt();
-                i2++;
-                chromaFormatIdc = picOrderCntLsbLength;
+            deltaPicOrderAlwaysZeroFlag = parsableNalUnitBitArray.readBit();
+            parsableNalUnitBitArray.readSignedExpGolombCodedInt();
+            parsableNalUnitBitArray.readSignedExpGolombCodedInt();
+            long numRefFramesInPicOrderCntCycle = (long) parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            for (i = 0; ((long) i) < numRefFramesInPicOrderCntCycle; i++) {
+                parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
             }
-            deltaPicOrderAlwaysZeroFlag = separateColorPlaneFlag;
-        } else {
-            picOrderCntLsbLength = 0;
-            deltaPicOrderAlwaysZeroFlag = false;
         }
-        data.readUnsignedExpGolombCodedInt();
-        data.skipBit();
-        int picWidthInMbs = data.readUnsignedExpGolombCodedInt() + 1;
-        int picHeightInMapUnits = data.readUnsignedExpGolombCodedInt() + 1;
-        boolean frameMbsOnlyFlag = data.readBit();
-        int frameHeightInMbs = (2 - frameMbsOnlyFlag) * picHeightInMapUnits;
+        parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+        parsableNalUnitBitArray.skipBit();
+        int picWidthInMbs = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 1;
+        int picHeightInMapUnits = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt() + 1;
+        boolean frameMbsOnlyFlag = parsableNalUnitBitArray.readBit();
+        int frameHeightInMbs = (2 - (frameMbsOnlyFlag ? 1 : 0)) * picHeightInMapUnits;
         if (!frameMbsOnlyFlag) {
-            data.skipBit();
+            parsableNalUnitBitArray.skipBit();
         }
-        data.skipBit();
+        parsableNalUnitBitArray.skipBit();
         int frameWidth = picWidthInMbs * 16;
-        i2 = frameHeightInMbs * 16;
-        if (data.readBit()) {
-            limit = data.readUnsignedExpGolombCodedInt();
-            i = data.readUnsignedExpGolombCodedInt();
-            int frameCropTopOffset = data.readUnsignedExpGolombCodedInt();
-            int frameCropBottomOffset = data.readUnsignedExpGolombCodedInt();
-            if (chromaFormatIdc2 == 0) {
-                chromaFormatIdc = 2 - frameMbsOnlyFlag;
+        int frameHeight = frameHeightInMbs * 16;
+        if (parsableNalUnitBitArray.readBit()) {
+            int cropUnitX;
+            int cropUnitY;
+            int frameCropLeftOffset = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            int frameCropRightOffset = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            int frameCropTopOffset = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            int frameCropBottomOffset = parsableNalUnitBitArray.readUnsignedExpGolombCodedInt();
+            if (chromaFormatIdc == 0) {
                 cropUnitX = 1;
+                cropUnitY = 2 - (frameMbsOnlyFlag ? 1 : 0);
             } else {
-                int subWidthC = chromaFormatIdc2 == 3 ? 1 : 2;
-                if (chromaFormatIdc2 == 1) {
-                    subHeightC = 2;
-                }
-                cropUnitX = subWidthC;
-                chromaFormatIdc = (2 - frameMbsOnlyFlag) * subHeightC;
+                cropUnitX = chromaFormatIdc == 3 ? 1 : 2;
+                cropUnitY = (chromaFormatIdc == 1 ? 2 : 1) * (2 - (frameMbsOnlyFlag ? 1 : 0));
             }
-            frameWidth -= (limit + i) * cropUnitX;
-            i2 -= (frameCropTopOffset + frameCropBottomOffset) * chromaFormatIdc;
+            frameWidth -= (frameCropLeftOffset + frameCropRightOffset) * cropUnitX;
+            frameHeight -= (frameCropTopOffset + frameCropBottomOffset) * cropUnitY;
         }
-        cropUnitX = frameWidth;
-        int frameHeight = i2;
         float pixelWidthHeightRatio = 1.0f;
-        if (data.readBit() && data.readBit()) {
-            int aspectRatioIdc = data.readBits(8);
+        if (parsableNalUnitBitArray.readBit() && parsableNalUnitBitArray.readBit()) {
+            int aspectRatioIdc = parsableNalUnitBitArray.readBits(8);
             if (aspectRatioIdc == 255) {
-                subWidthC = data.readBits(16);
-                i2 = data.readBits(16);
-                if (!(subWidthC == 0 || i2 == 0)) {
-                    pixelWidthHeightRatio = ((float) subWidthC) / ((float) i2);
+                int sarWidth = parsableNalUnitBitArray.readBits(16);
+                int sarHeight = parsableNalUnitBitArray.readBits(16);
+                if (!(sarWidth == 0 || sarHeight == 0)) {
+                    pixelWidthHeightRatio = ((float) sarWidth) / ((float) sarHeight);
                 }
             } else if (aspectRatioIdc < ASPECT_RATIO_IDC_VALUES.length) {
                 pixelWidthHeightRatio = ASPECT_RATIO_IDC_VALUES[aspectRatioIdc];
             } else {
-                String str = TAG;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Unexpected aspect_ratio_idc value: ");
-                stringBuilder.append(aspectRatioIdc);
-                Log.w(str, stringBuilder.toString());
+                Log.w(TAG, "Unexpected aspect_ratio_idc value: " + aspectRatioIdc);
             }
         }
-        return new SpsData(seqParameterSetId, cropUnitX, frameHeight, pixelWidthHeightRatio, separateColorPlaneFlag2, frameMbsOnlyFlag, frameNumLength, picOrderCntType, picOrderCntLsbLength, deltaPicOrderAlwaysZeroFlag);
+        return new SpsData(seqParameterSetId, frameWidth, frameHeight, pixelWidthHeightRatio, separateColorPlaneFlag, frameMbsOnlyFlag, frameNumLength, picOrderCntType, picOrderCntLsbLength, deltaPicOrderAlwaysZeroFlag);
     }
 
     public static PpsData parsePpsNalUnit(byte[] nalData, int nalOffset, int nalLimit) {
@@ -255,12 +234,16 @@ public final class NalUnitUtil {
         return new PpsData(picParameterSetId, seqParameterSetId, data.readBit());
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public static int findNalUnit(byte[] data, int startOffset, int endOffset, boolean[] prefixFlags) {
+        boolean z;
+        boolean z2 = true;
         int length = endOffset - startOffset;
-        boolean z = false;
-        Assertions.checkState(length >= 0);
+        if (length >= 0) {
+            z = true;
+        } else {
+            z = false;
+        }
+        Assertions.checkState(z);
         if (length == 0) {
             return endOffset;
         }
@@ -290,102 +273,17 @@ public final class NalUnitUtil {
             }
             i += 3;
         }
-        if (prefixFlags != null) {
-            boolean z2;
-            if (length > 2) {
-                if (data[endOffset - 3] == (byte) 0) {
-                    if (data[endOffset - 2] == (byte) 0) {
-                    }
-                }
-                z2 = false;
-                prefixFlags[0] = z2;
-                if (length <= 1) {
-                    if (data[endOffset - 2] == (byte) 0) {
-                    }
-                    z2 = false;
-                    prefixFlags[1] = z2;
-                    if (data[endOffset - 1] == (byte) 0) {
-                        z = true;
-                    }
-                    prefixFlags[2] = z;
-                } else {
-                    if (prefixFlags[2] && data[endOffset - 1] == (byte) 0) {
-                    }
-                    z2 = false;
-                    prefixFlags[1] = z2;
-                    if (data[endOffset - 1] == (byte) 0) {
-                        z = true;
-                    }
-                    prefixFlags[2] = z;
-                }
-                z2 = true;
-                prefixFlags[1] = z2;
-                if (data[endOffset - 1] == (byte) 0) {
-                    z = true;
-                }
-                prefixFlags[2] = z;
-            } else if (length == 2) {
-                if (prefixFlags[2] && data[endOffset - 2] == (byte) 0 && data[endOffset - 1] == (byte) 1) {
-                }
-                z2 = false;
-                prefixFlags[0] = z2;
-                if (length <= 1) {
-                    if (data[endOffset - 2] == (byte) 0) {
-                    }
-                    z2 = false;
-                    prefixFlags[1] = z2;
-                    if (data[endOffset - 1] == (byte) 0) {
-                        z = true;
-                    }
-                    prefixFlags[2] = z;
-                }
-                z2 = true;
-                prefixFlags[1] = z2;
-                if (data[endOffset - 1] == (byte) 0) {
-                    z = true;
-                }
-                prefixFlags[2] = z;
-            } else {
-                if (prefixFlags[1] && data[endOffset - 1] == (byte) 1) {
-                }
-                z2 = false;
-                prefixFlags[0] = z2;
-                if (length <= 1) {
-                    if (data[endOffset - 2] == (byte) 0) {
-                    }
-                    z2 = false;
-                    prefixFlags[1] = z2;
-                    if (data[endOffset - 1] == (byte) 0) {
-                        z = true;
-                    }
-                    prefixFlags[2] = z;
-                }
-                z2 = true;
-                prefixFlags[1] = z2;
-                if (data[endOffset - 1] == (byte) 0) {
-                    z = true;
-                }
-                prefixFlags[2] = z;
-            }
-            z2 = true;
-            prefixFlags[0] = z2;
-            if (length <= 1) {
-                if (data[endOffset - 2] == (byte) 0) {
-                }
-                z2 = false;
-                prefixFlags[1] = z2;
-                if (data[endOffset - 1] == (byte) 0) {
-                    z = true;
-                }
-                prefixFlags[2] = z;
-            }
-            z2 = true;
-            prefixFlags[1] = z2;
-            if (data[endOffset - 1] == (byte) 0) {
-                z = true;
-            }
-            prefixFlags[2] = z;
+        if (prefixFlags == null) {
+            return endOffset;
         }
+        z = length > 2 ? data[endOffset + -3] == (byte) 0 && data[endOffset - 2] == (byte) 0 && data[endOffset - 1] == (byte) 1 : length == 2 ? prefixFlags[2] && data[endOffset - 2] == (byte) 0 && data[endOffset - 1] == (byte) 1 : prefixFlags[1] && data[endOffset - 1] == (byte) 1;
+        prefixFlags[0] = z;
+        z = length > 1 ? data[endOffset + -2] == (byte) 0 && data[endOffset - 1] == (byte) 0 : prefixFlags[2] && data[endOffset - 1] == (byte) 0;
+        prefixFlags[1] = z;
+        if (data[endOffset - 1] != (byte) 0) {
+            z2 = false;
+        }
+        prefixFlags[2] = z2;
         return endOffset;
     }
 
@@ -413,7 +311,9 @@ public final class NalUnitUtil {
             if (nextScale != 0) {
                 nextScale = ((lastScale + bitArray.readSignedExpGolombCodedInt()) + 256) % 256;
             }
-            lastScale = nextScale == 0 ? lastScale : nextScale;
+            if (nextScale != 0) {
+                lastScale = nextScale;
+            }
         }
     }
 

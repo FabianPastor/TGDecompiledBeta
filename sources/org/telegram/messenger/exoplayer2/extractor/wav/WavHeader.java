@@ -47,13 +47,11 @@ final class WavHeader implements SeekMap {
         long seekPosition = this.dataStartPosition + positionOffset;
         long seekTimeUs = getTimeUs(seekPosition);
         SeekPoint seekPoint = new SeekPoint(seekTimeUs, seekPosition);
-        if (seekTimeUs < timeUs) {
-            if (positionOffset != this.dataSize - ((long) this.blockAlignment)) {
-                long secondSeekPosition = seekPosition + ((long) this.blockAlignment);
-                return new SeekPoints(seekPoint, new SeekPoint(getTimeUs(secondSeekPosition), secondSeekPosition));
-            }
+        if (seekTimeUs >= timeUs || positionOffset == this.dataSize - ((long) this.blockAlignment)) {
+            return new SeekPoints(seekPoint);
         }
-        return new SeekPoints(seekPoint);
+        long secondSeekPosition = seekPosition + ((long) this.blockAlignment);
+        return new SeekPoints(seekPoint, new SeekPoint(getTimeUs(secondSeekPosition), secondSeekPosition));
     }
 
     public long getTimeUs(long position) {

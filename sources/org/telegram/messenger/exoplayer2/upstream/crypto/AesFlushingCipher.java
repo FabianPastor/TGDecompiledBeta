@@ -2,7 +2,11 @@ package org.telegram.messenger.exoplayer2.upstream.crypto;
 
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -16,6 +20,7 @@ public final class AesFlushingCipher {
     private final byte[] zerosBlock;
 
     public AesFlushingCipher(int mode, byte[] secretKey, long nonce, long offset) {
+        GeneralSecurityException e;
         try {
             this.cipher = Cipher.getInstance("AES/CTR/NoPadding");
             this.blockSize = this.cipher.getBlockSize();
@@ -26,7 +31,17 @@ public final class AesFlushingCipher {
             if (startPadding != 0) {
                 updateInPlace(new byte[startPadding], 0, startPadding);
             }
-        } catch (GeneralSecurityException e) {
+        } catch (NoSuchAlgorithmException e2) {
+            e = e2;
+            throw new RuntimeException(e);
+        } catch (NoSuchPaddingException e3) {
+            e = e3;
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e4) {
+            e = e4;
+            throw new RuntimeException(e);
+        } catch (InvalidAlgorithmParameterException e5) {
+            e = e5;
             throw new RuntimeException(e);
         }
     }
@@ -36,45 +51,32 @@ public final class AesFlushingCipher {
     }
 
     public void update(byte[] in, int inOffset, int length, byte[] out, int outOffset) {
-        AesFlushingCipher aesFlushingCipher = this;
-        int inOffset2 = inOffset;
-        int length2 = length;
-        int outOffset2 = outOffset;
-        do {
-            boolean z = true;
-            if (aesFlushingCipher.pendingXorBytes > 0) {
-                out[outOffset2] = (byte) (in[inOffset2] ^ aesFlushingCipher.flushedBlock[aesFlushingCipher.blockSize - aesFlushingCipher.pendingXorBytes]);
-                outOffset2++;
-                inOffset2++;
-                aesFlushingCipher.pendingXorBytes--;
-                length2--;
-            } else {
-                int written = nonFlushingUpdate(in, inOffset2, length2, out, outOffset2);
-                if (length2 != written) {
-                    int bytesToFlush = length2 - written;
-                    int i = 0;
-                    Assertions.checkState(bytesToFlush < aesFlushingCipher.blockSize);
-                    outOffset2 += written;
-                    aesFlushingCipher.pendingXorBytes = aesFlushingCipher.blockSize - bytesToFlush;
-                    if (nonFlushingUpdate(aesFlushingCipher.zerosBlock, 0, aesFlushingCipher.pendingXorBytes, aesFlushingCipher.flushedBlock, 0) != aesFlushingCipher.blockSize) {
-                        z = false;
-                    }
-                    Assertions.checkState(z);
-                    while (true) {
-                        int i2 = i;
-                        if (i2 < bytesToFlush) {
-                            int outOffset3 = outOffset2 + 1;
-                            out[outOffset2] = aesFlushingCipher.flushedBlock[i2];
-                            i = i2 + 1;
-                            outOffset2 = outOffset3;
-                        } else {
-                            return;
-                        }
-                    }
-                }
+        while (this.pendingXorBytes > 0) {
+            out[outOffset] = (byte) (in[inOffset] ^ this.flushedBlock[this.blockSize - this.pendingXorBytes]);
+            outOffset++;
+            inOffset++;
+            this.pendingXorBytes--;
+            length--;
+            if (length == 0) {
                 return;
             }
-        } while (length2 != 0);
+        }
+        int written = nonFlushingUpdate(in, inOffset, length, out, outOffset);
+        if (length != written) {
+            int bytesToFlush = length - written;
+            Assertions.checkState(bytesToFlush < this.blockSize);
+            outOffset += written;
+            this.pendingXorBytes = this.blockSize - bytesToFlush;
+            Assertions.checkState(nonFlushingUpdate(this.zerosBlock, 0, this.pendingXorBytes, this.flushedBlock, 0) == this.blockSize);
+            int i = 0;
+            int outOffset2 = outOffset;
+            while (i < bytesToFlush) {
+                outOffset = outOffset2 + 1;
+                out[outOffset2] = this.flushedBlock[i];
+                i++;
+                outOffset2 = outOffset;
+            }
+        }
     }
 
     private int nonFlushingUpdate(byte[] in, int inOffset, int length, byte[] out, int outOffset) {

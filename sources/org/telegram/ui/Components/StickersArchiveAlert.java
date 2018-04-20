@@ -32,8 +32,8 @@ public class StickersArchiveAlert extends Builder {
     private ArrayList<StickerSetCovered> stickerSets;
 
     /* renamed from: org.telegram.ui.Components.StickersArchiveAlert$1 */
-    class C13161 implements OnClickListener {
-        C13161() {
+    class C13181 implements OnClickListener {
+        C13181() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -42,8 +42,8 @@ public class StickersArchiveAlert extends Builder {
     }
 
     /* renamed from: org.telegram.ui.Components.StickersArchiveAlert$2 */
-    class C13172 implements OnClickListener {
-        C13172() {
+    class C13192 implements OnClickListener {
+        C13192() {
         }
 
         public void onClick(DialogInterface dialog, int which) {
@@ -74,13 +74,7 @@ public class StickersArchiveAlert extends Builder {
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            ArchivedStickerSetCell archivedStickerSetCell = (ArchivedStickerSetCell) holder.itemView;
-            StickerSetCovered stickerSetCovered = (StickerSetCovered) StickersArchiveAlert.this.stickerSets.get(position);
-            boolean z = true;
-            if (position == StickersArchiveAlert.this.stickerSets.size() - 1) {
-                z = false;
-            }
-            archivedStickerSetCell.setStickersSet(stickerSetCovered, z);
+            ((ArchivedStickerSetCell) holder.itemView).setStickersSet((StickerSetCovered) StickersArchiveAlert.this.stickerSets.get(position), position != StickersArchiveAlert.this.stickerSets.size() + -1);
         }
     }
 
@@ -116,9 +110,9 @@ public class StickersArchiveAlert extends Builder {
         listView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
         listView.setGlowColor(-657673);
         container.addView(listView, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
-        setNegativeButton(LocaleController.getString("Close", R.string.Close), new C13161());
+        setNegativeButton(LocaleController.getString("Close", R.string.Close), new C13181());
         if (this.parentFragment != null) {
-            setPositiveButton(LocaleController.getString("Settings", R.string.Settings), new C13172());
+            setPositiveButton(LocaleController.getString("Settings", R.string.Settings), new C13192());
         }
     }
 }

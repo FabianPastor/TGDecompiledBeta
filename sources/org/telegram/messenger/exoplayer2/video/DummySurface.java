@@ -96,85 +96,80 @@ public final class DummySurface extends Surface {
                         synchronized (this) {
                             notify();
                         }
+                        break;
                     } catch (RuntimeException e) {
                         Log.e(DummySurface.TAG, "Failed to initialize dummy surface", e);
                         this.initException = e;
                         synchronized (this) {
                             notify();
+                            break;
                         }
                     } catch (Error e2) {
-                        try {
-                            Log.e(DummySurface.TAG, "Failed to initialize dummy surface", e2);
-                            this.initError = e2;
-                            synchronized (this) {
-                                notify();
-                            }
-                        } catch (Throwable th) {
-                            synchronized (this) {
-                                notify();
-                            }
+                        Log.e(DummySurface.TAG, "Failed to initialize dummy surface", e2);
+                        this.initError = e2;
+                        synchronized (this) {
+                            notify();
+                            break;
+                        }
+                    } catch (Throwable th) {
+                        synchronized (this) {
+                            notify();
                         }
                     }
-                    return true;
                 case 2:
                     this.surfaceTexture.updateTexImage();
-                    return true;
+                    break;
                 case 3:
                     try {
                         releaseInternal();
-                    } catch (Throwable th2) {
+                        break;
+                    } catch (Throwable e3) {
+                        Log.e(DummySurface.TAG, "Failed to release dummy surface", e3);
+                        break;
+                    } finally {
                         quit();
                     }
-                    quit();
-                    return true;
-                default:
-                    return true;
             }
+            return true;
         }
 
         private void initInternal(int secureMode) {
             int[] glAttributes;
             EGLSurface surface;
-            int i = secureMode;
-            boolean z = false;
             this.display = EGL14.eglGetDisplay(0);
             Assertions.checkState(this.display != null, "eglGetDisplay failed");
             int[] version = new int[2];
-            Assertions.checkState(EGL14.eglInitialize(r0.display, version, 0, version, 1), "eglInitialize failed");
+            Assertions.checkState(EGL14.eglInitialize(this.display, version, 0, version, 1), "eglInitialize failed");
             EGLConfig[] configs = new EGLConfig[1];
             int[] numConfigs = new int[1];
-            boolean z2 = EGL14.eglChooseConfig(r0.display, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12327, 12344, 12339, 4, 12344}, 0, configs, 0, 1, numConfigs, null) && numConfigs[0] > 0 && configs[0] != null;
-            Assertions.checkState(z2, "eglChooseConfig failed");
+            boolean z = EGL14.eglChooseConfig(this.display, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12327, 12344, 12339, 4, 12344}, 0, configs, 0, 1, numConfigs, 0) && numConfigs[0] > 0 && configs[0] != null;
+            Assertions.checkState(z, "eglChooseConfig failed");
             EGLConfig config = configs[0];
-            if (i == 0) {
+            if (secureMode == 0) {
                 glAttributes = new int[]{12440, 2, 12344};
             } else {
                 glAttributes = new int[]{12440, 2, DummySurface.EGL_PROTECTED_CONTENT_EXT, 1, 12344};
             }
-            r0.context = EGL14.eglCreateContext(r0.display, config, EGL14.EGL_NO_CONTEXT, glAttributes, 0);
-            Assertions.checkState(r0.context != null, "eglCreateContext failed");
-            if (i == 1) {
+            this.context = EGL14.eglCreateContext(this.display, config, EGL14.EGL_NO_CONTEXT, glAttributes, 0);
+            Assertions.checkState(this.context != null, "eglCreateContext failed");
+            if (secureMode == 1) {
                 surface = EGL14.EGL_NO_SURFACE;
             } else {
                 int[] pbufferAttributes;
-                if (i == 2) {
+                if (secureMode == 2) {
                     pbufferAttributes = new int[]{12375, 1, 12374, 1, DummySurface.EGL_PROTECTED_CONTENT_EXT, 1, 12344};
                 } else {
                     pbufferAttributes = new int[]{12375, 1, 12374, 1, 12344};
                 }
-                r0.pbuffer = EGL14.eglCreatePbufferSurface(r0.display, config, pbufferAttributes, 0);
-                Assertions.checkState(r0.pbuffer != null, "eglCreatePbufferSurface failed");
-                surface = r0.pbuffer;
+                this.pbuffer = EGL14.eglCreatePbufferSurface(this.display, config, pbufferAttributes, 0);
+                Assertions.checkState(this.pbuffer != null, "eglCreatePbufferSurface failed");
+                surface = this.pbuffer;
             }
-            Assertions.checkState(EGL14.eglMakeCurrent(r0.display, surface, surface, r0.context), "eglMakeCurrent failed");
-            GLES20.glGenTextures(1, r0.textureIdHolder, 0);
-            r0.surfaceTexture = new SurfaceTexture(r0.textureIdHolder[0]);
-            r0.surfaceTexture.setOnFrameAvailableListener(r0);
-            SurfaceTexture surfaceTexture = r0.surfaceTexture;
-            if (i != 0) {
-                z = true;
-            }
-            r0.surface = new DummySurface(r0, surfaceTexture, z);
+            Assertions.checkState(EGL14.eglMakeCurrent(this.display, surface, surface, this.context), "eglMakeCurrent failed");
+            GLES20.glGenTextures(1, this.textureIdHolder, 0);
+            this.surfaceTexture = new SurfaceTexture(this.textureIdHolder[0]);
+            this.surfaceTexture.setOnFrameAvailableListener(this);
+            this.surface = new DummySurface(this, this.surfaceTexture, secureMode != 0);
         }
 
         private void releaseInternal() {
@@ -215,9 +210,8 @@ public final class DummySurface extends Surface {
     }
 
     public static synchronized boolean isSecureSupported(Context context) {
-        boolean z;
+        boolean z = true;
         synchronized (DummySurface.class) {
-            z = true;
             if (!secureModeInitialized) {
                 secureMode = Util.SDK_INT < 24 ? 0 : getSecureModeV24(context);
                 secureModeInitialized = true;
@@ -231,23 +225,15 @@ public final class DummySurface extends Surface {
 
     public static DummySurface newInstanceV17(Context context, boolean secure) {
         boolean z;
-        DummySurfaceThread thread;
-        assertApiLevel17OrHigher();
         int i = 0;
-        if (secure) {
-            if (!isSecureSupported(context)) {
-                z = false;
-                Assertions.checkState(z);
-                thread = new DummySurfaceThread();
-                if (secure) {
-                    i = secureMode;
-                }
-                return thread.init(i);
-            }
+        assertApiLevel17OrHigher();
+        if (!secure || isSecureSupported(context)) {
+            z = true;
+        } else {
+            z = false;
         }
-        z = true;
         Assertions.checkState(z);
-        thread = new DummySurfaceThread();
+        DummySurfaceThread thread = new DummySurfaceThread();
         if (secure) {
             i = secureMode;
         }

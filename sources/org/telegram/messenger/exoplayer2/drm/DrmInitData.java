@@ -74,12 +74,7 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
         }
 
         public boolean matches(UUID schemeUuid) {
-            if (!C0542C.UUID_NIL.equals(this.uuid)) {
-                if (!schemeUuid.equals(this.uuid)) {
-                    return false;
-                }
-            }
-            return true;
+            return C0542C.UUID_NIL.equals(this.uuid) || schemeUuid.equals(this.uuid);
         }
 
         public boolean canReplace(SchemeData other) {
@@ -94,20 +89,19 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
             if (!(obj instanceof SchemeData)) {
                 return false;
             }
-            boolean z = true;
             if (obj == this) {
                 return true;
             }
             SchemeData other = (SchemeData) obj;
-            if (!this.mimeType.equals(other.mimeType) || !Util.areEqual(this.uuid, other.uuid) || !Arrays.equals(this.data, other.data)) {
-                z = false;
+            if (this.mimeType.equals(other.mimeType) && Util.areEqual(this.uuid, other.uuid) && Arrays.equals(this.data, other.data)) {
+                return true;
             }
-            return z;
+            return false;
         }
 
         public int hashCode() {
             if (this.hashCode == 0) {
-                this.hashCode = (31 * ((31 * this.uuid.hashCode()) + this.mimeType.hashCode())) + Arrays.hashCode(this.data);
+                this.hashCode = (((this.uuid.hashCode() * 31) + this.mimeType.hashCode()) * 31) + Arrays.hashCode(this.data);
             }
             return this.hashCode;
         }
@@ -121,15 +115,14 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
             dest.writeLong(this.uuid.getLeastSignificantBits());
             dest.writeString(this.mimeType);
             dest.writeByteArray(this.data);
-            dest.writeByte((byte) this.requiresSecureDecryption);
+            dest.writeByte((byte) (this.requiresSecureDecryption ? 1 : 0));
         }
     }
 
     public static DrmInitData createSessionCreationData(DrmInitData manifestData, DrmInitData mediaData) {
-        int length;
+        int i = 0;
         List result = new ArrayList();
         String schemeType = null;
-        int i = 0;
         if (manifestData != null) {
             schemeType = manifestData.schemeType;
             for (SchemeData data : manifestData.schemeDatas) {
@@ -145,7 +138,7 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
             }
             int manifestDatasCount = result.size();
             SchemeData[] schemeDataArr = mediaData.schemeDatas;
-            length = schemeDataArr.length;
+            int length = schemeDataArr.length;
             while (i < length) {
                 data2 = schemeDataArr[i];
                 if (data2.hasData() && !containsSchemeDataWithUuid(result, manifestDatasCount, data2.uuid)) {
@@ -204,32 +197,26 @@ public final class DrmInitData implements Parcelable, Comparator<SchemeData> {
     }
 
     public DrmInitData copyWithSchemeType(String schemeType) {
-        if (Util.areEqual(this.schemeType, schemeType)) {
-            return this;
-        }
-        return new DrmInitData(schemeType, false, this.schemeDatas);
+        return Util.areEqual(this.schemeType, schemeType) ? this : new DrmInitData(schemeType, false, this.schemeDatas);
     }
 
     public int hashCode() {
         if (this.hashCode == 0) {
-            this.hashCode = (31 * (this.schemeType == null ? 0 : this.schemeType.hashCode())) + Arrays.hashCode(this.schemeDatas);
+            this.hashCode = ((this.schemeType == null ? 0 : this.schemeType.hashCode()) * 31) + Arrays.hashCode(this.schemeDatas);
         }
         return this.hashCode;
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                DrmInitData other = (DrmInitData) obj;
-                if (!Util.areEqual(this.schemeType, other.schemeType) || !Arrays.equals(this.schemeDatas, other.schemeDatas)) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        DrmInitData other = (DrmInitData) obj;
+        if (Util.areEqual(this.schemeType, other.schemeType) && Arrays.equals(this.schemeDatas, other.schemeDatas)) {
+            return true;
         }
         return false;
     }

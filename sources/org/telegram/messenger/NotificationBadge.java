@@ -194,12 +194,7 @@ public class NotificationBadge {
 
         public void executeBadge(int badgeCount) {
             ContentValues contentValues = new ContentValues();
-            String str = TAG;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(NotificationBadge.componentName.getPackageName());
-            stringBuilder.append("/");
-            stringBuilder.append(NotificationBadge.componentName.getClassName());
-            contentValues.put(str, stringBuilder.toString());
+            contentValues.put(TAG, NotificationBadge.componentName.getPackageName() + "/" + NotificationBadge.componentName.getClassName());
             contentValues.put("count", Integer.valueOf(badgeCount));
             ApplicationLoader.applicationContext.getContentResolver().insert(Uri.parse(CONTENT_URI), contentValues);
         }
@@ -256,9 +251,7 @@ public class NotificationBadge {
             Uri mUri = Uri.parse(CONTENT_URI);
             ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
             try {
-                ContentResolver contentResolver2 = contentResolver;
-                Uri uri = mUri;
-                Cursor cursor = contentResolver2.query(uri, CONTENT_PROJECTION, "package=?", new String[]{NotificationBadge.componentName.getPackageName()}, null);
+                Cursor cursor = contentResolver.query(mUri, CONTENT_PROJECTION, "package=?", new String[]{NotificationBadge.componentName.getPackageName()}, null);
                 if (cursor != null) {
                     String entryActivityName = NotificationBadge.componentName.getClassName();
                     boolean entryActivityExist = false;
@@ -386,18 +379,19 @@ public class NotificationBadge {
 
         public void executeBadge(int badgeCount) {
             try {
+                Object obj;
                 Object miuiNotification = Class.forName("android.app.MiuiNotification").newInstance();
                 Field field = miuiNotification.getClass().getDeclaredField("messageCount");
                 field.setAccessible(true);
-                field.set(miuiNotification, String.valueOf(badgeCount == 0 ? TtmlNode.ANONYMOUS_REGION_ID : Integer.valueOf(badgeCount)));
+                if (badgeCount == 0) {
+                    obj = TtmlNode.ANONYMOUS_REGION_ID;
+                } else {
+                    obj = Integer.valueOf(badgeCount);
+                }
+                field.set(miuiNotification, String.valueOf(obj));
             } catch (Throwable th) {
                 final Intent localIntent = new Intent(INTENT_ACTION);
-                String str = EXTRA_UPDATE_APP_COMPONENT_NAME;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(NotificationBadge.componentName.getPackageName());
-                stringBuilder.append("/");
-                stringBuilder.append(NotificationBadge.componentName.getClassName());
-                localIntent.putExtra(str, stringBuilder.toString());
+                localIntent.putExtra(EXTRA_UPDATE_APP_COMPONENT_NAME, NotificationBadge.componentName.getPackageName() + "/" + NotificationBadge.componentName.getClassName());
                 localIntent.putExtra(EXTRA_UPDATE_APP_MSG_TEXT, String.valueOf(badgeCount == 0 ? TtmlNode.ANONYMOUS_REGION_ID : Integer.valueOf(badgeCount)));
                 if (NotificationBadge.canResolveBroadcast(localIntent)) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -471,7 +465,6 @@ public class NotificationBadge {
     private static boolean initBadger() {
         Context context = ApplicationLoader.applicationContext;
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-        int a = 0;
         if (launchIntent == null) {
             return false;
         }
@@ -499,7 +492,7 @@ public class NotificationBadge {
         }
         List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, C0542C.DEFAULT_BUFFER_SEGMENT_SIZE);
         if (resolveInfos != null) {
-            while (a < resolveInfos.size()) {
+            for (int a = 0; a < resolveInfos.size(); a++) {
                 currentHomePackage = ((ResolveInfo) resolveInfos.get(a)).activityInfo.packageName;
                 for (Class<? extends Badger> b2 : BADGERS) {
                     shortcutBadger = null;
@@ -515,7 +508,6 @@ public class NotificationBadge {
                 if (badger != null) {
                     break;
                 }
-                a++;
             }
         }
         if (badger == null) {

@@ -89,32 +89,38 @@ public class SizeNotifierFrameLayout extends FrameLayout {
             if (this.bottomClip != 0) {
                 canvas.restore();
             }
-        } else if (this.backgroundDrawable instanceof BitmapDrawable) {
+        } else if (!(this.backgroundDrawable instanceof BitmapDrawable)) {
+        } else {
+            float scale;
             if (this.backgroundDrawable.getTileModeX() == TileMode.REPEAT) {
                 canvas.save();
-                float scale = 2.0f / AndroidUtilities.density;
+                scale = 2.0f / AndroidUtilities.density;
                 canvas.scale(scale, scale);
                 this.backgroundDrawable.setBounds(0, 0, (int) Math.ceil((double) (((float) getMeasuredWidth()) / scale)), (int) Math.ceil((double) (((float) getMeasuredHeight()) / scale)));
                 this.backgroundDrawable.draw(canvas);
                 canvas.restore();
-            } else {
-                int actionBarHeight = isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0;
-                int i = (VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight;
-                actionBarHeight += i;
-                i = getMeasuredHeight() - actionBarHeight;
-                float scaleX = ((float) getMeasuredWidth()) / ((float) this.backgroundDrawable.getIntrinsicWidth());
-                float scaleY = ((float) (this.keyboardHeight + i)) / ((float) this.backgroundDrawable.getIntrinsicHeight());
-                float scale2 = scaleX < scaleY ? scaleY : scaleX;
-                int width = (int) Math.ceil((double) (((float) this.backgroundDrawable.getIntrinsicWidth()) * scale2));
-                int height = (int) Math.ceil((double) (((float) this.backgroundDrawable.getIntrinsicHeight()) * scale2));
-                int x = (getMeasuredWidth() - width) / 2;
-                int y = (((i - height) + this.keyboardHeight) / 2) + actionBarHeight;
-                canvas.save();
-                canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - this.bottomClip);
-                this.backgroundDrawable.setBounds(x, y, x + width, y + height);
-                this.backgroundDrawable.draw(canvas);
-                canvas.restore();
+                return;
             }
+            int currentActionBarHeight = isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0;
+            int i = (VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight;
+            int actionBarHeight = currentActionBarHeight + i;
+            int viewHeight = getMeasuredHeight() - actionBarHeight;
+            float scaleX = ((float) getMeasuredWidth()) / ((float) this.backgroundDrawable.getIntrinsicWidth());
+            float scaleY = ((float) (this.keyboardHeight + viewHeight)) / ((float) this.backgroundDrawable.getIntrinsicHeight());
+            if (scaleX < scaleY) {
+                scale = scaleY;
+            } else {
+                scale = scaleX;
+            }
+            int width = (int) Math.ceil((double) (((float) this.backgroundDrawable.getIntrinsicWidth()) * scale));
+            int height = (int) Math.ceil((double) (((float) this.backgroundDrawable.getIntrinsicHeight()) * scale));
+            int x = (getMeasuredWidth() - width) / 2;
+            int y = (((viewHeight - height) + this.keyboardHeight) / 2) + actionBarHeight;
+            canvas.save();
+            canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - this.bottomClip);
+            this.backgroundDrawable.setBounds(x, y, x + width, y + height);
+            this.backgroundDrawable.draw(canvas);
+            canvas.restore();
         }
     }
 

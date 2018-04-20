@@ -94,8 +94,7 @@ final class VorbisUtil {
     }
 
     public static VorbisIdHeader readVorbisIdentificationHeader(ParsableByteArray headerData) throws ParserException {
-        ParsableByteArray parsableByteArray = headerData;
-        verifyVorbisHeaderCapturePattern(1, parsableByteArray, false);
+        verifyVorbisHeaderCapturePattern(1, headerData, false);
         long version = headerData.readLittleEndianUnsignedInt();
         int channels = headerData.readUnsignedByte();
         long sampleRate = headerData.readLittleEndianUnsignedInt();
@@ -103,24 +102,21 @@ final class VorbisUtil {
         int bitrateNominal = headerData.readLittleEndianInt();
         int bitrateMin = headerData.readLittleEndianInt();
         int blockSize = headerData.readUnsignedByte();
-        int blockSize0 = (int) Math.pow(2.0d, (double) (blockSize & 15));
-        return new VorbisIdHeader(version, channels, sampleRate, bitrateMax, bitrateNominal, bitrateMin, blockSize0, (int) Math.pow(2.0d, (double) ((blockSize & PsExtractor.VIDEO_STREAM_MASK) >> 4)), (headerData.readUnsignedByte() & 1) > 0, Arrays.copyOf(parsableByteArray.data, headerData.limit()));
+        return new VorbisIdHeader(version, channels, sampleRate, bitrateMax, bitrateNominal, bitrateMin, (int) Math.pow(2.0d, (double) (blockSize & 15)), (int) Math.pow(2.0d, (double) ((blockSize & PsExtractor.VIDEO_STREAM_MASK) >> 4)), (headerData.readUnsignedByte() & 1) > 0, Arrays.copyOf(headerData.data, headerData.limit()));
     }
 
     public static CommentHeader readVorbisCommentHeader(ParsableByteArray headerData) throws ParserException {
-        int i = 0;
         verifyVorbisHeaderCapturePattern(3, headerData, false);
         int length = 7 + 4;
         String vendor = headerData.readString((int) headerData.readLittleEndianUnsignedInt());
-        length += vendor.length();
+        length = vendor.length() + 11;
         long commentListLen = headerData.readLittleEndianUnsignedInt();
         String[] comments = new String[((int) commentListLen)];
         length += 4;
-        while (((long) i) < commentListLen) {
+        for (int i = 0; ((long) i) < commentListLen; i++) {
             length += 4;
             comments[i] = headerData.readString((int) headerData.readLittleEndianUnsignedInt());
             length += comments[i].length();
-            i++;
         }
         if ((headerData.readUnsignedByte() & 1) != 0) {
             return new CommentHeader(vendor, comments, length + 1);
@@ -129,38 +125,28 @@ final class VorbisUtil {
     }
 
     public static boolean verifyVorbisHeaderCapturePattern(int headerType, ParsableByteArray header, boolean quiet) throws ParserException {
-        StringBuilder stringBuilder;
         if (header.bytesLeft() < 7) {
             if (quiet) {
                 return false;
             }
-            stringBuilder = new StringBuilder();
-            stringBuilder.append("too short header: ");
-            stringBuilder.append(header.bytesLeft());
-            throw new ParserException(stringBuilder.toString());
-        } else if (header.readUnsignedByte() == headerType) {
-            if (header.readUnsignedByte() == 118 && header.readUnsignedByte() == 111 && header.readUnsignedByte() == 114 && header.readUnsignedByte() == 98 && header.readUnsignedByte() == 105) {
-                if (header.readUnsignedByte() == 115) {
-                    return true;
-                }
+            throw new ParserException("too short header: " + header.bytesLeft());
+        } else if (header.readUnsignedByte() != headerType) {
+            if (quiet) {
+                return false;
             }
+            throw new ParserException("expected header type " + Integer.toHexString(headerType));
+        } else if (header.readUnsignedByte() == 118 && header.readUnsignedByte() == 111 && header.readUnsignedByte() == 114 && header.readUnsignedByte() == 98 && header.readUnsignedByte() == 105 && header.readUnsignedByte() == 115) {
+            return true;
+        } else {
             if (quiet) {
                 return false;
             }
             throw new ParserException("expected characters 'vorbis'");
-        } else if (quiet) {
-            return false;
-        } else {
-            stringBuilder = new StringBuilder();
-            stringBuilder.append("expected header type ");
-            stringBuilder.append(Integer.toHexString(headerType));
-            throw new ParserException(stringBuilder.toString());
         }
     }
 
     public static Mode[] readVorbisModes(ParsableByteArray headerData, int channels) throws ParserException {
         int i;
-        int i2 = 0;
         verifyVorbisHeaderCapturePattern(5, headerData, false);
         int numberOfBooks = headerData.readUnsignedByte() + 1;
         VorbisBitArray bitArray = new VorbisBitArray(headerData.data);
@@ -168,12 +154,11 @@ final class VorbisUtil {
         for (i = 0; i < numberOfBooks; i++) {
             readBook(bitArray);
         }
-        i = bitArray.readBits(6) + 1;
-        while (i2 < i) {
+        int timeCount = bitArray.readBits(6) + 1;
+        for (i = 0; i < timeCount; i++) {
             if (bitArray.readBits(16) != 0) {
                 throw new ParserException("placeholder of time domain transforms not zeroed out");
             }
-            i2++;
         }
         readFloors(bitArray);
         readResidues(bitArray);
@@ -198,40 +183,39 @@ final class VorbisUtil {
         int mappingsCount = bitArray.readBits(6) + 1;
         for (int i = 0; i < mappingsCount; i++) {
             int mappingType = bitArray.readBits(16);
-            if (mappingType != 0) {
-                String str = TAG;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("mapping type other than 0 not supported: ");
-                stringBuilder.append(mappingType);
-                Log.e(str, stringBuilder.toString());
-            } else {
-                int submaps;
-                int couplingSteps;
-                if (bitArray.readBit()) {
-                    submaps = bitArray.readBits(4) + 1;
-                } else {
-                    submaps = 1;
-                }
-                if (bitArray.readBit()) {
-                    couplingSteps = bitArray.readBits(8) + 1;
-                    for (int j = 0; j < couplingSteps; j++) {
-                        bitArray.skipBits(iLog(channels - 1));
-                        bitArray.skipBits(iLog(channels - 1));
+            switch (mappingType) {
+                case 0:
+                    int submaps;
+                    int j;
+                    if (bitArray.readBit()) {
+                        submaps = bitArray.readBits(4) + 1;
+                    } else {
+                        submaps = 1;
                     }
-                }
-                if (bitArray.readBits(2) != 0) {
+                    if (bitArray.readBit()) {
+                        int couplingSteps = bitArray.readBits(8) + 1;
+                        for (j = 0; j < couplingSteps; j++) {
+                            bitArray.skipBits(iLog(channels - 1));
+                            bitArray.skipBits(iLog(channels - 1));
+                        }
+                    }
+                    if (bitArray.readBits(2) == 0) {
+                        if (submaps > 1) {
+                            for (j = 0; j < channels; j++) {
+                                bitArray.skipBits(4);
+                            }
+                        }
+                        for (j = 0; j < submaps; j++) {
+                            bitArray.skipBits(8);
+                            bitArray.skipBits(8);
+                            bitArray.skipBits(8);
+                        }
+                        break;
+                    }
                     throw new ParserException("to reserved bits must be zero after mapping coupling steps");
-                }
-                if (submaps > 1) {
-                    for (couplingSteps = 0; couplingSteps < channels; couplingSteps++) {
-                        bitArray.skipBits(4);
-                    }
-                }
-                for (int j2 = 0; j2 < submaps; j2++) {
-                    bitArray.skipBits(8);
-                    bitArray.skipBits(8);
-                    bitArray.skipBits(8);
-                }
+                default:
+                    Log.e(TAG, "mapping type other than 0 not supported: " + mappingType);
+                    break;
             }
         }
     }
@@ -258,8 +242,8 @@ final class VorbisUtil {
                 cascade[j] = (highBits * 8) + lowBits;
             }
             for (j = 0; j < classifications; j++) {
-                for (highBits = 0; highBits < 8; highBits++) {
-                    if ((cascade[j] & (1 << highBits)) != 0) {
+                for (int k = 0; k < 8; k++) {
+                    if ((cascade[j] & (1 << k)) != 0) {
                         bitArray.skipBits(8);
                     }
                 }
@@ -268,118 +252,103 @@ final class VorbisUtil {
     }
 
     private static void readFloors(VorbisBitArray bitArray) throws ParserException {
-        VorbisBitArray vorbisBitArray = bitArray;
-        int floorCount = vorbisBitArray.readBits(6) + 1;
+        int floorCount = bitArray.readBits(6) + 1;
         for (int i = 0; i < floorCount; i++) {
-            int floorType = vorbisBitArray.readBits(16);
-            int floorNumberOfBooks;
+            int floorType = bitArray.readBits(16);
             int j;
             switch (floorType) {
                 case 0:
-                    vorbisBitArray.skipBits(8);
-                    vorbisBitArray.skipBits(16);
-                    vorbisBitArray.skipBits(16);
-                    vorbisBitArray.skipBits(6);
-                    vorbisBitArray.skipBits(8);
-                    floorNumberOfBooks = vorbisBitArray.readBits(4) + 1;
+                    bitArray.skipBits(8);
+                    bitArray.skipBits(16);
+                    bitArray.skipBits(16);
+                    bitArray.skipBits(6);
+                    bitArray.skipBits(8);
+                    int floorNumberOfBooks = bitArray.readBits(4) + 1;
                     for (j = 0; j < floorNumberOfBooks; j++) {
-                        vorbisBitArray.skipBits(8);
+                        bitArray.skipBits(8);
                     }
                     break;
                 case 1:
-                    int j2;
-                    j = vorbisBitArray.readBits(5);
-                    int[] partitionClassList = new int[j];
+                    int k;
+                    int partitions = bitArray.readBits(5);
                     int maximumClass = -1;
-                    for (int j3 = 0; j3 < j; j3++) {
-                        partitionClassList[j3] = vorbisBitArray.readBits(4);
-                        if (partitionClassList[j3] > maximumClass) {
-                            maximumClass = partitionClassList[j3];
+                    int[] partitionClassList = new int[partitions];
+                    for (j = 0; j < partitions; j++) {
+                        partitionClassList[j] = bitArray.readBits(4);
+                        if (partitionClassList[j] > maximumClass) {
+                            maximumClass = partitionClassList[j];
                         }
                     }
                     int[] classDimensions = new int[(maximumClass + 1)];
-                    for (j2 = 0; j2 < classDimensions.length; j2++) {
-                        classDimensions[j2] = vorbisBitArray.readBits(3) + 1;
-                        int classSubclasses = vorbisBitArray.readBits(2);
+                    for (j = 0; j < classDimensions.length; j++) {
+                        classDimensions[j] = bitArray.readBits(3) + 1;
+                        int classSubclasses = bitArray.readBits(2);
                         if (classSubclasses > 0) {
-                            vorbisBitArray.skipBits(8);
+                            bitArray.skipBits(8);
                         }
-                        for (int k = 0; k < (1 << classSubclasses); k++) {
-                            vorbisBitArray.skipBits(8);
+                        for (k = 0; k < (1 << classSubclasses); k++) {
+                            bitArray.skipBits(8);
                         }
                     }
-                    vorbisBitArray.skipBits(2);
-                    floorNumberOfBooks = vorbisBitArray.readBits(4);
-                    j2 = 0;
-                    int k2 = 0;
-                    for (int j4 = 0; j4 < j; j4++) {
-                        j2 += classDimensions[partitionClassList[j4]];
-                        while (k2 < j2) {
-                            vorbisBitArray.skipBits(floorNumberOfBooks);
-                            k2++;
+                    bitArray.skipBits(2);
+                    int rangeBits = bitArray.readBits(4);
+                    int count = 0;
+                    k = 0;
+                    for (j = 0; j < partitions; j++) {
+                        count += classDimensions[partitionClassList[j]];
+                        while (k < count) {
+                            bitArray.skipBits(rangeBits);
+                            k++;
                         }
                     }
                     break;
                 default:
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("floor type greater than 1 not decodable: ");
-                    stringBuilder.append(floorType);
-                    throw new ParserException(stringBuilder.toString());
+                    throw new ParserException("floor type greater than 1 not decodable: " + floorType);
             }
         }
     }
 
     private static CodeBook readBook(VorbisBitArray bitArray) throws ParserException {
         if (bitArray.readBits(24) != 5653314) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("expected code book to start with [0x56, 0x43, 0x42] at ");
-            stringBuilder.append(bitArray.getPosition());
-            throw new ParserException(stringBuilder.toString());
+            throw new ParserException("expected code book to start with [0x56, 0x43, 0x42] at " + bitArray.getPosition());
         }
-        int i;
         int dimensions = bitArray.readBits(16);
         int entries = bitArray.readBits(24);
         long[] lengthMap = new long[entries];
         boolean isOrdered = bitArray.readBit();
-        int i2 = 0;
+        int i;
         if (isOrdered) {
             int length = bitArray.readBits(5) + 1;
             i = 0;
             while (i < lengthMap.length) {
                 int num = bitArray.readBits(iLog(entries - i));
-                int i3 = i;
-                for (i = 0; i < num && i3 < lengthMap.length; i++) {
-                    lengthMap[i3] = (long) length;
-                    i3++;
+                for (int j = 0; j < num && i < lengthMap.length; j++) {
+                    lengthMap[i] = (long) length;
+                    i++;
                 }
                 length++;
-                i = i3;
             }
         } else {
             boolean isSparse = bitArray.readBit();
-            while (i2 < lengthMap.length) {
+            for (i = 0; i < lengthMap.length; i++) {
                 if (!isSparse) {
-                    lengthMap[i2] = (long) (bitArray.readBits(5) + 1);
+                    lengthMap[i] = (long) (bitArray.readBits(5) + 1);
                 } else if (bitArray.readBit()) {
-                    lengthMap[i2] = (long) (bitArray.readBits(5) + 1);
+                    lengthMap[i] = (long) (bitArray.readBits(5) + 1);
                 } else {
-                    lengthMap[i2] = 0;
+                    lengthMap[i] = 0;
                 }
-                i2++;
             }
         }
         int lookupType = bitArray.readBits(4);
         if (lookupType > 2) {
-            StringBuilder stringBuilder2 = new StringBuilder();
-            stringBuilder2.append("lookup type greater than 2 not decodable: ");
-            stringBuilder2.append(lookupType);
-            throw new ParserException(stringBuilder2.toString());
+            throw new ParserException("lookup type greater than 2 not decodable: " + lookupType);
         }
         if (lookupType == 1 || lookupType == 2) {
             long lookupValuesCount;
             bitArray.skipBits(32);
             bitArray.skipBits(32);
-            i = bitArray.readBits(4) + 1;
+            int valueBits = bitArray.readBits(4) + 1;
             bitArray.skipBits(1);
             if (lookupType != 1) {
                 lookupValuesCount = (long) (entries * dimensions);
@@ -388,7 +357,7 @@ final class VorbisUtil {
             } else {
                 lookupValuesCount = 0;
             }
-            bitArray.skipBits((int) (((long) i) * lookupValuesCount));
+            bitArray.skipBits((int) (((long) valueBits) * lookupValuesCount));
         }
         return new CodeBook(dimensions, entries, lengthMap, lookupType, isOrdered);
     }

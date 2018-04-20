@@ -62,7 +62,6 @@ public final class LatmReader implements ElementaryStreamReader {
 
     public void consume(ParsableByteArray data) throws ParserException {
         while (data.bytesLeft() > 0) {
-            int secondByte;
             switch (this.state) {
                 case 0:
                     if (data.readUnsignedByte() != SYNC_BYTE_FIRST) {
@@ -71,7 +70,7 @@ public final class LatmReader implements ElementaryStreamReader {
                     this.state = 1;
                     break;
                 case 1:
-                    secondByte = data.readUnsignedByte();
+                    int secondByte = data.readUnsignedByte();
                     if ((secondByte & 224) != 224) {
                         if (secondByte == SYNC_BYTE_FIRST) {
                             break;
@@ -91,9 +90,9 @@ public final class LatmReader implements ElementaryStreamReader {
                     this.state = 3;
                     break;
                 case 3:
-                    secondByte = Math.min(data.bytesLeft(), this.sampleSize - this.bytesRead);
-                    data.readBytes(this.sampleBitArray.data, this.bytesRead, secondByte);
-                    this.bytesRead += secondByte;
+                    int bytesToRead = Math.min(data.bytesLeft(), this.sampleSize - this.bytesRead);
+                    data.readBytes(this.sampleBitArray.data, this.bytesRead, bytesToRead);
+                    this.bytesRead += bytesToRead;
                     if (this.bytesRead != this.sampleSize) {
                         break;
                     }
@@ -130,54 +129,51 @@ public final class LatmReader implements ElementaryStreamReader {
     }
 
     private void parseStreamMuxConfig(ParsableBitArray data) throws ParserException {
-        LatmReader latmReader = this;
-        ParsableBitArray parsableBitArray = data;
-        int audioMuxVersion = parsableBitArray.readBits(1);
-        latmReader.audioMuxVersionA = audioMuxVersion == 1 ? parsableBitArray.readBits(1) : 0;
-        if (latmReader.audioMuxVersionA == 0) {
+        int audioMuxVersion = data.readBits(1);
+        this.audioMuxVersionA = audioMuxVersion == 1 ? data.readBits(1) : 0;
+        if (this.audioMuxVersionA == 0) {
             if (audioMuxVersion == 1) {
                 latmGetValue(data);
             }
             if (data.readBit()) {
-                latmReader.numSubframes = parsableBitArray.readBits(6);
-                int numProgram = parsableBitArray.readBits(4);
-                int numLayer = parsableBitArray.readBits(3);
-                if (numProgram == 0) {
-                    if (numLayer == 0) {
-                        if (audioMuxVersion == 0) {
-                            int startPosition = data.getPosition();
-                            int readBits = parseAudioSpecificConfig(data);
-                            parsableBitArray.setPosition(startPosition);
-                            byte[] initData = new byte[((readBits + 7) / 8)];
-                            parsableBitArray.readBits(initData, 0, readBits);
-                            Format format = Format.createAudioSampleFormat(latmReader.formatId, MimeTypes.AUDIO_AAC, null, -1, -1, latmReader.channelCount, latmReader.sampleRateHz, Collections.singletonList(initData), null, 0, latmReader.language);
-                            if (!format.equals(latmReader.format)) {
-                                latmReader.format = format;
-                                latmReader.sampleDurationUs = NUM / ((long) format.sampleRate);
-                                latmReader.output.format(format);
-                            }
+                this.numSubframes = data.readBits(6);
+                int numProgram = data.readBits(4);
+                int numLayer = data.readBits(3);
+                if (numProgram == 0 && numLayer == 0) {
+                    if (audioMuxVersion == 0) {
+                        int startPosition = data.getPosition();
+                        int readBits = parseAudioSpecificConfig(data);
+                        data.setPosition(startPosition);
+                        byte[] initData = new byte[((readBits + 7) / 8)];
+                        data.readBits(initData, 0, readBits);
+                        Format format = Format.createAudioSampleFormat(this.formatId, MimeTypes.AUDIO_AAC, null, -1, -1, this.channelCount, this.sampleRateHz, Collections.singletonList(initData), null, 0, this.language);
+                        if (!format.equals(this.format)) {
+                            this.format = format;
+                            this.sampleDurationUs = NUM / ((long) format.sampleRate);
+                            this.output.format(format);
+                        }
+                    } else {
+                        data.skipBits(((int) latmGetValue(data)) - parseAudioSpecificConfig(data));
+                    }
+                    parseFrameLength(data);
+                    this.otherDataPresent = data.readBit();
+                    this.otherDataLenBits = 0;
+                    if (this.otherDataPresent) {
+                        if (audioMuxVersion == 1) {
+                            this.otherDataLenBits = latmGetValue(data);
                         } else {
-                            parsableBitArray.skipBits(((int) latmGetValue(data)) - parseAudioSpecificConfig(data));
+                            boolean otherDataLenEsc;
+                            do {
+                                otherDataLenEsc = data.readBit();
+                                this.otherDataLenBits = (this.otherDataLenBits << 8) + ((long) data.readBits(8));
+                            } while (otherDataLenEsc);
                         }
-                        parseFrameLength(data);
-                        latmReader.otherDataPresent = data.readBit();
-                        latmReader.otherDataLenBits = 0;
-                        if (latmReader.otherDataPresent) {
-                            if (audioMuxVersion == 1) {
-                                latmReader.otherDataLenBits = latmGetValue(data);
-                            } else {
-                                boolean otherDataLenEsc;
-                                do {
-                                    otherDataLenEsc = data.readBit();
-                                    latmReader.otherDataLenBits = (latmReader.otherDataLenBits << 8) + ((long) parsableBitArray.readBits(8));
-                                } while (otherDataLenEsc);
-                            }
-                        }
-                        if (data.readBit()) {
-                            parsableBitArray.skipBits(8);
-                        }
+                    }
+                    if (data.readBit()) {
+                        data.skipBits(8);
                         return;
                     }
+                    return;
                 }
                 throw new ParserException();
             }

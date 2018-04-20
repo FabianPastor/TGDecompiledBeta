@@ -95,63 +95,50 @@ public final class H262Reader implements ElementaryStreamReader {
     }
 
     public void consume(ParsableByteArray data) {
-        ParsableByteArray parsableByteArray = data;
         int offset = data.getPosition();
         int limit = data.limit();
-        byte[] dataArray = parsableByteArray.data;
+        byte[] dataArray = data.data;
         this.totalBytesWritten += (long) data.bytesLeft();
-        this.output.sampleData(parsableByteArray, data.bytesLeft());
+        this.output.sampleData(data, data.bytesLeft());
         while (true) {
-            int startCodeOffset = NalUnitUtil.findNalUnit(dataArray, offset, limit, r0.prefixFlags);
+            int startCodeOffset = NalUnitUtil.findNalUnit(dataArray, offset, limit, this.prefixFlags);
             if (startCodeOffset == limit) {
                 break;
             }
-            int lengthToStartCode;
-            int startCodeValue = parsableByteArray.data[startCodeOffset + 3] & 255;
-            boolean z = false;
-            if (!r0.hasOutputFormat) {
-                lengthToStartCode = startCodeOffset - offset;
+            int startCodeValue = data.data[startCodeOffset + 3] & 255;
+            if (!this.hasOutputFormat) {
+                int lengthToStartCode = startCodeOffset - offset;
                 if (lengthToStartCode > 0) {
-                    r0.csdBuffer.onData(dataArray, offset, startCodeOffset);
+                    this.csdBuffer.onData(dataArray, offset, startCodeOffset);
                 }
-                if (r0.csdBuffer.onStartCode(startCodeValue, lengthToStartCode < 0 ? -lengthToStartCode : 0)) {
-                    Pair<Format, Long> result = parseCsdBuffer(r0.csdBuffer, r0.formatId);
-                    r0.output.format((Format) result.first);
-                    r0.frameDurationUs = ((Long) result.second).longValue();
-                    r0.hasOutputFormat = true;
-                }
-            }
-            if (startCodeValue != 0) {
-                if (startCodeValue != START_SEQUENCE_HEADER) {
-                    if (startCodeValue == START_GROUP) {
-                        r0.sampleIsKeyframe = true;
-                    }
-                    offset = startCodeOffset + 3;
-                    parsableByteArray = data;
+                if (this.csdBuffer.onStartCode(startCodeValue, lengthToStartCode < 0 ? -lengthToStartCode : 0)) {
+                    Pair<Format, Long> result = parseCsdBuffer(this.csdBuffer, this.formatId);
+                    this.output.format((Format) result.first);
+                    this.frameDurationUs = ((Long) result.second).longValue();
+                    this.hasOutputFormat = true;
                 }
             }
-            lengthToStartCode = limit - startCodeOffset;
-            if (r0.startedFirstSample && r0.sampleHasPicture && r0.hasOutputFormat) {
-                int i = offset;
-                r0.output.sampleMetadata(r0.sampleTimeUs, r0.sampleIsKeyframe, ((int) (r0.totalBytesWritten - r0.samplePosition)) - lengthToStartCode, lengthToStartCode, null);
+            if (startCodeValue == 0 || startCodeValue == START_SEQUENCE_HEADER) {
+                int bytesWrittenPastStartCode = limit - startCodeOffset;
+                if (this.startedFirstSample && this.sampleHasPicture && this.hasOutputFormat) {
+                    this.output.sampleMetadata(this.sampleTimeUs, this.sampleIsKeyframe ? 1 : 0, ((int) (this.totalBytesWritten - this.samplePosition)) - bytesWrittenPastStartCode, bytesWrittenPastStartCode, null);
+                }
+                if (!this.startedFirstSample || this.sampleHasPicture) {
+                    this.samplePosition = this.totalBytesWritten - ((long) bytesWrittenPastStartCode);
+                    long j = this.pesTimeUs != C0542C.TIME_UNSET ? this.pesTimeUs : this.startedFirstSample ? this.sampleTimeUs + this.frameDurationUs : 0;
+                    this.sampleTimeUs = j;
+                    this.sampleIsKeyframe = false;
+                    this.pesTimeUs = C0542C.TIME_UNSET;
+                    this.startedFirstSample = true;
+                }
+                this.sampleHasPicture = startCodeValue == 0;
+            } else if (startCodeValue == START_GROUP) {
+                this.sampleIsKeyframe = true;
             }
-            if (!r0.startedFirstSample || r0.sampleHasPicture) {
-                r0.samplePosition = r0.totalBytesWritten - ((long) lengthToStartCode);
-                long j = r0.pesTimeUs != C0542C.TIME_UNSET ? r0.pesTimeUs : r0.startedFirstSample ? r0.sampleTimeUs + r0.frameDurationUs : 0;
-                r0.sampleTimeUs = j;
-                r0.sampleIsKeyframe = false;
-                r0.pesTimeUs = C0542C.TIME_UNSET;
-                r0.startedFirstSample = true;
-            }
-            if (startCodeValue == 0) {
-                z = true;
-            }
-            r0.sampleHasPicture = z;
             offset = startCodeOffset + 3;
-            parsableByteArray = data;
         }
-        if (!r0.hasOutputFormat) {
-            r0.csdBuffer.onData(dataArray, offset, limit);
+        if (!this.hasOutputFormat) {
+            this.csdBuffer.onData(dataArray, offset, limit);
         }
     }
 
@@ -159,46 +146,32 @@ public final class H262Reader implements ElementaryStreamReader {
     }
 
     private static Pair<Format, Long> parseCsdBuffer(CsdBuffer csdBuffer, String formatId) {
-        float pixelWidthHeightRatio;
-        CsdBuffer csdBuffer2 = csdBuffer;
-        byte[] csdData = Arrays.copyOf(csdBuffer2.data, csdBuffer2.length);
-        int firstByte = csdData[4] & 255;
+        byte[] csdData = Arrays.copyOf(csdBuffer.data, csdBuffer.length);
         int secondByte = csdData[5] & 255;
-        int width = (firstByte << 4) | (secondByte >> 4);
+        int width = ((csdData[4] & 255) << 4) | (secondByte >> 4);
         int height = ((secondByte & 15) << 8) | (csdData[6] & 255);
+        float pixelWidthHeightRatio = 1.0f;
         switch ((csdData[7] & PsExtractor.VIDEO_STREAM_MASK) >> 4) {
             case 2:
-                pixelWidthHeightRatio = ((float) (4 * height)) / ((float) (3 * width));
+                pixelWidthHeightRatio = ((float) (height * 4)) / ((float) (width * 3));
                 break;
             case 3:
-                pixelWidthHeightRatio = ((float) (16 * height)) / ((float) (9 * width));
+                pixelWidthHeightRatio = ((float) (height * 16)) / ((float) (width * 9));
                 break;
             case 4:
-                pixelWidthHeightRatio = ((float) (121 * height)) / ((float) (100 * width));
-                break;
-            default:
-                pixelWidthHeightRatio = 1.0f;
+                pixelWidthHeightRatio = ((float) (height * 121)) / ((float) (width * 100));
                 break;
         }
         Format format = Format.createVideoSampleFormat(formatId, MimeTypes.VIDEO_MPEG2, null, -1, -1, width, height, -1.0f, Collections.singletonList(csdData), -1, pixelWidthHeightRatio, null);
         long frameDurationUs = 0;
         int frameRateCodeMinusOne = (csdData[7] & 15) - 1;
-        float f;
-        int i;
-        if (frameRateCodeMinusOne < 0 || frameRateCodeMinusOne >= FRAME_RATE_VALUES.length) {
-            f = pixelWidthHeightRatio;
-            i = firstByte;
-        } else {
+        if (frameRateCodeMinusOne >= 0 && frameRateCodeMinusOne < FRAME_RATE_VALUES.length) {
             double frameRate = FRAME_RATE_VALUES[frameRateCodeMinusOne];
-            int sequenceExtensionPosition = csdBuffer2.sequenceExtensionPosition;
+            int sequenceExtensionPosition = csdBuffer.sequenceExtensionPosition;
             int frameRateExtensionN = (csdData[sequenceExtensionPosition + 9] & 96) >> 5;
             int frameRateExtensionD = csdData[sequenceExtensionPosition + 9] & 31;
             if (frameRateExtensionN != frameRateExtensionD) {
                 frameRate *= (((double) frameRateExtensionN) + 1.0d) / ((double) (frameRateExtensionD + 1));
-            } else {
-                f = pixelWidthHeightRatio;
-                i = firstByte;
-                int i2 = frameRateExtensionN;
             }
             frameDurationUs = (long) (1000000.0d / frameRate);
         }

@@ -112,10 +112,15 @@ public class DrawerProfileCell extends FrameLayout {
             backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
             backgroundDrawable.draw(canvas);
         } else if (backgroundDrawable instanceof BitmapDrawable) {
+            float scale;
             Bitmap bitmap = ((BitmapDrawable) backgroundDrawable).getBitmap();
             float scaleX = ((float) getMeasuredWidth()) / ((float) bitmap.getWidth());
             float scaleY = ((float) getMeasuredHeight()) / ((float) bitmap.getHeight());
-            float scale = scaleX < scaleY ? scaleY : scaleX;
+            if (scaleX < scaleY) {
+                scale = scaleY;
+            } else {
+                scale = scaleX;
+            }
             int width = (int) (((float) getMeasuredWidth()) / scale);
             int height = (int) (((float) getMeasuredHeight()) / scale);
             int x = (bitmap.getWidth() - width) / 2;
@@ -144,7 +149,7 @@ public class DrawerProfileCell extends FrameLayout {
     public void setOnArrowClickListener(final OnClickListener onClickListener) {
         this.arrowView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                DrawerProfileCell.this.accountsShowed = DrawerProfileCell.this.accountsShowed ^ 1;
+                DrawerProfileCell.this.accountsShowed = !DrawerProfileCell.this.accountsShowed;
                 DrawerProfileCell.this.arrowView.setImageResource(DrawerProfileCell.this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
                 onClickListener.onClick(DrawerProfileCell.this);
             }
@@ -160,12 +165,7 @@ public class DrawerProfileCell extends FrameLayout {
             this.accountsShowed = accounts;
             this.arrowView.setImageResource(this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
             this.nameTextView.setText(UserObject.getUserName(user));
-            TextView textView = this.phoneTextView;
-            PhoneFormat instance = PhoneFormat.getInstance();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("+");
-            stringBuilder.append(user.phone);
-            textView.setText(instance.format(stringBuilder.toString()));
+            this.phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
             Drawable avatarDrawable = new AvatarDrawable(user);
             avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
             this.avatarImageView.setImage(photo, "50_50", avatarDrawable);

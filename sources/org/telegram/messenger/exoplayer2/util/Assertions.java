@@ -20,10 +20,8 @@ public final class Assertions {
     }
 
     public static int checkIndex(int index, int start, int limit) {
-        if (index >= start) {
-            if (index < limit) {
-                return index;
-            }
+        if (index >= start && index < limit) {
+            return index;
         }
         throw new IndexOutOfBoundsException();
     }

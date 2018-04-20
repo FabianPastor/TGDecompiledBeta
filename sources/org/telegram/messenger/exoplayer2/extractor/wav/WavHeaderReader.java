@@ -36,31 +36,25 @@ final class WavHeaderReader {
     }
 
     public static WavHeader peek(ExtractorInput input) throws IOException, InterruptedException {
-        ExtractorInput extractorInput = input;
         Assertions.checkNotNull(input);
         ParsableByteArray scratch = new ParsableByteArray(16);
-        if (ChunkHeader.peek(extractorInput, scratch).id != Util.getIntegerCodeForString("RIFF")) {
+        if (ChunkHeader.peek(input, scratch).id != Util.getIntegerCodeForString("RIFF")) {
             return null;
         }
-        int i = 4;
-        extractorInput.peekFully(scratch.data, 0, 4);
+        input.peekFully(scratch.data, 0, 4);
         scratch.setPosition(0);
         int riffFormat = scratch.readInt();
         if (riffFormat != Util.getIntegerCodeForString("WAVE")) {
-            String str = TAG;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Unsupported RIFF format: ");
-            stringBuilder.append(riffFormat);
-            Log.e(str, stringBuilder.toString());
+            Log.e(TAG, "Unsupported RIFF format: " + riffFormat);
             return null;
         }
-        ChunkHeader chunkHeader = ChunkHeader.peek(extractorInput, scratch);
+        ChunkHeader chunkHeader = ChunkHeader.peek(input, scratch);
         while (chunkHeader.id != Util.getIntegerCodeForString("fmt ")) {
-            extractorInput.advancePeekPosition((int) chunkHeader.size);
-            chunkHeader = ChunkHeader.peek(extractorInput, scratch);
+            input.advancePeekPosition((int) chunkHeader.size);
+            chunkHeader = ChunkHeader.peek(input, scratch);
         }
         Assertions.checkState(chunkHeader.size >= 16);
-        extractorInput.peekFully(scratch.data, 0, 16);
+        input.peekFully(scratch.data, 0, 16);
         scratch.setPosition(0);
         int type = scratch.readLittleEndianUnsignedShort();
         int numChannels = scratch.readLittleEndianUnsignedShort();
@@ -70,52 +64,27 @@ final class WavHeaderReader {
         int bitsPerSample = scratch.readLittleEndianUnsignedShort();
         int expectedBlockAlignment = (numChannels * bitsPerSample) / 8;
         if (blockAlignment != expectedBlockAlignment) {
-            stringBuilder = new StringBuilder();
-            stringBuilder.append("Expected block alignment: ");
-            stringBuilder.append(expectedBlockAlignment);
-            stringBuilder.append("; got: ");
-            stringBuilder.append(blockAlignment);
-            throw new ParserException(stringBuilder.toString());
+            throw new ParserException("Expected block alignment: " + expectedBlockAlignment + "; got: " + blockAlignment);
         }
-        if (type != 1) {
-            if (type == 3) {
-                if (bitsPerSample != 32) {
-                    i = 0;
-                }
-                if (i != 0) {
-                    str = TAG;
-                    StringBuilder stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append("Unsupported WAV bit depth ");
-                    stringBuilder2.append(bitsPerSample);
-                    stringBuilder2.append(" for type ");
-                    stringBuilder2.append(type);
-                    Log.e(str, stringBuilder2.toString());
-                    return null;
-                }
-                extractorInput.advancePeekPosition(((int) chunkHeader.size) - 16);
-                return new WavHeader(numChannels, sampleRateHz, averageBytesPerSecond, blockAlignment, bitsPerSample, i);
-            } else if (type != TYPE_WAVE_FORMAT_EXTENSIBLE) {
-                str = TAG;
-                stringBuilder = new StringBuilder();
-                stringBuilder.append("Unsupported WAV format type: ");
-                stringBuilder.append(type);
-                Log.e(str, stringBuilder.toString());
+        int encoding;
+        switch (type) {
+            case 1:
+            case TYPE_WAVE_FORMAT_EXTENSIBLE /*65534*/:
+                encoding = Util.getPcmEncoding(bitsPerSample);
+                break;
+            case 3:
+                encoding = bitsPerSample == 32 ? 4 : 0;
+                break;
+            default:
+                Log.e(TAG, "Unsupported WAV format type: " + type);
                 return null;
-            }
         }
-        i = Util.getPcmEncoding(bitsPerSample);
-        if (i != 0) {
-            extractorInput.advancePeekPosition(((int) chunkHeader.size) - 16);
-            return new WavHeader(numChannels, sampleRateHz, averageBytesPerSecond, blockAlignment, bitsPerSample, i);
+        if (encoding == 0) {
+            Log.e(TAG, "Unsupported WAV bit depth " + bitsPerSample + " for type " + type);
+            return null;
         }
-        str = TAG;
-        StringBuilder stringBuilder22 = new StringBuilder();
-        stringBuilder22.append("Unsupported WAV bit depth ");
-        stringBuilder22.append(bitsPerSample);
-        stringBuilder22.append(" for type ");
-        stringBuilder22.append(type);
-        Log.e(str, stringBuilder22.toString());
-        return null;
+        input.advancePeekPosition(((int) chunkHeader.size) - 16);
+        return new WavHeader(numChannels, sampleRateHz, averageBytesPerSecond, blockAlignment, bitsPerSample, encoding);
     }
 
     public static void skipToData(ExtractorInput input, WavHeader wavHeader) throws IOException, InterruptedException {
@@ -125,20 +94,13 @@ final class WavHeaderReader {
         ParsableByteArray scratch = new ParsableByteArray(8);
         ChunkHeader chunkHeader = ChunkHeader.peek(input, scratch);
         while (chunkHeader.id != Util.getIntegerCodeForString(DataSchemeDataSource.SCHEME_DATA)) {
-            String str = TAG;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Ignoring unknown WAV chunk: ");
-            stringBuilder.append(chunkHeader.id);
-            Log.w(str, stringBuilder.toString());
+            Log.w(TAG, "Ignoring unknown WAV chunk: " + chunkHeader.id);
             long bytesToSkip = 8 + chunkHeader.size;
             if (chunkHeader.id == Util.getIntegerCodeForString("RIFF")) {
                 bytesToSkip = 12;
             }
             if (bytesToSkip > 2147483647L) {
-                StringBuilder stringBuilder2 = new StringBuilder();
-                stringBuilder2.append("Chunk is too large (~2GB+) to skip; id: ");
-                stringBuilder2.append(chunkHeader.id);
-                throw new ParserException(stringBuilder2.toString());
+                throw new ParserException("Chunk is too large (~2GB+) to skip; id: " + chunkHeader.id);
             }
             input.skipFully((int) bytesToSkip);
             chunkHeader = ChunkHeader.peek(input, scratch);

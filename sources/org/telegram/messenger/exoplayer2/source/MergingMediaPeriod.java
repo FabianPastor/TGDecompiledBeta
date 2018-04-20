@@ -43,89 +43,69 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
     }
 
     public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
-        MergingMediaPeriod mergingMediaPeriod = this;
-        TrackSelection[] trackSelectionArr = selections;
-        SampleStream[] sampleStreamArr = streams;
-        int[] streamChildIndices = new int[trackSelectionArr.length];
-        int[] selectionChildIndices = new int[trackSelectionArr.length];
-        for (int i = 0; i < trackSelectionArr.length; i++) {
-            streamChildIndices[i] = sampleStreamArr[i] == null ? -1 : ((Integer) mergingMediaPeriod.streamPeriodIndices.get(sampleStreamArr[i])).intValue();
+        int i;
+        int[] streamChildIndices = new int[selections.length];
+        int[] selectionChildIndices = new int[selections.length];
+        for (i = 0; i < selections.length; i++) {
+            int i2;
+            int j;
+            if (streams[i] == null) {
+                i2 = -1;
+            } else {
+                i2 = ((Integer) this.streamPeriodIndices.get(streams[i])).intValue();
+            }
+            streamChildIndices[i] = i2;
             selectionChildIndices[i] = -1;
-            if (trackSelectionArr[i] != null) {
-                TrackGroup trackGroup = trackSelectionArr[i].getTrackGroup();
-                for (int j = 0; j < mergingMediaPeriod.periods.length; j++) {
-                    if (mergingMediaPeriod.periods[j].getTrackGroups().indexOf(trackGroup) != -1) {
+            if (selections[i] != null) {
+                TrackGroup trackGroup = selections[i].getTrackGroup();
+                for (j = 0; j < this.periods.length; j++) {
+                    if (this.periods[j].getTrackGroups().indexOf(trackGroup) != -1) {
                         selectionChildIndices[i] = j;
                         break;
                     }
                 }
             }
         }
-        mergingMediaPeriod.streamPeriodIndices.clear();
-        SampleStream[] newStreams = new SampleStream[trackSelectionArr.length];
-        SampleStream[] childStreams = new SampleStream[trackSelectionArr.length];
-        TrackSelection[] childSelections = new TrackSelection[trackSelectionArr.length];
-        ArrayList<MediaPeriod> enabledPeriodsList = new ArrayList(mergingMediaPeriod.periods.length);
-        long positionUs2 = positionUs;
-        int i2 = 0;
-        while (true) {
-            int i3 = i2;
-            ArrayList<MediaPeriod> enabledPeriodsList2;
-            TrackSelection[] childSelections2;
-            if (i3 < mergingMediaPeriod.periods.length) {
-                i2 = 0;
-                while (i2 < trackSelectionArr.length) {
-                    TrackSelection trackSelection = null;
-                    childStreams[i2] = streamChildIndices[i2] == i3 ? sampleStreamArr[i2] : null;
-                    if (selectionChildIndices[i2] == i3) {
-                        trackSelection = trackSelectionArr[i2];
-                    }
-                    childSelections[i2] = trackSelection;
-                    i2++;
-                }
-                enabledPeriodsList2 = enabledPeriodsList;
-                childSelections2 = childSelections;
-                int i4 = i3;
-                long selectPositionUs = mergingMediaPeriod.periods[i3].selectTracks(childSelections, mayRetainStreamFlags, childStreams, streamResetFlags, positionUs2);
-                if (i4 == 0) {
-                    positionUs2 = selectPositionUs;
-                } else if (selectPositionUs != positionUs2) {
-                    throw new IllegalStateException("Children enabled at different positions");
-                }
-                boolean periodEnabled = false;
-                for (int j2 = 0; j2 < trackSelectionArr.length; j2++) {
-                    boolean z = true;
-                    if (selectionChildIndices[j2] == i4) {
-                        if (childStreams[j2] == null) {
-                            z = false;
-                        }
-                        Assertions.checkState(z);
-                        newStreams[j2] = childStreams[j2];
-                        periodEnabled = true;
-                        mergingMediaPeriod.streamPeriodIndices.put(childStreams[j2], Integer.valueOf(i4));
-                    } else if (streamChildIndices[j2] == i4) {
-                        if (childStreams[j2] != null) {
-                            z = false;
-                        }
-                        Assertions.checkState(z);
-                    }
-                }
-                if (periodEnabled) {
-                    enabledPeriodsList2.add(mergingMediaPeriod.periods[i4]);
-                }
-                i2 = i4 + 1;
-                enabledPeriodsList = enabledPeriodsList2;
-                childSelections = childSelections2;
-            } else {
-                enabledPeriodsList2 = enabledPeriodsList;
-                childSelections2 = childSelections;
-                System.arraycopy(newStreams, 0, sampleStreamArr, 0, newStreams.length);
-                mergingMediaPeriod.enabledPeriods = new MediaPeriod[enabledPeriodsList2.size()];
-                enabledPeriodsList2.toArray(mergingMediaPeriod.enabledPeriods);
-                mergingMediaPeriod.compositeSequenceableLoader = mergingMediaPeriod.compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(mergingMediaPeriod.enabledPeriods);
-                return positionUs2;
+        this.streamPeriodIndices.clear();
+        SampleStream[] newStreams = new SampleStream[selections.length];
+        SampleStream[] childStreams = new SampleStream[selections.length];
+        TrackSelection[] childSelections = new TrackSelection[selections.length];
+        ArrayList<MediaPeriod> enabledPeriodsList = new ArrayList(this.periods.length);
+        i = 0;
+        while (i < this.periods.length) {
+            j = 0;
+            while (j < selections.length) {
+                childStreams[j] = streamChildIndices[j] == i ? streams[j] : null;
+                childSelections[j] = selectionChildIndices[j] == i ? selections[j] : null;
+                j++;
             }
+            long selectPositionUs = this.periods[i].selectTracks(childSelections, mayRetainStreamFlags, childStreams, streamResetFlags, positionUs);
+            if (i == 0) {
+                positionUs = selectPositionUs;
+            } else if (selectPositionUs != positionUs) {
+                throw new IllegalStateException("Children enabled at different positions");
+            }
+            boolean periodEnabled = false;
+            for (j = 0; j < selections.length; j++) {
+                if (selectionChildIndices[j] == i) {
+                    Assertions.checkState(childStreams[j] != null);
+                    newStreams[j] = childStreams[j];
+                    periodEnabled = true;
+                    this.streamPeriodIndices.put(childStreams[j], Integer.valueOf(i));
+                } else if (streamChildIndices[j] == i) {
+                    Assertions.checkState(childStreams[j] == null);
+                }
+            }
+            if (periodEnabled) {
+                enabledPeriodsList.add(this.periods[i]);
+            }
+            i++;
         }
+        System.arraycopy(newStreams, 0, streams, 0, newStreams.length);
+        this.enabledPeriods = new MediaPeriod[enabledPeriodsList.size()];
+        enabledPeriodsList.toArray(this.enabledPeriods);
+        this.compositeSequenceableLoader = this.compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(this.enabledPeriods);
+        return positionUs;
     }
 
     public void discardBuffer(long positionUs, boolean toKeyframe) {
@@ -188,31 +168,31 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
     }
 
     public void onPrepared(MediaPeriod ignored) {
-        int i = this.pendingChildPrepareCount - 1;
-        this.pendingChildPrepareCount = i;
-        if (i <= 0) {
+        int i = 0;
+        int i2 = this.pendingChildPrepareCount - 1;
+        this.pendingChildPrepareCount = i2;
+        if (i2 <= 0) {
             int totalTrackGroupCount = 0;
             for (MediaPeriod period : this.periods) {
                 totalTrackGroupCount += period.getTrackGroups().length;
             }
             TrackGroup[] trackGroupArray = new TrackGroup[totalTrackGroupCount];
+            int trackGroupIndex = 0;
             MediaPeriod[] mediaPeriodArr = this.periods;
             int length = mediaPeriodArr.length;
-            int trackGroupIndex = 0;
-            int trackGroupIndex2 = 0;
-            while (trackGroupIndex2 < length) {
-                TrackGroupArray periodTrackGroups = mediaPeriodArr[trackGroupIndex2].getTrackGroups();
+            while (i < length) {
+                TrackGroupArray periodTrackGroups = mediaPeriodArr[i].getTrackGroups();
                 int periodTrackGroupCount = periodTrackGroups.length;
-                int trackGroupIndex3 = trackGroupIndex;
-                trackGroupIndex = 0;
-                while (trackGroupIndex < periodTrackGroupCount) {
-                    int trackGroupIndex4 = trackGroupIndex3 + 1;
-                    trackGroupArray[trackGroupIndex3] = periodTrackGroups.get(trackGroupIndex);
-                    trackGroupIndex++;
-                    trackGroupIndex3 = trackGroupIndex4;
+                int j = 0;
+                int trackGroupIndex2 = trackGroupIndex;
+                while (j < periodTrackGroupCount) {
+                    trackGroupIndex = trackGroupIndex2 + 1;
+                    trackGroupArray[trackGroupIndex2] = periodTrackGroups.get(j);
+                    j++;
+                    trackGroupIndex2 = trackGroupIndex;
                 }
-                trackGroupIndex2++;
-                trackGroupIndex = trackGroupIndex3;
+                i++;
+                trackGroupIndex = trackGroupIndex2;
             }
             this.trackGroups = new TrackGroupArray(trackGroupArray);
             this.callback.onPrepared(this);

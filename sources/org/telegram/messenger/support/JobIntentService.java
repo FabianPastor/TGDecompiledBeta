@@ -38,9 +38,8 @@ public abstract class JobIntentService extends Service {
 
         protected Void doInBackground(Void... params) {
             while (true) {
-                GenericWorkItem dequeueWork = JobIntentService.this.dequeueWork();
-                GenericWorkItem work = dequeueWork;
-                if (dequeueWork == null) {
+                GenericWorkItem work = JobIntentService.this.dequeueWork();
+                if (work == null) {
                     return null;
                 }
                 JobIntentService.this.onHandleWork(work.getIntent());
@@ -85,12 +84,7 @@ public abstract class JobIntentService extends Service {
                 this.mHasJobId = true;
                 this.mJobId = jobId;
             } else if (this.mJobId != jobId) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Given job ID ");
-                stringBuilder.append(jobId);
-                stringBuilder.append(" is different than previous ");
-                stringBuilder.append(this.mJobId);
-                throw new IllegalArgumentException(stringBuilder.toString());
+                throw new IllegalArgumentException("Given job ID " + jobId + " is different than previous " + this.mJobId);
             }
         }
 
@@ -115,15 +109,9 @@ public abstract class JobIntentService extends Service {
             super(context, cn);
             this.mContext = context.getApplicationContext();
             PowerManager pm = (PowerManager) context.getSystemService("power");
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(cn.getClassName());
-            stringBuilder.append(":launch");
-            this.mLaunchWakeLock = pm.newWakeLock(1, stringBuilder.toString());
+            this.mLaunchWakeLock = pm.newWakeLock(1, cn.getClassName() + ":launch");
             this.mLaunchWakeLock.setReferenceCounted(false);
-            stringBuilder = new StringBuilder();
-            stringBuilder.append(cn.getClassName());
-            stringBuilder.append(":run");
-            this.mRunWakeLock = pm.newWakeLock(1, stringBuilder.toString());
+            this.mRunWakeLock = pm.newWakeLock(1, cn.getClassName() + ":run");
             this.mRunWakeLock.setReferenceCounted(false);
         }
 
@@ -298,7 +286,11 @@ public abstract class JobIntentService extends Service {
         }
         this.mCompatWorkEnqueuer.serviceStartReceived();
         synchronized (this.mCompatQueue) {
-            this.mCompatQueue.add(new CompatWorkItem(intent != null ? intent : new Intent(), startId));
+            ArrayList arrayList = this.mCompatQueue;
+            if (intent == null) {
+                intent = new Intent();
+            }
+            arrayList.add(new CompatWorkItem(intent, startId));
             ensureProcessorRunningLocked(true);
         }
         return 3;

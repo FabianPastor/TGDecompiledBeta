@@ -78,14 +78,17 @@ public class DefaultLoadControl implements LoadControl {
     }
 
     public boolean shouldContinueLoading(long bufferedDurationUs, float playbackSpeed) {
+        boolean targetBufferSizeReached;
         boolean z = true;
-        boolean targetBufferSizeReached = this.allocator.getTotalBytesAllocated() >= this.targetBufferSize;
+        if (this.allocator.getTotalBytesAllocated() >= this.targetBufferSize) {
+            targetBufferSizeReached = true;
+        } else {
+            targetBufferSizeReached = false;
+        }
         boolean wasBuffering = this.isBuffering;
         if (this.prioritizeTimeOverSizeThresholds) {
-            if (bufferedDurationUs >= this.minBufferUs) {
-                if (bufferedDurationUs > this.maxBufferUs || !this.isBuffering || targetBufferSizeReached) {
-                    z = false;
-                }
+            if (bufferedDurationUs >= this.minBufferUs && (bufferedDurationUs > this.maxBufferUs || !this.isBuffering || targetBufferSizeReached)) {
+                z = false;
             }
             this.isBuffering = z;
         } else {
@@ -107,12 +110,7 @@ public class DefaultLoadControl implements LoadControl {
     public boolean shouldStartPlayback(long bufferedDurationUs, float playbackSpeed, boolean rebuffering) {
         bufferedDurationUs = Util.getPlayoutDurationForMediaDuration(bufferedDurationUs, playbackSpeed);
         long minBufferDurationUs = rebuffering ? this.bufferForPlaybackAfterRebufferUs : this.bufferForPlaybackUs;
-        if (minBufferDurationUs > 0 && bufferedDurationUs < minBufferDurationUs) {
-            if (this.prioritizeTimeOverSizeThresholds || this.allocator.getTotalBytesAllocated() < this.targetBufferSize) {
-                return false;
-            }
-        }
-        return true;
+        return minBufferDurationUs <= 0 || bufferedDurationUs >= minBufferDurationUs || (!this.prioritizeTimeOverSizeThresholds && this.allocator.getTotalBytesAllocated() >= this.targetBufferSize);
     }
 
     protected int calculateTargetBufferSize(Renderer[] renderers, TrackSelectionArray trackSelectionArray) {

@@ -38,21 +38,26 @@ public class CustomTabsClient {
 
     public static String getPackageName(Context context, List<String> packages, boolean ignoreDefault) {
         PackageManager pm = context.getPackageManager();
-        List<String> packageNames = packages == null ? new ArrayList() : packages;
+        if (packages == null) {
+            List packageNames = new ArrayList();
+        } else {
+            List<String> list = packages;
+        }
         Intent activityIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://"));
         if (!ignoreDefault) {
             ResolveInfo defaultViewHandlerInfo = pm.resolveActivity(activityIntent, 0);
             if (defaultViewHandlerInfo != null) {
                 String packageName = defaultViewHandlerInfo.activityInfo.packageName;
-                packageNames = new ArrayList(packageNames.size() + 1);
-                packageNames.add(packageName);
+                List<String> packageNames2 = new ArrayList(packageNames.size() + 1);
+                packageNames2.add(packageName);
                 if (packages != null) {
-                    packageNames.addAll(packages);
+                    packageNames2.addAll(packages);
                 }
+                packageNames = packageNames2;
             }
         }
         Intent serviceIntent = new Intent(CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION);
-        for (String packageName2 : packageNames) {
+        for (String packageName2 : r3) {
             serviceIntent.setPackage(packageName2);
             if (pm.resolveService(serviceIntent, 0) != null) {
                 return packageName2;
@@ -62,23 +67,23 @@ public class CustomTabsClient {
     }
 
     public static boolean connectAndInitialize(Context context, String packageName) {
-        if (packageName == null) {
-            return false;
-        }
-        final Context applicationContext = context.getApplicationContext();
-        try {
-            return bindCustomTabsService(applicationContext, packageName, new CustomTabsServiceConnection() {
-                public final void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {
-                    client.warmup(0);
-                    applicationContext.unbindService(this);
-                }
+        boolean z = false;
+        if (packageName != null) {
+            final Context applicationContext = context.getApplicationContext();
+            try {
+                z = bindCustomTabsService(applicationContext, packageName, new CustomTabsServiceConnection() {
+                    public final void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {
+                        client.warmup(0);
+                        applicationContext.unbindService(this);
+                    }
 
-                public final void onServiceDisconnected(ComponentName componentName) {
-                }
-            });
-        } catch (SecurityException e) {
-            return false;
+                    public final void onServiceDisconnected(ComponentName componentName) {
+                    }
+                });
+            } catch (SecurityException e) {
+            }
         }
+        return z;
     }
 
     public boolean warmup(long flags) {

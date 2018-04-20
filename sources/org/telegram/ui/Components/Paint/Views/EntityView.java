@@ -32,18 +32,16 @@ public class EntityView extends FrameLayout {
     private UUID uuid = UUID.randomUUID();
 
     /* renamed from: org.telegram.ui.Components.Paint.Views.EntityView$1 */
-    class C12221 extends SimpleOnGestureListener {
-        C12221() {
+    class C12241 extends SimpleOnGestureListener {
+        C12241() {
         }
 
         public void onLongPress(MotionEvent e) {
-            if (!(EntityView.this.hasPanned || EntityView.this.hasTransformed)) {
-                if (!EntityView.this.hasReleased) {
-                    EntityView.this.recognizedLongPress = true;
-                    if (EntityView.this.delegate != null) {
-                        EntityView.this.performHapticFeedback(0);
-                        EntityView.this.delegate.onEntityLongClicked(EntityView.this);
-                    }
+            if (!EntityView.this.hasPanned && !EntityView.this.hasTransformed && !EntityView.this.hasReleased) {
+                EntityView.this.recognizedLongPress = true;
+                if (EntityView.this.delegate != null) {
+                    EntityView.this.performHapticFeedback(0);
+                    EntityView.this.delegate.onEntityLongClicked(EntityView.this);
                 }
             }
         }
@@ -91,45 +89,36 @@ public class EntityView extends FrameLayout {
             return 0;
         }
 
-        /* JADX WARNING: inconsistent code. */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
         public boolean onTouchEvent(MotionEvent event) {
-            boolean handled;
-            SelectionView selectionView = this;
-            int action = event.getActionMasked();
-            boolean handled2;
-            switch (action) {
+            boolean handled = false;
+            switch (event.getActionMasked()) {
                 case 0:
                 case 5:
-                    handled2 = false;
-                    action = pointInsideHandle(event.getX(), event.getY());
-                    if (action != 0) {
-                        selectionView.currentHandle = action;
+                    int handle = pointInsideHandle(event.getX(), event.getY());
+                    if (handle != 0) {
+                        this.currentHandle = handle;
                         EntityView.this.previousLocationX = event.getRawX();
                         EntityView.this.previousLocationY = event.getRawY();
                         EntityView.this.hasReleased = false;
                         handled = true;
-                    } else {
-                        handled = handled2;
+                        break;
                     }
                     break;
                 case 1:
                 case 3:
                 case 6:
-                    handled2 = false;
                     EntityView.this.onTouchUp();
-                    selectionView.currentHandle = 0;
+                    this.currentHandle = 0;
                     handled = true;
                     break;
                 case 2:
-                    int i;
-                    if (selectionView.currentHandle != 3) {
-                        if (selectionView.currentHandle != 0) {
+                    if (this.currentHandle != 3) {
+                        if (this.currentHandle != 0) {
                             EntityView.this.hasTransformed = true;
                             Point translation = new Point(event.getRawX() - EntityView.this.previousLocationX, event.getRawY() - EntityView.this.previousLocationY);
                             float radAngle = (float) Math.toRadians((double) getRotation());
                             float delta = (float) ((((double) translation.f24x) * Math.cos((double) radAngle)) + (((double) translation.f25y) * Math.sin((double) radAngle)));
-                            if (selectionView.currentHandle == 1) {
+                            if (this.currentHandle == 1) {
                                 delta *= -1.0f;
                             }
                             EntityView.this.scale(1.0f + ((2.0f * delta) / ((float) getWidth())));
@@ -138,15 +127,10 @@ public class EntityView extends FrameLayout {
                             float parentX = event.getRawX() - ((float) ((View) getParent()).getLeft());
                             float parentY = (event.getRawY() - ((float) ((View) getParent()).getTop())) - ((float) AndroidUtilities.statusBarHeight);
                             float angle = 0.0f;
-                            if (selectionView.currentHandle == 1) {
-                                i = action;
-                                handled2 = false;
+                            if (this.currentHandle == 1) {
                                 angle = (float) Math.atan2((double) (centerY - parentY), (double) (centerX - parentX));
-                            } else {
-                                handled2 = false;
-                                if (selectionView.currentHandle == 2) {
-                                    angle = (float) Math.atan2((double) (parentY - centerY), (double) (parentX - centerX));
-                                }
+                            } else if (this.currentHandle == 2) {
+                                angle = (float) Math.atan2((double) (parentY - centerY), (double) (parentX - centerX));
                             }
                             EntityView.this.rotate((float) Math.toDegrees((double) angle));
                             EntityView.this.previousLocationX = event.getRawX();
@@ -156,16 +140,11 @@ public class EntityView extends FrameLayout {
                         }
                     }
                     handled = EntityView.this.onTouchMove(event.getRawX(), event.getRawY());
-                    i = action;
                     break;
-                default:
-                    handled = false;
                     break;
             }
-            if (selectionView.currentHandle == 3) {
+            if (this.currentHandle == 3) {
                 EntityView.this.gestureDetector.onTouchEvent(event);
-            } else {
-                MotionEvent motionEvent = event;
             }
             return handled;
         }
@@ -174,7 +153,7 @@ public class EntityView extends FrameLayout {
     public EntityView(Context context, Point pos) {
         super(context);
         this.position = pos;
-        this.gestureDetector = new GestureDetector(context, new C12221());
+        this.gestureDetector = new GestureDetector(context, new C12241());
     }
 
     public UUID getUUID() {
@@ -237,40 +216,36 @@ public class EntityView extends FrameLayout {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getPointerCount() <= 1) {
-            if (this.delegate.allowInteraction(this)) {
-                float x = event.getRawX();
-                float y = event.getRawY();
-                boolean handled = false;
-                switch (event.getActionMasked()) {
-                    case 0:
-                    case 5:
-                        if (!(isSelected() || this.delegate == null)) {
-                            this.delegate.onEntitySelected(this);
-                            this.announcedSelection = true;
-                        }
-                        this.previousLocationX = x;
-                        this.previousLocationY = y;
-                        handled = true;
-                        this.hasReleased = false;
-                        break;
-                    case 1:
-                    case 3:
-                    case 6:
-                        onTouchUp();
-                        handled = true;
-                        break;
-                    case 2:
-                        handled = onTouchMove(x, y);
-                        break;
-                    default:
-                        break;
-                }
-                this.gestureDetector.onTouchEvent(event);
-                return handled;
-            }
+        if (event.getPointerCount() > 1 || !this.delegate.allowInteraction(this)) {
+            return false;
         }
-        return false;
+        float x = event.getRawX();
+        float y = event.getRawY();
+        boolean handled = false;
+        switch (event.getActionMasked()) {
+            case 0:
+            case 5:
+                if (!(isSelected() || this.delegate == null)) {
+                    this.delegate.onEntitySelected(this);
+                    this.announcedSelection = true;
+                }
+                this.previousLocationX = x;
+                this.previousLocationY = y;
+                handled = true;
+                this.hasReleased = false;
+                break;
+            case 1:
+            case 3:
+            case 6:
+                onTouchUp();
+                handled = true;
+                break;
+            case 2:
+                handled = onTouchMove(x, y);
+                break;
+        }
+        this.gestureDetector.onTouchEvent(event);
+        return handled;
     }
 
     public void pan(Point translation) {

@@ -22,7 +22,7 @@ public final class TrackSelectionArray {
 
     public int hashCode() {
         if (this.hashCode == 0) {
-            this.hashCode = (31 * 17) + Arrays.hashCode(this.trackSelections);
+            this.hashCode = Arrays.hashCode(this.trackSelections) + 527;
         }
         return this.hashCode;
     }
@@ -31,11 +31,9 @@ public final class TrackSelectionArray {
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                return Arrays.equals(this.trackSelections, ((TrackSelectionArray) obj).trackSelections);
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
         }
-        return false;
+        return Arrays.equals(this.trackSelections, ((TrackSelectionArray) obj).trackSelections);
     }
 }

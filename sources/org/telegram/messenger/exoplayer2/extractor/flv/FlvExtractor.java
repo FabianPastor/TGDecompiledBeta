@@ -15,7 +15,7 @@ import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public final class FlvExtractor implements Extractor {
-    public static final ExtractorsFactory FACTORY = new C18371();
+    public static final ExtractorsFactory FACTORY = new C18391();
     private static final int FLV_HEADER_SIZE = 9;
     private static final int FLV_TAG = Util.getIntegerCodeForString("FLV");
     private static final int FLV_TAG_HEADER_SIZE = 11;
@@ -47,8 +47,8 @@ public final class FlvExtractor implements Extractor {
     }
 
     /* renamed from: org.telegram.messenger.exoplayer2.extractor.flv.FlvExtractor$1 */
-    static class C18371 implements ExtractorsFactory {
-        C18371() {
+    static class C18391 implements ExtractorsFactory {
+        C18391() {
         }
 
         public Extractor[] createExtractors() {
@@ -57,7 +57,6 @@ public final class FlvExtractor implements Extractor {
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
-        boolean z = false;
         input.peekFully(this.scratch.data, 0, 3);
         this.scratch.setPosition(0);
         if (this.scratch.readUnsignedInt24() != FLV_TAG) {
@@ -76,9 +75,9 @@ public final class FlvExtractor implements Extractor {
         input.peekFully(this.scratch.data, 0, 4);
         this.scratch.setPosition(0);
         if (this.scratch.readInt() == 0) {
-            z = true;
+            return true;
         }
-        return z;
+        return false;
     }
 
     public void init(ExtractorOutput output) {
@@ -122,16 +121,23 @@ public final class FlvExtractor implements Extractor {
     }
 
     private boolean readFlvHeader(ExtractorInput input) throws IOException, InterruptedException {
-        boolean hasVideo = false;
         if (!input.readFully(this.headerBuffer.data, 0, 9, true)) {
             return false;
         }
+        boolean hasAudio;
+        boolean hasVideo;
         this.headerBuffer.setPosition(0);
         this.headerBuffer.skipBytes(4);
         int flags = this.headerBuffer.readUnsignedByte();
-        boolean hasAudio = (flags & 4) != 0;
+        if ((flags & 4) != 0) {
+            hasAudio = true;
+        } else {
+            hasAudio = false;
+        }
         if ((flags & 1) != 0) {
             hasVideo = true;
+        } else {
+            hasVideo = false;
         }
         if (hasAudio && this.audioReader == null) {
             this.audioReader = new AudioTagPayloadReader(this.extractorOutput.track(8, 1));

@@ -48,81 +48,65 @@ public class UserCell extends FrameLayout {
     private SimpleTextView statusTextView;
 
     public UserCell(Context context, int padding, int checkbox, boolean admin) {
-        int i;
         float f;
-        Context context2 = context;
-        int i2 = checkbox;
+        float f2;
         super(context);
-        this.avatarImageView = new BackupImageView(context2);
+        this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
-        int i3 = 3;
-        addView(this.avatarImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (7 + padding), 8.0f, LocaleController.isRTL ? (float) (7 + padding) : 0.0f, 0.0f));
-        r0.nameTextView = new SimpleTextView(context2);
-        r0.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        r0.nameTextView.setTextSize(17);
-        r0.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        View view = r0.nameTextView;
-        int i4 = (LocaleController.isRTL ? 5 : 3) | 48;
-        int i5 = 18;
+        addView(this.avatarImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (padding + 7), 8.0f, LocaleController.isRTL ? (float) (padding + 7) : 0.0f, 0.0f));
+        this.nameTextView = new SimpleTextView(context);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.nameTextView.setTextSize(17);
+        this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        View view = this.nameTextView;
+        int i = (LocaleController.isRTL ? 5 : 3) | 48;
         if (LocaleController.isRTL) {
-            i = (i2 == 2 ? 18 : 0) + 28;
+            f = (float) ((checkbox == 2 ? 18 : 0) + 28);
         } else {
-            i = 68 + padding;
+            f = (float) (padding + 68);
         }
-        float f2 = (float) i;
         if (LocaleController.isRTL) {
-            f = (float) (68 + padding);
+            f2 = (float) (padding + 68);
         } else {
-            if (i2 != 2) {
-                i5 = 0;
-            }
-            f = (float) (28 + i5);
+            f2 = (float) ((checkbox == 2 ? 18 : 0) + 28);
         }
-        i = 2;
-        boolean z = false;
-        addView(view, LayoutHelper.createFrame(-1, 20.0f, i4, f2, 11.5f, f, 0.0f));
-        r0.statusTextView = new SimpleTextView(context2);
-        r0.statusTextView.setTextSize(14);
-        r0.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        view = r0.statusTextView;
-        i4 = (LocaleController.isRTL ? 5 : 3) | 48;
-        float f3 = 28.0f;
-        f = LocaleController.isRTL ? 28.0f : (float) (68 + padding);
-        if (LocaleController.isRTL) {
-            f3 = (float) (68 + padding);
-        }
-        addView(view, LayoutHelper.createFrame(-1, 20.0f, i4, f, 34.5f, f3, 0.0f));
-        r0.imageView = new ImageView(context2);
-        r0.imageView.setScaleType(ScaleType.CENTER);
-        r0.imageView.setVisibility(8);
-        addView(r0.imageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, LocaleController.isRTL ? 0.0f : 16.0f, 0.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
-        if (i2 == i) {
-            r0.checkBoxBig = new CheckBoxSquare(context2, z);
-            addView(r0.checkBoxBig, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 3 : 5) | 16, LocaleController.isRTL ? 19.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 19.0f, 0.0f));
-        } else if (i2 == 1) {
-            r0.checkBox = new CheckBox(context2, R.drawable.round_check2);
-            r0.checkBox.setVisibility(4);
-            r0.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
-            addView(r0.checkBox, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (37 + padding), 38.0f, LocaleController.isRTL ? (float) (37 + padding) : 0.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, 20.0f, i, f, 11.5f, f2, 0.0f));
+        this.statusTextView = new SimpleTextView(context);
+        this.statusTextView.setTextSize(14);
+        this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : (float) (padding + 68), 34.5f, LocaleController.isRTL ? (float) (padding + 68) : 28.0f, 0.0f));
+        this.imageView = new ImageView(context);
+        this.imageView.setScaleType(ScaleType.CENTER);
+        this.imageView.setVisibility(8);
+        addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, LocaleController.isRTL ? 0.0f : 16.0f, 0.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
+        if (checkbox == 2) {
+            this.checkBoxBig = new CheckBoxSquare(context, false);
+            addView(this.checkBoxBig, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 3 : 5) | 16, LocaleController.isRTL ? 19.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 19.0f, 0.0f));
+        } else if (checkbox == 1) {
+            this.checkBox = new CheckBox(context, R.drawable.round_check2);
+            this.checkBox.setVisibility(4);
+            this.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
+            addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (padding + 37), 38.0f, LocaleController.isRTL ? (float) (padding + 37) : 0.0f, 0.0f));
         }
         if (admin) {
-            r0.adminImage = new ImageView(context2);
-            r0.adminImage.setImageResource(R.drawable.admin_star);
-            View view2 = r0.adminImage;
-            if (!LocaleController.isRTL) {
-                i3 = 5;
-            }
-            addView(view2, LayoutHelper.createFrame(16, 16.0f, i3 | 48, LocaleController.isRTL ? 24.0f : 0.0f, 13.5f, LocaleController.isRTL ? 0.0f : 24.0f, 0.0f));
+            this.adminImage = new ImageView(context);
+            this.adminImage.setImageResource(R.drawable.admin_star);
+            addView(this.adminImage, LayoutHelper.createFrame(16, 16.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 24.0f : 0.0f, 13.5f, LocaleController.isRTL ? 0.0f : 24.0f, 0.0f));
         }
     }
 
     public void setIsAdmin(int value) {
         if (this.adminImage != null) {
+            int i;
             this.adminImage.setVisibility(value != 0 ? 0 : 8);
             SimpleTextView simpleTextView = this.nameTextView;
-            int dp = (!LocaleController.isRTL || value == 0) ? 0 : AndroidUtilities.dp(16.0f);
-            int dp2 = (LocaleController.isRTL || value == 0) ? 0 : AndroidUtilities.dp(16.0f);
-            simpleTextView.setPadding(dp, 0, dp2, 0);
+            if (!LocaleController.isRTL || value == 0) {
+                i = 0;
+            } else {
+                i = AndroidUtilities.dp(16.0f);
+            }
+            int dp = (LocaleController.isRTL || value == 0) ? 0 : AndroidUtilities.dp(16.0f);
+            simpleTextView.setPadding(i, 0, dp, 0);
             if (value == 1) {
                 setTag(Theme.key_profile_creatorIcon);
                 this.adminImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_creatorIcon), Mode.MULTIPLY));
@@ -187,18 +171,19 @@ public class UserCell extends FrameLayout {
     }
 
     public void update(int mask) {
+        int i = 8;
         if (this.currentObject != null) {
             TLObject photo = null;
             String newName = null;
             User currentUser = null;
             Chat currentChat = null;
             if (this.currentObject instanceof User) {
-                currentUser = (User) this.currentObject;
+                currentUser = this.currentObject;
                 if (currentUser.photo != null) {
                     photo = currentUser.photo.photo_small;
                 }
             } else {
-                currentChat = (Chat) this.currentObject;
+                currentChat = this.currentObject;
                 if (currentChat.photo != null) {
                     photo = currentChat.photo.photo_small;
                 }
@@ -231,7 +216,6 @@ public class UserCell extends FrameLayout {
                     return;
                 }
             }
-            int i = 0;
             if (currentUser != null) {
                 this.avatarDrawable.setInfo(currentUser);
                 if (currentUser.status != null) {
@@ -247,9 +231,15 @@ public class UserCell extends FrameLayout {
                 this.nameTextView.setText(this.currentName);
             } else {
                 if (currentUser != null) {
-                    this.lastName = newName == null ? UserObject.getUserName(currentUser) : newName;
+                    if (newName == null) {
+                        newName = UserObject.getUserName(currentUser);
+                    }
+                    this.lastName = newName;
                 } else {
-                    this.lastName = newName == null ? currentChat.title : newName;
+                    if (newName == null) {
+                        newName = currentChat.title;
+                    }
+                    this.lastName = newName;
                 }
                 this.nameTextView.setText(this.lastName);
             }
@@ -259,27 +249,23 @@ public class UserCell extends FrameLayout {
             } else if (currentUser != null) {
                 if (currentUser.bot) {
                     this.statusTextView.setTextColor(this.statusColor);
-                    if (!currentUser.bot_chat_history) {
-                        if (this.adminImage == null || this.adminImage.getVisibility() != 0) {
-                            this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
-                        }
+                    if (currentUser.bot_chat_history || (this.adminImage != null && this.adminImage.getVisibility() == 0)) {
+                        this.statusTextView.setText(LocaleController.getString("BotStatusRead", R.string.BotStatusRead));
+                    } else {
+                        this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
                     }
-                    this.statusTextView.setText(LocaleController.getString("BotStatusRead", R.string.BotStatusRead));
-                } else {
-                    if (currentUser.id != UserConfig.getInstance(this.currentAccount).getClientUserId() && (currentUser.status == null || currentUser.status.expires <= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime())) {
-                        if (!MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.id))) {
-                            this.statusTextView.setTextColor(this.statusColor);
-                            this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, currentUser));
-                        }
-                    }
+                } else if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.id)))) {
                     this.statusTextView.setTextColor(this.statusOnlineColor);
                     this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
+                } else {
+                    this.statusTextView.setTextColor(this.statusColor);
+                    this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, currentUser));
                 }
             }
             if ((this.imageView.getVisibility() == 0 && this.currentDrawable == 0) || (this.imageView.getVisibility() == 8 && this.currentDrawable != 0)) {
                 ImageView imageView = this.imageView;
-                if (this.currentDrawable == 0) {
-                    i = 8;
+                if (this.currentDrawable != 0) {
+                    i = 0;
                 }
                 imageView.setVisibility(i);
                 this.imageView.setImageResource(this.currentDrawable);

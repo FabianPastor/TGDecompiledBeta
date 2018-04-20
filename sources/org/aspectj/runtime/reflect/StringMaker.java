@@ -45,10 +45,7 @@ class StringMaker {
 
     String makeKindName(String name) {
         int dash = name.lastIndexOf(45);
-        if (dash == -1) {
-            return name;
-        }
-        return name.substring(dash + 1);
+        return dash == -1 ? name : name.substring(dash + 1);
     }
 
     String makeModifiersString(int modifiers) {
@@ -59,18 +56,12 @@ class StringMaker {
         if (str.length() == 0) {
             return TtmlNode.ANONYMOUS_REGION_ID;
         }
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(str);
-        stringBuffer.append(" ");
-        return stringBuffer.toString();
+        return new StringBuffer().append(str).append(" ").toString();
     }
 
     String stripPackageName(String name) {
         int dot = name.lastIndexOf(46);
-        if (dot == -1) {
-            return name;
-        }
-        return name.substring(dot + 1);
+        return dot == -1 ? name : name.substring(dot + 1);
     }
 
     String makeTypeName(Class type, String typeName, boolean shortName) {
@@ -79,10 +70,7 @@ class StringMaker {
         }
         if (type.isArray()) {
             Class componentType = type.getComponentType();
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(makeTypeName(componentType, componentType.getName(), shortName));
-            stringBuffer.append("[]");
-            return stringBuffer.toString();
+            return new StringBuffer().append(makeTypeName(componentType, componentType.getName(), shortName)).append("[]").toString();
         } else if (shortName) {
             return stripPackageName(typeName).replace('$', '.');
         } else {
@@ -122,11 +110,9 @@ class StringMaker {
     }
 
     public void addThrows(StringBuffer buf, Class[] types) {
-        if (this.includeThrows && types != null) {
-            if (types.length != 0) {
-                buf.append(" throws ");
-                addTypeNames(buf, types);
-            }
+        if (this.includeThrows && types != null && types.length != 0) {
+            buf.append(" throws ");
+            addTypeNames(buf, types);
         }
     }
 }

@@ -38,24 +38,21 @@ public final class PrivFrame extends Id3Frame {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                PrivFrame other = (PrivFrame) obj;
-                if (!Util.areEqual(this.owner, other.owner) || !Arrays.equals(this.privateData, other.privateData)) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        PrivFrame other = (PrivFrame) obj;
+        if (Util.areEqual(this.owner, other.owner) && Arrays.equals(this.privateData, other.privateData)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * ((31 * 17) + (this.owner != null ? this.owner.hashCode() : 0))) + Arrays.hashCode(this.privateData);
+        return (((this.owner != null ? this.owner.hashCode() : 0) + 527) * 31) + Arrays.hashCode(this.privateData);
     }
 
     public void writeToParcel(Parcel dest, int flags) {

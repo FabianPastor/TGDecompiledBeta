@@ -94,33 +94,25 @@ abstract class FormatCache<F extends Format> {
     static String getPatternForStyle(Integer dateStyle, Integer timeStyle, Locale locale) {
         MultipartKey key = new MultipartKey(dateStyle, timeStyle, locale);
         String pattern = (String) cDateTimeInstanceCache.get(key);
-        if (pattern == null) {
-            ClassCastException ex;
-            String previous;
-            if (dateStyle == null) {
-                try {
-                    ex = DateFormat.getTimeInstance(timeStyle.intValue(), locale);
-                } catch (ClassCastException e) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("No date time pattern for locale: ");
-                    stringBuilder.append(locale);
-                    throw new IllegalArgumentException(stringBuilder.toString());
-                }
-            } else if (timeStyle == null) {
-                ex = DateFormat.getDateInstance(dateStyle.intValue(), locale);
-            } else {
-                ex = DateFormat.getDateTimeInstance(dateStyle.intValue(), timeStyle.intValue(), locale);
-                pattern = ((SimpleDateFormat) ex).toPattern();
-                previous = (String) cDateTimeInstanceCache.putIfAbsent(key, pattern);
-                if (previous != null) {
-                    pattern = previous;
-                }
+        if (pattern != null) {
+            return pattern;
+        }
+        DateFormat formatter;
+        if (dateStyle == null) {
+            try {
+                formatter = DateFormat.getTimeInstance(timeStyle.intValue(), locale);
+            } catch (ClassCastException e) {
+                throw new IllegalArgumentException("No date time pattern for locale: " + locale);
             }
-            pattern = ((SimpleDateFormat) ex).toPattern();
-            previous = (String) cDateTimeInstanceCache.putIfAbsent(key, pattern);
-            if (previous != null) {
-                pattern = previous;
-            }
+        } else if (timeStyle == null) {
+            formatter = DateFormat.getDateInstance(dateStyle.intValue(), locale);
+        } else {
+            formatter = DateFormat.getDateTimeInstance(dateStyle.intValue(), timeStyle.intValue(), locale);
+        }
+        pattern = ((SimpleDateFormat) formatter).toPattern();
+        String previous = (String) cDateTimeInstanceCache.putIfAbsent(key, pattern);
+        if (previous != null) {
+            return previous;
         }
         return pattern;
     }

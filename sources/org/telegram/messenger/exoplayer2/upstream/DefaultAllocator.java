@@ -20,18 +20,26 @@ public final class DefaultAllocator implements Allocator {
     }
 
     public DefaultAllocator(boolean trimOnReset, int individualAllocationSize, int initialAllocationCount) {
-        int i = 0;
-        Assertions.checkArgument(individualAllocationSize > 0);
-        Assertions.checkArgument(initialAllocationCount >= 0);
+        boolean z;
+        boolean z2 = false;
+        if (individualAllocationSize > 0) {
+            z = true;
+        } else {
+            z = false;
+        }
+        Assertions.checkArgument(z);
+        if (initialAllocationCount >= 0) {
+            z2 = true;
+        }
+        Assertions.checkArgument(z2);
         this.trimOnReset = trimOnReset;
         this.individualAllocationSize = individualAllocationSize;
         this.availableCount = initialAllocationCount;
         this.availableAllocations = new Allocation[(initialAllocationCount + AVAILABLE_EXTRA_CAPACITY)];
         if (initialAllocationCount > 0) {
             this.initialAllocationBlock = new byte[(initialAllocationCount * individualAllocationSize)];
-            while (i < initialAllocationCount) {
+            for (int i = 0; i < initialAllocationCount; i++) {
                 this.availableAllocations[i] = new Allocation(this.initialAllocationBlock, i * individualAllocationSize);
-                i++;
             }
         } else {
             this.initialAllocationBlock = null;
@@ -57,10 +65,10 @@ public final class DefaultAllocator implements Allocator {
         Allocation allocation;
         this.allocatedCount++;
         if (this.availableCount > 0) {
-            allocation = this.availableAllocations;
+            Allocation[] allocationArr = this.availableAllocations;
             int i = this.availableCount - 1;
             this.availableCount = i;
-            allocation = allocation[i];
+            allocation = allocationArr[i];
             this.availableAllocations[this.availableCount] = null;
         } else {
             allocation = new Allocation(new byte[this.individualAllocationSize], 0);
@@ -79,22 +87,14 @@ public final class DefaultAllocator implements Allocator {
         }
         for (Allocation allocation : allocations) {
             boolean z;
-            Allocation[] allocationArr;
-            int i;
-            if (allocation.data != this.initialAllocationBlock) {
-                if (allocation.data.length != this.individualAllocationSize) {
-                    z = false;
-                    Assertions.checkArgument(z);
-                    allocationArr = this.availableAllocations;
-                    i = this.availableCount;
-                    this.availableCount = i + 1;
-                    allocationArr[i] = allocation;
-                }
+            if (allocation.data == this.initialAllocationBlock || allocation.data.length == this.individualAllocationSize) {
+                z = true;
+            } else {
+                z = false;
             }
-            z = true;
             Assertions.checkArgument(z);
-            allocationArr = this.availableAllocations;
-            i = this.availableCount;
+            Allocation[] allocationArr = this.availableAllocations;
+            int i = this.availableCount;
             this.availableCount = i + 1;
             allocationArr[i] = allocation;
         }
@@ -102,34 +102,37 @@ public final class DefaultAllocator implements Allocator {
         notifyAll();
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public synchronized void trim() {
         int targetAvailableCount = Math.max(0, Util.ceilDivide(this.targetBufferSize, this.individualAllocationSize) - this.allocatedCount);
         if (targetAvailableCount < this.availableCount) {
             if (this.initialAllocationBlock != null) {
+                int highIndex = this.availableCount - 1;
                 int lowIndex = 0;
-                int i = this.availableCount - 1;
-                while (lowIndex <= i) {
+                while (lowIndex <= highIndex) {
+                    int lowIndex2;
+                    int highIndex2;
                     Allocation lowAllocation = this.availableAllocations[lowIndex];
                     if (lowAllocation.data == this.initialAllocationBlock) {
-                        lowIndex++;
+                        lowIndex2 = lowIndex + 1;
+                        highIndex2 = highIndex;
                     } else {
-                        Allocation highAllocation = this.availableAllocations[i];
+                        Allocation highAllocation = this.availableAllocations[highIndex];
                         if (highAllocation.data != this.initialAllocationBlock) {
-                            i--;
+                            highIndex2 = highIndex - 1;
+                            lowIndex2 = lowIndex;
                         } else {
-                            int lowIndex2 = lowIndex + 1;
+                            lowIndex2 = lowIndex + 1;
                             this.availableAllocations[lowIndex] = highAllocation;
-                            int highIndex = i - 1;
-                            this.availableAllocations[i] = lowAllocation;
-                            i = highIndex;
-                            lowIndex = lowIndex2;
+                            highIndex2 = highIndex - 1;
+                            this.availableAllocations[highIndex] = lowAllocation;
                         }
                     }
+                    highIndex = highIndex2;
+                    lowIndex = lowIndex2;
                 }
                 targetAvailableCount = Math.max(targetAvailableCount, lowIndex);
-                if (targetAvailableCount >= this.availableCount) {
-                    return;
-                }
             }
             Arrays.fill(this.availableAllocations, targetAvailableCount, this.availableCount, null);
             this.availableCount = targetAvailableCount;

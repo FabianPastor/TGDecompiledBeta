@@ -19,6 +19,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
@@ -29,8 +30,8 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
-import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.User;
 
 public class WearDataLayerListenerService extends WearableListenerService {
@@ -38,8 +39,8 @@ public class WearDataLayerListenerService extends WearableListenerService {
     private int currentAccount = UserConfig.selectedAccount;
 
     /* renamed from: org.telegram.messenger.WearDataLayerListenerService$9 */
-    static class C18299 implements OnCompleteListener<CapabilityInfo> {
-        C18299() {
+    static class C18319 implements OnCompleteListener<CapabilityInfo> {
+        C18319() {
         }
 
         public void onComplete(Task<CapabilityInfo> task) {
@@ -73,45 +74,39 @@ public class WearDataLayerListenerService extends WearableListenerService {
     }
 
     public void onChannelOpened(Channel ch) {
-        Channel channel = ch;
         GoogleApiClient apiClient = new Builder(this).addApi(Wearable.API).build();
         if (apiClient.blockingConnect().isSuccess()) {
             String path = ch.getPath();
             if (BuildVars.LOGS_ENABLED) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("wear channel path: ");
-                stringBuilder.append(path);
-                FileLog.m0d(stringBuilder.toString());
+                FileLog.m0d("wear channel path: " + path);
             }
-            DataInputStream in;
-            DataOutputStream out;
+            DataOutputStream dataOutputStream;
+            DataInputStream dataInputStream;
             try {
-                final File photo;
+                User user;
                 final CyclicBarrier barrier;
+                NotificationCenterDelegate c18281;
+                final NotificationCenterDelegate notificationCenterDelegate;
                 if ("/getCurrentUser".equals(path)) {
-                    DataOutputStream out2 = new DataOutputStream(new BufferedOutputStream(((GetOutputStreamResult) channel.getOutputStream(apiClient).await()).getOutputStream()));
-                    if (UserConfig.getInstance(r1.currentAccount).isClientActivated()) {
-                        final User user = UserConfig.getInstance(r1.currentAccount).getCurrentUser();
-                        out2.writeInt(user.id);
-                        out2.writeUTF(user.first_name);
-                        out2.writeUTF(user.last_name);
-                        out2.writeUTF(user.phone);
+                    dataOutputStream = new DataOutputStream(new BufferedOutputStream(((GetOutputStreamResult) ch.getOutputStream(apiClient).await()).getOutputStream()));
+                    if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
+                        user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
+                        dataOutputStream.writeInt(user.id);
+                        dataOutputStream.writeUTF(user.first_name);
+                        dataOutputStream.writeUTF(user.last_name);
+                        dataOutputStream.writeUTF(user.phone);
                         if (user.photo != null) {
-                            photo = FileLoader.getPathToAttach(user.photo.photo_small, true);
+                            File photo = FileLoader.getPathToAttach(user.photo.photo_small, true);
                             barrier = new CyclicBarrier(2);
                             if (!photo.exists()) {
-                                final NotificationCenterDelegate listener = new NotificationCenterDelegate() {
+                                final File file = photo;
+                                c18281 = new NotificationCenterDelegate() {
                                     public void didReceivedNotification(int id, int account, Object... args) {
                                         if (id == NotificationCenter.FileDidLoaded) {
                                             if (BuildVars.LOGS_ENABLED) {
-                                                StringBuilder stringBuilder = new StringBuilder();
-                                                stringBuilder.append("file loaded: ");
-                                                stringBuilder.append(args[0]);
-                                                stringBuilder.append(" ");
-                                                stringBuilder.append(args[0].getClass().getName());
-                                                FileLog.m0d(stringBuilder.toString());
+                                                FileLog.m0d("file loaded: " + args[0] + " " + args[0].getClass().getName());
                                             }
-                                            if (args[0].equals(photo.getName())) {
+                                            if (args[0].equals(file.getName())) {
                                                 if (BuildVars.LOGS_ENABLED) {
                                                     FileLog.m1e("LOADED USER PHOTO");
                                                 }
@@ -123,45 +118,53 @@ public class WearDataLayerListenerService extends WearableListenerService {
                                         }
                                     }
                                 };
+                                notificationCenterDelegate = c18281;
+                                final User user2 = user;
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
-                                        NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).addObserver(listener, NotificationCenter.FileDidLoaded);
-                                        FileLoader.getInstance(WearDataLayerListenerService.this.currentAccount).loadFile(user.photo.photo_small, null, 0, 1);
+                                        NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.FileDidLoaded);
+                                        FileLoader.getInstance(WearDataLayerListenerService.this.currentAccount).loadFile(user2.photo.photo_small, null, 0, 1);
                                     }
                                 });
                                 try {
                                     barrier.await(10, TimeUnit.SECONDS);
                                 } catch (Exception e) {
                                 }
+                                notificationCenterDelegate = c18281;
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
-                                        NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).removeObserver(listener, NotificationCenter.FileDidLoaded);
+                                        NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.FileDidLoaded);
                                     }
                                 });
                             }
                             if (!photo.exists() || photo.length() > 52428800) {
-                                out2.writeInt(0);
+                                dataOutputStream.writeInt(0);
                             } else {
                                 byte[] photoData = new byte[((int) photo.length())];
-                                FileInputStream photoIn = new FileInputStream(photo);
-                                new DataInputStream(photoIn).readFully(photoData);
-                                photoIn.close();
-                                out2.writeInt(photoData.length);
-                                out2.write(photoData);
+                                InputStream fileInputStream = new FileInputStream(photo);
+                                new DataInputStream(fileInputStream).readFully(photoData);
+                                fileInputStream.close();
+                                dataOutputStream.writeInt(photoData.length);
+                                dataOutputStream.write(photoData);
                             }
                         } else {
-                            out2.writeInt(0);
+                            dataOutputStream.writeInt(0);
                         }
                     } else {
-                        out2.writeInt(0);
+                        dataOutputStream.writeInt(0);
                     }
-                    out2.flush();
-                    out2.close();
+                    dataOutputStream.flush();
+                    dataOutputStream.close();
+                    ch.close(apiClient).await();
+                    apiClient.disconnect();
+                    if (!BuildVars.LOGS_ENABLED) {
+                        FileLog.m0d("WearableDataLayer channel thread exiting");
+                    }
                 } else if ("/waitForAuthCode".equals(path)) {
-                    ConnectionsManager.getInstance(r1.currentAccount).setAppPaused(false, false);
+                    ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
                     final String[] code = new String[]{null};
                     barrier = new CyclicBarrier(2);
-                    final NotificationCenterDelegate listener2 = new NotificationCenterDelegate() {
+                    c18281 = new NotificationCenterDelegate() {
                         public void didReceivedNotification(int id, int account, Object... args) {
                             if (id == NotificationCenter.didReceivedNewMessages && ((Long) args[0]).longValue() == 777000) {
                                 ArrayList<MessageObject> arr = args[1];
@@ -181,105 +184,108 @@ public class WearDataLayerListenerService extends WearableListenerService {
                             }
                         }
                     };
+                    notificationCenterDelegate = c18281;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).addObserver(listener2, NotificationCenter.didReceivedNewMessages);
+                            NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.didReceivedNewMessages);
                         }
                     });
                     try {
                         barrier.await(15, TimeUnit.SECONDS);
                     } catch (Exception e2) {
                     }
+                    notificationCenterDelegate = c18281;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).removeObserver(listener2, NotificationCenter.didReceivedNewMessages);
+                            NotificationCenter.getInstance(WearDataLayerListenerService.this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.didReceivedNewMessages);
                         }
                     });
-                    DataOutputStream out3 = new DataOutputStream(((GetOutputStreamResult) channel.getOutputStream(apiClient).await()).getOutputStream());
+                    dataOutputStream = new DataOutputStream(((GetOutputStreamResult) ch.getOutputStream(apiClient).await()).getOutputStream());
                     if (code[0] != null) {
-                        out3.writeUTF(code[0]);
+                        dataOutputStream.writeUTF(code[0]);
                     } else {
-                        out3.writeUTF(TtmlNode.ANONYMOUS_REGION_ID);
+                        dataOutputStream.writeUTF(TtmlNode.ANONYMOUS_REGION_ID);
                     }
-                    out3.flush();
-                    out3.close();
-                    ConnectionsManager.getInstance(r1.currentAccount).setAppPaused(true, false);
-                } else if ("/getChatPhoto".equals(path)) {
-                    in = new DataInputStream(((GetInputStreamResult) channel.getInputStream(apiClient).await()).getInputStream());
-                    out = new DataOutputStream(((GetOutputStreamResult) channel.getOutputStream(apiClient).await()).getOutputStream());
-                    String _req = in.readUTF();
-                    JSONObject req = new JSONObject(_req);
-                    int chatID = req.getInt("chat_id");
-                    int accountID = req.getInt("account_id");
-                    int currentAccount = -1;
-                    for (int i = 0; i < UserConfig.getActivatedAccountsCount(); i++) {
-                        if (UserConfig.getInstance(i).getClientUserId() == accountID) {
-                            currentAccount = i;
-                            break;
-                        }
+                    dataOutputStream.flush();
+                    dataOutputStream.close();
+                    ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
+                    ch.close(apiClient).await();
+                    apiClient.disconnect();
+                    if (!BuildVars.LOGS_ENABLED) {
+                        FileLog.m0d("WearableDataLayer channel thread exiting");
                     }
-                    if (currentAccount != -1) {
-                        FileLocation location = null;
-                        if (chatID > 0) {
-                            User user2 = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(chatID));
-                            if (!(user2 == null || user2.photo == null)) {
-                                location = user2.photo.photo_small;
-                            }
-                        } else {
-                            Chat chat = MessagesController.getInstance(currentAccount).getChat(Integer.valueOf(-chatID));
-                            if (!(chat == null || chat.photo == null)) {
-                                location = chat.photo.photo_small;
+                } else {
+                    if ("/getChatPhoto".equals(path)) {
+                        dataInputStream = new DataInputStream(((GetInputStreamResult) ch.getInputStream(apiClient).await()).getInputStream());
+                        dataOutputStream = new DataOutputStream(((GetOutputStreamResult) ch.getOutputStream(apiClient).await()).getOutputStream());
+                        JSONObject jSONObject = new JSONObject(dataInputStream.readUTF());
+                        int chatID = jSONObject.getInt("chat_id");
+                        int accountID = jSONObject.getInt("account_id");
+                        int currentAccount = -1;
+                        for (int i = 0; i < UserConfig.getActivatedAccountsCount(); i++) {
+                            if (UserConfig.getInstance(i).getClientUserId() == accountID) {
+                                currentAccount = i;
+                                break;
                             }
                         }
-                        if (location != null) {
-                            photo = FileLoader.getPathToAttach(location, true);
-                            if (!photo.exists() || photo.length() >= 102400) {
-                                out.writeInt(0);
-                            } else {
-                                out.writeInt((int) photo.length());
-                                FileInputStream fin = new FileInputStream(photo);
-                                _req = new byte[10240];
-                                while (true) {
-                                    int read = fin.read(_req);
-                                    int read2 = read;
-                                    if (read <= 0) {
-                                        break;
-                                    }
-                                    out.write(_req, 0, read2);
-                                    WearDataLayerListenerService wearDataLayerListenerService = this;
+                        if (currentAccount != -1) {
+                            TLObject location = null;
+                            if (chatID > 0) {
+                                user = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(chatID));
+                                if (!(user == null || user.photo == null)) {
+                                    location = user.photo.photo_small;
                                 }
-                                fin.close();
+                            } else {
+                                Chat chat = MessagesController.getInstance(currentAccount).getChat(Integer.valueOf(-chatID));
+                                if (!(chat == null || chat.photo == null)) {
+                                    location = chat.photo.photo_small;
+                                }
+                            }
+                            if (location != null) {
+                                File file2 = FileLoader.getPathToAttach(location, true);
+                                if (!file2.exists() || file2.length() >= 102400) {
+                                    dataOutputStream.writeInt(0);
+                                } else {
+                                    dataOutputStream.writeInt((int) file2.length());
+                                    FileInputStream fin = new FileInputStream(file2);
+                                    byte[] buf = new byte[10240];
+                                    while (true) {
+                                        int read = fin.read(buf);
+                                        if (read <= 0) {
+                                            break;
+                                        }
+                                        dataOutputStream.write(buf, 0, read);
+                                    }
+                                    fin.close();
+                                }
+                            } else {
+                                dataOutputStream.writeInt(0);
                             }
                         } else {
-                            out.writeInt(0);
+                            dataOutputStream.writeInt(0);
                         }
-                    } else {
-                        out.writeInt(0);
+                        dataOutputStream.flush();
+                        dataInputStream.close();
+                        dataOutputStream.close();
                     }
-                    out.flush();
-                    in.close();
-                    out.close();
+                    ch.close(apiClient).await();
+                    apiClient.disconnect();
+                    if (!BuildVars.LOGS_ENABLED) {
+                        FileLog.m0d("WearableDataLayer channel thread exiting");
+                    }
                 }
             } catch (Exception e3) {
-                in.close();
-            } catch (Exception e4) {
-                Exception x = e4;
+                dataInputStream.close();
+                dataOutputStream.close();
+            } catch (Throwable x) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.m2e("error processing wear request", x);
                 }
             } catch (Throwable th) {
-                Throwable th2 = th;
-                in.close();
-                out.close();
+                dataInputStream.close();
+                dataOutputStream.close();
             }
-            channel.close(apiClient).await();
-            apiClient.disconnect();
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.m0d("WearableDataLayer channel thread exiting");
-            }
-            return;
-        }
-        if (BuildVars.LOGS_ENABLED) {
+        } else if (BuildVars.LOGS_ENABLED) {
             FileLog.m1e("failed to connect google api client");
         }
     }
@@ -288,53 +294,27 @@ public class WearDataLayerListenerService extends WearableListenerService {
         if ("/reply".equals(messageEvent.getPath())) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
-                    Throwable e;
-                    Throwable x;
                     try {
                         ApplicationLoader.postInitApplication();
-                        try {
-                            JSONObject r = new JSONObject(new String(messageEvent.getData(), C0542C.UTF8_NAME));
-                            CharSequence text = r.getString(MimeTypes.BASE_TYPE_TEXT);
-                            if (text != null) {
-                                if (text.length() != 0) {
-                                    long dialog_id = r.getLong("chat_id");
-                                    int max_id = r.getInt("max_id");
-                                    int currentAccount = -1;
-                                    int accountID = r.getInt("account_id");
-                                    for (int i = 0; i < UserConfig.getActivatedAccountsCount(); i++) {
-                                        if (UserConfig.getInstance(i).getClientUserId() == accountID) {
-                                            currentAccount = i;
-                                            break;
-                                        }
-                                    }
-                                    int currentAccount2 = currentAccount;
-                                    int i2;
-                                    int i3;
-                                    if (dialog_id == 0 || max_id == 0) {
-                                        i2 = currentAccount2;
-                                        i3 = accountID;
-                                    } else if (currentAccount2 == -1) {
-                                        i2 = currentAccount2;
-                                        i3 = accountID;
-                                    } else {
-                                        int currentAccount3 = currentAccount2;
-                                        SendMessagesHelper.getInstance(currentAccount2).sendMessage(text.toString(), dialog_id, null, null, true, null, null, null);
-                                        accountID = currentAccount3;
-                                        MessagesController.getInstance(accountID).markDialogAsRead(dialog_id, max_id, max_id, 0, false, 0, 1);
-                                    }
+                        JSONObject jSONObject = new JSONObject(new String(messageEvent.getData(), C0542C.UTF8_NAME));
+                        CharSequence text = jSONObject.getString(MimeTypes.BASE_TYPE_TEXT);
+                        if (text != null && text.length() != 0) {
+                            long dialog_id = jSONObject.getLong("chat_id");
+                            int max_id = jSONObject.getInt("max_id");
+                            int currentAccount = -1;
+                            int accountID = jSONObject.getInt("account_id");
+                            for (int i = 0; i < UserConfig.getActivatedAccountsCount(); i++) {
+                                if (UserConfig.getInstance(i).getClientUserId() == accountID) {
+                                    currentAccount = i;
+                                    break;
                                 }
                             }
-                        } catch (Exception e2) {
-                            e = e2;
-                            x = e;
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m3e(x);
+                            if (dialog_id != 0 && max_id != 0 && currentAccount != -1) {
+                                SendMessagesHelper.getInstance(currentAccount).sendMessage(text.toString(), dialog_id, null, null, true, null, null, null);
+                                MessagesController.getInstance(currentAccount).markDialogAsRead(dialog_id, max_id, max_id, 0, false, 0, true);
                             }
                         }
-                    } catch (Exception e3) {
-                        e = e3;
-                        C05207 c05207 = this;
-                        x = e;
+                    } catch (Throwable x) {
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.m3e(x);
                         }
@@ -370,7 +350,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
     }
 
     public static void updateWatchConnectionState() {
-        Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener(new C18299());
+        Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener(new C18319());
     }
 
     public static boolean isWatchConnected() {

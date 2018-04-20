@@ -20,6 +20,8 @@ public class GroupCreateSectionCell extends FrameLayout {
     private TextView textView;
 
     public GroupCreateSectionCell(Context context) {
+        int i;
+        int i2 = 5;
         super(context);
         setBackgroundColor(Theme.getColor(Theme.key_graySection));
         this.drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_groupcreate_sectionShadow), Mode.MULTIPLY));
@@ -27,13 +29,18 @@ public class GroupCreateSectionCell extends FrameLayout {
         this.textView.setTextSize(1, 14.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextColor(Theme.getColor(Theme.key_groupcreate_sectionText));
-        int i = 3;
-        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
+        } else {
+            i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 16.0f, 0.0f, 16.0f, 0.0f));
+        textView.setGravity(i | 16);
+        View view = this.textView;
+        if (!LocaleController.isRTL) {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 16.0f, 0.0f, 16.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

@@ -49,23 +49,20 @@ public final class AudioAttributes {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                AudioAttributes other = (AudioAttributes) obj;
-                if (this.contentType != other.contentType || this.flags != other.flags || this.usage != other.usage) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        AudioAttributes other = (AudioAttributes) obj;
+        if (this.contentType == other.contentType && this.flags == other.flags && this.usage == other.usage) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * ((31 * ((31 * 17) + this.contentType)) + this.flags)) + this.usage;
+        return ((((this.contentType + 527) * 31) + this.flags) * 31) + this.usage;
     }
 }

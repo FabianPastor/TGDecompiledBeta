@@ -87,10 +87,10 @@ public class Switch2 extends View {
             this.isChecked = checked;
             if (this.attachedToWindow && animated) {
                 animateToCheckedState(checked);
-            } else {
-                cancelCheckAnimator();
-                setProgress(checked ? 1.0f : 0.0f);
+                return;
             }
+            cancelCheckAnimator();
+            setProgress(checked ? 1.0f : 0.0f);
         }
     }
 
@@ -104,49 +104,37 @@ public class Switch2 extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        Switch2 switch2 = this;
-        Canvas canvas2 = canvas;
         if (getVisibility() == 0) {
             int width = AndroidUtilities.dp(36.0f);
             int thumb = AndroidUtilities.dp(20.0f);
             int x = (getMeasuredWidth() - width) / 2;
             int y = (getMeasuredHeight() - AndroidUtilities.dp(14.0f)) / 2;
-            int tx = (((int) (((float) (width - AndroidUtilities.dp(14.0f))) * switch2.progress)) + x) + AndroidUtilities.dp(7.0f);
+            int tx = (((int) (((float) (width - AndroidUtilities.dp(14.0f))) * this.progress)) + x) + AndroidUtilities.dp(7.0f);
             int ty = getMeasuredHeight() / 2;
-            switch2.paint.setColor(((((((int) (NUM + (-95.0f * switch2.progress))) & 255) << 16) | Theme.ACTION_BAR_VIDEO_EDIT_COLOR) | ((((int) (NUM + (38.0f * switch2.progress))) & 255) << 8)) | (((int) (NUM + (77.0f * switch2.progress))) & 255));
-            switch2.rectF.set((float) x, (float) y, (float) (x + width), (float) (AndroidUtilities.dp(14.0f) + y));
-            canvas2.drawRoundRect(switch2.rectF, (float) AndroidUtilities.dp(7.0f), (float) AndroidUtilities.dp(7.0f), switch2.paint);
-            switch2.paint.setColor(((((((int) (219.0f + (-151.0f * switch2.progress))) & 255) << 16) | Theme.ACTION_BAR_VIDEO_EDIT_COLOR) | ((((int) (88.0f + (80.0f * switch2.progress))) & 255) << 8)) | (((int) (92.0f + (142.0f * switch2.progress))) & 255));
-            canvas2.drawBitmap(drawBitmap, (float) (tx - AndroidUtilities.dp(12.0f)), (float) (ty - AndroidUtilities.dp(11.0f)), null);
-            canvas2.drawCircle((float) tx, (float) ty, (float) AndroidUtilities.dp(10.0f), switch2.paint);
-            switch2.paint2.setColor(-1);
-            int tx2 = (int) (((float) tx) - (((float) AndroidUtilities.dp(10.8f)) - (((float) AndroidUtilities.dp(1.3f)) * switch2.progress)));
-            int ty2 = (int) (((float) ty) - (((float) AndroidUtilities.dp(8.5f)) - (((float) AndroidUtilities.dp(0.5f)) * switch2.progress)));
-            int startX2 = ((int) AndroidUtilities.dpf2(4.6f)) + tx2;
-            int startY2 = (int) (AndroidUtilities.dpf2(9.5f) + ((float) ty2));
-            tx = ((int) AndroidUtilities.dpf2(7.5f)) + tx2;
-            int startY = ((int) AndroidUtilities.dpf2(5.4f)) + ty2;
-            int endX = tx + AndroidUtilities.dp(7.0f);
-            ty = startY + AndroidUtilities.dp(7.0f);
-            int ty3 = ty2;
-            width = (int) (((float) tx) + (((float) (startX2 - tx)) * switch2.progress));
-            ty2 = (int) (((float) startY) + (((float) (startY2 - startY)) * switch2.progress));
-            endX = (int) (((float) endX) + (((float) ((startX2 + AndroidUtilities.dp(2.0f)) - endX)) * switch2.progress));
-            ty = (int) (((float) ty) + (((float) ((startY2 + AndroidUtilities.dp(2.0f)) - ty)) * switch2.progress));
-            float f = (float) ty2;
-            int startY22 = startY2;
-            int startY3 = ty2;
-            float f2 = f;
-            Canvas canvas3 = canvas2;
-            int i = startY3;
-            canvas3.drawLine((float) width, f2, (float) endX, (float) ty, switch2.paint2);
-            width = ((int) AndroidUtilities.dpf2(7.5f)) + tx2;
-            thumb = ((int) AndroidUtilities.dpf2(12.5f)) + ty3;
-            ty2 = width + AndroidUtilities.dp(7.0f);
-            startY2 = thumb - AndroidUtilities.dp(7.0f);
-            float f3 = (float) startY2;
-            float f4 = f3;
-            canvas2.drawLine((float) width, (float) thumb, (float) ty2, f4, switch2.paint2);
+            this.paint.setColor(((Theme.ACTION_BAR_VIDEO_EDIT_COLOR | ((((int) (255.0f + (-95.0f * this.progress))) & 255) << 16)) | ((((int) (176.0f + (38.0f * this.progress))) & 255) << 8)) | (((int) (173.0f + (77.0f * this.progress))) & 255));
+            this.rectF.set((float) x, (float) y, (float) (x + width), (float) (AndroidUtilities.dp(14.0f) + y));
+            canvas.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(7.0f), (float) AndroidUtilities.dp(7.0f), this.paint);
+            this.paint.setColor(((Theme.ACTION_BAR_VIDEO_EDIT_COLOR | ((((int) (219.0f + (-151.0f * this.progress))) & 255) << 16)) | ((((int) (88.0f + (80.0f * this.progress))) & 255) << 8)) | (((int) (92.0f + (142.0f * this.progress))) & 255));
+            canvas.drawBitmap(drawBitmap, (float) (tx - AndroidUtilities.dp(12.0f)), (float) (ty - AndroidUtilities.dp(11.0f)), null);
+            canvas.drawCircle((float) tx, (float) ty, (float) AndroidUtilities.dp(10.0f), this.paint);
+            this.paint2.setColor(-1);
+            tx = (int) (((float) tx) - (((float) AndroidUtilities.dp(10.8f)) - (((float) AndroidUtilities.dp(1.3f)) * this.progress)));
+            ty = (int) (((float) ty) - (((float) AndroidUtilities.dp(8.5f)) - (((float) AndroidUtilities.dp(0.5f)) * this.progress)));
+            int startX2 = ((int) AndroidUtilities.dpf2(4.6f)) + tx;
+            int startY2 = (int) (AndroidUtilities.dpf2(9.5f) + ((float) ty));
+            int startX = ((int) AndroidUtilities.dpf2(7.5f)) + tx;
+            int startY = ((int) AndroidUtilities.dpf2(5.4f)) + ty;
+            int endX = startX + AndroidUtilities.dp(7.0f);
+            int endY = startY + AndroidUtilities.dp(7.0f);
+            startX = (int) (((float) startX) + (((float) (startX2 - startX)) * this.progress));
+            startY = (int) (((float) startY) + (((float) (startY2 - startY)) * this.progress));
+            endX = (int) (((float) endX) + (((float) ((startX2 + AndroidUtilities.dp(2.0f)) - endX)) * this.progress));
+            Canvas canvas2 = canvas;
+            canvas2.drawLine((float) startX, (float) startY, (float) endX, (float) ((int) (((float) endY) + (((float) ((startY2 + AndroidUtilities.dp(2.0f)) - endY)) * this.progress))), this.paint2);
+            startX = ((int) AndroidUtilities.dpf2(7.5f)) + tx;
+            startY = ((int) AndroidUtilities.dpf2(12.5f)) + ty;
+            canvas2 = canvas;
+            canvas2.drawLine((float) startX, (float) startY, (float) (startX + AndroidUtilities.dp(7.0f)), (float) (startY - AndroidUtilities.dp(7.0f)), this.paint2);
         }
     }
 }

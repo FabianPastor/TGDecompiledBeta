@@ -22,8 +22,8 @@ public class PhotoEditRadioCell extends FrameLayout {
     private final int[] tintShadowColors = new int[]{0, -45747, -753630, -13056, -8269183, -9321002, -16747844, -10080879};
 
     /* renamed from: org.telegram.ui.Cells.PhotoEditRadioCell$1 */
-    class C08841 implements OnClickListener {
-        C08841() {
+    class C08851 implements OnClickListener {
+        C08851() {
         }
 
         public void onClick(View v) {
@@ -55,7 +55,7 @@ public class PhotoEditRadioCell extends FrameLayout {
             radioButton.setSize(AndroidUtilities.dp(20.0f));
             radioButton.setTag(Integer.valueOf(a));
             this.tintButtonsContainer.addView(radioButton, LayoutHelper.createLinear(0, -1, 1.0f / ((float) this.tintShadowColors.length)));
-            radioButton.setOnClickListener(new C08841());
+            radioButton.setOnClickListener(new C08851());
         }
         addView(this.tintButtonsContainer, LayoutHelper.createFrame(-1, 40.0f, 51, 96.0f, 0.0f, 24.0f, 0.0f));
     }
@@ -72,12 +72,9 @@ public class PhotoEditRadioCell extends FrameLayout {
                 RadioButton radioButton = (RadioButton) child;
                 int num = ((Integer) radioButton.getTag()).intValue();
                 radioButton.setChecked(this.currentColor == (this.currentType == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num]), animated);
-                int i = -1;
+                int i = num == 0 ? -1 : this.currentType == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num];
                 int i2 = num == 0 ? -1 : this.currentType == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num];
-                if (num != 0) {
-                    i = this.currentType == 0 ? this.tintShadowColors[num] : this.tintHighlighsColors[num];
-                }
-                radioButton.setColor(i2, i);
+                radioButton.setColor(i, i2);
             }
         }
     }
@@ -93,11 +90,7 @@ public class PhotoEditRadioCell extends FrameLayout {
     public void setIconAndTextAndValue(String text, int type, int value) {
         this.currentType = type;
         this.currentColor = value;
-        TextView textView = this.nameTextView;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(text.substring(0, 1).toUpperCase());
-        stringBuilder.append(text.substring(1).toLowerCase());
-        textView.setText(stringBuilder.toString());
+        this.nameTextView.setText(text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase());
         updateSelectedTintButton(false);
     }
 }

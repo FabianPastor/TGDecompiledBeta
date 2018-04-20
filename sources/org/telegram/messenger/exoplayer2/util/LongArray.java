@@ -26,17 +26,10 @@ public final class LongArray {
     }
 
     public long get(int index) {
-        if (index >= 0) {
-            if (index < this.size) {
-                return this.values[index];
-            }
+        if (index >= 0 && index < this.size) {
+            return this.values[index];
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Invalid index ");
-        stringBuilder.append(index);
-        stringBuilder.append(", size is ");
-        stringBuilder.append(this.size);
-        throw new IndexOutOfBoundsException(stringBuilder.toString());
+        throw new IndexOutOfBoundsException("Invalid index " + index + ", size is " + this.size);
     }
 
     public int size() {

@@ -36,52 +36,35 @@ public final class CodecSpecificDataUtil {
             }
         }
         if (forceReadToEnd) {
-            if (audioObjectType != 17) {
-                switch (audioObjectType) {
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                        break;
-                    default:
-                        switch (audioObjectType) {
-                            case 6:
-                            case 7:
-                                break;
-                            default:
-                                switch (audioObjectType) {
-                                    case 19:
-                                    case 20:
-                                    case 21:
-                                    case 22:
-                                    case 23:
-                                        break;
-                                    default:
-                                        StringBuilder stringBuilder = new StringBuilder();
-                                        stringBuilder.append("Unsupported audio object type: ");
-                                        stringBuilder.append(audioObjectType);
-                                        throw new ParserException(stringBuilder.toString());
-                                }
-                        }
-                }
-            }
-            parseGaSpecificConfig(bitArray, audioObjectType, channelConfiguration);
             switch (audioObjectType) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 6:
+                case 7:
                 case 17:
                 case 19:
                 case 20:
                 case 21:
                 case 22:
                 case 23:
-                    int epConfig = bitArray.readBits(2);
-                    if (epConfig == 2 || epConfig == 3) {
-                        StringBuilder stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append("Unsupported epConfig: ");
-                        stringBuilder2.append(epConfig);
-                        throw new ParserException(stringBuilder2.toString());
+                    parseGaSpecificConfig(bitArray, audioObjectType, channelConfiguration);
+                    switch (audioObjectType) {
+                        case 17:
+                        case 19:
+                        case 20:
+                        case 21:
+                        case 22:
+                        case 23:
+                            int epConfig = bitArray.readBits(2);
+                            if (epConfig == 2 || epConfig == 3) {
+                                throw new ParserException("Unsupported epConfig: " + epConfig);
+                            }
                     }
-                default:
                     break;
+                default:
+                    throw new ParserException("Unsupported audio object type: " + audioObjectType);
             }
         }
         int channelCount = AUDIO_SPECIFIC_CONFIG_CHANNEL_COUNT_TABLE[channelConfiguration];
@@ -91,31 +74,22 @@ public final class CodecSpecificDataUtil {
 
     public static byte[] buildAacLcAudioSpecificConfig(int sampleRate, int numChannels) {
         int i;
-        int i2 = 0;
         int sampleRateIndex = -1;
         for (i = 0; i < AUDIO_SPECIFIC_CONFIG_SAMPLING_RATE_TABLE.length; i++) {
             if (sampleRate == AUDIO_SPECIFIC_CONFIG_SAMPLING_RATE_TABLE[i]) {
                 sampleRateIndex = i;
             }
         }
-        i = -1;
-        while (i2 < AUDIO_SPECIFIC_CONFIG_CHANNEL_COUNT_TABLE.length) {
-            if (numChannels == AUDIO_SPECIFIC_CONFIG_CHANNEL_COUNT_TABLE[i2]) {
-                i = i2;
-            }
-            i2++;
-        }
-        if (sampleRate != -1) {
-            if (i != -1) {
-                return buildAacAudioSpecificConfig(2, sampleRateIndex, i);
+        int channelConfig = -1;
+        for (i = 0; i < AUDIO_SPECIFIC_CONFIG_CHANNEL_COUNT_TABLE.length; i++) {
+            if (numChannels == AUDIO_SPECIFIC_CONFIG_CHANNEL_COUNT_TABLE[i]) {
+                channelConfig = i;
             }
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Invalid sample rate or number of channels: ");
-        stringBuilder.append(sampleRate);
-        stringBuilder.append(", ");
-        stringBuilder.append(numChannels);
-        throw new IllegalArgumentException(stringBuilder.toString());
+        if (sampleRate != -1 && channelConfig != -1) {
+            return buildAacAudioSpecificConfig(2, sampleRateIndex, channelConfig);
+        }
+        throw new IllegalArgumentException("Invalid sample rate or number of channels: " + sampleRate + ", " + numChannels);
     }
 
     public static byte[] buildAacAudioSpecificConfig(int audioObjectType, int sampleRateIndex, int channelConfig) {
@@ -176,7 +150,7 @@ public final class CodecSpecificDataUtil {
     private static int getAacAudioObjectType(ParsableBitArray bitArray) {
         int audioObjectType = bitArray.readBits(5);
         if (audioObjectType == AUDIO_OBJECT_TYPE_ESCAPE) {
-            return 32 + bitArray.readBits(6);
+            return bitArray.readBits(6) + 32;
         }
         return audioObjectType;
     }

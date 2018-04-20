@@ -34,18 +34,15 @@ public final class ConcatenatingMediaSource implements MediaSource {
             super(shuffleOrder);
             int[] sourcePeriodOffsets = new int[timelines.length];
             int[] sourceWindowOffsets = new int[timelines.length];
-            int windowCount = 0;
             long periodCount = 0;
-            int i = 0;
-            while (i < timelines.length) {
+            int windowCount = 0;
+            for (int i = 0; i < timelines.length; i++) {
                 Timeline timeline = timelines[i];
-                long periodCount2 = periodCount + ((long) timeline.getPeriodCount());
-                Assertions.checkState(periodCount2 <= 2147483647L, "ConcatenatingMediaSource children contain too many periods");
-                sourcePeriodOffsets[i] = (int) periodCount2;
+                periodCount += (long) timeline.getPeriodCount();
+                Assertions.checkState(periodCount <= 2147483647L, "ConcatenatingMediaSource children contain too many periods");
+                sourcePeriodOffsets[i] = (int) periodCount;
                 windowCount += timeline.getWindowCount();
                 sourceWindowOffsets[i] = windowCount;
-                i++;
-                periodCount = periodCount2;
             }
             this.timelines = timelines;
             this.sourcePeriodOffsets = sourcePeriodOffsets;

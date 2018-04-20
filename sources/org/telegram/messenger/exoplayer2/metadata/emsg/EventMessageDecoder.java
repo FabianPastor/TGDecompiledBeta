@@ -12,13 +12,14 @@ import org.telegram.messenger.exoplayer2.util.Util;
 public final class EventMessageDecoder implements MetadataDecoder {
     public Metadata decode(MetadataInputBuffer inputBuffer) {
         ByteBuffer buffer = inputBuffer.data;
-        ParsableByteArray emsgData = new ParsableByteArray(buffer.array(), buffer.limit());
-        String schemeIdUri = emsgData.readNullTerminatedString();
-        String value = emsgData.readNullTerminatedString();
-        long readUnsignedInt = emsgData.readUnsignedInt();
-        long presentationTimeUs = Util.scaleLargeTimestamp(emsgData.readUnsignedInt(), C0542C.MICROS_PER_SECOND, readUnsignedInt);
-        long durationMs = Util.scaleLargeTimestamp(emsgData.readUnsignedInt(), 1000, readUnsignedInt);
-        long id = emsgData.readUnsignedInt();
-        return new Metadata(new EventMessage(schemeIdUri, value, durationMs, id, Arrays.copyOfRange(data, emsgData.getPosition(), size), presentationTimeUs));
+        ParsableByteArray parsableByteArray = new ParsableByteArray(buffer.array(), buffer.limit());
+        String schemeIdUri = parsableByteArray.readNullTerminatedString();
+        String value = parsableByteArray.readNullTerminatedString();
+        long timescale = parsableByteArray.readUnsignedInt();
+        long presentationTimeUs = Util.scaleLargeTimestamp(parsableByteArray.readUnsignedInt(), C0542C.MICROS_PER_SECOND, timescale);
+        long durationMs = Util.scaleLargeTimestamp(parsableByteArray.readUnsignedInt(), 1000, timescale);
+        long id = parsableByteArray.readUnsignedInt();
+        int position = parsableByteArray.getPosition();
+        return new Metadata(new EventMessage(schemeIdUri, value, durationMs, id, Arrays.copyOfRange(data, position, size), presentationTimeUs));
     }
 }

@@ -23,9 +23,6 @@ public final class AvcConfig {
                 throw new IllegalStateException();
             }
             int j;
-            float pixelWidthAspectRatio;
-            int width;
-            int height;
             List<byte[]> initializationData = new ArrayList();
             int numSequenceParameterSets = data.readUnsignedByte() & 31;
             for (j = 0; j < numSequenceParameterSets; j++) {
@@ -35,17 +32,14 @@ public final class AvcConfig {
             for (j = 0; j < numPictureParameterSets; j++) {
                 initializationData.add(buildNalUnitForChild(data));
             }
+            int width = -1;
+            int height = -1;
+            float pixelWidthAspectRatio = 1.0f;
             if (numSequenceParameterSets > 0) {
                 SpsData spsData = NalUnitUtil.parseSpsNalUnit((byte[]) initializationData.get(0), nalUnitLengthFieldLength, ((byte[]) initializationData.get(0)).length);
-                j = spsData.width;
-                int height2 = spsData.height;
+                width = spsData.width;
+                height = spsData.height;
                 pixelWidthAspectRatio = spsData.pixelWidthAspectRatio;
-                width = j;
-                height = height2;
-            } else {
-                width = -1;
-                height = -1;
-                pixelWidthAspectRatio = 1.0f;
             }
             return new AvcConfig(initializationData, nalUnitLengthFieldLength, width, height, pixelWidthAspectRatio);
         } catch (ArrayIndexOutOfBoundsException e) {

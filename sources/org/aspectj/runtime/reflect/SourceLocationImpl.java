@@ -22,10 +22,6 @@ class SourceLocationImpl implements SourceLocation {
     }
 
     public String toString() {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(getFileName());
-        stringBuffer.append(":");
-        stringBuffer.append(getLine());
-        return stringBuffer.toString();
+        return new StringBuffer().append(getFileName()).append(":").append(getLine()).toString();
     }
 }

@@ -40,8 +40,8 @@ public abstract class DataChunk extends Chunk {
     public final void load() throws IOException, InterruptedException {
         try {
             this.dataSource.open(this.dataSpec);
-            int bytesRead = 0;
             this.limit = 0;
+            int bytesRead = 0;
             while (bytesRead != -1 && !this.loadCanceled) {
                 maybeExpandData();
                 bytesRead = this.dataSource.read(this.data, this.limit, 16384);

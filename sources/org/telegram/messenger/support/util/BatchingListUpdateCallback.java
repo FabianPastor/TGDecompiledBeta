@@ -27,8 +27,6 @@ public class BatchingListUpdateCallback implements ListUpdateCallback {
                 case 3:
                     this.mWrapped.onChanged(this.mLastEventPosition, this.mLastEventCount, this.mLastEventPayload);
                     break;
-                default:
-                    break;
             }
             this.mLastEventPayload = null;
             this.mLastEventType = 0;

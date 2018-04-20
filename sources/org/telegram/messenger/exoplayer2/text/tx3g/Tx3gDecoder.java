@@ -48,23 +48,25 @@ public final class Tx3gDecoder extends SimpleSubtitleDecoder {
     }
 
     private void decodeInitializationData(List<byte[]> initializationData) {
-        boolean z = false;
         if (initializationData != null && initializationData.size() == 1 && (((byte[]) initializationData.get(0)).length == 48 || ((byte[]) initializationData.get(0)).length == 53)) {
+            boolean z;
             byte[] initializationBytes = (byte[]) initializationData.get(0);
             this.defaultFontFace = initializationBytes[24];
             this.defaultColorRgba = ((((initializationBytes[26] & 255) << 24) | ((initializationBytes[27] & 255) << 16)) | ((initializationBytes[28] & 255) << 8)) | (initializationBytes[29] & 255);
-            this.defaultFontFamily = TX3G_SERIF.equals(new String(initializationBytes, 43, initializationBytes.length - 43)) ? C0542C.SERIF_NAME : "sans-serif";
-            this.calculatedVideoTrackHeight = 20 * initializationBytes[25];
+            this.defaultFontFamily = TX3G_SERIF.equals(new String(initializationBytes, 43, initializationBytes.length + -43)) ? C0542C.SERIF_NAME : "sans-serif";
+            this.calculatedVideoTrackHeight = initializationBytes[25] * 20;
             if ((initializationBytes[0] & 32) != 0) {
                 z = true;
+            } else {
+                z = false;
             }
             this.customVerticalPlacement = z;
             if (this.customVerticalPlacement) {
                 this.defaultVerticalPlacement = ((float) (((initializationBytes[10] & 255) << 8) | (initializationBytes[11] & 255))) / ((float) this.calculatedVideoTrackHeight);
                 this.defaultVerticalPlacement = Util.constrainValue(this.defaultVerticalPlacement, 0.0f, 0.95f);
-            } else {
-                this.defaultVerticalPlacement = DEFAULT_VERTICAL_PLACEMENT;
+                return;
             }
+            this.defaultVerticalPlacement = DEFAULT_VERTICAL_PLACEMENT;
             return;
         }
         this.defaultFontFace = 0;
@@ -81,40 +83,25 @@ public final class Tx3gDecoder extends SimpleSubtitleDecoder {
             return Tx3gSubtitle.EMPTY;
         }
         SpannableStringBuilder cueText = new SpannableStringBuilder(cueTextString);
-        SpannableStringBuilder spannableStringBuilder = cueText;
-        attachFontFace(spannableStringBuilder, r0.defaultFontFace, 0, 0, cueText.length(), SPAN_PRIORITY_LOW);
-        attachColor(spannableStringBuilder, r0.defaultColorRgba, -1, 0, cueText.length(), SPAN_PRIORITY_LOW);
-        attachFontFamily(spannableStringBuilder, r0.defaultFontFamily, "sans-serif", 0, cueText.length(), SPAN_PRIORITY_LOW);
-        float verticalPlacement = r0.defaultVerticalPlacement;
-        while (r0.parsableByteArray.bytesLeft() >= 8) {
-            int position = r0.parsableByteArray.getPosition();
-            int atomSize = r0.parsableByteArray.readInt();
-            int atomType = r0.parsableByteArray.readInt();
-            boolean i = false;
-            boolean z = true;
+        attachFontFace(cueText, this.defaultFontFace, 0, 0, cueText.length(), SPAN_PRIORITY_LOW);
+        attachColor(cueText, this.defaultColorRgba, -1, 0, cueText.length(), SPAN_PRIORITY_LOW);
+        attachFontFamily(cueText, this.defaultFontFamily, "sans-serif", 0, cueText.length(), SPAN_PRIORITY_LOW);
+        float verticalPlacement = this.defaultVerticalPlacement;
+        while (this.parsableByteArray.bytesLeft() >= 8) {
+            int position = this.parsableByteArray.getPosition();
+            int atomSize = this.parsableByteArray.readInt();
+            int atomType = this.parsableByteArray.readInt();
             if (atomType == TYPE_STYL) {
-                if (r0.parsableByteArray.bytesLeft() < 2) {
-                    z = false;
+                assertTrue(this.parsableByteArray.bytesLeft() >= 2);
+                int styleRecordCount = this.parsableByteArray.readUnsignedShort();
+                for (int i = 0; i < styleRecordCount; i++) {
+                    applyStyleRecord(this.parsableByteArray, cueText);
                 }
-                assertTrue(z);
-                int styleRecordCount = r0.parsableByteArray.readUnsignedShort();
-                while (true) {
-                    int i2;
-                    int i3 = i2;
-                    if (i3 >= styleRecordCount) {
-                        break;
-                    }
-                    applyStyleRecord(r0.parsableByteArray, cueText);
-                    i2 = i3 + 1;
-                }
-            } else if (atomType == TYPE_TBOX && r0.customVerticalPlacement) {
-                if (r0.parsableByteArray.bytesLeft() >= 2) {
-                    i = true;
-                }
-                assertTrue(i);
-                verticalPlacement = Util.constrainValue(((float) r0.parsableByteArray.readUnsignedShort()) / ((float) r0.calculatedVideoTrackHeight), 0.0f, 0.95f);
+            } else if (atomType == TYPE_TBOX && this.customVerticalPlacement) {
+                assertTrue(this.parsableByteArray.bytesLeft() >= 2);
+                verticalPlacement = Util.constrainValue(((float) this.parsableByteArray.readUnsignedShort()) / ((float) this.calculatedVideoTrackHeight), 0.0f, 0.95f);
             }
-            r0.parsableByteArray.setPosition(position + atomSize);
+            this.parsableByteArray.setPosition(position + atomSize);
         }
         return new Tx3gSubtitle(new Cue(cueText, null, verticalPlacement, 0, 0, Float.MIN_VALUE, Integer.MIN_VALUE, Float.MIN_VALUE));
     }
@@ -135,26 +122,39 @@ public final class Tx3gDecoder extends SimpleSubtitleDecoder {
     }
 
     private void applyStyleRecord(ParsableByteArray parsableByteArray, SpannableStringBuilder cueText) throws SubtitleDecoderException {
-        assertTrue(parsableByteArray.bytesLeft() >= 12);
+        boolean z;
+        if (parsableByteArray.bytesLeft() >= 12) {
+            z = true;
+        } else {
+            z = false;
+        }
+        assertTrue(z);
         int start = parsableByteArray.readUnsignedShort();
         int end = parsableByteArray.readUnsignedShort();
         parsableByteArray.skipBytes(2);
         int fontFace = parsableByteArray.readUnsignedByte();
         parsableByteArray.skipBytes(1);
         int colorRgba = parsableByteArray.readInt();
-        SpannableStringBuilder spannableStringBuilder = cueText;
-        int i = start;
-        int i2 = end;
-        attachFontFace(spannableStringBuilder, fontFace, this.defaultFontFace, i, i2, 0);
-        attachColor(spannableStringBuilder, colorRgba, this.defaultColorRgba, i, i2, 0);
+        attachFontFace(cueText, fontFace, this.defaultFontFace, start, end, 0);
+        attachColor(cueText, colorRgba, this.defaultColorRgba, start, end, 0);
     }
 
     private static void attachFontFace(SpannableStringBuilder cueText, int fontFace, int defaultFontFace, int start, int end, int spanPriority) {
+        boolean isUnderlined = true;
         if (fontFace != defaultFontFace) {
-            int flags = 33 | spanPriority;
-            boolean isUnderlined = true;
-            boolean isBold = (fontFace & 1) != 0;
-            boolean isItalic = (fontFace & 2) != 0;
+            boolean isBold;
+            boolean isItalic;
+            int flags = spanPriority | 33;
+            if ((fontFace & 1) != 0) {
+                isBold = true;
+            } else {
+                isBold = false;
+            }
+            if ((fontFace & 2) != 0) {
+                isItalic = true;
+            } else {
+                isItalic = false;
+            }
             if (isBold) {
                 if (isItalic) {
                     cueText.setSpan(new StyleSpan(3), start, end, flags);
@@ -178,13 +178,13 @@ public final class Tx3gDecoder extends SimpleSubtitleDecoder {
 
     private static void attachColor(SpannableStringBuilder cueText, int colorRgba, int defaultColorRgba, int start, int end, int spanPriority) {
         if (colorRgba != defaultColorRgba) {
-            cueText.setSpan(new ForegroundColorSpan(((colorRgba & 255) << 24) | (colorRgba >>> 8)), start, end, 33 | spanPriority);
+            cueText.setSpan(new ForegroundColorSpan(((colorRgba & 255) << 24) | (colorRgba >>> 8)), start, end, spanPriority | 33);
         }
     }
 
     private static void attachFontFamily(SpannableStringBuilder cueText, String fontFamily, String defaultFontFamily, int start, int end, int spanPriority) {
         if (fontFamily != defaultFontFamily) {
-            cueText.setSpan(new TypefaceSpan(fontFamily), start, end, 33 | spanPriority);
+            cueText.setSpan(new TypefaceSpan(fontFamily), start, end, spanPriority | 33);
         }
     }
 

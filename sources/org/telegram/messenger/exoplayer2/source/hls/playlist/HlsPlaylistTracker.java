@@ -85,19 +85,15 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         }
 
         public boolean isSnapshotValid() {
-            boolean z = false;
             if (this.playlistSnapshot == null) {
                 return false;
             }
             long currentTimeMs = SystemClock.elapsedRealtime();
             long snapshotValidityDurationMs = Math.max(30000, C0542C.usToMs(this.playlistSnapshot.durationUs));
-            if (!(this.playlistSnapshot.hasEndTag || this.playlistSnapshot.playlistType == 2 || this.playlistSnapshot.playlistType == 1)) {
-                if (this.lastSnapshotLoadMs + snapshotValidityDurationMs <= currentTimeMs) {
-                    return z;
-                }
+            if (this.playlistSnapshot.hasEndTag || this.playlistSnapshot.playlistType == 2 || this.playlistSnapshot.playlistType == 1 || this.lastSnapshotLoadMs + snapshotValidityDurationMs > currentTimeMs) {
+                return true;
             }
-            z = true;
-            return z;
+            return false;
         }
 
         public void release() {
@@ -106,16 +102,14 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
 
         public void loadPlaylist() {
             this.blacklistUntilMs = 0;
-            if (!this.loadPending) {
-                if (!this.mediaPlaylistLoader.isLoading()) {
-                    long currentTimeMs = SystemClock.elapsedRealtime();
-                    if (currentTimeMs < this.earliestNextLoadTimeMs) {
-                        this.loadPending = true;
-                        HlsPlaylistTracker.this.playlistRefreshHandler.postDelayed(this, this.earliestNextLoadTimeMs - currentTimeMs);
-                    } else {
-                        loadPlaylistImmediately();
-                    }
+            if (!this.loadPending && !this.mediaPlaylistLoader.isLoading()) {
+                long currentTimeMs = SystemClock.elapsedRealtime();
+                if (currentTimeMs < this.earliestNextLoadTimeMs) {
+                    this.loadPending = true;
+                    HlsPlaylistTracker.this.playlistRefreshHandler.postDelayed(this, this.earliestNextLoadTimeMs - currentTimeMs);
+                    return;
                 }
+                loadPlaylistImmediately();
             }
         }
 
@@ -127,27 +121,22 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         }
 
         public void onLoadCompleted(ParsingLoadable<HlsPlaylist> loadable, long elapsedRealtimeMs, long loadDurationMs) {
-            MediaPlaylistBundle mediaPlaylistBundle = this;
             HlsPlaylist result = (HlsPlaylist) loadable.getResult();
             if (result instanceof HlsMediaPlaylist) {
                 processLoadedPlaylist((HlsMediaPlaylist) result);
-                ParsingLoadable<HlsPlaylist> parsingLoadable = loadable;
-                HlsPlaylistTracker.this.eventDispatcher.loadCompleted(parsingLoadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, parsingLoadable.bytesLoaded());
+                HlsPlaylistTracker.this.eventDispatcher.loadCompleted(loadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded());
                 return;
             }
-            parsingLoadable = loadable;
-            mediaPlaylistBundle.playlistError = new ParserException("Loaded playlist has unexpected type.");
+            this.playlistError = new ParserException("Loaded playlist has unexpected type.");
         }
 
         public void onLoadCanceled(ParsingLoadable<HlsPlaylist> loadable, long elapsedRealtimeMs, long loadDurationMs, boolean released) {
-            ParsingLoadable<HlsPlaylist> parsingLoadable = loadable;
-            HlsPlaylistTracker.this.eventDispatcher.loadCanceled(parsingLoadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, parsingLoadable.bytesLoaded());
+            HlsPlaylistTracker.this.eventDispatcher.loadCanceled(loadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded());
         }
 
         public int onLoadError(ParsingLoadable<HlsPlaylist> loadable, long elapsedRealtimeMs, long loadDurationMs, IOException error) {
-            IOException iOException = error;
-            boolean isFatal = iOException instanceof ParserException;
-            HlsPlaylistTracker.this.eventDispatcher.loadError(loadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded(), iOException, isFatal);
+            boolean isFatal = error instanceof ParserException;
+            HlsPlaylistTracker.this.eventDispatcher.loadError(loadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded(), error, isFatal);
             if (isFatal) {
                 return 3;
             }
@@ -184,7 +173,7 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
                     blacklistPlaylist();
                 }
             }
-            this.earliestNextLoadTimeMs = currentTimeMs + C0542C.usToMs(this.playlistSnapshot != oldPlaylist ? this.playlistSnapshot.targetDurationUs : this.playlistSnapshot.targetDurationUs / 2);
+            this.earliestNextLoadTimeMs = C0542C.usToMs(this.playlistSnapshot != oldPlaylist ? this.playlistSnapshot.targetDurationUs : this.playlistSnapshot.targetDurationUs / 2) + currentTimeMs;
             if (this.playlistUrl == HlsPlaylistTracker.this.primaryHlsUrl && !this.playlistSnapshot.hasEndTag) {
                 loadPlaylist();
             }
@@ -264,7 +253,6 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
 
     public void onLoadCompleted(ParsingLoadable<HlsPlaylist> loadable, long elapsedRealtimeMs, long loadDurationMs) {
         HlsMasterPlaylist masterPlaylist;
-        HlsPlaylistTracker hlsPlaylistTracker = this;
         HlsPlaylist result = (HlsPlaylist) loadable.getResult();
         boolean isMediaPlaylist = result instanceof HlsMediaPlaylist;
         if (isMediaPlaylist) {
@@ -272,20 +260,20 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         } else {
             masterPlaylist = (HlsMasterPlaylist) result;
         }
-        hlsPlaylistTracker.masterPlaylist = masterPlaylist;
-        hlsPlaylistTracker.primaryHlsUrl = (HlsUrl) masterPlaylist.variants.get(0);
+        this.masterPlaylist = masterPlaylist;
+        this.primaryHlsUrl = (HlsUrl) masterPlaylist.variants.get(0);
         ArrayList<HlsUrl> urls = new ArrayList();
         urls.addAll(masterPlaylist.variants);
         urls.addAll(masterPlaylist.audios);
         urls.addAll(masterPlaylist.subtitles);
         createBundles(urls);
-        MediaPlaylistBundle primaryBundle = (MediaPlaylistBundle) hlsPlaylistTracker.playlistBundles.get(hlsPlaylistTracker.primaryHlsUrl);
+        MediaPlaylistBundle primaryBundle = (MediaPlaylistBundle) this.playlistBundles.get(this.primaryHlsUrl);
         if (isMediaPlaylist) {
             primaryBundle.processLoadedPlaylist((HlsMediaPlaylist) result);
         } else {
             primaryBundle.loadPlaylist();
         }
-        hlsPlaylistTracker.eventDispatcher.loadCompleted(loadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded());
+        this.eventDispatcher.loadCompleted(loadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded());
     }
 
     public void onLoadCanceled(ParsingLoadable<HlsPlaylist> loadable, long elapsedRealtimeMs, long loadDurationMs, boolean released) {
@@ -293,9 +281,8 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
     }
 
     public int onLoadError(ParsingLoadable<HlsPlaylist> loadable, long elapsedRealtimeMs, long loadDurationMs, IOException error) {
-        IOException iOException = error;
-        boolean isFatal = iOException instanceof ParserException;
-        this.eventDispatcher.loadError(loadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded(), iOException, isFatal);
+        boolean isFatal = error instanceof ParserException;
+        this.eventDispatcher.loadError(loadable.dataSpec, 4, elapsedRealtimeMs, loadDurationMs, loadable.bytesLoaded(), error, isFatal);
         return isFatal ? 3 : 0;
     }
 
@@ -334,7 +321,7 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
     private void onPlaylistUpdated(HlsUrl url, HlsMediaPlaylist newSnapshot) {
         if (url == this.primaryHlsUrl) {
             if (this.primaryUrlSnapshot == null) {
-                this.isLive = newSnapshot.hasEndTag ^ 1;
+                this.isLive = !newSnapshot.hasEndTag;
             }
             this.primaryUrlSnapshot = newSnapshot;
             this.primaryPlaylistListener.onPrimaryPlaylistRefreshed(newSnapshot);
@@ -366,9 +353,9 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         if (loadedPlaylist.hasProgramDateTime) {
             return loadedPlaylist.startTimeUs;
         }
-        long primarySnapshotStartTimeUs = this.primaryUrlSnapshot != null ? this.primaryUrlSnapshot.startTimeUs : 0;
+        long j = this.primaryUrlSnapshot != null ? this.primaryUrlSnapshot.startTimeUs : 0;
         if (oldPlaylist == null) {
-            return primarySnapshotStartTimeUs;
+            return j;
         }
         int oldPlaylistSize = oldPlaylist.segments.size();
         Segment firstOldOverlappingSegment = getFirstOldOverlappingSegment(oldPlaylist, loadedPlaylist);
@@ -378,14 +365,19 @@ public final class HlsPlaylistTracker implements Callback<ParsingLoadable<HlsPla
         if (oldPlaylistSize == loadedPlaylist.mediaSequence - oldPlaylist.mediaSequence) {
             return oldPlaylist.getEndTimeUs();
         }
-        return primarySnapshotStartTimeUs;
+        return j;
     }
 
     private int getLoadedPlaylistDiscontinuitySequence(HlsMediaPlaylist oldPlaylist, HlsMediaPlaylist loadedPlaylist) {
         if (loadedPlaylist.hasDiscontinuitySequence) {
             return loadedPlaylist.discontinuitySequence;
         }
-        int primaryUrlDiscontinuitySequence = this.primaryUrlSnapshot != null ? this.primaryUrlSnapshot.discontinuitySequence : 0;
+        int primaryUrlDiscontinuitySequence;
+        if (this.primaryUrlSnapshot != null) {
+            primaryUrlDiscontinuitySequence = this.primaryUrlSnapshot.discontinuitySequence;
+        } else {
+            primaryUrlDiscontinuitySequence = 0;
+        }
         if (oldPlaylist == null) {
             return primaryUrlDiscontinuitySequence;
         }

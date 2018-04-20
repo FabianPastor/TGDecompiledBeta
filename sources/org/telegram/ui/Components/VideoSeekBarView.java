@@ -40,39 +40,37 @@ public class VideoSeekBarView extends View {
         float thumbX = (float) ((int) (((float) (getMeasuredWidth() - this.thumbWidth)) * this.progress));
         if (event.getAction() == 0) {
             int additionWidth = (getMeasuredHeight() - this.thumbWidth) / 2;
-            if (thumbX - ((float) additionWidth) <= x && x <= (((float) this.thumbWidth) + thumbX) + ((float) additionWidth) && y >= 0.0f && y <= ((float) getMeasuredHeight())) {
-                this.pressed = true;
-                this.thumbDX = (int) (x - thumbX);
-                getParent().requestDisallowInterceptTouchEvent(true);
-                invalidate();
-                return true;
+            if (thumbX - ((float) additionWidth) > x || x > (((float) this.thumbWidth) + thumbX) + ((float) additionWidth) || y < 0.0f || y > ((float) getMeasuredHeight())) {
+                return false;
             }
+            this.pressed = true;
+            this.thumbDX = (int) (x - thumbX);
+            getParent().requestDisallowInterceptTouchEvent(true);
+            invalidate();
+            return true;
+        } else if (event.getAction() == 1 || event.getAction() == 3) {
+            if (!this.pressed) {
+                return false;
+            }
+            if (event.getAction() == 1 && this.delegate != null) {
+                this.delegate.onSeekBarDrag(thumbX / ((float) (getMeasuredWidth() - this.thumbWidth)));
+            }
+            this.pressed = false;
+            invalidate();
+            return true;
+        } else if (event.getAction() != 2 || !this.pressed) {
+            return false;
         } else {
-            if (event.getAction() != 1) {
-                if (event.getAction() != 3) {
-                    if (event.getAction() == 2 && this.pressed) {
-                        float thumbX2 = (float) ((int) (x - ((float) this.thumbDX)));
-                        if (thumbX2 < 0.0f) {
-                            thumbX2 = 0.0f;
-                        } else if (thumbX2 > ((float) (getMeasuredWidth() - this.thumbWidth))) {
-                            thumbX2 = (float) (getMeasuredWidth() - this.thumbWidth);
-                        }
-                        this.progress = thumbX2 / ((float) (getMeasuredWidth() - this.thumbWidth));
-                        invalidate();
-                        return true;
-                    }
-                }
+            thumbX = (float) ((int) (x - ((float) this.thumbDX)));
+            if (thumbX < 0.0f) {
+                thumbX = 0.0f;
+            } else if (thumbX > ((float) (getMeasuredWidth() - this.thumbWidth))) {
+                thumbX = (float) (getMeasuredWidth() - this.thumbWidth);
             }
-            if (this.pressed) {
-                if (event.getAction() == 1 && this.delegate != null) {
-                    this.delegate.onSeekBarDrag(thumbX / ((float) (getMeasuredWidth() - this.thumbWidth)));
-                }
-                this.pressed = false;
-                invalidate();
-                return true;
-            }
+            this.progress = thumbX / ((float) (getMeasuredWidth() - this.thumbWidth));
+            invalidate();
+            return true;
         }
-        return false;
     }
 
     public void setProgress(float progress) {

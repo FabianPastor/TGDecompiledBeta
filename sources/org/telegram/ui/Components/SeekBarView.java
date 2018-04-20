@@ -82,24 +82,7 @@ public class SeekBarView extends FrameLayout {
                 invalidate();
                 return true;
             }
-        } else {
-            if (ev.getAction() != 1) {
-                if (ev.getAction() != 3) {
-                    if (ev.getAction() == 2 && this.pressed) {
-                        this.thumbX = (int) (ev.getX() - ((float) this.thumbDX));
-                        if (this.thumbX < 0) {
-                            this.thumbX = 0;
-                        } else if (this.thumbX > getMeasuredWidth() - this.thumbWidth) {
-                            this.thumbX = getMeasuredWidth() - this.thumbWidth;
-                        }
-                        if (this.reportChanges) {
-                            this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
-                        }
-                        invalidate();
-                        return true;
-                    }
-                }
-            }
+        } else if (ev.getAction() == 1 || ev.getAction() == 3) {
             if (this.pressed) {
                 if (ev.getAction() == 1) {
                     this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
@@ -108,6 +91,18 @@ public class SeekBarView extends FrameLayout {
                 invalidate();
                 return true;
             }
+        } else if (ev.getAction() == 2 && this.pressed) {
+            this.thumbX = (int) (ev.getX() - ((float) this.thumbDX));
+            if (this.thumbX < 0) {
+                this.thumbX = 0;
+            } else if (this.thumbX > getMeasuredWidth() - this.thumbWidth) {
+                this.thumbX = getMeasuredWidth() - this.thumbWidth;
+            }
+            if (this.reportChanges) {
+                this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
+            }
+            invalidate();
+            return true;
         }
         return false;
     }
@@ -150,7 +145,7 @@ public class SeekBarView extends FrameLayout {
         int y = (getMeasuredHeight() - this.thumbHeight) / 2;
         canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
         if (this.bufferedProgress > 0.0f) {
-            canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), ((float) (this.thumbWidth / 2)) + (this.bufferedProgress * ((float) (getMeasuredWidth() - this.thumbWidth))), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
+            canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (this.bufferedProgress * ((float) (getMeasuredWidth() - this.thumbWidth))) + ((float) (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
         }
         canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) ((this.thumbWidth / 2) + this.thumbX), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.outerPaint1);
         canvas.drawCircle((float) (this.thumbX + (this.thumbWidth / 2)), (float) ((this.thumbHeight / 2) + y), (float) AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f), this.outerPaint1);

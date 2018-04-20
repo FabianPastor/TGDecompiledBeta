@@ -80,8 +80,7 @@ public interface IPostMessageService extends IInterface {
                 return null;
             }
             IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
-            IPostMessageService proxy = (iin == null || !(iin instanceof IPostMessageService)) ? new Proxy(obj) : (IPostMessageService) iin;
-            return proxy;
+            return (iin == null || !(iin instanceof IPostMessageService)) ? new Proxy(obj) : (IPostMessageService) iin;
         }
 
         public IBinder asBinder() {
@@ -89,35 +88,39 @@ public interface IPostMessageService extends IInterface {
         }
 
         public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
-            if (code != NUM) {
-                Bundle _arg11 = null;
-                ICustomTabsCallback _arg0;
-                switch (code) {
-                    case 2:
-                        data.enforceInterface(DESCRIPTOR);
-                        _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
-                        if (data.readInt() != 0) {
-                            _arg11 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                        }
-                        onMessageChannelReady(_arg0, _arg11);
-                        reply.writeNoException();
-                        return true;
-                    case 3:
-                        data.enforceInterface(DESCRIPTOR);
-                        _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
-                        String _arg1 = data.readString();
-                        if (data.readInt() != 0) {
-                            _arg11 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                        }
-                        onPostMessage(_arg0, _arg1, _arg11);
-                        reply.writeNoException();
-                        return true;
-                    default:
-                        return super.onTransact(code, data, reply, flags);
-                }
+            ICustomTabsCallback _arg0;
+            switch (code) {
+                case 2:
+                    Bundle _arg11;
+                    data.enforceInterface(DESCRIPTOR);
+                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                    if (data.readInt() != 0) {
+                        _arg11 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                    } else {
+                        _arg11 = null;
+                    }
+                    onMessageChannelReady(_arg0, _arg11);
+                    reply.writeNoException();
+                    return true;
+                case 3:
+                    Bundle _arg2;
+                    data.enforceInterface(DESCRIPTOR);
+                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
+                    String _arg1 = data.readString();
+                    if (data.readInt() != 0) {
+                        _arg2 = (Bundle) Bundle.CREATOR.createFromParcel(data);
+                    } else {
+                        _arg2 = null;
+                    }
+                    onPostMessage(_arg0, _arg1, _arg2);
+                    reply.writeNoException();
+                    return true;
+                case 1598968902:
+                    reply.writeString(DESCRIPTOR);
+                    return true;
+                default:
+                    return super.onTransact(code, data, reply, flags);
             }
-            reply.writeString(DESCRIPTOR);
-            return true;
         }
     }
 

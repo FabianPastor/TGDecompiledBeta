@@ -134,15 +134,8 @@ final class TtmlNode {
         }
         if (this.children != null) {
             for (int i = 0; i < this.children.size(); i++) {
-                boolean z;
                 TtmlNode ttmlNode = (TtmlNode) this.children.get(i);
-                if (!descendsPNode) {
-                    if (!isPNode) {
-                        z = false;
-                        ttmlNode.getEventTimes(out, z);
-                    }
-                }
-                z = true;
+                boolean z = descendsPNode || isPNode;
                 ttmlNode.getEventTimes(out, z);
             }
         }
@@ -159,11 +152,8 @@ final class TtmlNode {
         List<Cue> cues = new ArrayList();
         for (Entry<String, SpannableStringBuilder> entry : regionOutputs.entrySet()) {
             TtmlRegion region = (TtmlRegion) regionMap.get(entry.getKey());
-            Cue cue = r8;
-            Cue cue2 = new Cue(cleanUpText((SpannableStringBuilder) entry.getValue()), null, region.line, region.lineType, region.lineAnchor, region.position, Integer.MIN_VALUE, region.width);
-            cues.add(cue);
+            cues.add(new Cue(cleanUpText((SpannableStringBuilder) entry.getValue()), null, region.line, region.lineType, region.lineAnchor, region.position, Integer.MIN_VALUE, region.width));
         }
-        Map<String, TtmlRegion> map = regionMap;
         return cues;
     }
 
@@ -178,37 +168,21 @@ final class TtmlNode {
             getRegionOutput(resolvedRegionId, regionOutputs).append(this.text);
         } else if (TAG_BR.equals(this.tag) && descendsPNode) {
             getRegionOutput(resolvedRegionId, regionOutputs).append('\n');
-        } else if (!TAG_METADATA.equals(this.tag)) {
-            if (isActive(timeUs)) {
-                boolean isPNode = TAG_P.equals(this.tag);
-                for (Entry<String, SpannableStringBuilder> entry : regionOutputs.entrySet()) {
-                    this.nodeStartsByRegion.put(entry.getKey(), Integer.valueOf(((SpannableStringBuilder) entry.getValue()).length()));
-                }
-                int i = 0;
-                while (true) {
-                    int i2 = i;
-                    if (i2 >= getChildCount()) {
-                        break;
-                    }
-                    boolean z;
-                    TtmlNode child = getChild(i2);
-                    if (!descendsPNode) {
-                        if (!isPNode) {
-                            z = false;
-                            child.traverseForText(timeUs, z, resolvedRegionId, regionOutputs);
-                            i = i2 + 1;
-                        }
-                    }
-                    z = true;
-                    child.traverseForText(timeUs, z, resolvedRegionId, regionOutputs);
-                    i = i2 + 1;
-                }
-                if (isPNode) {
-                    TtmlRenderUtil.endParagraph(getRegionOutput(resolvedRegionId, regionOutputs));
-                }
-                for (Entry<String, SpannableStringBuilder> entry2 : regionOutputs.entrySet()) {
-                    this.nodeEndsByRegion.put(entry2.getKey(), Integer.valueOf(((SpannableStringBuilder) entry2.getValue()).length()));
-                }
+        } else if (!TAG_METADATA.equals(this.tag) && isActive(timeUs)) {
+            boolean isPNode = TAG_P.equals(this.tag);
+            for (Entry<String, SpannableStringBuilder> entry : regionOutputs.entrySet()) {
+                this.nodeStartsByRegion.put(entry.getKey(), Integer.valueOf(((SpannableStringBuilder) entry.getValue()).length()));
+            }
+            for (int i = 0; i < getChildCount(); i++) {
+                TtmlNode child = getChild(i);
+                boolean z = descendsPNode || isPNode;
+                child.traverseForText(timeUs, z, resolvedRegionId, regionOutputs);
+            }
+            if (isPNode) {
+                TtmlRenderUtil.endParagraph(getRegionOutput(resolvedRegionId, regionOutputs));
+            }
+            for (Entry<String, SpannableStringBuilder> entry2 : regionOutputs.entrySet()) {
+                this.nodeEndsByRegion.put(entry2.getKey(), Integer.valueOf(((SpannableStringBuilder) entry2.getValue()).length()));
             }
         }
     }
@@ -223,11 +197,9 @@ final class TtmlNode {
     private void traverseForStyle(Map<String, TtmlStyle> globalStyles, Map<String, SpannableStringBuilder> regionOutputs) {
         for (Entry<String, Integer> entry : this.nodeEndsByRegion.entrySet()) {
             String regionId = (String) entry.getKey();
-            int i = 0;
             applyStyleToOutput(globalStyles, (SpannableStringBuilder) regionOutputs.get(regionId), this.nodeStartsByRegion.containsKey(regionId) ? ((Integer) this.nodeStartsByRegion.get(regionId)).intValue() : 0, ((Integer) entry.getValue()).intValue());
-            while (i < getChildCount()) {
+            for (int i = 0; i < getChildCount(); i++) {
                 getChild(i).traverseForStyle(globalStyles, regionOutputs);
-                i++;
             }
         }
     }
@@ -243,7 +215,6 @@ final class TtmlNode {
 
     private SpannableStringBuilder cleanUpText(SpannableStringBuilder builder) {
         int i;
-        int i2 = 0;
         int builderLength = builder.length();
         for (i = 0; i < builderLength; i++) {
             if (builder.charAt(i) == ' ') {
@@ -274,16 +245,13 @@ final class TtmlNode {
             builder.delete(builderLength - 1, builderLength);
             builderLength--;
         }
-        while (true) {
-            i = i2;
-            if (i >= builderLength - 1) {
-                break;
-            }
+        i = 0;
+        while (i < builderLength - 1) {
             if (builder.charAt(i) == ' ' && builder.charAt(i + 1) == '\n') {
                 builder.delete(i, i + 1);
                 builderLength--;
             }
-            i2 = i + 1;
+            i++;
         }
         if (builderLength > 0 && builder.charAt(builderLength - 1) == '\n') {
             builder.delete(builderLength - 1, builderLength);

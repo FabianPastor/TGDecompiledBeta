@@ -43,7 +43,6 @@ public final class RandomTrackSelection extends BaseTrackSelection {
     public void updateSelectedTrack(long playbackPositionUs, long bufferedDurationUs, long availableDurationUs) {
         int i;
         long nowMs = SystemClock.elapsedRealtime();
-        int i2 = 0;
         int nonBlacklistedFormatCount = 0;
         for (i = 0; i < this.length; i++) {
             if (!isBlacklisted(i, nowMs)) {
@@ -53,20 +52,16 @@ public final class RandomTrackSelection extends BaseTrackSelection {
         this.selectedIndex = this.random.nextInt(nonBlacklistedFormatCount);
         if (nonBlacklistedFormatCount != this.length) {
             nonBlacklistedFormatCount = 0;
-            while (true) {
-                i = i2;
-                if (i >= this.length) {
-                    break;
-                }
+            for (i = 0; i < this.length; i++) {
                 if (!isBlacklisted(i, nowMs)) {
                     int nonBlacklistedFormatCount2 = nonBlacklistedFormatCount + 1;
                     if (this.selectedIndex == nonBlacklistedFormatCount) {
                         this.selectedIndex = i;
+                        nonBlacklistedFormatCount = nonBlacklistedFormatCount2;
                         return;
                     }
                     nonBlacklistedFormatCount = nonBlacklistedFormatCount2;
                 }
-                i2 = i + 1;
             }
         }
     }

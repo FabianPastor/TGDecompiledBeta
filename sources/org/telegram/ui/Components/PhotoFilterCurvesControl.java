@@ -94,8 +94,8 @@ public class PhotoFilterCurvesControl extends View {
                     this.checkForMoving = false;
                     if (this.isMoving) {
                         handlePan(1, event);
+                        break;
                     }
-                    break;
                 }
                 break;
             case 1:
@@ -112,8 +112,6 @@ public class PhotoFilterCurvesControl extends View {
                     handlePan(2, event);
                     break;
                 }
-                break;
-            default:
                 break;
         }
         return true;
@@ -142,8 +140,6 @@ public class PhotoFilterCurvesControl extends View {
                     case 3:
                         curveValue = this.curveValue.blueCurve;
                         break;
-                    default:
-                        break;
                 }
                 switch (this.activeSegment) {
                     case 1:
@@ -160,8 +156,6 @@ public class PhotoFilterCurvesControl extends View {
                         break;
                     case 5:
                         curveValue.whitesLevel = Math.max(0.0f, Math.min(100.0f, curveValue.whitesLevel + delta));
-                        break;
-                    default:
                         break;
                 }
                 invalidate();
@@ -195,12 +189,15 @@ public class PhotoFilterCurvesControl extends View {
 
     @SuppressLint({"DrawAllocation"})
     protected void onDraw(Canvas canvas) {
+        Canvas canvas2;
+        int a;
         float segmentWidth = this.actualArea.width / 5.0f;
-        int a = 0;
         for (int i = 0; i < 4; i++) {
-            canvas.drawLine((this.actualArea.f26x + segmentWidth) + (((float) i) * segmentWidth), this.actualArea.f27y, (this.actualArea.f26x + segmentWidth) + (((float) i) * segmentWidth), this.actualArea.f27y + this.actualArea.height, this.paint);
+            canvas2 = canvas;
+            canvas2.drawLine((((float) i) * segmentWidth) + (this.actualArea.f26x + segmentWidth), this.actualArea.f27y, (((float) i) * segmentWidth) + (this.actualArea.f26x + segmentWidth), this.actualArea.height + this.actualArea.f27y, this.paint);
         }
-        canvas.drawLine(this.actualArea.f26x, this.actualArea.f27y + this.actualArea.height, this.actualArea.f26x + this.actualArea.width, this.actualArea.f27y, this.paintDash);
+        canvas2 = canvas;
+        canvas2.drawLine(this.actualArea.f26x, this.actualArea.height + this.actualArea.f27y, this.actualArea.width + this.actualArea.f26x, this.actualArea.f27y, this.paintDash);
         CurvesValue curvesValue = null;
         switch (this.curveValue.activeType) {
             case 0:
@@ -219,12 +216,10 @@ public class PhotoFilterCurvesControl extends View {
                 this.paintCurve.setColor(-13404165);
                 curvesValue = this.curveValue.blueCurve;
                 break;
-            default:
-                break;
         }
-        for (int a2 = 0; a2 < 5; a2++) {
+        for (a = 0; a < 5; a++) {
             String str;
-            switch (a2) {
+            switch (a) {
                 case 0:
                     str = String.format(Locale.US, "%.2f", new Object[]{Float.valueOf(curvesValue.blacksLevel / 100.0f)});
                     break;
@@ -244,18 +239,17 @@ public class PhotoFilterCurvesControl extends View {
                     str = TtmlNode.ANONYMOUS_REGION_ID;
                     break;
             }
-            canvas.drawText(str, (this.actualArea.f26x + ((segmentWidth - this.textPaint.measureText(str)) / 2.0f)) + (((float) a2) * segmentWidth), (this.actualArea.f27y + this.actualArea.height) - ((float) AndroidUtilities.dp(4.0f)), this.textPaint);
+            canvas.drawText(str, (this.actualArea.f26x + ((segmentWidth - this.textPaint.measureText(str)) / 2.0f)) + (((float) a) * segmentWidth), (this.actualArea.f27y + this.actualArea.height) - ((float) AndroidUtilities.dp(4.0f)), this.textPaint);
         }
         float[] points = curvesValue.interpolateCurve();
         invalidate();
         this.path.reset();
-        while (a < points.length / 2) {
+        for (a = 0; a < points.length / 2; a++) {
             if (a == 0) {
                 this.path.moveTo(this.actualArea.f26x + (points[a * 2] * this.actualArea.width), this.actualArea.f27y + ((1.0f - points[(a * 2) + 1]) * this.actualArea.height));
             } else {
                 this.path.lineTo(this.actualArea.f26x + (points[a * 2] * this.actualArea.width), this.actualArea.f27y + ((1.0f - points[(a * 2) + 1]) * this.actualArea.height));
             }
-            a++;
         }
         canvas.drawPath(this.path, this.paintCurve);
     }

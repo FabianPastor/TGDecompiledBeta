@@ -39,36 +39,32 @@ public final class Id3Reader implements ElementaryStreamReader {
 
     public void consume(ParsableByteArray data) {
         if (this.writingSample) {
-            int headerBytesAvailable;
             int bytesAvailable = data.bytesLeft();
             if (this.sampleBytesRead < 10) {
-                headerBytesAvailable = Math.min(bytesAvailable, 10 - this.sampleBytesRead);
+                int headerBytesAvailable = Math.min(bytesAvailable, 10 - this.sampleBytesRead);
                 System.arraycopy(data.data, data.getPosition(), this.id3Header.data, this.sampleBytesRead, headerBytesAvailable);
                 if (this.sampleBytesRead + headerBytesAvailable == 10) {
                     this.id3Header.setPosition(0);
-                    if (73 == this.id3Header.readUnsignedByte() && 68 == this.id3Header.readUnsignedByte()) {
-                        if (51 == this.id3Header.readUnsignedByte()) {
-                            this.id3Header.skipBytes(3);
-                            this.sampleSize = 10 + this.id3Header.readSynchSafeInt();
-                        }
+                    if (73 == this.id3Header.readUnsignedByte() && 68 == this.id3Header.readUnsignedByte() && 51 == this.id3Header.readUnsignedByte()) {
+                        this.id3Header.skipBytes(3);
+                        this.sampleSize = this.id3Header.readSynchSafeInt() + 10;
+                    } else {
+                        Log.w(TAG, "Discarding invalid ID3 tag");
+                        this.writingSample = false;
+                        return;
                     }
-                    Log.w(TAG, "Discarding invalid ID3 tag");
-                    this.writingSample = false;
-                    return;
                 }
             }
-            headerBytesAvailable = Math.min(bytesAvailable, this.sampleSize - this.sampleBytesRead);
-            this.output.sampleData(data, headerBytesAvailable);
-            this.sampleBytesRead += headerBytesAvailable;
+            int bytesToWrite = Math.min(bytesAvailable, this.sampleSize - this.sampleBytesRead);
+            this.output.sampleData(data, bytesToWrite);
+            this.sampleBytesRead += bytesToWrite;
         }
     }
 
     public void packetFinished() {
-        if (this.writingSample && this.sampleSize != 0) {
-            if (this.sampleBytesRead == this.sampleSize) {
-                this.output.sampleMetadata(this.sampleTimeUs, 1, this.sampleSize, 0, null);
-                this.writingSample = false;
-            }
+        if (this.writingSample && this.sampleSize != 0 && this.sampleBytesRead == this.sampleSize) {
+            this.output.sampleMetadata(this.sampleTimeUs, 1, this.sampleSize, 0, null);
+            this.writingSample = false;
         }
     }
 }

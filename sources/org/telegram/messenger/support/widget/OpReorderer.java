@@ -17,9 +17,8 @@ class OpReorderer {
 
     void reorderOps(List<UpdateOp> ops) {
         while (true) {
-            int lastMoveOutOfOrder = getLastMoveOutOfOrder(ops);
-            int badMove = lastMoveOutOfOrder;
-            if (lastMoveOutOfOrder != -1) {
+            int badMove = getLastMoveOutOfOrder(ops);
+            if (badMove != -1) {
                 swapMoveOp(ops, badMove, badMove + 1);
             } else {
                 return;
@@ -30,20 +29,19 @@ class OpReorderer {
     private void swapMoveOp(List<UpdateOp> list, int badMove, int next) {
         UpdateOp moveOp = (UpdateOp) list.get(badMove);
         UpdateOp nextOp = (UpdateOp) list.get(next);
-        int i = nextOp.cmd;
-        if (i != 4) {
-            switch (i) {
-                case 1:
-                    swapMoveAdd(list, badMove, moveOp, next, nextOp);
-                    return;
-                case 2:
-                    swapMoveRemove(list, badMove, moveOp, next, nextOp);
-                    return;
-                default:
-                    return;
-            }
+        switch (nextOp.cmd) {
+            case 1:
+                swapMoveAdd(list, badMove, moveOp, next, nextOp);
+                return;
+            case 2:
+                swapMoveRemove(list, badMove, moveOp, next, nextOp);
+                return;
+            case 4:
+                swapMoveUpdate(list, badMove, moveOp, next, nextOp);
+                return;
+            default:
+                return;
         }
-        swapMoveUpdate(list, badMove, moveOp, next, nextOp);
     }
 
     void swapMoveRemove(List<UpdateOp> list, int movePos, UpdateOp moveOp, int removePos, UpdateOp removeOp) {
@@ -70,6 +68,7 @@ class OpReorderer {
             if (removeOp.itemCount == 0) {
                 list.remove(removePos);
                 this.mCallback.recycleUpdateOp(removeOp);
+                return;
             }
             return;
         }

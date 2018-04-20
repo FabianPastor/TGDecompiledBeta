@@ -53,8 +53,8 @@ public class CropAreaView extends View {
     private RectF topRightCorner = new RectF();
 
     /* renamed from: org.telegram.ui.Components.Crop.CropAreaView$1 */
-    class C11171 extends AnimatorListenerAdapter {
-        C11171() {
+    class C11181 extends AnimatorListenerAdapter {
+        C11181() {
         }
 
         public void onAnimationEnd(Animator animation) {
@@ -132,20 +132,18 @@ public class CropAreaView extends View {
     }
 
     public void setBitmap(Bitmap bitmap, boolean sideward, boolean freeform) {
-        if (bitmap != null) {
-            if (!bitmap.isRecycled()) {
-                float height;
-                if (sideward) {
-                    height = ((float) bitmap.getHeight()) / ((float) bitmap.getWidth());
-                } else {
-                    height = ((float) bitmap.getWidth()) / ((float) bitmap.getHeight());
-                }
-                if (!freeform) {
-                    height = 1.0f;
-                    this.lockAspectRatio = 1.0f;
-                }
-                setActualRect(height);
+        if (bitmap != null && !bitmap.isRecycled()) {
+            float aspectRatio;
+            if (sideward) {
+                aspectRatio = ((float) bitmap.getHeight()) / ((float) bitmap.getWidth());
+            } else {
+                aspectRatio = ((float) bitmap.getWidth()) / ((float) bitmap.getHeight());
             }
+            if (!freeform) {
+                aspectRatio = 1.0f;
+                this.lockAspectRatio = 1.0f;
+            }
+            setActualRect(aspectRatio);
         }
     }
 
@@ -162,110 +160,67 @@ public class CropAreaView extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        int lineThickness = AndroidUtilities.dp(NUM);
-        int handleSize = AndroidUtilities.dp(NUM);
-        int handleThickness = AndroidUtilities.dp(NUM);
+        int lineThickness = AndroidUtilities.dp(2.0f);
+        int handleSize = AndroidUtilities.dp(16.0f);
+        int handleThickness = AndroidUtilities.dp(3.0f);
         int originX = ((int) this.actualRect.left) - lineThickness;
         int originY = ((int) this.actualRect.top) - lineThickness;
         int width = ((int) (this.actualRect.right - this.actualRect.left)) + (lineThickness * 2);
         int height = ((int) (this.actualRect.bottom - this.actualRect.top)) + (lineThickness * 2);
         if (this.dimVisibile) {
-            canvas.drawRect(0.0f, 0.0f, (float) getWidth(), (float) (originY + lineThickness), r0.dimPaint);
-            Canvas canvas2 = canvas;
-            canvas2.drawRect(0.0f, (float) (originY + lineThickness), (float) (originX + lineThickness), (float) ((originY + height) - lineThickness), r0.dimPaint);
-            canvas.drawRect((float) ((originX + width) - lineThickness), (float) (originY + lineThickness), (float) getWidth(), (float) ((originY + height) - lineThickness), r0.dimPaint);
-            canvas2.drawRect(0.0f, (float) ((originY + height) - lineThickness), (float) getWidth(), (float) getHeight(), r0.dimPaint);
+            canvas.drawRect(0.0f, 0.0f, (float) getWidth(), (float) (originY + lineThickness), this.dimPaint);
+            canvas.drawRect(0.0f, (float) (originY + lineThickness), (float) (originX + lineThickness), (float) ((originY + height) - lineThickness), this.dimPaint);
+            canvas.drawRect((float) ((originX + width) - lineThickness), (float) (originY + lineThickness), (float) getWidth(), (float) ((originY + height) - lineThickness), this.dimPaint);
+            canvas.drawRect(0.0f, (float) ((originY + height) - lineThickness), (float) getWidth(), (float) getHeight(), this.dimPaint);
         }
-        if (r0.frameVisible) {
+        if (this.frameVisible) {
             int inset = handleThickness - lineThickness;
             int gridWidth = width - (handleThickness * 2);
             int gridHeight = height - (handleThickness * 2);
-            GridType type = r0.gridType;
-            if (type == GridType.NONE && r0.gridProgress > 0.0f) {
-                type = r0.previousGridType;
+            GridType type = this.gridType;
+            if (type == GridType.NONE && this.gridProgress > 0.0f) {
+                type = this.previousGridType;
             }
-            r0.shadowPaint.setAlpha((int) (r0.gridProgress * 26.0f));
-            r0.linePaint.setAlpha((int) (r0.gridProgress * 178.0f));
+            this.shadowPaint.setAlpha((int) (this.gridProgress * 26.0f));
+            this.linePaint.setAlpha((int) (this.gridProgress * 178.0f));
             int i = 0;
-            while (true) {
-                int i2 = 3;
-                int lineThickness2;
-                int handleSize2;
-                int height2;
-                if (i < 3) {
-                    if (type == GridType.MINOR) {
-                        int j = 1;
-                        while (j < 4) {
-                            int i3;
-                            if (i == 2 && j == i2) {
-                                lineThickness2 = lineThickness;
-                                handleSize2 = handleSize;
-                                height2 = height;
-                                i3 = i2;
-                            } else {
-                                handleSize2 = handleSize;
-                                height2 = height;
-                                lineThickness2 = lineThickness;
-                                canvas.drawLine((float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), r0.shadowPaint);
-                                canvas.drawLine((float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), r0.linePaint);
-                                canvas.drawLine((float) (originX + handleThickness), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), r0.shadowPaint);
-                                i3 = 3;
-                                canvas.drawLine((float) (originX + handleThickness), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), r0.linePaint);
-                            }
-                            j++;
-                            i2 = i3;
-                            handleSize = handleSize2;
-                            height = height2;
-                            lineThickness = lineThickness2;
+            while (i < 3) {
+                if (type == GridType.MINOR) {
+                    int j = 1;
+                    while (j < 4) {
+                        if (i != 2 || j != 3) {
+                            canvas.drawLine((float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.shadowPaint);
+                            canvas.drawLine((float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.linePaint);
+                            canvas.drawLine((float) (originX + handleThickness), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), this.shadowPaint);
+                            canvas.drawLine((float) (originX + handleThickness), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), this.linePaint);
                         }
-                        lineThickness2 = lineThickness;
-                        handleSize2 = handleSize;
-                        height2 = height;
-                    } else {
-                        lineThickness2 = lineThickness;
-                        handleSize2 = handleSize;
-                        height2 = height;
-                        if (type == GridType.MAJOR && i > 0) {
-                            Canvas canvas3 = canvas;
-                            canvas3.drawLine((float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), r0.shadowPaint);
-                            canvas3.drawLine((float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), r0.linePaint);
-                            canvas3.drawLine((float) (originX + handleThickness), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), r0.shadowPaint);
-                            canvas3.drawLine((float) (originX + handleThickness), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), r0.linePaint);
-                        }
+                        j++;
                     }
-                    i++;
-                    handleSize = handleSize2;
-                    height = height2;
-                    lineThickness = lineThickness2;
-                } else {
-                    lineThickness2 = lineThickness;
-                    handleSize2 = handleSize;
-                    height2 = height;
-                    Canvas canvas4 = canvas;
-                    canvas4.drawRect((float) (originX + inset), (float) (originY + inset), (float) ((originX + width) - inset), (float) ((originY + inset) + lineThickness2), r0.framePaint);
-                    canvas4.drawRect((float) (originX + inset), (float) (originY + inset), (float) ((originX + inset) + lineThickness2), (float) ((originY + height2) - inset), r0.framePaint);
-                    canvas4.drawRect((float) (originX + inset), (float) (((originY + height2) - inset) - lineThickness2), (float) ((originX + width) - inset), (float) ((originY + height2) - inset), r0.framePaint);
-                    canvas4.drawRect((float) (((originX + width) - inset) - lineThickness2), (float) (originY + inset), (float) ((originX + width) - inset), (float) ((originY + height2) - inset), r0.framePaint);
-                    canvas.drawRect((float) originX, (float) originY, (float) (originX + handleSize2), (float) (originY + handleThickness), r0.handlePaint);
-                    Canvas canvas5 = canvas;
-                    canvas5.drawRect((float) originX, (float) originY, (float) (originX + handleThickness), (float) (originY + handleSize2), r0.handlePaint);
-                    canvas4 = canvas;
-                    canvas4.drawRect((float) ((originX + width) - handleSize2), (float) originY, (float) (originX + width), (float) (originY + handleThickness), r0.handlePaint);
-                    canvas4.drawRect((float) ((originX + width) - handleThickness), (float) originY, (float) (originX + width), (float) (originY + handleSize2), r0.handlePaint);
-                    canvas.drawRect((float) originX, (float) ((originY + height2) - handleThickness), (float) (originX + handleSize2), (float) (originY + height2), r0.handlePaint);
-                    canvas5 = canvas;
-                    canvas5.drawRect((float) originX, (float) ((originY + height2) - handleSize2), (float) (originX + handleThickness), (float) (originY + height2), r0.handlePaint);
-                    canvas4 = canvas;
-                    canvas4.drawRect((float) ((originX + width) - handleSize2), (float) ((originY + height2) - handleThickness), (float) (originX + width), (float) (originY + height2), r0.handlePaint);
-                    canvas4.drawRect((float) ((originX + width) - handleThickness), (float) ((originY + height2) - handleSize2), (float) (originX + width), (float) (originY + height2), r0.handlePaint);
-                    return;
+                } else if (type == GridType.MAJOR && i > 0) {
+                    canvas.drawLine((float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.shadowPaint);
+                    canvas.drawLine((float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.linePaint);
+                    canvas.drawLine((float) (originX + handleThickness), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), this.shadowPaint);
+                    canvas.drawLine((float) (originX + handleThickness), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), this.linePaint);
                 }
+                i++;
             }
+            canvas.drawRect((float) (originX + inset), (float) (originY + inset), (float) ((originX + width) - inset), (float) ((originY + inset) + lineThickness), this.framePaint);
+            canvas.drawRect((float) (originX + inset), (float) (originY + inset), (float) ((originX + inset) + lineThickness), (float) ((originY + height) - inset), this.framePaint);
+            canvas.drawRect((float) (originX + inset), (float) (((originY + height) - inset) - lineThickness), (float) ((originX + width) - inset), (float) ((originY + height) - inset), this.framePaint);
+            canvas.drawRect((float) (((originX + width) - inset) - lineThickness), (float) (originY + inset), (float) ((originX + width) - inset), (float) ((originY + height) - inset), this.framePaint);
+            canvas.drawRect((float) originX, (float) originY, (float) (originX + handleSize), (float) (originY + handleThickness), this.handlePaint);
+            canvas.drawRect((float) originX, (float) originY, (float) (originX + handleThickness), (float) (originY + handleSize), this.handlePaint);
+            canvas.drawRect((float) ((originX + width) - handleSize), (float) originY, (float) (originX + width), (float) (originY + handleThickness), this.handlePaint);
+            canvas.drawRect((float) ((originX + width) - handleThickness), (float) originY, (float) (originX + width), (float) (originY + handleSize), this.handlePaint);
+            canvas.drawRect((float) originX, (float) ((originY + height) - handleThickness), (float) (originX + handleSize), (float) (originY + height), this.handlePaint);
+            canvas.drawRect((float) originX, (float) ((originY + height) - handleSize), (float) (originX + handleThickness), (float) (originY + height), this.handlePaint);
+            canvas.drawRect((float) ((originX + width) - handleSize), (float) ((originY + height) - handleThickness), (float) (originX + width), (float) (originY + height), this.handlePaint);
+            canvas.drawRect((float) ((originX + width) - handleThickness), (float) ((originY + height) - handleSize), (float) (originX + width), (float) (originY + height), this.handlePaint);
         }
     }
 
     private void updateTouchAreas() {
-        int touchPadding = AndroidUtilities.dp(NUM);
+        int touchPadding = AndroidUtilities.dp(16.0f);
         this.topLeftCorner.set(this.actualRect.left - ((float) touchPadding), this.actualRect.top - ((float) touchPadding), this.actualRect.left + ((float) touchPadding), this.actualRect.top + ((float) touchPadding));
         this.topRightCorner.set(this.actualRect.right - ((float) touchPadding), this.actualRect.top - ((float) touchPadding), this.actualRect.right + ((float) touchPadding), this.actualRect.top + ((float) touchPadding));
         this.bottomLeftCorner.set(this.actualRect.left - ((float) touchPadding), this.actualRect.bottom - ((float) touchPadding), this.actualRect.left + ((float) touchPadding), this.actualRect.bottom + ((float) touchPadding));
@@ -296,15 +251,15 @@ public class CropAreaView extends View {
             if (animated) {
                 this.gridAnimator = ObjectAnimator.ofFloat(this, "gridProgress", new float[]{this.gridProgress, targetProgress});
                 this.gridAnimator.setDuration(200);
-                this.gridAnimator.addListener(new C11171());
+                this.gridAnimator.addListener(new C11181());
                 if (type == GridType.NONE) {
                     this.gridAnimator.setStartDelay(200);
                 }
                 this.gridAnimator.start();
-            } else {
-                this.gridProgress = targetProgress;
-                invalidate();
+                return;
             }
+            this.gridProgress = targetProgress;
+            invalidate();
         }
     }
 
@@ -424,30 +379,29 @@ public class CropAreaView extends View {
         float top;
         float right;
         float bottom;
-        float statusBarHeight = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0.0f);
+        float statusBarHeight = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         float measuredHeight = (((float) getMeasuredHeight()) - this.bottomPadding) - statusBarHeight;
         float aspectRatio = ((float) getMeasuredWidth()) / measuredHeight;
-        float minSide = Math.min((float) getMeasuredWidth(), measuredHeight) - (r0.sidePadding * 2.0f);
-        float width = ((float) getMeasuredWidth()) - (r0.sidePadding * 2.0f);
-        float height = measuredHeight - (r0.sidePadding * 2.0f);
+        float minSide = Math.min((float) getMeasuredWidth(), measuredHeight) - (2.0f * this.sidePadding);
+        float width = ((float) getMeasuredWidth()) - (2.0f * this.sidePadding);
+        float height = measuredHeight - (2.0f * this.sidePadding);
         float centerX = ((float) getMeasuredWidth()) / 2.0f;
-        float centerY = (measuredHeight / 2.0f) + statusBarHeight;
+        float centerY = statusBarHeight + (measuredHeight / 2.0f);
         if (((double) Math.abs(1.0f - cropAspectRatio)) < 1.0E-4d) {
             left = centerX - (minSide / 2.0f);
             top = centerY - (minSide / 2.0f);
-            right = (minSide / 2.0f) + centerX;
-            bottom = (minSide / 2.0f) + centerY;
+            right = centerX + (minSide / 2.0f);
+            bottom = centerY + (minSide / 2.0f);
         } else if (cropAspectRatio > aspectRatio) {
             left = centerX - (width / 2.0f);
             top = centerY - ((width / cropAspectRatio) / 2.0f);
-            right = (width / 2.0f) + centerX;
+            right = centerX + (width / 2.0f);
             bottom = centerY + ((width / cropAspectRatio) / 2.0f);
         } else {
             left = centerX - ((height * cropAspectRatio) / 2.0f);
             top = centerY - (height / 2.0f);
-            right = ((height * cropAspectRatio) / 2.0f) + centerX;
-            bottom = (height / 2.0f) + centerY;
-            rect.set(left, top, right, bottom);
+            right = centerX + ((height * cropAspectRatio) / 2.0f);
+            bottom = centerY + (height / 2.0f);
         }
         rect.set(left, top, right, bottom);
     }
@@ -455,7 +409,7 @@ public class CropAreaView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         int x = (int) (event.getX() - ((ViewGroup) getParent()).getX());
         int y = (int) (event.getY() - ((ViewGroup) getParent()).getY());
-        float statusBarHeight = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0.0f);
+        float statusBarHeight = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         int action = event.getActionMasked();
         if (action == 0) {
             if (this.topLeftCorner.contains((float) x, (float) y)) {
@@ -486,182 +440,179 @@ public class CropAreaView extends View {
                 this.listener.onAreaChangeBegan();
             }
             return true;
-        }
-        if (action != 1) {
-            if (action != 3) {
-                if (action != 2 || this.activeControl == Control.NONE) {
-                    return false;
-                }
-                float w;
-                float h;
-                this.tempRect.set(this.actualRect);
-                float translationX = (float) (x - this.previousX);
-                float translationY = (float) (y - this.previousY);
-                this.previousX = x;
-                this.previousY = y;
-                RectF rectF;
-                RectF rectF2;
-                switch (this.activeControl) {
-                    case TOP_LEFT:
-                        rectF = this.tempRect;
-                        rectF.left += translationX;
-                        rectF = this.tempRect;
-                        rectF.top += translationY;
-                        if (this.lockAspectRatio > 0.0f) {
-                            w = this.tempRect.width();
-                            h = this.tempRect.height();
-                            if (Math.abs(translationX) > Math.abs(translationY)) {
-                                constrainRectByWidth(this.tempRect, this.lockAspectRatio);
-                            } else {
-                                constrainRectByHeight(this.tempRect, this.lockAspectRatio);
-                            }
-                            RectF rectF3 = this.tempRect;
-                            rectF3.left -= this.tempRect.width() - w;
-                            rectF3 = this.tempRect;
-                            rectF3.top -= this.tempRect.width() - h;
-                            break;
-                        }
-                        break;
-                    case TOP_RIGHT:
-                        rectF = this.tempRect;
-                        rectF.right += translationX;
-                        rectF = this.tempRect;
-                        rectF.top += translationY;
-                        if (this.lockAspectRatio > 0.0f) {
-                            w = this.tempRect.height();
-                            if (Math.abs(translationX) > Math.abs(translationY)) {
-                                constrainRectByWidth(this.tempRect, this.lockAspectRatio);
-                            } else {
-                                constrainRectByHeight(this.tempRect, this.lockAspectRatio);
-                            }
-                            rectF2 = this.tempRect;
-                            rectF2.top -= this.tempRect.width() - w;
-                            break;
-                        }
-                        break;
-                    case BOTTOM_LEFT:
-                        rectF = this.tempRect;
-                        rectF.left += translationX;
-                        rectF = this.tempRect;
-                        rectF.bottom += translationY;
-                        if (this.lockAspectRatio > 0.0f) {
-                            w = this.tempRect.width();
-                            if (Math.abs(translationX) > Math.abs(translationY)) {
-                                constrainRectByWidth(this.tempRect, this.lockAspectRatio);
-                            } else {
-                                constrainRectByHeight(this.tempRect, this.lockAspectRatio);
-                            }
-                            rectF2 = this.tempRect;
-                            rectF2.left -= this.tempRect.width() - w;
-                            break;
-                        }
-                        break;
-                    case BOTTOM_RIGHT:
-                        rectF = this.tempRect;
-                        rectF.right += translationX;
-                        rectF = this.tempRect;
-                        rectF.bottom += translationY;
-                        if (this.lockAspectRatio > 0.0f) {
-                            if (Math.abs(translationX) <= Math.abs(translationY)) {
-                                constrainRectByHeight(this.tempRect, this.lockAspectRatio);
-                                break;
-                            }
-                            constrainRectByWidth(this.tempRect, this.lockAspectRatio);
-                            break;
-                        }
-                        break;
-                    case TOP:
-                        rectF = this.tempRect;
-                        rectF.top += translationY;
-                        if (this.lockAspectRatio > 0.0f) {
-                            constrainRectByHeight(this.tempRect, this.lockAspectRatio);
-                            break;
-                        }
-                        break;
-                    case LEFT:
-                        rectF = this.tempRect;
-                        rectF.left += translationX;
-                        if (this.lockAspectRatio > 0.0f) {
-                            constrainRectByWidth(this.tempRect, this.lockAspectRatio);
-                            break;
-                        }
-                        break;
-                    case RIGHT:
-                        rectF = this.tempRect;
-                        rectF.right += translationX;
-                        if (this.lockAspectRatio > 0.0f) {
-                            constrainRectByWidth(this.tempRect, this.lockAspectRatio);
-                            break;
-                        }
-                        break;
-                    case BOTTOM:
-                        rectF = this.tempRect;
-                        rectF.bottom += translationY;
-                        if (this.lockAspectRatio > 0.0f) {
-                            constrainRectByHeight(this.tempRect, this.lockAspectRatio);
-                            break;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                if (this.tempRect.left < this.sidePadding) {
+        } else if (action == 1 || action == 3) {
+            this.isDragging = false;
+            if (this.activeControl == Control.NONE) {
+                return false;
+            }
+            this.activeControl = Control.NONE;
+            if (this.listener != null) {
+                this.listener.onAreaChangeEnded();
+            }
+            return true;
+        } else if (action != 2) {
+            return false;
+        } else {
+            if (this.activeControl == Control.NONE) {
+                return false;
+            }
+            this.tempRect.set(this.actualRect);
+            float translationX = (float) (x - this.previousX);
+            float translationY = (float) (y - this.previousY);
+            this.previousX = x;
+            this.previousY = y;
+            RectF rectF;
+            float w;
+            float h;
+            switch (this.activeControl) {
+                case TOP_LEFT:
+                    rectF = this.tempRect;
+                    rectF.left += translationX;
+                    rectF = this.tempRect;
+                    rectF.top += translationY;
                     if (this.lockAspectRatio > 0.0f) {
-                        this.tempRect.bottom = this.tempRect.top + ((this.tempRect.right - this.sidePadding) / this.lockAspectRatio);
+                        w = this.tempRect.width();
+                        h = this.tempRect.height();
+                        if (Math.abs(translationX) > Math.abs(translationY)) {
+                            constrainRectByWidth(this.tempRect, this.lockAspectRatio);
+                        } else {
+                            constrainRectByHeight(this.tempRect, this.lockAspectRatio);
+                        }
+                        rectF = this.tempRect;
+                        rectF.left -= this.tempRect.width() - w;
+                        rectF = this.tempRect;
+                        rectF.top -= this.tempRect.width() - h;
+                        break;
                     }
-                    this.tempRect.left = this.sidePadding;
-                } else if (this.tempRect.right > ((float) getWidth()) - this.sidePadding) {
-                    this.tempRect.right = ((float) getWidth()) - this.sidePadding;
+                    break;
+                case TOP_RIGHT:
+                    rectF = this.tempRect;
+                    rectF.right += translationX;
+                    rectF = this.tempRect;
+                    rectF.top += translationY;
                     if (this.lockAspectRatio > 0.0f) {
+                        h = this.tempRect.height();
+                        if (Math.abs(translationX) > Math.abs(translationY)) {
+                            constrainRectByWidth(this.tempRect, this.lockAspectRatio);
+                        } else {
+                            constrainRectByHeight(this.tempRect, this.lockAspectRatio);
+                        }
+                        rectF = this.tempRect;
+                        rectF.top -= this.tempRect.width() - h;
+                        break;
+                    }
+                    break;
+                case BOTTOM_LEFT:
+                    rectF = this.tempRect;
+                    rectF.left += translationX;
+                    rectF = this.tempRect;
+                    rectF.bottom += translationY;
+                    if (this.lockAspectRatio > 0.0f) {
+                        w = this.tempRect.width();
+                        if (Math.abs(translationX) > Math.abs(translationY)) {
+                            constrainRectByWidth(this.tempRect, this.lockAspectRatio);
+                        } else {
+                            constrainRectByHeight(this.tempRect, this.lockAspectRatio);
+                        }
+                        rectF = this.tempRect;
+                        rectF.left -= this.tempRect.width() - w;
+                        break;
+                    }
+                    break;
+                case BOTTOM_RIGHT:
+                    rectF = this.tempRect;
+                    rectF.right += translationX;
+                    rectF = this.tempRect;
+                    rectF.bottom += translationY;
+                    if (this.lockAspectRatio > 0.0f) {
+                        if (Math.abs(translationX) <= Math.abs(translationY)) {
+                            constrainRectByHeight(this.tempRect, this.lockAspectRatio);
+                            break;
+                        }
+                        constrainRectByWidth(this.tempRect, this.lockAspectRatio);
+                        break;
+                    }
+                    break;
+                case TOP:
+                    rectF = this.tempRect;
+                    rectF.top += translationY;
+                    if (this.lockAspectRatio > 0.0f) {
+                        constrainRectByHeight(this.tempRect, this.lockAspectRatio);
+                        break;
+                    }
+                    break;
+                case LEFT:
+                    rectF = this.tempRect;
+                    rectF.left += translationX;
+                    if (this.lockAspectRatio > 0.0f) {
+                        constrainRectByWidth(this.tempRect, this.lockAspectRatio);
+                        break;
+                    }
+                    break;
+                case RIGHT:
+                    rectF = this.tempRect;
+                    rectF.right += translationX;
+                    if (this.lockAspectRatio > 0.0f) {
+                        constrainRectByWidth(this.tempRect, this.lockAspectRatio);
+                        break;
+                    }
+                    break;
+                case BOTTOM:
+                    rectF = this.tempRect;
+                    rectF.bottom += translationY;
+                    if (this.lockAspectRatio > 0.0f) {
+                        constrainRectByHeight(this.tempRect, this.lockAspectRatio);
+                        break;
+                    }
+                    break;
+            }
+            if (this.tempRect.left < this.sidePadding) {
+                if (this.lockAspectRatio > 0.0f) {
+                    this.tempRect.bottom = this.tempRect.top + ((this.tempRect.right - this.sidePadding) / this.lockAspectRatio);
+                }
+                this.tempRect.left = this.sidePadding;
+            } else if (this.tempRect.right > ((float) getWidth()) - this.sidePadding) {
+                this.tempRect.right = ((float) getWidth()) - this.sidePadding;
+                if (this.lockAspectRatio > 0.0f) {
+                    this.tempRect.bottom = this.tempRect.top + (this.tempRect.width() / this.lockAspectRatio);
+                }
+            }
+            float topPadding = statusBarHeight + this.sidePadding;
+            float finalBottomPadidng = this.bottomPadding + this.sidePadding;
+            if (this.tempRect.top < topPadding) {
+                if (this.lockAspectRatio > 0.0f) {
+                    this.tempRect.right = this.tempRect.left + ((this.tempRect.bottom - topPadding) * this.lockAspectRatio);
+                }
+                this.tempRect.top = topPadding;
+            } else if (this.tempRect.bottom > ((float) getHeight()) - finalBottomPadidng) {
+                this.tempRect.bottom = ((float) getHeight()) - finalBottomPadidng;
+                if (this.lockAspectRatio > 0.0f) {
+                    this.tempRect.right = this.tempRect.left + (this.tempRect.height() * this.lockAspectRatio);
+                }
+            }
+            if (this.tempRect.width() < this.minWidth) {
+                this.tempRect.right = this.tempRect.left + this.minWidth;
+            }
+            if (this.tempRect.height() < this.minWidth) {
+                this.tempRect.bottom = this.tempRect.top + this.minWidth;
+            }
+            if (this.lockAspectRatio > 0.0f) {
+                if (this.lockAspectRatio < 1.0f) {
+                    if (this.tempRect.width() <= this.minWidth) {
+                        this.tempRect.right = this.tempRect.left + this.minWidth;
                         this.tempRect.bottom = this.tempRect.top + (this.tempRect.width() / this.lockAspectRatio);
                     }
-                }
-                w = this.sidePadding + statusBarHeight;
-                h = this.bottomPadding + this.sidePadding;
-                if (this.tempRect.top < w) {
-                    if (this.lockAspectRatio > 0.0f) {
-                        this.tempRect.right = this.tempRect.left + ((this.tempRect.bottom - w) * this.lockAspectRatio);
-                    }
-                    this.tempRect.top = w;
-                } else if (this.tempRect.bottom > ((float) getHeight()) - h) {
-                    this.tempRect.bottom = ((float) getHeight()) - h;
-                    if (this.lockAspectRatio > 0.0f) {
-                        this.tempRect.right = this.tempRect.left + (this.tempRect.height() * this.lockAspectRatio);
-                    }
-                }
-                if (this.tempRect.width() < this.minWidth) {
-                    this.tempRect.right = this.tempRect.left + this.minWidth;
-                }
-                if (this.tempRect.height() < this.minWidth) {
+                } else if (this.tempRect.height() <= this.minWidth) {
                     this.tempRect.bottom = this.tempRect.top + this.minWidth;
+                    this.tempRect.right = this.tempRect.left + (this.tempRect.height() * this.lockAspectRatio);
                 }
-                if (this.lockAspectRatio > 0.0f) {
-                    if (this.lockAspectRatio < 1.0f) {
-                        if (this.tempRect.width() <= this.minWidth) {
-                            this.tempRect.right = this.tempRect.left + this.minWidth;
-                            this.tempRect.bottom = this.tempRect.top + (this.tempRect.width() / this.lockAspectRatio);
-                        }
-                    } else if (this.tempRect.height() <= this.minWidth) {
-                        this.tempRect.bottom = this.tempRect.top + this.minWidth;
-                        this.tempRect.right = this.tempRect.left + (this.tempRect.height() * this.lockAspectRatio);
-                    }
-                }
-                setActualRect(this.tempRect);
-                if (this.listener != null) {
-                    this.listener.onAreaChange();
-                }
-                return true;
             }
+            setActualRect(this.tempRect);
+            if (this.listener != null) {
+                this.listener.onAreaChange();
+            }
+            return true;
         }
-        this.isDragging = false;
-        if (this.activeControl == Control.NONE) {
-            return false;
-        }
-        this.activeControl = Control.NONE;
-        if (this.listener != null) {
-            this.listener.onAreaChangeEnded();
-        }
-        return true;
     }
 
     private void constrainRectByWidth(RectF rect, float aspectRatio) {

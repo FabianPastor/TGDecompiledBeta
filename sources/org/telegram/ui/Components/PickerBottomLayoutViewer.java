@@ -24,30 +24,18 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         setBackgroundColor(this.isDarkTheme ? -15066598 : -1);
         this.cancelButton = new TextView(context);
         this.cancelButton.setTextSize(1, 14.0f);
-        int i = -15095832;
         this.cancelButton.setTextColor(this.isDarkTheme ? -1 : -15095832);
         this.cancelButton.setGravity(17);
-        TextView textView = this.cancelButton;
-        boolean z = this.isDarkTheme;
-        int i2 = Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR;
-        textView.setBackgroundDrawable(Theme.createSelectorDrawable(z ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+        this.cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(this.isDarkTheme ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         this.cancelButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         this.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
         this.cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.cancelButton, LayoutHelper.createFrame(-2, -1, 51));
         this.doneButton = new TextView(context);
         this.doneButton.setTextSize(1, 14.0f);
-        textView = this.doneButton;
-        if (this.isDarkTheme) {
-            i = -1;
-        }
-        textView.setTextColor(i);
+        this.doneButton.setTextColor(this.isDarkTheme ? -1 : -15095832);
         this.doneButton.setGravity(17);
-        textView = this.doneButton;
-        if (this.isDarkTheme) {
-            i2 = Theme.ACTION_BAR_PICKER_SELECTOR_COLOR;
-        }
-        textView.setBackgroundDrawable(Theme.createSelectorDrawable(i2, 0));
+        this.doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(this.isDarkTheme ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         this.doneButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         this.doneButton.setText(LocaleController.getString("Send", R.string.Send).toUpperCase());
         this.doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -64,7 +52,7 @@ public class PickerBottomLayoutViewer extends FrameLayout {
     }
 
     public void updateSelectedCount(int count, boolean disable) {
-        int i = -15095832;
+        int i = -1;
         if (count == 0) {
             this.doneButtonBadgeTextView.setVisibility(8);
             if (disable) {
@@ -73,8 +61,8 @@ public class PickerBottomLayoutViewer extends FrameLayout {
                 return;
             }
             TextView textView = this.doneButton;
-            if (this.isDarkTheme) {
-                i = -1;
+            if (!this.isDarkTheme) {
+                i = -15095832;
             }
             textView.setTextColor(i);
             return;
@@ -82,8 +70,8 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         this.doneButtonBadgeTextView.setVisibility(0);
         this.doneButtonBadgeTextView.setText(String.format("%d", new Object[]{Integer.valueOf(count)}));
         textView = this.doneButton;
-        if (this.isDarkTheme) {
-            i = -1;
+        if (!this.isDarkTheme) {
+            i = -15095832;
         }
         textView.setTextColor(i);
         if (disable) {

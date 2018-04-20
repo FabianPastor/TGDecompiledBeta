@@ -41,12 +41,7 @@ public final class EncryptedFileDataSource implements DataSource {
         try {
             this.uri = dataSpec.uri;
             File path = new File(dataSpec.uri.getPath());
-            String name = path.getName();
-            File internalCacheDir = FileLoader.getInternalCacheDir();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(name);
-            stringBuilder.append(".key");
-            RandomAccessFile keyFile = new RandomAccessFile(new File(internalCacheDir, stringBuilder.toString()), "r");
+            RandomAccessFile keyFile = new RandomAccessFile(new File(FileLoader.getInternalCacheDir(), path.getName() + ".key"), "r");
             keyFile.read(this.key);
             keyFile.read(this.iv);
             keyFile.close();
@@ -78,12 +73,14 @@ public final class EncryptedFileDataSource implements DataSource {
             int bytesRead = this.file.read(buffer, offset, (int) Math.min(this.bytesRemaining, (long) readLength));
             Utilities.aesCtrDecryptionByteArray(buffer, this.key, this.iv, offset, bytesRead, this.fileOffset);
             this.fileOffset += bytesRead;
-            if (bytesRead > 0) {
-                this.bytesRemaining -= (long) bytesRead;
-                if (this.listener != null) {
-                    this.listener.onBytesTransferred(this, bytesRead);
-                }
+            if (bytesRead <= 0) {
+                return bytesRead;
             }
+            this.bytesRemaining -= (long) bytesRead;
+            if (this.listener == null) {
+                return bytesRead;
+            }
+            this.listener.onBytesTransferred(this, bytesRead);
             return bytesRead;
         } catch (IOException e) {
             throw new EncryptedFileDataSourceException(e);

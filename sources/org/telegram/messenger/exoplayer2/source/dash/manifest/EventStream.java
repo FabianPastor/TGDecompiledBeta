@@ -18,10 +18,6 @@ public final class EventStream {
     }
 
     public String id() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(this.schemeIdUri);
-        stringBuilder.append("/");
-        stringBuilder.append(this.value);
-        return stringBuilder.toString();
+        return this.schemeIdUri + "/" + this.value;
     }
 }

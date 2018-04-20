@@ -93,84 +93,51 @@ public class ClippingImageView extends View {
     }
 
     public void onDraw(Canvas canvas) {
-        if (!(getVisibility() != 0 || this.bmp == null || this.bmp.isRecycled())) {
+        if (getVisibility() == 0 && this.bmp != null && !this.bmp.isRecycled()) {
             float scaleY = getScaleY();
             canvas.save();
             if (this.needRadius) {
                 int bitmapW;
                 int bitmapH;
-                float scaleH;
-                float scaleW;
-                float scale;
-                int w;
-                int h;
                 this.shaderMatrix.reset();
                 this.roundRect.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
-                if (this.orientation % 360 != 90) {
-                    if (this.orientation % 360 != 270) {
-                        bitmapW = this.bmp.getWidth();
-                        bitmapH = this.bmp.getHeight();
-                        scaleH = 1.0f;
-                        scaleW = getWidth() == 0 ? ((float) bitmapW) / ((float) getWidth()) : 1.0f;
-                        if (getHeight() != 0) {
-                            scaleH = ((float) bitmapH) / ((float) getHeight());
-                        }
-                        scale = Math.min(scaleW, scaleH);
-                        if (Math.abs(scaleW - scaleH) <= 1.0E-5f) {
-                            w = (int) Math.floor((double) (((float) getWidth()) * scale));
-                            h = (int) Math.floor((double) (((float) getHeight()) * scale));
-                            this.bitmapRect.set((float) ((bitmapW - w) / 2), (float) ((bitmapH - h) / 2), (float) w, (float) h);
-                            AndroidUtilities.setRectToRect(this.shaderMatrix, this.bitmapRect, this.roundRect, this.orientation, ScaleToFit.START);
-                        } else {
-                            this.bitmapRect.set(0.0f, 0.0f, (float) this.bmp.getWidth(), (float) this.bmp.getHeight());
-                            AndroidUtilities.setRectToRect(this.shaderMatrix, this.bitmapRect, this.roundRect, this.orientation, ScaleToFit.FILL);
-                        }
-                        this.bitmapShader.setLocalMatrix(this.shaderMatrix);
-                        canvas.clipRect(((float) this.clipLeft) / scaleY, ((float) this.clipTop) / scaleY, ((float) getWidth()) - (((float) this.clipRight) / scaleY), ((float) getHeight()) - (((float) this.clipBottom) / scaleY));
-                        canvas.drawRoundRect(this.roundRect, (float) this.radius, (float) this.radius, this.roundPaint);
-                    }
-                }
-                bitmapW = this.bmp.getHeight();
-                bitmapH = this.bmp.getWidth();
-                scaleH = 1.0f;
-                if (getWidth() == 0) {
-                }
-                if (getHeight() != 0) {
-                    scaleH = ((float) bitmapH) / ((float) getHeight());
-                }
-                scale = Math.min(scaleW, scaleH);
-                if (Math.abs(scaleW - scaleH) <= 1.0E-5f) {
-                    this.bitmapRect.set(0.0f, 0.0f, (float) this.bmp.getWidth(), (float) this.bmp.getHeight());
-                    AndroidUtilities.setRectToRect(this.shaderMatrix, this.bitmapRect, this.roundRect, this.orientation, ScaleToFit.FILL);
+                if (this.orientation % 360 == 90 || this.orientation % 360 == 270) {
+                    bitmapW = this.bmp.getHeight();
+                    bitmapH = this.bmp.getWidth();
                 } else {
-                    w = (int) Math.floor((double) (((float) getWidth()) * scale));
-                    h = (int) Math.floor((double) (((float) getHeight()) * scale));
+                    bitmapW = this.bmp.getWidth();
+                    bitmapH = this.bmp.getHeight();
+                }
+                float scaleW = getWidth() != 0 ? ((float) bitmapW) / ((float) getWidth()) : 1.0f;
+                float scaleH = getHeight() != 0 ? ((float) bitmapH) / ((float) getHeight()) : 1.0f;
+                float scale = Math.min(scaleW, scaleH);
+                if (Math.abs(scaleW - scaleH) > 1.0E-5f) {
+                    int w = (int) Math.floor((double) (((float) getWidth()) * scale));
+                    int h = (int) Math.floor((double) (((float) getHeight()) * scale));
                     this.bitmapRect.set((float) ((bitmapW - w) / 2), (float) ((bitmapH - h) / 2), (float) w, (float) h);
                     AndroidUtilities.setRectToRect(this.shaderMatrix, this.bitmapRect, this.roundRect, this.orientation, ScaleToFit.START);
+                } else {
+                    this.bitmapRect.set(0.0f, 0.0f, (float) this.bmp.getWidth(), (float) this.bmp.getHeight());
+                    AndroidUtilities.setRectToRect(this.shaderMatrix, this.bitmapRect, this.roundRect, this.orientation, ScaleToFit.FILL);
                 }
                 this.bitmapShader.setLocalMatrix(this.shaderMatrix);
                 canvas.clipRect(((float) this.clipLeft) / scaleY, ((float) this.clipTop) / scaleY, ((float) getWidth()) - (((float) this.clipRight) / scaleY), ((float) getHeight()) - (((float) this.clipBottom) / scaleY));
                 canvas.drawRoundRect(this.roundRect, (float) this.radius, (float) this.radius, this.roundPaint);
             } else {
-                if (this.orientation != 90) {
-                    if (this.orientation != 270) {
-                        if (this.orientation == 180) {
-                            this.drawRect.set((float) ((-getWidth()) / 2), (float) ((-getHeight()) / 2), (float) (getWidth() / 2), (float) (getHeight() / 2));
-                            this.matrix.setRectToRect(this.bitmapRect, this.drawRect, ScaleToFit.FILL);
-                            this.matrix.postRotate((float) this.orientation, 0.0f, 0.0f);
-                            this.matrix.postTranslate((float) (getWidth() / 2), (float) (getHeight() / 2));
-                        } else {
-                            this.drawRect.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
-                            this.matrix.setRectToRect(this.bitmapRect, this.drawRect, ScaleToFit.FILL);
-                        }
-                        canvas.clipRect(((float) this.clipLeft) / scaleY, ((float) this.clipTop) / scaleY, ((float) getWidth()) - (((float) this.clipRight) / scaleY), ((float) getHeight()) - (((float) this.clipBottom) / scaleY));
-                        canvas.drawBitmap(this.bmp.bitmap, this.matrix, this.paint);
-                    }
+                if (this.orientation == 90 || this.orientation == 270) {
+                    this.drawRect.set((float) ((-getHeight()) / 2), (float) ((-getWidth()) / 2), (float) (getHeight() / 2), (float) (getWidth() / 2));
+                    this.matrix.setRectToRect(this.bitmapRect, this.drawRect, ScaleToFit.FILL);
+                    this.matrix.postRotate((float) this.orientation, 0.0f, 0.0f);
+                    this.matrix.postTranslate((float) (getWidth() / 2), (float) (getHeight() / 2));
+                } else if (this.orientation == 180) {
+                    this.drawRect.set((float) ((-getWidth()) / 2), (float) ((-getHeight()) / 2), (float) (getWidth() / 2), (float) (getHeight() / 2));
+                    this.matrix.setRectToRect(this.bitmapRect, this.drawRect, ScaleToFit.FILL);
+                    this.matrix.postRotate((float) this.orientation, 0.0f, 0.0f);
+                    this.matrix.postTranslate((float) (getWidth() / 2), (float) (getHeight() / 2));
+                } else {
+                    this.drawRect.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
+                    this.matrix.setRectToRect(this.bitmapRect, this.drawRect, ScaleToFit.FILL);
                 }
-                this.drawRect.set((float) ((-getHeight()) / 2), (float) ((-getWidth()) / 2), (float) (getHeight() / 2), (float) (getWidth() / 2));
-                this.matrix.setRectToRect(this.bitmapRect, this.drawRect, ScaleToFit.FILL);
-                this.matrix.postRotate((float) this.orientation, 0.0f, 0.0f);
-                this.matrix.postTranslate((float) (getWidth() / 2), (float) (getHeight() / 2));
                 canvas.clipRect(((float) this.clipLeft) / scaleY, ((float) this.clipTop) / scaleY, ((float) getWidth()) - (((float) this.clipRight) / scaleY), ((float) getHeight()) - (((float) this.clipBottom) / scaleY));
                 try {
                     canvas.drawBitmap(this.bmp.bitmap, this.matrix, this.paint);

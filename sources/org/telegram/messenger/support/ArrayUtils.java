@@ -52,17 +52,15 @@ public class ArrayUtils {
         if (array1 == array2) {
             return true;
         }
-        if (!(array1 == null || array2 == null || array1.length < length)) {
-            if (array2.length >= length) {
-                for (int i = 0; i < length; i++) {
-                    if (array1[i] != array2[i]) {
-                        return false;
-                    }
-                }
-                return true;
+        if (array1 == null || array2 == null || array1.length < length || array2.length < length) {
+            return false;
+        }
+        for (int i = 0; i < length; i++) {
+            if (array1[i] != array2[i]) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public static <T> T[] emptyArray(Class<T> kind) {
@@ -102,10 +100,8 @@ public class ArrayUtils {
 
     public static long total(long[] array) {
         long total = 0;
-        int i = 0;
-        while (i < array.length) {
-            i++;
-            total += array[i];
+        for (long value : array) {
+            total += value;
         }
         return total;
     }
@@ -115,15 +111,14 @@ public class ArrayUtils {
         T[] result;
         if (array != null) {
             end = array.length;
-            result = (Object[]) Array.newInstance(kind, end + 1);
+            result = (Object[]) ((Object[]) Array.newInstance(kind, end + 1));
             System.arraycopy(array, 0, result, 0, end);
         } else {
             end = 0;
-            result = (Object[]) Array.newInstance(kind, 1);
+            Object[] result2 = (Object[]) Array.newInstance(kind, 1);
         }
-        T[] result2 = result;
-        result2[end] = element;
-        return result2;
+        result[end] = element;
+        return result;
     }
 
     public static <T> T[] removeElement(Class<T> kind, T[] array, T element) {
@@ -136,7 +131,7 @@ public class ArrayUtils {
                 } else if (length == 1) {
                     return null;
                 } else {
-                    Object[] result = (Object[]) Array.newInstance(kind, length - 1);
+                    Object[] result = (Object[]) ((Object[]) Array.newInstance(kind, length - 1));
                     System.arraycopy(array, 0, result, 0, i);
                     System.arraycopy(array, i + 1, result, i, (length - i) - 1);
                     return result;
@@ -172,9 +167,10 @@ public class ArrayUtils {
                 if (i > 0) {
                     System.arraycopy(cur, 0, ret, 0, i);
                 }
-                if (i < N - 1) {
-                    System.arraycopy(cur, i + 1, ret, i, (N - i) - 1);
+                if (i >= N - 1) {
+                    return ret;
                 }
+                System.arraycopy(cur, i + 1, ret, i, (N - i) - 1);
                 return ret;
             }
         }

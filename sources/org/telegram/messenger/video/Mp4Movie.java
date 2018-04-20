@@ -55,10 +55,8 @@ public class Mp4Movie {
     }
 
     public void addSample(int trackIndex, long offset, BufferInfo bufferInfo) {
-        if (trackIndex >= 0) {
-            if (trackIndex < this.tracks.size()) {
-                ((Track) this.tracks.get(trackIndex)).addSample(offset, bufferInfo);
-            }
+        if (trackIndex >= 0 && trackIndex < this.tracks.size()) {
+            ((Track) this.tracks.get(trackIndex)).addSample(offset, bufferInfo);
         }
     }
 

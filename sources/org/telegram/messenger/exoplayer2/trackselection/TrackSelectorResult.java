@@ -20,27 +20,21 @@ public final class TrackSelectorResult {
     }
 
     public boolean isEquivalent(TrackSelectorResult other) {
-        if (other != null) {
-            if (other.selections.length == this.selections.length) {
-                for (int i = 0; i < this.selections.length; i++) {
-                    if (!isEquivalent(other, i)) {
-                        return false;
-                    }
-                }
-                return true;
+        if (other == null || other.selections.length != this.selections.length) {
+            return false;
+        }
+        for (int i = 0; i < this.selections.length; i++) {
+            if (!isEquivalent(other, i)) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public boolean isEquivalent(TrackSelectorResult other, int index) {
-        boolean z = false;
-        if (other == null) {
-            return false;
+        if (other != null && this.renderersEnabled[index] == other.renderersEnabled[index] && Util.areEqual(this.selections.get(index), other.selections.get(index)) && Util.areEqual(this.rendererConfigurations[index], other.rendererConfigurations[index])) {
+            return true;
         }
-        if (this.renderersEnabled[index] == other.renderersEnabled[index] && Util.areEqual(this.selections.get(index), other.selections.get(index)) && Util.areEqual(this.rendererConfigurations[index], other.rendererConfigurations[index])) {
-            z = true;
-        }
-        return z;
+        return false;
     }
 }

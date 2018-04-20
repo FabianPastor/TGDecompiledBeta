@@ -33,39 +33,39 @@ public class Input {
         this.tempPoint[0] = event.getX();
         this.tempPoint[1] = y;
         this.invertMatrix.mapPoints(this.tempPoint);
-        Point point = new Point((double) this.tempPoint[0], (double) this.tempPoint[1], 1.0d);
+        Point location = new Point((double) this.tempPoint[0], (double) this.tempPoint[1], 1.0d);
         switch (action) {
             case 0:
             case 2:
-                if (this.beganDrawing) {
-                    if (point.getDistanceTo(this.lastLocation) >= ((float) AndroidUtilities.dp(5.0f))) {
-                        if (!this.hasMoved) {
-                            this.renderView.onBeganDrawing();
-                            this.hasMoved = true;
-                        }
-                        this.points[this.pointsCount] = point;
-                        this.pointsCount++;
-                        if (this.pointsCount == 3) {
-                            smoothenAndPaintPoints(false);
-                        }
-                        this.lastLocation = point;
-                        break;
+                if (!this.beganDrawing) {
+                    this.beganDrawing = true;
+                    this.hasMoved = false;
+                    this.isFirst = true;
+                    this.lastLocation = location;
+                    this.points[0] = location;
+                    this.pointsCount = 1;
+                    this.clearBuffer = true;
+                    return;
+                } else if (location.getDistanceTo(this.lastLocation) >= ((float) AndroidUtilities.dp(5.0f))) {
+                    if (!this.hasMoved) {
+                        this.renderView.onBeganDrawing();
+                        this.hasMoved = true;
                     }
+                    this.points[this.pointsCount] = location;
+                    this.pointsCount++;
+                    if (this.pointsCount == 3) {
+                        smoothenAndPaintPoints(false);
+                    }
+                    this.lastLocation = location;
+                    return;
+                } else {
                     return;
                 }
-                this.beganDrawing = true;
-                this.hasMoved = false;
-                this.isFirst = true;
-                this.lastLocation = point;
-                this.points[0] = point;
-                this.pointsCount = 1;
-                this.clearBuffer = true;
-                break;
             case 1:
                 if (!this.hasMoved) {
                     if (this.renderView.shouldDraw()) {
-                        point.edge = true;
-                        paintPath(new Path(point));
+                        location.edge = true;
+                        paintPath(new Path(location));
                     }
                     reset();
                 } else if (this.pointsCount > 0) {
@@ -75,9 +75,9 @@ public class Input {
                 this.renderView.getPainting().commitStroke(this.renderView.getCurrentColor());
                 this.beganDrawing = false;
                 this.renderView.onFinishedDrawing(this.hasMoved);
-                break;
+                return;
             default:
-                break;
+                return;
         }
     }
 
@@ -88,31 +88,23 @@ public class Input {
     private void smoothenAndPaintPoints(boolean ended) {
         if (this.pointsCount > 2) {
             Vector<Point> points = new Vector();
-            Point prev2 = r0.points[0];
-            Point prev1 = r0.points[1];
-            Point cur = r0.points[2];
-            Vector<Point> vector;
-            Point point;
-            if (cur == null || prev1 == null) {
-                vector = points;
-                point = cur;
-            } else if (prev2 == null) {
-                vector = points;
-                point = cur;
-            } else {
+            Point prev2 = this.points[0];
+            Point prev1 = this.points[1];
+            Point cur = this.points[2];
+            if (cur != null && prev1 != null && prev2 != null) {
                 Point midPoint1 = prev1.multiplySum(prev2, 0.5d);
                 Point midPoint2 = cur.multiplySum(prev1, 0.5d);
                 int numberOfSegments = (int) Math.min(48.0d, Math.max(Math.floor((double) (midPoint1.getDistanceTo(midPoint2) / ((float) 1))), 24.0d));
+                float t = 0.0f;
                 float step = 1.0f / ((float) numberOfSegments);
-                cur = 0.0f;
                 for (int j = 0; j < numberOfSegments; j++) {
-                    Point point2 = smoothPoint(midPoint1, midPoint2, prev1, cur);
-                    if (r0.isFirst) {
-                        point2.edge = true;
-                        r0.isFirst = false;
+                    Point point = smoothPoint(midPoint1, midPoint2, prev1, t);
+                    if (this.isFirst) {
+                        point.edge = true;
+                        this.isFirst = false;
                     }
-                    points.add(point2);
-                    cur += step;
+                    points.add(point);
+                    t += step;
                 }
                 if (ended) {
                     midPoint2.edge = true;
@@ -121,28 +113,27 @@ public class Input {
                 Point[] result = new Point[points.size()];
                 points.toArray(result);
                 paintPath(new Path(result));
-                System.arraycopy(r0.points, 1, r0.points, 0, 2);
+                System.arraycopy(this.points, 1, this.points, 0, 2);
                 if (ended) {
-                    r0.pointsCount = 0;
+                    this.pointsCount = 0;
+                    return;
                 } else {
-                    r0.pointsCount = 2;
+                    this.pointsCount = 2;
+                    return;
                 }
             }
             return;
         }
-        Point[] result2 = new Point[r0.pointsCount];
-        System.arraycopy(r0.points, 0, result2, 0, r0.pointsCount);
-        paintPath(new Path(result2));
+        result = new Point[this.pointsCount];
+        System.arraycopy(this.points, 0, result, 0, this.pointsCount);
+        paintPath(new Path(result));
     }
 
     private Point smoothPoint(Point midPoint1, Point midPoint2, Point prev1, float t) {
-        Point point = midPoint1;
-        Point point2 = midPoint2;
-        Point point3 = prev1;
         double a1 = Math.pow((double) (1.0f - t), 2.0d);
         double a2 = (double) ((2.0f * (1.0f - t)) * t);
         double a3 = (double) (t * t);
-        return new Point(((point.f20x * a1) + (point3.f20x * a2)) + (point2.f20x * a3), ((point.f21y * a1) + (point3.f21y * a2)) + (point2.f21y * a3), 1.0d);
+        return new Point(((midPoint1.f20x * a1) + (prev1.f20x * a2)) + (midPoint2.f20x * a3), ((midPoint1.f21y * a1) + (prev1.f21y * a2)) + (midPoint2.f21y * a3), 1.0d);
     }
 
     private void paintPath(final Path path) {
@@ -154,8 +145,8 @@ public class Input {
         this.renderView.getPainting().paintStroke(path, this.clearBuffer, new Runnable() {
 
             /* renamed from: org.telegram.ui.Components.Paint.Input$1$1 */
-            class C12001 implements Runnable {
-                C12001() {
+            class C12021 implements Runnable {
+                C12021() {
                 }
 
                 public void run() {
@@ -165,7 +156,7 @@ public class Input {
             }
 
             public void run() {
-                AndroidUtilities.runOnUIThread(new C12001());
+                AndroidUtilities.runOnUIThread(new C12021());
             }
         });
     }

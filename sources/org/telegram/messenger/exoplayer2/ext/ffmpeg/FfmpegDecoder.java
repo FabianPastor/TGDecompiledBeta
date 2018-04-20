@@ -46,12 +46,7 @@ final class FfmpegDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutput
     }
 
     public String getName() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("ffmpeg");
-        stringBuilder.append(FfmpegLibrary.getVersion());
-        stringBuilder.append("-");
-        stringBuilder.append(this.codecName);
-        return stringBuilder.toString();
+        return "ffmpeg" + FfmpegLibrary.getVersion() + "-" + this.codecName;
     }
 
     protected DecoderInputBuffer createInputBuffer() {
@@ -74,13 +69,9 @@ final class FfmpegDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutput
             }
         }
         ByteBuffer inputData = inputBuffer.data;
-        int inputSize = inputData.limit();
-        int result = ffmpegDecode(this.nativeContext, inputData, inputSize, outputBuffer.init(inputBuffer.timeUs, this.outputBufferSize), this.outputBufferSize);
+        int result = ffmpegDecode(this.nativeContext, inputData, inputData.limit(), outputBuffer.init(inputBuffer.timeUs, this.outputBufferSize), this.outputBufferSize);
         if (result < 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Error decoding (see logcat). Code: ");
-            stringBuilder.append(result);
-            return new FfmpegDecoderException(stringBuilder.toString());
+            return new FfmpegDecoderException("Error decoding (see logcat). Code: " + result);
         }
         if (!this.hasOutputFormat) {
             this.channelCount = ffmpegGetChannelCount(this.nativeContext);
@@ -116,121 +107,42 @@ final class FfmpegDecoder extends SimpleDecoder<DecoderInputBuffer, SimpleOutput
     }
 
     private static byte[] getExtraData(String mimeType, List<byte[]> initializationData) {
-        byte[] header0;
-        byte[] header1;
-        byte[] extraData;
-        int hashCode = mimeType.hashCode();
-        if (hashCode != -NUM) {
-            if (hashCode != -53558318) {
-                if (hashCode != NUM) {
-                    if (hashCode == NUM) {
-                        if (mimeType.equals(MimeTypes.AUDIO_OPUS)) {
-                            hashCode = 2;
-                            switch (hashCode) {
-                                case 0:
-                                case 1:
-                                case 2:
-                                    return (byte[]) initializationData.get(0);
-                                case 3:
-                                    header0 = (byte[]) initializationData.get(0);
-                                    header1 = (byte[]) initializationData.get(1);
-                                    extraData = new byte[((header0.length + header1.length) + 6)];
-                                    extraData[0] = (byte) (header0.length >> 8);
-                                    extraData[1] = (byte) (header0.length & 255);
-                                    System.arraycopy(header0, 0, extraData, 2, header0.length);
-                                    extraData[header0.length + 2] = (byte) 0;
-                                    extraData[header0.length + 3] = (byte) 0;
-                                    extraData[header0.length + 4] = (byte) (header1.length >> 8);
-                                    extraData[header0.length + 5] = (byte) (header1.length & 255);
-                                    System.arraycopy(header1, 0, extraData, header0.length + 6, header1.length);
-                                    return extraData;
-                                default:
-                                    return null;
-                            }
-                        }
-                    }
-                } else if (mimeType.equals(MimeTypes.AUDIO_ALAC)) {
-                    hashCode = 1;
-                    switch (hashCode) {
-                        case 0:
-                        case 1:
-                        case 2:
-                            return (byte[]) initializationData.get(0);
-                        case 3:
-                            header0 = (byte[]) initializationData.get(0);
-                            header1 = (byte[]) initializationData.get(1);
-                            extraData = new byte[((header0.length + header1.length) + 6)];
-                            extraData[0] = (byte) (header0.length >> 8);
-                            extraData[1] = (byte) (header0.length & 255);
-                            System.arraycopy(header0, 0, extraData, 2, header0.length);
-                            extraData[header0.length + 2] = (byte) 0;
-                            extraData[header0.length + 3] = (byte) 0;
-                            extraData[header0.length + 4] = (byte) (header1.length >> 8);
-                            extraData[header0.length + 5] = (byte) (header1.length & 255);
-                            System.arraycopy(header1, 0, extraData, header0.length + 6, header1.length);
-                            return extraData;
-                        default:
-                            return null;
-                    }
+        byte b = (byte) -1;
+        switch (mimeType.hashCode()) {
+            case -1003765268:
+                if (mimeType.equals(MimeTypes.AUDIO_VORBIS)) {
+                    b = (byte) 3;
+                    break;
                 }
-            } else if (mimeType.equals(MimeTypes.AUDIO_AAC)) {
-                hashCode = (byte) 0;
-                switch (hashCode) {
-                    case 0:
-                    case 1:
-                    case 2:
-                        return (byte[]) initializationData.get(0);
-                    case 3:
-                        header0 = (byte[]) initializationData.get(0);
-                        header1 = (byte[]) initializationData.get(1);
-                        extraData = new byte[((header0.length + header1.length) + 6)];
-                        extraData[0] = (byte) (header0.length >> 8);
-                        extraData[1] = (byte) (header0.length & 255);
-                        System.arraycopy(header0, 0, extraData, 2, header0.length);
-                        extraData[header0.length + 2] = (byte) 0;
-                        extraData[header0.length + 3] = (byte) 0;
-                        extraData[header0.length + 4] = (byte) (header1.length >> 8);
-                        extraData[header0.length + 5] = (byte) (header1.length & 255);
-                        System.arraycopy(header1, 0, extraData, header0.length + 6, header1.length);
-                        return extraData;
-                    default:
-                        return null;
+                break;
+            case -53558318:
+                if (mimeType.equals(MimeTypes.AUDIO_AAC)) {
+                    b = (byte) 0;
+                    break;
                 }
-            }
-        } else if (mimeType.equals(MimeTypes.AUDIO_VORBIS)) {
-            hashCode = 3;
-            switch (hashCode) {
-                case 0:
-                case 1:
-                case 2:
-                    return (byte[]) initializationData.get(0);
-                case 3:
-                    header0 = (byte[]) initializationData.get(0);
-                    header1 = (byte[]) initializationData.get(1);
-                    extraData = new byte[((header0.length + header1.length) + 6)];
-                    extraData[0] = (byte) (header0.length >> 8);
-                    extraData[1] = (byte) (header0.length & 255);
-                    System.arraycopy(header0, 0, extraData, 2, header0.length);
-                    extraData[header0.length + 2] = (byte) 0;
-                    extraData[header0.length + 3] = (byte) 0;
-                    extraData[header0.length + 4] = (byte) (header1.length >> 8);
-                    extraData[header0.length + 5] = (byte) (header1.length & 255);
-                    System.arraycopy(header1, 0, extraData, header0.length + 6, header1.length);
-                    return extraData;
-                default:
-                    return null;
-            }
+                break;
+            case 1504470054:
+                if (mimeType.equals(MimeTypes.AUDIO_ALAC)) {
+                    b = (byte) 1;
+                    break;
+                }
+                break;
+            case 1504891608:
+                if (mimeType.equals(MimeTypes.AUDIO_OPUS)) {
+                    b = (byte) 2;
+                    break;
+                }
+                break;
         }
-        hashCode = -1;
-        switch (hashCode) {
-            case 0:
-            case 1:
-            case 2:
+        switch (b) {
+            case (byte) 0:
+            case (byte) 1:
+            case (byte) 2:
                 return (byte[]) initializationData.get(0);
-            case 3:
-                header0 = (byte[]) initializationData.get(0);
-                header1 = (byte[]) initializationData.get(1);
-                extraData = new byte[((header0.length + header1.length) + 6)];
+            case (byte) 3:
+                byte[] header0 = (byte[]) initializationData.get(0);
+                byte[] header1 = (byte[]) initializationData.get(1);
+                byte[] extraData = new byte[((header0.length + header1.length) + 6)];
                 extraData[0] = (byte) (header0.length >> 8);
                 extraData[1] = (byte) (header0.length & 255);
                 System.arraycopy(header0, 0, extraData, 2, header0.length);

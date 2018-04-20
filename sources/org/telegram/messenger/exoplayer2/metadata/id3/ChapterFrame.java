@@ -62,24 +62,21 @@ public final class ChapterFrame extends Id3Frame {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                ChapterFrame other = (ChapterFrame) obj;
-                if (this.startTimeMs != other.startTimeMs || this.endTimeMs != other.endTimeMs || this.startOffset != other.startOffset || this.endOffset != other.endOffset || !Util.areEqual(this.chapterId, other.chapterId) || !Arrays.equals(this.subFrames, other.subFrames)) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        ChapterFrame other = (ChapterFrame) obj;
+        if (this.startTimeMs == other.startTimeMs && this.endTimeMs == other.endTimeMs && this.startOffset == other.startOffset && this.endOffset == other.endOffset && Util.areEqual(this.chapterId, other.chapterId) && Arrays.equals(this.subFrames, other.subFrames)) {
+            return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (31 * ((31 * ((31 * ((31 * ((31 * 17) + this.startTimeMs)) + this.endTimeMs)) + ((int) this.startOffset))) + ((int) this.endOffset))) + (this.chapterId != null ? this.chapterId.hashCode() : 0);
+        return ((((((((this.startTimeMs + 527) * 31) + this.endTimeMs) * 31) + ((int) this.startOffset)) * 31) + ((int) this.endOffset)) * 31) + (this.chapterId != null ? this.chapterId.hashCode() : 0);
     }
 
     public void writeToParcel(Parcel dest, int flags) {

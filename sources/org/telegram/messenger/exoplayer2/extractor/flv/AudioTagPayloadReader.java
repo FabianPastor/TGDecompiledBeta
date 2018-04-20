@@ -34,49 +34,39 @@ final class AudioTagPayloadReader extends TagPayloadReader {
             data.skipBytes(1);
         } else {
             int header = data.readUnsignedByte();
-            r0.audioFormat = (header >> 4) & 15;
-            if (r0.audioFormat == 2) {
-                r0.output.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_MPEG, null, -1, -1, 1, AUDIO_SAMPLING_RATE_TABLE[(header >> 2) & 3], null, null, 0, null));
-                r0.hasOutputFormat = true;
-            } else {
-                if (r0.audioFormat != 7) {
-                    if (r0.audioFormat != 8) {
-                        if (r0.audioFormat != 10) {
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append("Audio format not supported: ");
-                            stringBuilder.append(r0.audioFormat);
-                            throw new UnsupportedFormatException(stringBuilder.toString());
-                        }
-                    }
-                }
-                r0.output.format(Format.createAudioSampleFormat(null, r0.audioFormat == 7 ? MimeTypes.AUDIO_ALAW : MimeTypes.AUDIO_MLAW, null, -1, -1, 1, 8000, (header & 1) == 1 ? 2 : 3, null, null, 0, null));
-                r0.hasOutputFormat = true;
+            this.audioFormat = (header >> 4) & 15;
+            if (this.audioFormat == 2) {
+                this.output.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_MPEG, null, -1, -1, 1, AUDIO_SAMPLING_RATE_TABLE[(header >> 2) & 3], null, null, 0, null));
+                this.hasOutputFormat = true;
+            } else if (this.audioFormat == 7 || this.audioFormat == 8) {
+                this.output.format(Format.createAudioSampleFormat(null, this.audioFormat == 7 ? MimeTypes.AUDIO_ALAW : MimeTypes.AUDIO_MLAW, null, -1, -1, 1, 8000, (header & 1) == 1 ? 2 : 3, null, null, 0, null));
+                this.hasOutputFormat = true;
+            } else if (this.audioFormat != 10) {
+                throw new UnsupportedFormatException("Audio format not supported: " + this.audioFormat);
             }
-            r0.hasParsedAudioDataHeader = true;
-            ParsableByteArray parsableByteArray = data;
+            this.hasParsedAudioDataHeader = true;
         }
         return true;
     }
 
     protected void parsePayload(ParsableByteArray data, long timeUs) throws ParserException {
-        ParsableByteArray parsableByteArray = data;
         if (this.audioFormat == 2) {
             int sampleSize = data.bytesLeft();
-            r0.output.sampleData(parsableByteArray, sampleSize);
-            r0.output.sampleMetadata(timeUs, 1, sampleSize, 0, null);
+            this.output.sampleData(data, sampleSize);
+            this.output.sampleMetadata(timeUs, 1, sampleSize, 0, null);
             return;
         }
-        sampleSize = data.readUnsignedByte();
-        if (sampleSize == 0 && !r0.hasOutputFormat) {
+        int packetType = data.readUnsignedByte();
+        if (packetType == 0 && !this.hasOutputFormat) {
             byte[] audioSpecificConfig = new byte[data.bytesLeft()];
-            parsableByteArray.readBytes(audioSpecificConfig, 0, audioSpecificConfig.length);
+            data.readBytes(audioSpecificConfig, 0, audioSpecificConfig.length);
             Pair<Integer, Integer> audioParams = CodecSpecificDataUtil.parseAacAudioSpecificConfig(audioSpecificConfig);
-            r0.output.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_AAC, null, -1, -1, ((Integer) audioParams.second).intValue(), ((Integer) audioParams.first).intValue(), Collections.singletonList(audioSpecificConfig), null, 0, null));
-            r0.hasOutputFormat = true;
-        } else if (r0.audioFormat != 10 || sampleSize == 1) {
-            int sampleSize2 = data.bytesLeft();
-            r0.output.sampleData(parsableByteArray, sampleSize2);
-            r0.output.sampleMetadata(timeUs, 1, sampleSize2, 0, null);
+            this.output.format(Format.createAudioSampleFormat(null, MimeTypes.AUDIO_AAC, null, -1, -1, ((Integer) audioParams.second).intValue(), ((Integer) audioParams.first).intValue(), Collections.singletonList(audioSpecificConfig), null, 0, null));
+            this.hasOutputFormat = true;
+        } else if (this.audioFormat != 10 || packetType == 1) {
+            sampleSize = data.bytesLeft();
+            this.output.sampleData(data, sampleSize);
+            this.output.sampleMetadata(timeUs, 1, sampleSize, 0, null);
         }
     }
 }

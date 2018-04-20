@@ -31,7 +31,7 @@ public class StickerView extends EntityView {
     private class FrameLayoutDrawer extends FrameLayout {
         public FrameLayoutDrawer(Context context) {
             super(context);
-            setWillNotDraw(null);
+            setWillNotDraw(false);
         }
 
         protected void onDraw(Canvas canvas) {
@@ -53,7 +53,7 @@ public class StickerView extends EntityView {
         protected int pointInsideHandle(float x, float y) {
             float radius = (float) AndroidUtilities.dp(19.5f);
             float inset = radius + ((float) AndroidUtilities.dp(1.0f));
-            float middle = ((((float) getHeight()) - (inset * 2.0f)) / 2.0f) + inset;
+            float middle = inset + ((((float) getHeight()) - (inset * 2.0f)) / 2.0f);
             if (x > inset - radius && y > middle - radius && x < inset + radius && y < middle + radius) {
                 return 1;
             }
@@ -73,22 +73,14 @@ public class StickerView extends EntityView {
             float inset = (radius + ((float) AndroidUtilities.dp(1.0f))) + ((float) AndroidUtilities.dp(15.0f));
             float mainRadius = ((float) (getWidth() / 2)) - inset;
             this.arcRect.set(inset, inset, (mainRadius * 2.0f) + inset, (mainRadius * 2.0f) + inset);
-            int i = 0;
-            while (true) {
-                int i2 = i;
-                if (i2 < 48) {
-                    Canvas canvas2 = canvas;
-                    float f = 4.0f;
-                    canvas2.drawArc(this.arcRect, (4.0f + 4.0f) * ((float) i2), f, false, this.arcPaint);
-                    i = i2 + 1;
-                } else {
-                    canvas.drawCircle(inset, inset + mainRadius, radius, this.dotPaint);
-                    canvas.drawCircle(inset, inset + mainRadius, radius, this.dotStrokePaint);
-                    canvas.drawCircle((mainRadius * 2.0f) + inset, inset + mainRadius, radius, this.dotPaint);
-                    canvas.drawCircle((2.0f * mainRadius) + inset, inset + mainRadius, radius, this.dotStrokePaint);
-                    return;
-                }
+            for (int i = 0; i < 48; i++) {
+                Canvas canvas2 = canvas;
+                canvas2.drawArc(this.arcRect, (4.0f + 4.0f) * ((float) i), 4.0f, false, this.arcPaint);
             }
+            canvas.drawCircle(inset, inset + mainRadius, radius, this.dotPaint);
+            canvas.drawCircle(inset, inset + mainRadius, radius, this.dotStrokePaint);
+            canvas.drawCircle((mainRadius * 2.0f) + inset, inset + mainRadius, radius, this.dotPaint);
+            canvas.drawCircle((mainRadius * 2.0f) + inset, inset + mainRadius, radius, this.dotStrokePaint);
         }
     }
 
@@ -99,14 +91,13 @@ public class StickerView extends EntityView {
     public StickerView(Context context, Point position, float angle, float scale, Size baseSize, Document sticker) {
         super(context, position);
         this.anchor = -1;
-        int a = 0;
         this.mirrored = false;
         this.centerImage = new ImageReceiver();
         setRotation(angle);
         setScale(scale);
         this.sticker = sticker;
         this.baseSize = baseSize;
-        while (a < sticker.attributes.size()) {
+        for (int a = 0; a < sticker.attributes.size(); a++) {
             DocumentAttribute attribute = (DocumentAttribute) sticker.attributes.get(a);
             if (attribute instanceof TL_documentAttributeSticker) {
                 if (attribute.mask_coords != null) {
@@ -120,7 +111,6 @@ public class StickerView extends EntityView {
                 this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", 1);
                 updatePosition();
             }
-            a++;
         }
         this.containerView = new FrameLayoutDrawer(context);
         addView(this.containerView, LayoutHelper.createFrame(-1, -1.0f));
@@ -143,7 +133,7 @@ public class StickerView extends EntityView {
     }
 
     public void mirror() {
-        this.mirrored ^= 1;
+        this.mirrored = !this.mirrored;
         this.containerView.invalidate();
     }
 

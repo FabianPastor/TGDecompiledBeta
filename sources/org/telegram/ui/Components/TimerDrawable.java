@@ -32,63 +32,32 @@ public class TimerDrawable extends Drawable {
     public void setTime(int value) {
         String timeString;
         this.time = value;
-        StringBuilder stringBuilder;
         if (this.time >= 1 && this.time < 60) {
-            timeString = new StringBuilder();
-            timeString.append(TtmlNode.ANONYMOUS_REGION_ID);
-            timeString.append(value);
-            timeString = timeString.toString();
+            timeString = TtmlNode.ANONYMOUS_REGION_ID + value;
             if (timeString.length() < 2) {
-                stringBuilder = new StringBuilder();
-                stringBuilder.append(timeString);
-                stringBuilder.append("s");
-                timeString = stringBuilder.toString();
+                timeString = timeString + "s";
             }
         } else if (this.time >= 60 && this.time < 3600) {
-            r0 = new StringBuilder();
-            r0.append(TtmlNode.ANONYMOUS_REGION_ID);
-            r0.append(value / 60);
-            timeString = r0.toString();
+            timeString = TtmlNode.ANONYMOUS_REGION_ID + (value / 60);
             if (timeString.length() < 2) {
-                stringBuilder = new StringBuilder();
-                stringBuilder.append(timeString);
-                stringBuilder.append("m");
-                timeString = stringBuilder.toString();
+                timeString = timeString + "m";
             }
         } else if (this.time >= 3600 && this.time < 86400) {
-            r0 = new StringBuilder();
-            r0.append(TtmlNode.ANONYMOUS_REGION_ID);
-            r0.append((value / 60) / 60);
-            timeString = r0.toString();
+            timeString = TtmlNode.ANONYMOUS_REGION_ID + ((value / 60) / 60);
             if (timeString.length() < 2) {
-                stringBuilder = new StringBuilder();
-                stringBuilder.append(timeString);
-                stringBuilder.append("h");
-                timeString = stringBuilder.toString();
+                timeString = timeString + "h";
             }
         } else if (this.time < 86400 || this.time >= 604800) {
-            r0 = new StringBuilder();
-            r0.append(TtmlNode.ANONYMOUS_REGION_ID);
-            r0.append((((value / 60) / 60) / 24) / 7);
-            timeString = r0.toString();
+            timeString = TtmlNode.ANONYMOUS_REGION_ID + ((((value / 60) / 60) / 24) / 7);
             if (timeString.length() < 2) {
-                stringBuilder = new StringBuilder();
-                stringBuilder.append(timeString);
-                stringBuilder.append("w");
-                timeString = stringBuilder.toString();
+                timeString = timeString + "w";
             } else if (timeString.length() > 2) {
                 timeString = "c";
             }
         } else {
-            r0 = new StringBuilder();
-            r0.append(TtmlNode.ANONYMOUS_REGION_ID);
-            r0.append(((value / 60) / 60) / 24);
-            timeString = r0.toString();
+            timeString = TtmlNode.ANONYMOUS_REGION_ID + (((value / 60) / 60) / 24);
             if (timeString.length() < 2) {
-                stringBuilder = new StringBuilder();
-                stringBuilder.append(timeString);
-                stringBuilder.append("d");
-                timeString = stringBuilder.toString();
+                timeString = timeString + "d";
             }
         }
         this.timeWidth = this.timePaint.measureText(timeString);
@@ -111,9 +80,8 @@ public class TimerDrawable extends Drawable {
             canvas.drawCircle(AndroidUtilities.dpf2(9.0f), AndroidUtilities.dpf2(9.0f), AndroidUtilities.dpf2(7.5f), this.paint);
             canvas.drawCircle(AndroidUtilities.dpf2(9.0f), AndroidUtilities.dpf2(9.0f), AndroidUtilities.dpf2(8.0f), this.linePaint);
             this.paint.setColor(Theme.getColor(Theme.key_chat_secretTimerText));
-            Canvas canvas2 = canvas;
-            canvas2.drawLine((float) AndroidUtilities.dp(9.0f), (float) AndroidUtilities.dp(9.0f), (float) AndroidUtilities.dp(13.0f), (float) AndroidUtilities.dp(9.0f), this.linePaint);
-            canvas2.drawLine((float) AndroidUtilities.dp(9.0f), (float) AndroidUtilities.dp(5.0f), (float) AndroidUtilities.dp(9.0f), (float) AndroidUtilities.dp(9.5f), this.linePaint);
+            canvas.drawLine((float) AndroidUtilities.dp(9.0f), (float) AndroidUtilities.dp(9.0f), (float) AndroidUtilities.dp(13.0f), (float) AndroidUtilities.dp(9.0f), this.linePaint);
+            canvas.drawLine((float) AndroidUtilities.dp(9.0f), (float) AndroidUtilities.dp(5.0f), (float) AndroidUtilities.dp(9.0f), (float) AndroidUtilities.dp(9.5f), this.linePaint);
             canvas.drawRect(AndroidUtilities.dpf2(7.0f), AndroidUtilities.dpf2(0.0f), AndroidUtilities.dpf2(11.0f), AndroidUtilities.dpf2(1.5f), this.paint);
         } else {
             this.paint.setColor(Theme.getColor(Theme.key_chat_secretTimerBackground));

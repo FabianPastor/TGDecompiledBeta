@@ -58,69 +58,58 @@ class AdapterHelper implements Callback {
         }
 
         String cmdToString() {
-            int i = this.cmd;
-            if (i == 4) {
-                return "up";
-            }
-            if (i == 8) {
-                return "mv";
-            }
-            switch (i) {
+            switch (this.cmd) {
                 case 1:
                     return "add";
                 case 2:
                     return "rm";
+                case 4:
+                    return "up";
+                case 8:
+                    return "mv";
                 default:
                     return "??";
             }
         }
 
         public String toString() {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(Integer.toHexString(System.identityHashCode(this)));
-            stringBuilder.append("[");
-            stringBuilder.append(cmdToString());
-            stringBuilder.append(",s:");
-            stringBuilder.append(this.positionStart);
-            stringBuilder.append("c:");
-            stringBuilder.append(this.itemCount);
-            stringBuilder.append(",p:");
-            stringBuilder.append(this.payload);
-            stringBuilder.append("]");
-            return stringBuilder.toString();
+            return Integer.toHexString(System.identityHashCode(this)) + "[" + cmdToString() + ",s:" + this.positionStart + "c:" + this.itemCount + ",p:" + this.payload + "]";
         }
 
         public boolean equals(Object o) {
             if (this == o) {
                 return true;
             }
-            if (o != null) {
-                if (getClass() == o.getClass()) {
-                    UpdateOp op = (UpdateOp) o;
-                    if (this.cmd != op.cmd) {
-                        return false;
-                    }
-                    if (this.cmd == 8 && Math.abs(this.itemCount - this.positionStart) == 1 && this.itemCount == op.positionStart && this.positionStart == op.itemCount) {
-                        return true;
-                    }
-                    if (this.itemCount != op.itemCount || this.positionStart != op.positionStart) {
-                        return false;
-                    }
-                    if (this.payload != null) {
-                        if (!this.payload.equals(op.payload)) {
-                            return false;
-                        }
-                    } else if (op.payload != null) {
-                        return false;
-                    }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            UpdateOp op = (UpdateOp) o;
+            if (this.cmd != op.cmd) {
+                return false;
+            }
+            if (this.cmd == 8 && Math.abs(this.itemCount - this.positionStart) == 1 && this.itemCount == op.positionStart && this.positionStart == op.itemCount) {
+                return true;
+            }
+            if (this.itemCount != op.itemCount) {
+                return false;
+            }
+            if (this.positionStart != op.positionStart) {
+                return false;
+            }
+            if (this.payload != null) {
+                if (this.payload.equals(op.payload)) {
                     return true;
                 }
+                return false;
+            } else if (op.payload != null) {
+                return false;
+            } else {
+                return true;
             }
-            return false;
         }
 
         public int hashCode() {
-            return (31 * ((31 * this.cmd) + this.positionStart)) + this.itemCount;
+            return (((this.cmd * 31) + this.positionStart) * 31) + this.itemCount;
         }
     }
 
@@ -154,22 +143,19 @@ class AdapterHelper implements Callback {
         int count = this.mPendingUpdates.size();
         for (int i = 0; i < count; i++) {
             UpdateOp op = (UpdateOp) this.mPendingUpdates.get(i);
-            int i2 = op.cmd;
-            if (i2 == 4) {
-                applyUpdate(op);
-            } else if (i2 != 8) {
-                switch (i2) {
-                    case 1:
-                        applyAdd(op);
-                        break;
-                    case 2:
-                        applyRemove(op);
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                applyMove(op);
+            switch (op.cmd) {
+                case 1:
+                    applyAdd(op);
+                    break;
+                case 2:
+                    applyRemove(op);
+                    break;
+                case 4:
+                    applyUpdate(op);
+                    break;
+                case 8:
+                    applyMove(op);
+                    break;
             }
             if (this.mOnItemProcessedCallback != null) {
                 this.mOnItemProcessedCallback.run();
@@ -199,34 +185,25 @@ class AdapterHelper implements Callback {
         int position = op.positionStart;
         while (position < tmpEnd) {
             boolean typeChanged = false;
-            if (this.mCallback.findViewHolder(position) == null) {
-                if (!canFindInPreLayout(position)) {
-                    if (type == 1) {
-                        postponeAndUpdateViewHolders(obtainUpdateOp(2, tmpStart, tmpCount, null));
-                        typeChanged = true;
-                    }
-                    type = 0;
-                    if (typeChanged) {
-                        tmpCount++;
-                    } else {
-                        position -= tmpCount;
-                        tmpEnd -= tmpCount;
-                        tmpCount = 1;
-                    }
-                    position++;
+            if (this.mCallback.findViewHolder(position) != null || canFindInPreLayout(position)) {
+                if (type == 0) {
+                    dispatchAndUpdateViewHolders(obtainUpdateOp(2, tmpStart, tmpCount, null));
+                    typeChanged = true;
                 }
-            }
-            if (type == 0) {
-                dispatchAndUpdateViewHolders(obtainUpdateOp(2, tmpStart, tmpCount, null));
-                typeChanged = true;
-            }
-            type = 1;
-            if (typeChanged) {
-                tmpCount++;
+                type = 1;
             } else {
+                if (type == 1) {
+                    postponeAndUpdateViewHolders(obtainUpdateOp(2, tmpStart, tmpCount, null));
+                    typeChanged = true;
+                }
+                type = 0;
+            }
+            if (typeChanged) {
                 position -= tmpCount;
                 tmpEnd -= tmpCount;
                 tmpCount = 1;
+            } else {
+                tmpCount++;
             }
             position++;
         }
@@ -246,25 +223,25 @@ class AdapterHelper implements Callback {
         int tmpCount = 0;
         int tmpEnd = op.positionStart + op.itemCount;
         int type = -1;
-        for (int position = op.positionStart; position < tmpEnd; position++) {
-            if (this.mCallback.findViewHolder(position) == null) {
-                if (!canFindInPreLayout(position)) {
-                    if (type == 1) {
-                        postponeAndUpdateViewHolders(obtainUpdateOp(4, tmpStart, tmpCount, op.payload));
-                        tmpCount = 0;
-                        tmpStart = position;
-                    }
-                    type = 0;
-                    tmpCount++;
+        int position = op.positionStart;
+        while (position < tmpEnd) {
+            if (this.mCallback.findViewHolder(position) != null || canFindInPreLayout(position)) {
+                if (type == 0) {
+                    dispatchAndUpdateViewHolders(obtainUpdateOp(4, tmpStart, tmpCount, op.payload));
+                    tmpCount = 0;
+                    tmpStart = position;
                 }
+                type = 1;
+            } else {
+                if (type == 1) {
+                    postponeAndUpdateViewHolders(obtainUpdateOp(4, tmpStart, tmpCount, op.payload));
+                    tmpCount = 0;
+                    tmpStart = position;
+                }
+                type = 0;
             }
-            if (type == 0) {
-                dispatchAndUpdateViewHolders(obtainUpdateOp(4, tmpStart, tmpCount, op.payload));
-                tmpCount = 0;
-                tmpStart = position;
-            }
-            type = 1;
             tmpCount++;
+            position++;
         }
         if (tmpCount != op.itemCount) {
             Object payload = op.payload;
@@ -279,76 +256,71 @@ class AdapterHelper implements Callback {
     }
 
     private void dispatchAndUpdateViewHolders(UpdateOp op) {
-        if (op.cmd != 1) {
-            if (op.cmd != 8) {
-                int tmpStart = updatePositionWithPostponed(op.positionStart, op.cmd);
-                int tmpCnt = 1;
-                int offsetPositionForPartial = op.positionStart;
-                int i = op.cmd;
-                if (i == 2) {
-                    i = 0;
-                } else if (i != 4) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("op should be remove or update.");
-                    stringBuilder.append(op);
-                    throw new IllegalArgumentException(stringBuilder.toString());
-                } else {
-                    i = 1;
-                }
-                int offsetPositionForPartial2 = offsetPositionForPartial;
-                offsetPositionForPartial = tmpStart;
-                for (tmpStart = 1; tmpStart < op.itemCount; tmpStart++) {
-                    int updatedPos = updatePositionWithPostponed(op.positionStart + (i * tmpStart), op.cmd);
-                    boolean continuous = false;
-                    int i2 = op.cmd;
-                    boolean z = false;
-                    if (i2 == 2) {
-                        if (updatedPos == offsetPositionForPartial) {
-                            z = true;
-                        }
-                        continuous = z;
-                    } else if (i2 == 4) {
-                        if (updatedPos == offsetPositionForPartial + 1) {
-                            z = true;
-                        }
-                        continuous = z;
-                    }
-                    if (continuous) {
-                        tmpCnt++;
+        if (op.cmd == 1 || op.cmd == 8) {
+            throw new IllegalArgumentException("should not dispatch add or move for pre layout");
+        }
+        int positionMultiplier;
+        int tmpStart = updatePositionWithPostponed(op.positionStart, op.cmd);
+        int tmpCnt = 1;
+        int offsetPositionForPartial = op.positionStart;
+        switch (op.cmd) {
+            case 2:
+                positionMultiplier = 0;
+                break;
+            case 4:
+                positionMultiplier = 1;
+                break;
+            default:
+                throw new IllegalArgumentException("op should be remove or update." + op);
+        }
+        for (int p = 1; p < op.itemCount; p++) {
+            int updatedPos = updatePositionWithPostponed(op.positionStart + (positionMultiplier * p), op.cmd);
+            boolean continuous = false;
+            switch (op.cmd) {
+                case 2:
+                    continuous = updatedPos == tmpStart;
+                    break;
+                case 4:
+                    if (updatedPos == tmpStart + 1) {
+                        continuous = true;
                     } else {
-                        UpdateOp tmp = obtainUpdateOp(op.cmd, offsetPositionForPartial, tmpCnt, op.payload);
-                        dispatchFirstPassAndUpdateViewHolders(tmp, offsetPositionForPartial2);
-                        recycleUpdateOp(tmp);
-                        if (op.cmd == 4) {
-                            offsetPositionForPartial2 += tmpCnt;
-                        }
-                        offsetPositionForPartial = updatedPos;
-                        tmpCnt = 1;
+                        continuous = false;
                     }
+                    break;
+            }
+            if (continuous) {
+                tmpCnt++;
+            } else {
+                UpdateOp tmp = obtainUpdateOp(op.cmd, tmpStart, tmpCnt, op.payload);
+                dispatchFirstPassAndUpdateViewHolders(tmp, offsetPositionForPartial);
+                recycleUpdateOp(tmp);
+                if (op.cmd == 4) {
+                    offsetPositionForPartial += tmpCnt;
                 }
-                Object payload = op.payload;
-                recycleUpdateOp(op);
-                if (tmpCnt > 0) {
-                    UpdateOp tmp2 = obtainUpdateOp(op.cmd, offsetPositionForPartial, tmpCnt, payload);
-                    dispatchFirstPassAndUpdateViewHolders(tmp2, offsetPositionForPartial2);
-                    recycleUpdateOp(tmp2);
-                    return;
-                }
-                return;
+                tmpStart = updatedPos;
+                tmpCnt = 1;
             }
         }
-        throw new IllegalArgumentException("should not dispatch add or move for pre layout");
+        Object payload = op.payload;
+        recycleUpdateOp(op);
+        if (tmpCnt > 0) {
+            tmp = obtainUpdateOp(op.cmd, tmpStart, tmpCnt, payload);
+            dispatchFirstPassAndUpdateViewHolders(tmp, offsetPositionForPartial);
+            recycleUpdateOp(tmp);
+        }
     }
 
     void dispatchFirstPassAndUpdateViewHolders(UpdateOp op, int offsetStart) {
         this.mCallback.onDispatchFirstPass(op);
-        int i = op.cmd;
-        if (i == 2) {
-            this.mCallback.offsetPositionsForRemovingInvisible(offsetStart, op.itemCount);
-        } else if (i != 4) {
-            throw new IllegalArgumentException("only remove and update ops can be dispatched in first pass");
-        } else {
-            this.mCallback.markViewHoldersUpdated(offsetStart, op.itemCount, op.payload);
+        switch (op.cmd) {
+            case 2:
+                this.mCallback.offsetPositionsForRemovingInvisible(offsetStart, op.itemCount);
+                return;
+            case 4:
+                this.mCallback.markViewHoldersUpdated(offsetStart, op.itemCount, op.payload);
+                return;
+            default:
+                throw new IllegalArgumentException("only remove and update ops can be dispatched in first pass");
         }
     }
 
@@ -447,25 +419,21 @@ class AdapterHelper implements Callback {
 
     private void postponeAndUpdateViewHolders(UpdateOp op) {
         this.mPostponedList.add(op);
-        int i = op.cmd;
-        if (i == 4) {
-            this.mCallback.markViewHoldersUpdated(op.positionStart, op.itemCount, op.payload);
-        } else if (i != 8) {
-            switch (i) {
-                case 1:
-                    this.mCallback.offsetPositionsForAdd(op.positionStart, op.itemCount);
-                    return;
-                case 2:
-                    this.mCallback.offsetPositionsForRemovingLaidOutOrNewView(op.positionStart, op.itemCount);
-                    return;
-                default:
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("Unknown update op type for ");
-                    stringBuilder.append(op);
-                    throw new IllegalArgumentException(stringBuilder.toString());
-            }
-        } else {
-            this.mCallback.offsetPositionsForMove(op.positionStart, op.itemCount);
+        switch (op.cmd) {
+            case 1:
+                this.mCallback.offsetPositionsForAdd(op.positionStart, op.itemCount);
+                return;
+            case 2:
+                this.mCallback.offsetPositionsForRemovingLaidOutOrNewView(op.positionStart, op.itemCount);
+                return;
+            case 4:
+                this.mCallback.markViewHoldersUpdated(op.positionStart, op.itemCount, op.payload);
+                return;
+            case 8:
+                this.mCallback.offsetPositionsForMove(op.positionStart, op.itemCount);
+                return;
+            default:
+                throw new IllegalArgumentException("Unknown update op type for " + op);
         }
     }
 
@@ -483,75 +451,74 @@ class AdapterHelper implements Callback {
 
     int findPositionOffset(int position, int firstPostponedItem) {
         int count = this.mPostponedList.size();
-        int position2 = position;
-        for (position = firstPostponedItem; position < count; position++) {
-            UpdateOp op = (UpdateOp) this.mPostponedList.get(position);
+        for (int i = firstPostponedItem; i < count; i++) {
+            UpdateOp op = (UpdateOp) this.mPostponedList.get(i);
             if (op.cmd == 8) {
-                if (op.positionStart == position2) {
-                    position2 = op.itemCount;
+                if (op.positionStart == position) {
+                    position = op.itemCount;
                 } else {
-                    if (op.positionStart < position2) {
-                        position2--;
+                    if (op.positionStart < position) {
+                        position--;
                     }
-                    if (op.itemCount <= position2) {
-                        position2++;
+                    if (op.itemCount <= position) {
+                        position++;
                     }
                 }
-            } else if (op.positionStart > position2) {
+            } else if (op.positionStart > position) {
                 continue;
             } else if (op.cmd == 2) {
-                if (position2 < op.positionStart + op.itemCount) {
+                if (position < op.positionStart + op.itemCount) {
                     return -1;
                 }
-                position2 -= op.itemCount;
+                position -= op.itemCount;
             } else if (op.cmd == 1) {
-                position2 += op.itemCount;
+                position += op.itemCount;
             }
         }
-        return position2;
+        return position;
     }
 
     boolean onItemRangeChanged(int positionStart, int itemCount, Object payload) {
-        boolean z = false;
+        boolean z = true;
         if (itemCount < 1) {
             return false;
         }
         this.mPendingUpdates.add(obtainUpdateOp(4, positionStart, itemCount, payload));
         this.mExistingUpdateTypes |= 4;
-        if (this.mPendingUpdates.size() == 1) {
-            z = true;
+        if (this.mPendingUpdates.size() != 1) {
+            z = false;
         }
         return z;
     }
 
     boolean onItemRangeInserted(int positionStart, int itemCount) {
-        boolean z = false;
+        boolean z = true;
         if (itemCount < 1) {
             return false;
         }
         this.mPendingUpdates.add(obtainUpdateOp(1, positionStart, itemCount, null));
         this.mExistingUpdateTypes |= 1;
-        if (this.mPendingUpdates.size() == 1) {
-            z = true;
+        if (this.mPendingUpdates.size() != 1) {
+            z = false;
         }
         return z;
     }
 
     boolean onItemRangeRemoved(int positionStart, int itemCount) {
-        boolean z = false;
+        boolean z = true;
         if (itemCount < 1) {
             return false;
         }
         this.mPendingUpdates.add(obtainUpdateOp(2, positionStart, itemCount, null));
         this.mExistingUpdateTypes |= 2;
-        if (this.mPendingUpdates.size() == 1) {
-            z = true;
+        if (this.mPendingUpdates.size() != 1) {
+            z = false;
         }
         return z;
     }
 
     boolean onItemRangeMoved(int from, int to, int itemCount) {
-        boolean z = false;
+        boolean z = true;
         if (from == to) {
             return false;
         }
@@ -560,8 +527,8 @@ class AdapterHelper implements Callback {
         }
         this.mPendingUpdates.add(obtainUpdateOp(8, from, to, null));
         this.mExistingUpdateTypes |= 8;
-        if (this.mPendingUpdates.size() == 1) {
-            z = true;
+        if (this.mPendingUpdates.size() != 1) {
+            z = false;
         }
         return z;
     }
@@ -571,26 +538,23 @@ class AdapterHelper implements Callback {
         int count = this.mPendingUpdates.size();
         for (int i = 0; i < count; i++) {
             UpdateOp op = (UpdateOp) this.mPendingUpdates.get(i);
-            int i2 = op.cmd;
-            if (i2 == 4) {
-                this.mCallback.onDispatchSecondPass(op);
-                this.mCallback.markViewHoldersUpdated(op.positionStart, op.itemCount, op.payload);
-            } else if (i2 != 8) {
-                switch (i2) {
-                    case 1:
-                        this.mCallback.onDispatchSecondPass(op);
-                        this.mCallback.offsetPositionsForAdd(op.positionStart, op.itemCount);
-                        break;
-                    case 2:
-                        this.mCallback.onDispatchSecondPass(op);
-                        this.mCallback.offsetPositionsForRemovingInvisible(op.positionStart, op.itemCount);
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                this.mCallback.onDispatchSecondPass(op);
-                this.mCallback.offsetPositionsForMove(op.positionStart, op.itemCount);
+            switch (op.cmd) {
+                case 1:
+                    this.mCallback.onDispatchSecondPass(op);
+                    this.mCallback.offsetPositionsForAdd(op.positionStart, op.itemCount);
+                    break;
+                case 2:
+                    this.mCallback.onDispatchSecondPass(op);
+                    this.mCallback.offsetPositionsForRemovingInvisible(op.positionStart, op.itemCount);
+                    break;
+                case 4:
+                    this.mCallback.onDispatchSecondPass(op);
+                    this.mCallback.markViewHoldersUpdated(op.positionStart, op.itemCount, op.payload);
+                    break;
+                case 8:
+                    this.mCallback.onDispatchSecondPass(op);
+                    this.mCallback.offsetPositionsForMove(op.positionStart, op.itemCount);
+                    break;
             }
             if (this.mOnItemProcessedCallback != null) {
                 this.mOnItemProcessedCallback.run();
@@ -604,36 +568,37 @@ class AdapterHelper implements Callback {
         int size = this.mPendingUpdates.size();
         for (int i = 0; i < size; i++) {
             UpdateOp op = (UpdateOp) this.mPendingUpdates.get(i);
-            int i2 = op.cmd;
-            if (i2 != 8) {
-                switch (i2) {
-                    case 1:
-                        if (op.positionStart > position) {
+            switch (op.cmd) {
+                case 1:
+                    if (op.positionStart > position) {
+                        break;
+                    }
+                    position += op.itemCount;
+                    break;
+                case 2:
+                    if (op.positionStart <= position) {
+                        if (op.positionStart + op.itemCount <= position) {
+                            position -= op.itemCount;
                             break;
                         }
-                        position += op.itemCount;
-                        break;
-                    case 2:
-                        if (op.positionStart <= position) {
-                            if (op.positionStart + op.itemCount <= position) {
-                                position -= op.itemCount;
-                                break;
-                            }
-                            return -1;
+                        return -1;
+                    }
+                    continue;
+                case 8:
+                    if (op.positionStart != position) {
+                        if (op.positionStart < position) {
+                            position--;
                         }
-                        continue;
-                    default:
+                        if (op.itemCount > position) {
+                            break;
+                        }
+                        position++;
                         break;
-                }
-            } else if (op.positionStart == position) {
-                position = op.itemCount;
-            } else {
-                if (op.positionStart < position) {
-                    position--;
-                }
-                if (op.itemCount <= position) {
-                    position++;
-                }
+                    }
+                    position = op.itemCount;
+                    break;
+                default:
+                    break;
             }
         }
         return position;

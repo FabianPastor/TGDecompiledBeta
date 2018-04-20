@@ -37,22 +37,12 @@ public class WallpaperUpdater {
     public WallpaperUpdater(Activity activity, WallpaperUpdaterDelegate wallpaperUpdaterDelegate) {
         this.parentActivity = activity;
         this.delegate = wallpaperUpdaterDelegate;
-        File directory = FileLoader.getDirectory(4);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(Utilities.random.nextInt());
-        stringBuilder.append(".jpg");
-        this.currentWallpaperPath = new File(directory, stringBuilder.toString());
+        this.currentWallpaperPath = new File(FileLoader.getDirectory(4), Utilities.random.nextInt() + ".jpg");
     }
 
     public void showAlert(final boolean fromTheme) {
-        CharSequence[] items;
         Builder builder = new Builder(this.parentActivity);
-        if (fromTheme) {
-            items = new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("SelectColor", R.string.SelectColor), LocaleController.getString("Default", R.string.Default), LocaleController.getString("Cancel", R.string.Cancel)};
-        } else {
-            items = new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("Cancel", R.string.Cancel)};
-        }
-        builder.setItems(items, new OnClickListener() {
+        builder.setItems(fromTheme ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("SelectColor", R.string.SelectColor), LocaleController.getString("Default", R.string.Default), LocaleController.getString("Cancel", R.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("Cancel", R.string.Cancel)}, new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
                     try {
@@ -80,7 +70,8 @@ public class WallpaperUpdater {
                     Intent photoPickerIntent = new Intent("android.intent.action.PICK");
                     photoPickerIntent.setType("image/*");
                     WallpaperUpdater.this.parentActivity.startActivityForResult(photoPickerIntent, 11);
-                } else if (fromTheme != null) {
+                } else if (!fromTheme) {
+                } else {
                     if (i == 2) {
                         WallpaperUpdater.this.delegate.needOpenColorPicker();
                     } else if (i == 3) {
@@ -109,52 +100,81 @@ public class WallpaperUpdater {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == -1) {
-            Bitmap bitmap;
-            if (requestCode == 10) {
-                AndroidUtilities.addMediaToGallery(this.currentPicturePath);
-                FileOutputStream stream = null;
+        Throwable e;
+        Throwable th;
+        if (resultCode != -1) {
+            return;
+        }
+        Point screenSize;
+        Bitmap bitmap;
+        if (requestCode == 10) {
+            AndroidUtilities.addMediaToGallery(this.currentPicturePath);
+            FileOutputStream stream = null;
+            try {
+                screenSize = AndroidUtilities.getRealScreenSize();
+                bitmap = ImageLoader.loadBitmap(this.currentPicturePath, null, (float) screenSize.x, (float) screenSize.y, true);
+                FileOutputStream stream2 = new FileOutputStream(this.currentWallpaperPath);
                 try {
-                    Point screenSize = AndroidUtilities.getRealScreenSize();
-                    bitmap = ImageLoader.loadBitmap(this.currentPicturePath, null, (float) screenSize.x, (float) screenSize.y, true);
-                    stream = new FileOutputStream(this.currentWallpaperPath);
-                    bitmap.compress(CompressFormat.JPEG, 87, stream);
+                    bitmap.compress(CompressFormat.JPEG, 87, stream2);
                     this.delegate.didSelectWallpaper(this.currentWallpaperPath, bitmap);
-                    if (stream != null) {
+                    if (stream2 != null) {
                         try {
-                            stream.close();
-                        } catch (Throwable e) {
-                            FileLog.m3e(e);
+                            stream2.close();
+                        } catch (Throwable e2) {
+                            FileLog.m3e(e2);
+                            stream = stream2;
                         }
                     }
-                } catch (Throwable e2) {
-                    FileLog.m3e(e2);
+                    stream = stream2;
+                } catch (Exception e3) {
+                    e2 = e3;
+                    stream = stream2;
+                    try {
+                        FileLog.m3e(e2);
+                        if (stream != null) {
+                            try {
+                                stream.close();
+                            } catch (Throwable e22) {
+                                FileLog.m3e(e22);
+                            }
+                        }
+                        this.currentPicturePath = null;
+                    } catch (Throwable th2) {
+                        th = th2;
+                        if (stream != null) {
+                            try {
+                                stream.close();
+                            } catch (Throwable e222) {
+                                FileLog.m3e(e222);
+                            }
+                        }
+                        throw th;
+                    }
+                } catch (Throwable th3) {
+                    th = th3;
+                    stream = stream2;
                     if (stream != null) {
                         stream.close();
                     }
-                } catch (Throwable th) {
-                    if (stream != null) {
-                        try {
-                            stream.close();
-                        } catch (Throwable e3) {
-                            FileLog.m3e(e3);
-                        }
-                    }
+                    throw th;
+                }
+            } catch (Exception e4) {
+                e222 = e4;
+                FileLog.m3e(e222);
+                if (stream != null) {
+                    stream.close();
                 }
                 this.currentPicturePath = null;
-            } else {
-                if (requestCode == 11 && data != null) {
-                    if (data.getData() != null) {
-                        try {
-                            Point screenSize2 = AndroidUtilities.getRealScreenSize();
-                            bitmap = ImageLoader.loadBitmap(null, data.getData(), (float) screenSize2.x, (float) screenSize2.y, true);
-                            bitmap.compress(CompressFormat.JPEG, 87, new FileOutputStream(this.currentWallpaperPath));
-                            this.delegate.didSelectWallpaper(this.currentWallpaperPath, bitmap);
-                        } catch (Throwable e4) {
-                            FileLog.m3e(e4);
-                        }
-                    }
-                }
+            }
+            this.currentPicturePath = null;
+        } else if (requestCode == 11 && data != null && data.getData() != null) {
+            try {
+                screenSize = AndroidUtilities.getRealScreenSize();
+                bitmap = ImageLoader.loadBitmap(null, data.getData(), (float) screenSize.x, (float) screenSize.y, true);
+                bitmap.compress(CompressFormat.JPEG, 87, new FileOutputStream(this.currentWallpaperPath));
+                this.delegate.didSelectWallpaper(this.currentWallpaperPath, bitmap);
+            } catch (Throwable e2222) {
+                FileLog.m3e(e2222);
             }
         }
     }

@@ -80,7 +80,7 @@ abstract class StreamReader {
     final void seek(long position, long timeUs) {
         this.oggPacket.reset();
         if (position == 0) {
-            reset(this.seekMapSet ^ 1);
+            reset(!this.seekMapSet);
         } else if (this.state != 0) {
             this.targetGranule = this.oggSeeker.startSeek(timeUs);
             this.state = 2;
@@ -127,7 +127,7 @@ abstract class StreamReader {
             this.oggSeeker = new UnseekableOggSeeker();
         } else {
             OggPageHeader firstPayloadPageHeader = this.oggPacket.getPageHeader();
-            this.oggSeeker = new DefaultOggSeeker(this.payloadStartPosition, input.getLength(), this, firstPayloadPageHeader.headerSize + firstPayloadPageHeader.bodySize, firstPayloadPageHeader.granulePosition);
+            this.oggSeeker = new DefaultOggSeeker(this.payloadStartPosition, input.getLength(), this, firstPayloadPageHeader.bodySize + firstPayloadPageHeader.headerSize, firstPayloadPageHeader.granulePosition);
         }
         this.setupData = null;
         this.state = 2;
@@ -136,37 +136,33 @@ abstract class StreamReader {
     }
 
     private int readPayload(ExtractorInput input, PositionHolder seekPosition) throws IOException, InterruptedException {
-        ExtractorInput extractorInput = input;
-        long position = this.oggSeeker.read(extractorInput);
+        long position = this.oggSeeker.read(input);
         if (position >= 0) {
             seekPosition.position = position;
             return 1;
         }
-        PositionHolder positionHolder = seekPosition;
         if (position < -1) {
-            onSeekEnd(-(position + 2));
+            onSeekEnd(-(2 + position));
         }
-        if (!r0.seekMapSet) {
-            r0.extractorOutput.seekMap(r0.oggSeeker.createSeekMap());
-            r0.seekMapSet = true;
+        if (!this.seekMapSet) {
+            this.extractorOutput.seekMap(this.oggSeeker.createSeekMap());
+            this.seekMapSet = true;
         }
-        if (r0.lengthOfReadPacket <= 0) {
-            if (!r0.oggPacket.populate(extractorInput)) {
-                r0.state = 3;
-                return -1;
+        if (this.lengthOfReadPacket > 0 || this.oggPacket.populate(input)) {
+            this.lengthOfReadPacket = 0;
+            ParsableByteArray payload = this.oggPacket.getPayload();
+            long granulesInPacket = preparePayload(payload);
+            if (granulesInPacket >= 0 && this.currentGranule + granulesInPacket >= this.targetGranule) {
+                long timeUs = convertGranuleToTime(this.currentGranule);
+                this.trackOutput.sampleData(payload, payload.limit());
+                this.trackOutput.sampleMetadata(timeUs, 1, payload.limit(), 0, null);
+                this.targetGranule = -1;
             }
+            this.currentGranule += granulesInPacket;
+            return 0;
         }
-        r0.lengthOfReadPacket = 0;
-        ParsableByteArray payload = r0.oggPacket.getPayload();
-        long granulesInPacket = preparePayload(payload);
-        if (granulesInPacket >= 0 && r0.currentGranule + granulesInPacket >= r0.targetGranule) {
-            long timeUs = convertGranuleToTime(r0.currentGranule);
-            r0.trackOutput.sampleData(payload, payload.limit());
-            r0.trackOutput.sampleMetadata(timeUs, 1, payload.limit(), 0, null);
-            r0.targetGranule = -1;
-        }
-        r0.currentGranule += granulesInPacket;
-        return 0;
+        this.state = 3;
+        return -1;
     }
 
     protected long convertGranuleToTime(long granule) {

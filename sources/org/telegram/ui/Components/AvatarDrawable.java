@@ -63,10 +63,7 @@ public class AvatarDrawable extends Drawable {
     }
 
     public static int getColorIndex(int id) {
-        if (id < 0 || id >= 7) {
-            return Math.abs(id % Theme.keys_avatar_background.length);
-        }
-        return id;
+        return (id < 0 || id >= 7) ? Math.abs(id % Theme.keys_avatar_background.length) : id;
     }
 
     public static int getColorForId(int id) {
@@ -149,13 +146,11 @@ public class AvatarDrawable extends Drawable {
             if (firstName != null && firstName.length() > 0) {
                 this.stringBuilder.appendCodePoint(firstName.codePointAt(0));
             }
+            int a;
             if (lastName != null && lastName.length() > 0) {
                 Integer lastch = null;
-                int a = lastName.length() - 1;
-                while (a >= 0) {
-                    if (lastch != null && lastName.charAt(a) == ' ') {
-                        break;
-                    }
+                a = lastName.length() - 1;
+                while (a >= 0 && (lastch == null || lastName.charAt(a) != ' ')) {
                     lastch = Integer.valueOf(lastName.codePointAt(a));
                     a--;
                 }
@@ -164,15 +159,15 @@ public class AvatarDrawable extends Drawable {
                 }
                 this.stringBuilder.appendCodePoint(lastch.intValue());
             } else if (firstName != null && firstName.length() > 0) {
-                int a2 = firstName.length() - 1;
-                while (a2 >= 0) {
-                    if (firstName.charAt(a2) != ' ' || a2 == firstName.length() - 1 || firstName.charAt(a2 + 1) == ' ') {
-                        a2--;
+                a = firstName.length() - 1;
+                while (a >= 0) {
+                    if (firstName.charAt(a) != ' ' || a == firstName.length() - 1 || firstName.charAt(a + 1) == ' ') {
+                        a--;
                     } else {
                         if (VERSION.SDK_INT >= 17) {
                             this.stringBuilder.append("\u200c");
                         }
-                        this.stringBuilder.appendCodePoint(firstName.codePointAt(a2 + 1));
+                        this.stringBuilder.appendCodePoint(firstName.codePointAt(a + 1));
                     }
                 }
             }
@@ -184,11 +179,13 @@ public class AvatarDrawable extends Drawable {
                     this.textLeft = this.textLayout.getLineLeft(0);
                     this.textWidth = this.textLayout.getLineWidth(0);
                     this.textHeight = (float) this.textLayout.getLineBottom(0);
+                    return;
                 }
+                return;
             } catch (Throwable e) {
                 FileLog.m3e(e);
+                return;
             }
-            return;
         }
         this.textLayout = null;
     }
@@ -206,31 +203,31 @@ public class AvatarDrawable extends Drawable {
             canvas.save();
             canvas.translate((float) bounds.left, (float) bounds.top);
             canvas.drawCircle(((float) size) / 2.0f, ((float) size) / 2.0f, ((float) size) / 2.0f, Theme.avatar_backgroundPaint);
-            int w;
-            int h;
+            int x;
+            int y;
             if (this.savedMessages != 0 && Theme.avatar_savedDrawable != null) {
-                w = Theme.avatar_savedDrawable.getIntrinsicWidth();
-                h = Theme.avatar_savedDrawable.getIntrinsicHeight();
+                int w = Theme.avatar_savedDrawable.getIntrinsicWidth();
+                int h = Theme.avatar_savedDrawable.getIntrinsicHeight();
                 if (this.savedMessages == 2) {
                     w = (int) (((float) w) * 0.8f);
                     h = (int) (((float) h) * 0.8f);
                 }
-                int x = (size - w) / 2;
-                int y = (size - h) / 2;
+                x = (size - w) / 2;
+                y = (size - h) / 2;
                 Theme.avatar_savedDrawable.setBounds(x, y, x + w, y + h);
                 Theme.avatar_savedDrawable.draw(canvas);
             } else if (this.drawBrodcast && Theme.avatar_broadcastDrawable != null) {
-                w = (size - Theme.avatar_broadcastDrawable.getIntrinsicWidth()) / 2;
-                h = (size - Theme.avatar_broadcastDrawable.getIntrinsicHeight()) / 2;
-                Theme.avatar_broadcastDrawable.setBounds(w, h, Theme.avatar_broadcastDrawable.getIntrinsicWidth() + w, Theme.avatar_broadcastDrawable.getIntrinsicHeight() + h);
+                x = (size - Theme.avatar_broadcastDrawable.getIntrinsicWidth()) / 2;
+                y = (size - Theme.avatar_broadcastDrawable.getIntrinsicHeight()) / 2;
+                Theme.avatar_broadcastDrawable.setBounds(x, y, Theme.avatar_broadcastDrawable.getIntrinsicWidth() + x, Theme.avatar_broadcastDrawable.getIntrinsicHeight() + y);
                 Theme.avatar_broadcastDrawable.draw(canvas);
             } else if (this.textLayout != null) {
                 canvas.translate(((((float) size) - this.textWidth) / 2.0f) - this.textLeft, (((float) size) - this.textHeight) / 2.0f);
                 this.textLayout.draw(canvas);
             } else if (this.drawPhoto && Theme.avatar_photoDrawable != null) {
-                w = (size - Theme.avatar_photoDrawable.getIntrinsicWidth()) / 2;
-                h = (size - Theme.avatar_photoDrawable.getIntrinsicHeight()) / 2;
-                Theme.avatar_photoDrawable.setBounds(w, h, Theme.avatar_photoDrawable.getIntrinsicWidth() + w, Theme.avatar_photoDrawable.getIntrinsicHeight() + h);
+                x = (size - Theme.avatar_photoDrawable.getIntrinsicWidth()) / 2;
+                y = (size - Theme.avatar_photoDrawable.getIntrinsicHeight()) / 2;
+                Theme.avatar_photoDrawable.setBounds(x, y, Theme.avatar_photoDrawable.getIntrinsicWidth() + x, Theme.avatar_photoDrawable.getIntrinsicHeight() + y);
                 Theme.avatar_photoDrawable.draw(canvas);
             }
             canvas.restore();

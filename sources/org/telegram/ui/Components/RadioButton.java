@@ -112,10 +112,10 @@ public class RadioButton extends View {
             this.isChecked = checked;
             if (this.attachedToWindow && animated) {
                 animateToCheckedState(checked);
-            } else {
-                cancelCheckAnimator();
-                setProgress(checked ? 1.0f : 0.0f);
+                return;
             }
+            cancelCheckAnimator();
+            setProgress(checked ? 1.0f : 0.0f);
         }
     }
 

@@ -20,33 +20,26 @@ public final class ByteArrayDataSource implements DataSource {
         this.uri = dataSpec.uri;
         this.readPosition = (int) dataSpec.position;
         this.bytesRemaining = (int) (dataSpec.length == -1 ? ((long) this.data.length) - dataSpec.position : dataSpec.length);
-        if (this.bytesRemaining > 0) {
-            if (this.readPosition + this.bytesRemaining <= this.data.length) {
-                return (long) this.bytesRemaining;
-            }
+        if (this.bytesRemaining > 0 && this.readPosition + this.bytesRemaining <= this.data.length) {
+            return (long) this.bytesRemaining;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Unsatisfiable range: [");
-        stringBuilder.append(this.readPosition);
-        stringBuilder.append(", ");
-        stringBuilder.append(dataSpec.length);
-        stringBuilder.append("], length: ");
-        stringBuilder.append(this.data.length);
-        throw new IOException(stringBuilder.toString());
+        throw new IOException("Unsatisfiable range: [" + this.readPosition + ", " + dataSpec.length + "], length: " + this.data.length);
     }
 
     public int read(byte[] buffer, int offset, int readLength) throws IOException {
         if (readLength == 0) {
             return 0;
-        }
-        if (this.bytesRemaining == 0) {
+        } else if (this.bytesRemaining == 0) {
+            r0 = readLength;
             return -1;
+        } else {
+            readLength = Math.min(readLength, this.bytesRemaining);
+            System.arraycopy(this.data, this.readPosition, buffer, offset, readLength);
+            this.readPosition += readLength;
+            this.bytesRemaining -= readLength;
+            r0 = readLength;
+            return readLength;
         }
-        readLength = Math.min(readLength, this.bytesRemaining);
-        System.arraycopy(this.data, this.readPosition, buffer, offset, readLength);
-        this.readPosition += readLength;
-        this.bytesRemaining -= readLength;
-        return readLength;
     }
 
     public Uri getUri() {

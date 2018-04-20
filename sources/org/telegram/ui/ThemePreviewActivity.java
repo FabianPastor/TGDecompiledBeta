@@ -93,8 +93,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     private File themeFile;
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$3 */
-    class C17263 extends ViewOutlineProvider {
-        C17263() {
+    class C17283 extends ViewOutlineProvider {
+        C17283() {
         }
 
         @SuppressLint({"NewApi"})
@@ -104,8 +104,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$8 */
-    class C17288 implements OnClickListener {
-        C17288() {
+    class C17308 implements OnClickListener {
+        C17308() {
         }
 
         public void onClick(View v) {
@@ -116,8 +116,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$9 */
-    class C17299 implements OnClickListener {
-        C17299() {
+    class C17319 implements OnClickListener {
+        C17319() {
         }
 
         public void onClick(View v) {
@@ -129,8 +129,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$1 */
-    class C22991 extends ActionBarMenuItemSearchListener {
-        C22991() {
+    class C23001 extends ActionBarMenuItemSearchListener {
+        C23001() {
         }
 
         public void onSearchExpand() {
@@ -148,8 +148,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$5 */
-    class C23015 implements OnPageChangeListener {
-        C23015() {
+    class C23025 implements OnPageChangeListener {
+        C23025() {
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -164,8 +164,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     /* renamed from: org.telegram.ui.ThemePreviewActivity$6 */
-    class C23026 extends PagerAdapter {
-        C23026() {
+    class C23036 extends PagerAdapter {
+        C23036() {
         }
 
         public int getCount() {
@@ -332,11 +332,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
             if (viewHolder.getItemViewType() == 0) {
                 DialogCell cell = viewHolder.itemView;
-                boolean z = true;
-                if (i == getItemCount() - 1) {
-                    z = false;
-                }
-                cell.useSeparator = z;
+                cell.useSeparator = i != getItemCount() + -1;
                 cell.setDialog((CustomDialog) this.dialogs.get(i));
             }
         }
@@ -354,8 +350,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         private ArrayList<MessageObject> messages = new ArrayList();
 
         /* renamed from: org.telegram.ui.ThemePreviewActivity$MessagesAdapter$1 */
-        class C23031 implements ChatMessageCellDelegate {
-            C23031() {
+        class C23041 implements ChatMessageCellDelegate {
+            C23041() {
             }
 
             public void didPressedShare(ChatMessageCell cell) {
@@ -411,8 +407,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
 
         /* renamed from: org.telegram.ui.ThemePreviewActivity$MessagesAdapter$2 */
-        class C23042 implements ChatActionCellDelegate {
-            C23042() {
+        class C23052 implements ChatActionCellDelegate {
+            C23052() {
             }
 
             public void didClickedImage(ChatActionCell cell) {
@@ -503,18 +499,18 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
             message.id = 1;
             message.media = new TL_messageMediaDocument();
-            MessageMedia messageMedia2 = message.media;
-            messageMedia2.flags |= 3;
+            messageMedia = message.media;
+            messageMedia.flags |= 3;
             message.media.document = new TL_document();
             message.media.document.mime_type = "audio/ogg";
             message.media.document.thumb = new TL_photoSizeEmpty();
             message.media.document.thumb.type = "s";
-            TL_documentAttributeAudio audio2 = new TL_documentAttributeAudio();
-            audio2.flags = 1028;
-            audio2.duration = 3;
-            audio2.voice = true;
-            audio2.waveform = new byte[]{(byte) 0, (byte) 4, (byte) 17, (byte) -50, (byte) -93, (byte) 86, (byte) -103, (byte) -45, (byte) -12, (byte) -26, (byte) 63, (byte) -25, (byte) -3, (byte) 109, (byte) -114, (byte) -54, (byte) -4, (byte) -1, (byte) -1, (byte) -1, (byte) -1, (byte) -29, (byte) -1, (byte) -1, (byte) -25, (byte) -1, (byte) -1, (byte) -97, (byte) -43, (byte) 57, (byte) -57, (byte) -108, (byte) 1, (byte) -91, (byte) -4, (byte) -47, (byte) 21, (byte) 99, (byte) 10, (byte) 97, (byte) 43, (byte) 45, (byte) 115, (byte) -112, (byte) -77, (byte) 51, (byte) -63, (byte) 66, (byte) 40, (byte) 34, (byte) -122, (byte) -116, (byte) 48, (byte) -124, (byte) 16, (byte) 66, (byte) -120, (byte) 16, (byte) 68, (byte) 16, (byte) 33, (byte) 4, (byte) 1};
-            message.media.document.attributes.add(audio2);
+            audio = new TL_documentAttributeAudio();
+            audio.flags = 1028;
+            audio.duration = 3;
+            audio.voice = true;
+            audio.waveform = new byte[]{(byte) 0, (byte) 4, (byte) 17, (byte) -50, (byte) -93, (byte) 86, (byte) -103, (byte) -45, (byte) -12, (byte) -26, (byte) 63, (byte) -25, (byte) -3, (byte) 109, (byte) -114, (byte) -54, (byte) -4, (byte) -1, (byte) -1, (byte) -1, (byte) -1, (byte) -29, (byte) -1, (byte) -1, (byte) -25, (byte) -1, (byte) -1, (byte) -97, (byte) -43, (byte) 57, (byte) -57, (byte) -108, (byte) 1, (byte) -91, (byte) -4, (byte) -47, (byte) 21, (byte) 99, (byte) 10, (byte) 97, (byte) 43, (byte) 45, (byte) 115, (byte) -112, (byte) -77, (byte) 51, (byte) -63, (byte) 66, (byte) 40, (byte) 34, (byte) -122, (byte) -116, (byte) 48, (byte) -124, (byte) 16, (byte) 66, (byte) -120, (byte) 16, (byte) 68, (byte) 16, (byte) 33, (byte) 4, (byte) 1};
+            message.media.document.attributes.add(audio);
             message.out = true;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = 0;
@@ -549,18 +545,18 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             message.out = false;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            MessageObject messageObject2 = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
-            messageObject2.useCustomPhoto = true;
-            this.messages.add(messageObject2);
+            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
+            messageObject.useCustomPhoto = true;
+            this.messages.add(messageObject);
             message = new TL_message();
             message.message = LocaleController.formatDateChat((long) date);
             message.id = 0;
             message.date = date;
-            messageObject2 = new MessageObject(ThemePreviewActivity.this.currentAccount, message, false);
-            messageObject2.type = 10;
-            messageObject2.contentType = 1;
-            messageObject2.isDateObject = true;
-            this.messages.add(messageObject2);
+            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, false);
+            messageObject.type = 10;
+            messageObject.contentType = 1;
+            messageObject.isDateObject = true;
+            this.messages.add(messageObject);
         }
 
         public int getItemCount() {
@@ -575,10 +571,10 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             View view = null;
             if (viewType == 0) {
                 view = new ChatMessageCell(this.mContext);
-                ((ChatMessageCell) view).setDelegate(new C23031());
+                ((ChatMessageCell) view).setDelegate(new C23041());
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);
-                ((ChatActionCell) view).setDelegate(new C23042());
+                ((ChatActionCell) view).setDelegate(new C23052());
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
             return new Holder(view);
@@ -589,8 +585,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             View view = holder.itemView;
             if (view instanceof ChatMessageCell) {
                 boolean pinnedBotton;
+                boolean pinnedTop;
                 ChatMessageCell messageCell = (ChatMessageCell) view;
-                boolean pinnedTop = false;
                 messageCell.isChat = false;
                 int nextType = getItemViewType(position - 1);
                 int prevType = getItemViewType(position + 1);
@@ -598,14 +594,13 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                     pinnedBotton = false;
                 } else {
                     MessageObject nextMessage = (MessageObject) this.messages.get(position - 1);
-                    boolean z = nextMessage.isOutOwner() == message.isOutOwner() && Math.abs(nextMessage.messageOwner.date - message.messageOwner.date) <= 300;
-                    pinnedBotton = z;
+                    pinnedBotton = nextMessage.isOutOwner() == message.isOutOwner() && Math.abs(nextMessage.messageOwner.date - message.messageOwner.date) <= 300;
                 }
                 if (prevType == holder.getItemViewType()) {
                     MessageObject prevMessage = (MessageObject) this.messages.get(position + 1);
-                    if (!(prevMessage.messageOwner.reply_markup instanceof TL_replyInlineMarkup) && prevMessage.isOutOwner() == message.isOutOwner() && Math.abs(prevMessage.messageOwner.date - message.messageOwner.date) <= 300) {
-                        pinnedTop = true;
-                    }
+                    pinnedTop = !(prevMessage.messageOwner.reply_markup instanceof TL_replyInlineMarkup) && prevMessage.isOutOwner() == message.isOutOwner() && Math.abs(prevMessage.messageOwner.date - message.messageOwner.date) <= 300;
+                } else {
+                    pinnedTop = false;
                 }
                 messageCell.setFullyDraw(true);
                 messageCell.setMessageObject(message, null, pinnedBotton, pinnedTop);
@@ -631,13 +626,16 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     }
 
     public View createView(Context context) {
-        Context context2 = context;
-        this.page1 = new FrameLayout(context2);
-        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C22991()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
+        float f;
+        int i;
+        float f2;
+        float f3;
+        this.page1 = new FrameLayout(context);
+        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new C23001()).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
         this.actionBar.setBackButtonDrawable(new MenuDrawable());
         this.actionBar.setAddToContainer(false);
         this.actionBar.setTitle(LocaleController.getString("ThemePreview", R.string.ThemePreview));
-        this.page1 = new FrameLayout(context2) {
+        this.page1 = new FrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                 int heightSize = MeasureSpec.getSize(heightMeasureSpec);
@@ -661,16 +659,15 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             }
         };
         this.page1.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-        this.listView = new RecyclerListView(context2);
+        this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(true);
         this.listView.setItemAnimator(null);
         this.listView.setLayoutAnimation(null);
-        this.listView.setLayoutManager(new LinearLayoutManager(context2, 1, false));
-        int i = 2;
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-        r0.page1.addView(r0.listView, LayoutHelper.createFrame(-1, -1, 51));
-        r0.floatingButton = new ImageView(context2);
-        r0.floatingButton.setScaleType(ScaleType.CENTER);
+        this.page1.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
+        this.floatingButton = new ImageView(context);
+        this.floatingButton.setScaleType(ScaleType.CENTER);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (VERSION.SDK_INT < 21) {
             Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
@@ -679,20 +676,44 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
             drawable = combinedDrawable;
         }
-        r0.floatingButton.setBackgroundDrawable(drawable);
-        r0.floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), Mode.MULTIPLY));
-        r0.floatingButton.setImageResource(R.drawable.floating_pencil);
+        this.floatingButton.setBackgroundDrawable(drawable);
+        this.floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), Mode.MULTIPLY));
+        this.floatingButton.setImageResource(R.drawable.floating_pencil);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
-            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(r0.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
-            animator.addState(new int[0], ObjectAnimator.ofFloat(r0.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
-            r0.floatingButton.setStateListAnimator(animator);
-            r0.floatingButton.setOutlineProvider(new C17263());
+            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
+            animator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
+            this.floatingButton.setStateListAnimator(animator);
+            this.floatingButton.setOutlineProvider(new C17283());
         }
-        r0.page1.addView(r0.floatingButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
-        r0.dialogsAdapter = new DialogsAdapter(context2);
-        r0.listView.setAdapter(r0.dialogsAdapter);
-        r0.page2 = new SizeNotifierFrameLayout(context2) {
+        FrameLayout frameLayout = this.page1;
+        View view = this.floatingButton;
+        int i2 = VERSION.SDK_INT >= 21 ? 56 : 60;
+        if (VERSION.SDK_INT >= 21) {
+            f = 56.0f;
+        } else {
+            f = 60.0f;
+        }
+        if (LocaleController.isRTL) {
+            i = 3;
+        } else {
+            i = 5;
+        }
+        i |= 80;
+        if (LocaleController.isRTL) {
+            f2 = 14.0f;
+        } else {
+            f2 = 0.0f;
+        }
+        if (LocaleController.isRTL) {
+            f3 = 0.0f;
+        } else {
+            f3 = 14.0f;
+        }
+        frameLayout.addView(view, LayoutHelper.createFrame(i2, f, i, f2, 0.0f, f3, 14.0f));
+        this.dialogsAdapter = new DialogsAdapter(context);
+        this.listView.setAdapter(this.dialogsAdapter);
+        this.page2 = new SizeNotifierFrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                 int heightSize = MeasureSpec.getSize(heightMeasureSpec);
@@ -714,55 +735,52 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                 return result;
             }
         };
-        r0.page2.setBackgroundImage(Theme.getCachedWallpaper());
-        r0.actionBar2 = createActionBar(context);
-        r0.actionBar2.setBackButtonDrawable(new BackDrawable(false));
-        r0.actionBar2.setTitle("Reinhardt");
-        r0.actionBar2.setSubtitle(LocaleController.formatDateOnline((System.currentTimeMillis() / 1000) - 3600));
-        r0.page2.addView(r0.actionBar2, LayoutHelper.createFrame(-1, -2.0f));
-        r0.listView2 = new RecyclerListView(context2);
-        r0.listView2.setVerticalScrollBarEnabled(true);
-        r0.listView2.setItemAnimator(null);
-        r0.listView2.setLayoutAnimation(null);
-        r0.listView2.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
-        r0.listView2.setClipToPadding(false);
-        r0.listView2.setLayoutManager(new LinearLayoutManager(context2, 1, true));
-        RecyclerListView recyclerListView = r0.listView2;
-        if (LocaleController.isRTL) {
-            i = 1;
-        }
-        recyclerListView.setVerticalScrollbarPosition(i);
-        r0.page2.addView(r0.listView2, LayoutHelper.createFrame(-1, -1, 51));
-        r0.messagesAdapter = new MessagesAdapter(context2);
-        r0.listView2.setAdapter(r0.messagesAdapter);
-        r0.fragmentView = new FrameLayout(context2);
-        FrameLayout frameLayout = r0.fragmentView;
-        final ViewPager viewPager = new ViewPager(context2);
-        viewPager.addOnPageChangeListener(new C23015());
-        viewPager.setAdapter(new C23026());
+        this.page2.setBackgroundImage(Theme.getCachedWallpaper());
+        this.actionBar2 = createActionBar(context);
+        this.actionBar2.setBackButtonDrawable(new BackDrawable(false));
+        this.actionBar2.setTitle("Reinhardt");
+        this.actionBar2.setSubtitle(LocaleController.formatDateOnline((System.currentTimeMillis() / 1000) - 3600));
+        this.page2.addView(this.actionBar2, LayoutHelper.createFrame(-1, -2.0f));
+        this.listView2 = new RecyclerListView(context);
+        this.listView2.setVerticalScrollBarEnabled(true);
+        this.listView2.setItemAnimator(null);
+        this.listView2.setLayoutAnimation(null);
+        this.listView2.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
+        this.listView2.setClipToPadding(false);
+        this.listView2.setLayoutManager(new LinearLayoutManager(context, 1, true));
+        this.listView2.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
+        this.page2.addView(this.listView2, LayoutHelper.createFrame(-1, -1, 51));
+        this.messagesAdapter = new MessagesAdapter(context);
+        this.listView2.setAdapter(this.messagesAdapter);
+        this.fragmentView = new FrameLayout(context);
+        FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;
+        View viewPager = new ViewPager(context);
+        viewPager.addOnPageChangeListener(new C23025());
+        viewPager.setAdapter(new C23036());
         AndroidUtilities.setViewPagerEdgeEffectColor(viewPager, Theme.getColor(Theme.key_actionBarDefault));
-        frameLayout.addView(viewPager, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
-        View shadow = new View(context2);
-        shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
-        frameLayout.addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
-        FrameLayout bottomLayout = new FrameLayout(context2);
+        frameLayout2.addView(viewPager, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
+        viewPager = new View(context);
+        viewPager.setBackgroundResource(R.drawable.header_shadow_reverse);
+        frameLayout2.addView(viewPager, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
+        FrameLayout bottomLayout = new FrameLayout(context);
         bottomLayout.setBackgroundColor(-1);
-        frameLayout.addView(bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
-        r0.dotsContainer = new View(context2) {
+        frameLayout2.addView(bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
+        final View view2 = viewPager;
+        this.dotsContainer = new View(context) {
             private Paint paint = new Paint(1);
 
             protected void onDraw(Canvas canvas) {
-                int selected = viewPager.getCurrentItem();
+                int selected = view2.getCurrentItem();
                 int a = 0;
                 while (a < 2) {
                     this.paint.setColor(a == selected ? -6710887 : -3355444);
-                    canvas.drawCircle((float) AndroidUtilities.dp((float) (3 + (15 * a))), (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
+                    canvas.drawCircle((float) AndroidUtilities.dp((float) ((a * 15) + 3)), (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
                     a++;
                 }
             }
         };
-        bottomLayout.addView(r0.dotsContainer, LayoutHelper.createFrame(22, 8, 17));
-        TextView cancelButton = new TextView(context2);
+        bottomLayout.addView(this.dotsContainer, LayoutHelper.createFrame(22, 8, 17));
+        TextView cancelButton = new TextView(context);
         cancelButton.setTextSize(1, 14.0f);
         cancelButton.setTextColor(-15095832);
         cancelButton.setGravity(17);
@@ -771,8 +789,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
         cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         bottomLayout.addView(cancelButton, LayoutHelper.createFrame(-2, -1, 51));
-        cancelButton.setOnClickListener(new C17288());
-        TextView doneButton = new TextView(context2);
+        cancelButton.setOnClickListener(new C17308());
+        TextView doneButton = new TextView(context);
         doneButton.setTextSize(1, 14.0f);
         doneButton.setTextColor(-15095832);
         doneButton.setGravity(17);
@@ -781,8 +799,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         doneButton.setText(LocaleController.getString("ApplyTheme", R.string.ApplyTheme).toUpperCase());
         doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         bottomLayout.addView(doneButton, LayoutHelper.createFrame(-2, -1, 53));
-        doneButton.setOnClickListener(new C17299());
-        return r0.fragmentView;
+        doneButton.setOnClickListener(new C17319());
+        return this.fragmentView;
     }
 
     public boolean onFragmentCreate() {

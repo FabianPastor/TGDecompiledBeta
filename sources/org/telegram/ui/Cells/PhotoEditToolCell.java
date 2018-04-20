@@ -16,18 +16,18 @@ import org.telegram.ui.Components.PhotoEditorSeekBar;
 import org.telegram.ui.Components.PhotoEditorSeekBar.PhotoEditorSeekBarDelegate;
 
 public class PhotoEditToolCell extends FrameLayout {
-    private Runnable hideValueRunnable = new C08861();
+    private Runnable hideValueRunnable = new C08871();
     private TextView nameTextView;
     private PhotoEditorSeekBar seekBar;
     private AnimatorSet valueAnimation;
     private TextView valueTextView;
 
     /* renamed from: org.telegram.ui.Cells.PhotoEditToolCell$1 */
-    class C08861 implements Runnable {
+    class C08871 implements Runnable {
 
         /* renamed from: org.telegram.ui.Cells.PhotoEditToolCell$1$1 */
-        class C08851 extends AnimatorListenerAdapter {
-            C08851() {
+        class C08861 extends AnimatorListenerAdapter {
+            C08861() {
             }
 
             public void onAnimationEnd(Animator animation) {
@@ -37,7 +37,7 @@ public class PhotoEditToolCell extends FrameLayout {
             }
         }
 
-        C08861() {
+        C08871() {
         }
 
         public void run() {
@@ -50,7 +50,7 @@ public class PhotoEditToolCell extends FrameLayout {
             access$100.playTogether(r1);
             PhotoEditToolCell.this.valueAnimation.setDuration(180);
             PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
-            PhotoEditToolCell.this.valueAnimation.addListener(new C08851());
+            PhotoEditToolCell.this.valueAnimation.addListener(new C08861());
             PhotoEditToolCell.this.valueAnimation.start();
         }
     }
@@ -79,8 +79,8 @@ public class PhotoEditToolCell extends FrameLayout {
         this.seekBar.setDelegate(new PhotoEditorSeekBarDelegate() {
 
             /* renamed from: org.telegram.ui.Cells.PhotoEditToolCell$2$1 */
-            class C08871 extends AnimatorListenerAdapter {
-                C08871() {
+            class C08881 extends AnimatorListenerAdapter {
+                C08881() {
                 }
 
                 public void onAnimationEnd(Animator animation) {
@@ -90,20 +90,10 @@ public class PhotoEditToolCell extends FrameLayout {
 
             public void onProgressChanged(int i, int progress) {
                 photoEditorSeekBarDelegate.onProgressChanged(i, progress);
-                TextView access$000;
-                StringBuilder stringBuilder;
                 if (progress > 0) {
-                    access$000 = PhotoEditToolCell.this.valueTextView;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append("+");
-                    stringBuilder.append(progress);
-                    access$000.setText(stringBuilder.toString());
+                    PhotoEditToolCell.this.valueTextView.setText("+" + progress);
                 } else {
-                    access$000 = PhotoEditToolCell.this.valueTextView;
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(TtmlNode.ANONYMOUS_REGION_ID);
-                    stringBuilder.append(progress);
-                    access$000.setText(stringBuilder.toString());
+                    PhotoEditToolCell.this.valueTextView.setText(TtmlNode.ANONYMOUS_REGION_ID + progress);
                 }
                 if (PhotoEditToolCell.this.valueTextView.getTag() == null) {
                     if (PhotoEditToolCell.this.valueAnimation != null) {
@@ -112,13 +102,13 @@ public class PhotoEditToolCell extends FrameLayout {
                     PhotoEditToolCell.this.valueTextView.setTag(Integer.valueOf(1));
                     PhotoEditToolCell.this.valueAnimation = new AnimatorSet();
                     AnimatorSet access$100 = PhotoEditToolCell.this.valueAnimation;
-                    r2 = new Animator[2];
-                    r2[0] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, "alpha", new float[]{1.0f});
-                    r2[1] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, "alpha", new float[]{0.0f});
-                    access$100.playTogether(r2);
+                    r1 = new Animator[2];
+                    r1[0] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, "alpha", new float[]{1.0f});
+                    r1[1] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, "alpha", new float[]{0.0f});
+                    access$100.playTogether(r1);
                     PhotoEditToolCell.this.valueAnimation.setDuration(180);
                     PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
-                    PhotoEditToolCell.this.valueAnimation.addListener(new C08871());
+                    PhotoEditToolCell.this.valueAnimation.addListener(new C08881());
                     PhotoEditToolCell.this.valueAnimation.start();
                     return;
                 }
@@ -144,25 +134,11 @@ public class PhotoEditToolCell extends FrameLayout {
         }
         AndroidUtilities.cancelRunOnUIThread(this.hideValueRunnable);
         this.valueTextView.setTag(null);
-        TextView textView = this.nameTextView;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(text.substring(0, 1).toUpperCase());
-        stringBuilder.append(text.substring(1).toLowerCase());
-        textView.setText(stringBuilder.toString());
-        TextView textView2;
-        StringBuilder stringBuilder2;
+        this.nameTextView.setText(text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase());
         if (value > 0.0f) {
-            textView2 = this.valueTextView;
-            stringBuilder2 = new StringBuilder();
-            stringBuilder2.append("+");
-            stringBuilder2.append((int) value);
-            textView2.setText(stringBuilder2.toString());
+            this.valueTextView.setText("+" + ((int) value));
         } else {
-            textView2 = this.valueTextView;
-            stringBuilder2 = new StringBuilder();
-            stringBuilder2.append(TtmlNode.ANONYMOUS_REGION_ID);
-            stringBuilder2.append((int) value);
-            textView2.setText(stringBuilder2.toString());
+            this.valueTextView.setText(TtmlNode.ANONYMOUS_REGION_ID + ((int) value));
         }
         this.valueTextView.setAlpha(0.0f);
         this.nameTextView.setAlpha(1.0f);

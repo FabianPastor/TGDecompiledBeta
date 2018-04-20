@@ -27,19 +27,18 @@ public abstract class BaseTrackSelection implements TrackSelection {
     }
 
     public BaseTrackSelection(TrackGroup group, int... tracks) {
-        int i = 0;
+        int i;
         Assertions.checkState(tracks.length > 0);
         this.group = (TrackGroup) Assertions.checkNotNull(group);
         this.length = tracks.length;
         this.formats = new Format[this.length];
-        for (int i2 = 0; i2 < tracks.length; i2++) {
-            this.formats[i2] = group.getFormat(tracks[i2]);
+        for (i = 0; i < tracks.length; i++) {
+            this.formats[i] = group.getFormat(tracks[i]);
         }
         Arrays.sort(this.formats, new DecreasingBandwidthComparator());
         this.tracks = new int[this.length];
-        while (i < this.length) {
+        for (i = 0; i < this.length; i++) {
             this.tracks[i] = group.indexOf(this.formats[i]);
-            i++;
         }
         this.blacklistUntilTimes = new long[this.length];
     }
@@ -103,20 +102,13 @@ public abstract class BaseTrackSelection implements TrackSelection {
         long nowMs = SystemClock.elapsedRealtime();
         boolean canBlacklist = isBlacklisted(index, nowMs);
         int i = 0;
-        while (true) {
-            boolean z = true;
-            if (i < this.length && !canBlacklist) {
-                if (i == index || isBlacklisted(i, nowMs)) {
-                    z = false;
-                }
-                canBlacklist = z;
-                i++;
-            } else if (!canBlacklist) {
-                return false;
+        while (i < this.length && !canBlacklist) {
+            if (i == index || isBlacklisted(i, nowMs)) {
+                canBlacklist = false;
             } else {
-                this.blacklistUntilTimes[index] = Math.max(this.blacklistUntilTimes[index], nowMs + blacklistDurationMs);
-                return true;
+                canBlacklist = true;
             }
+            i++;
         }
         if (!canBlacklist) {
             return false;
@@ -131,24 +123,21 @@ public abstract class BaseTrackSelection implements TrackSelection {
 
     public int hashCode() {
         if (this.hashCode == 0) {
-            this.hashCode = (31 * System.identityHashCode(this.group)) + Arrays.hashCode(this.tracks);
+            this.hashCode = (System.identityHashCode(this.group) * 31) + Arrays.hashCode(this.tracks);
         }
         return this.hashCode;
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
         if (this == obj) {
             return true;
         }
-        if (obj != null) {
-            if (getClass() == obj.getClass()) {
-                BaseTrackSelection other = (BaseTrackSelection) obj;
-                if (this.group != other.group || !Arrays.equals(this.tracks, other.tracks)) {
-                    z = false;
-                }
-                return z;
-            }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        BaseTrackSelection other = (BaseTrackSelection) obj;
+        if (this.group == other.group && Arrays.equals(this.tracks, other.tracks)) {
+            return true;
         }
         return false;
     }

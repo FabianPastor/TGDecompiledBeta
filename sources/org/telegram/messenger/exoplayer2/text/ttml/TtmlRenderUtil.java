@@ -17,16 +17,13 @@ final class TtmlRenderUtil {
         if (style == null && styleIds == null) {
             return null;
         }
-        int i = 0;
         if (style == null && styleIds.length == 1) {
             return (TtmlStyle) globalStyles.get(styleIds[0]);
         }
         if (style == null && styleIds.length > 1) {
             TtmlStyle chainedStyle = new TtmlStyle();
-            int length = styleIds.length;
-            while (i < length) {
-                chainedStyle.chain((TtmlStyle) globalStyles.get(styleIds[i]));
-                i++;
+            for (String id : styleIds) {
+                chainedStyle.chain((TtmlStyle) globalStyles.get(id));
             }
             return chainedStyle;
         } else if (style != null && styleIds != null && styleIds.length == 1) {
@@ -35,10 +32,8 @@ final class TtmlRenderUtil {
             if (style == null || styleIds == null || styleIds.length <= 1) {
                 return style;
             }
-            int length2 = styleIds.length;
-            while (i < length2) {
-                style.chain((TtmlStyle) globalStyles.get(styleIds[i]));
-                i++;
+            for (String id2 : styleIds) {
+                style.chain((TtmlStyle) globalStyles.get(id2));
             }
             return style;
         }

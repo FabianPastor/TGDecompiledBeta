@@ -41,26 +41,20 @@ public final class SinglePeriodTimeline extends Timeline {
     }
 
     public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
-        long windowDefaultStartPositionUs;
-        SinglePeriodTimeline singlePeriodTimeline = this;
         Assertions.checkIndex(windowIndex, 0, 1);
         Object id = setIds ? ID : null;
-        long j = singlePeriodTimeline.windowDefaultStartPositionUs;
-        if (singlePeriodTimeline.isDynamic && defaultPositionProjectionUs != 0) {
-            if (singlePeriodTimeline.windowDurationUs == C0542C.TIME_UNSET) {
-                j = C0542C.TIME_UNSET;
+        long windowDefaultStartPositionUs = this.windowDefaultStartPositionUs;
+        if (this.isDynamic && defaultPositionProjectionUs != 0) {
+            if (this.windowDurationUs == C0542C.TIME_UNSET) {
+                windowDefaultStartPositionUs = C0542C.TIME_UNSET;
             } else {
-                long windowDefaultStartPositionUs2 = j + defaultPositionProjectionUs;
-                if (windowDefaultStartPositionUs2 > singlePeriodTimeline.windowDurationUs) {
-                    j = C0542C.TIME_UNSET;
-                } else {
-                    windowDefaultStartPositionUs = windowDefaultStartPositionUs2;
-                    return window.set(id, singlePeriodTimeline.presentationStartTimeMs, singlePeriodTimeline.windowStartTimeMs, singlePeriodTimeline.isSeekable, singlePeriodTimeline.isDynamic, windowDefaultStartPositionUs, singlePeriodTimeline.windowDurationUs, 0, 0, singlePeriodTimeline.windowPositionInPeriodUs);
+                windowDefaultStartPositionUs += defaultPositionProjectionUs;
+                if (windowDefaultStartPositionUs > this.windowDurationUs) {
+                    windowDefaultStartPositionUs = C0542C.TIME_UNSET;
                 }
             }
         }
-        windowDefaultStartPositionUs = j;
-        return window.set(id, singlePeriodTimeline.presentationStartTimeMs, singlePeriodTimeline.windowStartTimeMs, singlePeriodTimeline.isSeekable, singlePeriodTimeline.isDynamic, windowDefaultStartPositionUs, singlePeriodTimeline.windowDurationUs, 0, 0, singlePeriodTimeline.windowPositionInPeriodUs);
+        return window.set(id, this.presentationStartTimeMs, this.windowStartTimeMs, this.isSeekable, this.isDynamic, windowDefaultStartPositionUs, this.windowDurationUs, 0, 0, this.windowPositionInPeriodUs);
     }
 
     public int getPeriodCount() {

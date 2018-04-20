@@ -26,8 +26,8 @@ public class ShareActivity extends Activity {
     private Dialog visibleDialog;
 
     /* renamed from: org.telegram.ui.ShareActivity$1 */
-    class C17011 implements OnDismissListener {
-        C17011() {
+    class C17031 implements OnDismissListener {
+        C17031() {
         }
 
         public void onDismiss(DialogInterface dialog) {
@@ -46,48 +46,39 @@ public class ShareActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(new View(this), new LayoutParams(-1, -1));
         Intent intent = getIntent();
-        if (intent != null && "android.intent.action.VIEW".equals(intent.getAction())) {
-            if (intent.getData() != null) {
-                Uri data = intent.getData();
-                String scheme = data.getScheme();
-                String url = data.toString();
-                String hash = data.getQueryParameter("hash");
-                if ("tgb".equals(scheme) && url.toLowerCase().startsWith("tgb://share_game_score")) {
-                    if (!TextUtils.isEmpty(hash)) {
-                        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare", 0);
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(hash);
-                        stringBuilder.append("_m");
-                        String message = sharedPreferences.getString(stringBuilder.toString(), null);
-                        if (TextUtils.isEmpty(message)) {
-                            finish();
-                            return;
-                        }
-                        SerializedData serializedData = new SerializedData(Utilities.hexToBytes(message));
-                        Message mess = Message.TLdeserialize(serializedData, serializedData.readInt32(false), false);
-                        mess.readAttachPath(serializedData, 0);
-                        if (mess == null) {
-                            finish();
-                            return;
-                        }
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append(hash);
-                        stringBuilder.append("_link");
-                        String link = sharedPreferences.getString(stringBuilder.toString(), null);
-                        MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, mess, false);
-                        messageObject.messageOwner.with_my_score = true;
-                        try {
-                            r7.visibleDialog = ShareAlert.createShareAlert(r7, messageObject, null, false, link, null);
-                            r7.visibleDialog.setCanceledOnTouchOutside(true);
-                            r7.visibleDialog.setOnDismissListener(new C17011());
-                            r7.visibleDialog.show();
-                        } catch (Throwable e) {
-                            FileLog.m3e(e);
-                            finish();
-                        }
-                        return;
-                    }
-                }
+        if (intent == null || !"android.intent.action.VIEW".equals(intent.getAction()) || intent.getData() == null) {
+            finish();
+            return;
+        }
+        Uri data = intent.getData();
+        String scheme = data.getScheme();
+        String url = data.toString();
+        String hash = data.getQueryParameter("hash");
+        if ("tgb".equals(scheme) && url.toLowerCase().startsWith("tgb://share_game_score") && !TextUtils.isEmpty(hash)) {
+            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("botshare", 0);
+            String message = sharedPreferences.getString(hash + "_m", null);
+            if (TextUtils.isEmpty(message)) {
+                finish();
+                return;
+            }
+            SerializedData serializedData = new SerializedData(Utilities.hexToBytes(message));
+            Message mess = Message.TLdeserialize(serializedData, serializedData.readInt32(false), false);
+            mess.readAttachPath(serializedData, 0);
+            if (mess == null) {
+                finish();
+                return;
+            }
+            String link = sharedPreferences.getString(hash + "_link", null);
+            MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, mess, false);
+            messageObject.messageOwner.with_my_score = true;
+            try {
+                this.visibleDialog = ShareAlert.createShareAlert(this, messageObject, null, false, link, false);
+                this.visibleDialog.setCanceledOnTouchOutside(true);
+                this.visibleDialog.setOnDismissListener(new C17031());
+                this.visibleDialog.show();
+                return;
+            } catch (Throwable e) {
+                FileLog.m3e(e);
                 finish();
                 return;
             }

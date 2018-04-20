@@ -60,28 +60,28 @@ public class DefaultRenderersFactory implements RenderersFactory {
         ArrayList<Renderer> renderersList = new ArrayList();
         buildVideoRenderers(this.context, this.drmSessionManager, this.allowedVideoJoiningTimeMs, eventHandler, videoRendererEventListener, this.extensionRendererMode, renderersList);
         buildAudioRenderers(this.context, this.drmSessionManager, buildAudioProcessors(), eventHandler, audioRendererEventListener, this.extensionRendererMode, renderersList);
-        ArrayList<Renderer> arrayList = renderersList;
-        buildTextRenderers(this.context, textRendererOutput, eventHandler.getLooper(), this.extensionRendererMode, arrayList);
-        buildMetadataRenderers(this.context, metadataRendererOutput, eventHandler.getLooper(), this.extensionRendererMode, arrayList);
+        buildTextRenderers(this.context, textRendererOutput, eventHandler.getLooper(), this.extensionRendererMode, renderersList);
+        buildMetadataRenderers(this.context, metadataRendererOutput, eventHandler.getLooper(), this.extensionRendererMode, renderersList);
         buildMiscellaneousRenderers(this.context, eventHandler, this.extensionRendererMode, renderersList);
         return (Renderer[]) renderersList.toArray(new Renderer[renderersList.size()]);
     }
 
     protected void buildVideoRenderers(Context context, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, long allowedVideoJoiningTimeMs, Handler eventHandler, VideoRendererEventListener eventListener, int extensionRendererMode, ArrayList<Renderer> out) {
-        Exception e;
-        int i = extensionRendererMode;
+        Throwable e;
         ArrayList<Renderer> arrayList = out;
         arrayList.add(new MediaCodecVideoRenderer(context, MediaCodecSelector.DEFAULT, allowedVideoJoiningTimeMs, drmSessionManager, false, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY));
-        if (i != 0) {
-            int extensionRendererIndex = out.size();
-            if (i == 2) {
-                extensionRendererIndex--;
+        if (extensionRendererMode != 0) {
+            int extensionRendererIndex;
+            int extensionRendererIndex2 = out.size();
+            if (extensionRendererMode == 2) {
+                extensionRendererIndex = extensionRendererIndex2 - 1;
+            } else {
+                extensionRendererIndex = extensionRendererIndex2;
             }
-            int extensionRendererIndex2;
             try {
                 extensionRendererIndex2 = extensionRendererIndex + 1;
                 try {
-                    arrayList.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.vp9.LibvpxVideoRenderer").getConstructor(new Class[]{Boolean.TYPE, Long.TYPE, Handler.class, VideoRendererEventListener.class, Integer.TYPE}).newInstance(new Object[]{Boolean.valueOf(true), Long.valueOf(allowedVideoJoiningTimeMs), eventHandler, eventListener, Integer.valueOf(MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY)}));
+                    out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.vp9.LibvpxVideoRenderer").getConstructor(new Class[]{Boolean.TYPE, Long.TYPE, Handler.class, VideoRendererEventListener.class, Integer.TYPE}).newInstance(new Object[]{Boolean.valueOf(true), Long.valueOf(allowedVideoJoiningTimeMs), eventHandler, eventListener, Integer.valueOf(MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY)}));
                     Log.i(TAG, "Loaded LibvpxVideoRenderer.");
                 } catch (ClassNotFoundException e2) {
                 } catch (Exception e3) {
@@ -100,68 +100,93 @@ public class DefaultRenderersFactory implements RenderersFactory {
 
     protected void buildAudioRenderers(Context context, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, AudioProcessor[] audioProcessors, Handler eventHandler, AudioRendererEventListener eventListener, int extensionRendererMode, ArrayList<Renderer> out) {
         Exception e;
-        int extensionRendererIndex;
-        Exception e2;
-        int extensionRendererIndex2;
-        int i = extensionRendererMode;
         ArrayList<Renderer> arrayList = out;
         arrayList.add(new MediaCodecAudioRenderer(MediaCodecSelector.DEFAULT, drmSessionManager, true, eventHandler, eventListener, AudioCapabilities.getCapabilities(context), audioProcessors));
-        if (i != 0) {
-            int extensionRendererIndex3;
-            int extensionRendererIndex4 = out.size();
-            if (i == 2) {
-                extensionRendererIndex4--;
-            }
-            try {
-                extensionRendererIndex3 = extensionRendererIndex4 + 1;
-                try {
-                    arrayList.add(extensionRendererIndex4, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.opus.LibopusAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
-                    Log.i(TAG, "Loaded LibopusAudioRenderer.");
-                } catch (ClassNotFoundException e3) {
-                } catch (Exception e4) {
-                    e = e4;
-                    throw new RuntimeException(e);
-                }
-            } catch (ClassNotFoundException e5) {
-                extensionRendererIndex3 = extensionRendererIndex4;
-            } catch (Exception e6) {
-                e = e6;
-                extensionRendererIndex3 = extensionRendererIndex4;
-                throw new RuntimeException(e);
-            }
-            try {
-                extensionRendererIndex = extensionRendererIndex3 + 1;
-                try {
-                    arrayList.add(extensionRendererIndex3, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.flac.LibflacAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
-                    Log.i(TAG, "Loaded LibflacAudioRenderer.");
-                } catch (ClassNotFoundException e7) {
-                } catch (Exception e8) {
-                    e2 = e8;
-                    extensionRendererIndex3 = extensionRendererIndex;
-                    throw new RuntimeException(e2);
-                }
-            } catch (ClassNotFoundException e9) {
-                extensionRendererIndex = extensionRendererIndex3;
-            } catch (Exception e82) {
-                e2 = e82;
-                throw new RuntimeException(e2);
+        if (extensionRendererMode != 0) {
+            int extensionRendererIndex;
+            int extensionRendererIndex2 = out.size();
+            if (extensionRendererMode == 2) {
+                extensionRendererIndex = extensionRendererIndex2 - 1;
+            } else {
+                extensionRendererIndex = extensionRendererIndex2;
             }
             try {
                 extensionRendererIndex2 = extensionRendererIndex + 1;
                 try {
-                    arrayList.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
-                    Log.i(TAG, "Loaded FfmpegAudioRenderer.");
-                } catch (ClassNotFoundException e10) {
-                } catch (Exception e822) {
-                    e2 = e822;
+                    out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.opus.LibopusAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
+                    Log.i(TAG, "Loaded LibopusAudioRenderer.");
                     extensionRendererIndex = extensionRendererIndex2;
-                    throw new RuntimeException(e2);
+                } catch (ClassNotFoundException e2) {
+                    extensionRendererIndex = extensionRendererIndex2;
+                    extensionRendererIndex2 = extensionRendererIndex + 1;
+                    try {
+                        out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.flac.LibflacAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
+                        Log.i(TAG, "Loaded LibflacAudioRenderer.");
+                        extensionRendererIndex = extensionRendererIndex2;
+                    } catch (ClassNotFoundException e3) {
+                        extensionRendererIndex = extensionRendererIndex2;
+                        extensionRendererIndex2 = extensionRendererIndex + 1;
+                        out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
+                        Log.i(TAG, "Loaded FfmpegAudioRenderer.");
+                    } catch (Exception e4) {
+                        e = e4;
+                        throw new RuntimeException(e);
+                    }
+                    extensionRendererIndex2 = extensionRendererIndex + 1;
+                    try {
+                        out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
+                        Log.i(TAG, "Loaded FfmpegAudioRenderer.");
+                    } catch (ClassNotFoundException e5) {
+                        return;
+                    } catch (Exception e6) {
+                        e = e6;
+                        throw new RuntimeException(e);
+                    }
+                } catch (Exception e7) {
+                    e = e7;
+                    throw new RuntimeException(e);
                 }
-            } catch (ClassNotFoundException e11) {
+            } catch (ClassNotFoundException e8) {
                 extensionRendererIndex2 = extensionRendererIndex;
-            } catch (Exception e8222) {
-                e2 = e8222;
-                throw new RuntimeException(e2);
+                extensionRendererIndex = extensionRendererIndex2;
+                extensionRendererIndex2 = extensionRendererIndex + 1;
+                out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.flac.LibflacAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
+                Log.i(TAG, "Loaded LibflacAudioRenderer.");
+                extensionRendererIndex = extensionRendererIndex2;
+                extensionRendererIndex2 = extensionRendererIndex + 1;
+                out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
+                Log.i(TAG, "Loaded FfmpegAudioRenderer.");
+            } catch (Exception e9) {
+                e = e9;
+                extensionRendererIndex2 = extensionRendererIndex;
+                throw new RuntimeException(e);
+            }
+            try {
+                extensionRendererIndex2 = extensionRendererIndex + 1;
+                out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.flac.LibflacAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
+                Log.i(TAG, "Loaded LibflacAudioRenderer.");
+                extensionRendererIndex = extensionRendererIndex2;
+            } catch (ClassNotFoundException e10) {
+                extensionRendererIndex2 = extensionRendererIndex;
+                extensionRendererIndex = extensionRendererIndex2;
+                extensionRendererIndex2 = extensionRendererIndex + 1;
+                out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
+                Log.i(TAG, "Loaded FfmpegAudioRenderer.");
+            } catch (Exception e11) {
+                e = e11;
+                extensionRendererIndex2 = extensionRendererIndex;
+                throw new RuntimeException(e);
+            }
+            try {
+                extensionRendererIndex2 = extensionRendererIndex + 1;
+                out.add(extensionRendererIndex, (Renderer) Class.forName("org.telegram.messenger.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer").getConstructor(new Class[]{Handler.class, AudioRendererEventListener.class, AudioProcessor[].class}).newInstance(new Object[]{eventHandler, eventListener, audioProcessors}));
+                Log.i(TAG, "Loaded FfmpegAudioRenderer.");
+            } catch (ClassNotFoundException e12) {
+                extensionRendererIndex2 = extensionRendererIndex;
+            } catch (Exception e13) {
+                e = e13;
+                extensionRendererIndex2 = extensionRendererIndex;
+                throw new RuntimeException(e);
             }
         }
     }

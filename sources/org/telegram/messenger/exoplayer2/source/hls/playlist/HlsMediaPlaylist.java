@@ -65,7 +65,6 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
     }
 
     public HlsMediaPlaylist(int playlistType, String baseUri, List<String> tags, long startOffsetUs, long startTimeUs, boolean hasDiscontinuitySequence, int discontinuitySequence, int mediaSequence, int version, long targetDurationUs, boolean hasIndependentSegmentsTag, boolean hasEndTag, boolean hasProgramDateTime, DrmInitData drmInitData, Segment initializationSegment, List<Segment> segments) {
-        long j;
         super(baseUri, tags);
         this.playlistType = playlistType;
         this.startTimeUs = startTimeUs;
@@ -81,38 +80,32 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
         this.initializationSegment = initializationSegment;
         this.segments = Collections.unmodifiableList(segments);
         if (segments.isEmpty()) {
-            j = 0;
-            r0.durationUs = 0;
+            this.durationUs = 0;
         } else {
             Segment last = (Segment) segments.get(segments.size() - 1);
-            r0.durationUs = last.relativeStartTimeUs + last.durationUs;
-            j = 0;
+            this.durationUs = last.relativeStartTimeUs + last.durationUs;
         }
-        long j2 = C0542C.TIME_UNSET;
-        if (startOffsetUs != C0542C.TIME_UNSET) {
-            j2 = startOffsetUs >= j ? startOffsetUs : r0.durationUs + startOffsetUs;
+        if (startOffsetUs == C0542C.TIME_UNSET) {
+            startOffsetUs = C0542C.TIME_UNSET;
+        } else if (startOffsetUs < 0) {
+            startOffsetUs += this.durationUs;
         }
-        r0.startOffsetUs = j2;
+        this.startOffsetUs = startOffsetUs;
     }
 
     public boolean isNewerThan(HlsMediaPlaylist other) {
-        boolean z = true;
-        if (other != null) {
-            if (this.mediaSequence <= other.mediaSequence) {
-                if (this.mediaSequence < other.mediaSequence) {
-                    return false;
-                }
-                int segmentCount = this.segments.size();
-                int otherSegmentCount = other.segments.size();
-                if (segmentCount <= otherSegmentCount) {
-                    if (segmentCount != otherSegmentCount || !this.hasEndTag || other.hasEndTag) {
-                        z = false;
-                    }
-                }
-                return z;
-            }
+        if (other == null || this.mediaSequence > other.mediaSequence) {
+            return true;
         }
-        return true;
+        if (this.mediaSequence < other.mediaSequence) {
+            return false;
+        }
+        int segmentCount = this.segments.size();
+        int otherSegmentCount = other.segments.size();
+        if (segmentCount > otherSegmentCount || (segmentCount == otherSegmentCount && this.hasEndTag && !other.hasEndTag)) {
+            return true;
+        }
+        return false;
     }
 
     public long getEndTimeUs() {
@@ -120,41 +113,10 @@ public final class HlsMediaPlaylist extends HlsPlaylist {
     }
 
     public HlsMediaPlaylist copyWith(long startTimeUs, int discontinuitySequence) {
-        int i = this.playlistType;
-        String str = this.baseUri;
-        List list = this.tags;
-        long j = this.startOffsetUs;
-        int i2 = this.mediaSequence;
-        int i3 = this.version;
-        long j2 = this.targetDurationUs;
-        boolean z = this.hasIndependentSegmentsTag;
-        boolean z2 = this.hasEndTag;
-        boolean z3 = this.hasProgramDateTime;
-        DrmInitData drmInitData = this.drmInitData;
-        DrmInitData drmInitData2 = drmInitData;
-        boolean z4 = z3;
-        boolean z5 = z2;
-        return new HlsMediaPlaylist(i, str, list, j, startTimeUs, true, discontinuitySequence, i2, i3, j2, z, z5, z4, drmInitData2, this.initializationSegment, this.segments);
+        return new HlsMediaPlaylist(this.playlistType, this.baseUri, this.tags, this.startOffsetUs, startTimeUs, true, discontinuitySequence, this.mediaSequence, this.version, this.targetDurationUs, this.hasIndependentSegmentsTag, this.hasEndTag, this.hasProgramDateTime, this.drmInitData, this.initializationSegment, this.segments);
     }
 
     public HlsMediaPlaylist copyWithEndTag() {
-        if (this.hasEndTag) {
-            return r0;
-        }
-        int i = r0.playlistType;
-        String str = r0.baseUri;
-        List list = r0.tags;
-        long j = r0.startOffsetUs;
-        long j2 = r0.startTimeUs;
-        boolean z = r0.hasDiscontinuitySequence;
-        int i2 = r0.discontinuitySequence;
-        int i3 = r0.mediaSequence;
-        int i4 = r0.version;
-        long j3 = r0.targetDurationUs;
-        boolean z2 = r0.hasIndependentSegmentsTag;
-        long j4 = j3;
-        boolean z3 = r0.hasProgramDateTime;
-        boolean z4 = z3;
-        return new HlsMediaPlaylist(i, str, list, j, j2, z, i2, i3, i4, j4, z2, true, z4, r0.drmInitData, r0.initializationSegment, r0.segments);
+        return this.hasEndTag ? this : new HlsMediaPlaylist(this.playlistType, this.baseUri, this.tags, this.startOffsetUs, this.startTimeUs, this.hasDiscontinuitySequence, this.discontinuitySequence, this.mediaSequence, this.version, this.targetDurationUs, this.hasIndependentSegmentsTag, true, this.hasProgramDateTime, this.drmInitData, this.initializationSegment, this.segments);
     }
 }

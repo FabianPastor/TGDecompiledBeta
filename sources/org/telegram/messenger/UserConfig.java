@@ -1,6 +1,5 @@
 package org.telegram.messenger;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Base64;
@@ -51,12 +50,23 @@ public class UserConfig {
         UserConfig localInstance = Instance[num];
         if (localInstance == null) {
             synchronized (UserConfig.class) {
-                localInstance = Instance[num];
-                if (localInstance == null) {
-                    UserConfig[] userConfigArr = Instance;
-                    UserConfig userConfig = new UserConfig(num);
-                    localInstance = userConfig;
-                    userConfigArr[num] = userConfig;
+                try {
+                    localInstance = Instance[num];
+                    if (localInstance == null) {
+                        UserConfig[] userConfigArr = Instance;
+                        UserConfig localInstance2 = new UserConfig(num);
+                        try {
+                            userConfigArr[num] = localInstance2;
+                            localInstance = localInstance2;
+                        } catch (Throwable th) {
+                            Throwable th2 = th;
+                            localInstance = localInstance2;
+                            throw th2;
+                        }
+                    }
+                } catch (Throwable th3) {
+                    th2 = th3;
+                    throw th2;
                 }
             }
         }
@@ -98,11 +108,7 @@ public class UserConfig {
                 if (this.currentAccount == 0) {
                     preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
                 } else {
-                    Context context = ApplicationLoader.applicationContext;
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("userconfig");
-                    stringBuilder.append(this.currentAccount);
-                    preferences = context.getSharedPreferences(stringBuilder.toString(), 0);
+                    preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfig" + this.currentAccount, 0);
                 }
                 Editor editor = preferences.edit();
                 if (this.currentAccount == 0) {
@@ -201,15 +207,12 @@ public class UserConfig {
                 return;
             }
             SharedPreferences preferences;
+            byte[] bytes;
             if (this.currentAccount == 0) {
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
                 selectedAccount = preferences.getInt("selectedAccount", 0);
             } else {
-                Context context = ApplicationLoader.applicationContext;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("userconfig");
-                stringBuilder.append(this.currentAccount);
-                preferences = context.getSharedPreferences(stringBuilder.toString(), 0);
+                preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfig" + this.currentAccount, 0);
             }
             this.registeredForPush = preferences.getBoolean("registeredForPush", false);
             this.lastSendMessageId = preferences.getInt("lastSendMessageId", -210000);
@@ -242,7 +245,7 @@ public class UserConfig {
             this.dialogsLoadOffsetAccess = preferences.getLong("2dialogsLoadOffsetAccess", -1);
             String string = preferences.getString("tmpPassword", null);
             if (string != null) {
-                byte[] bytes = Base64.decode(string, 0);
+                bytes = Base64.decode(string, 0);
                 if (bytes != null) {
                     SerializedData data = new SerializedData(bytes);
                     this.tmpPassword = TL_account_tmpPassword.TLdeserialize(data, data.readInt32(false), false);
@@ -251,11 +254,11 @@ public class UserConfig {
             }
             string = preferences.getString("user", null);
             if (string != null) {
-                byte[] bytes2 = Base64.decode(string, 0);
-                if (bytes2 != null) {
-                    SerializedData data2 = new SerializedData(bytes2);
-                    this.currentUser = User.TLdeserialize(data2, data2.readInt32(false), false);
-                    data2.cleanup();
+                bytes = Base64.decode(string, 0);
+                if (bytes != null) {
+                    data = new SerializedData(bytes);
+                    this.currentUser = User.TLdeserialize(data, data.readInt32(false), false);
+                    data.cleanup();
                 }
             }
             if (this.currentUser != null) {
@@ -267,7 +270,6 @@ public class UserConfig {
 
     public void clearConfig() {
         this.currentUser = null;
-        int a = 0;
         this.clientUserId = 0;
         this.registeredForPush = false;
         this.contactsSavedCount = 0;
@@ -297,12 +299,11 @@ public class UserConfig {
         this.lastContactsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 82800;
         this.lastHintsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 90000;
         boolean hasActivated = false;
-        while (a < 3) {
+        for (int a = 0; a < 3; a++) {
             if (getInstance(a).isClientActivated()) {
                 hasActivated = true;
                 break;
             }
-            a++;
         }
         if (!hasActivated) {
             SharedConfig.clearConfig();

@@ -29,7 +29,7 @@ public class CacheSpan implements Comparable<CacheSpan> {
     }
 
     public boolean isHoleSpan() {
-        return this.isCached ^ 1;
+        return !this.isCached;
     }
 
     public int compareTo(CacheSpan another) {
@@ -37,7 +37,9 @@ public class CacheSpan implements Comparable<CacheSpan> {
             return this.key.compareTo(another.key);
         }
         long startOffsetDiff = this.position - another.position;
-        int i = startOffsetDiff == 0 ? 0 : startOffsetDiff < 0 ? -1 : 1;
-        return i;
+        if (startOffsetDiff == 0) {
+            return 0;
+        }
+        return startOffsetDiff < 0 ? -1 : 1;
     }
 }

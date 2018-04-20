@@ -26,22 +26,26 @@ final class SsaSubtitle implements Subtitle {
     }
 
     public long getEventTime(int index) {
-        boolean z = false;
-        Assertions.checkArgument(index >= 0);
-        if (index < this.cueTimesUs.length) {
+        boolean z;
+        boolean z2 = true;
+        if (index >= 0) {
             z = true;
+        } else {
+            z = false;
         }
         Assertions.checkArgument(z);
+        if (index >= this.cueTimesUs.length) {
+            z2 = false;
+        }
+        Assertions.checkArgument(z2);
         return this.cueTimesUs[index];
     }
 
     public List<Cue> getCues(long timeUs) {
         int index = Util.binarySearchFloor(this.cueTimesUs, timeUs, true, false);
-        if (index != -1) {
-            if (this.cues[index] != null) {
-                return Collections.singletonList(this.cues[index]);
-            }
+        if (index == -1 || this.cues[index] == null) {
+            return Collections.emptyList();
         }
-        return Collections.emptyList();
+        return Collections.singletonList(this.cues[index]);
     }
 }

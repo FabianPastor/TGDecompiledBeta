@@ -52,7 +52,7 @@ public abstract class NoSampleRenderer implements Renderer, RendererCapabilities
     }
 
     public final void replaceStream(Format[] formats, SampleStream stream, long offsetUs) throws ExoPlaybackException {
-        Assertions.checkState(this.streamIsFinal ^ 1);
+        Assertions.checkState(!this.streamIsFinal);
         this.stream = stream;
         onRendererOffsetChanged(offsetUs);
     }

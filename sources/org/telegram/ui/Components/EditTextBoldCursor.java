@@ -131,7 +131,6 @@ public class EditTextBoldCursor extends EditText {
     }
 
     protected void onDraw(Canvas canvas) {
-        int left;
         int topPadding = getExtendedPaddingTop();
         this.scrollY = ConnectionsManager.DEFAULT_DATACENTER_ID;
         try {
@@ -147,7 +146,7 @@ public class EditTextBoldCursor extends EditText {
             super.onDraw(canvas);
         } catch (Exception e2) {
         }
-        if (this.scrollY != ConnectionsManager.DEFAULT_DATACENTER_ID) {
+        if (this.scrollY != Integer.MAX_VALUE) {
             try {
                 mScrollYField.set(this, Integer.valueOf(this.scrollY));
             } catch (Exception e3) {
@@ -179,7 +178,7 @@ public class EditTextBoldCursor extends EditText {
             getPaint().setColor(this.hintColor);
             getPaint().setAlpha((int) (255.0f * this.hintAlpha));
             canvas.save();
-            left = 0;
+            int left = 0;
             float lineLeft = this.hintLayout.getLineLeft(0);
             if (lineLeft != 0.0f) {
                 left = (int) (((float) null) - lineLeft);
@@ -190,15 +189,15 @@ public class EditTextBoldCursor extends EditText {
             canvas.restore();
         }
         try {
-            if (!(!this.allowDrawCursor || mShowCursorField == null || this.mCursorDrawable == null || this.mCursorDrawable[0] == null)) {
+            if (this.allowDrawCursor && mShowCursorField != null && this.mCursorDrawable != null && this.mCursorDrawable[0] != null) {
                 boolean showCursor = (SystemClock.uptimeMillis() - mShowCursorField.getLong(this.editor)) % 1000 < 500 && isFocused();
                 if (showCursor) {
                     canvas.save();
-                    left = 0;
+                    int voffsetCursor = 0;
                     if ((getGravity() & 112) != 48) {
-                        left = ((Integer) getVerticalOffsetMethod.invoke(this, new Object[]{Boolean.valueOf(true)})).intValue();
+                        voffsetCursor = ((Integer) getVerticalOffsetMethod.invoke(this, new Object[]{Boolean.valueOf(true)})).intValue();
                     }
-                    canvas.translate((float) getPaddingLeft(), (float) (getExtendedPaddingTop() + left));
+                    canvas.translate((float) getPaddingLeft(), (float) (getExtendedPaddingTop() + voffsetCursor));
                     Layout layout = getLayout();
                     int line = layout.getLineForOffset(getSelectionStart());
                     int lineCount = layout.getLineCount();

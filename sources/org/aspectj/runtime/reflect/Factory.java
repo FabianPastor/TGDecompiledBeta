@@ -10,7 +10,7 @@ import org.aspectj.lang.reflect.SourceLocation;
 
 public final class Factory {
     private static Object[] NO_ARGS = new Object[0];
-    static /* synthetic */ Class class$java$lang$ClassNotFoundException;
+    static Class class$java$lang$ClassNotFoundException;
     static Hashtable prims = new Hashtable();
     int count = 0;
     String filename;
@@ -39,7 +39,7 @@ public final class Factory {
             return ret;
         }
         if (loader != null) {
-            return Class.forName(s, null, loader);
+            return Class.forName(s, false, loader);
         }
         try {
             return Class.forName(s);
@@ -54,7 +54,7 @@ public final class Factory {
         }
     }
 
-    static /* synthetic */ Class class$(String x0) {
+    static Class class$(String x0) {
         try {
             return Class.forName(x0);
         } catch (ClassNotFoundException x1) {
@@ -93,9 +93,8 @@ public final class Factory {
         StringTokenizer st = new StringTokenizer(paramTypes, ":");
         int numParams = st.countTokens();
         Class[] paramTypeClasses = new Class[numParams];
-        int i2 = 0;
         for (i = 0; i < numParams; i++) {
-            paramTypeClasses[i] = makeClass(st.nextToken(), r0.lookupClassLoader);
+            paramTypeClasses[i] = makeClass(st.nextToken(), this.lookupClassLoader);
         }
         st = new StringTokenizer(paramNames, ":");
         numParams = st.countTokens();
@@ -103,18 +102,13 @@ public final class Factory {
         for (i = 0; i < numParams; i++) {
             paramNamesArray[i] = st.nextToken();
         }
-        StringTokenizer st2 = new StringTokenizer(exceptionTypes, ":");
-        int numParams2 = st2.countTokens();
-        Class[] exceptionTypeClasses = new Class[numParams2];
-        while (true) {
-            int i3 = i2;
-            if (i3 < numParams2) {
-                exceptionTypeClasses[i3] = makeClass(st2.nextToken(), r0.lookupClassLoader);
-                i2 = i3 + 1;
-            } else {
-                return new MethodSignatureImpl(modifiersAsInt, methodName, declaringTypeClass, paramTypeClasses, paramNamesArray, exceptionTypeClasses, makeClass(returnType, r0.lookupClassLoader));
-            }
+        st = new StringTokenizer(exceptionTypes, ":");
+        numParams = st.countTokens();
+        Class[] exceptionTypeClasses = new Class[numParams];
+        for (i = 0; i < numParams; i++) {
+            exceptionTypeClasses[i] = makeClass(st.nextToken(), this.lookupClassLoader);
         }
+        return new MethodSignatureImpl(modifiersAsInt, methodName, declaringTypeClass, paramTypeClasses, paramNamesArray, exceptionTypeClasses, makeClass(returnType, this.lookupClassLoader));
     }
 
     public SourceLocation makeSourceLoc(int line, int col) {

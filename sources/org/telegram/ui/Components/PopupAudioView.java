@@ -93,35 +93,19 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
                 BaseCell.setDrawableBounds(Theme.chat_msgInMediaDrawable, 0, 0, getMeasuredWidth(), getMeasuredHeight());
                 Theme.chat_msgInMediaDrawable.draw(canvas);
                 if (this.currentMessageObject != null) {
-                    int state;
-                    Drawable buttonDrawable;
-                    int side;
                     canvas.save();
-                    if (this.buttonState != 0) {
-                        if (this.buttonState != 1) {
-                            canvas.translate((float) (this.seekBarX + AndroidUtilities.dp(12.0f)), (float) this.seekBarY);
-                            this.progressView.draw(canvas);
-                            canvas.restore();
-                            state = this.buttonState + 5;
-                            this.timePaint.setColor(-6182221);
-                            buttonDrawable = Theme.chat_fileStatesDrawable[state][this.buttonPressed];
-                            side = AndroidUtilities.dp(NUM);
-                            BaseCell.setDrawableBounds(buttonDrawable, this.buttonX + ((side - buttonDrawable.getIntrinsicWidth()) / 2), this.buttonY + ((side - buttonDrawable.getIntrinsicHeight()) / 2));
-                            buttonDrawable.draw(canvas);
-                            canvas.save();
-                            canvas.translate((float) this.timeX, (float) AndroidUtilities.dp(18.0f));
-                            this.timeLayout.draw(canvas);
-                            canvas.restore();
-                            return;
-                        }
+                    if (this.buttonState == 0 || this.buttonState == 1) {
+                        canvas.translate((float) this.seekBarX, (float) this.seekBarY);
+                        this.seekBar.draw(canvas);
+                    } else {
+                        canvas.translate((float) (this.seekBarX + AndroidUtilities.dp(12.0f)), (float) this.seekBarY);
+                        this.progressView.draw(canvas);
                     }
-                    canvas.translate((float) this.seekBarX, (float) this.seekBarY);
-                    this.seekBar.draw(canvas);
                     canvas.restore();
-                    state = this.buttonState + 5;
+                    int state = this.buttonState + 5;
                     this.timePaint.setColor(-6182221);
-                    buttonDrawable = Theme.chat_fileStatesDrawable[state][this.buttonPressed];
-                    side = AndroidUtilities.dp(NUM);
+                    Drawable buttonDrawable = Theme.chat_fileStatesDrawable[state][this.buttonPressed];
+                    int side = AndroidUtilities.dp(36.0f);
                     BaseCell.setDrawableBounds(buttonDrawable, this.buttonX + ((side - buttonDrawable.getIntrinsicWidth()) / 2), this.buttonY + ((side - buttonDrawable.getIntrinsicHeight()) / 2));
                     buttonDrawable.draw(canvas);
                     canvas.save();
@@ -152,7 +136,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
             invalidate();
             return result;
         }
-        int side = AndroidUtilities.dp(NUM);
+        int side = AndroidUtilities.dp(36.0f);
         if (event.getAction() == 0) {
             if (x >= ((float) this.buttonX) && x <= ((float) (this.buttonX + side)) && y >= ((float) this.buttonY) && y <= ((float) (this.buttonY + side))) {
                 this.buttonPressed = 1;
@@ -245,13 +229,11 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
         if (FileLoader.getPathToMessage(this.currentMessageObject.messageOwner).exists()) {
             DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-            if (playing) {
-                if (!playing || !MediaController.getInstance().isMessagePaused()) {
-                    this.buttonState = 1;
-                    this.progressView.setProgress(0.0f);
-                }
+            if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
+                this.buttonState = 0;
+            } else {
+                this.buttonState = 1;
             }
-            this.buttonState = 0;
             this.progressView.setProgress(0.0f);
         } else {
             DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);

@@ -5,6 +5,7 @@ import org.telegram.messenger.exoplayer2.C0542C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorInput;
 import org.telegram.messenger.exoplayer2.extractor.Extractor;
+import org.telegram.messenger.exoplayer2.extractor.ExtractorInput;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.util.Assertions;
@@ -34,7 +35,7 @@ public final class InitializationChunk extends Chunk {
 
     public void load() throws IOException, InterruptedException {
         DataSpec loadDataSpec = this.dataSpec.subrange((long) this.bytesLoaded);
-        DefaultExtractorInput input;
+        ExtractorInput input;
         try {
             input = new DefaultExtractorInput(this.dataSource, loadDataSpec.absoluteStreamPosition, this.dataSource.open(loadDataSpec));
             if (this.bytesLoaded == 0) {
@@ -45,11 +46,7 @@ public final class InitializationChunk extends Chunk {
             while (result == 0 && !this.loadCanceled) {
                 result = extractor.read(input, null);
             }
-            boolean z = true;
-            if (result == 1) {
-                z = false;
-            }
-            Assertions.checkState(z);
+            Assertions.checkState(result != 1);
             this.bytesLoaded = (int) (input.getPosition() - this.dataSpec.absoluteStreamPosition);
             Util.closeQuietly(this.dataSource);
         } catch (Throwable th) {

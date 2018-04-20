@@ -45,11 +45,11 @@ public class InviteTextCell extends FrameLayout {
         int height = bottom - top;
         int width = right - left;
         int viewTop = (height - this.textView.getTextHeight()) / 2;
-        int viewLeft = AndroidUtilities.dp(!LocaleController.isRTL ? 71.0f : 24.0f);
+        int viewLeft = !LocaleController.isRTL ? AndroidUtilities.dp(71.0f) : AndroidUtilities.dp(24.0f);
         this.textView.layout(viewLeft, viewTop, this.textView.getMeasuredWidth() + viewLeft, this.textView.getMeasuredHeight() + viewTop);
-        int viewTop2 = (height - this.imageView.getMeasuredHeight()) / 2;
-        viewTop = !LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : (width - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(20.0f);
-        this.imageView.layout(viewTop, viewTop2, this.imageView.getMeasuredWidth() + viewTop, this.imageView.getMeasuredHeight() + viewTop2);
+        viewTop = (height - this.imageView.getMeasuredHeight()) / 2;
+        viewLeft = !LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : (width - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp(20.0f);
+        this.imageView.layout(viewLeft, viewTop, this.imageView.getMeasuredWidth() + viewLeft, this.imageView.getMeasuredHeight() + viewTop);
     }
 
     public void setTextColor(int color) {
